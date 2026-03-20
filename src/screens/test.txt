@@ -1,0 +1,213 @@
+const express = require('express');
+const cors = require('cors');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+const API_KEY = process.env.ANTHROPIC_API_KEY;
+const JWT_SECRET = process.env.JWT_SECRET || 'runwithai-secret-2026';
+
+const { Pool } = require('pg');
+const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
+const db = { query: (text, params) => pool.query(text, params) };
+
+pool.query(`
+  CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    email TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()
+  );
+  CREATE TABLE IF NOT EXISTS profile (
+    user_id INTEGER PRIMARY KEY REFERENCES users(id),
+    data TEXT,
+    updated_at TIMESTAMP DEFAULT NOW()
+  );
+  CREATE TABLE IF NOT EXISTS messages (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id),
+    role TEXT NOT NULL,
+    text TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()
+  );
+  CREATE TABLE IF NOT EXISTS week_plan (
+    user_id INTEGER PRIMARY KEY REFERENCES users(id),
+    data TEXT,
+    updated_at TIMESTAMP DEFAULT NOW()
+  );
+  CREATE TABLE IF NOT EXISTS runs (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id),
+    date TIMESTAMP DEFAULT NOW(),
+    km REAL,
+    duration_secs INTEGER,
+    pace_secs_per_km REAL,
+    avg_hr INTEGER,
+    route TEXT,
+    notes TEXT
+  );
+  CREATE TABLE IF NOT EXISTS training_plan (
+    user_id INTEGER PRIMARY KEY REFERENCES users(id),
+    data TEXT,
+    generated_at TIMESTAMP DEFAULT NOW()
+  );
+`).then(() => console.log('Database klar')).catch(e => console.error('DB fejl:', e));
+
+function authMiddleware(req, res, next) {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  if (!token) return res.status(401).json({ error: 'Ikke logget ind' });
+  try { req.user = jwt.verify(token, JWT_SECRET); next(); }
+  catch { res.status(401).json({ error: 'Token ugyldig' }); }
+}
+
+app.post('/auth/register', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'Email og adgangskode kræves' });
+  if (password.length < 6) return res.status(400).json({ error: 'Adgangskode skal være mindst 6 tegn' });
+  try {
+    const hashed = await bcrypt.hash(password, 10);
+    const result = await db.query('INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id, email', [email.toLowerCase().trim(), hashed]);
+    const user = result.rows[0];
+    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '30d' });
+    res.json({ token, user: { id: user.id, email: user.email } });
+  } catch (e) {
+    if (e.code === '23505') return res.status(400).json({ error: 'Email er allerede i brug' });
+    res.status(500).json({ error: 'Serverfejl' });
+  }
+});
+
+app.post('/auth/login', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'Email og adgangskode kræves' });
+  try {
+    const result = await db.query('SELECT * FROM users WHERE email = $1', [email.toLowerCase().trim()]);
+    const user = result.rows[0];
+    if (!user) return res.status(401).json({ error: 'Forkert email eller adgangskode' });
+    const ok = await bcrypt.compare(password, user.password);
+    if (!ok) return res.status(401).json({ error: 'Forkert email eller adgangskode' });
+    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '30d' });
+    res.json({ token, user: { id: user.id, email: user.email } });
+  } catch (e) { res.status(500).json({ error: 'Serverfejl' }); }
+});
+
+app.get('/profile', authMiddleware, async (req, res) => {
+  try {
+    const result = await db.query('SELECT data FROM profile WHERE user_id = $1', [req.user.id]);
+    res.json(result.rows[0]?.data ? JSON.parse(result.rows[0].data) : {});
+  } catch { res.json({}); }
+});
+
+app.post('/profile', authMiddleware, async (req, res) => {
+  try {
+    await db.query('INSERT INTO profile (user_id, data) VALUES ($1, $2) ON CONFLICT (user_id) DO UPDATE SET data = $2, updated_at = NOW()', [req.user.id, JSON.stringify(req.body)]);
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: 'Fejl' }); }
+});
+
+app.get('/messages', authMiddleware, async (req, res) => {
+  try {
+    const result = await db.query('SELECT role, text FROM messages WHERE user_id = $1 ORDER BY created_at ASC LIMIT 100', [req.user.id]);
+    res.json(result.rows);
+  } catch { res.json([]); }
+});
+
+app.delete('/messages', authMiddleware, async (req, res) => {
+  try { await db.query('DELETE FROM messages WHERE user_id = $1', [req.user.id]); res.json({ ok: true }); }
+  catch { res.status(500).json({ error: 'Fejl' }); }
+});
+
+app.get('/weekplan', authMiddleware, async (req, res) => {
+  try {
+    const result = await db.query('SELECT data FROM week_plan WHERE user_id = $1', [req.user.id]);
+    res.json(result.rows[0]?.data ? JSON.parse(result.rows[0].data) : null);
+  } catch { res.json(null); }
+});
+
+app.post('/weekplan', authMiddleware, async (req, res) => {
+  try {
+    await db.query('INSERT INTO week_plan (user_id, data) VALUES ($1, $2) ON CONFLICT (user_id) DO UPDATE SET data = $2, updated_at = NOW()', [req.user.id, JSON.stringify(req.body)]);
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: 'Fejl' }); }
+});
+
+app.get('/runs', authMiddleware, async (req, res) => {
+  try {
+    const result = await db.query('SELECT * FROM runs WHERE user_id = $1 ORDER BY date DESC LIMIT 50', [req.user.id]);
+    res.json(result.rows);
+  } catch { res.json([]); }
+});
+
+app.post('/runs', authMiddleware, async (req, res) => {
+  try {
+    const { km, duration_secs, pace_secs_per_km, avg_hr, route, notes } = req.body;
+    const result = await db.query(
+      'INSERT INTO runs (user_id, km, duration_secs, pace_secs_per_km, avg_hr, route, notes) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *',
+      [req.user.id, km, duration_secs, pace_secs_per_km, avg_hr || null, route ? JSON.stringify(route) : null, notes || null]
+    );
+    res.json(result.rows[0]);
+  } catch (e) { res.status(500).json({ error: 'Fejl' }); }
+});
+
+app.get('/trainingplan', authMiddleware, async (req, res) => {
+  try {
+    const result = await db.query('SELECT data, generated_at FROM training_plan WHERE user_id = $1', [req.user.id]);
+    res.json(result.rows[0] ? { data: JSON.parse(result.rows[0].data), generated_at: result.rows[0].generated_at } : null);
+  } catch { res.json(null); }
+});
+
+app.post('/trainingplan/generate', authMiddleware, async (req, res) => {
+  try {
+    const { profile, level, recentRuns } = req.body;
+    const runSummary = recentRuns?.slice(0,5).map(r => {
+      const mins = Math.floor(r.duration_secs/60);
+      const pace = r.pace_secs_per_km ? `${Math.floor(r.pace_secs_per_km/60)}:${String(Math.round(r.pace_secs_per_km%60)).padStart(2,'0')}/km` : '?';
+      return `${r.km?.toFixed(1)}km på ${mins}min (${pace})`;
+    }).join(', ') || 'ingen tidligere løb';
+    const prompt = `Du er en professionel løbecoach. Lav en ugentlig træningsplan for denne løber:
+Profil: ${profile?.name || 'Løber'}, ${profile?.age || '?'} år, niveau: ${level}
+Ugekilometer mål: ${profile?.weeklyKm || '?'} km, Mål: ${profile?.goal || 'generel fitness'}
+Seneste løb: ${runSummary}
+Lav en 7-dages plan. Svar KUN med JSON array, ingen tekst før eller efter:
+[{"day":"Man","workout":"navn","km":8,"color":"#c8ff00","type":"run","description":"kort beskrivelse"},...]
+Type: run, rest, cross. Colors: #c8ff00 interval, #2ecc71 roligt, #ff6b35 tempo, #3a7bd5 langtur, #a855f7 styrke, #2a2a2f hvile.`;
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, messages: [{ role: 'user', content: prompt }] }),
+    });
+    const aiData = await response.json();
+    const text = aiData.content?.[0]?.text || '[]';
+    let plan;
+    try { plan = JSON.parse(text.replace(/```json|```/g, '').trim()); } catch { plan = []; }
+    await db.query('INSERT INTO training_plan (user_id, data, generated_at) VALUES ($1,$2,NOW()) ON CONFLICT (user_id) DO UPDATE SET data=$2, generated_at=NOW()', [req.user.id, JSON.stringify(plan)]);
+    res.json({ data: plan, generated_at: new Date() });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'Fejl ved generering' }); }
+});
+
+app.post('/chat', authMiddleware, async (req, res) => {
+  try {
+    const { messages, system, model, max_tokens } = req.body;
+    const userMsg = messages?.[messages.length - 1];
+    if (userMsg?.role === 'user') {
+      await db.query('INSERT INTO messages (user_id, role, text) VALUES ($1, $2, $3)', [req.user.id, 'user', userMsg.content]);
+    }
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({ model: model || 'claude-sonnet-4-20250514', max_tokens: max_tokens || 1000, system, messages }),
+    });
+    const data = await response.json();
+    const aiText = data.content?.[0]?.text;
+    if (aiText) {
+      await db.query('INSERT INTO messages (user_id, role, text) VALUES ($1, $2, $3)', [req.user.id, 'assistant', aiText]);
+    }
+    res.json(data);
+  } catch (e) { res.status(500).json({ type: 'error', error: { message: 'Serverfejl' } }); }
+});
+
+app.get('/', (req, res) => res.json({ status: 'RunWithAI server kører!' }));
+const PORT = process.env.PORT || 3333;
+app.listen(PORT, () => console.log(`RunWithAI server kører på port ${PORT}`));
