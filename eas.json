@@ -26,7 +26,8 @@
     "production": {
       "autoIncrement": true,
       "ios": {
-        "resourceClass": "m-medium"
+        "resourceClass": "m-medium",
+        "image": "macos-ventura-13.6-xcode-15.2"
       },
       "android": {
         "buildType": "app-bundle"
