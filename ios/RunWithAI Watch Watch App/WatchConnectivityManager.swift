@@ -22,17 +22,9 @@ class WatchConnectivityManager: NSObject, ObservableObject {
         }
     }
     
-    func startRun() {
-        sendCommand("START_RUN")
-    }
-    
-    func stopRun() {
-        sendCommand("STOP_RUN")
-    }
-    
-    func pauseRun() {
-        sendCommand("PAUSE_RUN")
-    }
+    func startRun() { sendCommand("START_RUN") }
+    func stopRun() { sendCommand("STOP_RUN") }
+    func pauseRun() { sendCommand("PAUSE_RUN") }
     
     func sendCommand(_ command: String) {
         guard let session = session, session.isReachable else { return }

@@ -2,7 +2,7 @@
 //  RunWithAI_Watch_Watch_AppUITests.swift
 //  RunWithAI Watch Watch AppUITests
 //
-//  Created by user293171 on 3/23/26.
+//  Created by user281474 on 3/23/26.
 //
 
 import XCTest
@@ -33,9 +33,11 @@ final class RunWithAI_Watch_Watch_AppUITests: XCTestCase {
 
     @MainActor
     func testLaunchPerformance() throws {
-        // This measures how long it takes to launch your application.
-        measure(metrics: [XCTApplicationLaunchMetric()]) {
-            XCUIApplication().launch()
+        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
+            // This measures how long it takes to launch your application.
+            measure(metrics: [XCTApplicationLaunchMetric()]) {
+                XCUIApplication().launch()
+            }
         }
     }
 }

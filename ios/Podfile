@@ -64,8 +64,3 @@ target 'RunWithAI' do
     )
   end
 end
-
-target 'RunWithAI Watch Watch App' do
-  platform :watchos, '9.0'
-  use_frameworks!
-end
