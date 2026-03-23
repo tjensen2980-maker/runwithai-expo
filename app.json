@@ -5,12 +5,11 @@
     "version": "1.5.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "dark",
-    "backgroundColor": "#09090b",
+    "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#09090b"
+      "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -20,28 +19,44 @@
       "bundleIdentifier": "app.runwithai",
       "buildNumber": "3",
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter og vise din position på kortet.",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter i baggrunden.",
-        "NSMotionUsageDescription": "RunWithAI bruger bevægelsesdata til at forbedre distance- og tempoberegninger.",
-        "UIBackgroundModes": ["location", "audio"]
+        "NSLocationWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter, også i baggrunden.",
+        "NSMotionUsageDescription": "RunWithAI bruger bevægelsessensorer til at forbedre distance-beregning.",
+        "NSHealthShareUsageDescription": "RunWithAI bruger dine sundhedsdata til at vise puls og kalorier under løb.",
+        "NSHealthUpdateUsageDescription": "RunWithAI gemmer dine løbeture i Apple Health.",
+        "UIBackgroundModes": [
+          "location",
+          "audio",
+          "location",
+          "audio"
+        ],
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "entitlements": {
+        "com.apple.developer.healthkit": true,
+        "com.apple.developer.healthkit.access": []
       },
       "config": {
-        "usesNonExemptEncryption": false
+        "googleMapsApiKey": "YOUR_GOOGLE_MAPS_API_KEY"
       }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#09090b"
+        "backgroundColor": "#ffffff"
       },
       "package": "app.runwithai",
-      "versionCode": 3,
+      "versionCode": 1,
       "permissions": [
-        "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
         "ACCESS_BACKGROUND_LOCATION",
-        "FOREGROUND_SERVICE",
-        "VIBRATE"
+        "ACTIVITY_RECOGNITION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_LOCATION"
       ],
       "config": {
         "googleMaps": {
@@ -54,23 +69,25 @@
         "expo-location",
         {
           "locationAlwaysAndWhenInUsePermission": "RunWithAI bruger din placering til at tracke dine løberuter.",
-          "locationAlwaysPermission": "RunWithAI bruger din placering til at tracke løberuter i baggrunden.",
-          "locationWhenInUsePermission": "RunWithAI bruger din placering til at vise din position på kortet."
+          "isIosBackgroundLocationEnabled": true,
+          "isAndroidBackgroundLocationEnabled": true
         }
       ],
-      "expo-secure-store"
+      [
+        "react-native-health",
+        {
+          "isClinicalDataEnabled": false,
+          "healthSharePermission": "RunWithAI bruger dine sundhedsdata til at vise puls og kalorier under løb.",
+          "healthUpdatePermission": "RunWithAI gemmer dine løbeture i Apple Health."
+        }
+      ],
+      "expo-dev-client"
     ],
+    "owner": "tj2970",
     "extra": {
       "eas": {
-        "projectId": "YOUR_EAS_PROJECT_ID"
+        "projectId": "e312f910-d828-4893-adf6-645ba1ba2252"
       }
-    },
-    "owner": "runwithai",
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
-    "updates": {
-      "url": "https://u.expo.dev/YOUR_EAS_PROJECT_ID"
     }
   }
 }

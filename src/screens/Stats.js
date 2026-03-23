@@ -1,32 +1,43 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Dimensions, Platform } from 'react-native';
 import { colors } from '../data';
-import { Icon } from '../components/Icons';
+import Svg, { Circle } from 'react-native-svg';
 
 const W = Dimensions.get('window').width;
 
-// ─── HJÆLPE-FUNKTIONER ───────────────────────────────────────────────────────
+// ─── HJÆLPE-FUNKTIONER ──────────────────────────────────────────────────────
 const fmtPace = (s) => s ? `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}` : '–';
 const fmtDur  = (s) => s ? `${Math.floor(s / 3600) > 0 ? Math.floor(s / 3600) + 't ' : ''}${Math.floor((s % 3600) / 60)}m` : '–';
 
-function getRingPath(pct, r = 44) {
-  const circ = 2 * Math.PI * r;
-  return circ * Math.min(pct, 1);
-}
-
-// ─── RING KOMPONENT ──────────────────────────────────────────────────────────
+// ─── RING KOMPONENT (RETTET TIL REACT NATIVE) ───────────────────────────────
 function Ring({ pct, size = 110, color = colors.accent, label, value, sub }) {
   const r = (size - 12) / 2;
   const circ = 2 * Math.PI * r;
   const filled = circ * Math.min(pct, 1);
+  
   return (
     <View style={{ alignItems: 'center' }}>
       <View style={{ width: size, height: size }}>
-        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
-          <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={colors.surface} strokeWidth={10} />
-          <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={10}
-            strokeDasharray={`${filled} ${circ}`} strokeLinecap="round" />
-        </svg>
+        <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: [{ rotate: '-90deg' }] }}>
+          <Circle 
+            cx={size/2} 
+            cy={size/2} 
+            r={r} 
+            fill="none" 
+            stroke={colors.surface} 
+            strokeWidth={10} 
+          />
+          <Circle 
+            cx={size/2} 
+            cy={size/2} 
+            r={r} 
+            fill="none" 
+            stroke={color} 
+            strokeWidth={10}
+            strokeDasharray={`${filled} ${circ}`} 
+            strokeLinecap="round" 
+          />
+        </Svg>
         <View style={{ position: 'absolute', top: 0, left: 0, width: size, height: size, alignItems: 'center', justifyContent: 'center' }}>
           <Text style={{ fontSize: 18, fontWeight: '900', color: colors.text, letterSpacing: -0.5 }}>{value}</Text>
           {sub && <Text style={{ fontSize: 9, color: colors.muted, fontWeight: '600', letterSpacing: 0.5 }}>{sub}</Text>}
@@ -37,7 +48,7 @@ function Ring({ pct, size = 110, color = colors.accent, label, value, sub }) {
   );
 }
 
-// ─── MINI BAR CHART ──────────────────────────────────────────────────────────
+// ─── MINI BAR CHART ─────────────────────────────────────────────────────────
 function BarChart({ data, color = colors.accent, labelKey = 'label', valueKey = 'value', unit = '' }) {
   const max = Math.max(...data.map(d => d[valueKey] || 0), 1);
   return (
@@ -56,7 +67,7 @@ function BarChart({ data, color = colors.accent, labelKey = 'label', valueKey = 
   );
 }
 
-// ─── STAT KORT ───────────────────────────────────────────────────────────────
+// ─── STAT KORT ──────────────────────────────────────────────────────────────
 function StatCard({ title, children, accent }) {
   return (
     <View style={[st.card, accent && { borderLeftWidth: 3, borderLeftColor: colors.accent }]}>
@@ -75,11 +86,11 @@ function BigStat({ value, label, color }) {
   );
 }
 
-// ─── HOVED KOMPONENT ─────────────────────────────────────────────────────────
+// ─── HOVED KOMPONENT ────────────────────────────────────────────────────────
 export default function Stats({ runs = [], profile, level }) {
-  const [period, setPeriod] = useState('all'); // '4w' | '3m' | 'all'
-
+  const [period, setPeriod] = useState('all');
   const now = new Date();
+  
   const filtered = useMemo(() => {
     if (period === '4w') {
       const cutoff = new Date(now - 28 * 86400000);
@@ -187,7 +198,6 @@ export default function Stats({ runs = [], profile, level }) {
 
   return (
     <ScrollView style={st.container} contentContainerStyle={{ padding: 16, paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
-
       {/* Periode-vælger */}
       <View style={st.periodRow}>
         {[['4w','4 uger'],['3m','3 mdr'],['all','Alt tid']].map(([id, label]) => (
@@ -320,7 +330,6 @@ export default function Stats({ runs = [], profile, level }) {
           ))}
         </StatCard>
       )}
-
     </ScrollView>
   );
 }

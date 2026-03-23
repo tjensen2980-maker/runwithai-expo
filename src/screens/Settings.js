@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '../components/Icons';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Switch, Platform, Modal, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Switch, Platform, Modal, Alert, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, assessProfile, saveProfile, SERVER, getAuthToken, loadRuns } from '../data';
+import { Linking } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function Field({ label, value, onChange, keyboard, placeholder }) {
   return (
@@ -38,8 +40,7 @@ function SexPicker({ value, onChange }) {
   );
 }
 
-
-// ─── SKO TRACKER ──────────────────────────────────────────────────────────────
+// ─── SKO TRACKER ────────────────────────────────────────────────────────────
 const SHOE_WARNING_KM = 700;
 const SHOE_MAX_KM = 800;
 
@@ -50,7 +51,6 @@ function ShoesSection({ profile, onProfileChange, runs }) {
   const [newBrand, setNewBrand] = useState('');
   const [newStartKm, setNewStartKm] = useState('');
 
-  // Beregn km for hvert sko fra løbshistorik
   const shoesWithKm = shoes.map(shoe => {
     const km = runs
       .filter(r => r.shoe_id === shoe.id)
@@ -87,7 +87,10 @@ function ShoesSection({ profile, onProfileChange, runs }) {
 
   return (
     <View>
-      <View style={{flexDirection:'row',alignItems:'center',gap:8}}><Icon name='shoe' size={16} color='#8c8c8c'/><Text style={s.sectionTitle}>SKO-TRACKER</Text></View>
+      <View style={{flexDirection:'row',alignItems:'center',gap:8}}>
+        <Icon name='shoe' size={16} color='#8c8c8c'/>
+        <Text style={s.sectionTitle}>SKO-TRACKER</Text>
+      </View>
       <View style={s.card}>
         {shoesWithKm.length === 0 ? (
           <Text style={st.empty}>Ingen sko tilføjet endnu. Tilføj dine løbesko og track km automatisk.</Text>
@@ -134,7 +137,11 @@ function ShoesSection({ profile, onProfileChange, runs }) {
                     </TouchableOpacity>
                   )}
                   <TouchableOpacity style={st.deleteBtn} onPress={() => {
-                    if (window.confirm ? window.confirm(`Slet ${shoe.name}?`) : true) deleteShoe(shoe.id);
+                    if (Platform.OS === 'web' && window.confirm) {
+                      if (window.confirm(`Slet ${shoe.name}?`)) deleteShoe(shoe.id);
+                    } else {
+                      deleteShoe(shoe.id);
+                    }
                   }}>
                     <Text style={st.deleteBtnText}>Slet</Text>
                   </TouchableOpacity>
@@ -143,11 +150,9 @@ function ShoesSection({ profile, onProfileChange, runs }) {
             );
           })
         )}
-
         <TouchableOpacity style={st.addBtn} onPress={() => setShowAdd(!showAdd)}>
           <Text style={st.addBtnText}>{showAdd ? 'Annuller' : '+ Tilføj sko'}</Text>
         </TouchableOpacity>
-
         {showAdd && (
           <View style={st.addForm}>
             <TextInput
@@ -186,11 +191,28 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
   const [form, setForm] = useState(profile || {});
   const [saved, setSaved] = useState(false);
   const [runs, setRuns] = useState([]);
+  const [subscription, setSubscription] = useState(null);
+  const [deletingAccount, setDeletingAccount] = useState(false);
+  
+  useEffect(() => {
+    const fetchSub = async () => {
+      try {
+        const token = await getAuthToken();
+        const res = await fetch(`${SERVER}/subscription`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        setSubscription(data);
+      } catch (e) { console.log(e); }
+    };
+    fetchSub();
+  }, []);
+
   useEffect(() => { loadRuns().then(r => setRuns(r || [])); }, []);
+  
   const [notifEnabled, setNotifEnabled] = useState(false);
   const [notifTime, setNotifTime] = useState(profile?.notifTime || '07:00');
   const [notifDays, setNotifDays] = useState(profile?.notifDays || ['Man', 'Ons', 'Fre']);
-
   const days = ['Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør', 'Søn'];
 
   useEffect(() => {
@@ -199,9 +221,8 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
     if (profile?.notifDays) setNotifDays(profile.notifDays);
   }, [profile]);
 
-  // Tjek om notifikationer allerede er aktiveret
   useEffect(() => {
-    if (Platform.OS === 'web' && 'Notification' in window) {
+    if (Platform.OS === 'web' && typeof window !== 'undefined' && 'Notification' in window) {
       setNotifEnabled(Notification.permission === 'granted');
     }
   }, []);
@@ -220,8 +241,8 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
 
   const toggleNotifications = async () => {
     if (Platform.OS !== 'web') return;
-    if (!('Notification' in window)) return alert('Din browser understøtter ikke notifikationer');
-
+    if (typeof window === 'undefined' || !('Notification' in window)) return;
+    
     if (Notification.permission === 'granted') {
       setNotifEnabled(false);
       return;
@@ -235,8 +256,6 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
   };
 
   const scheduleNotifications = () => {
-    // Web notifikationer kan ikke schedules permanent uden service worker
-    // Vi sætter en daglig check med setInterval som en simpel løsning
     const now = new Date();
     const [h, m] = notifTime.split(':').map(Number);
     const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0);
@@ -254,9 +273,63 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
     setNotifDays(prev => prev.includes(day) ? prev.filter(d => d !== day) : [...prev, day]);
   };
 
-  const a = assessProfile(form);
-  const lv = { beginner: { label: 'Begynder', icon: 'run' }, intermediate: { label: 'Øvet', icon: 'activity' }, advanced: { label: 'Avanceret', icon: 'zap' } };
+  // ─── SLET KONTO (APPLE KRAV) ────────────────────────────────────────────────
+  const handleDeleteAccount = () => {
+    const confirmDelete = async () => {
+      setDeletingAccount(true);
+      try {
+        const token = getAuthToken();
+        const res = await fetch(`${SERVER}/delete-account`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        if (res.ok) {
+          await AsyncStorage.multiRemove(['token', 'onboardingCompleted', 'userLevel']);
+          Alert.alert(
+            'Konto slettet',
+            'Din konto og alle data er blevet slettet permanent.',
+            [{ text: 'OK', onPress: onLogout }]
+          );
+        } else {
+          const data = await res.json();
+          Alert.alert('Fejl', data.error || 'Kunne ikke slette konto. Prøv igen.');
+        }
+      } catch (err) {
+        console.error('Delete account error:', err);
+        Alert.alert('Fejl', 'Kunne ikke forbinde til serveren. Prøv igen.');
+      } finally {
+        setDeletingAccount(false);
+      }
+    };
 
+    if (Platform.OS === 'web') {
+      if (window.confirm('Er du sikker på at du vil slette din konto permanent?\n\nDette vil:\n• Slette alle dine løbedata\n• Annullere dit abonnement\n• Fjerne alle dine personlige oplysninger\n\nDenne handling kan ikke fortrydes.')) {
+        confirmDelete();
+      }
+    } else {
+      Alert.alert(
+        '⚠️ Slet konto',
+        'Er du sikker på, at du vil slette din konto permanent?\n\nDette vil:\n• Slette alle dine løbedata\n• Annullere dit abonnement\n• Fjerne alle dine personlige oplysninger\n\nDenne handling kan ikke fortrydes.',
+        [
+          { text: 'Annuller', style: 'cancel' },
+          { text: 'Slet permanent', style: 'destructive', onPress: confirmDelete }
+        ]
+      );
+    }
+  };
+
+  const a = assessProfile(form);
+  
+  const lv = { 
+    beginner: { label: 'Begynder', iconName: 'run' }, 
+    intermediate: { label: 'Øvet', iconName: 'activity' }, 
+    advanced: { label: 'Avanceret', iconName: 'zap' } 
+  };
+  
   const goals = [
     { id: 'fitness', label: 'Generel fitness' },
     { id: '5k',      label: '5 km' },
@@ -272,7 +345,7 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
           {onBack && (
             <TouchableOpacity onPress={onBack} style={{ marginRight: 12, padding: 4 }}>
-              <Text style={{ fontSize: 22, color: colors.black }}>←</Text>
+              <Text style={{ fontSize: 22, color: colors.text }}>←</Text>
             </TouchableOpacity>
           )}
           <Text style={s.pageTitle}>PROFIL & INDSTILLINGER</Text>
@@ -286,7 +359,9 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
               key={id}
               style={[s.levelBtn, level === id && { borderColor: colors.accent, backgroundColor: colors.accent + '15' }]}
               onPress={() => onLevelChange(id)}>
-              <Text style={s.levelEmoji}>{info.emoji}</Text>
+              <View style={s.levelIconWrap}>
+                <Icon name={info.iconName} size={24} color={level === id ? colors.accent : colors.muted} />
+              </View>
               <Text style={[s.levelLabel, level === id && { color: colors.accent }]}>{info.label}</Text>
             </TouchableOpacity>
           ))}
@@ -370,7 +445,6 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
               thumbColor={notifEnabled ? colors.accent : colors.muted}
             />
           </View>
-
           {notifEnabled && (
             <>
               <Field label="Tidspunkt" value={notifTime} onChange={setNotifTime} placeholder="07:00" />
@@ -500,12 +574,13 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
         <Text style={s.sectionTitle}>Data</Text>
         <View style={s.card}>
           <TouchableOpacity style={s.exportBtn} onPress={() => {
+            if (Platform.OS !== 'web') return;
             const token = getAuthToken();
             fetch(`${SERVER}/runs`, { headers: { Authorization: `Bearer ${token}` } })
               .then(r => r.json())
               .then(data => {
                 const csv = ['Dato,Km,Pace,Tid,Puls']
-                  .concat((data.runs || []).map(r => {
+                  .concat((data.runs || data || []).map(r => {
                     const pace = r.pace_secs_per_km ? `${Math.floor(r.pace_secs_per_km/60)}:${String(Math.round(r.pace_secs_per_km%60)).padStart(2,'0')}` : '';
                     const tid = r.duration_secs ? `${Math.floor(r.duration_secs/60)}min` : '';
                     return `${r.date || ''},${r.km || ''},${pace},${tid},${r.avg_hr || ''}`;
@@ -516,7 +591,10 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
                 a.href = url; a.download = 'runwithai-løb.csv'; a.click();
               });
           }}>
-            <View style={{flexDirection:'row',alignItems:'center',gap:6}}><Icon name='download' size={14} color='#0a0a0a'/><Text style={s.exportBtnText}>Eksportér løb som CSV</Text></View>
+            <View style={{flexDirection:'row',alignItems:'center',gap:6}}>
+              <Icon name='download' size={14} color={colors.accent}/>
+              <Text style={s.exportBtnText}>Eksportér løb som CSV</Text>
+            </View>
           </TouchableOpacity>
           <Text style={s.exportSub}>Download alle dine løb til Excel eller Garmin Connect</Text>
         </View>
@@ -531,6 +609,36 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
           <Text style={s.logoutText}>Log ud</Text>
         </TouchableOpacity>
 
+        {/* ── PRIVATLIVSPOLITIK ── */}
+        <TouchableOpacity 
+          style={s.privacyBtn}
+          onPress={() => Linking.openURL('https://dist-lilac-zeta-14.vercel.app/privacy.html')}
+        >
+          <Text style={s.privacyText}>📜 Privatlivspolitik</Text>
+        </TouchableOpacity>
+
+        {/* ── SLET KONTO (APPLE KRAV) ── */}
+        <View style={s.dangerZone}>
+          <Text style={s.dangerZoneLabel}>FAREZONE</Text>
+          <TouchableOpacity 
+            style={s.deleteAccountBtn} 
+            onPress={handleDeleteAccount}
+            disabled={deletingAccount}
+          >
+            {deletingAccount ? (
+              <ActivityIndicator size="small" color="#ff3b30" />
+            ) : (
+              <Text style={s.deleteAccountBtnText}>🗑️ Slet min konto</Text>
+            )}
+          </TouchableOpacity>
+          <Text style={s.deleteAccountWarning}>Dette sletter permanent alle dine data</Text>
+        </View>
+
+        {/* ── APP VERSION ── */}
+        <View style={s.versionContainer}>
+          <Text style={s.versionText}>RunWithAI v1.5.1</Text>
+        </View>
+
         <View style={{ height: 40 }} />
       </ScrollView>
     </SafeAreaView>
@@ -538,7 +646,7 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
 }
 
 const s = StyleSheet.create({
-  safe:         { flex: 1, backgroundColor: colors.black },
+  safe:         { flex: 1, backgroundColor: colors.bg },
   scroll:       { padding: 16 },
   pageTitle:    { fontSize: 11, color: colors.muted, letterSpacing: 2, fontWeight: '600', marginBottom: 20, marginTop: 8 },
   sectionTitle: { fontSize: 11, color: colors.muted, letterSpacing: 1.5, fontWeight: '600', marginBottom: 10, marginTop: 20, textTransform: 'uppercase' },
@@ -550,8 +658,8 @@ const s = StyleSheet.create({
   sexBtn:       { flex: 1, padding: 12, borderRadius: 12, borderWidth: 1, borderColor: colors.border2, alignItems: 'center', backgroundColor: colors.surface },
   sexBtnText:   { color: colors.dim, fontWeight: '600' },
   levelRow:     { flexDirection: 'row', gap: 8, marginBottom: 4 },
-  levelBtn:     { flex: 1, padding: 12, borderRadius: 14, borderWidth: 1, borderColor: colors.border, alignItems: 'center', backgroundColor: colors.card },
-  levelEmoji:   { fontSize: 20, marginBottom: 4 },
+  levelBtn:     { flex: 1, padding: 14, borderRadius: 14, borderWidth: 1, borderColor: colors.border, alignItems: 'center', backgroundColor: colors.card },
+  levelIconWrap:{ marginBottom: 6 },
   levelLabel:   { color: colors.dim, fontSize: 11, fontWeight: '600', textAlign: 'center' },
   goalGrid:     { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 },
   goalBtn:      { paddingVertical: 8, paddingHorizontal: 12, borderRadius: 20, borderWidth: 1, borderColor: colors.border2, backgroundColor: colors.surface },
@@ -571,10 +679,22 @@ const s = StyleSheet.create({
   saveBtn:      { backgroundColor: colors.accent, borderRadius: 16, padding: 16, alignItems: 'center', marginTop: 24 },
   saveBtnText:  { color: colors.black, fontWeight: '800', fontSize: 16 },
   logoutBtn:    { alignItems: 'center', marginTop: 16, padding: 12 },
-  logoutText:   { color: colors.red, fontSize: 14, fontWeight: '600' },
+  logoutText:   { color: '#ef4444', fontSize: 14, fontWeight: '600' },
   exportBtn:    { backgroundColor: colors.surface, borderRadius: 12, paddingVertical: 13, paddingHorizontal: 16, alignItems: 'center', borderWidth: 1, borderColor: colors.border2, marginBottom: 8 },
   exportBtnText:{ color: colors.accent, fontSize: 14, fontWeight: '700' },
   exportSub:    { color: colors.muted, fontSize: 11, textAlign: 'center', lineHeight: 16 },
+  // Privacy link
+  privacyBtn:   { alignItems: 'center', marginTop: 12, padding: 8 },
+  privacyText:  { color: colors.muted, fontSize: 14 },
+  // Danger zone
+  dangerZone:   { marginTop: 32, paddingTop: 24, borderTopWidth: 1, borderTopColor: colors.border, alignItems: 'center' },
+  dangerZoneLabel: { fontSize: 11, color: colors.muted, letterSpacing: 2, fontWeight: '700', marginBottom: 16 },
+  deleteAccountBtn: { backgroundColor: 'rgba(255, 59, 48, 0.1)', borderWidth: 1, borderColor: '#ff3b30', borderRadius: 14, paddingVertical: 16, paddingHorizontal: 32, alignItems: 'center' },
+  deleteAccountBtnText: { color: '#ff3b30', fontWeight: 'bold', fontSize: 15 },
+  deleteAccountWarning: { color: colors.muted, fontSize: 11, textAlign: 'center', marginTop: 8 },
+  // Version
+  versionContainer: { marginTop: 32, alignItems: 'center', paddingBottom: 16 },
+  versionText: { color: colors.muted, fontSize: 11 },
 });
 
 const st = StyleSheet.create({
@@ -590,14 +710,14 @@ const st = StyleSheet.create({
   activeBadgeText:{ fontSize: 9, color: colors.accent, fontWeight: '700', letterSpacing: 1 },
   warnBadge:      { backgroundColor: '#f59e0b20', borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2, borderWidth: 1, borderColor: '#f59e0b' },
   warnBadgeText:  { fontSize: 9, color: '#f59e0b', fontWeight: '700' },
-  deadBadge:      { backgroundColor: colors.secondary + '20', borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2, borderWidth: 1, borderColor: colors.secondary },
-  deadBadgeText:  { fontSize: 9, color: colors.secondary, fontWeight: '700', letterSpacing: 1 },
+  deadBadge:      { backgroundColor: '#ef444420', borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2, borderWidth: 1, borderColor: '#ef4444' },
+  deadBadgeText:  { fontSize: 9, color: '#ef4444', fontWeight: '700', letterSpacing: 1 },
   barTrack:       { height: 8, backgroundColor: colors.border2, borderRadius: 4, overflow: 'hidden', position: 'relative', marginBottom: 4 },
   barFill:        { height: '100%', borderRadius: 4 },
   barWarnLine:    { position: 'absolute', left: '87.5%', top: 0, width: 2, height: '100%', backgroundColor: '#f59e0b60' },
   barLabels:      { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
   barLabel:       { fontSize: 9, color: colors.muted },
-  deadMsg:        { fontSize: 12, color: colors.secondary, marginBottom: 8, lineHeight: 18 },
+  deadMsg:        { fontSize: 12, color: '#ef4444', marginBottom: 8, lineHeight: 18 },
   shoeActions:    { flexDirection: 'row', gap: 8 },
   actionBtn:      { flex: 1, backgroundColor: colors.accent + '15', borderRadius: 10, paddingVertical: 8, alignItems: 'center', borderWidth: 1, borderColor: colors.accent + '40' },
   actionBtnText:  { color: colors.accent, fontSize: 12, fontWeight: '600' },

@@ -6,23 +6,6 @@ import {
 } from 'react-native';
 import { colors, LEVELS, sendToAI, loadMessages, clearMessages } from '../data';
 
-const SUGGESTED = {
-  beginner:     [
-    'Jeg er træt i dag', 'Flyt løbet til i morgen',
-    'Gør løbet kortere', 'Hvad skal jeg lave i dag?',
-  ],
-  intermediate: [
-    'Ben er tunge — juster planen', 'Flyt løbet til torsdag',
-    '↘️ Reducer distancen i dag', 'Skift til restitutionsløb',
-    'Jeg har ondt i knæet', 'Øg intensiteten?',
-  ],
-  advanced: [
-    'Analyser min ACWR', 'Juster intervallerne',
-    'Overbelastning — hvad gør jeg?', 'Optimer til mit race',
-    'Tilføj ekstra session', '↘️ Reducer belastning denne uge',
-  ],
-};
-
 function Message({ msg }) {
   const isAI = msg.role === 'ai' || msg.role === 'assistant';
   return (
@@ -53,14 +36,12 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
     async function fetchHistory() {
       const history = await loadMessages();
       if (history && history.length > 0) {
-        // Konverter database format til app format
         const converted = history.map(m => ({
           role: m.role === 'assistant' ? 'ai' : m.role,
           text: m.text,
         }));
         setMessages(converted);
       } else {
-        // Ingen historik — vis velkomstbesked
         const name = (profile?.name || 'løber').split(' ')[0];
         setMessages([{ role: 'ai', text: `Hej ${name}! Jeg er din AI løbecoach. Hvad kan jeg hjælpe dig med i dag?` }]);
       }
@@ -101,7 +82,7 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
   };
 
   if (loadingHistory) return (
-    <View style={{ flex: 1, backgroundColor: colors.black, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{ flex: 1, backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center' }}>
       <ActivityIndicator color={colors.accent} />
       <Text style={{ color: colors.muted, marginTop: 10, fontSize: 12 }}>Henter samtale...</Text>
     </View>
@@ -113,9 +94,6 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
       <View style={s.header}>
         <View style={[s.dot, { backgroundColor: lv.color }]} />
         <Text style={s.headerTitle}>AI COACH</Text>
-        <View style={[s.levelBadge, { borderColor: lv.color + '40', backgroundColor: lv.color + '10' }]}>
-          <Text style={[s.levelText, { color: lv.color }]}>{lv.emoji} {lv.label}</Text>
-        </View>
         <TouchableOpacity onPress={handleClear} style={s.clearBtn}>
           <Text style={s.clearBtnText}>Ryd</Text>
         </TouchableOpacity>
@@ -134,16 +112,7 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
         )}
       </ScrollView>
 
-      {/* Kontekst-knapper — altid synlige */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={s.suggestions}>
-        {SUGGESTED[level].map(s2 => (
-          <TouchableOpacity key={s2} style={s.suggBtn} onPress={() => send(s2)}>
-            <Text style={s.suggText}>{s2}</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-
-      {/* Input */}
+      {/* Input — FIX: ikke multiline, Enter sender besked */}
       <View style={s.inputRow}>
         <TextInput
           style={s.input}
@@ -153,7 +122,7 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
           placeholderTextColor={colors.muted}
           onSubmitEditing={() => send(input)}
           returnKeyType="send"
-          multiline
+          blurOnSubmit={false}
         />
         <TouchableOpacity style={[s.sendBtn, { opacity: input.trim() ? 1 : 0.4 }]} onPress={() => send(input)}>
           <Text style={s.sendBtnText}>↑</Text>
@@ -168,8 +137,6 @@ const s = StyleSheet.create({
   header:              { flexDirection: 'row', alignItems: 'center', gap: 8, padding: 16, paddingTop: 8, borderBottomWidth: 1, borderBottomColor: colors.border, backgroundColor: colors.card },
   dot:                 { width: 8, height: 8, borderRadius: 4 },
   headerTitle:         { flex: 1, fontSize: 12, color: colors.muted, letterSpacing: 2, fontWeight: '600' },
-  levelBadge:          { backgroundColor: colors.surface, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4 },
-  levelText:           { fontSize: 12, fontWeight: '600', color: colors.dim },
   clearBtn:            { paddingHorizontal: 10, paddingVertical: 4, backgroundColor: colors.surface, borderRadius: 8 },
   clearBtnText:        { fontSize: 11, color: colors.muted },
   messages:            { flex: 1, backgroundColor: colors.bg },
@@ -183,11 +150,8 @@ const s = StyleSheet.create({
   bubbleText:          { fontSize: 14, lineHeight: 21 },
   bubbleTextAI:        { color: colors.black },
   bubbleTextUser:      { color: colors.card },
-  suggestions:         { paddingHorizontal: 16, paddingVertical: 8, gap: 8, backgroundColor: colors.card, borderTopWidth: 1, borderTopColor: colors.border },
-  suggBtn:             { backgroundColor: colors.surface, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 8 },
-  suggText:            { fontSize: 12, color: colors.dim, fontWeight: '500' },
-  inputRow:            { flexDirection: 'row', gap: 10, padding: 12, paddingBottom: 16, borderTopWidth: 1, borderTopColor: colors.border, alignItems: 'flex-end', backgroundColor: colors.card },
-  input:               { flex: 1, backgroundColor: colors.surface, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12, fontSize: 14, color: colors.text, maxHeight: 100 },
+  inputRow:            { flexDirection: 'row', gap: 10, padding: 12, paddingBottom: 16, borderTopWidth: 1, borderTopColor: colors.border, alignItems: 'center', backgroundColor: colors.card },
+  input:               { flex: 1, backgroundColor: colors.surface, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12, fontSize: 14, color: colors.text, height: 44 },
   sendBtn:             { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.black, alignItems: 'center', justifyContent: 'center' },
   sendBtnText:         { fontSize: 20, fontWeight: '700', color: colors.card },
   planUpdateBadge:     { flexDirection: 'row', alignItems: 'center', marginTop: 6, backgroundColor: colors.surface, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 5, alignSelf: 'flex-start' },

@@ -151,18 +151,25 @@ export const DEFAULT_PROFILE = {
 };
 
 // ─── DATABASE API ─────────────────────────────────────────────────────────────
+
+// FIX 1: loadProfile — håndter dobbelt-JSON-encoded string fra serveren
 export async function loadProfile() {
   try {
     const res = await fetch(`${SERVER}/profile`, { headers: authHeaders() });
-    const data = await res.json();
-    return Object.keys(data).length > 0 ? data : null;
+    let data = await res.json();
+    // Serveren returnerer profil som JSON-string — parse den ekstra gang
+    if (typeof data === 'string') {
+      try { data = JSON.parse(data); } catch(e) {}
+    }
+    return data && typeof data === 'object' && Object.keys(data).length > 0 ? data : null;
   } catch { return null; }
 }
 
+// FIX 2: saveProfile — brug PUT (serveren har kun PUT /profile, ikke POST)
 export async function saveProfile(profile) {
   try {
     await fetch(`${SERVER}/profile`, {
-      method: 'POST',
+      method: 'PUT',
       headers: authHeaders(),
       body: JSON.stringify(profile),
     });
@@ -195,7 +202,14 @@ export async function clearMessages() {
 export async function loadWeekPlan() {
   try {
     const res = await fetch(`${SERVER}/weekplan`, { headers: authHeaders() });
-    const data = await res.json();
+    let data = await res.json();
+    // FIX: håndter dobbelt-JSON-encoded string ligesom profil
+    if (typeof data === 'string') {
+      try { data = JSON.parse(data); } catch(e) {}
+    }
+    if (typeof data === 'string') {
+      try { data = JSON.parse(data); } catch(e) {}
+    }
     return data || null;
   } catch { return null; }
 }
@@ -366,7 +380,16 @@ export async function deleteRun(runId) {
 export async function loadTrainingPlan() {
   try {
     const res = await fetch(`${SERVER}/trainingplan`, { headers: authHeaders() });
-    return await res.json();
+    const plan = await res.json();
+    if (!plan) return null;
+    // FIX: parse dobbelt-JSON-encoded data felt
+    if (plan.data && typeof plan.data === 'string') {
+      try { plan.data = JSON.parse(plan.data); } catch {}
+    }
+    if (plan.data && typeof plan.data === 'string') {
+      try { plan.data = JSON.parse(plan.data); } catch {}
+    }
+    return plan;
   } catch { return null; }
 }
 
@@ -476,6 +499,7 @@ export async function loadFeed() {
   } catch { return { feed: [] }; }
 }
 
+// FIX 3: shareRun — brug Server.js feltnavne (duration, pace, heart_rate)
 export async function shareRun(run, comment = '') {
   try {
     const res = await fetch(`${SERVER}/runs/share`, {
@@ -483,9 +507,9 @@ export async function shareRun(run, comment = '') {
       body: JSON.stringify({
         run_id: run.id,
         km: run.km,
-        duration_secs: run.duration_secs,
-        pace_secs_per_km: run.pace_secs_per_km,
-        avg_hr: run.avg_hr,
+        duration: run.duration || run.duration_secs,
+        pace: run.pace || run.pace_secs_per_km,
+        heart_rate: run.heart_rate || run.avg_hr,
         ai_comment: comment,
       }),
     });

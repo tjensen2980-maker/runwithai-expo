@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AUTH.JS - RunWithAI Login & Registration
+// AUTH.JS - RunWithAI Login & Registration (med PRO Upsell)
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import React, { useState } from 'react';
@@ -14,6 +14,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -56,8 +57,18 @@ const GOALS = [
   { id: 'fun', label: 'Hygge', emoji: '😊' },
 ];
 
+// ─── PRO FEATURES ───────────────────────────────────────────────────────────
+const PRO_FEATURES = [
+  { emoji: '🤖', title: 'AI Coach', desc: 'Personlig træningsplan' },
+  { emoji: '📊', title: 'Statistik', desc: 'Dybdegående analyse' },
+  { emoji: '🎯', title: 'Mål', desc: 'Ubegrænsede mål' },
+  { emoji: '🗺️', title: 'Ruter', desc: 'Gem yndlingsruter' },
+  { emoji: '💬', title: 'AI Chat', desc: 'Spørg om alt' },
+  { emoji: '📈', title: 'Rapporter', desc: 'Ugentlige opsummeringer' },
+];
+
 export default function Auth({ onAuth }) {
-  const [mode, setMode] = useState('login'); // 'login' | 'register' | 'register_profile'
+  const [mode, setMode] = useState('login'); // 'login' | 'register' | 'register_profile' | 'register_upsell'
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   
@@ -78,6 +89,7 @@ export default function Auth({ onAuth }) {
   // Temp storage for auth data between steps
   const [pendingToken, setPendingToken] = useState(null);
   const [pendingUser, setPendingUser] = useState(null);
+  const [pendingProfile, setPendingProfile] = useState(null);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -195,16 +207,58 @@ export default function Auth({ onAuth }) {
       await AsyncStorage.setItem('onboardingCompleted', 'true');
       await AsyncStorage.setItem('userLevel', level);
       
-      // Fuldfør login
-      onAuth(pendingToken, { ...pendingUser, profile: profileData });
+      // Gem profil data til næste step
+      setPendingProfile(profileData);
+      
+      // Gå til PRO upsell step
+      setMode('register_upsell');
       
     } catch (err) {
       console.log('Profile save error:', err);
-      // Fortsæt alligevel - brugeren er oprettet
-      onAuth(pendingToken, pendingUser);
+      // Fortsæt alligevel til upsell
+      setMode('register_upsell');
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleStartTrial = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_URL}/create-checkout-session`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${pendingToken}`,
+        },
+        body: JSON.stringify({ priceId: 'price_1TBU4s5DwJ9LegdIxUvhaTJu' }),
+      });
+      
+      const data = await res.json();
+      
+      if (data.url) {
+        if (Platform.OS === 'web') {
+          window.open(data.url, '_blank');
+        } else {
+          Linking.openURL(data.url);
+        }
+      }
+      
+      // Fuldfør login efter checkout åbnes
+      onAuth(pendingToken, { ...pendingUser, profile: pendingProfile });
+      
+    } catch (err) {
+      console.log('Checkout error:', err);
+      // Fortsæt alligevel
+      onAuth(pendingToken, { ...pendingUser, profile: pendingProfile });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSkipTrial = () => {
+    // Fuldfør login uden PRO
+    onAuth(pendingToken, { ...pendingUser, profile: pendingProfile });
   };
 
   const toggleGoal = (goalId) => {
@@ -319,7 +373,7 @@ export default function Auth({ onAuth }) {
             {/* Form */}
             <View style={styles.formCard}>
               <Text style={styles.formTitle}>Opret konto</Text>
-              <Text style={styles.stepIndicator}>Trin 1 af 2</Text>
+              <Text style={styles.stepIndicator}>Trin 1 af 3</Text>
               
               {error ? <Text style={styles.errorText}>{error}</Text> : null}
               
@@ -398,7 +452,7 @@ export default function Auth({ onAuth }) {
             {/* Header */}
             <View style={styles.profileHeader}>
               <Text style={styles.profileTitle}>Fortæl os om dig selv</Text>
-              <Text style={styles.stepIndicator}>Trin 2 af 2</Text>
+              <Text style={styles.stepIndicator}>Trin 2 af 3</Text>
             </View>
 
             {/* Form */}
@@ -516,12 +570,66 @@ export default function Auth({ onAuth }) {
                 {loading ? (
                   <ActivityIndicator color={colors.black} />
                 ) : (
-                  <Text style={styles.primaryButtonText}>Start din rejse 🏃</Text>
+                  <Text style={styles.primaryButtonText}>Fortsæt →</Text>
                 )}
               </TouchableOpacity>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
+      </SafeAreaView>
+    );
+  }
+
+  // ─── REGISTER STEP 3 - PRO UPSELL ─────────────────────────────────────────
+  if (mode === 'register_upsell') {
+    return (
+      <SafeAreaView style={styles.upsellContainer}>
+        <ScrollView contentContainerStyle={styles.upsellContent} showsVerticalScrollIndicator={false}>
+          {/* Header */}
+          <View style={styles.upsellHeader}>
+            <View style={styles.proBadge}>
+              <Text style={styles.proBadgeText}>⭐ PRO</Text>
+            </View>
+            <Text style={styles.upsellTitle}>Lås op for fuld kraft</Text>
+            <Text style={styles.upsellSubtitle}>Få adgang til alle funktioner og nå dine mål hurtigere</Text>
+          </View>
+
+          {/* Features Grid */}
+          <View style={styles.featuresGrid}>
+            {PRO_FEATURES.map((f, i) => (
+              <View key={i} style={styles.featureCard}>
+                <Text style={styles.featureEmoji}>{f.emoji}</Text>
+                <Text style={styles.featureTitle}>{f.title}</Text>
+                <Text style={styles.featureDesc}>{f.desc}</Text>
+              </View>
+            ))}
+          </View>
+
+          {/* Price */}
+          <View style={styles.priceSection}>
+            <Text style={styles.priceAmount}>49 kr</Text>
+            <Text style={styles.priceUnit}>/måned</Text>
+          </View>
+          
+          <Text style={styles.guarantee}>✓ Annuller når som helst • ✓ 7 dages gratis prøveperiode</Text>
+
+          {/* CTA Buttons */}
+          <TouchableOpacity 
+            style={[styles.upsellButton, loading && styles.buttonDisabled]}
+            onPress={handleStartTrial}
+            disabled={loading}
+          >
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.upsellButtonText}>🚀 Start gratis prøveperiode</Text>
+            )}
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.skipButton} onPress={handleSkipTrial}>
+            <Text style={styles.skipButtonText}>Fortsæt med gratis version</Text>
+          </TouchableOpacity>
+        </ScrollView>
       </SafeAreaView>
     );
   }
@@ -756,5 +864,120 @@ const styles = StyleSheet.create({
   },
   goalLabelSelected: {
     color: colors.black,
+  },
+  // ─── PRO UPSELL STYLES ──────────────────────────────────────────────────────
+  upsellContainer: {
+    flex: 1,
+    backgroundColor: '#09090b',
+  },
+  upsellContent: {
+    padding: 24,
+    paddingBottom: 48,
+    alignItems: 'center',
+  },
+  upsellHeader: {
+    alignItems: 'center',
+    marginBottom: 28,
+    marginTop: 20,
+  },
+  proBadge: {
+    backgroundColor: colors.accent,
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    borderRadius: 20,
+    marginBottom: 16,
+  },
+  proBadgeText: {
+    color: '#000',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  upsellTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  upsellSubtitle: {
+    fontSize: 16,
+    color: '#888',
+    textAlign: 'center',
+    maxWidth: 300,
+  },
+  featuresGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: 12,
+    marginBottom: 28,
+    maxWidth: 500,
+  },
+  featureCard: {
+    backgroundColor: '#1a1a2e',
+    borderRadius: 14,
+    padding: 16,
+    width: '47%',
+    minWidth: 140,
+    alignItems: 'center',
+  },
+  featureEmoji: {
+    fontSize: 28,
+    marginBottom: 8,
+  },
+  featureTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: 4,
+    textAlign: 'center',
+  },
+  featureDesc: {
+    fontSize: 12,
+    color: '#888',
+    textAlign: 'center',
+  },
+  priceSection: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    marginBottom: 8,
+  },
+  priceAmount: {
+    fontSize: 48,
+    fontWeight: 'bold',
+    color: colors.accent,
+  },
+  priceUnit: {
+    fontSize: 18,
+    color: '#888',
+    marginLeft: 4,
+  },
+  guarantee: {
+    fontSize: 12,
+    color: '#666',
+    marginBottom: 24,
+    textAlign: 'center',
+  },
+  upsellButton: {
+    backgroundColor: colors.accent,
+    paddingVertical: 16,
+    paddingHorizontal: 40,
+    borderRadius: 30,
+    marginBottom: 12,
+    width: '100%',
+    maxWidth: 320,
+  },
+  upsellButtonText: {
+    color: '#000',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  skipButton: {
+    paddingVertical: 12,
+  },
+  skipButtonText: {
+    color: '#666',
+    fontSize: 14,
   },
 });
