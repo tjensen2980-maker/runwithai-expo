@@ -27,7 +27,7 @@
       "autoIncrement": true,
       "ios": {
         "resourceClass": "m-medium",
-        "image": "macos-ventura-13.6-xcode-15.2"
+        "image": "macos-sonoma-14.5-xcode-16.1"
       },
       "android": {
         "buildType": "app-bundle"
