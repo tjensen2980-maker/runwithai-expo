@@ -17,7 +17,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "app.runwithai",
-      "buildNumber": "22",
+      "buildNumber": "23",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter i realtid.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter, også når appen kører i baggrunden under dit løb.",
