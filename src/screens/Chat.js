@@ -2,9 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Icon } from '../components/Icons';
 import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
-  StyleSheet, KeyboardAvoidingView, Platform, ActivityIndicator
+  StyleSheet, KeyboardAvoidingView, Platform, ActivityIndicator,
+  Keyboard, Dimensions
 } from 'react-native';
 import { colors, LEVELS, sendToAI, loadMessages, clearMessages } from '../data';
+
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function Message({ msg }) {
   const isAI = msg.role === 'ai' || msg.role === 'assistant';
@@ -29,7 +32,30 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [loadingHistory, setLoadingHistory] = useState(true);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const scrollRef = useRef(null);
+
+  // Lyt til keyboard events
+  useEffect(() => {
+    const showSub = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      (e) => {
+        setKeyboardHeight(e.endCoordinates.height);
+        setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
+      }
+    );
+    const hideSub = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+      () => {
+        setKeyboardHeight(0);
+      }
+    );
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   // Hent samtalehistorik fra database ved opstart
   useEffect(() => {
@@ -88,8 +114,11 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
     </View>
   );
 
+  // Beregn padding baseret på keyboard
+  const bottomPadding = Platform.OS === 'ios' ? keyboardHeight : 0;
+
   return (
-    <KeyboardAvoidingView style={s.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined} keyboardVerticalOffset={90}>
+    <View style={s.container}>
       {/* Header */}
       <View style={s.header}>
         <View style={[s.dot, { backgroundColor: lv.color }]} />
@@ -100,7 +129,14 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
       </View>
 
       {/* Messages */}
-      <ScrollView ref={scrollRef} style={s.messages} contentContainerStyle={{ padding: 16, paddingBottom: 8 }} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        ref={scrollRef}
+        style={s.messages}
+        contentContainerStyle={{ padding: 16, paddingBottom: 8 }}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
+      >
         {messages.map((m, i) => <Message key={i} msg={m} />)}
         {loading && (
           <View style={[s.msgWrap, s.msgAI]}>
@@ -112,8 +148,8 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
         )}
       </ScrollView>
 
-      {/* Input — FIX: ikke multiline, Enter sender besked */}
-      <View style={s.inputRow}>
+      {/* Input - med dynamisk padding for keyboard */}
+      <View style={[s.inputRow, { marginBottom: bottomPadding }]}>
         <TextInput
           style={s.input}
           value={input}
@@ -128,7 +164,7 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
           <Text style={s.sendBtnText}>↑</Text>
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 
@@ -150,7 +186,7 @@ const s = StyleSheet.create({
   bubbleText:          { fontSize: 14, lineHeight: 21 },
   bubbleTextAI:        { color: colors.black },
   bubbleTextUser:      { color: colors.card },
-  inputRow:            { flexDirection: 'row', gap: 10, padding: 12, paddingBottom: 16, borderTopWidth: 1, borderTopColor: colors.border, alignItems: 'center', backgroundColor: colors.card },
+  inputRow:            { flexDirection: 'row', gap: 10, padding: 12, paddingBottom: 12, borderTopWidth: 1, borderTopColor: colors.border, alignItems: 'center', backgroundColor: colors.card },
   input:               { flex: 1, backgroundColor: colors.surface, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12, fontSize: 14, color: colors.text, height: 44 },
   sendBtn:             { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.black, alignItems: 'center', justifyContent: 'center' },
   sendBtnText:         { fontSize: 20, fontWeight: '700', color: colors.card },

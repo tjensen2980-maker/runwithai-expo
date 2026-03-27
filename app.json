@@ -2,7 +2,7 @@
   "expo": {
     "name": "RunWithAI",
     "slug": "runwithai",
-    "version": "1.6.0",
+    "version": "1.6.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -15,18 +15,16 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": false,
+      "supportsTablet": true,
       "bundleIdentifier": "app.runwithai",
-      "buildNumber": "15",
+      "buildNumber": "21",
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter.",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter, også i baggrunden.",
+        "NSLocationWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter i realtid.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter, også når appen kører i baggrunden under dit løb.",
         "NSMotionUsageDescription": "RunWithAI bruger bevægelsessensorer til at forbedre distance-beregning.",
         "NSHealthShareUsageDescription": "RunWithAI bruger dine sundhedsdata til at vise puls og kalorier under løb.",
         "NSHealthUpdateUsageDescription": "RunWithAI gemmer dine løbeture i Apple Health.",
         "UIBackgroundModes": [
-          "location",
-          "audio",
           "location",
           "audio"
         ],
@@ -68,7 +66,7 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "RunWithAI bruger din placering til at tracke dine løberuter.",
+          "locationAlwaysAndWhenInUsePermission": "RunWithAI bruger din placering til at tracke dine løberuter, også når appen kører i baggrunden under dit løb.",
           "isIosBackgroundLocationEnabled": true,
           "isAndroidBackgroundLocationEnabled": true
         }

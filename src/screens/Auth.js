@@ -193,6 +193,7 @@ export default function Auth({ onAuth }) {
         setResetCode('');
         setNewPassword('');
         setConfirmNewPassword('');
+        setPassword(''); // Ryd password feltet på login-skærmen
       } else {
         setError(data.error || 'Kunne ikke nulstille adgangskode');
       }
@@ -543,6 +544,7 @@ export default function Auth({ onAuth }) {
                   placeholderTextColor={colors.muted}
                   keyboardType="number-pad"
                   maxLength={6}
+                  autoFocus={true}
                 />
               </View>
 
