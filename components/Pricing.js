@@ -14,8 +14,8 @@ import {
   Platform,
 } from 'react-native';
 
-// Apple IAP imports
-import * as IAP from 'react-native-iap';
+// Expo IAP imports
+import * as InAppPurchases from 'expo-in-app-purchases';
 
 const API_URL = 'https://runwithai-server-production.up.railway.app';
 
@@ -93,6 +93,7 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [restoring, setRestoring] = useState(false);
+  const [connected, setConnected] = useState(false);
 
   // Initialize IAP connection
   useEffect(() => {
@@ -100,9 +101,13 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
       if (Platform.OS !== 'ios') return;
       
       try {
-        await IAP.initConnection();
-        const availableProducts = await IAP.getSubscriptions({ skus: PRODUCT_IDS });
-        setProducts(availableProducts);
+        await InAppPurchases.connectAsync();
+        setConnected(true);
+        
+        const { results } = await InAppPurchases.getProductsAsync(PRODUCT_IDS);
+        if (results) {
+          setProducts(results);
+        }
       } catch (err) {
         console.error('IAP init error:', err);
       }
@@ -112,8 +117,8 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
 
     // Cleanup
     return () => {
-      if (Platform.OS === 'ios') {
-        IAP.endConnection();
+      if (Platform.OS === 'ios' && connected) {
+        InAppPurchases.disconnectAsync();
       }
     };
   }, []);
@@ -122,54 +127,51 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
   useEffect(() => {
     if (Platform.OS !== 'ios') return;
 
-    const purchaseUpdateSubscription = IAP.purchaseUpdatedListener(async (purchase) => {
-      const receipt = purchase.transactionReceipt;
-      
-      if (receipt) {
-        try {
-          // Send receipt til server for validering
-          const res = await fetch(`${API_URL}/validate-receipt`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ 
-              receipt,
-              productId: purchase.productId,
-            }),
-          });
+    const subscription = InAppPurchases.setPurchaseListener(async ({ responseCode, results, errorCode }) => {
+      if (responseCode === InAppPurchases.IAPResponseCode.OK) {
+        for (const purchase of results) {
+          if (!purchase.acknowledged) {
+            try {
+              // Send receipt til server for validering
+              const res = await fetch(`${API_URL}/validate-receipt`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ 
+                  receipt: purchase.transactionReceipt,
+                  productId: purchase.productId,
+                }),
+              });
 
-          const data = await res.json();
+              const data = await res.json();
 
-          if (data.success) {
-            // Finish transaction
-            await IAP.finishTransaction({ purchase, isConsumable: false });
-            Alert.alert('🎉 Velkommen til Pro!', 'Dit abonnement er nu aktivt.');
-            onClose();
-          } else {
-            Alert.alert('Fejl', data.error || 'Kunne ikke validere køb');
+              if (data.success) {
+                // Finish transaction
+                await InAppPurchases.finishTransactionAsync(purchase, false);
+                Alert.alert('🎉 Velkommen til Pro!', 'Dit abonnement er nu aktivt.');
+                onClose();
+              } else {
+                Alert.alert('Fejl', data.error || 'Kunne ikke validere køb');
+              }
+            } catch (err) {
+              console.error('Receipt validation error:', err);
+              Alert.alert('Fejl', 'Kunne ikke validere køb. Prøv igen.');
+            }
           }
-        } catch (err) {
-          console.error('Receipt validation error:', err);
-          Alert.alert('Fejl', 'Kunne ikke validere køb. Prøv igen.');
         }
-      }
-
-      setLoading(false);
-    });
-
-    const purchaseErrorSubscription = IAP.purchaseErrorListener((error) => {
-      console.error('Purchase error:', error);
-      if (error.code !== 'E_USER_CANCELLED') {
+      } else if (responseCode === InAppPurchases.IAPResponseCode.USER_CANCELED) {
+        console.log('User cancelled purchase');
+      } else {
+        console.error('Purchase error:', errorCode);
         Alert.alert('Fejl', 'Køb fejlede. Prøv igen.');
       }
       setLoading(false);
     });
 
     return () => {
-      purchaseUpdateSubscription.remove();
-      purchaseErrorSubscription.remove();
+      // Cleanup handled by disconnectAsync
     };
   }, [token, onClose]);
 
@@ -184,15 +186,18 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
       return;
     }
 
+    if (!connected) {
+      Alert.alert('Fejl', 'Kunne ikke forbinde til App Store. Prøv igen.');
+      return;
+    }
+
     setLoading(true);
 
     try {
-      await IAP.requestSubscription({ sku: PRODUCT_IDS[0] });
+      await InAppPurchases.purchaseItemAsync(PRODUCT_IDS[0]);
     } catch (err) {
       console.error('Purchase request error:', err);
-      if (err.code !== 'E_USER_CANCELLED') {
-        Alert.alert('Fejl', 'Kunne ikke starte køb. Prøv igen.');
-      }
+      Alert.alert('Fejl', 'Kunne ikke starte køb. Prøv igen.');
       setLoading(false);
     }
   };
@@ -203,9 +208,9 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
     setRestoring(true);
 
     try {
-      const purchases = await IAP.getAvailablePurchases();
+      const { results } = await InAppPurchases.getPurchaseHistoryAsync();
       
-      if (purchases.length > 0) {
+      if (results && results.length > 0) {
         // Send til server for validering
         const res = await fetch(`${API_URL}/restore-purchases`, {
           method: 'POST',
@@ -213,7 +218,7 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ purchases }),
+          body: JSON.stringify({ purchases: results }),
         });
 
         const data = await res.json();
@@ -237,7 +242,7 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
 
   // Get price from product or use fallback
   const productPrice = products.length > 0 
-    ? products[0].localizedPrice 
+    ? products[0].price 
     : '49 kr';
 
   return (
