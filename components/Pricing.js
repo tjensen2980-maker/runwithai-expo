@@ -1,7 +1,6 @@
-// ═══════════════════════════════════════════════════════════════════════════════
-// PRICING.JS - RunWithAI Pro Subscription Component
-// ═══════════════════════════════════════════════════════════════════════════════
-// Tilføj denne fil til din components mappe og importer den i App.js
+// ═══════════════════════════════════════════════════════════════════════════
+// PRICING.JS - RunWithAI Pro Subscription Component (Apple IAP)
+// ═══════════════════════════════════════════════════════════════════════════
 
 import React, { useState, useEffect } from 'react';
 import {
@@ -15,68 +14,15 @@ import {
   Platform,
 } from 'react-native';
 
-// Web-compatible Linking
-const openURL = (url) => {
-  if (Platform.OS === 'web') {
-    window.open(url, '_blank');
-  } else {
-    import('react-native').then(({ Linking }) => {
-      Linking.openURL(url);
-    });
-  }
-};
+// Apple IAP imports
+import * as IAP from 'react-native-iap';
 
 const API_URL = 'https://runwithai-server-production.up.railway.app';
 
-// ─── PRICING PLANS ──────────────────────────────────────────────────────────────
-const PLANS = {
-  free: {
-    name: 'Free',
-    price: '0',
-    period: '',
-    features: [
-      '10 løb per måned',
-      'Basis statistik',
-      'Ugentlig oversigt',
-    ],
-    limitations: [
-      'Ingen AI coach',
-      'Ingen badges',
-      'Ingen Garmin sync',
-    ],
-  },
-  monthly: {
-    name: 'Pro Månedlig',
-    price: '49',
-    period: '/md',
-    priceId: 'price_1TAy6y5vfJTCWWKE6SAScpOa',
-    features: [
-      'Ubegrænset løb',
-      'AI løbecoach',
-      'Alle badges & achievements',
-      'Streak tracking',
-      'Puls zoner',
-      'Garmin sync',
-      'Social feed',
-      'Eksporter data',
-    ],
-    highlight: true,
-  },
-  yearly: {
-    name: 'Pro Årlig',
-    price: '399',
-    period: '/år',
-    priceId: 'price_1TAy7I5vfJTCWWKETZJMH5d3',
-    features: [
-      'Alt i Pro Månedlig',
-      'Spar 189 kr (32%)',
-      'Prioriteret support',
-    ],
-    savings: 'Spar 32%',
-  },
-};
+// Product IDs - skal matche App Store Connect
+const PRODUCT_IDS = ['app.runwithai.pro.monthly'];
 
-// ─── SUBSCRIPTION HOOK ──────────────────────────────────────────────────────────
+// ─── SUBSCRIPTION HOOK ──────────────────────────────────────────────────────
 export function useSubscription(token) {
   const [subscription, setSubscription] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -110,7 +56,7 @@ export function useSubscription(token) {
   return { subscription, loading, isPro, canTrackRun, refresh: fetchSubscription };
 }
 
-// ─── PAYWALL COMPONENT ──────────────────────────────────────────────────────────
+// ─── PAYWALL COMPONENT ──────────────────────────────────────────────────────
 export function Paywall({ feature, children, token, onUpgrade }) {
   const { isPro, loading } = useSubscription(token);
 
@@ -142,12 +88,97 @@ export function Paywall({ feature, children, token, onUpgrade }) {
   );
 }
 
-// ─── PRICING PAGE COMPONENT ─────────────────────────────────────────────────────
+// ─── PRICING PAGE COMPONENT ─────────────────────────────────────────────────
 export default function PricingPage({ token, onClose, currentTier = 'free' }) {
-  const [selectedPlan, setSelectedPlan] = useState('monthly');
   const [loading, setLoading] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [restoring, setRestoring] = useState(false);
 
-  const handleSubscribe = async (interval) => {
+  // Initialize IAP connection
+  useEffect(() => {
+    const initIAP = async () => {
+      if (Platform.OS !== 'ios') return;
+      
+      try {
+        await IAP.initConnection();
+        const availableProducts = await IAP.getSubscriptions({ skus: PRODUCT_IDS });
+        setProducts(availableProducts);
+      } catch (err) {
+        console.error('IAP init error:', err);
+      }
+    };
+
+    initIAP();
+
+    // Cleanup
+    return () => {
+      if (Platform.OS === 'ios') {
+        IAP.endConnection();
+      }
+    };
+  }, []);
+
+  // Listen for purchase updates
+  useEffect(() => {
+    if (Platform.OS !== 'ios') return;
+
+    const purchaseUpdateSubscription = IAP.purchaseUpdatedListener(async (purchase) => {
+      const receipt = purchase.transactionReceipt;
+      
+      if (receipt) {
+        try {
+          // Send receipt til server for validering
+          const res = await fetch(`${API_URL}/validate-receipt`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ 
+              receipt,
+              productId: purchase.productId,
+            }),
+          });
+
+          const data = await res.json();
+
+          if (data.success) {
+            // Finish transaction
+            await IAP.finishTransaction({ purchase, isConsumable: false });
+            Alert.alert('🎉 Velkommen til Pro!', 'Dit abonnement er nu aktivt.');
+            onClose();
+          } else {
+            Alert.alert('Fejl', data.error || 'Kunne ikke validere køb');
+          }
+        } catch (err) {
+          console.error('Receipt validation error:', err);
+          Alert.alert('Fejl', 'Kunne ikke validere køb. Prøv igen.');
+        }
+      }
+
+      setLoading(false);
+    });
+
+    const purchaseErrorSubscription = IAP.purchaseErrorListener((error) => {
+      console.error('Purchase error:', error);
+      if (error.code !== 'E_USER_CANCELLED') {
+        Alert.alert('Fejl', 'Køb fejlede. Prøv igen.');
+      }
+      setLoading(false);
+    });
+
+    return () => {
+      purchaseUpdateSubscription.remove();
+      purchaseErrorSubscription.remove();
+    };
+  }, [token, onClose]);
+
+  const handleSubscribe = async () => {
+    if (Platform.OS !== 'ios') {
+      Alert.alert('Info', 'In-App Purchase er kun tilgængelig på iOS');
+      return;
+    }
+
     if (!token) {
       Alert.alert('Log ind', 'Du skal være logget ind for at købe abonnement');
       return;
@@ -156,59 +187,58 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_URL}/create-checkout-session`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ interval }),
-      });
-
-      const data = await res.json();
-
-      if (data.url) {
-        // Åbn Stripe Checkout i browser
-        openURL(data.url);
-      } else {
-        Alert.alert('Fejl', data.error || 'Kunne ikke starte checkout');
-      }
+      await IAP.requestSubscription({ sku: PRODUCT_IDS[0] });
     } catch (err) {
-      console.error('Checkout error:', err);
-      Alert.alert('Fejl', 'Noget gik galt. Prøv igen.');
-    } finally {
+      console.error('Purchase request error:', err);
+      if (err.code !== 'E_USER_CANCELLED') {
+        Alert.alert('Fejl', 'Kunne ikke starte køb. Prøv igen.');
+      }
       setLoading(false);
     }
   };
 
-  const handleManageSubscription = async () => {
-    if (!token) return;
+  const handleRestorePurchases = async () => {
+    if (Platform.OS !== 'ios') return;
 
-    setLoading(true);
+    setRestoring(true);
 
     try {
-      const res = await fetch(`${API_URL}/create-portal-session`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const purchases = await IAP.getAvailablePurchases();
+      
+      if (purchases.length > 0) {
+        // Send til server for validering
+        const res = await fetch(`${API_URL}/restore-purchases`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ purchases }),
+        });
 
-      const data = await res.json();
+        const data = await res.json();
 
-      if (data.url) {
-        openURL(data.url);
+        if (data.success && data.hasActiveSub) {
+          Alert.alert('✅ Gendannet!', 'Dit Pro abonnement er gendannet.');
+          onClose();
+        } else {
+          Alert.alert('Info', 'Ingen aktive abonnementer fundet.');
+        }
       } else {
-        Alert.alert('Fejl', data.error || 'Kunne ikke åbne kundeportal');
+        Alert.alert('Info', 'Ingen tidligere køb fundet.');
       }
     } catch (err) {
-      console.error('Portal error:', err);
-      Alert.alert('Fejl', 'Noget gik galt. Prøv igen.');
+      console.error('Restore error:', err);
+      Alert.alert('Fejl', 'Kunne ikke gendanne køb. Prøv igen.');
     } finally {
-      setLoading(false);
+      setRestoring(false);
     }
   };
+
+  // Get price from product or use fallback
+  const productPrice = products.length > 0 
+    ? products[0].localizedPrice 
+    : '49 kr';
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -217,7 +247,7 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
         <TouchableOpacity style={styles.closeButton} onPress={onClose}>
           <Text style={styles.closeButtonText}>✕</Text>
         </TouchableOpacity>
-        <Text style={styles.title}>Vælg din plan</Text>
+        <Text style={styles.title}>RunWithAI Pro</Text>
         <Text style={styles.subtitle}>
           Få mest muligt ud af din løbetræning
         </Text>
@@ -230,65 +260,14 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
         </View>
       )}
 
-      {/* Plan Toggle */}
-      <View style={styles.planToggle}>
-        <TouchableOpacity
-          style={[
-            styles.toggleButton,
-            selectedPlan === 'monthly' && styles.toggleButtonActive,
-          ]}
-          onPress={() => setSelectedPlan('monthly')}
-        >
-          <Text
-            style={[
-              styles.toggleText,
-              selectedPlan === 'monthly' && styles.toggleTextActive,
-            ]}
-          >
-            Månedlig
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.toggleButton,
-            selectedPlan === 'yearly' && styles.toggleButtonActive,
-          ]}
-          onPress={() => setSelectedPlan('yearly')}
-        >
-          <Text
-            style={[
-              styles.toggleText,
-              selectedPlan === 'yearly' && styles.toggleTextActive,
-            ]}
-          >
-            Årlig
-          </Text>
-          <View style={styles.savingsBadge}>
-            <Text style={styles.savingsText}>-32%</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-
-      {/* Selected Plan Card */}
+      {/* Plan Card */}
       <View style={styles.planCard}>
         <View style={styles.planHeader}>
-          <Text style={styles.planName}>
-            {selectedPlan === 'monthly' ? 'Pro Månedlig' : 'Pro Årlig'}
-          </Text>
+          <Text style={styles.planName}>PRO MÅNEDLIG</Text>
           <View style={styles.priceContainer}>
-            <Text style={styles.currency}>kr</Text>
-            <Text style={styles.price}>
-              {selectedPlan === 'monthly' ? '49' : '399'}
-            </Text>
-            <Text style={styles.period}>
-              {selectedPlan === 'monthly' ? '/md' : '/år'}
-            </Text>
+            <Text style={styles.price}>{productPrice}</Text>
+            <Text style={styles.period}>/md</Text>
           </View>
-          {selectedPlan === 'yearly' && (
-            <Text style={styles.yearlyBreakdown}>
-              Kun 33 kr/md • Spar 189 kr
-            </Text>
-          )}
         </View>
 
         {/* Features List */}
@@ -301,28 +280,13 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
           <FeatureItem text="Garmin Connect sync" />
           <FeatureItem text="Social feed med venner" />
           <FeatureItem text="Eksporter alle dine data" />
-          {selectedPlan === 'yearly' && (
-            <FeatureItem text="Prioriteret support" highlight />
-          )}
         </View>
 
         {/* Subscribe Button */}
-        {currentTier === 'pro' ? (
-          <TouchableOpacity
-            style={styles.manageButton}
-            onPress={handleManageSubscription}
-            disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator color="#000" />
-            ) : (
-              <Text style={styles.manageButtonText}>Administrer abonnement</Text>
-            )}
-          </TouchableOpacity>
-        ) : (
+        {currentTier !== 'pro' && (
           <TouchableOpacity
             style={styles.subscribeButton}
-            onPress={() => handleSubscribe(selectedPlan)}
+            onPress={handleSubscribe}
             disabled={loading}
           >
             {loading ? (
@@ -337,11 +301,23 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
 
         {/* Terms */}
         <Text style={styles.terms}>
-          {selectedPlan === 'monthly'
-            ? 'Forny automatisk hver måned. Annuller når som helst.'
-            : 'Forny automatisk hvert år. Annuller når som helst.'}
+          Abonnementet fornyes automatisk hver måned.{'\n'}
+          Du kan annullere når som helst i Indstillinger.
         </Text>
       </View>
+
+      {/* Restore Purchases */}
+      <TouchableOpacity
+        style={styles.restoreButton}
+        onPress={handleRestorePurchases}
+        disabled={restoring}
+      >
+        {restoring ? (
+          <ActivityIndicator color="#888" size="small" />
+        ) : (
+          <Text style={styles.restoreButtonText}>Gendan tidligere køb</Text>
+        )}
+      </TouchableOpacity>
 
       {/* Free Plan Comparison */}
       <View style={styles.freePlanCard}>
@@ -362,7 +338,7 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
       {/* Footer */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>
-          🔒 Sikker betaling via Stripe
+          🔒 Sikker betaling via App Store
         </Text>
         <Text style={styles.footerText}>
           Spørgsmål? kontakt@runwithai.app
@@ -372,7 +348,7 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
   );
 }
 
-// ─── HELPER COMPONENTS ──────────────────────────────────────────────────────────
+// ─── HELPER COMPONENTS ──────────────────────────────────────────────────────
 function FeatureItem({ text, highlight, dimmed }) {
   return (
     <View style={styles.featureItem}>
@@ -395,7 +371,7 @@ function LimitationItem({ text }) {
   );
 }
 
-// ─── STYLES ─────────────────────────────────────────────────────────────────────
+// ─── STYLES ─────────────────────────────────────────────────────────────────
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -442,44 +418,6 @@ const styles = StyleSheet.create({
     color: '#c8ff00',
     fontWeight: '600',
   },
-  planToggle: {
-    flexDirection: 'row',
-    backgroundColor: '#1a1a1f',
-    borderRadius: 12,
-    padding: 4,
-    marginBottom: 24,
-  },
-  toggleButton: {
-    flex: 1,
-    paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  toggleButtonActive: {
-    backgroundColor: '#c8ff00',
-  },
-  toggleText: {
-    color: '#888',
-    fontWeight: '600',
-    fontSize: 15,
-  },
-  toggleTextActive: {
-    color: '#000',
-  },
-  savingsBadge: {
-    backgroundColor: '#ff6b35',
-    borderRadius: 8,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    marginLeft: 8,
-  },
-  savingsText: {
-    color: '#fff',
-    fontSize: 11,
-    fontWeight: 'bold',
-  },
   planCard: {
     backgroundColor: '#1a1a1f',
     borderRadius: 20,
@@ -507,27 +445,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
   },
-  currency: {
-    fontSize: 20,
-    color: '#fff',
-    marginBottom: 8,
-    marginRight: 4,
-  },
   price: {
-    fontSize: 56,
+    fontSize: 48,
     fontWeight: 'bold',
     color: '#fff',
   },
   period: {
     fontSize: 18,
     color: '#888',
-    marginBottom: 12,
+    marginBottom: 8,
     marginLeft: 4,
-  },
-  yearlyBreakdown: {
-    fontSize: 14,
-    color: '#c8ff00',
-    marginTop: 8,
   },
   featuresList: {
     marginBottom: 24,
@@ -577,24 +504,21 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  manageButton: {
-    backgroundColor: '#2a2a2f',
-    borderRadius: 14,
-    paddingVertical: 18,
-    alignItems: 'center',
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: '#c8ff00',
-  },
-  manageButtonText: {
-    color: '#c8ff00',
-    fontSize: 16,
-    fontWeight: '600',
-  },
   terms: {
     textAlign: 'center',
     color: '#666',
     fontSize: 12,
+    lineHeight: 18,
+  },
+  restoreButton: {
+    alignItems: 'center',
+    paddingVertical: 16,
+    marginBottom: 20,
+  },
+  restoreButtonText: {
+    color: '#888',
+    fontSize: 14,
+    textDecorationLine: 'underline',
   },
   freePlanCard: {
     backgroundColor: '#1a1a1f',
