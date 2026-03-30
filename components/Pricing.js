@@ -19,7 +19,7 @@ import Purchases from 'react-native-purchases';
 const API_URL = 'https://runwithai-server-production.up.railway.app';
 
 // RevenueCat API Keys - du får disse fra RevenueCat dashboard
-const REVENUECAT_IOS_KEY = 'appl_YOUR_REVENUECAT_IOS_KEY'; // Erstat med din rigtige nøgle
+const REVENUECAT_IOS_KEY = 'appl_RSTGHBSwwJLczMzoqgBiNYDFDIb'; // Erstat med din rigtige nøgle
 const REVENUECAT_ANDROID_KEY = 'goog_YOUR_REVENUECAT_ANDROID_KEY'; // Erstat med din rigtige nøgle
 
 // ─── INITIALIZE REVENUECAT ──────────────────────────────────────────────────
