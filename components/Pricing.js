@@ -2,7 +2,7 @@
 // PRICING.JS - RunWithAI Pro Subscription Component (Temporary - No IAP)
 // ═══════════════════════════════════════════════════════════════════════════
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -12,9 +12,62 @@ import {
   ScrollView,
   Platform,
   Linking,
+  Modal,
 } from 'react-native';
 
 const API_URL = 'https://runwithai-server-production.up.railway.app';
+
+// ─── USE SUBSCRIPTION HOOK ──────────────────────────────────────────────────
+export function useSubscription(token) {
+  const [subscription, setSubscription] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const refresh = async () => {
+    if (!token) {
+      setSubscription(null);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_URL}/subscription-status`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      setSubscription(data);
+    } catch (err) {
+      console.error('Error fetching subscription:', err);
+      setSubscription(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    refresh();
+  }, [token]);
+
+  const isPro = subscription?.tier === 'pro' || subscription?.status === 'active';
+  const canTrackRun = true; // Allow all users to track runs for now
+
+  return { subscription, isPro, canTrackRun, loading, refresh };
+}
+
+// ─── PAYWALL COMPONENT ──────────────────────────────────────────────────────
+export function Paywall({ visible, onClose, token }) {
+  if (!visible) return null;
+
+  return (
+    <Modal
+      visible={visible}
+      animationType="slide"
+      presentationStyle="pageSheet"
+      onRequestClose={onClose}
+    >
+      <PricingPage token={token} onClose={onClose} />
+    </Modal>
+  );
+}
 
 // ─── PRICING PAGE COMPONENT ─────────────────────────────────────────────────
 export default function PricingPage({ token, onClose, currentTier = 'free' }) {
