@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════
-// PRICING.JS - RunWithAI Pro Subscription Component (Apple IAP)
+// PRICING.JS - RunWithAI Pro Subscription Component (RevenueCat)
 // ═══════════════════════════════════════════════════════════════════════════
 
 import React, { useState, useEffect } from 'react';
@@ -14,12 +14,40 @@ import {
   Modal,
   ActivityIndicator,
 } from 'react-native';
-import * as RNIap from 'react-native-iap';
+import Purchases from 'react-native-purchases';
 
 const API_URL = 'https://runwithai-server-production.up.railway.app';
 
-// Product IDs - skal matche App Store Connect
-const PRODUCT_IDS = ['app.runwithai.pro.monthly'];
+// RevenueCat API Keys - du får disse fra RevenueCat dashboard
+const REVENUECAT_IOS_KEY = 'appl_YOUR_REVENUECAT_IOS_KEY'; // Erstat med din rigtige nøgle
+const REVENUECAT_ANDROID_KEY = 'goog_YOUR_REVENUECAT_ANDROID_KEY'; // Erstat med din rigtige nøgle
+
+// ─── INITIALIZE REVENUECAT ──────────────────────────────────────────────────
+let isRevenueCatConfigured = false;
+
+async function initRevenueCat(userId) {
+  if (isRevenueCatConfigured) return;
+  
+  try {
+    const apiKey = Platform.OS === 'ios' ? REVENUECAT_IOS_KEY : REVENUECAT_ANDROID_KEY;
+    
+    // Check if keys are configured
+    if (apiKey.includes('YOUR_REVENUECAT')) {
+      console.log('RevenueCat not configured - using placeholder keys');
+      return;
+    }
+    
+    await Purchases.configure({ apiKey });
+    
+    if (userId) {
+      await Purchases.logIn(userId);
+    }
+    
+    isRevenueCatConfigured = true;
+  } catch (err) {
+    console.error('RevenueCat init error:', err);
+  }
+}
 
 // ─── USE SUBSCRIPTION HOOK ──────────────────────────────────────────────────
 export function useSubscription(token) {
@@ -76,87 +104,47 @@ export function Paywall({ visible, onClose, token }) {
 // ─── PRICING PAGE COMPONENT ─────────────────────────────────────────────────
 export default function PricingPage({ token, onClose, currentTier = 'free' }) {
   const [loading, setLoading] = useState(false);
-  const [products, setProducts] = useState([]);
+  const [offerings, setOfferings] = useState(null);
   const [restoring, setRestoring] = useState(false);
+  const [isConfigured, setIsConfigured] = useState(false);
 
-  // Initialize IAP
+  // Initialize RevenueCat and fetch offerings
   useEffect(() => {
-    let purchaseUpdateSubscription;
-    let purchaseErrorSubscription;
-
-    const initIAP = async () => {
-      if (Platform.OS !== 'ios') return;
-
+    const init = async () => {
+      await initRevenueCat(token);
+      
+      // Check if configured
+      if (REVENUECAT_IOS_KEY.includes('YOUR_REVENUECAT') && Platform.OS === 'ios') {
+        setIsConfigured(false);
+        return;
+      }
+      if (REVENUECAT_ANDROID_KEY.includes('YOUR_REVENUECAT') && Platform.OS === 'android') {
+        setIsConfigured(false);
+        return;
+      }
+      
+      setIsConfigured(true);
+      
       try {
-        await RNIap.initConnection();
-        const availableProducts = await RNIap.getSubscriptions({ skus: PRODUCT_IDS });
-        setProducts(availableProducts);
+        const offerings = await Purchases.getOfferings();
+        if (offerings.current) {
+          setOfferings(offerings.current);
+        }
       } catch (err) {
-        console.error('IAP init error:', err);
-      }
-
-      // Listen for purchases
-      purchaseUpdateSubscription = RNIap.purchaseUpdatedListener(async (purchase) => {
-        const receipt = purchase.transactionReceipt;
-        if (receipt) {
-          try {
-            // Validate with server
-            const res = await fetch(`${API_URL}/validate-receipt`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify({
-                receipt,
-                productId: purchase.productId,
-              }),
-            });
-
-            const data = await res.json();
-
-            if (data.success) {
-              await RNIap.finishTransaction({ purchase, isConsumable: false });
-              Alert.alert('🎉 Velkommen til Pro!', 'Dit abonnement er nu aktivt.');
-              onClose();
-            } else {
-              Alert.alert('Fejl', data.error || 'Kunne ikke validere køb');
-            }
-          } catch (err) {
-            console.error('Validation error:', err);
-            Alert.alert('Fejl', 'Kunne ikke validere køb');
-          }
-        }
-        setLoading(false);
-      });
-
-      purchaseErrorSubscription = RNIap.purchaseErrorListener((error) => {
-        console.error('Purchase error:', error);
-        if (error.code !== 'E_USER_CANCELLED') {
-          Alert.alert('Fejl', 'Køb fejlede. Prøv igen.');
-        }
-        setLoading(false);
-      });
-    };
-
-    initIAP();
-
-    return () => {
-      if (purchaseUpdateSubscription) {
-        purchaseUpdateSubscription.remove();
-      }
-      if (purchaseErrorSubscription) {
-        purchaseErrorSubscription.remove();
-      }
-      if (Platform.OS === 'ios') {
-        RNIap.endConnection();
+        console.error('Error fetching offerings:', err);
       }
     };
-  }, [token, onClose]);
+
+    init();
+  }, [token]);
 
   const handleSubscribe = async () => {
-    if (Platform.OS !== 'ios') {
-      Alert.alert('Info', 'In-App Purchase er kun tilgængelig på iOS');
+    if (!isConfigured) {
+      Alert.alert(
+        '🚀 Kommer snart!', 
+        'Pro-abonnement vil snart være tilgængeligt. Vi arbejder på at færdiggøre betalingsintegration.',
+        [{ text: 'OK' }]
+      );
       return;
     }
 
@@ -165,48 +153,71 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
       return;
     }
 
+    if (!offerings || !offerings.availablePackages.length) {
+      Alert.alert('Fejl', 'Kunne ikke hente produkter. Prøv igen.');
+      return;
+    }
+
     setLoading(true);
 
     try {
-      await RNIap.requestSubscription({ sku: PRODUCT_IDS[0] });
-    } catch (err) {
-      console.error('Purchase error:', err);
-      if (err.code !== 'E_USER_CANCELLED') {
-        Alert.alert('Fejl', 'Kunne ikke starte køb. Prøv igen.');
-      }
-      setLoading(false);
-    }
-  };
-
-  const handleRestorePurchases = async () => {
-    if (Platform.OS !== 'ios') return;
-
-    setRestoring(true);
-
-    try {
-      const purchases = await RNIap.getAvailablePurchases();
-
-      if (purchases.length > 0) {
-        // Send to server for validation
-        const res = await fetch(`${API_URL}/restore-purchases`, {
+      const pkg = offerings.availablePackages[0];
+      const { customerInfo } = await Purchases.purchasePackage(pkg);
+      
+      if (customerInfo.entitlements.active['pro']) {
+        // Update server
+        await fetch(`${API_URL}/subscription/activate`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ purchases }),
+          body: JSON.stringify({
+            revenueCatId: customerInfo.originalAppUserId,
+          }),
         });
+        
+        Alert.alert('🎉 Velkommen til Pro!', 'Dit abonnement er nu aktivt.');
+        onClose();
+      }
+    } catch (err) {
+      if (!err.userCancelled) {
+        console.error('Purchase error:', err);
+        Alert.alert('Fejl', 'Køb fejlede. Prøv igen.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        const data = await res.json();
+  const handleRestorePurchases = async () => {
+    if (!isConfigured) {
+      Alert.alert('Gendan køb', 'Denne funktion kommer snart.', [{ text: 'OK' }]);
+      return;
+    }
 
-        if (data.success && data.hasActiveSub) {
-          Alert.alert('✅ Gendannet!', 'Dit Pro abonnement er gendannet.');
-          onClose();
-        } else {
-          Alert.alert('Info', 'Ingen aktive abonnementer fundet.');
-        }
+    setRestoring(true);
+
+    try {
+      const customerInfo = await Purchases.restorePurchases();
+      
+      if (customerInfo.entitlements.active['pro']) {
+        // Update server
+        await fetch(`${API_URL}/subscription/activate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            revenueCatId: customerInfo.originalAppUserId,
+          }),
+        });
+        
+        Alert.alert('✅ Gendannet!', 'Dit Pro abonnement er gendannet.');
+        onClose();
       } else {
-        Alert.alert('Info', 'Ingen tidligere køb fundet.');
+        Alert.alert('Info', 'Ingen aktive abonnementer fundet.');
       }
     } catch (err) {
       console.error('Restore error:', err);
@@ -216,8 +227,8 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
     }
   };
 
-  // Get price from product or use fallback
-  const productPrice = products.length > 0 ? products[0].localizedPrice : '49 kr';
+  // Get price from offerings or use fallback
+  const productPrice = offerings?.availablePackages?.[0]?.product?.priceString || '49 kr';
 
   // ─── PRO FEATURES ─────────────────────────────────────────────────────────
   const proFeatures = [
