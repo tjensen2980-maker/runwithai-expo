@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════
-// PRICING.JS - RunWithAI Pro Subscription Component (Temporary - No IAP)
+// PRICING.JS - RunWithAI Pro Subscription Component (Apple IAP)
 // ═══════════════════════════════════════════════════════════════════════════
 
 import React, { useState, useEffect } from 'react';
@@ -11,11 +11,15 @@ import {
   Alert,
   ScrollView,
   Platform,
-  Linking,
   Modal,
+  ActivityIndicator,
 } from 'react-native';
+import * as RNIap from 'react-native-iap';
 
 const API_URL = 'https://runwithai-server-production.up.railway.app';
+
+// Product IDs - skal matche App Store Connect
+const PRODUCT_IDS = ['app.runwithai.pro.monthly'];
 
 // ─── USE SUBSCRIPTION HOOK ──────────────────────────────────────────────────
 export function useSubscription(token) {
@@ -30,7 +34,7 @@ export function useSubscription(token) {
     }
 
     try {
-      const res = await fetch(`${API_URL}/subscription-status`, {
+      const res = await fetch(`${API_URL}/subscription`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -72,23 +76,148 @@ export function Paywall({ visible, onClose, token }) {
 // ─── PRICING PAGE COMPONENT ─────────────────────────────────────────────────
 export default function PricingPage({ token, onClose, currentTier = 'free' }) {
   const [loading, setLoading] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [restoring, setRestoring] = useState(false);
+
+  // Initialize IAP
+  useEffect(() => {
+    let purchaseUpdateSubscription;
+    let purchaseErrorSubscription;
+
+    const initIAP = async () => {
+      if (Platform.OS !== 'ios') return;
+
+      try {
+        await RNIap.initConnection();
+        const availableProducts = await RNIap.getSubscriptions({ skus: PRODUCT_IDS });
+        setProducts(availableProducts);
+      } catch (err) {
+        console.error('IAP init error:', err);
+      }
+
+      // Listen for purchases
+      purchaseUpdateSubscription = RNIap.purchaseUpdatedListener(async (purchase) => {
+        const receipt = purchase.transactionReceipt;
+        if (receipt) {
+          try {
+            // Validate with server
+            const res = await fetch(`${API_URL}/validate-receipt`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                receipt,
+                productId: purchase.productId,
+              }),
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+              await RNIap.finishTransaction({ purchase, isConsumable: false });
+              Alert.alert('🎉 Velkommen til Pro!', 'Dit abonnement er nu aktivt.');
+              onClose();
+            } else {
+              Alert.alert('Fejl', data.error || 'Kunne ikke validere køb');
+            }
+          } catch (err) {
+            console.error('Validation error:', err);
+            Alert.alert('Fejl', 'Kunne ikke validere køb');
+          }
+        }
+        setLoading(false);
+      });
+
+      purchaseErrorSubscription = RNIap.purchaseErrorListener((error) => {
+        console.error('Purchase error:', error);
+        if (error.code !== 'E_USER_CANCELLED') {
+          Alert.alert('Fejl', 'Køb fejlede. Prøv igen.');
+        }
+        setLoading(false);
+      });
+    };
+
+    initIAP();
+
+    return () => {
+      if (purchaseUpdateSubscription) {
+        purchaseUpdateSubscription.remove();
+      }
+      if (purchaseErrorSubscription) {
+        purchaseErrorSubscription.remove();
+      }
+      if (Platform.OS === 'ios') {
+        RNIap.endConnection();
+      }
+    };
+  }, [token, onClose]);
 
   const handleSubscribe = async () => {
-    // For now, show coming soon message
-    Alert.alert(
-      '🚀 Kommer snart!', 
-      'Pro-abonnement vil snart være tilgængeligt. Vi arbejder på at færdiggøre betalingsintegration.',
-      [{ text: 'OK' }]
-    );
+    if (Platform.OS !== 'ios') {
+      Alert.alert('Info', 'In-App Purchase er kun tilgængelig på iOS');
+      return;
+    }
+
+    if (!token) {
+      Alert.alert('Log ind', 'Du skal være logget ind for at købe abonnement');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await RNIap.requestSubscription({ sku: PRODUCT_IDS[0] });
+    } catch (err) {
+      console.error('Purchase error:', err);
+      if (err.code !== 'E_USER_CANCELLED') {
+        Alert.alert('Fejl', 'Kunne ikke starte køb. Prøv igen.');
+      }
+      setLoading(false);
+    }
   };
 
   const handleRestorePurchases = async () => {
-    Alert.alert(
-      'Gendan køb',
-      'Denne funktion kommer snart.',
-      [{ text: 'OK' }]
-    );
+    if (Platform.OS !== 'ios') return;
+
+    setRestoring(true);
+
+    try {
+      const purchases = await RNIap.getAvailablePurchases();
+
+      if (purchases.length > 0) {
+        // Send to server for validation
+        const res = await fetch(`${API_URL}/restore-purchases`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ purchases }),
+        });
+
+        const data = await res.json();
+
+        if (data.success && data.hasActiveSub) {
+          Alert.alert('✅ Gendannet!', 'Dit Pro abonnement er gendannet.');
+          onClose();
+        } else {
+          Alert.alert('Info', 'Ingen aktive abonnementer fundet.');
+        }
+      } else {
+        Alert.alert('Info', 'Ingen tidligere køb fundet.');
+      }
+    } catch (err) {
+      console.error('Restore error:', err);
+      Alert.alert('Fejl', 'Kunne ikke gendanne køb. Prøv igen.');
+    } finally {
+      setRestoring(false);
+    }
   };
+
+  // Get price from product or use fallback
+  const productPrice = products.length > 0 ? products[0].localizedPrice : '49 kr';
 
   // ─── PRO FEATURES ─────────────────────────────────────────────────────────
   const proFeatures = [
@@ -112,7 +241,7 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
 
       {/* Price Card */}
       <View style={styles.priceCard}>
-        <Text style={styles.price}>49 kr</Text>
+        <Text style={styles.price}>{productPrice}</Text>
         <Text style={styles.period}>/ måned</Text>
         <Text style={styles.trial}>Prøv gratis i 7 dage</Text>
       </View>
@@ -131,19 +260,26 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
       <TouchableOpacity
         style={[styles.subscribeButton, loading && styles.buttonDisabled]}
         onPress={handleSubscribe}
-        disabled={loading}
+        disabled={loading || restoring}
       >
-        <Text style={styles.subscribeButtonText}>
-          {loading ? 'Indlæser...' : 'Start gratis prøveperiode'}
-        </Text>
+        {loading ? (
+          <ActivityIndicator color="#ffffff" />
+        ) : (
+          <Text style={styles.subscribeButtonText}>Start gratis prøveperiode</Text>
+        )}
       </TouchableOpacity>
 
-      {/* Restore Purchases - Apple kræver dette */}
+      {/* Restore Purchases */}
       <TouchableOpacity
         style={styles.restoreButton}
         onPress={handleRestorePurchases}
+        disabled={loading || restoring}
       >
-        <Text style={styles.restoreButtonText}>Gendan tidligere køb</Text>
+        {restoring ? (
+          <ActivityIndicator color="#888888" />
+        ) : (
+          <Text style={styles.restoreButtonText}>Gendan tidligere køb</Text>
+        )}
       </TouchableOpacity>
 
       {/* Terms */}
