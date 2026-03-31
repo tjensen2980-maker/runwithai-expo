@@ -79,7 +79,7 @@ export function useSubscription(token) {
     refresh();
   }, [token]);
 
-  const isPro = subscription?.tier === 'pro' || subscription?.status === 'active';
+  const isPro = subscription?.tier === 'pro';
   const canTrackRun = true; // Allow all users to track runs for now
 
   return { subscription, isPro, canTrackRun, loading, refresh };
