@@ -1,0 +1,512 @@
+{
+  "tabs": {
+    "plan": "Plan",
+    "run": "Hardlopen",
+    "coach": "Coach",
+    "stats": "Statistieken",
+    "settings": "Instellingen",
+    "calendar": "Kalender",
+    "progress": "Voortgang",
+    "start": "Start"
+  },
+  "run": {
+    "title": "Hardlopen",
+    "walk": "Wandelen",
+    "km": "KM",
+    "time": "TIJD",
+    "pace": "TEMPO",
+    "start": "Start",
+    "pause": "Pauze",
+    "resume": "Hervat",
+    "stop": "Stop",
+    "save": "Opslaan",
+    "discard": "Verwijderen",
+    "startRun": "Start hardloop",
+    "startThisWorkout": "Start deze workout",
+    "nextWorkout": "Volgende workout",
+    "lastActivity": "Laatste activiteit",
+    "gpsTracking": "GPS-tracking",
+    "walkTracking": "Wandel-tracking",
+    "aiRoutes": "AI-routes"
+  },
+  "pro": {
+    "badge": "PRO",
+    "upgrade": "Upgraden",
+    "upgradeToPro": "Upgrade naar Pro",
+    "feature": "Pro-functie",
+    "unlockFeatures": "Ontgrendel alle functies",
+    "fromOnly": "Vanaf slechts",
+    "limit": {
+      "title": "Pro-functie",
+      "message": "Deze functie vereist een Pro-abonnement",
+      "seePlans": "Bekijk plannen",
+      "cancel": "Annuleren"
+    },
+    "stats": {
+      "title": "Pro Statistieken",
+      "features": "Geavanceerde statistieken en inzichten",
+      "unlock": "Ontgrendelen"
+    },
+    "coach": {
+      "title": "AI Coach",
+      "description": "Persoonlijk trainingsplan dat zich aan jou aanpast"
+    },
+    "calendar": {
+      "title": "Trainingskalender",
+      "description": "Bekijk je volledige trainingsplan"
+    },
+    "aiRoutes": {
+      "title": "AI-routes",
+      "description": "Krijg aanbevolen routes op basis van je training"
+    }
+  },
+  "stats": {
+    "title": "Statistieken",
+    "totalRuns": "Totaal hardloopsessies",
+    "totalKm": "Totaal km",
+    "avgPace": "Gem. tempo",
+    "thisWeek": "Deze week",
+    "thisMonth": "Deze maand",
+    "allTime": "Totaal",
+    "basic": "Basisstatistieken",
+    "runs": "sessies"
+  },
+  "subscription": "Abonnement",
+  "alerts": {
+    "deleteRun": "Weet je zeker dat je deze hardloopsessie wilt verwijderen?",
+    "deleteAccount": "Weet je zeker dat je je account wilt verwijderen? Dit kan niet ongedaan worden gemaakt.",
+    "logout": "Weet je zeker dat je wilt uitloggen?",
+    "discardRun": "Weet je zeker dat je deze hardloopsessie wilt verwijderen?",
+    "unsavedChanges": "Je hebt niet-opgeslagen wijzigingen. Wil je deze verwijderen?",
+    "welcomePro": {
+      "title": "Welkom bij Pro!",
+      "message": "Je hebt nu toegang tot alle functies"
+    }
+  },
+  "auth": {
+    "login": "Inloggen",
+    "register": "Account aanmaken",
+    "email": "E-mail",
+    "password": "Wachtwoord",
+    "confirmPassword": "Bevestig wachtwoord",
+    "forgotPassword": "Wachtwoord vergeten?",
+    "noAccount": "Geen account?",
+    "hasAccount": "Al een account?",
+    "loginButton": "Inloggen",
+    "registerButton": "Account aanmaken",
+    "orContinueWith": "of ga verder met",
+    "apple": "Apple",
+    "google": "Google",
+    "emailPlaceholder": "jouw@email.nl",
+    "passwordPlaceholder": "••••••••",
+    "namePlaceholder": "Jouw naam",
+    "name": "Naam",
+    "loggingIn": "Inloggen...",
+    "registering": "Account aanmaken...",
+    "tagline": "Jouw persoonlijke AI-hardloopcoach",
+    "createAccount": "Account aanmaken",
+    "minChars": "min. tekens",
+    "repeatPassword": "herhaal wachtwoord",
+    "continue": "doorgaan",
+    "getStarted": "aan de slag",
+    "step1of3": "stap 1 van 3",
+    "step2of3": "stap 2 van 3",
+    "step3of3": "stap 3 van 3",
+    "yourName": "jouw naam",
+    "age": "LEEFTIJD",
+    "weight": "GEWICHT",
+    "height": "LENGTE",
+    "years": "Jaar",
+    "runningLevel": "HARDLOOPNIVEAU",
+    "levels.beginner": "Beginner",
+    "levels.intermediate": "Gemiddeld",
+    "levels.advanced": "Gevorderd",
+    "yourGoals": "WAT ZIJN JOUW DOELEN",
+    "goals.health": "Gezondheid",
+    "goals.weight": "Gewichtsverlies",
+    "goals.distance": "Verder hardlopen",
+    "goals.speed": "Sneller worden",
+    "goals.race": "Een wedstrijd lopen",
+    "goals.fun": "Plezier",
+    "weeklyGoalKm": "WEKELIJKS KM DOEL",
+    "weeklyGoalExample": "Bijv. 20",
+    "unlockFullPower": "Volledige toegang vrijspelen",
+    "unlockDesc": "Krijg toegang tot alle functies en bereik je doelen sneller",
+    "proFeatures.aiCoachDesc": "AI Coach",
+    "proFeatures.statsDesc": "Statistieken",
+    "proFeatures.goalsDesc": "Doelen",
+    "proFeatures.routesDesc": "Routes",
+    "proFeatures.chatDesc": "AI Chat",
+    "proFeatures.reportsDesc": "Rapporten",
+    "price": "49 kr",
+    "guarantee": "✓ Op elk moment opzeggen • ✓ 7 dagen gratis proberen",
+    "perMonth": "/maand",
+    "startFreeTrial": "Start gratis proefperiode",
+    "continueWithFree": "Doorgaan met gratis versie",
+    "levels.beginnerDesc": "Nieuw met hardlopen of opnieuw beginnen na een lange pauze",
+    "levels.intermediateDesc": "Loopt regelmatig en wil verbeteren",
+    "levels.advancedDesc": "Ervaren hardloper met specifieke doelen",
+    "or": "of",
+    "errors": {
+      "serverConnection": "Kon geen verbinding maken met server"
+    }
+  },
+  "settings": {
+    "pageTitle": "Instellingen",
+    "title": "Instellingen",
+    "profile": "Profiel",
+    "days": ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"],
+    "saveChanges": "Wijzigingen opslaan",
+    "saved": "Opgeslagen!",
+    "logout": "Uitloggen",
+    "privacyPolicy": "Privacybeleid",
+    "termsOfService": "Servicevoorwaarden",
+    "dangerZone": "Gevarenzone",
+    "sections": {
+      "personalInfo": "Persoonlijke informatie",
+      "level": "Niveau",
+      "runningGoals": "Hardloopdoelen",
+      "weeklyGoals": "Wekelijkse doelen",
+      "trainingTypes": "Trainingstypes",
+      "heartRateZones": "Hartslagzones",
+      "injuries": "Blessures",
+      "reminders": "Herinneringen",
+      "privacy": "Privacy",
+      "units": "Eenheden",
+      "data": "Gegevens"
+    },
+    "fields": {
+      "name": "Naam",
+      "age": "Leeftijd",
+      "weight": "Gewicht (kg)",
+      "height": "Lengte (cm)",
+      "sex": "Geslacht",
+      "restingHr": "Rustpols",
+      "maxHr": "Max. hartslag",
+      "vo2max": "VO2max",
+      "yearsRunning": "Jaren hardlopen",
+      "weeklyKm": "Wekelijkse km",
+      "weeklyKmGoal": "Doel wekelijkse km",
+      "weeklyRunsGoal": "Doel wekelijkse sessies",
+      "primaryGoal": "Primair doel",
+      "raceDate": "Wedstrijddatum",
+      "injuries": "Blessures/beperkingen",
+      "injuriesPlaceholder": "Bijv. knieproblemen, rugpijn...",
+      "preferredDays": "Voorkeursdagen",
+      "preferredTypes": "Voorkeur hardlooptypes"
+    },
+    "sex": {
+      "male": "Man",
+      "female": "Vrouw"
+    },
+    "levels": {
+      "beginner": "Beginner",
+      "intermediate": "Gemiddeld",
+      "advanced": "Gevorderd"
+    },
+    "goals": {
+      "fitness": "Algemene fitness",
+      "weight": "Gewichtsverlies",
+      "half": "Halve marathon",
+      "full": "Marathon"
+    },
+    "runTypes": {
+      "easy": "Rustige loop",
+      "interval": "Intervallen",
+      "long": "Lange loop",
+      "tempo": "Tempoloop",
+      "recovery": "Herstel",
+      "race": "Wedstrijd",
+      "trail": "Trail"
+    },
+    "zones": {
+      "calculated": "Berekend op basis van je max. hartslag",
+      "z1": "Zone 1 (Herstel)",
+      "z2": "Zone 2 (Aeroob)",
+      "z3": "Zone 3 (Tempo)",
+      "z4": "Zone 4 (Drempel)",
+      "z5": "Zone 5 (Anaeroob)"
+    },
+    "notifications": {
+      "push": "Pushmeldingen",
+      "pushSub": "Ontvang trainingsherinneringen",
+      "enabled": "Ingeschakeld",
+      "reminder": "Herinnering",
+      "time": "Tijd",
+      "days": "Dagen"
+    },
+    "privacy": {
+      "shareProfile": "Profiel delen",
+      "shareProfileSub": "Laat anderen je profiel zien",
+      "shareActivity": "Activiteit delen",
+      "shareActivitySub": "Laat anderen je hardloopsessies zien",
+      "shareLocation": "Locatie delen",
+      "shareLocationSub": "Toon je positie op routes"
+    },
+    "units": {
+      "distance": "Afstand",
+      "pace": "Tempo"
+    },
+    "data": {
+      "export": "Gegevens exporteren",
+      "exportSub": "Download al je hardloopgegevens"
+    },
+    "shoes": {
+      "title": "Hardloopschoenen",
+      "addShoe": "Schoen toevoegen",
+      "namePlaceholder": "Schoennaam",
+      "brandPlaceholder": "Merk",
+      "kmPlaceholder": "Start-km",
+      "saveShoe": "Schoen opslaan",
+      "useForNextRun": "Gebruik voor volgende loop",
+      "active": "Actief",
+      "delete": "Verwijderen",
+      "deleteConfirm": "Weet je zeker dat je deze schoen wilt verwijderen?",
+      "empty": "Nog geen schoenen toegevoegd",
+      "worn": "Versleten",
+      "soonWorn": "Bijna versleten",
+      "wornMessage": "Deze schoen heeft meer dan 800 km gelopen en moet worden vervangen"
+    },
+    "deleteAccount": {
+      "title": "Account verwijderen",
+      "button": "Verwijder mijn account",
+      "warning": "Dit kan niet ongedaan worden gemaakt!",
+      "confirmMessage": "Weet je zeker dat je je account wilt verwijderen? Alle gegevens worden permanent verwijderd.",
+      "confirmButton": "Ja, verwijder mijn account",
+      "deletedTitle": "Account verwijderd",
+      "deletedMessage": "Je account is verwijderd.",
+      "error": "Kon account niet verwijderen"
+    }
+  },
+  "pricing": {
+    "title": "RunWithAI Pro",
+    "subtitle": "Ontgrendel alle functies",
+    "monthly": "Maandelijks",
+    "yearly": "Jaarlijks",
+    "perMonth": "/maand",
+    "perYear": "/jaar",
+    "save": "Bespaar",
+    "features": {
+      "aiCoach": "Persoonlijke AI-coach",
+      "unlimitedRuns": "Onbeperkte hardloopsessies",
+      "advancedStats": "Geavanceerde statistieken",
+      "trainingPlans": "Aangepaste trainingsplannen",
+      "voiceCoach": "Stemcoach tijdens hardlopen",
+      "exportData": "Gegevens exporteren"
+    },
+    "subscribe": "Nu abonneren",
+    "restore": "Aankoop herstellen",
+    "terms": "Voorwaarden van toepassing. Automatische verlenging.",
+    "currentPlan": "Huidig plan",
+    "free": "Gratis",
+    "pro": "Pro",
+    "loading": "Laden...",
+    "error": "Er ging iets mis",
+    "success": "Je bent nu Pro!",
+    "alreadyPro": "Je bent al een Pro-gebruiker",
+    "tryAgain": "Probeer opnieuw"
+  },
+  "common": {
+    "cancel": "Annuleren",
+    "save": "Opslaan",
+    "delete": "Verwijderen",
+    "edit": "Bewerken",
+    "done": "Klaar",
+    "next": "Volgende",
+    "back": "Terug",
+    "skip": "Overslaan",
+    "ok": "OK",
+    "yes": "Ja",
+    "no": "Nee",
+    "loading": "Laden...",
+    "error": "Fout",
+    "success": "Succes",
+    "retry": "Opnieuw proberen"
+  },
+  "onboarding": {
+    "welcome": "Welkom bij",
+    "appName": "RunWithAI",
+    "subtitle": "Je persoonlijke AI hardloopcoach",
+    "getStarted": "Aan de slag",
+    "step1": {
+      "title": "Volg je hardloopsessies",
+      "desc": "GPS-tracking met live statistieken en routeweergave"
+    },
+    "step2": {
+      "title": "AI-aangedreven coaching",
+      "desc": "Krijg persoonlijke trainingsplannen en tips van je AI-coach"
+    },
+    "step3": {
+      "title": "Bereik je doelen",
+      "desc": "Stel doelen en volg je voortgang met gedetailleerde statistieken"
+    }
+  },
+  "dashboard": {
+    "defaultName": "HARDLOPER",
+    "greeting": {
+      "morning": "GOEDEMORGEN,",
+      "day": "GOEDEMIDDAG,",
+      "evening": "GOEDENAVOND,"
+    },
+    "planUpdated": "PLAN BIJGEWERKT",
+    "refresh": "Vernieuwen",
+    "shoeAlert": {
+      "worn": "Schoenen versleten!",
+      "soonWorn": "Schoenen bijna versleten!"
+    },
+    "fatigue": {
+      "rested": "Uitgerust",
+      "ok": "OK",
+      "slightlyTired": "Licht vermoeid",
+      "veryTired": "Erg vermoeid"
+    },
+    "weather": {
+      "title": "WEER & VORM",
+      "wind": "Wind",
+      "clear": "Helder",
+      "partlyCloudy": "Gedeeltelijk bewolkt",
+      "foggy": "Mist/nevel",
+      "rain": "Regen",
+      "snow": "Sneeuw",
+      "showers": "Buien",
+      "thunder": "Onweer",
+      "analyzing": "Weer en conditie analyseren...",
+      "noAdvice": "Geen advies beschikbaar",
+      "fetchError": "Kon weergegevens niet ophalen — probeer opnieuw."
+    },
+    "stats": {
+      "kmThisWeek": "KM DEZE WEEK",
+      "daysInRow": "DAGEN OP RIJ",
+      "runsThisMonth": "SESSIES DEZE MAAND",
+      "of": "van",
+      "personalRecord": "Persoonlijk record",
+      "fromRecord": "{{count}} van je record",
+      "overOneWeek": "Meer dan 1 week op rij",
+      "keepingMomentum": "Momentum behouden",
+      "goodStart": "Goede start",
+      "keepGoing": "Ga zo door!",
+      "startStreak": "Start vandaag een reeks",
+      "bestMonthEver": "Beste {{month}} ooit",
+      "oneFromRecord": "1 sessie van je beste maand!",
+      "runsFromRecord": "{{count}} sessies van record",
+      "runsInMonth": "{{count}} sessies in {{month}}"
+    },
+    "monthNames": ["Jan", "Feb", "Mrt", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"],
+    "workout": {
+      "nextWorkout": "VOLGENDE WORKOUT",
+      "today": "VANDAAG",
+      "distance": "Afstand",
+      "time": "Tijd",
+      "targetPace": "Doeltempo",
+      "targetHr": "Doelhartslag"
+    },
+    "weekPlan": {
+      "title": "DEZE WEEK"
+    },
+    "milestone": {
+      "nextMilestone": "VOLGENDE MIJLPAAL",
+      "kmLeft": "km te gaan",
+      "total": "totaal",
+      "thisWeek": "Deze week!",
+      "oneToTwoWeeks": "Ongeveer 1-2 weken",
+      "aboutWeeks": "Ongeveer {{count}} weken"
+    },
+    "diary": {
+      "title": "HARDLOOPDAGBOEK",
+      "subtitle": "Schrijf notities voor je sessies — de AI leert ervan",
+      "addNote": "+ Notitie",
+      "mood": "Stemming",
+      "placeholder": "Hoe ging het? Zware benen? Goede dag? Nieuwe route?",
+      "dayNames": ["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za"]
+    },
+    "injury": {
+      "title": "BLESSURERISICO",
+      "low": "Laag",
+      "moderate": "Matig",
+      "high": "Hoog",
+      "kmIncrease": "Km gestegen met {{pct}}% vs. vorige week",
+      "runsLast3Days": "{{count}} sessies in de laatste 3 dagen",
+      "noRestToday": "Geen rustdag vandaag",
+      "daysSinceRun": "{{count}} dagen sinds laatste loop — fris",
+      "noRiskFactors": "Geen bijzondere risicofactoren.",
+      "tip1": "Denk aan rustdag na zware sessies",
+      "tip2": "Verhoog km niet meer dan 10% per week",
+      "analyzed": "Geanalyseerd",
+      "aiAnalysis": "AI-analyse"
+    },
+    "racePredictor": {
+      "title": "Wedstrijdvoorspelling",
+      "subtitle": "Bekijk je verwachte wedstrijdtijden",
+      "noData": "Je hebt minimaal één hardloopsessie nodig voor een voorspelling.",
+      "analyzing": "AI analyseert je sessies...",
+      "halfMarathon": "Halve marathon",
+      "confidence": "betrouwbaarheid"
+    }
+  },
+  "tracker": {
+    "defaultRunner": "hardloper",
+    "voiceOn": "Stem aan",
+    "voiceOff": "Stem uit",
+    "mapNotAvailable": "Kaart niet beschikbaar",
+    "status": {
+      "ready": "Druk op start om te beginnen",
+      "paused": "Gepauzeerd",
+      "tracking": "Tracking..."
+    },
+    "gps": {
+      "active": "GPS actief",
+      "waiting": "GPS-signaal zoeken...",
+      "denied": "GPS-toestemming geweigerd",
+      "unavailable": "GPS niet beschikbaar",
+      "timeout": "GPS time-out",
+      "notAvailable": "GPS niet beschikbaar",
+      "error": "GPS-fout"
+    }
+  },
+  "chat": {
+    "title": "AI COACH",
+    "clear": "Wissen",
+    "placeholder": "Schrijf naar je coach...",
+    "loadingHistory": "Gesprek laden...",
+    "planUpdated": "Plan bijgewerkt",
+    "defaultRunner": "hardloper",
+    "greeting": "Hoi {{name}}! Ik ben je AI hardloopcoach. Hoe kan ik je vandaag helpen?",
+    "clearedGreeting": "Gesprek gewist! Hoe kan ik je helpen, {{name}}?",
+    "connectionError": "Sorry, ik kon geen verbinding maken. Probeer het opnieuw."
+  },
+  "proUpsell": {
+    "title": "Ontgrendel volledige kracht",
+    "subtitle": "Krijg toegang tot alle functies en bereik je doelen sneller",
+    "price": "49 DKK",
+    "priceUnit": "/maand",
+    "guarantee": "✓ Op elk moment opzeggen • ✓ 7 dagen gratis proberen",
+    "startTrial": "Start gratis proefperiode",
+    "continueWithFree": "Ga verder met gratis versie",
+    "features": {
+      "aiCoach": {
+        "title": "AI Coach",
+        "desc": "Persoonlijk trainingsplan dat zich aan jou aanpast"
+      },
+      "advancedStats": {
+        "title": "Geavanceerde stats",
+        "desc": "Diepgaande analyse van je training"
+      },
+      "unlimitedGoals": {
+        "title": "Onbeperkte doelen",
+        "desc": "Stel zoveel doelen als je wilt"
+      },
+      "routeLibrary": {
+        "title": "Routebibliotheek",
+        "desc": "Sla je favoriete routes op en deel ze"
+      },
+      "aiChat": {
+        "title": "AI Chat",
+        "desc": "Stel vragen over hardlopen en krijg antwoorden"
+      },
+      "progressReports": {
+        "title": "Voortgangsrapporten",
+        "desc": "Wekelijkse en maandelijkse samenvattingen"
+      }
+    }
+  }
+}

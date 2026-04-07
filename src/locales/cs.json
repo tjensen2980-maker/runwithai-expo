@@ -1,0 +1,512 @@
+{
+  "tabs": {
+    "plan": "Plán",
+    "run": "Běh",
+    "coach": "Trenér",
+    "stats": "Statistiky",
+    "settings": "Nastavení",
+    "calendar": "Kalendář",
+    "progress": "Pokrok",
+    "start": "Start"
+  },
+  "run": {
+    "title": "Běh",
+    "walk": "Chůze",
+    "km": "KM",
+    "time": "ČAS",
+    "pace": "TEMPO",
+    "start": "Start",
+    "pause": "Pauza",
+    "resume": "Pokračovat",
+    "stop": "Stop",
+    "save": "Uložit",
+    "discard": "Zahodit",
+    "startRun": "Zahájit běh",
+    "startThisWorkout": "Zahájit tento trénink",
+    "nextWorkout": "Další trénink",
+    "lastActivity": "Poslední aktivita",
+    "gpsTracking": "GPS sledování",
+    "walkTracking": "Sledování chůze",
+    "aiRoutes": "AI trasy"
+  },
+  "pro": {
+    "badge": "PRO",
+    "upgrade": "Upgradovat",
+    "upgradeToPro": "Upgradovat na Pro",
+    "feature": "Pro funkce",
+    "unlockFeatures": "Odemknout všechny funkce",
+    "fromOnly": "Již od",
+    "limit": {
+      "title": "Pro funkce",
+      "message": "Tato funkce vyžaduje předplatné Pro",
+      "seePlans": "Zobrazit plány",
+      "cancel": "Zrušit"
+    },
+    "stats": {
+      "title": "Pro statistiky",
+      "features": "Pokročilé statistiky a přehledy",
+      "unlock": "Odemknout"
+    },
+    "coach": {
+      "title": "AI trenér",
+      "description": "Personalizovaný tréninkový plán, který se přizpůsobuje tobě"
+    },
+    "calendar": {
+      "title": "Tréninkový kalendář",
+      "description": "Zobraz si celý svůj tréninkový plán"
+    },
+    "aiRoutes": {
+      "title": "AI trasy",
+      "description": "Získej doporučení tras na základě svého tréninku"
+    }
+  },
+  "stats": {
+    "title": "Statistiky",
+    "totalRuns": "Celkem běhů",
+    "totalKm": "Celkem km",
+    "avgPace": "Průměrné tempo",
+    "thisWeek": "Tento týden",
+    "thisMonth": "Tento měsíc",
+    "allTime": "Celkově",
+    "basic": "Základní statistiky",
+    "runs": "Běhy"
+  },
+  "subscription": "Předplatné",
+  "alerts": {
+    "deleteRun": "Opravdu chceš smazat tento běh?",
+    "deleteAccount": "Opravdu chceš smazat svůj účet? Tuto akci nelze vrátit zpět.",
+    "logout": "Opravdu se chceš odhlásit?",
+    "discardRun": "Opravdu chceš zahodit tento běh?",
+    "unsavedChanges": "Máš neuložené změny. Chceš je zahodit?",
+    "welcomePro": {
+      "title": "Vítej v Pro!",
+      "message": "Nyní máš přístup ke všem funkcím"
+    }
+  },
+  "auth": {
+    "login": "Přihlásit se",
+    "register": "Vytvořit účet",
+    "email": "E-mail",
+    "password": "Heslo",
+    "confirmPassword": "Potvrdit heslo",
+    "forgotPassword": "Zapomněl jsi heslo?",
+    "noAccount": "Nemáš účet?",
+    "hasAccount": "Už máš účet?",
+    "loginButton": "Přihlásit se",
+    "registerButton": "Vytvořit účet",
+    "orContinueWith": "nebo pokračuj s",
+    "apple": "Apple",
+    "google": "Google",
+    "emailPlaceholder": "tvuj@email.cz",
+    "passwordPlaceholder": "••••••••",
+    "namePlaceholder": "Tvé jméno",
+    "name": "Jméno",
+    "loggingIn": "Přihlašování...",
+    "registering": "Vytváření účtu...",
+    "tagline": "Tvůj osobní AI běžecký trenér",
+    "createAccount": "Vytvořit účet",
+    "minChars": "min. znaků",
+    "repeatPassword": "opakuj heslo",
+    "continue": "pokračovat",
+    "getStarted": "začít",
+    "step1of3": "krok 1 ze 3",
+    "step2of3": "krok 2 ze 3",
+    "step3of3": "krok 3 ze 3",
+    "yourName": "tvé jméno",
+    "age": "VĚK",
+    "weight": "VÁHA",
+    "height": "VÝŠKA",
+    "years": "Let",
+    "runningLevel": "ÚROVEŇ BĚHU",
+    "levels.beginner": "Začátečník",
+    "levels.intermediate": "Pokročilý",
+    "levels.advanced": "Expert",
+    "yourGoals": "JAKÉ JSOU TVÉ CÍLE",
+    "goals.health": "Zdraví",
+    "goals.weight": "Hubnutí",
+    "goals.distance": "Běhat déle",
+    "goals.speed": "Být rychlejší",
+    "goals.race": "Běžet závod",
+    "goals.fun": "Zábava",
+    "weeklyGoalKm": "TÝDENNÍ CÍL KM",
+    "weeklyGoalExample": "Např. 20",
+    "unlockFullPower": "Odemknout plný přístup",
+    "unlockDesc": "Získej přístup ke všem funkcím a dosáhni cílů rychleji",
+    "proFeatures.aiCoachDesc": "AI Trenér",
+    "proFeatures.statsDesc": "Statistiky",
+    "proFeatures.goalsDesc": "Cíle",
+    "proFeatures.routesDesc": "Trasy",
+    "proFeatures.chatDesc": "AI Chat",
+    "proFeatures.reportsDesc": "Reporty",
+    "price": "49 kr",
+    "guarantee": "✓ Zruš kdykoliv • ✓ 7 dní zdarma",
+    "perMonth": "/měsíc",
+    "startFreeTrial": "Zahájit bezplatnou zkušební verzi",
+    "continueWithFree": "Pokračovat s bezplatnou verzí",
+    "levels.beginnerDesc": "Nový v běhání nebo začínáš po dlouhé pauze",
+    "levels.intermediateDesc": "Běháš pravidelně a chceš se zlepšit",
+    "levels.advancedDesc": "Zkušený běžec se specifickými cíli",
+    "or": "nebo",
+    "errors": {
+      "serverConnection": "Nelze se připojit k serveru"
+    }
+  },
+  "settings": {
+    "pageTitle": "Nastavení",
+    "title": "Nastavení",
+    "profile": "Profil",
+    "days": ["Po", "Út", "St", "Čt", "Pá", "So", "Ne"],
+    "saveChanges": "Uložit změny",
+    "saved": "Uloženo!",
+    "logout": "Odhlásit se",
+    "privacyPolicy": "Zásady ochrany osobních údajů",
+    "termsOfService": "Podmínky služby",
+    "dangerZone": "Nebezpečná zóna",
+    "sections": {
+      "personalInfo": "Osobní údaje",
+      "level": "Úroveň",
+      "runningGoals": "Běžecké cíle",
+      "weeklyGoals": "Týdenní cíle",
+      "trainingTypes": "Typy tréninku",
+      "heartRateZones": "Srdeční zóny",
+      "injuries": "Zranění",
+      "reminders": "Připomínky",
+      "privacy": "Soukromí",
+      "units": "Jednotky",
+      "data": "Data"
+    },
+    "fields": {
+      "name": "Jméno",
+      "age": "Věk",
+      "weight": "Váha (kg)",
+      "height": "Výška (cm)",
+      "sex": "Pohlaví",
+      "restingHr": "Klidový tep",
+      "maxHr": "Maximální tep",
+      "vo2max": "VO2max",
+      "yearsRunning": "Roky běhání",
+      "weeklyKm": "Týdenní km",
+      "weeklyKmGoal": "Cíl týdenních km",
+      "weeklyRunsGoal": "Cíl týdenních běhů",
+      "primaryGoal": "Hlavní cíl",
+      "raceDate": "Datum závodu",
+      "injuries": "Zranění/omezení",
+      "injuriesPlaceholder": "Např. problémy s koleny, bolest zad...",
+      "preferredDays": "Preferované dny",
+      "preferredTypes": "Preferované typy běhu"
+    },
+    "sex": {
+      "male": "Muž",
+      "female": "Žena"
+    },
+    "levels": {
+      "beginner": "Začátečník",
+      "intermediate": "Pokročilý",
+      "advanced": "Expert"
+    },
+    "goals": {
+      "fitness": "Obecná kondice",
+      "weight": "Hubnutí",
+      "half": "Půlmaraton",
+      "full": "Maraton"
+    },
+    "runTypes": {
+      "easy": "Lehký běh",
+      "interval": "Intervaly",
+      "long": "Dlouhý běh",
+      "tempo": "Tempový běh",
+      "recovery": "Regenerace",
+      "race": "Závod",
+      "trail": "Trailový běh"
+    },
+    "zones": {
+      "calculated": "Vypočítáno z tvého maximálního tepu",
+      "z1": "Zóna 1 (Regenerace)",
+      "z2": "Zóna 2 (Aerobní)",
+      "z3": "Zóna 3 (Tempo)",
+      "z4": "Zóna 4 (Práh)",
+      "z5": "Zóna 5 (Anaerobní)"
+    },
+    "notifications": {
+      "push": "Push notifikace",
+      "pushSub": "Dostávej připomínky tréninku",
+      "enabled": "Povoleno",
+      "reminder": "Připomínka",
+      "time": "Čas",
+      "days": "Dny"
+    },
+    "privacy": {
+      "shareProfile": "Sdílet profil",
+      "shareProfileSub": "Ostatní mohou vidět tvůj profil",
+      "shareActivity": "Sdílet aktivitu",
+      "shareActivitySub": "Ostatní mohou vidět tvé běhy",
+      "shareLocation": "Sdílet polohu",
+      "shareLocationSub": "Ukazovat tvou polohu na trasách"
+    },
+    "units": {
+      "distance": "Vzdálenost",
+      "pace": "Tempo"
+    },
+    "data": {
+      "export": "Exportovat data",
+      "exportSub": "Stáhnout všechna tvá běžecká data"
+    },
+    "shoes": {
+      "title": "Běžecké boty",
+      "addShoe": "Přidat botu",
+      "namePlaceholder": "Název boty",
+      "brandPlaceholder": "Značka",
+      "kmPlaceholder": "Počáteční km",
+      "saveShoe": "Uložit botu",
+      "useForNextRun": "Použít pro další běh",
+      "active": "Aktivní",
+      "delete": "Smazat",
+      "deleteConfirm": "Opravdu chceš smazat tuto botu?",
+      "empty": "Zatím nebyly přidány žádné boty",
+      "worn": "Opotřebená",
+      "soonWorn": "Brzy opotřebená",
+      "wornMessage": "Tato bota má přes 800 km a měla by být vyměněna"
+    },
+    "deleteAccount": {
+      "title": "Smazat účet",
+      "button": "Smazat můj účet",
+      "warning": "Tuto akci nelze vrátit zpět!",
+      "confirmMessage": "Opravdu chceš smazat svůj účet? Všechna data budou trvale smazána.",
+      "confirmButton": "Ano, smazat můj účet",
+      "deletedTitle": "Účet smazán",
+      "deletedMessage": "Tvůj účet byl smazán.",
+      "error": "Nepodařilo se smazat účet"
+    }
+  },
+  "pricing": {
+    "title": "RunWithAI Pro",
+    "subtitle": "Odemkni všechny funkce",
+    "monthly": "Měsíčně",
+    "yearly": "Ročně",
+    "perMonth": "/měsíc",
+    "perYear": "/rok",
+    "save": "Ušetři",
+    "features": {
+      "aiCoach": "Osobní AI trenér",
+      "unlimitedRuns": "Neomezené běhy",
+      "advancedStats": "Pokročilé statistiky",
+      "trainingPlans": "Přizpůsobené tréninkové plány",
+      "voiceCoach": "Hlasový trenér během běhu",
+      "exportData": "Export dat"
+    },
+    "subscribe": "Předplatit nyní",
+    "restore": "Obnovit nákup",
+    "terms": "Platí podmínky. Automatické obnovení.",
+    "currentPlan": "Aktuální plán",
+    "free": "Zdarma",
+    "pro": "Pro",
+    "loading": "Načítání...",
+    "error": "Něco se pokazilo",
+    "success": "Nyní jsi Pro!",
+    "alreadyPro": "Již jsi uživatel Pro",
+    "tryAgain": "Zkus to znovu"
+  },
+  "common": {
+    "cancel": "Zrušit",
+    "save": "Uložit",
+    "delete": "Smazat",
+    "edit": "Upravit",
+    "done": "Hotovo",
+    "next": "Další",
+    "back": "Zpět",
+    "skip": "Přeskočit",
+    "ok": "OK",
+    "yes": "Ano",
+    "no": "Ne",
+    "loading": "Načítání...",
+    "error": "Chyba",
+    "success": "Úspěch",
+    "retry": "Zkus to znovu"
+  },
+  "onboarding": {
+    "welcome": "Vítej v",
+    "appName": "RunWithAI",
+    "subtitle": "Tvůj osobní AI běžecký trenér",
+    "getStarted": "Začít",
+    "step1": {
+      "title": "Sleduj své běhy",
+      "desc": "GPS sledování s živými daty a zobrazením trasy"
+    },
+    "step2": {
+      "title": "AI trénink",
+      "desc": "Získej personalizované tréninkové plány a rady od svého AI trenéra"
+    },
+    "step3": {
+      "title": "Dosáhni svých cílů",
+      "desc": "Nastav si cíle a sleduj svůj pokrok s detailními statistikami"
+    }
+  },
+  "dashboard": {
+    "defaultName": "BĚŽEC",
+    "greeting": {
+      "morning": "DOBRÉ RÁNO,",
+      "day": "DOBRÝ DEN,",
+      "evening": "DOBRÝ VEČER,"
+    },
+    "planUpdated": "PLÁN AKTUALIZOVÁN",
+    "refresh": "Obnovit",
+    "shoeAlert": {
+      "worn": "Boty jsou opotřebované!",
+      "soonWorn": "Boty budou brzy opotřebované!"
+    },
+    "fatigue": {
+      "rested": "Odpočatý",
+      "ok": "OK",
+      "slightlyTired": "Trochu unavený",
+      "veryTired": "Velmi unavený"
+    },
+    "weather": {
+      "title": "POČASÍ & FORMA",
+      "wind": "Vítr",
+      "clear": "Jasno",
+      "partlyCloudy": "Částečně oblačno",
+      "foggy": "Mlha/opar",
+      "rain": "Déšť",
+      "snow": "Sníh",
+      "showers": "Přeháňky",
+      "thunder": "Bouřka",
+      "analyzing": "Analyzuji počasí a stav...",
+      "noAdvice": "Žádná rada k dispozici",
+      "fetchError": "Data o počasí nejsou k dispozici — zkus to znovu."
+    },
+    "stats": {
+      "kmThisWeek": "KM TENTO TÝDEN",
+      "daysInRow": "DNÍ V ŘADĚ",
+      "runsThisMonth": "BĚHY TENTO MĚSÍC",
+      "of": "z",
+      "personalRecord": "Osobní rekord",
+      "fromRecord": "{{count}} od tvého rekordu",
+      "overOneWeek": "Přes 1 týden v řadě",
+      "keepingMomentum": "Držíš tempo",
+      "goodStart": "Dobrý začátek",
+      "keepGoing": "Pokračuj!",
+      "startStreak": "Začni sérii dnes",
+      "bestMonthEver": "Nejlepší {{month}} vůbec",
+      "oneFromRecord": "1 běh do rekordního měsíce!",
+      "runsFromRecord": "{{count}} běhů do rekordu",
+      "runsInMonth": "{{count}} běhů v {{month}}"
+    },
+    "monthNames": ["Led", "Úno", "Bře", "Dub", "Kvě", "Čvn", "Čvc", "Srp", "Zář", "Říj", "Lis", "Pro"],
+    "workout": {
+      "nextWorkout": "DALŠÍ TRÉNINK",
+      "today": "DNES",
+      "distance": "Vzdálenost",
+      "time": "Čas",
+      "targetPace": "Cílové tempo",
+      "targetHr": "Cílový tep"
+    },
+    "weekPlan": {
+      "title": "TENTO TÝDEN"
+    },
+    "milestone": {
+      "nextMilestone": "DALŠÍ MILNÍK",
+      "kmLeft": "km zbývá",
+      "total": "celkem",
+      "thisWeek": "Tento týden!",
+      "oneToTwoWeeks": "Přibližně 1-2 týdny",
+      "aboutWeeks": "Přibližně {{count}} týdnů"
+    },
+    "diary": {
+      "title": "BĚŽECKÝ DENÍK",
+      "subtitle": "Piš poznámky o svých bězích — AI se z nich učí",
+      "addNote": "+ Poznámka",
+      "mood": "Nálada",
+      "placeholder": "Jak to šlo? Těžké nohy? Dobrý den? Nová trasa?",
+      "dayNames": ["Ne", "Po", "Út", "St", "Čt", "Pá", "So"]
+    },
+    "injury": {
+      "title": "RIZIKO ZRANĚNÍ",
+      "low": "Nízké",
+      "moderate": "Střední",
+      "high": "Vysoké",
+      "kmIncrease": "Km vzrostly o {{pct}}% oproti minulému týdnu",
+      "runsLast3Days": "{{count}} běhů za poslední 3 dny",
+      "noRestToday": "Dnes žádný odpočinek",
+      "daysSinceRun": "{{count}} dní od posledního běhu — odpočatý",
+      "noRiskFactors": "Žádné specifické rizikové faktory.",
+      "tip1": "Zvaž den odpočinku po těžkých bězích",
+      "tip2": "Nezvyšuj km o více než 10% týdně",
+      "analyzed": "Analyzováno",
+      "aiAnalysis": "AI analýza"
+    },
+    "racePredictor": {
+      "title": "Predikce závodu",
+      "subtitle": "Podívej se na předpokládané časy závodu",
+      "noData": "Pro predikci je potřeba alespoň jeden běh.",
+      "analyzing": "AI analyzuje tvé běhy...",
+      "halfMarathon": "Půlmaraton",
+      "confidence": "Spolehlivost"
+    }
+  },
+  "tracker": {
+    "defaultRunner": "Běžec",
+    "voiceOn": "Hlas zapnut",
+    "voiceOff": "Hlas vypnut",
+    "mapNotAvailable": "Mapa není k dispozici",
+    "status": {
+      "ready": "Stiskni Start pro zahájení",
+      "paused": "Pozastaveno",
+      "tracking": "Nahrávání..."
+    },
+    "gps": {
+      "active": "GPS aktivní",
+      "waiting": "Hledám GPS signál...",
+      "denied": "GPS povolení zamítnuto",
+      "unavailable": "GPS není k dispozici",
+      "timeout": "Časový limit GPS",
+      "notAvailable": "GPS není k dispozici",
+      "error": "Chyba GPS"
+    }
+  },
+  "chat": {
+    "title": "AI-TRENÉR",
+    "clear": "Vymazat",
+    "placeholder": "Napiš svému trenérovi...",
+    "loadingHistory": "Načítání konverzace...",
+    "planUpdated": "Plán aktualizován",
+    "defaultRunner": "Běžec",
+    "greeting": "Ahoj {{name}}! Jsem tvůj AI běžecký trenér. Jak ti mohu dnes pomoci?",
+    "clearedGreeting": "Konverzace vymazána! Jak ti mohu pomoci, {{name}}?",
+    "connectionError": "Omlouvám se, nepodařilo se připojit. Zkus to prosím znovu."
+  },
+  "proUpsell": {
+    "title": "Odemkni plnou sílu",
+    "subtitle": "Získej přístup ke všem funkcím a dosáhni svých cílů rychleji",
+    "price": "49 DKK",
+    "priceUnit": "/měsíc",
+    "guarantee": "✓ Zruš kdykoliv • ✓ 7 dní zdarma na vyzkoušení",
+    "startTrial": "Začít zkušební období",
+    "continueWithFree": "Pokračovat s bezplatnou verzí",
+    "features": {
+      "aiCoach": {
+        "title": "AI trenér",
+        "desc": "Personalizovaný tréninkový plán, který se přizpůsobuje tobě"
+      },
+      "advancedStats": {
+        "title": "Pokročilé statistiky",
+        "desc": "Hloubková analýza tvého tréninku"
+      },
+      "unlimitedGoals": {
+        "title": "Neomezené cíle",
+        "desc": "Nastav si tolik cílů, kolik chceš"
+      },
+      "routeLibrary": {
+        "title": "Knihovna tras",
+        "desc": "Ukládej a sdílej své oblíbené trasy"
+      },
+      "aiChat": {
+        "title": "AI chat",
+        "desc": "Ptej se na běhání a dostávej odpovědi"
+      },
+      "progressReports": {
+        "title": "Reporty pokroku",
+        "desc": "Týdenní a měsíční souhrny"
+      }
+    }
+  }
+}

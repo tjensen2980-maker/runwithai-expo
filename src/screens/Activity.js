@@ -114,6 +114,17 @@ function getActivityStyles() {
   kudosCount:         { color: colors.muted, fontSize: 12, marginLeft: 4 },
   streakSection:      { marginBottom: 16 },
   routeMapContainer:  { height: 160, borderRadius: 12, overflow: 'hidden', marginTop: 12, backgroundColor: colors.surface },
+  // Run/Walk breakdown styles
+  breakdownContainer: { marginTop: 12, backgroundColor: colors.surface, borderRadius: 10, padding: 10 },
+  breakdownTitle:     { fontSize: 9, color: colors.muted, fontWeight: '700', letterSpacing: 1, marginBottom: 8, textTransform: 'uppercase' },
+  breakdownBar:       { flexDirection: 'row', height: 8, borderRadius: 4, overflow: 'hidden', marginBottom: 8 },
+  breakdownRunBar:    { backgroundColor: colors.accent },
+  breakdownWalkBar:   { backgroundColor: colors.blue },
+  breakdownStats:     { flexDirection: 'row', justifyContent: 'space-between' },
+  breakdownStat:      { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  breakdownDot:       { width: 8, height: 8, borderRadius: 4 },
+  breakdownLabel:     { fontSize: 11, color: colors.muted },
+  breakdownValue:     { fontSize: 12, fontWeight: '800', color: colors.text },
   });
   return _activityStyles;
 }
@@ -601,6 +612,51 @@ const ef = StyleSheet.create({
   score:  { fontSize: 14, fontWeight: '900', letterSpacing: -0.5 },
   label:  { fontSize: 8, fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase', marginTop: 1 },
 });
+
+// ─── RUN/WALK BREAKDOWN COMPONENT ─────────────────────────────────────────────
+function RunWalkBreakdown({ runningKm, walkingKm, totalKm }) {
+  const styles = getActivityStyles();
+  
+  if (!runningKm && !walkingKm) return null;
+  if (totalKm <= 0) return null;
+  
+  const runPct = Math.round((runningKm / totalKm) * 100);
+  const walkPct = Math.round((walkingKm / totalKm) * 100);
+  
+  // Don't show if it's all one type
+  if (runPct === 100 || walkPct === 100) return null;
+  
+  return (
+    <View style={styles.breakdownContainer}>
+      <Text style={styles.breakdownTitle}>Løb / Gang fordeling</Text>
+      
+      {/* Progress bar */}
+      <View style={styles.breakdownBar}>
+        {runPct > 0 && (
+          <View style={[styles.breakdownRunBar, { flex: runPct }]} />
+        )}
+        {walkPct > 0 && (
+          <View style={[styles.breakdownWalkBar, { flex: walkPct }]} />
+        )}
+      </View>
+      
+      {/* Stats */}
+      <View style={styles.breakdownStats}>
+        <View style={styles.breakdownStat}>
+          <View style={[styles.breakdownDot, { backgroundColor: colors.accent }]} />
+          <Text style={styles.breakdownLabel}>Løb</Text>
+          <Text style={styles.breakdownValue}>{runningKm.toFixed(2)} km ({runPct}%)</Text>
+        </View>
+        <View style={styles.breakdownStat}>
+          <View style={[styles.breakdownDot, { backgroundColor: colors.blue }]} />
+          <Text style={styles.breakdownLabel}>Gang</Text>
+          <Text style={styles.breakdownValue}>{walkingKm.toFixed(2)} km ({walkPct}%)</Text>
+        </View>
+      </View>
+    </View>
+  );
+}
+
 // ─── RUN CARD ─────────────────────────────────────────────────────────────────
 function RunCard({ run, level, allRuns, onDelete }) {
   const [showShare, setShowShare] = useState(false);
@@ -614,6 +670,11 @@ function RunCard({ run, level, allRuns, onDelete }) {
   const route = getRunRoute(run);
   const runType = run.type === 'walk' ? 'Gåtur' : 'Løb';
   const splits = (() => { try { return run.splits ? JSON.parse(run.splits) : []; } catch { return []; } })();
+  
+  // Run/walk breakdown
+  const runningKm = parseFloat(run.running_km) || 0;
+  const walkingKm = parseFloat(run.walking_km) || 0;
+  
   const metrics = level === 'beginner'
     ? [{ label: 'Pace', val: pace + '/km' }, { label: 'Tid', val: time }]
     : [{ label: 'Pace', val: pace + '/km' }, { label: 'Tid', val: time }, { label: 'Puls', val: hr }];
@@ -663,6 +724,14 @@ function RunCard({ run, level, allRuns, onDelete }) {
             </View>
           ))}
         </View>
+        
+        {/* Run/Walk Breakdown */}
+        <RunWalkBreakdown 
+          runningKm={runningKm} 
+          walkingKm={walkingKm} 
+          totalKm={run.km || 0} 
+        />
+        
         {/* Mini rutekort — tryk for at åbne fuldskærmskort */}
         {route.length >= 2 && (
           <MiniRouteMap route={route} onPress={() => setShowMap(true)} />

@@ -1,0 +1,512 @@
+{
+  "tabs": {
+    "plan": "Plean",
+    "run": "Rith",
+    "coach": "Traenálaí",
+    "stats": "Staitisticí",
+    "settings": "Socruithe",
+    "calendar": "Féilire",
+    "progress": "Dul chun cinn",
+    "start": "Tosaigh"
+  },
+  "run": {
+    "title": "Rith",
+    "walk": "Siúl",
+    "km": "KM",
+    "time": "AM",
+    "pace": "LUAS",
+    "start": "Tosaigh",
+    "pause": "Sos",
+    "resume": "Lean ar aghaidh",
+    "stop": "Stop",
+    "save": "Sábháil",
+    "discard": "Caith amach",
+    "startRun": "Tosaigh ag rith",
+    "startThisWorkout": "Tosaigh an traenáil seo",
+    "nextWorkout": "An chéad traenáil eile",
+    "lastActivity": "Gníomhaíocht dheireanach",
+    "gpsTracking": "Rianú GPS",
+    "walkTracking": "Rianú siúil",
+    "aiRoutes": "Bealaí AI"
+  },
+  "pro": {
+    "badge": "PRO",
+    "upgrade": "Uasghrádaigh",
+    "upgradeToPro": "Uasghrádaigh go Pro",
+    "feature": "Gné Pro",
+    "unlockFeatures": "Díghlasáil gach gné",
+    "fromOnly": "Ó",
+    "limit": {
+      "title": "Gné Pro",
+      "message": "Teastaíonn síntiús Pro don ghné seo",
+      "seePlans": "Féach ar phleananna",
+      "cancel": "Cealaigh"
+    },
+    "stats": {
+      "title": "Staitisticí Pro",
+      "features": "Staitisticí agus léargais fheabhsaithe",
+      "unlock": "Díghlasáil"
+    },
+    "coach": {
+      "title": "Traenálaí AI",
+      "description": "Plean traenála pearsantaithe a oiriúnaíonn duit"
+    },
+    "calendar": {
+      "title": "Féilire traenála",
+      "description": "Féach ar do phlean traenála iomlán"
+    },
+    "aiRoutes": {
+      "title": "Bealaí AI",
+      "description": "Faigh moltaí bealaí bunaithe ar do thraenáil"
+    }
+  },
+  "stats": {
+    "title": "Staitisticí",
+    "totalRuns": "Ritheanna iomlána",
+    "totalKm": "Km iomlána",
+    "avgPace": "Meánluas",
+    "thisWeek": "An tseachtain seo",
+    "thisMonth": "An mhí seo",
+    "allTime": "Riamh",
+    "basic": "Staitisticí bunúsacha",
+    "runs": "Ritheanna"
+  },
+  "subscription": "Síntiús",
+  "alerts": {
+    "deleteRun": "An bhfuil tú cinnte gur mhaith leat an rith seo a scriosadh?",
+    "deleteAccount": "An bhfuil tú cinnte gur mhaith leat do chuntas a scriosadh? Ní féidir é seo a chur ar ceal.",
+    "logout": "An bhfuil tú cinnte gur mhaith leat logáil amach?",
+    "discardRun": "An bhfuil tú cinnte gur mhaith leat an rith seo a chaitheamh amach?",
+    "unsavedChanges": "Tá athruithe neamhshábháilte agat. An bhfuil tú ag iarraidh iad a chaitheamh amach?",
+    "welcomePro": {
+      "title": "Fáilte go Pro!",
+      "message": "Tá rochtain agat anois ar gach gné"
+    }
+  },
+  "auth": {
+    "login": "Logáil isteach",
+    "register": "Cruthaigh cuntas",
+    "email": "Ríomhphost",
+    "password": "Focal faire",
+    "confirmPassword": "Deimhnigh focal faire",
+    "forgotPassword": "Dearmad ar fhocal faire?",
+    "noAccount": "Níl cuntas agat?",
+    "hasAccount": "An bhfuil cuntas agat cheana?",
+    "loginButton": "Logáil isteach",
+    "registerButton": "Cruthaigh cuntas",
+    "orContinueWith": "nó lean ar aghaidh le",
+    "apple": "Apple",
+    "google": "Google",
+    "emailPlaceholder": "do@rphost.ie",
+    "passwordPlaceholder": "••••••••",
+    "namePlaceholder": "D'ainm",
+    "name": "Ainm",
+    "loggingIn": "Ag logáil isteach...",
+    "registering": "Ag cruthú cuntais...",
+    "tagline": "Do thraenálaí rith AI pearsanta",
+    "createAccount": "Cruthaigh cuntas",
+    "minChars": "íos. carachtair",
+    "repeatPassword": "athdhéan focal faire",
+    "continue": "lean ar aghaidh",
+    "getStarted": "tosaímis",
+    "step1of3": "céim 1 as 3",
+    "step2of3": "céim 2 as 3",
+    "step3of3": "céim 3 as 3",
+    "yourName": "d'ainm",
+    "age": "AOIS",
+    "weight": "MEÁCHAN",
+    "height": "AIRDE",
+    "years": "Bliain",
+    "runningLevel": "LEIBHÉAL RITH",
+    "levels.beginner": "Tosaíoch",
+    "levels.intermediate": "Meánleibhéal",
+    "levels.advanced": "Ardleibhéal",
+    "yourGoals": "CAD IAD DO SPRIOCANNA",
+    "goals.health": "Sláinte",
+    "goals.weight": "Caillteanas meáchain",
+    "goals.distance": "Rith níos faide",
+    "goals.speed": "Éirigh níos tapúla",
+    "goals.race": "Rith rás",
+    "goals.fun": "Spraoi",
+    "weeklyGoalKm": "SPRIOC KM SEACHTAINIÚIL",
+    "weeklyGoalExample": "M.sh. 20",
+    "unlockFullPower": "Díghlasáil rochtain iomlán",
+    "unlockDesc": "Faigh rochtain ar gach gné agus bain do spriocanna amach níos tapúla",
+    "proFeatures.aiCoachDesc": "Traenálaí AI",
+    "proFeatures.statsDesc": "Staitisticí",
+    "proFeatures.goalsDesc": "Spriocanna",
+    "proFeatures.routesDesc": "Bealaí",
+    "proFeatures.chatDesc": "Comhrá AI",
+    "proFeatures.reportsDesc": "Tuairiscí",
+    "price": "49 kr",
+    "guarantee": "✓ Cealaigh am ar bith • ✓ 7 lá saor in aisce",
+    "perMonth": "/mí",
+    "startFreeTrial": "Tosaigh triail saor in aisce",
+    "continueWithFree": "Lean leis an leagan saor in aisce",
+    "levels.beginnerDesc": "Nua don rith nó ag tosú arís tar éis sos fada",
+    "levels.intermediateDesc": "Ritheann go rialta agus ag iarraidh feabhsú",
+    "levels.advancedDesc": "Reathaire taithíoch le spriocanna sonracha",
+    "or": "nó",
+    "errors": {
+      "serverConnection": "Ní féidir ceangal leis an bhfreastalaí"
+    }
+  },
+  "settings": {
+    "pageTitle": "Socruithe",
+    "title": "Socruithe",
+    "profile": "Próifíl",
+    "days": ["Lu", "Má", "Cé", "Dé", "Ao", "Sa", "Do"],
+    "saveChanges": "Sábháil athruithe",
+    "saved": "Sábháilte!",
+    "logout": "Logáil amach",
+    "privacyPolicy": "Polasaí príobháideachta",
+    "termsOfService": "Téarmaí seirbhíse",
+    "dangerZone": "Crios contúirteach",
+    "sections": {
+      "personalInfo": "Faisnéis phearsanta",
+      "level": "Leibhéal",
+      "runningGoals": "Spriocanna reatha",
+      "weeklyGoals": "Spriocanna seachtainiúla",
+      "trainingTypes": "Cineálacha traenála",
+      "heartRateZones": "Criosanna buille croí",
+      "injuries": "Gortuithe",
+      "reminders": "Meabhrúcháin",
+      "privacy": "Príobháideacht",
+      "units": "Aonaid",
+      "data": "Sonraí"
+    },
+    "fields": {
+      "name": "Ainm",
+      "age": "Aois",
+      "weight": "Meáchan (kg)",
+      "height": "Airde (cm)",
+      "sex": "Inscne",
+      "restingHr": "Buille croí ag suaimhneas",
+      "maxHr": "Buille croí uasta",
+      "vo2max": "VO2max",
+      "yearsRunning": "Blianta ag rith",
+      "weeklyKm": "Km seachtainiúil",
+      "weeklyKmGoal": "Sprioc km seachtainiúil",
+      "weeklyRunsGoal": "Sprioc ritheanna seachtainiúil",
+      "primaryGoal": "Príomhsprioc",
+      "raceDate": "Dáta an rása",
+      "injuries": "Gortuithe/teorainneacha",
+      "injuriesPlaceholder": "m.sh. fadhbanna glúine, pian droma...",
+      "preferredDays": "Laethanta is fearr leat",
+      "preferredTypes": "Cineálacha rith is fearr leat"
+    },
+    "sex": {
+      "male": "Fireann",
+      "female": "Baineann"
+    },
+    "levels": {
+      "beginner": "Tosaí",
+      "intermediate": "Meánach",
+      "advanced": "Ardleibhéal"
+    },
+    "goals": {
+      "fitness": "Aclaíocht ghinearálta",
+      "weight": "Cailliúint meáchain",
+      "half": "Leath-mharatón",
+      "full": "Maratón"
+    },
+    "runTypes": {
+      "easy": "Rith éasca",
+      "interval": "Eatraimh",
+      "long": "Rith fada",
+      "tempo": "Rith tempo",
+      "recovery": "Téarnamh",
+      "race": "Rás",
+      "trail": "Cosán"
+    },
+    "zones": {
+      "calculated": "Ríofa ó do bhuille croí uasta",
+      "z1": "Crios 1 (Téarnamh)",
+      "z2": "Crios 2 (Aeróbach)",
+      "z3": "Crios 3 (Tempo)",
+      "z4": "Crios 4 (Tairseach)",
+      "z5": "Crios 5 (Anaeróbach)"
+    },
+    "notifications": {
+      "push": "Fógraí brú",
+      "pushSub": "Faigh meabhrúcháin traenála",
+      "enabled": "Cumasaithe",
+      "reminder": "Meabhrúchán",
+      "time": "Am",
+      "days": "Laethanta"
+    },
+    "privacy": {
+      "shareProfile": "Comhroinn próifíl",
+      "shareProfileSub": "Is féidir le daoine eile do phróifíl a fheiceáil",
+      "shareActivity": "Comhroinn gníomhaíocht",
+      "shareActivitySub": "Is féidir le daoine eile do ritheanna a fheiceáil",
+      "shareLocation": "Comhroinn suíomh",
+      "shareLocationSub": "Taispeáin do shuíomh ar bhealaí"
+    },
+    "units": {
+      "distance": "Fad",
+      "pace": "Luas"
+    },
+    "data": {
+      "export": "Easpórtáil sonraí",
+      "exportSub": "Íoslódáil do shonraí rith go léir"
+    },
+    "shoes": {
+      "title": "Bróga reatha",
+      "addShoe": "Cuir bróg leis",
+      "namePlaceholder": "Ainm na bróige",
+      "brandPlaceholder": "Branda",
+      "kmPlaceholder": "Km tosaigh",
+      "saveShoe": "Sábháil bróg",
+      "useForNextRun": "Úsáid don chéad rith eile",
+      "active": "Gníomhach",
+      "delete": "Scrios",
+      "deleteConfirm": "An bhfuil tú cinnte gur mhaith leat an bhróg seo a scriosadh?",
+      "empty": "Níl bróga curtha leis fós",
+      "worn": "Caite",
+      "soonWorn": "Beagnach caite",
+      "wornMessage": "Tá níos mó ná 800 km ar na bróga seo agus ba cheart iad a athsholáthar"
+    },
+    "deleteAccount": {
+      "title": "Scrios cuntas",
+      "button": "Scrios mo chuntas",
+      "warning": "Ní féidir é seo a chur ar ceal!",
+      "confirmMessage": "An bhfuil tú cinnte gur mhaith leat do chuntas a scriosadh? Scriosfar gach sonraí go buan.",
+      "confirmButton": "Tá, scrios mo chuntas",
+      "deletedTitle": "Cuntas scriosta",
+      "deletedMessage": "Scriosadh do chuntas.",
+      "error": "Theip ar scriosadh an chuntais"
+    }
+  },
+  "pricing": {
+    "title": "RunWithAI Pro",
+    "subtitle": "Díghlasáil gach gné",
+    "monthly": "Míosúil",
+    "yearly": "Bliantúil",
+    "perMonth": "/mí",
+    "perYear": "/bliain",
+    "save": "Sábháil",
+    "features": {
+      "aiCoach": "Traenálaí AI pearsanta",
+      "unlimitedRuns": "Ritheanna gan teorainn",
+      "advancedStats": "Staitisticí forbartha",
+      "trainingPlans": "Pleananna traenála saincheaptha",
+      "voiceCoach": "Traenálaí gutha le linn rith",
+      "exportData": "Easpórtáil sonraí"
+    },
+    "subscribe": "Liostáil anois",
+    "restore": "Athchóirigh ceannach",
+    "terms": "Téarmaí i bhfeidhm. Athnuachan uathoibríoch.",
+    "currentPlan": "Plean reatha",
+    "free": "Saor in aisce",
+    "pro": "Pro",
+    "loading": "Ag lódáil...",
+    "error": "Tharla earráid",
+    "success": "Is Pro tú anois!",
+    "alreadyPro": "Is úsáideoir Pro thú cheana",
+    "tryAgain": "Bain triail eile as"
+  },
+  "common": {
+    "cancel": "Cealaigh",
+    "save": "Sábháil",
+    "delete": "Scrios",
+    "edit": "Cuir in eagar",
+    "done": "Déanta",
+    "next": "Ar aghaidh",
+    "back": "Ar ais",
+    "skip": "Scipeáil",
+    "ok": "OK",
+    "yes": "Tá",
+    "no": "Níl",
+    "loading": "Ag lódáil...",
+    "error": "Earráid",
+    "success": "Rath",
+    "retry": "Bain triail eile as"
+  },
+  "onboarding": {
+    "welcome": "Fáilte go",
+    "appName": "RunWithAI",
+    "subtitle": "Do thraenálaí rith AI pearsanta",
+    "getStarted": "Tosaímis",
+    "step1": {
+      "title": "Rianaigh do ritheanna",
+      "desc": "Rianú GPS le staitisticí beo agus taispeáint bealaí"
+    },
+    "step2": {
+      "title": "Traenáil le tacaíocht AI",
+      "desc": "Faigh pleananna traenála pearsantaithe agus comhairle ó do thraenálaí AI"
+    },
+    "step3": {
+      "title": "Sroich do spriocanna",
+      "desc": "Socraigh spriocanna agus rianaigh do dhul chun cinn le staitisticí mionsonraithe"
+    }
+  },
+  "dashboard": {
+    "defaultName": "RITHEOIR",
+    "greeting": {
+      "morning": "MAIDIN MHAITH,",
+      "day": "LÁ MAITH,",
+      "evening": "TRÁTHNÓNA MAITH,"
+    },
+    "planUpdated": "PLEAN NUASHONRAITHE",
+    "refresh": "Athnuaigh",
+    "shoeAlert": {
+      "worn": "Tá na bróga caite!",
+      "soonWorn": "Beidh na bróga caite go luath!"
+    },
+    "fatigue": {
+      "rested": "Ar scíth",
+      "ok": "OK",
+      "slightlyTired": "Beagán tuirseach",
+      "veryTired": "An-tuirseach"
+    },
+    "weather": {
+      "title": "AIMSIR & FOIRM",
+      "wind": "Gaoth",
+      "clear": "Spéir ghlan",
+      "partlyCloudy": "Beagán scamallach",
+      "foggy": "Ceomhar/ceitheach",
+      "rain": "Báisteach",
+      "snow": "Sneachta",
+      "showers": "Ceathanna",
+      "thunder": "Toirneach",
+      "analyzing": "Ag anailísiú aimsire agus riocht...",
+      "noAdvice": "Níl comhairle ar fáil",
+      "fetchError": "Sonraí aimsire níl ar fáil — bain triail eile as."
+    },
+    "stats": {
+      "kmThisWeek": "KM AN TSEACHTAIN SEO",
+      "daysInRow": "LAETHANTA I NDIAIDH A CHÉILE",
+      "runsThisMonth": "RITHEANNA AN MHÍ SEO",
+      "of": "as",
+      "personalRecord": "Taifead pearsanta",
+      "fromRecord": "{{count}} ó do thaifead",
+      "overOneWeek": "Níos mó ná 1 seachtain i ndiaidh a chéile",
+      "keepingMomentum": "Ag coinneáil an mhóimintim",
+      "goodStart": "Tús maith",
+      "keepGoing": "Lean ort!",
+      "startStreak": "Tosaigh sraith inniu",
+      "bestMonthEver": "An {{month}} is fearr riamh",
+      "oneFromRecord": "1 rith go dtí do mhí thaifid!",
+      "runsFromRecord": "{{count}} ritheanna go dtí an taifead",
+      "runsInMonth": "{{count}} ritheanna i {{month}}"
+    },
+    "monthNames": ["Ean", "Feab", "Már", "Aib", "Beal", "Meith", "Iúil", "Lún", "MFó", "DF", "Sam", "Nol"],
+    "workout": {
+      "nextWorkout": "AN CHÉAD TRAENÁIL EILE",
+      "today": "INNIU",
+      "distance": "Fad",
+      "time": "Am",
+      "targetPace": "Luas sprice",
+      "targetHr": "Buille croí sprice"
+    },
+    "weekPlan": {
+      "title": "AN TSEACHTAIN SEO"
+    },
+    "milestone": {
+      "nextMilestone": "AN CHÉAD CHLOCH MHÍLE EILE",
+      "kmLeft": "km fágtha",
+      "total": "iomlán",
+      "thisWeek": "An tseachtain seo!",
+      "oneToTwoWeeks": "Thart ar 1-2 seachtain",
+      "aboutWeeks": "Thart ar {{count}} seachtaine"
+    },
+    "diary": {
+      "title": "DIALANN RITH",
+      "subtitle": "Scríobh nótaí faoi do ritheanna — foghlaimíonn AI uathu",
+      "addNote": "+ Nóta",
+      "mood": "Giúmar",
+      "placeholder": "Conas a bhí sé? Cosa troma? Lá maith? Bealach nua?",
+      "dayNames": ["Do", "Lu", "Má", "Cé", "Dé", "Ao", "Sa"]
+    },
+    "injury": {
+      "title": "RIOSCA GORTAITHE",
+      "low": "Íseal",
+      "moderate": "Measartha",
+      "high": "Ard",
+      "kmIncrease": "Mhéadaigh km {{pct}}% i gcomparáid leis an tseachtain seo caite",
+      "runsLast3Days": "{{count}} ritheanna le 3 lá anuas",
+      "noRestToday": "Gan scíth inniu",
+      "daysSinceRun": "{{count}} lá ón rith deireanach — ar scíth",
+      "noRiskFactors": "Gan tosca riosca ar leith.",
+      "tip1": "Smaoinigh ar lá scíthe tar éis ritheanna deacra",
+      "tip2": "Ná méadaigh km níos mó ná 10% in aghaidh na seachtaine",
+      "analyzed": "Anailísithe",
+      "aiAnalysis": "Anailís AI"
+    },
+    "racePredictor": {
+      "title": "Tuar rása",
+      "subtitle": "Féach ar d'amanna rása ionchasacha",
+      "noData": "Teastaíonn ar a laghad rith amháin le haghaidh tuarthála.",
+      "analyzing": "Tá AI ag anailísiú do ritheanna...",
+      "halfMarathon": "Leath-mharatón",
+      "confidence": "Muinín"
+    }
+  },
+  "tracker": {
+    "defaultRunner": "Ritheoir",
+    "voiceOn": "Guth ar siúl",
+    "voiceOff": "Guth as",
+    "mapNotAvailable": "Léarscáil níl ar fáil",
+    "status": {
+      "ready": "Brúigh Tosaigh le tosú",
+      "paused": "Ar sos",
+      "tracking": "Ag taifeadadh..."
+    },
+    "gps": {
+      "active": "GPS gníomhach",
+      "waiting": "Ag lorg comhartha GPS...",
+      "denied": "Cead GPS diúltaithe",
+      "unavailable": "GPS níl ar fáil",
+      "timeout": "Am istigh GPS",
+      "notAvailable": "GPS níl ar fáil",
+      "error": "Earráid GPS"
+    }
+  },
+  "chat": {
+    "title": "TRAENÁLAÍ-AI",
+    "clear": "Glan",
+    "placeholder": "Scríobh chuig do thraenálaí...",
+    "loadingHistory": "Ag lódáil comhrá...",
+    "planUpdated": "Plean nuashonraithe",
+    "defaultRunner": "Ritheoir",
+    "greeting": "Dia duit {{name}}! Is mise do thraenálaí rith AI. Conas is féidir liom cabhrú leat inniu?",
+    "clearedGreeting": "Comhrá glanta! Conas is féidir liom cabhrú leat, {{name}}?",
+    "connectionError": "Gabh mo leithscéal, níorbh fhéidir ceangal. Bain triail eile as."
+  },
+  "proUpsell": {
+    "title": "Díghlasáil an chumhacht iomlán",
+    "subtitle": "Faigh rochtain ar gach gné agus sroich do spriocanna níos tapúla",
+    "price": "49 DKK",
+    "priceUnit": "/mí",
+    "guarantee": "✓ Cealaigh am ar bith • ✓ Triail 7 lá saor in aisce",
+    "startTrial": "Tosaigh triail saor in aisce",
+    "continueWithFree": "Lean ar aghaidh leis an leagan saor",
+    "features": {
+      "aiCoach": {
+        "title": "Traenálaí AI",
+        "desc": "Plean traenála pearsantaithe a oiriúnaíonn duit"
+      },
+      "advancedStats": {
+        "title": "Staitisticí forbartha",
+        "desc": "Anailís dhomhain ar do thraenáil"
+      },
+      "unlimitedGoals": {
+        "title": "Spriocanna gan teorainn",
+        "desc": "Socraigh oiread spriocanna agus is mian leat"
+      },
+      "routeLibrary": {
+        "title": "Leabharlann bealaí",
+        "desc": "Sábháil agus comhroinn do bhealaí is fearr"
+      },
+      "aiChat": {
+        "title": "Comhrá AI",
+        "desc": "Cuir ceisteanna faoi rith agus faigh freagraí"
+      },
+      "progressReports": {
+        "title": "Tuairiscí dul chun cinn",
+        "desc": "Achoimrí seachtainiúla agus míosúla"
+      }
+    }
+  }
+}

@@ -1,0 +1,512 @@
+{
+  "tabs": {
+    "plan": "Plaan",
+    "run": "Jooks",
+    "coach": "Treener",
+    "stats": "Statistika",
+    "settings": "Seaded",
+    "calendar": "Kalender",
+    "progress": "Progress",
+    "start": "Alusta"
+  },
+  "run": {
+    "title": "Jooks",
+    "walk": "Kõnd",
+    "km": "KM",
+    "time": "AEG",
+    "pace": "TEMPO",
+    "start": "Alusta",
+    "pause": "Paus",
+    "resume": "Jätka",
+    "stop": "Peata",
+    "save": "Salvesta",
+    "discard": "Loobu",
+    "startRun": "Alusta jooksu",
+    "startThisWorkout": "Alusta seda treeningut",
+    "nextWorkout": "Järgmine treening",
+    "lastActivity": "Viimane tegevus",
+    "gpsTracking": "GPS jälgimine",
+    "walkTracking": "Kõnni jälgimine",
+    "aiRoutes": "AI marsruudid"
+  },
+  "pro": {
+    "badge": "PRO",
+    "upgrade": "Täienda",
+    "upgradeToPro": "Täienda Pro-ks",
+    "feature": "Pro funktsioon",
+    "unlockFeatures": "Ava kõik funktsioonid",
+    "fromOnly": "Alates",
+    "limit": {
+      "title": "Pro funktsioon",
+      "message": "See funktsioon nõuab Pro tellimust",
+      "seePlans": "Vaata plaane",
+      "cancel": "Tühista"
+    },
+    "stats": {
+      "title": "Pro statistika",
+      "features": "Täiustatud statistika ja ülevaated",
+      "unlock": "Ava"
+    },
+    "coach": {
+      "title": "AI treener",
+      "description": "Personaliseeritud treeningplaan, mis kohandub sinuga"
+    },
+    "calendar": {
+      "title": "Treeningute kalender",
+      "description": "Vaata kogu oma treeningplaani"
+    },
+    "aiRoutes": {
+      "title": "AI marsruudid",
+      "description": "Saa marsruudi soovitusi oma treeningu põhjal"
+    }
+  },
+  "stats": {
+    "title": "Statistika",
+    "totalRuns": "Kokku jookse",
+    "totalKm": "Kokku km",
+    "avgPace": "Keskmine tempo",
+    "thisWeek": "Sel nädalal",
+    "thisMonth": "Sel kuul",
+    "allTime": "Kogu aeg",
+    "basic": "Põhistatistika",
+    "runs": "Jooksud"
+  },
+  "subscription": "Tellimus",
+  "alerts": {
+    "deleteRun": "Kas olete kindel, et soovite selle jooksu kustutada?",
+    "deleteAccount": "Kas olete kindel, et soovite oma konto kustutada? Seda ei saa tagasi võtta.",
+    "logout": "Kas olete kindel, et soovite välja logida?",
+    "discardRun": "Kas olete kindel, et soovite sellest jooksust loobuda?",
+    "unsavedChanges": "Teil on salvestamata muudatusi. Kas soovite neist loobuda?",
+    "welcomePro": {
+      "title": "Tere tulemast Pro-sse!",
+      "message": "Nüüd on teil juurdepääs kõigile funktsioonidele"
+    }
+  },
+  "auth": {
+    "login": "Logi sisse",
+    "register": "Loo konto",
+    "email": "E-post",
+    "password": "Parool",
+    "confirmPassword": "Kinnita parool",
+    "forgotPassword": "Unustasid parooli?",
+    "noAccount": "Pole kontot?",
+    "hasAccount": "On juba konto?",
+    "loginButton": "Logi sisse",
+    "registerButton": "Loo konto",
+    "orContinueWith": "või jätka",
+    "apple": "Apple",
+    "google": "Google",
+    "emailPlaceholder": "sinu@email.ee",
+    "passwordPlaceholder": "••••••••",
+    "namePlaceholder": "Sinu nimi",
+    "name": "Nimi",
+    "loggingIn": "Sisselogimine...",
+    "registering": "Konto loomine...",
+    "tagline": "Sinu isiklik AI jooksutreener",
+    "createAccount": "Loo konto",
+    "minChars": "min. tähemärki",
+    "repeatPassword": "korda parooli",
+    "continue": "jätka",
+    "getStarted": "alustame",
+    "step1of3": "samm 1/3",
+    "step2of3": "samm 2/3",
+    "step3of3": "samm 3/3",
+    "yourName": "sinu nimi",
+    "age": "VANUS",
+    "weight": "KAAL",
+    "height": "PIKKUS",
+    "years": "Aastat",
+    "runningLevel": "JOOKSUTASE",
+    "levels.beginner": "Algaja",
+    "levels.intermediate": "Kesktase",
+    "levels.advanced": "Edasijõudnu",
+    "yourGoals": "MIS ON SINU EESMÄRGID",
+    "goals.health": "Tervis",
+    "goals.weight": "Kaalulangus",
+    "goals.distance": "Joosta kaugemale",
+    "goals.speed": "Saada kiiremaks",
+    "goals.race": "Joosta võistlus",
+    "goals.fun": "Lõbu",
+    "weeklyGoalKm": "NÄDALA KM EESMÄRK",
+    "weeklyGoalExample": "Nt. 20",
+    "unlockFullPower": "Ava täielik juurdepääs",
+    "unlockDesc": "Saa juurdepääs kõigile funktsioonidele ja saavuta eesmärgid kiiremini",
+    "proFeatures.aiCoachDesc": "AI Treener",
+    "proFeatures.statsDesc": "Statistika",
+    "proFeatures.goalsDesc": "Eesmärgid",
+    "proFeatures.routesDesc": "Marsruudid",
+    "proFeatures.chatDesc": "AI Vestlus",
+    "proFeatures.reportsDesc": "Aruanded",
+    "price": "49 kr",
+    "guarantee": "✓ Tühista igal ajal • ✓ 7 päeva tasuta",
+    "perMonth": "/kuus",
+    "startFreeTrial": "Alusta tasuta prooviperioodi",
+    "continueWithFree": "Jätka tasuta versiooniga",
+    "levels.beginnerDesc": "Jooksmises uus või alustad pärast pikka pausi",
+    "levels.intermediateDesc": "Jooksed regulaarselt ja soovid areneda",
+    "levels.advancedDesc": "Kogenud jooksja kindlate eesmärkidega",
+    "or": "või",
+    "errors": {
+      "serverConnection": "Serveriga ei saa ühendust"
+    }
+  },
+  "settings": {
+    "pageTitle": "Seaded",
+    "title": "Seaded",
+    "profile": "Profiil",
+    "days": ["E", "T", "K", "N", "R", "L", "P"],
+    "saveChanges": "Salvesta muudatused",
+    "saved": "Salvestatud!",
+    "logout": "Logi välja",
+    "privacyPolicy": "Privaatsuspoliitika",
+    "termsOfService": "Kasutustingimused",
+    "dangerZone": "Ohtlik tsoon",
+    "sections": {
+      "personalInfo": "Isikuandmed",
+      "level": "Tase",
+      "runningGoals": "Jooksu eesmärgid",
+      "weeklyGoals": "Nädala eesmärgid",
+      "trainingTypes": "Treeningu tüübid",
+      "heartRateZones": "Südame löögisageduse tsoonid",
+      "injuries": "Vigastused",
+      "reminders": "Meeldetuletused",
+      "privacy": "Privaatsus",
+      "units": "Ühikud",
+      "data": "Andmed"
+    },
+    "fields": {
+      "name": "Nimi",
+      "age": "Vanus",
+      "weight": "Kaal (kg)",
+      "height": "Pikkus (cm)",
+      "sex": "Sugu",
+      "restingHr": "Puhkepulss",
+      "maxHr": "Maksimaalne pulss",
+      "vo2max": "VO2max",
+      "yearsRunning": "Jooksuaastad",
+      "weeklyKm": "Nädala km",
+      "weeklyKmGoal": "Nädala km eesmärk",
+      "weeklyRunsGoal": "Nädala jooksude eesmärk",
+      "primaryGoal": "Peamine eesmärk",
+      "raceDate": "Võistluse kuupäev",
+      "injuries": "Vigastused/piirangud",
+      "injuriesPlaceholder": "Nt põlveprobleemid, seljavaevused...",
+      "preferredDays": "Eelistatud päevad",
+      "preferredTypes": "Eelistatud jooksutüübid"
+    },
+    "sex": {
+      "male": "Mees",
+      "female": "Naine"
+    },
+    "levels": {
+      "beginner": "Algaja",
+      "intermediate": "Kesktase",
+      "advanced": "Edasijõudnu"
+    },
+    "goals": {
+      "fitness": "Üldine vorm",
+      "weight": "Kaalulangus",
+      "half": "Poolmaraton",
+      "full": "Maraton"
+    },
+    "runTypes": {
+      "easy": "Kerge jooks",
+      "interval": "Intervallid",
+      "long": "Pikk jooks",
+      "tempo": "Tempo jooks",
+      "recovery": "Taastumine",
+      "race": "Võistlus",
+      "trail": "Maastikujooks"
+    },
+    "zones": {
+      "calculated": "Arvutatud teie maksimaalsest pulsist",
+      "z1": "Tsoon 1 (Taastumine)",
+      "z2": "Tsoon 2 (Aeroobne)",
+      "z3": "Tsoon 3 (Tempo)",
+      "z4": "Tsoon 4 (Lävi)",
+      "z5": "Tsoon 5 (Anaeroobne)"
+    },
+    "notifications": {
+      "push": "Tõuketeavitused",
+      "pushSub": "Saage treeningu meeldetuletusi",
+      "enabled": "Lubatud",
+      "reminder": "Meeldetuletus",
+      "time": "Aeg",
+      "days": "Päevad"
+    },
+    "privacy": {
+      "shareProfile": "Jaga profiili",
+      "shareProfileSub": "Teised näevad teie profiili",
+      "shareActivity": "Jaga tegevust",
+      "shareActivitySub": "Teised näevad teie jookse",
+      "shareLocation": "Jaga asukohta",
+      "shareLocationSub": "Näita oma positsiooni marsruutidel"
+    },
+    "units": {
+      "distance": "Vahemaa",
+      "pace": "Tempo"
+    },
+    "data": {
+      "export": "Ekspordi andmed",
+      "exportSub": "Laadi alla kõik oma jooksuandmed"
+    },
+    "shoes": {
+      "title": "Jooksujalanõud",
+      "addShoe": "Lisa jalanõud",
+      "namePlaceholder": "Jalanõude nimi",
+      "brandPlaceholder": "Bränd",
+      "kmPlaceholder": "Alg-km",
+      "saveShoe": "Salvesta jalanõud",
+      "useForNextRun": "Kasuta järgmisel jooksul",
+      "active": "Aktiivne",
+      "delete": "Kustuta",
+      "deleteConfirm": "Kas olete kindel, et soovite need jalanõud kustutada?",
+      "empty": "Jalanõusid pole veel lisatud",
+      "worn": "Kulunud",
+      "soonWorn": "Varsti kulunud",
+      "wornMessage": "Need jalanõud on läbinud üle 800 km ja peaksid välja vahetama"
+    },
+    "deleteAccount": {
+      "title": "Kustuta konto",
+      "button": "Kustuta minu konto",
+      "warning": "Seda ei saa tagasi võtta!",
+      "confirmMessage": "Kas olete kindel, et soovite oma konto kustutada? Kõik andmed kustutatakse jäädavalt.",
+      "confirmButton": "Jah, kustuta minu konto",
+      "deletedTitle": "Konto kustutatud",
+      "deletedMessage": "Teie konto on kustutatud.",
+      "error": "Konto kustutamine ebaõnnestus"
+    }
+  },
+  "pricing": {
+    "title": "RunWithAI Pro",
+    "subtitle": "Ava kõik funktsioonid",
+    "monthly": "Kuutellimus",
+    "yearly": "Aastane",
+    "perMonth": "/kuus",
+    "perYear": "/aastas",
+    "save": "Säästa",
+    "features": {
+      "aiCoach": "Isiklik AI treener",
+      "unlimitedRuns": "Piiramatud jooksud",
+      "advancedStats": "Täiustatud statistika",
+      "trainingPlans": "Kohandatud treeningplaanid",
+      "voiceCoach": "Häältreener jooksu ajal",
+      "exportData": "Andmete eksport"
+    },
+    "subscribe": "Telli nüüd",
+    "restore": "Taasta ost",
+    "terms": "Kehtivad tingimused. Automaatne pikendamine.",
+    "currentPlan": "Praegune plaan",
+    "free": "Tasuta",
+    "pro": "Pro",
+    "loading": "Laadimine...",
+    "error": "Midagi läks valesti",
+    "success": "Olete nüüd Pro!",
+    "alreadyPro": "Olete juba Pro kasutaja",
+    "tryAgain": "Proovi uuesti"
+  },
+  "common": {
+    "cancel": "Tühista",
+    "save": "Salvesta",
+    "delete": "Kustuta",
+    "edit": "Muuda",
+    "done": "Valmis",
+    "next": "Järgmine",
+    "back": "Tagasi",
+    "skip": "Jäta vahele",
+    "ok": "OK",
+    "yes": "Jah",
+    "no": "Ei",
+    "loading": "Laadimine...",
+    "error": "Viga",
+    "success": "Õnnestus",
+    "retry": "Proovi uuesti"
+  },
+  "onboarding": {
+    "welcome": "Tere tulemast",
+    "appName": "RunWithAI",
+    "subtitle": "Teie isiklik AI jooksutreener",
+    "getStarted": "Alustame",
+    "step1": {
+      "title": "Jälgi oma jookse",
+      "desc": "GPS jälgimine reaalajas statistika ja marsruudi kuvamisega"
+    },
+    "step2": {
+      "title": "AI-toega treenimine",
+      "desc": "Saa personaliseeritud treeningplaane ja nõuandeid oma AI treenerilt"
+    },
+    "step3": {
+      "title": "Saavuta oma eesmärgid",
+      "desc": "Sea eesmärgid ja jälgi oma progressi üksikasjaliku statistikaga"
+    }
+  },
+  "dashboard": {
+    "defaultName": "JOOKSJA",
+    "greeting": {
+      "morning": "TERE HOMMIKUST,",
+      "day": "TERE PÄEVAST,",
+      "evening": "TERE ÕHTUST,"
+    },
+    "planUpdated": "PLAAN UUENDATUD",
+    "refresh": "Värskenda",
+    "shoeAlert": {
+      "worn": "Jalanõud on kulunud!",
+      "soonWorn": "Jalanõud kuluvad varsti!"
+    },
+    "fatigue": {
+      "rested": "Puhanud",
+      "ok": "OK",
+      "slightlyTired": "Veidi väsinud",
+      "veryTired": "Väga väsinud"
+    },
+    "weather": {
+      "title": "ILM JA VORM",
+      "wind": "Tuul",
+      "clear": "Selge taevas",
+      "partlyCloudy": "Osaliselt pilvine",
+      "foggy": "Udune/hämar",
+      "rain": "Vihm",
+      "snow": "Lumi",
+      "showers": "Vihmahoogud",
+      "thunder": "Äike",
+      "analyzing": "Analüüsin ilma ja seisundit...",
+      "noAdvice": "Nõuanne pole saadaval",
+      "fetchError": "Ilmaandmed pole saadaval — proovige uuesti."
+    },
+    "stats": {
+      "kmThisWeek": "KM SEL NÄDALAL",
+      "daysInRow": "PÄEVA JÄRJEST",
+      "runsThisMonth": "JOOKSU SEL KUUL",
+      "of": "/",
+      "personalRecord": "Isiklik rekord",
+      "fromRecord": "{{count}} teie rekordist",
+      "overOneWeek": "Üle 1 nädala järjest",
+      "keepingMomentum": "Hoiad hoogu",
+      "goodStart": "Hea algus",
+      "keepGoing": "Jätka!",
+      "startStreak": "Alusta seeriat täna",
+      "bestMonthEver": "Parim {{month}} kunagi",
+      "oneFromRecord": "1 jooks rekordkuuni!",
+      "runsFromRecord": "{{count}} jooksu rekordini",
+      "runsInMonth": "{{count}} jooksu {{month}}"
+    },
+    "monthNames": ["Jaan", "Veeb", "Märts", "Apr", "Mai", "Juuni", "Juuli", "Aug", "Sept", "Okt", "Nov", "Dets"],
+    "workout": {
+      "nextWorkout": "JÄRGMINE TREENING",
+      "today": "TÄNA",
+      "distance": "Vahemaa",
+      "time": "Aeg",
+      "targetPace": "Siht-tempo",
+      "targetHr": "Siht-pulss"
+    },
+    "weekPlan": {
+      "title": "SEE NÄDAL"
+    },
+    "milestone": {
+      "nextMilestone": "JÄRGMINE VERSTAPOST",
+      "kmLeft": "km jäänud",
+      "total": "kokku",
+      "thisWeek": "Sel nädalal!",
+      "oneToTwoWeeks": "Umbes 1-2 nädalat",
+      "aboutWeeks": "Umbes {{count}} nädalat"
+    },
+    "diary": {
+      "title": "JOOKSUPÄEVIK",
+      "subtitle": "Kirjuta märkmeid oma jooksudest — AI õpib neist",
+      "addNote": "+ Märge",
+      "mood": "Meeleolu",
+      "placeholder": "Kuidas läks? Rasked jalad? Hea päev? Uus marsruut?",
+      "dayNames": ["P", "E", "T", "K", "N", "R", "L"]
+    },
+    "injury": {
+      "title": "VIGASTUSE RISK",
+      "low": "Madal",
+      "moderate": "Mõõdukas",
+      "high": "Kõrge",
+      "kmIncrease": "Km kasvasid {{pct}}% võrreldes eelmise nädalaga",
+      "runsLast3Days": "{{count}} jooksu viimase 3 päeva jooksul",
+      "noRestToday": "Täna pole puhkust",
+      "daysSinceRun": "{{count}} päeva viimasest jooksust — puhanud",
+      "noRiskFactors": "Konkreetseid riskitegureid pole.",
+      "tip1": "Kaaluge puhkepäeva pärast raskeid jookse",
+      "tip2": "Ärge suurendage km-e rohkem kui 10% nädalas",
+      "analyzed": "Analüüsitud",
+      "aiAnalysis": "AI analüüs"
+    },
+    "racePredictor": {
+      "title": "Võistluse prognoos",
+      "subtitle": "Vaadake oma eeldatavaid võistlusaegu",
+      "noData": "Prognoosiks on vaja vähemalt ühte jooksu.",
+      "analyzing": "AI analüüsib teie jookse...",
+      "halfMarathon": "Poolmaraton",
+      "confidence": "Usaldusväärsus"
+    }
+  },
+  "tracker": {
+    "defaultRunner": "Jooksja",
+    "voiceOn": "Hääl sees",
+    "voiceOff": "Hääl väljas",
+    "mapNotAvailable": "Kaart pole saadaval",
+    "status": {
+      "ready": "Vajutage Alusta",
+      "paused": "Peatatud",
+      "tracking": "Salvestamine..."
+    },
+    "gps": {
+      "active": "GPS aktiivne",
+      "waiting": "GPS-signaali otsimine...",
+      "denied": "GPS-i luba keelatud",
+      "unavailable": "GPS pole saadaval",
+      "timeout": "GPS-i ajalõpp",
+      "notAvailable": "GPS pole saadaval",
+      "error": "GPS-i viga"
+    }
+  },
+  "chat": {
+    "title": "AI-TREENER",
+    "clear": "Tühjenda",
+    "placeholder": "Kirjutage oma treenerile...",
+    "loadingHistory": "Vestluse laadimine...",
+    "planUpdated": "Plaan uuendatud",
+    "defaultRunner": "Jooksja",
+    "greeting": "Tere {{name}}! Olen sinu AI jooksutreener. Kuidas saan sind täna aidata?",
+    "clearedGreeting": "Vestlus tühjendatud! Kuidas saan sind aidata, {{name}}?",
+    "connectionError": "Vabandust, ei saanud ühendust. Palun proovige uuesti."
+  },
+  "proUpsell": {
+    "title": "Ava täielik võimekus",
+    "subtitle": "Saa juurdepääs kõigile funktsioonidele ja saavuta oma eesmärgid kiiremini",
+    "price": "49 DKK",
+    "priceUnit": "/kuus",
+    "guarantee": "✓ Tühista igal ajal • ✓ 7-päevane tasuta prooviversioon",
+    "startTrial": "Alusta tasuta prooviperioodi",
+    "continueWithFree": "Jätka tasuta versiooniga",
+    "features": {
+      "aiCoach": {
+        "title": "AI treener",
+        "desc": "Personaliseeritud treeningplaan, mis kohandub sinuga"
+      },
+      "advancedStats": {
+        "title": "Täiustatud statistika",
+        "desc": "Süvitsi minev treeninguanalüüs"
+      },
+      "unlimitedGoals": {
+        "title": "Piiramatud eesmärgid",
+        "desc": "Sea nii palju eesmärke kui soovid"
+      },
+      "routeLibrary": {
+        "title": "Marsruutide kogu",
+        "desc": "Salvesta ja jaga oma lemmik marsruute"
+      },
+      "aiChat": {
+        "title": "AI vestlus",
+        "desc": "Küsi jooksu kohta ja saa vastuseid"
+      },
+      "progressReports": {
+        "title": "Progressi aruanded",
+        "desc": "Nädala ja kuu kokkuvõtted"
+      }
+    }
+  }
+}

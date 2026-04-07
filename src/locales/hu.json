@@ -1,0 +1,512 @@
+{
+  "tabs": {
+    "plan": "Terv",
+    "run": "Futás",
+    "coach": "Edző",
+    "stats": "Statisztika",
+    "settings": "Beállítások",
+    "calendar": "Naptár",
+    "progress": "Haladás",
+    "start": "Indítás"
+  },
+  "run": {
+    "title": "Futás",
+    "walk": "Séta",
+    "km": "KM",
+    "time": "IDŐ",
+    "pace": "TEMPÓ",
+    "start": "Indítás",
+    "pause": "Szünet",
+    "resume": "Folytatás",
+    "stop": "Leállítás",
+    "save": "Mentés",
+    "discard": "Elvetés",
+    "startRun": "Futás indítása",
+    "startThisWorkout": "Edzés indítása",
+    "nextWorkout": "Következő edzés",
+    "lastActivity": "Utolsó tevékenység",
+    "gpsTracking": "GPS követés",
+    "walkTracking": "Séta követés",
+    "aiRoutes": "AI útvonalak"
+  },
+  "pro": {
+    "badge": "PRO",
+    "upgrade": "Frissítés",
+    "upgradeToPro": "Frissítés Pro-ra",
+    "feature": "Pro funkció",
+    "unlockFeatures": "Összes funkció feloldása",
+    "fromOnly": "Már",
+    "limit": {
+      "title": "Pro funkció",
+      "message": "Ez a funkció Pro előfizetést igényel",
+      "seePlans": "Csomagok megtekintése",
+      "cancel": "Mégse"
+    },
+    "stats": {
+      "title": "Pro statisztikák",
+      "features": "Fejlett statisztikák és elemzések",
+      "unlock": "Feloldás"
+    },
+    "coach": {
+      "title": "AI edző",
+      "description": "Személyre szabott edzésterv, amely hozzád igazodik"
+    },
+    "calendar": {
+      "title": "Edzésnaptár",
+      "description": "Tekintsd meg a teljes edzésterved"
+    },
+    "aiRoutes": {
+      "title": "AI útvonalak",
+      "description": "Útvonalajánlások az edzésed alapján"
+    }
+  },
+  "stats": {
+    "title": "Statisztikák",
+    "totalRuns": "Összes futás",
+    "totalKm": "Összes km",
+    "avgPace": "Átlag tempó",
+    "thisWeek": "Ezen a héten",
+    "thisMonth": "Ebben a hónapban",
+    "allTime": "Összesen",
+    "basic": "Alap statisztikák",
+    "runs": "Futások"
+  },
+  "subscription": "Előfizetés",
+  "alerts": {
+    "deleteRun": "Biztosan törölni szeretnéd ezt a futást?",
+    "deleteAccount": "Biztosan törölni szeretnéd a fiókodat? Ez nem vonható vissza.",
+    "logout": "Biztosan ki szeretnél jelentkezni?",
+    "discardRun": "Biztosan el szeretnéd vetni ezt a futást?",
+    "unsavedChanges": "Mentetlen változtatásaid vannak. Szeretnéd elvetni?",
+    "welcomePro": {
+      "title": "Üdv a Pro-ban!",
+      "message": "Most már hozzáférsz az összes funkcióhoz"
+    }
+  },
+  "auth": {
+    "login": "Bejelentkezés",
+    "register": "Fiók létrehozása",
+    "email": "E-mail",
+    "password": "Jelszó",
+    "confirmPassword": "Jelszó megerősítése",
+    "forgotPassword": "Elfelejtetted a jelszót?",
+    "noAccount": "Nincs fiókod?",
+    "hasAccount": "Már van fiókod?",
+    "loginButton": "Bejelentkezés",
+    "registerButton": "Fiók létrehozása",
+    "orContinueWith": "vagy folytasd ezzel",
+    "apple": "Apple",
+    "google": "Google",
+    "emailPlaceholder": "tied@email.hu",
+    "passwordPlaceholder": "••••••••",
+    "namePlaceholder": "A neved",
+    "name": "Név",
+    "loggingIn": "Bejelentkezés...",
+    "registering": "Fiók létrehozása...",
+    "tagline": "Személyes AI futóedződ",
+    "createAccount": "Fiók létrehozása",
+    "minChars": "min. karakter",
+    "repeatPassword": "jelszó ismétlése",
+    "continue": "folytatás",
+    "getStarted": "kezdjük",
+    "step1of3": "1. lépés a 3-ból",
+    "step2of3": "2. lépés a 3-ból",
+    "step3of3": "3. lépés a 3-ból",
+    "yourName": "a neved",
+    "age": "KOR",
+    "weight": "SÚLY",
+    "height": "MAGASSÁG",
+    "years": "Év",
+    "runningLevel": "FUTÁSI SZINT",
+    "levels.beginner": "Kezdő",
+    "levels.intermediate": "Haladó",
+    "levels.advanced": "Tapasztalt",
+    "yourGoals": "MIK A CÉLJAID",
+    "goals.health": "Egészség",
+    "goals.weight": "Fogyás",
+    "goals.distance": "Hosszabb futás",
+    "goals.speed": "Gyorsabb lenni",
+    "goals.race": "Versenyt futni",
+    "goals.fun": "Szórakozás",
+    "weeklyGoalKm": "HETI KM CÉL",
+    "weeklyGoalExample": "Pl. 20",
+    "unlockFullPower": "Teljes hozzáférés feloldása",
+    "unlockDesc": "Hozzáférés az összes funkcióhoz és célok gyorsabb elérése",
+    "proFeatures.aiCoachDesc": "AI Edző",
+    "proFeatures.statsDesc": "Statisztikák",
+    "proFeatures.goalsDesc": "Célok",
+    "proFeatures.routesDesc": "Útvonalak",
+    "proFeatures.chatDesc": "AI Chat",
+    "proFeatures.reportsDesc": "Jelentések",
+    "price": "49 kr",
+    "guarantee": "✓ Bármikor lemondható • ✓ 7 nap ingyenes próba",
+    "perMonth": "/hónap",
+    "startFreeTrial": "Ingyenes próba indítása",
+    "continueWithFree": "Folytatás ingyenes verzióval",
+    "levels.beginnerDesc": "Új a futásban vagy újrakezded hosszú szünet után",
+    "levels.intermediateDesc": "Rendszeresen futsz és fejlődni szeretnél",
+    "levels.advancedDesc": "Tapasztalt futó specifikus célokkal",
+    "or": "vagy",
+    "errors": {
+      "serverConnection": "Nem sikerült csatlakozni a szerverhez"
+    }
+  },
+  "settings": {
+    "pageTitle": "Beállítások",
+    "title": "Beállítások",
+    "profile": "Profil",
+    "days": ["H", "K", "Sze", "Cs", "P", "Szo", "V"],
+    "saveChanges": "Változtatások mentése",
+    "saved": "Mentve!",
+    "logout": "Kijelentkezés",
+    "privacyPolicy": "Adatvédelmi irányelvek",
+    "termsOfService": "Felhasználási feltételek",
+    "dangerZone": "Veszélyzóna",
+    "sections": {
+      "personalInfo": "Személyes adatok",
+      "level": "Szint",
+      "runningGoals": "Futási célok",
+      "weeklyGoals": "Heti célok",
+      "trainingTypes": "Edzéstípusok",
+      "heartRateZones": "Pulzuszónák",
+      "injuries": "Sérülések",
+      "reminders": "Emlékeztetők",
+      "privacy": "Adatvédelem",
+      "units": "Mértékegységek",
+      "data": "Adatok"
+    },
+    "fields": {
+      "name": "Név",
+      "age": "Kor",
+      "weight": "Súly (kg)",
+      "height": "Magasság (cm)",
+      "sex": "Nem",
+      "restingHr": "Nyugalmi pulzus",
+      "maxHr": "Maximális pulzus",
+      "vo2max": "VO2max",
+      "yearsRunning": "Futott évek",
+      "weeklyKm": "Heti km",
+      "weeklyKmGoal": "Heti km cél",
+      "weeklyRunsGoal": "Heti futás cél",
+      "primaryGoal": "Elsődleges cél",
+      "raceDate": "Verseny dátuma",
+      "injuries": "Sérülések/korlátozások",
+      "injuriesPlaceholder": "Pl. térdproblémák, hátfájás...",
+      "preferredDays": "Preferált napok",
+      "preferredTypes": "Preferált futástípusok"
+    },
+    "sex": {
+      "male": "Férfi",
+      "female": "Nő"
+    },
+    "levels": {
+      "beginner": "Kezdő",
+      "intermediate": "Középhaladó",
+      "advanced": "Haladó"
+    },
+    "goals": {
+      "fitness": "Általános fittség",
+      "weight": "Fogyás",
+      "half": "Félmaraton",
+      "full": "Maraton"
+    },
+    "runTypes": {
+      "easy": "Könnyű futás",
+      "interval": "Intervallum",
+      "long": "Hosszú futás",
+      "tempo": "Tempófutás",
+      "recovery": "Regeneráció",
+      "race": "Verseny",
+      "trail": "Terep"
+    },
+    "zones": {
+      "calculated": "A maximális pulzusod alapján számítva",
+      "z1": "Zóna 1 (Regeneráció)",
+      "z2": "Zóna 2 (Aerob)",
+      "z3": "Zóna 3 (Tempó)",
+      "z4": "Zóna 4 (Küszöb)",
+      "z5": "Zóna 5 (Anaerob)"
+    },
+    "notifications": {
+      "push": "Push értesítések",
+      "pushSub": "Edzésemlékeztetők fogadása",
+      "enabled": "Engedélyezve",
+      "reminder": "Emlékeztető",
+      "time": "Idő",
+      "days": "Napok"
+    },
+    "privacy": {
+      "shareProfile": "Profil megosztása",
+      "shareProfileSub": "Mások láthatják a profilod",
+      "shareActivity": "Tevékenység megosztása",
+      "shareActivitySub": "Mások láthatják a futásaidat",
+      "shareLocation": "Helyzet megosztása",
+      "shareLocationSub": "Pozíciód megjelenítése az útvonalakon"
+    },
+    "units": {
+      "distance": "Távolság",
+      "pace": "Tempó"
+    },
+    "data": {
+      "export": "Adatok exportálása",
+      "exportSub": "Az összes futási adatod letöltése"
+    },
+    "shoes": {
+      "title": "Futócipők",
+      "addShoe": "Cipő hozzáadása",
+      "namePlaceholder": "Cipő neve",
+      "brandPlaceholder": "Márka",
+      "kmPlaceholder": "Kezdő km",
+      "saveShoe": "Cipő mentése",
+      "useForNextRun": "Használat a következő futáshoz",
+      "active": "Aktív",
+      "delete": "Törlés",
+      "deleteConfirm": "Biztosan törölni szeretnéd ezt a cipőt?",
+      "empty": "Még nincs cipő hozzáadva",
+      "worn": "Elhasználódott",
+      "soonWorn": "Hamarosan elhasználódik",
+      "wornMessage": "Ez a cipő több mint 800 km-t futott és cserélni kellene"
+    },
+    "deleteAccount": {
+      "title": "Fiók törlése",
+      "button": "Fiókom törlése",
+      "warning": "Ez nem vonható vissza!",
+      "confirmMessage": "Biztosan törölni szeretnéd a fiókodat? Minden adat véglegesen törlődik.",
+      "confirmButton": "Igen, töröld a fiókomat",
+      "deletedTitle": "Fiók törölve",
+      "deletedMessage": "A fiókod törölve lett.",
+      "error": "A fiók törlése nem sikerült"
+    }
+  },
+  "pricing": {
+    "title": "RunWithAI Pro",
+    "subtitle": "Összes funkció feloldása",
+    "monthly": "Havi",
+    "yearly": "Éves",
+    "perMonth": "/hó",
+    "perYear": "/év",
+    "save": "Spórolj",
+    "features": {
+      "aiCoach": "Személyes AI edző",
+      "unlimitedRuns": "Korlátlan futások",
+      "advancedStats": "Fejlett statisztikák",
+      "trainingPlans": "Egyéni edzéstervek",
+      "voiceCoach": "Hangos edző futás közben",
+      "exportData": "Adatok exportálása"
+    },
+    "subscribe": "Előfizetés most",
+    "restore": "Vásárlás visszaállítása",
+    "terms": "Feltételek érvényesek. Automatikus megújítás.",
+    "currentPlan": "Jelenlegi csomag",
+    "free": "Ingyenes",
+    "pro": "Pro",
+    "loading": "Betöltés...",
+    "error": "Valami hiba történt",
+    "success": "Most már Pro vagy!",
+    "alreadyPro": "Már Pro felhasználó vagy",
+    "tryAgain": "Próbáld újra"
+  },
+  "common": {
+    "cancel": "Mégse",
+    "save": "Mentés",
+    "delete": "Törlés",
+    "edit": "Szerkesztés",
+    "done": "Kész",
+    "next": "Következő",
+    "back": "Vissza",
+    "skip": "Kihagyás",
+    "ok": "OK",
+    "yes": "Igen",
+    "no": "Nem",
+    "loading": "Betöltés...",
+    "error": "Hiba",
+    "success": "Siker",
+    "retry": "Újra"
+  },
+  "onboarding": {
+    "welcome": "Üdvözöl a",
+    "appName": "RunWithAI",
+    "subtitle": "A személyes AI futóedződ",
+    "getStarted": "Kezdjük",
+    "step1": {
+      "title": "Kövesd a futásaidat",
+      "desc": "GPS követés élő statisztikákkal és útvonal megjelenítéssel"
+    },
+    "step2": {
+      "title": "AI-támogatott edzés",
+      "desc": "Személyre szabott edzéstervek és tippek az AI edződtől"
+    },
+    "step3": {
+      "title": "Érd el a céljaidat",
+      "desc": "Állíts be célokat és kövesd a haladásodat részletes statisztikákkal"
+    }
+  },
+  "dashboard": {
+    "defaultName": "FUTÓ",
+    "greeting": {
+      "morning": "JÓ REGGELT,",
+      "day": "JÓ NAPOT,",
+      "evening": "JÓ ESTÉT,"
+    },
+    "planUpdated": "TERV FRISSÍTVE",
+    "refresh": "Frissítés",
+    "shoeAlert": {
+      "worn": "Cipők elhasználódtak!",
+      "soonWorn": "Cipők hamarosan elhasználódnak!"
+    },
+    "fatigue": {
+      "rested": "Kipihent",
+      "ok": "OK",
+      "slightlyTired": "Kissé fáradt",
+      "veryTired": "Nagyon fáradt"
+    },
+    "weather": {
+      "title": "IDŐJÁRÁS ÉS ÁLLAPOT",
+      "wind": "Szél",
+      "clear": "Tiszta égbolt",
+      "partlyCloudy": "Részben felhős",
+      "foggy": "Köd/pára",
+      "rain": "Eső",
+      "snow": "Hó",
+      "showers": "Zápor",
+      "thunder": "Vihar",
+      "analyzing": "Időjárás és állapot elemzése...",
+      "noAdvice": "Nincs elérhető tanács",
+      "fetchError": "Időjárási adatok nem érhetők el — próbáld újra."
+    },
+    "stats": {
+      "kmThisWeek": "KM EZEN A HÉTEN",
+      "daysInRow": "EGYMÁS UTÁNI NAPOK",
+      "runsThisMonth": "FUTÁSOK A HÓNAPBAN",
+      "of": "/",
+      "personalRecord": "Személyes rekord",
+      "fromRecord": "{{count}} a rekordodtól",
+      "overOneWeek": "Több mint 1 hét egymás után",
+      "keepingMomentum": "Tartod a lendületet",
+      "goodStart": "Valami jó kezdete",
+      "keepGoing": "Így tovább!",
+      "startStreak": "Kezdj egy sorozatot ma",
+      "bestMonthEver": "Legjobb {{month}} valaha",
+      "oneFromRecord": "1 futás a rekord hónapodtól!",
+      "runsFromRecord": "{{count}} futás a rekordtól",
+      "runsInMonth": "{{count}} futás {{month}}-ban"
+    },
+    "monthNames": ["Jan", "Feb", "Már", "Ápr", "Máj", "Jún", "Júl", "Aug", "Szep", "Okt", "Nov", "Dec"],
+    "workout": {
+      "nextWorkout": "KÖVETKEZŐ EDZÉS",
+      "today": "MA",
+      "distance": "Távolság",
+      "time": "Idő",
+      "targetPace": "Cél tempó",
+      "targetHr": "Cél pulzus"
+    },
+    "weekPlan": {
+      "title": "EZEN A HÉTEN"
+    },
+    "milestone": {
+      "nextMilestone": "KÖVETKEZŐ MÉRFÖLDKŐ",
+      "kmLeft": "km hátra",
+      "total": "összesen",
+      "thisWeek": "Ezen a héten!",
+      "oneToTwoWeeks": "Körülbelül 1-2 hét",
+      "aboutWeeks": "Körülbelül {{count}} hét"
+    },
+    "diary": {
+      "title": "FUTÓNAPLÓ",
+      "subtitle": "Írj jegyzeteket a futásaidról — az AI tanul belőlük",
+      "addNote": "+ Jegyzet",
+      "mood": "Hangulat",
+      "placeholder": "Hogy ment? Nehéz lábak? Jó nap? Új útvonal?",
+      "dayNames": ["V", "H", "K", "Sze", "Cs", "P", "Szo"]
+    },
+    "injury": {
+      "title": "SÉRÜLÉSKOCKÁZAT",
+      "low": "Alacsony",
+      "moderate": "Közepes",
+      "high": "Magas",
+      "kmIncrease": "Km {{pct}}%-kal nőtt az előző héthez képest",
+      "runsLast3Days": "{{count}} futás az utolsó 3 napban",
+      "noRestToday": "Nincs pihenőnap ma",
+      "daysSinceRun": "{{count}} nap az utolsó futás óta — kipihent",
+      "noRiskFactors": "Nincs különösebb kockázati tényező.",
+      "tip1": "Gondolj egy pihenőnapra kemény futások után",
+      "tip2": "Ne növeld a km-t több mint 10%-kal hetente",
+      "analyzed": "Elemezve",
+      "aiAnalysis": "AI elemzés"
+    },
+    "racePredictor": {
+      "title": "Verseny előrejelzés",
+      "subtitle": "Nézd meg a várható versenytávjaid",
+      "noData": "Legalább egy futás kell az előrejelzéshez.",
+      "analyzing": "AI elemzi a futásaidat...",
+      "halfMarathon": "Félmaraton",
+      "confidence": "Megbízhatóság"
+    }
+  },
+  "tracker": {
+    "defaultRunner": "Futó",
+    "voiceOn": "Hang be",
+    "voiceOff": "Hang ki",
+    "mapNotAvailable": "Térkép nem elérhető",
+    "status": {
+      "ready": "Nyomj az Indításra a kezdéshez",
+      "paused": "Szüneteltetve",
+      "tracking": "Rögzítés..."
+    },
+    "gps": {
+      "active": "GPS aktív",
+      "waiting": "GPS jel keresése...",
+      "denied": "GPS engedély megtagadva",
+      "unavailable": "GPS nem elérhető",
+      "timeout": "GPS időtúllépés",
+      "notAvailable": "GPS nem elérhető",
+      "error": "GPS hiba"
+    }
+  },
+  "chat": {
+    "title": "AI-EDZŐ",
+    "clear": "Törlés",
+    "placeholder": "Írj az edződnek...",
+    "loadingHistory": "Beszélgetés betöltése...",
+    "planUpdated": "Terv frissítve",
+    "defaultRunner": "Futó",
+    "greeting": "Szia {{name}}! Én vagyok az AI futóedződ. Miben segíthetek ma?",
+    "clearedGreeting": "Beszélgetés törölve! Miben segíthetek, {{name}}?",
+    "connectionError": "Sajnálom, nem tudtam csatlakozni. Kérlek próbáld újra."
+  },
+  "proUpsell": {
+    "title": "Oldd fel a teljes erőt",
+    "subtitle": "Hozzáférés az összes funkcióhoz és gyorsabban érd el a céljaidat",
+    "price": "49 DKK",
+    "priceUnit": "/hó",
+    "guarantee": "✓ Bármikor lemondható • ✓ 7 napos ingyenes próba",
+    "startTrial": "Ingyenes próba indítása",
+    "continueWithFree": "Folytatás az ingyenes verzióval",
+    "features": {
+      "aiCoach": {
+        "title": "AI edző",
+        "desc": "Személyre szabott edzésterv, amely hozzád igazodik"
+      },
+      "advancedStats": {
+        "title": "Fejlett statisztikák",
+        "desc": "Részletes elemzés az edzésedről"
+      },
+      "unlimitedGoals": {
+        "title": "Korlátlan célok",
+        "desc": "Állíts be annyi célt, amennyit csak akarsz"
+      },
+      "routeLibrary": {
+        "title": "Útvonalkönyvtár",
+        "desc": "Mentsd és oszd meg a kedvenc útvonalaidat"
+      },
+      "aiChat": {
+        "title": "AI chat",
+        "desc": "Tegyél fel futási kérdéseket és kapj válaszokat"
+      },
+      "progressReports": {
+        "title": "Haladási jelentések",
+        "desc": "Heti és havi összefoglalók"
+      }
+    }
+  }
+}

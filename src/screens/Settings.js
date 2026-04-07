@@ -5,6 +5,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, assessProfile, saveProfile, SERVER, getAuthToken, loadRuns } from '../data';
 import { Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
+import i18n from '../i18n';
 
 function Field({ label, value, onChange, keyboard, placeholder }) {
   return (
@@ -22,17 +24,21 @@ function Field({ label, value, onChange, keyboard, placeholder }) {
   );
 }
 
-function SexPicker({ value, onChange }) {
+function SexPicker({ value, onChange, t }) {
+  const options = [
+    { id: 'Mand', label: t('settings.sex.male') },
+    { id: 'Kvinde', label: t('settings.sex.female') }
+  ];
   return (
     <View style={s.fieldWrap}>
-      <Text style={s.label}>Køn</Text>
+      <Text style={s.label}>{t('settings.fields.sex')}</Text>
       <View style={s.sexRow}>
-        {['Mand', 'Kvinde'].map(opt => (
+        {options.map(opt => (
           <TouchableOpacity
-            key={opt}
-            style={[s.sexBtn, value === opt && { backgroundColor: colors.accent + '20', borderColor: colors.accent }]}
-            onPress={() => onChange(opt)}>
-            <Text style={[s.sexBtnText, value === opt && { color: colors.accent }]}>{opt}</Text>
+            key={opt.id}
+            style={[s.sexBtn, value === opt.id && { backgroundColor: colors.accent + '20', borderColor: colors.accent }]}
+            onPress={() => onChange(opt.id)}>
+            <Text style={[s.sexBtnText, value === opt.id && { color: colors.accent }]}>{opt.label}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -44,7 +50,7 @@ function SexPicker({ value, onChange }) {
 const SHOE_WARNING_KM = 700;
 const SHOE_MAX_KM = 800;
 
-function ShoesSection({ profile, onProfileChange, runs }) {
+function ShoesSection({ profile, onProfileChange, runs, t }) {
   const shoes = profile?.shoes || [];
   const [showAdd, setShowAdd] = useState(false);
   const [newName, setNewName] = useState('');
@@ -89,11 +95,11 @@ function ShoesSection({ profile, onProfileChange, runs }) {
     <View>
       <View style={{flexDirection:'row',alignItems:'center',gap:8}}>
         <Icon name='shoe' size={16} color='#8c8c8c'/>
-        <Text style={s.sectionTitle}>SKO-TRACKER</Text>
+        <Text style={s.sectionTitle}>{t('settings.shoes.title')}</Text>
       </View>
       <View style={s.card}>
         {shoesWithKm.length === 0 ? (
-          <Text style={st.empty}>Ingen sko tilføjet endnu. Tilføj dine løbesko og track km automatisk.</Text>
+          <Text style={st.empty}>{t('settings.shoes.empty')}</Text>
         ) : (
           shoesWithKm.map(shoe => {
             const kmTotal = totalKm(shoe);
@@ -108,9 +114,9 @@ function ShoesSection({ profile, onProfileChange, runs }) {
                   <View style={{ flex: 1 }}>
                     <View style={st.shoeNameRow}>
                       <Text style={st.shoeName}>{shoe.name}</Text>
-                      {isActive && <View style={st.activeBadge}><Text style={st.activeBadgeText}>AKTIV</Text></View>}
-                      {isDead && <View style={st.deadBadge}><Text style={st.deadBadgeText}>SLIDT</Text></View>}
-                      {isWarn && !isDead && <View style={st.warnBadge}><Text style={st.warnBadgeText}>SNART SLIDT</Text></View>}
+                      {isActive && <View style={st.activeBadge}><Text style={st.activeBadgeText}>{t('settings.shoes.active')}</Text></View>}
+                      {isDead && <View style={st.deadBadge}><Text style={st.deadBadgeText}>{t('settings.shoes.worn')}</Text></View>}
+                      {isWarn && !isDead && <View style={st.warnBadge}><Text style={st.warnBadgeText}>{t('settings.shoes.soonWorn')}</Text></View>}
                     </View>
                     {shoe.brand ? <Text style={st.shoeBrand}>{shoe.brand}</Text> : null}
                   </View>
@@ -128,22 +134,22 @@ function ShoesSection({ profile, onProfileChange, runs }) {
                   <Text style={st.barLabel}>{SHOE_MAX_KM}km</Text>
                 </View>
                 {isDead && (
-                  <Text style={st.deadMsg}>Disse sko har nået deres grænse og bør udskiftes for at undgå skader</Text>
+                  <Text style={st.deadMsg}>{t('settings.shoes.wornMessage')}</Text>
                 )}
                 <View style={st.shoeActions}>
                   {!isActive && (
                     <TouchableOpacity style={st.actionBtn} onPress={() => setActive(shoe.id)}>
-                      <Text style={st.actionBtnText}>Brug til næste løb</Text>
+                      <Text style={st.actionBtnText}>{t('settings.shoes.useForNextRun')}</Text>
                     </TouchableOpacity>
                   )}
                   <TouchableOpacity style={st.deleteBtn} onPress={() => {
                     if (Platform.OS === 'web' && window.confirm) {
-                      if (window.confirm(`Slet ${shoe.name}?`)) deleteShoe(shoe.id);
+                      if (window.confirm(`${t('settings.shoes.deleteConfirm')} ${shoe.name}?`)) deleteShoe(shoe.id);
                     } else {
                       deleteShoe(shoe.id);
                     }
                   }}>
-                    <Text style={st.deleteBtnText}>Slet</Text>
+                    <Text style={st.deleteBtnText}>{t('settings.shoes.delete')}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -151,34 +157,34 @@ function ShoesSection({ profile, onProfileChange, runs }) {
           })
         )}
         <TouchableOpacity style={st.addBtn} onPress={() => setShowAdd(!showAdd)}>
-          <Text style={st.addBtnText}>{showAdd ? 'Annuller' : '+ Tilføj sko'}</Text>
+          <Text style={st.addBtnText}>{showAdd ? t('common.cancel') : t('settings.shoes.addShoe')}</Text>
         </TouchableOpacity>
         {showAdd && (
           <View style={st.addForm}>
             <TextInput
               style={st.input}
-              placeholder="Navn på sko, f.eks. Pegasus 41"
+              placeholder={t('settings.shoes.namePlaceholder')}
               placeholderTextColor={colors.muted}
               value={newName}
               onChangeText={setNewName}
             />
             <TextInput
               style={st.input}
-              placeholder="Mærke, f.eks. Nike (valgfrit)"
+              placeholder={t('settings.shoes.brandPlaceholder')}
               placeholderTextColor={colors.muted}
               value={newBrand}
               onChangeText={setNewBrand}
             />
             <TextInput
               style={st.input}
-              placeholder="Km allerede løbet (valgfrit)"
+              placeholder={t('settings.shoes.kmPlaceholder')}
               placeholderTextColor={colors.muted}
               value={newStartKm}
               onChangeText={setNewStartKm}
               keyboardType="numeric"
             />
             <TouchableOpacity style={st.saveShoeBtn} onPress={addShoe}>
-              <Text style={st.saveShoeBtnText}>Gem sko</Text>
+              <Text style={st.saveShoeBtnText}>{t('settings.shoes.saveShoe')}</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -187,7 +193,73 @@ function ShoesSection({ profile, onProfileChange, runs }) {
   );
 }
 
+// ─── LANGUAGE SELECTOR ──────────────────────────────────────────────────────
+const LANGUAGES = [
+  { code: 'da', flag: '🇩🇰', name: 'Dansk' },
+  { code: 'en', flag: '🇬🇧', name: 'English' },
+  { code: 'de', flag: '🇩🇪', name: 'Deutsch' },
+  { code: 'fr', flag: '🇫🇷', name: 'Français' },
+  { code: 'es', flag: '🇪🇸', name: 'Español' },
+  { code: 'it', flag: '🇮🇹', name: 'Italiano' },
+  { code: 'pt', flag: '🇵🇹', name: 'Português' },
+  { code: 'nl', flag: '🇳🇱', name: 'Nederlands' },
+  { code: 'pl', flag: '🇵🇱', name: 'Polski' },
+  { code: 'sv', flag: '🇸🇪', name: 'Svenska' },
+  { code: 'fi', flag: '🇫🇮', name: 'Suomi' },
+  { code: 'el', flag: '🇬🇷', name: 'Ελληνικά' },
+  { code: 'cs', flag: '🇨🇿', name: 'Čeština' },
+  { code: 'ro', flag: '🇷🇴', name: 'Română' },
+  { code: 'hu', flag: '🇭🇺', name: 'Magyar' },
+  { code: 'bg', flag: '🇧🇬', name: 'Български' },
+  { code: 'hr', flag: '🇭🇷', name: 'Hrvatski' },
+  { code: 'sk', flag: '🇸🇰', name: 'Slovenčina' },
+  { code: 'sl', flag: '🇸🇮', name: 'Slovenščina' },
+  { code: 'lt', flag: '🇱🇹', name: 'Lietuvių' },
+  { code: 'lv', flag: '🇱🇻', name: 'Latviešu' },
+  { code: 'et', flag: '🇪🇪', name: 'Eesti' },
+  { code: 'ga', flag: '🇮🇪', name: 'Gaeilge' },
+  { code: 'mt', flag: '🇲🇹', name: 'Malti' },
+];
+
+function LanguageSelector() {
+  const [currentLang, setCurrentLang] = useState(i18n.language);
+
+  const changeLanguage = async (code) => {
+    await i18n.changeLanguage(code);
+    await AsyncStorage.setItem('userLanguage', code);
+    setCurrentLang(code);
+  };
+
+  return (
+    <View>
+      <Text style={s.sectionTitle}>LANGUAGE</Text>
+      <View style={s.card}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View style={{ flexDirection: 'row', gap: 8 }}>
+            {LANGUAGES.map(lang => {
+              const isActive = currentLang === lang.code;
+              return (
+                <TouchableOpacity
+                  key={lang.code}
+                  style={[
+                    s.langBtn,
+                    isActive && { borderColor: colors.accent, backgroundColor: colors.accent + '15' }
+                  ]}
+                  onPress={() => changeLanguage(lang.code)}>
+                  <Text style={{ fontSize: 24 }}>{lang.flag}</Text>
+                  <Text style={[s.langBtnText, isActive && { color: colors.accent }]}>{lang.code.toUpperCase()}</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </ScrollView>
+      </View>
+    </View>
+  );
+}
+
 export default function Settings({ profile, level, onProfileChange, onLevelChange, onLogout, onBack }) {
+  const { t } = useTranslation();
   const [form, setForm] = useState(profile || {});
   const [saved, setSaved] = useState(false);
   const [runs, setRuns] = useState([]);
@@ -213,7 +285,7 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
   const [notifEnabled, setNotifEnabled] = useState(false);
   const [notifTime, setNotifTime] = useState(profile?.notifTime || '07:00');
   const [notifDays, setNotifDays] = useState(profile?.notifDays || ['Man', 'Ons', 'Fre']);
-  const days = ['Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør', 'Søn'];
+  const days = t('settings.days', { returnObjects: true }) || ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   useEffect(() => {
     setForm(profile || {});
@@ -251,7 +323,7 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
     if (perm === 'granted') {
       setNotifEnabled(true);
       scheduleNotifications();
-      new Notification('RunWithAI', { body: 'Notifikationer er aktiveret! Vi minder dig om din træning.', icon: '/favicon.ico' });
+      new Notification('RunWithAI', { body: t('settings.notifications.enabled'), icon: '/favicon.ico' });
     }
   };
 
@@ -264,7 +336,7 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
     setTimeout(() => {
       const todayDay = days[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1];
       if (notifDays.includes(todayDay)) {
-        new Notification('RunWithAI', { body: 'Husk din træning i dag! Din coach er klar.', icon: '/favicon.ico' });
+        new Notification('RunWithAI', { body: t('settings.notifications.reminder'), icon: '/favicon.ico' });
       }
     }, msUntil);
   };
@@ -290,33 +362,33 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
         if (res.ok) {
           await AsyncStorage.multiRemove(['token', 'onboardingCompleted', 'userLevel']);
           Alert.alert(
-            'Konto slettet',
-            'Din konto og alle data er blevet slettet permanent.',
-            [{ text: 'OK', onPress: onLogout }]
+            t('settings.deleteAccount.deletedTitle'),
+            t('settings.deleteAccount.deletedMessage'),
+            [{ text: t('common.ok'), onPress: onLogout }]
           );
         } else {
           const data = await res.json();
-          Alert.alert('Fejl', data.error || 'Kunne ikke slette konto. Prøv igen.');
+          Alert.alert(t('common.error'), data.error || t('settings.deleteAccount.error'));
         }
       } catch (err) {
         console.error('Delete account error:', err);
-        Alert.alert('Fejl', 'Kunne ikke forbinde til serveren. Prøv igen.');
+        Alert.alert(t('common.error'), t('auth.errors.serverConnection'));
       } finally {
         setDeletingAccount(false);
       }
     };
 
     if (Platform.OS === 'web') {
-      if (window.confirm('Er du sikker på at du vil slette din konto permanent?\n\nDette vil:\n• Slette alle dine løbedata\n• Annullere dit abonnement\n• Fjerne alle dine personlige oplysninger\n\nDenne handling kan ikke fortrydes.')) {
+      if (window.confirm(t('settings.deleteAccount.confirmMessage'))) {
         confirmDelete();
       }
     } else {
       Alert.alert(
-        '⚠️ Slet konto',
-        'Er du sikker på, at du vil slette din konto permanent?\n\nDette vil:\n• Slette alle dine løbedata\n• Annullere dit abonnement\n• Fjerne alle dine personlige oplysninger\n\nDenne handling kan ikke fortrydes.',
+        t('settings.deleteAccount.title'),
+        t('settings.deleteAccount.confirmMessage'),
         [
-          { text: 'Annuller', style: 'cancel' },
-          { text: 'Slet permanent', style: 'destructive', onPress: confirmDelete }
+          { text: t('common.cancel'), style: 'cancel' },
+          { text: t('settings.deleteAccount.confirmButton'), style: 'destructive', onPress: confirmDelete }
         ]
       );
     }
@@ -325,18 +397,18 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
   const a = assessProfile(form);
   
   const lv = { 
-    beginner: { label: 'Begynder', iconName: 'run' }, 
-    intermediate: { label: 'Øvet', iconName: 'activity' }, 
-    advanced: { label: 'Avanceret', iconName: 'zap' } 
+    beginner: { label: t('settings.levels.beginner'), iconName: 'run' }, 
+    intermediate: { label: t('settings.levels.intermediate'), iconName: 'activity' }, 
+    advanced: { label: t('settings.levels.advanced'), iconName: 'zap' } 
   };
   
   const goals = [
-    { id: 'fitness', label: 'Generel fitness' },
+    { id: 'fitness', label: t('settings.goals.fitness') },
     { id: '5k',      label: '5 km' },
     { id: '10k',     label: '10 km' },
-    { id: 'half',    label: 'Halvmaraton' },
-    { id: 'full',    label: 'Maraton' },
-    { id: 'weight',  label: 'Vægttab' },
+    { id: 'half',    label: t('settings.goals.half') },
+    { id: 'full',    label: t('settings.goals.full') },
+    { id: 'weight',  label: t('settings.goals.weight') },
   ];
 
   return (
@@ -348,11 +420,14 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
               <Text style={{ fontSize: 22, color: colors.text }}>←</Text>
             </TouchableOpacity>
           )}
-          <Text style={s.pageTitle}>PROFIL & INDSTILLINGER</Text>
+          <Text style={s.pageTitle}>{t('settings.pageTitle')}</Text>
         </View>
 
+        {/* ── SPROG / LANGUAGE ── */}
+        <LanguageSelector />
+
         {/* ── NIVEAU ── */}
-        <Text style={s.sectionTitle}>Niveau</Text>
+        <Text style={s.sectionTitle}>{t('settings.sections.level')}</Text>
         <View style={s.levelRow}>
           {Object.entries(lv).map(([id, info]) => (
             <TouchableOpacity
@@ -368,21 +443,20 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
         </View>
 
         {/* ── PERSONLIG INFO ── */}
-        <Text style={s.sectionTitle}>Personlig info</Text>
+        <Text style={s.sectionTitle}>{t('settings.sections.personalInfo')}</Text>
         <View style={s.card}>
-          <Field label="Navn" {...field('name')} placeholder="Thomas" />
-          <Field label="Alder" {...field('age')} keyboard="numeric" placeholder="32" />
-          <SexPicker value={form.sex || 'Mand'} onChange={v => setForm(f => ({ ...f, sex: v }))} />
-          <Field label="Vægt (kg)" {...field('weight')} keyboard="numeric" placeholder="75" />
-          <Field label="Højde (cm)" {...field('height')} keyboard="numeric" placeholder="180" />
+          <Field label={t('settings.fields.name')} {...field('name')} placeholder="Thomas" />
+          <Field label={t('settings.fields.age')} {...field('age')} keyboard="numeric" placeholder="32" />
+          <SexPicker value={form.sex || 'Mand'} onChange={v => setForm(f => ({ ...f, sex: v }))} t={t} />
+          <Field label={t('settings.fields.weight')} {...field('weight')} keyboard="numeric" placeholder="75" />
+          <Field label={t('settings.fields.height')} {...field('height')} keyboard="numeric" placeholder="180" />
         </View>
 
         {/* ── LØB & MÅL ── */}
-        <Text style={s.sectionTitle}>Løb & mål</Text>
+        <Text style={s.sectionTitle}>{t('settings.sections.runningGoals')}</Text>
         <View style={s.card}>
-          <Field label="År med løb" {...field('yearsRunning')} keyboard="numeric" placeholder="3" />
-          <Field label="Km om ugen" {...field('weeklyKm')} keyboard="numeric" placeholder="25" />
-          <Text style={[s.label, { marginBottom: 8 }]}>Primært mål</Text>
+          <Field label={t('settings.fields.yearsRunning')} {...field('yearsRunning')} keyboard="numeric" placeholder="3" />
+          <Text style={[s.label, { marginBottom: 8 }]}>{t('settings.fields.primaryGoal')}</Text>
           <View style={s.goalGrid}>
             {goals.map(g => (
               <TouchableOpacity
@@ -394,25 +468,25 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
             ))}
           </View>
           {['half','full','5k','10k'].includes(form.goal) && (
-            <Field label="Race dato" {...field('raceDate')} placeholder="15. sep 2025" />
+            <Field label={t('settings.fields.raceDate')} {...field('raceDate')} placeholder="15. sep 2025" />
           )}
         </View>
 
         {/* ── PULS ── */}
-        <Text style={s.sectionTitle}>Pulszoner</Text>
+        <Text style={s.sectionTitle}>{t('settings.sections.heartRateZones')}</Text>
         <View style={s.card}>
-          <Field label="Hvilepuls (bpm)" {...field('restingHr')} keyboard="numeric" placeholder="58" />
-          <Field label="Maks puls (bpm)" {...field('maxHr')} keyboard="numeric" placeholder="185" />
-          <Field label="VO2max (valgfrit)" {...field('vo2max')} keyboard="numeric" placeholder="52" />
+          <Field label={t('settings.fields.restingHr')} {...field('restingHr')} keyboard="numeric" placeholder="58" />
+          <Field label={t('settings.fields.maxHr')} {...field('maxHr')} keyboard="numeric" placeholder="185" />
+          <Field label={t('settings.fields.vo2max')} {...field('vo2max')} keyboard="numeric" placeholder="52" />
           {a && (
             <View style={s.zonesWrap}>
-              <Text style={s.zonesTitle}>Dine beregnede pulszoner</Text>
+              <Text style={s.zonesTitle}>{t('settings.zones.calculated')}</Text>
               {[
-                { label: 'Z1 – Restitution', z: a.zones.z1, color: '#64b5f6' },
-                { label: 'Z2 – Aerob base', z: a.zones.z2, color: '#81c784' },
-                { label: 'Z3 – Aerob', z: a.zones.z3, color: '#ffb74d' },
-                { label: 'Z4 – Tærskel', z: a.zones.z4, color: '#ff8a65' },
-                { label: 'Z5 – VO2max', z: a.zones.z5, color: '#ef5350' },
+                { label: t('settings.zones.z1'), z: a.zones.z1, color: '#64b5f6' },
+                { label: t('settings.zones.z2'), z: a.zones.z2, color: '#81c784' },
+                { label: t('settings.zones.z3'), z: a.zones.z3, color: '#ffb74d' },
+                { label: t('settings.zones.z4'), z: a.zones.z4, color: '#ff8a65' },
+                { label: t('settings.zones.z5'), z: a.zones.z5, color: '#ef5350' },
               ].map(({ label, z, color }) => (
                 <View key={label} style={s.zoneRow}>
                   <View style={[s.zoneDot, { backgroundColor: color }]} />
@@ -425,18 +499,18 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
         </View>
 
         {/* ── SKADER ── */}
-        <Text style={s.sectionTitle}>Skader & noter</Text>
+        <Text style={s.sectionTitle}>{t('settings.sections.injuries')}</Text>
         <View style={s.card}>
-          <Field label="Kendte skader eller begrænsninger" {...field('injuries')} placeholder="f.eks. knæ, akillessene" />
+          <Field label={t('settings.fields.injuries')} {...field('injuries')} placeholder={t('settings.fields.injuriesPlaceholder')} />
         </View>
 
         {/* ── NOTIFIKATIONER ── */}
-        <Text style={s.sectionTitle}>Træningspåmindelser</Text>
+        <Text style={s.sectionTitle}>{t('settings.sections.reminders')}</Text>
         <View style={s.card}>
           <View style={s.notifRow}>
             <View style={{ flex: 1 }}>
-              <Text style={s.notifTitle}>Push notifikationer</Text>
-              <Text style={s.notifSub}>Minder dig om din træning</Text>
+              <Text style={s.notifTitle}>{t('settings.notifications.push')}</Text>
+              <Text style={s.notifSub}>{t('settings.notifications.pushSub')}</Text>
             </View>
             <Switch
               value={notifEnabled}
@@ -447,8 +521,8 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
           </View>
           {notifEnabled && (
             <>
-              <Field label="Tidspunkt" value={notifTime} onChange={setNotifTime} placeholder="07:00" />
-              <Text style={[s.label, { marginBottom: 8, marginTop: 4 }]}>Dage</Text>
+              <Field label={t('settings.notifications.time')} value={notifTime} onChange={setNotifTime} placeholder="07:00" />
+              <Text style={[s.label, { marginBottom: 8, marginTop: 4 }]}>{t('settings.notifications.days')}</Text>
               <View style={s.daysRow}>
                 {days.map(day => (
                   <TouchableOpacity
@@ -464,12 +538,12 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
         </View>
 
         {/* ── SKO TRACKER ── */}
-        <ShoesSection profile={form} onProfileChange={(updated) => { setForm(updated); onProfileChange(updated); }} runs={runs} />
+        <ShoesSection profile={form} onProfileChange={(updated) => { setForm(updated); onProfileChange(updated); }} runs={runs} t={t} />
 
         {/* ── ENHEDER & VISNING ── */}
-        <Text style={s.sectionTitle}>Enheder & visning</Text>
+        <Text style={s.sectionTitle}>{t('settings.sections.units')}</Text>
         <View style={s.card}>
-          <Text style={[s.label, { marginBottom: 8 }]}>Afstandsenhed</Text>
+          <Text style={[s.label, { marginBottom: 8 }]}>{t('settings.units.distance')}</Text>
           <View style={s.sexRow}>
             {['km', 'miles'].map(unit => (
               <TouchableOpacity
@@ -481,9 +555,9 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
             ))}
           </View>
           <View style={{ height: 14 }} />
-          <Text style={[s.label, { marginBottom: 8 }]}>Tempoformat</Text>
+          <Text style={[s.label, { marginBottom: 8 }]}>{t('settings.units.pace')}</Text>
           <View style={s.sexRow}>
-            {[{ id: 'pace', label: 'min/km' }, { id: 'speed', label: 'km/t' }].map(opt => (
+            {[{ id: 'pace', label: 'min/km' }, { id: 'speed', label: 'km/h' }].map(opt => (
               <TouchableOpacity
                 key={opt.id}
                 style={[s.sexBtn, (form.paceFormat || 'pace') === opt.id && { backgroundColor: colors.accent + '20', borderColor: colors.accent }]}
@@ -495,13 +569,14 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
         </View>
 
         {/* ── UGENTLIGE MÅL ── */}
-        <Text style={s.sectionTitle}>Ugentlige mål</Text>
+        <Text style={s.sectionTitle}>{t('settings.sections.weeklyGoals')}</Text>
         <View style={s.card}>
-          <Field label="Km-mål per uge" value={form.weeklyKmGoal || ''} onChange={v => setForm(f => ({ ...f, weeklyKmGoal: v }))} keyboard="numeric" placeholder="20" />
-          <Field label="Antal løb per uge" value={form.weeklyRunsGoal || ''} onChange={v => setForm(f => ({ ...f, weeklyRunsGoal: v }))} keyboard="numeric" placeholder="3" />
-          <Text style={[s.label, { marginBottom: 8 }]}>Foretrukne løbedage</Text>
+          <Field label={t('settings.fields.weeklyKm')} {...field('weeklyKm')} keyboard="numeric" placeholder="25" />
+          <Field label={t('settings.fields.weeklyKmGoal')} value={form.weeklyKmGoal || ''} onChange={v => setForm(f => ({ ...f, weeklyKmGoal: v }))} keyboard="numeric" placeholder="30" />
+          <Field label={t('settings.fields.weeklyRunsGoal')} value={form.weeklyRunsGoal || ''} onChange={v => setForm(f => ({ ...f, weeklyRunsGoal: v }))} keyboard="numeric" placeholder="3" />
+          <Text style={[s.label, { marginBottom: 8 }]}>{t('settings.fields.preferredDays')}</Text>
           <View style={s.daysRow}>
-            {['Man','Tir','Ons','Tor','Fre','Lør','Søn'].map(day => {
+            {days.map(day => {
               const active = (form.preferredDays || []).includes(day);
               return (
                 <TouchableOpacity
@@ -519,28 +594,28 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
         </View>
 
         {/* ── LØBETYPE PRÆFERENCER ── */}
-        <Text style={s.sectionTitle}>Træningstyper</Text>
+        <Text style={s.sectionTitle}>{t('settings.sections.trainingTypes')}</Text>
         <View style={s.card}>
-          <Text style={[s.label, { marginBottom: 10 }]}>Hvilke typer løb foretrækker du?</Text>
+          <Text style={[s.label, { marginBottom: 10 }]}>{t('settings.fields.preferredTypes')}</Text>
           <View style={s.goalGrid}>
             {[
-              { id: 'easy',     label: 'Roligt løb' },
-              { id: 'interval', label: 'Intervaltræning' },
-              { id: 'tempo',    label: 'Tempo' },
-              { id: 'long',     label: 'Langtur' },
-              { id: 'trail',    label: 'Trail' },
-              { id: 'race',     label: 'Race/konkurrence' },
-            ].map(t => {
-              const active = (form.preferredTypes || []).includes(t.id);
+              { id: 'easy',     label: t('settings.runTypes.easy') },
+              { id: 'interval', label: t('settings.runTypes.interval') },
+              { id: 'tempo',    label: t('settings.runTypes.tempo') },
+              { id: 'long',     label: t('settings.runTypes.long') },
+              { id: 'trail',    label: t('settings.runTypes.trail') },
+              { id: 'race',     label: t('settings.runTypes.race') },
+            ].map(typ => {
+              const active = (form.preferredTypes || []).includes(typ.id);
               return (
                 <TouchableOpacity
-                  key={t.id}
+                  key={typ.id}
                   style={[s.goalBtn, active && { borderColor: colors.accent, backgroundColor: colors.accent + '15' }]}
                   onPress={() => setForm(f => {
                     const types = f.preferredTypes || [];
-                    return { ...f, preferredTypes: active ? types.filter(x => x !== t.id) : [...types, t.id] };
+                    return { ...f, preferredTypes: active ? types.filter(x => x !== typ.id) : [...types, typ.id] };
                   })}>
-                  <Text style={[s.goalBtnText, active && { color: colors.accent }]}>{t.label}</Text>
+                  <Text style={[s.goalBtnText, active && { color: colors.accent }]}>{typ.label}</Text>
                 </TouchableOpacity>
               );
             })}
@@ -548,12 +623,12 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
         </View>
 
         {/* ── PRIVATLIV ── */}
-        <Text style={s.sectionTitle}>Privatliv</Text>
+        <Text style={s.sectionTitle}>{t('settings.sections.privacy')}</Text>
         <View style={s.card}>
           {[
-            { key: 'shareActivity', label: 'Del løb med venner', sub: 'Venner kan se dine løb i feed' },
-            { key: 'shareProfile',  label: 'Offentlig profil',    sub: 'Andre kan finde dig via email' },
-            { key: 'shareLocation', label: 'Del ruter',           sub: 'Gem og del GPS-ruter offentligt' },
+            { key: 'shareActivity', label: t('settings.privacy.shareActivity'), sub: t('settings.privacy.shareActivitySub') },
+            { key: 'shareProfile',  label: t('settings.privacy.shareProfile'),  sub: t('settings.privacy.shareProfileSub') },
+            { key: 'shareLocation', label: t('settings.privacy.shareLocation'), sub: t('settings.privacy.shareLocationSub') },
           ].map(({ key, label, sub }) => (
             <View key={key} style={[s.notifRow, { marginBottom: 14 }]}>
               <View style={{ flex: 1 }}>
@@ -571,7 +646,7 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
         </View>
 
         {/* ── EKSPORT ── */}
-        <Text style={s.sectionTitle}>Data</Text>
+        <Text style={s.sectionTitle}>{t('settings.sections.data')}</Text>
         <View style={s.card}>
           <TouchableOpacity style={s.exportBtn} onPress={() => {
             if (Platform.OS !== 'web') return;
@@ -588,38 +663,38 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
                 const blob = new Blob([csv], { type: 'text/csv' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.href = url; a.download = 'runwithai-løb.csv'; a.click();
+                a.href = url; a.download = 'runwithai-runs.csv'; a.click();
               });
           }}>
             <View style={{flexDirection:'row',alignItems:'center',gap:6}}>
               <Icon name='download' size={14} color={colors.accent}/>
-              <Text style={s.exportBtnText}>Eksportér løb som CSV</Text>
+              <Text style={s.exportBtnText}>{t('settings.data.export')}</Text>
             </View>
           </TouchableOpacity>
-          <Text style={s.exportSub}>Download alle dine løb til Excel eller Garmin Connect</Text>
+          <Text style={s.exportSub}>{t('settings.data.exportSub')}</Text>
         </View>
 
         {/* ── GEM ── */}
         <TouchableOpacity style={s.saveBtn} onPress={save}>
-          <Text style={s.saveBtnText}>{saved ? 'Gemt ✓' : 'Gem ændringer'}</Text>
+          <Text style={s.saveBtnText}>{saved ? t('settings.saved') : t('settings.saveChanges')}</Text>
         </TouchableOpacity>
 
         {/* ── LOG UD ── */}
         <TouchableOpacity style={s.logoutBtn} onPress={onLogout}>
-          <Text style={s.logoutText}>Log ud</Text>
+          <Text style={s.logoutText}>{t('settings.logout')}</Text>
         </TouchableOpacity>
 
         {/* ── PRIVATLIVSPOLITIK ── */}
         <TouchableOpacity 
           style={s.privacyBtn}
-          onPress={() => Linking.openURL('https://dist-lilac-zeta-14.vercel.app/privacy.html')}
+          onPress={() => Linking.openURL('https://www.runwithai.app/privacy')}
         >
-          <Text style={s.privacyText}>📜 Privatlivspolitik</Text>
+          <Text style={s.privacyText}>📜 {t('settings.privacyPolicy')}</Text>
         </TouchableOpacity>
 
         {/* ── SLET KONTO (APPLE KRAV) ── */}
         <View style={s.dangerZone}>
-          <Text style={s.dangerZoneLabel}>FAREZONE</Text>
+          <Text style={s.dangerZoneLabel}>{t('settings.dangerZone')}</Text>
           <TouchableOpacity 
             style={s.deleteAccountBtn} 
             onPress={handleDeleteAccount}
@@ -628,15 +703,15 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
             {deletingAccount ? (
               <ActivityIndicator size="small" color="#ff3b30" />
             ) : (
-              <Text style={s.deleteAccountBtnText}>🗑️ Slet min konto</Text>
+              <Text style={s.deleteAccountBtnText}>🗑️ {t('settings.deleteAccount.button')}</Text>
             )}
           </TouchableOpacity>
-          <Text style={s.deleteAccountWarning}>Dette sletter permanent alle dine data</Text>
+          <Text style={s.deleteAccountWarning}>{t('settings.deleteAccount.warning')}</Text>
         </View>
 
         {/* ── APP VERSION ── */}
         <View style={s.versionContainer}>
-          <Text style={s.versionText}>RunWithAI v1.5.1</Text>
+          <Text style={s.versionText}>RunWithAI v1.6.2</Text>
         </View>
 
         <View style={{ height: 40 }} />
@@ -683,18 +758,17 @@ const s = StyleSheet.create({
   exportBtn:    { backgroundColor: colors.surface, borderRadius: 12, paddingVertical: 13, paddingHorizontal: 16, alignItems: 'center', borderWidth: 1, borderColor: colors.border2, marginBottom: 8 },
   exportBtnText:{ color: colors.accent, fontSize: 14, fontWeight: '700' },
   exportSub:    { color: colors.muted, fontSize: 11, textAlign: 'center', lineHeight: 16 },
-  // Privacy link
   privacyBtn:   { alignItems: 'center', marginTop: 12, padding: 8 },
   privacyText:  { color: colors.muted, fontSize: 14 },
-  // Danger zone
   dangerZone:   { marginTop: 32, paddingTop: 24, borderTopWidth: 1, borderTopColor: colors.border, alignItems: 'center' },
   dangerZoneLabel: { fontSize: 11, color: colors.muted, letterSpacing: 2, fontWeight: '700', marginBottom: 16 },
   deleteAccountBtn: { backgroundColor: 'rgba(255, 59, 48, 0.1)', borderWidth: 1, borderColor: '#ff3b30', borderRadius: 14, paddingVertical: 16, paddingHorizontal: 32, alignItems: 'center' },
   deleteAccountBtnText: { color: '#ff3b30', fontWeight: 'bold', fontSize: 15 },
   deleteAccountWarning: { color: colors.muted, fontSize: 11, textAlign: 'center', marginTop: 8 },
-  // Version
   versionContainer: { marginTop: 32, alignItems: 'center', paddingBottom: 16 },
   versionText: { color: colors.muted, fontSize: 11 },
+  langBtn:      { alignItems: 'center', paddingVertical: 10, paddingHorizontal: 14, borderRadius: 12, borderWidth: 1, borderColor: colors.border2, backgroundColor: colors.surface },
+  langBtnText:  { color: colors.dim, fontSize: 10, fontWeight: '600', marginTop: 4 },
 });
 
 const st = StyleSheet.create({

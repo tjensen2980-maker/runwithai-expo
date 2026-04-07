@@ -1,0 +1,512 @@
+{
+  "tabs": {
+    "plan": "Plāns",
+    "run": "Skriešana",
+    "coach": "Treneris",
+    "stats": "Statistika",
+    "settings": "Iestatījumi",
+    "calendar": "Kalendārs",
+    "progress": "Progress",
+    "start": "Sākt"
+  },
+  "run": {
+    "title": "Skriešana",
+    "walk": "Iešana",
+    "km": "KM",
+    "time": "LAIKS",
+    "pace": "TEMPS",
+    "start": "Sākt",
+    "pause": "Pauze",
+    "resume": "Turpināt",
+    "stop": "Apturēt",
+    "save": "Saglabāt",
+    "discard": "Atmest",
+    "startRun": "Sākt skriešanu",
+    "startThisWorkout": "Sākt šo treniņu",
+    "nextWorkout": "Nākamais treniņš",
+    "lastActivity": "Pēdējā aktivitāte",
+    "gpsTracking": "GPS izsekošana",
+    "walkTracking": "Iešanas izsekošana",
+    "aiRoutes": "AI maršruti"
+  },
+  "pro": {
+    "badge": "PRO",
+    "upgrade": "Uzlabot",
+    "upgradeToPro": "Uzlabot uz Pro",
+    "feature": "Pro funkcija",
+    "unlockFeatures": "Atbloķēt visas funkcijas",
+    "fromOnly": "Tikai no",
+    "limit": {
+      "title": "Pro funkcija",
+      "message": "Šai funkcijai nepieciešams Pro abonements",
+      "seePlans": "Skatīt plānus",
+      "cancel": "Atcelt"
+    },
+    "stats": {
+      "title": "Pro statistika",
+      "features": "Uzlabota statistika un ieskati",
+      "unlock": "Atbloķēt"
+    },
+    "coach": {
+      "title": "AI treneris",
+      "description": "Personalizēts treniņu plāns, kas pielāgojas tev"
+    },
+    "calendar": {
+      "title": "Treniņu kalendārs",
+      "description": "Skaties visu savu treniņu plānu"
+    },
+    "aiRoutes": {
+      "title": "AI maršruti",
+      "description": "Saņem maršrutu ieteikumus, pamatojoties uz tavu treniņu"
+    }
+  },
+  "stats": {
+    "title": "Statistika",
+    "totalRuns": "Kopā skriešanas",
+    "totalKm": "Kopā km",
+    "avgPace": "Vidējais temps",
+    "thisWeek": "Šonedēļ",
+    "thisMonth": "Šomēnes",
+    "allTime": "Visu laiku",
+    "basic": "Pamata statistika",
+    "runs": "Skriešanas"
+  },
+  "subscription": "Abonements",
+  "alerts": {
+    "deleteRun": "Vai tiešām vēlaties dzēst šo skriešanu?",
+    "deleteAccount": "Vai tiešām vēlaties dzēst savu kontu? To nevar atcelt.",
+    "logout": "Vai tiešām vēlaties izrakstīties?",
+    "discardRun": "Vai tiešām vēlaties atmest šo skriešanu?",
+    "unsavedChanges": "Jums ir nesaglabātas izmaiņas. Vai vēlaties tās atmest?",
+    "welcomePro": {
+      "title": "Laipni lūgti Pro!",
+      "message": "Tagad jums ir pieeja visām funkcijām"
+    }
+  },
+  "auth": {
+    "login": "Pieslēgties",
+    "register": "Izveidot kontu",
+    "email": "E-pasts",
+    "password": "Parole",
+    "confirmPassword": "Apstiprināt paroli",
+    "forgotPassword": "Aizmirsi paroli?",
+    "noAccount": "Nav konta?",
+    "hasAccount": "Jau ir konts?",
+    "loginButton": "Pieslēgties",
+    "registerButton": "Izveidot kontu",
+    "orContinueWith": "vai turpini ar",
+    "apple": "Apple",
+    "google": "Google",
+    "emailPlaceholder": "tavs@epasts.lv",
+    "passwordPlaceholder": "••••••••",
+    "namePlaceholder": "Tavs vārds",
+    "name": "Vārds",
+    "loggingIn": "Pieslēdzas...",
+    "registering": "Izveido kontu...",
+    "tagline": "Tavs personīgais AI skriešanas treneris",
+    "createAccount": "Izveidot kontu",
+    "minChars": "min. rakstzīmes",
+    "repeatPassword": "atkārto paroli",
+    "continue": "turpināt",
+    "getStarted": "sāksim",
+    "step1of3": "1. solis no 3",
+    "step2of3": "2. solis no 3",
+    "step3of3": "3. solis no 3",
+    "yourName": "tavs vārds",
+    "age": "VECUMS",
+    "weight": "SVARS",
+    "height": "AUGUMS",
+    "years": "Gadi",
+    "runningLevel": "SKRIEŠANAS LĪMENIS",
+    "levels.beginner": "Iesācējs",
+    "levels.intermediate": "Vidējais",
+    "levels.advanced": "Pieredzējis",
+    "yourGoals": "KĀDI IR TAVI MĒRĶI",
+    "goals.health": "Veselība",
+    "goals.weight": "Svara zaudēšana",
+    "goals.distance": "Skriet tālāk",
+    "goals.speed": "Kļūt ātrākam",
+    "goals.race": "Skriet sacensības",
+    "goals.fun": "Izklaide",
+    "weeklyGoalKm": "NEDĒĻAS KM MĒRĶIS",
+    "weeklyGoalExample": "Piem. 20",
+    "unlockFullPower": "Atbloķēt pilnu piekļuvi",
+    "unlockDesc": "Iegūsti piekļuvi visām funkcijām un sasniedz mērķus ātrāk",
+    "proFeatures.aiCoachDesc": "AI Treneris",
+    "proFeatures.statsDesc": "Statistika",
+    "proFeatures.goalsDesc": "Mērķi",
+    "proFeatures.routesDesc": "Maršruti",
+    "proFeatures.chatDesc": "AI Čats",
+    "proFeatures.reportsDesc": "Atskaites",
+    "price": "49 kr",
+    "guarantee": "✓ Atcel jebkurā laikā • ✓ 7 dienas bez maksas",
+    "perMonth": "/mēnesī",
+    "startFreeTrial": "Sākt bezmaksas izmēģinājuma periodu",
+    "continueWithFree": "Turpināt ar bezmaksas versiju",
+    "levels.beginnerDesc": "Jauns skriešanā vai sāc no jauna pēc ilga pārtraukuma",
+    "levels.intermediateDesc": "Skrien regulāri un vēlies uzlaboties",
+    "levels.advancedDesc": "Pieredzējis skrējējs ar specifiskiem mērķiem",
+    "or": "vai",
+    "errors": {
+      "serverConnection": "Nevar izveidot savienojumu ar serveri"
+    }
+  },
+  "settings": {
+    "pageTitle": "Iestatījumi",
+    "title": "Iestatījumi",
+    "profile": "Profils",
+    "days": ["Pr", "Ot", "Tr", "Ce", "Pk", "Se", "Sv"],
+    "saveChanges": "Saglabāt izmaiņas",
+    "saved": "Saglabāts!",
+    "logout": "Izrakstīties",
+    "privacyPolicy": "Privātuma politika",
+    "termsOfService": "Lietošanas noteikumi",
+    "dangerZone": "Bīstama zona",
+    "sections": {
+      "personalInfo": "Personīgā informācija",
+      "level": "Līmenis",
+      "runningGoals": "Skriešanas mērķi",
+      "weeklyGoals": "Nedēļas mērķi",
+      "trainingTypes": "Treniņu veidi",
+      "heartRateZones": "Sirdsdarbības zonas",
+      "injuries": "Traumas",
+      "reminders": "Atgādinājumi",
+      "privacy": "Privātums",
+      "units": "Vienības",
+      "data": "Dati"
+    },
+    "fields": {
+      "name": "Vārds",
+      "age": "Vecums",
+      "weight": "Svars (kg)",
+      "height": "Augums (cm)",
+      "sex": "Dzimums",
+      "restingHr": "Miera pulss",
+      "maxHr": "Maksimālais pulss",
+      "vo2max": "VO2max",
+      "yearsRunning": "Skriešanas gadi",
+      "weeklyKm": "Nedēļas km",
+      "weeklyKmGoal": "Nedēļas km mērķis",
+      "weeklyRunsGoal": "Nedēļas skriešanas mērķis",
+      "primaryGoal": "Galvenais mērķis",
+      "raceDate": "Sacensību datums",
+      "injuries": "Traumas/ierobežojumi",
+      "injuriesPlaceholder": "Piem., ceļgalu problēmas, muguras sāpes...",
+      "preferredDays": "Vēlamās dienas",
+      "preferredTypes": "Vēlamie skriešanas veidi"
+    },
+    "sex": {
+      "male": "Vīrietis",
+      "female": "Sieviete"
+    },
+    "levels": {
+      "beginner": "Iesācējs",
+      "intermediate": "Vidējais",
+      "advanced": "Pieredzējis"
+    },
+    "goals": {
+      "fitness": "Vispārējā forma",
+      "weight": "Svara zaudēšana",
+      "half": "Pusmaratons",
+      "full": "Maratons"
+    },
+    "runTypes": {
+      "easy": "Viegla skriešana",
+      "interval": "Intervāli",
+      "long": "Gara skriešana",
+      "tempo": "Tempo skriešana",
+      "recovery": "Atjaunošanās",
+      "race": "Sacensības",
+      "trail": "Meža taka"
+    },
+    "zones": {
+      "calculated": "Aprēķināts no jūsu maksimālā pulsa",
+      "z1": "Zona 1 (Atjaunošanās)",
+      "z2": "Zona 2 (Aerobā)",
+      "z3": "Zona 3 (Tempo)",
+      "z4": "Zona 4 (Slieksnis)",
+      "z5": "Zona 5 (Anaerobā)"
+    },
+    "notifications": {
+      "push": "Push paziņojumi",
+      "pushSub": "Saņemiet treniņu atgādinājumus",
+      "enabled": "Iespējots",
+      "reminder": "Atgādinājums",
+      "time": "Laiks",
+      "days": "Dienas"
+    },
+    "privacy": {
+      "shareProfile": "Dalīties ar profilu",
+      "shareProfileSub": "Citi var redzēt jūsu profilu",
+      "shareActivity": "Dalīties ar aktivitāti",
+      "shareActivitySub": "Citi var redzēt jūsu skriešanas",
+      "shareLocation": "Dalīties ar atrašanās vietu",
+      "shareLocationSub": "Rādīt jūsu pozīciju maršrutos"
+    },
+    "units": {
+      "distance": "Attālums",
+      "pace": "Temps"
+    },
+    "data": {
+      "export": "Eksportēt datus",
+      "exportSub": "Lejupielādēt visus savus skriešanas datus"
+    },
+    "shoes": {
+      "title": "Skriešanas apavi",
+      "addShoe": "Pievienot apavus",
+      "namePlaceholder": "Apavu nosaukums",
+      "brandPlaceholder": "Zīmols",
+      "kmPlaceholder": "Sākotnējie km",
+      "saveShoe": "Saglabāt apavus",
+      "useForNextRun": "Izmantot nākamajai skriešanai",
+      "active": "Aktīvs",
+      "delete": "Dzēst",
+      "deleteConfirm": "Vai tiešām vēlaties dzēst šos apavus?",
+      "empty": "Vēl nav pievienoti apavi",
+      "worn": "Nolietojušies",
+      "soonWorn": "Drīz nolietosies",
+      "wornMessage": "Šiem apaviem ir vairāk nekā 800 km un tie būtu jānomaina"
+    },
+    "deleteAccount": {
+      "title": "Dzēst kontu",
+      "button": "Dzēst manu kontu",
+      "warning": "To nevar atcelt!",
+      "confirmMessage": "Vai tiešām vēlaties dzēst savu kontu? Visi dati tiks neatgriezeniski dzēsti.",
+      "confirmButton": "Jā, dzēst manu kontu",
+      "deletedTitle": "Konts dzēsts",
+      "deletedMessage": "Jūsu konts tika dzēsts.",
+      "error": "Neizdevās dzēst kontu"
+    }
+  },
+  "pricing": {
+    "title": "RunWithAI Pro",
+    "subtitle": "Atbloķējiet visas funkcijas",
+    "monthly": "Mēneša",
+    "yearly": "Gada",
+    "perMonth": "/mēnesī",
+    "perYear": "/gadā",
+    "save": "Ietaupiet",
+    "features": {
+      "aiCoach": "Personīgais AI treneris",
+      "unlimitedRuns": "Neierobežotas skriešanas",
+      "advancedStats": "Uzlabota statistika",
+      "trainingPlans": "Individuāli treniņu plāni",
+      "voiceCoach": "Balss treneris skriešanas laikā",
+      "exportData": "Datu eksports"
+    },
+    "subscribe": "Abonēt tagad",
+    "restore": "Atjaunot pirkumu",
+    "terms": "Piemērojami noteikumi. Automātiska atjaunošana.",
+    "currentPlan": "Pašreizējais plāns",
+    "free": "Bezmaksas",
+    "pro": "Pro",
+    "loading": "Ielādē...",
+    "error": "Kaut kas nogāja greizi",
+    "success": "Tagad esat Pro!",
+    "alreadyPro": "Jūs jau esat Pro lietotājs",
+    "tryAgain": "Mēģināt vēlreiz"
+  },
+  "common": {
+    "cancel": "Atcelt",
+    "save": "Saglabāt",
+    "delete": "Dzēst",
+    "edit": "Rediģēt",
+    "done": "Gatavs",
+    "next": "Tālāk",
+    "back": "Atpakaļ",
+    "skip": "Izlaist",
+    "ok": "Labi",
+    "yes": "Jā",
+    "no": "Nē",
+    "loading": "Ielādē...",
+    "error": "Kļūda",
+    "success": "Veiksmīgi",
+    "retry": "Mēģināt vēlreiz"
+  },
+  "onboarding": {
+    "welcome": "Laipni lūgti",
+    "appName": "RunWithAI",
+    "subtitle": "Jūsu personīgais AI skriešanas treneris",
+    "getStarted": "Sāksim",
+    "step1": {
+      "title": "Izsekojiet savas skriešanas",
+      "desc": "GPS izsekošana ar reāllaika statistiku un maršruta attēlojumu"
+    },
+    "step2": {
+      "title": "AI atbalstīta trenēšanās",
+      "desc": "Saņemiet personalizētus treniņu plānus un padomus no sava AI trenera"
+    },
+    "step3": {
+      "title": "Sasniedziet savus mērķus",
+      "desc": "Iestatiet mērķus un sekojiet savam progresam ar detalizētu statistiku"
+    }
+  },
+  "dashboard": {
+    "defaultName": "SKRĒJĒJS",
+    "greeting": {
+      "morning": "LABRĪT,",
+      "day": "LABDIEN,",
+      "evening": "LABVAKAR,"
+    },
+    "planUpdated": "PLĀNS ATJAUNINĀTS",
+    "refresh": "Atsvaidzināt",
+    "shoeAlert": {
+      "worn": "Apavi nolietojušies!",
+      "soonWorn": "Apavi drīz nolietosies!"
+    },
+    "fatigue": {
+      "rested": "Atpūties",
+      "ok": "Labi",
+      "slightlyTired": "Nedaudz noguris",
+      "veryTired": "Ļoti noguris"
+    },
+    "weather": {
+      "title": "LAIKS UN FORMA",
+      "wind": "Vējš",
+      "clear": "Skaidras debesis",
+      "partlyCloudy": "Daļēji mākoņains",
+      "foggy": "Migla/dūmaka",
+      "rain": "Lietus",
+      "snow": "Sniegs",
+      "showers": "Lietusgāzes",
+      "thunder": "Pērkons",
+      "analyzing": "Analizē laiku un stāvokli...",
+      "noAdvice": "Nav pieejama padoma",
+      "fetchError": "Laika dati nav pieejami — mēģiniet vēlreiz."
+    },
+    "stats": {
+      "kmThisWeek": "KM ŠONEDĒĻ",
+      "daysInRow": "DIENAS PĒC KĀRTAS",
+      "runsThisMonth": "SKRIEŠANAS ŠOMĒNES",
+      "of": "no",
+      "personalRecord": "Personīgais rekords",
+      "fromRecord": "{{count}} no jūsu rekorda",
+      "overOneWeek": "Vairāk nekā 1 nedēļa pēc kārtas",
+      "keepingMomentum": "Saglabājat impulsu",
+      "goodStart": "Kaut kā laba sākums",
+      "keepGoing": "Turpiniet!",
+      "startStreak": "Sāciet sēriju šodien",
+      "bestMonthEver": "Labākais {{month}} jebkad",
+      "oneFromRecord": "1 skriešana līdz jūsu rekorda mēnesim!",
+      "runsFromRecord": "{{count}} skriešanas līdz rekordam",
+      "runsInMonth": "{{count}} skriešanas {{month}}"
+    },
+    "monthNames": ["Jan", "Feb", "Mar", "Apr", "Mai", "Jūn", "Jūl", "Aug", "Sep", "Okt", "Nov", "Dec"],
+    "workout": {
+      "nextWorkout": "NĀKAMAIS TRENIŅŠ",
+      "today": "ŠODIEN",
+      "distance": "Attālums",
+      "time": "Laiks",
+      "targetPace": "Mērķa temps",
+      "targetHr": "Mērķa pulss"
+    },
+    "weekPlan": {
+      "title": "ŠĪ NEDĒĻA"
+    },
+    "milestone": {
+      "nextMilestone": "NĀKAMAIS PAGRIEZIENA PUNKTS",
+      "kmLeft": "km atlicis",
+      "total": "kopā",
+      "thisWeek": "Šonedēļ!",
+      "oneToTwoWeeks": "Aptuveni 1-2 nedēļas",
+      "aboutWeeks": "Aptuveni {{count}} nedēļas"
+    },
+    "diary": {
+      "title": "SKRIEŠANAS DIENASGRĀMATA",
+      "subtitle": "Rakstiet piezīmes par savām skriešanām — AI mācās no tām",
+      "addNote": "+ Piezīme",
+      "mood": "Noskaņojums",
+      "placeholder": "Kā gāja? Smagas kājas? Laba diena? Jauns maršruts?",
+      "dayNames": ["Sv", "Pr", "Ot", "Tr", "Ce", "Pk", "Se"]
+    },
+    "injury": {
+      "title": "TRAUMAS RISKS",
+      "low": "Zems",
+      "moderate": "Vidējs",
+      "high": "Augsts",
+      "kmIncrease": "Km palielinājās par {{pct}}% salīdzinot ar pagājušo nedēļu",
+      "runsLast3Days": "{{count}} skriešanas pēdējo 3 dienu laikā",
+      "noRestToday": "Šodien nav atpūtas",
+      "daysSinceRun": "{{count}} dienas kopš pēdējās skriešanas — atpūties",
+      "noRiskFactors": "Nav specifisku riska faktoru.",
+      "tip1": "Apsveriet atpūtas dienu pēc smagām skriešanām",
+      "tip2": "Nepalieliniet km vairāk par 10% nedēļā",
+      "analyzed": "Analizēts",
+      "aiAnalysis": "AI analīze"
+    },
+    "racePredictor": {
+      "title": "Sacensību prognoze",
+      "subtitle": "Apskatiet savus gaidāmos sacensību laikus",
+      "noData": "Prognozei nepieciešama vismaz viena skriešana.",
+      "analyzing": "AI analizē jūsu skriešanas...",
+      "halfMarathon": "Pusmaratons",
+      "confidence": "Pārliecība"
+    }
+  },
+  "tracker": {
+    "defaultRunner": "Skrējējs",
+    "voiceOn": "Balss ieslēgta",
+    "voiceOff": "Balss izslēgta",
+    "mapNotAvailable": "Karte nav pieejama",
+    "status": {
+      "ready": "Nospiediet Sākt, lai sāktu",
+      "paused": "Apturēts",
+      "tracking": "Ieraksta..."
+    },
+    "gps": {
+      "active": "GPS aktīvs",
+      "waiting": "Meklē GPS signālu...",
+      "denied": "GPS atļauja noraidīta",
+      "unavailable": "GPS nav pieejams",
+      "timeout": "GPS taimauts",
+      "notAvailable": "GPS nav pieejams",
+      "error": "GPS kļūda"
+    }
+  },
+  "chat": {
+    "title": "AI-TRENERIS",
+    "clear": "Notīrīt",
+    "placeholder": "Rakstiet savam trenerim...",
+    "loadingHistory": "Ielādē sarunu...",
+    "planUpdated": "Plāns atjaunināts",
+    "defaultRunner": "Skrējējs",
+    "greeting": "Sveiki {{name}}! Es esmu jūsu AI skriešanas treneris. Kā es varu jums šodien palīdzēt?",
+    "clearedGreeting": "Saruna notīrīta! Kā es varu jums palīdzēt, {{name}}?",
+    "connectionError": "Atvainojiet, nevarēju izveidot savienojumu. Lūdzu, mēģiniet vēlreiz."
+  },
+  "proUpsell": {
+    "title": "Atbloķējiet pilnu jaudu",
+    "subtitle": "Iegūstiet piekļuvi visām funkcijām un sasniedziet savus mērķus ātrāk",
+    "price": "49 DKK",
+    "priceUnit": "/mēnesī",
+    "guarantee": "✓ Atcelšana jebkurā laikā • ✓ 7 dienu bezmaksas izmēģinājums",
+    "startTrial": "Sākt bezmaksas izmēģinājumu",
+    "continueWithFree": "Turpināt ar bezmaksas versiju",
+    "features": {
+      "aiCoach": {
+        "title": "AI treneris",
+        "desc": "Personalizēts treniņu plāns, kas pielāgojas tev"
+      },
+      "advancedStats": {
+        "title": "Uzlabota statistika",
+        "desc": "Padziļināta treniņu analīze"
+      },
+      "unlimitedGoals": {
+        "title": "Neierobežoti mērķi",
+        "desc": "Iestatiet tik daudz mērķu, cik vēlaties"
+      },
+      "routeLibrary": {
+        "title": "Maršrutu bibliotēka",
+        "desc": "Saglabājiet un dalieties ar saviem mīļākajiem maršrutiem"
+      },
+      "aiChat": {
+        "title": "AI čats",
+        "desc": "Uzdodiet jautājumus par skriešanu un saņemiet atbildes"
+      },
+      "progressReports": {
+        "title": "Progresa atskaites",
+        "desc": "Nedēļas un mēneša kopsavilkumi"
+      }
+    }
+  }
+}

@@ -1,0 +1,512 @@
+{
+  "tabs": {
+    "plan": "Plan",
+    "run": "Alergare",
+    "coach": "Antrenor",
+    "stats": "Statistici",
+    "settings": "Setări",
+    "calendar": "Calendar",
+    "progress": "Progres",
+    "start": "Start"
+  },
+  "run": {
+    "title": "Alergare",
+    "walk": "Mers",
+    "km": "KM",
+    "time": "TIMP",
+    "pace": "RITM",
+    "start": "Start",
+    "pause": "Pauză",
+    "resume": "Continuă",
+    "stop": "Stop",
+    "save": "Salvează",
+    "discard": "Renunță",
+    "startRun": "Începe alergarea",
+    "startThisWorkout": "Începe acest antrenament",
+    "nextWorkout": "Următorul antrenament",
+    "lastActivity": "Ultima activitate",
+    "gpsTracking": "Urmărire GPS",
+    "walkTracking": "Urmărire mers",
+    "aiRoutes": "Trasee AI"
+  },
+  "pro": {
+    "badge": "PRO",
+    "upgrade": "Upgrade",
+    "upgradeToPro": "Upgrade la Pro",
+    "feature": "Funcție Pro",
+    "unlockFeatures": "Deblochează toate funcțiile",
+    "fromOnly": "De la doar",
+    "limit": {
+      "title": "Funcție Pro",
+      "message": "Această funcție necesită abonament Pro",
+      "seePlans": "Vezi planurile",
+      "cancel": "Anulează"
+    },
+    "stats": {
+      "title": "Statistici Pro",
+      "features": "Statistici și analize avansate",
+      "unlock": "Deblochează"
+    },
+    "coach": {
+      "title": "Antrenor AI",
+      "description": "Plan de antrenament personalizat care se adaptează la tine"
+    },
+    "calendar": {
+      "title": "Calendar antrenamente",
+      "description": "Vezi întregul tău plan de antrenament"
+    },
+    "aiRoutes": {
+      "title": "Trasee AI",
+      "description": "Primește recomandări de trasee bazate pe antrenamentul tău"
+    }
+  },
+  "stats": {
+    "title": "Statistici",
+    "totalRuns": "Total alergări",
+    "totalKm": "Total km",
+    "avgPace": "Ritm mediu",
+    "thisWeek": "Săptămâna aceasta",
+    "thisMonth": "Luna aceasta",
+    "allTime": "Total",
+    "basic": "Statistici de bază",
+    "runs": "Alergări"
+  },
+  "subscription": "Abonament",
+  "alerts": {
+    "deleteRun": "Ești sigur că vrei să ștergi această alergare?",
+    "deleteAccount": "Ești sigur că vrei să ștergi contul? Această acțiune nu poate fi anulată.",
+    "logout": "Ești sigur că vrei să te deconectezi?",
+    "discardRun": "Ești sigur că vrei să renunți la această alergare?",
+    "unsavedChanges": "Ai modificări nesalvate. Vrei să renunți la ele?",
+    "welcomePro": {
+      "title": "Bine ai venit la Pro!",
+      "message": "Acum ai acces la toate funcțiile"
+    }
+  },
+  "auth": {
+    "login": "Conectare",
+    "register": "Creează cont",
+    "email": "Email",
+    "password": "Parolă",
+    "confirmPassword": "Confirmă parola",
+    "forgotPassword": "Ai uitat parola?",
+    "noAccount": "Nu ai cont?",
+    "hasAccount": "Ai deja cont?",
+    "loginButton": "Conectare",
+    "registerButton": "Creează cont",
+    "orContinueWith": "sau continuă cu",
+    "apple": "Apple",
+    "google": "Google",
+    "emailPlaceholder": "al.tau@email.ro",
+    "passwordPlaceholder": "••••••••",
+    "namePlaceholder": "Numele tău",
+    "name": "Nume",
+    "loggingIn": "Se conectează...",
+    "registering": "Se creează contul...",
+    "tagline": "Antrenorul tău personal AI de alergare",
+    "createAccount": "Creează cont",
+    "minChars": "min. caractere",
+    "repeatPassword": "repetă parola",
+    "continue": "continuă",
+    "getStarted": "începe",
+    "step1of3": "pasul 1 din 3",
+    "step2of3": "pasul 2 din 3",
+    "step3of3": "pasul 3 din 3",
+    "yourName": "numele tău",
+    "age": "VÂRSTĂ",
+    "weight": "GREUTATE",
+    "height": "ÎNĂLȚIME",
+    "years": "Ani",
+    "runningLevel": "NIVEL DE ALERGARE",
+    "levels.beginner": "Începător",
+    "levels.intermediate": "Intermediar",
+    "levels.advanced": "Avansat",
+    "yourGoals": "CARE SUNT OBIECTIVELE TALE",
+    "goals.health": "Sănătate",
+    "goals.weight": "Pierdere în greutate",
+    "goals.distance": "Aleargă mai departe",
+    "goals.speed": "Devino mai rapid",
+    "goals.race": "Aleargă o cursă",
+    "goals.fun": "Distracție",
+    "weeklyGoalKm": "OBIECTIV KM SĂPTĂMÂNAL",
+    "weeklyGoalExample": "Ex. 20",
+    "unlockFullPower": "Deblochează acces complet",
+    "unlockDesc": "Obține acces la toate funcțiile și atinge-ți obiectivele mai repede",
+    "proFeatures.aiCoachDesc": "Antrenor AI",
+    "proFeatures.statsDesc": "Statistici",
+    "proFeatures.goalsDesc": "Obiective",
+    "proFeatures.routesDesc": "Trasee",
+    "proFeatures.chatDesc": "Chat AI",
+    "proFeatures.reportsDesc": "Rapoarte",
+    "price": "49 kr",
+    "guarantee": "✓ Anulează oricând • ✓ 7 zile probă gratuită",
+    "perMonth": "/lună",
+    "startFreeTrial": "Începe perioada de probă gratuită",
+    "continueWithFree": "Continuă cu versiunea gratuită",
+    "levels.beginnerDesc": "Nou în alergare sau reîncepi după o pauză lungă",
+    "levels.intermediateDesc": "Alergi regulat și vrei să te îmbunătățești",
+    "levels.advancedDesc": "Alergător experimentat cu obiective specifice",
+    "or": "sau",
+    "errors": {
+      "serverConnection": "Nu se poate conecta la server"
+    }
+  },
+  "settings": {
+    "pageTitle": "Setări",
+    "title": "Setări",
+    "profile": "Profil",
+    "days": ["Lun", "Mar", "Mie", "Joi", "Vin", "Sâm", "Dum"],
+    "saveChanges": "Salvează modificările",
+    "saved": "Salvat!",
+    "logout": "Deconectare",
+    "privacyPolicy": "Politica de confidențialitate",
+    "termsOfService": "Termeni și condiții",
+    "dangerZone": "Zonă periculoasă",
+    "sections": {
+      "personalInfo": "Informații personale",
+      "level": "Nivel",
+      "runningGoals": "Obiective de alergare",
+      "weeklyGoals": "Obiective săptămânale",
+      "trainingTypes": "Tipuri de antrenament",
+      "heartRateZones": "Zone de puls",
+      "injuries": "Accidentări",
+      "reminders": "Memento-uri",
+      "privacy": "Confidențialitate",
+      "units": "Unități",
+      "data": "Date"
+    },
+    "fields": {
+      "name": "Nume",
+      "age": "Vârstă",
+      "weight": "Greutate (kg)",
+      "height": "Înălțime (cm)",
+      "sex": "Sex",
+      "restingHr": "Puls în repaus",
+      "maxHr": "Puls maxim",
+      "vo2max": "VO2max",
+      "yearsRunning": "Ani de alergare",
+      "weeklyKm": "Km săptămânali",
+      "weeklyKmGoal": "Obiectiv km săptămânal",
+      "weeklyRunsGoal": "Obiectiv alergări săptămânale",
+      "primaryGoal": "Obiectiv principal",
+      "raceDate": "Data cursei",
+      "injuries": "Accidentări/limitări",
+      "injuriesPlaceholder": "Ex. probleme la genunchi, dureri de spate...",
+      "preferredDays": "Zile preferate",
+      "preferredTypes": "Tipuri de alergare preferate"
+    },
+    "sex": {
+      "male": "Bărbat",
+      "female": "Femeie"
+    },
+    "levels": {
+      "beginner": "Începător",
+      "intermediate": "Intermediar",
+      "advanced": "Avansat"
+    },
+    "goals": {
+      "fitness": "Condiție fizică generală",
+      "weight": "Pierdere în greutate",
+      "half": "Semimaraton",
+      "full": "Maraton"
+    },
+    "runTypes": {
+      "easy": "Alergare ușoară",
+      "interval": "Intervale",
+      "long": "Alergare lungă",
+      "tempo": "Tempo",
+      "recovery": "Recuperare",
+      "race": "Cursă",
+      "trail": "Alergare de munte"
+    },
+    "zones": {
+      "calculated": "Calculat din pulsul tău maxim",
+      "z1": "Zona 1 (Recuperare)",
+      "z2": "Zona 2 (Aerobică)",
+      "z3": "Zona 3 (Tempo)",
+      "z4": "Zona 4 (Prag)",
+      "z5": "Zona 5 (Anaerobică)"
+    },
+    "notifications": {
+      "push": "Notificări push",
+      "pushSub": "Primește memento-uri pentru antrenament",
+      "enabled": "Activat",
+      "reminder": "Memento",
+      "time": "Oră",
+      "days": "Zile"
+    },
+    "privacy": {
+      "shareProfile": "Partajează profilul",
+      "shareProfileSub": "Alții pot vedea profilul tău",
+      "shareActivity": "Partajează activitatea",
+      "shareActivitySub": "Alții pot vedea alergările tale",
+      "shareLocation": "Partajează locația",
+      "shareLocationSub": "Arată poziția ta pe trasee"
+    },
+    "units": {
+      "distance": "Distanță",
+      "pace": "Ritm"
+    },
+    "data": {
+      "export": "Exportă date",
+      "exportSub": "Descarcă toate datele tale de alergare"
+    },
+    "shoes": {
+      "title": "Pantofi de alergare",
+      "addShoe": "Adaugă pantof",
+      "namePlaceholder": "Numele pantofului",
+      "brandPlaceholder": "Marcă",
+      "kmPlaceholder": "Km inițiali",
+      "saveShoe": "Salvează pantoful",
+      "useForNextRun": "Folosește pentru următoarea alergare",
+      "active": "Activ",
+      "delete": "Șterge",
+      "deleteConfirm": "Ești sigur că vrei să ștergi acest pantof?",
+      "empty": "Nu au fost adăugați pantofi încă",
+      "worn": "Uzat",
+      "soonWorn": "Curând uzat",
+      "wornMessage": "Acest pantof are peste 800 km și ar trebui înlocuit"
+    },
+    "deleteAccount": {
+      "title": "Șterge contul",
+      "button": "Șterge contul meu",
+      "warning": "Această acțiune nu poate fi anulată!",
+      "confirmMessage": "Ești sigur că vrei să ștergi contul? Toate datele vor fi șterse permanent.",
+      "confirmButton": "Da, șterge contul meu",
+      "deletedTitle": "Cont șters",
+      "deletedMessage": "Contul tău a fost șters.",
+      "error": "Nu s-a putut șterge contul"
+    }
+  },
+  "pricing": {
+    "title": "RunWithAI Pro",
+    "subtitle": "Deblochează toate funcțiile",
+    "monthly": "Lunar",
+    "yearly": "Anual",
+    "perMonth": "/lună",
+    "perYear": "/an",
+    "save": "Economisești",
+    "features": {
+      "aiCoach": "Antrenor AI personal",
+      "unlimitedRuns": "Alergări nelimitate",
+      "advancedStats": "Statistici avansate",
+      "trainingPlans": "Planuri de antrenament personalizate",
+      "voiceCoach": "Antrenor vocal în timpul alergării",
+      "exportData": "Export date"
+    },
+    "subscribe": "Abonează-te acum",
+    "restore": "Restaurează achiziția",
+    "terms": "Se aplică termenii. Reînnoire automată.",
+    "currentPlan": "Plan curent",
+    "free": "Gratuit",
+    "pro": "Pro",
+    "loading": "Se încarcă...",
+    "error": "Ceva nu a mers bine",
+    "success": "Acum ești Pro!",
+    "alreadyPro": "Ești deja utilizator Pro",
+    "tryAgain": "Încearcă din nou"
+  },
+  "common": {
+    "cancel": "Anulează",
+    "save": "Salvează",
+    "delete": "Șterge",
+    "edit": "Editează",
+    "done": "Gata",
+    "next": "Următorul",
+    "back": "Înapoi",
+    "skip": "Sari peste",
+    "ok": "OK",
+    "yes": "Da",
+    "no": "Nu",
+    "loading": "Se încarcă...",
+    "error": "Eroare",
+    "success": "Succes",
+    "retry": "Încearcă din nou"
+  },
+  "onboarding": {
+    "welcome": "Bine ai venit la",
+    "appName": "RunWithAI",
+    "subtitle": "Antrenorul tău personal AI de alergare",
+    "getStarted": "Începe",
+    "step1": {
+      "title": "Urmărește-ți alergările",
+      "desc": "Urmărire GPS cu date live și afișare traseu"
+    },
+    "step2": {
+      "title": "Antrenament cu AI",
+      "desc": "Primește planuri de antrenament personalizate și sfaturi de la antrenorul tău AI"
+    },
+    "step3": {
+      "title": "Atinge-ți obiectivele",
+      "desc": "Setează obiective și urmărește-ți progresul cu statistici detaliate"
+    }
+  },
+  "dashboard": {
+    "defaultName": "ALERGĂTOR",
+    "greeting": {
+      "morning": "BUN DIMINEAȚA,",
+      "day": "BUN ZIUA,",
+      "evening": "BUN SEARA,"
+    },
+    "planUpdated": "PLAN ACTUALIZAT",
+    "refresh": "Reîmprospătează",
+    "shoeAlert": {
+      "worn": "Pantofii sunt uzați!",
+      "soonWorn": "Pantofii vor fi curând uzați!"
+    },
+    "fatigue": {
+      "rested": "Odihnit",
+      "ok": "OK",
+      "slightlyTired": "Puțin obosit",
+      "veryTired": "Foarte obosit"
+    },
+    "weather": {
+      "title": "VREME & FORMĂ",
+      "wind": "Vânt",
+      "clear": "Senin",
+      "partlyCloudy": "Parțial noros",
+      "foggy": "Ceață/pâclă",
+      "rain": "Ploaie",
+      "snow": "Ninsoare",
+      "showers": "Averse",
+      "thunder": "Furtună",
+      "analyzing": "Se analizează vremea și starea...",
+      "noAdvice": "Niciun sfat disponibil",
+      "fetchError": "Datele meteo nu sunt disponibile — încearcă din nou."
+    },
+    "stats": {
+      "kmThisWeek": "KM SĂPTĂMÂNA ACEASTA",
+      "daysInRow": "ZILE LA RÂND",
+      "runsThisMonth": "ALERGĂRI LUNA ACEASTA",
+      "of": "din",
+      "personalRecord": "Record personal",
+      "fromRecord": "{{count}} de la recordul tău",
+      "overOneWeek": "Peste 1 săptămână la rând",
+      "keepingMomentum": "Menții ritmul",
+      "goodStart": "Start bun",
+      "keepGoing": "Continuă!",
+      "startStreak": "Începe o serie azi",
+      "bestMonthEver": "Cea mai bună lună {{month}} din istorie",
+      "oneFromRecord": "1 alergare până la luna record!",
+      "runsFromRecord": "{{count}} alergări până la record",
+      "runsInMonth": "{{count}} alergări în {{month}}"
+    },
+    "monthNames": ["Ian", "Feb", "Mar", "Apr", "Mai", "Iun", "Iul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    "workout": {
+      "nextWorkout": "URMĂTORUL ANTRENAMENT",
+      "today": "AZI",
+      "distance": "Distanță",
+      "time": "Timp",
+      "targetPace": "Ritm țintă",
+      "targetHr": "Puls țintă"
+    },
+    "weekPlan": {
+      "title": "SĂPTĂMÂNA ACEASTA"
+    },
+    "milestone": {
+      "nextMilestone": "URMĂTORUL REPER",
+      "kmLeft": "km rămași",
+      "total": "total",
+      "thisWeek": "Săptămâna aceasta!",
+      "oneToTwoWeeks": "Aproximativ 1-2 săptămâni",
+      "aboutWeeks": "Aproximativ {{count}} săptămâni"
+    },
+    "diary": {
+      "title": "JURNAL DE ALERGARE",
+      "subtitle": "Scrie notițe despre alergările tale — AI învață din ele",
+      "addNote": "+ Notiță",
+      "mood": "Dispoziție",
+      "placeholder": "Cum a fost? Picioare grele? Zi bună? Traseu nou?",
+      "dayNames": ["Dum", "Lun", "Mar", "Mie", "Joi", "Vin", "Sâm"]
+    },
+    "injury": {
+      "title": "RISC DE ACCIDENTARE",
+      "low": "Scăzut",
+      "moderate": "Moderat",
+      "high": "Ridicat",
+      "kmIncrease": "Km au crescut cu {{pct}}% față de săptămâna trecută",
+      "runsLast3Days": "{{count}} alergări în ultimele 3 zile",
+      "noRestToday": "Fără odihnă azi",
+      "daysSinceRun": "{{count}} zile de la ultima alergare — odihnit",
+      "noRiskFactors": "Fără factori de risc specifici.",
+      "tip1": "Consideră o zi de odihnă după alergări grele",
+      "tip2": "Nu crește km cu mai mult de 10% pe săptămână",
+      "analyzed": "Analizat",
+      "aiAnalysis": "Analiză AI"
+    },
+    "racePredictor": {
+      "title": "Predicție cursă",
+      "subtitle": "Vezi timpii prevăzuți pentru cursă",
+      "noData": "E nevoie de cel puțin o alergare pentru predicție.",
+      "analyzing": "AI analizează alergările tale...",
+      "halfMarathon": "Semimaraton",
+      "confidence": "Încredere"
+    }
+  },
+  "tracker": {
+    "defaultRunner": "Alergător",
+    "voiceOn": "Voce activată",
+    "voiceOff": "Voce dezactivată",
+    "mapNotAvailable": "Hartă indisponibilă",
+    "status": {
+      "ready": "Apasă Start pentru a începe",
+      "paused": "În pauză",
+      "tracking": "Se înregistrează..."
+    },
+    "gps": {
+      "active": "GPS activ",
+      "waiting": "Se caută semnal GPS...",
+      "denied": "Permisiune GPS refuzată",
+      "unavailable": "GPS indisponibil",
+      "timeout": "Timeout GPS",
+      "notAvailable": "GPS indisponibil",
+      "error": "Eroare GPS"
+    }
+  },
+  "chat": {
+    "title": "ANTRENOR-AI",
+    "clear": "Șterge",
+    "placeholder": "Scrie antrenorului tău...",
+    "loadingHistory": "Se încarcă conversația...",
+    "planUpdated": "Plan actualizat",
+    "defaultRunner": "Alergător",
+    "greeting": "Salut {{name}}! Sunt antrenorul tău AI de alergare. Cum te pot ajuta azi?",
+    "clearedGreeting": "Conversație ștearsă! Cum te pot ajuta, {{name}}?",
+    "connectionError": "Îmi pare rău, nu m-am putut conecta. Te rog încearcă din nou."
+  },
+  "proUpsell": {
+    "title": "Deblochează puterea completă",
+    "subtitle": "Obține acces la toate funcțiile și atinge-ți obiectivele mai repede",
+    "price": "49 DKK",
+    "priceUnit": "/lună",
+    "guarantee": "✓ Anulează oricând • ✓ 7 zile probă gratuită",
+    "startTrial": "Începe proba gratuită",
+    "continueWithFree": "Continuă cu versiunea gratuită",
+    "features": {
+      "aiCoach": {
+        "title": "Antrenor AI",
+        "desc": "Plan de antrenament personalizat care se adaptează la tine"
+      },
+      "advancedStats": {
+        "title": "Statistici avansate",
+        "desc": "Analiză aprofundată a antrenamentului tău"
+      },
+      "unlimitedGoals": {
+        "title": "Obiective nelimitate",
+        "desc": "Setează câte obiective vrei"
+      },
+      "routeLibrary": {
+        "title": "Bibliotecă de trasee",
+        "desc": "Salvează și partajează traseele tale preferate"
+      },
+      "aiChat": {
+        "title": "Chat AI",
+        "desc": "Pune întrebări despre alergare și primește răspunsuri"
+      },
+      "progressReports": {
+        "title": "Rapoarte de progres",
+        "desc": "Rezumate săptămânale și lunare"
+      }
+    }
+  }
+}

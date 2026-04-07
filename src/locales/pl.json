@@ -1,0 +1,512 @@
+{
+  "tabs": {
+    "plan": "Plan",
+    "run": "Bieg",
+    "coach": "Trener",
+    "stats": "Statystyki",
+    "settings": "Ustawienia",
+    "calendar": "Kalendarz",
+    "progress": "Postęp",
+    "start": "Start"
+  },
+  "run": {
+    "title": "Bieg",
+    "walk": "Spacer",
+    "km": "KM",
+    "time": "CZAS",
+    "pace": "TEMPO",
+    "start": "Start",
+    "pause": "Pauza",
+    "resume": "Wznów",
+    "stop": "Stop",
+    "save": "Zapisz",
+    "discard": "Odrzuć",
+    "startRun": "Rozpocznij bieg",
+    "startThisWorkout": "Rozpocznij ten trening",
+    "nextWorkout": "Następny trening",
+    "lastActivity": "Ostatnia aktywność",
+    "gpsTracking": "Śledzenie GPS",
+    "walkTracking": "Śledzenie spaceru",
+    "aiRoutes": "Trasy AI"
+  },
+  "pro": {
+    "badge": "PRO",
+    "upgrade": "Ulepsz",
+    "upgradeToPro": "Ulepsz do Pro",
+    "feature": "Funkcja Pro",
+    "unlockFeatures": "Odblokuj wszystkie funkcje",
+    "fromOnly": "Już od",
+    "limit": {
+      "title": "Funkcja Pro",
+      "message": "Ta funkcja wymaga subskrypcji Pro",
+      "seePlans": "Zobacz plany",
+      "cancel": "Anuluj"
+    },
+    "stats": {
+      "title": "Statystyki Pro",
+      "features": "Zaawansowane statystyki i analizy",
+      "unlock": "Odblokuj"
+    },
+    "coach": {
+      "title": "Trener AI",
+      "description": "Spersonalizowany plan treningowy, który dostosowuje się do Ciebie"
+    },
+    "calendar": {
+      "title": "Kalendarz treningów",
+      "description": "Zobacz cały swój plan treningowy"
+    },
+    "aiRoutes": {
+      "title": "Trasy AI",
+      "description": "Otrzymuj rekomendacje tras na podstawie swojego treningu"
+    }
+  },
+  "stats": {
+    "title": "Statystyki",
+    "totalRuns": "Łącznie biegów",
+    "totalKm": "Łącznie km",
+    "avgPace": "Średnie tempo",
+    "thisWeek": "Ten tydzień",
+    "thisMonth": "Ten miesiąc",
+    "allTime": "Wszystkie",
+    "basic": "Podstawowe statystyki",
+    "runs": "Biegi"
+  },
+  "subscription": "Subskrypcja",
+  "alerts": {
+    "deleteRun": "Czy na pewno chcesz usunąć ten bieg?",
+    "deleteAccount": "Czy na pewno chcesz usunąć swoje konto? Tej operacji nie można cofnąć.",
+    "logout": "Czy na pewno chcesz się wylogować?",
+    "discardRun": "Czy na pewno chcesz odrzucić ten bieg?",
+    "unsavedChanges": "Masz niezapisane zmiany. Czy chcesz je odrzucić?",
+    "welcomePro": {
+      "title": "Witaj w Pro!",
+      "message": "Masz teraz dostęp do wszystkich funkcji"
+    }
+  },
+  "auth": {
+    "login": "Zaloguj się",
+    "register": "Utwórz konto",
+    "email": "E-mail",
+    "password": "Hasło",
+    "confirmPassword": "Potwierdź hasło",
+    "forgotPassword": "Zapomniałeś hasła?",
+    "noAccount": "Nie masz konta?",
+    "hasAccount": "Masz już konto?",
+    "loginButton": "Zaloguj się",
+    "registerButton": "Utwórz konto",
+    "orContinueWith": "lub kontynuuj z",
+    "apple": "Apple",
+    "google": "Google",
+    "emailPlaceholder": "twoj@email.pl",
+    "passwordPlaceholder": "••••••••",
+    "namePlaceholder": "Twoje imię",
+    "name": "Imię",
+    "loggingIn": "Logowanie...",
+    "registering": "Tworzenie konta...",
+    "tagline": "Twój osobisty trener biegowy AI",
+    "createAccount": "Utwórz konto",
+    "minChars": "min. znaków",
+    "repeatPassword": "powtórz hasło",
+    "continue": "kontynuuj",
+    "getStarted": "zaczynamy",
+    "step1of3": "krok 1 z 3",
+    "step2of3": "krok 2 z 3",
+    "step3of3": "krok 3 z 3",
+    "yourName": "twoje imię",
+    "age": "WIEK",
+    "weight": "WAGA",
+    "height": "WZROST",
+    "years": "Lat",
+    "runningLevel": "POZIOM BIEGANIA",
+    "levels.beginner": "Początkujący",
+    "levels.intermediate": "Średniozaawansowany",
+    "levels.advanced": "Zaawansowany",
+    "yourGoals": "JAKIE SĄ TWOJE CELE",
+    "goals.health": "Zdrowie",
+    "goals.weight": "Utrata wagi",
+    "goals.distance": "Biegać dalej",
+    "goals.speed": "Być szybszym",
+    "goals.race": "Przebiec wyścig",
+    "goals.fun": "Zabawa",
+    "weeklyGoalKm": "TYGODNIOWY CEL KM",
+    "weeklyGoalExample": "Np. 20",
+    "unlockFullPower": "Odblokuj pełny dostęp",
+    "unlockDesc": "Uzyskaj dostęp do wszystkich funkcji i osiągaj cele szybciej",
+    "proFeatures.aiCoachDesc": "Trener AI",
+    "proFeatures.statsDesc": "Statystyki",
+    "proFeatures.goalsDesc": "Cele",
+    "proFeatures.routesDesc": "Trasy",
+    "proFeatures.chatDesc": "Czat AI",
+    "proFeatures.reportsDesc": "Raporty",
+    "price": "49 kr",
+    "guarantee": "✓ Anuluj w dowolnym momencie • ✓ 7 dni za darmo",
+    "perMonth": "/miesiąc",
+    "startFreeTrial": "Rozpocznij bezpłatny okres próbny",
+    "continueWithFree": "Kontynuuj z wersją bezpłatną",
+    "levels.beginnerDesc": "Nowy w bieganiu lub zaczynasz po długiej przerwie",
+    "levels.intermediateDesc": "Biegasz regularnie i chcesz się poprawić",
+    "levels.advancedDesc": "Doświadczony biegacz ze specyficznymi celami",
+    "or": "lub",
+    "errors": {
+      "serverConnection": "Nie można połączyć z serwerem"
+    }
+  },
+  "settings": {
+    "pageTitle": "Ustawienia",
+    "title": "Ustawienia",
+    "profile": "Profil",
+    "days": ["Pon", "Wt", "Śr", "Czw", "Pt", "Sob", "Nd"],
+    "saveChanges": "Zapisz zmiany",
+    "saved": "Zapisano!",
+    "logout": "Wyloguj się",
+    "privacyPolicy": "Polityka prywatności",
+    "termsOfService": "Regulamin",
+    "dangerZone": "Strefa zagrożenia",
+    "sections": {
+      "personalInfo": "Dane osobowe",
+      "level": "Poziom",
+      "runningGoals": "Cele biegowe",
+      "weeklyGoals": "Cele tygodniowe",
+      "trainingTypes": "Rodzaje treningów",
+      "heartRateZones": "Strefy tętna",
+      "injuries": "Kontuzje",
+      "reminders": "Przypomnienia",
+      "privacy": "Prywatność",
+      "units": "Jednostki",
+      "data": "Dane"
+    },
+    "fields": {
+      "name": "Imię",
+      "age": "Wiek",
+      "weight": "Waga (kg)",
+      "height": "Wzrost (cm)",
+      "sex": "Płeć",
+      "restingHr": "Tętno spoczynkowe",
+      "maxHr": "Maksymalne tętno",
+      "vo2max": "VO2max",
+      "yearsRunning": "Lata biegania",
+      "weeklyKm": "Tygodniowe km",
+      "weeklyKmGoal": "Cel tygodniowy km",
+      "weeklyRunsGoal": "Cel biegów tygodniowo",
+      "primaryGoal": "Główny cel",
+      "raceDate": "Data zawodów",
+      "injuries": "Kontuzje/ograniczenia",
+      "injuriesPlaceholder": "Np. problemy z kolanami, ból pleców...",
+      "preferredDays": "Preferowane dni",
+      "preferredTypes": "Preferowane rodzaje biegów"
+    },
+    "sex": {
+      "male": "Mężczyzna",
+      "female": "Kobieta"
+    },
+    "levels": {
+      "beginner": "Początkujący",
+      "intermediate": "Średniozaawansowany",
+      "advanced": "Zaawansowany"
+    },
+    "goals": {
+      "fitness": "Ogólna forma",
+      "weight": "Utrata wagi",
+      "half": "Półmaraton",
+      "full": "Maraton"
+    },
+    "runTypes": {
+      "easy": "Lekki bieg",
+      "interval": "Interwały",
+      "long": "Długi bieg",
+      "tempo": "Tempo",
+      "recovery": "Regeneracja",
+      "race": "Zawody",
+      "trail": "Bieg górski"
+    },
+    "zones": {
+      "calculated": "Obliczone na podstawie maksymalnego tętna",
+      "z1": "Strefa 1 (Regeneracja)",
+      "z2": "Strefa 2 (Aerobowa)",
+      "z3": "Strefa 3 (Tempo)",
+      "z4": "Strefa 4 (Próg)",
+      "z5": "Strefa 5 (Anaerobowa)"
+    },
+    "notifications": {
+      "push": "Powiadomienia push",
+      "pushSub": "Otrzymuj przypomnienia o treningu",
+      "enabled": "Włączone",
+      "reminder": "Przypomnienie",
+      "time": "Godzina",
+      "days": "Dni"
+    },
+    "privacy": {
+      "shareProfile": "Udostępnij profil",
+      "shareProfileSub": "Inni mogą widzieć Twój profil",
+      "shareActivity": "Udostępnij aktywność",
+      "shareActivitySub": "Inni mogą widzieć Twoje biegi",
+      "shareLocation": "Udostępnij lokalizację",
+      "shareLocationSub": "Pokaż swoją pozycję na trasach"
+    },
+    "units": {
+      "distance": "Dystans",
+      "pace": "Tempo"
+    },
+    "data": {
+      "export": "Eksportuj dane",
+      "exportSub": "Pobierz wszystkie swoje dane biegowe"
+    },
+    "shoes": {
+      "title": "Buty do biegania",
+      "addShoe": "Dodaj buty",
+      "namePlaceholder": "Nazwa butów",
+      "brandPlaceholder": "Marka",
+      "kmPlaceholder": "Początkowe km",
+      "saveShoe": "Zapisz buty",
+      "useForNextRun": "Użyj do następnego biegu",
+      "active": "Aktywne",
+      "delete": "Usuń",
+      "deleteConfirm": "Czy na pewno chcesz usunąć te buty?",
+      "empty": "Nie dodano jeszcze butów",
+      "worn": "Zużyte",
+      "soonWorn": "Wkrótce zużyte",
+      "wornMessage": "Te buty mają ponad 800 km i powinny być wymienione"
+    },
+    "deleteAccount": {
+      "title": "Usuń konto",
+      "button": "Usuń moje konto",
+      "warning": "Tej operacji nie można cofnąć!",
+      "confirmMessage": "Czy na pewno chcesz usunąć swoje konto? Wszystkie dane zostaną trwale usunięte.",
+      "confirmButton": "Tak, usuń moje konto",
+      "deletedTitle": "Konto usunięte",
+      "deletedMessage": "Twoje konto zostało usunięte.",
+      "error": "Nie udało się usunąć konta"
+    }
+  },
+  "pricing": {
+    "title": "RunWithAI Pro",
+    "subtitle": "Odblokuj wszystkie funkcje",
+    "monthly": "Miesięcznie",
+    "yearly": "Rocznie",
+    "perMonth": "/miesiąc",
+    "perYear": "/rok",
+    "save": "Oszczędź",
+    "features": {
+      "aiCoach": "Osobisty trener AI",
+      "unlimitedRuns": "Nieograniczone biegi",
+      "advancedStats": "Zaawansowane statystyki",
+      "trainingPlans": "Spersonalizowane plany treningowe",
+      "voiceCoach": "Trener głosowy podczas biegu",
+      "exportData": "Eksport danych"
+    },
+    "subscribe": "Subskrybuj teraz",
+    "restore": "Przywróć zakup",
+    "terms": "Obowiązują warunki. Automatyczne odnowienie.",
+    "currentPlan": "Aktualny plan",
+    "free": "Bezpłatny",
+    "pro": "Pro",
+    "loading": "Ładowanie...",
+    "error": "Coś poszło nie tak",
+    "success": "Jesteś teraz Pro!",
+    "alreadyPro": "Jesteś już użytkownikiem Pro",
+    "tryAgain": "Spróbuj ponownie"
+  },
+  "common": {
+    "cancel": "Anuluj",
+    "save": "Zapisz",
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "done": "Gotowe",
+    "next": "Dalej",
+    "back": "Wstecz",
+    "skip": "Pomiń",
+    "ok": "OK",
+    "yes": "Tak",
+    "no": "Nie",
+    "loading": "Ładowanie...",
+    "error": "Błąd",
+    "success": "Sukces",
+    "retry": "Ponów"
+  },
+  "onboarding": {
+    "welcome": "Witaj w",
+    "appName": "RunWithAI",
+    "subtitle": "Twój osobisty trener biegowy AI",
+    "getStarted": "Zaczynajmy",
+    "step1": {
+      "title": "Śledź swoje biegi",
+      "desc": "Śledzenie GPS z danymi na żywo i wyświetlaniem trasy"
+    },
+    "step2": {
+      "title": "Trening wspierany przez AI",
+      "desc": "Otrzymuj spersonalizowane plany treningowe i porady od swojego trenera AI"
+    },
+    "step3": {
+      "title": "Osiągaj swoje cele",
+      "desc": "Ustal cele i śledź postępy dzięki szczegółowym statystykom"
+    }
+  },
+  "dashboard": {
+    "defaultName": "BIEGACZ",
+    "greeting": {
+      "morning": "DZIEŃ DOBRY,",
+      "day": "DZIEŃ DOBRY,",
+      "evening": "DOBRY WIECZÓR,"
+    },
+    "planUpdated": "PLAN ZAKTUALIZOWANY",
+    "refresh": "Odśwież",
+    "shoeAlert": {
+      "worn": "Buty są zużyte!",
+      "soonWorn": "Buty wkrótce się zużyją!"
+    },
+    "fatigue": {
+      "rested": "Wypoczęty",
+      "ok": "OK",
+      "slightlyTired": "Lekko zmęczony",
+      "veryTired": "Bardzo zmęczony"
+    },
+    "weather": {
+      "title": "POGODA I FORMA",
+      "wind": "Wiatr",
+      "clear": "Bezchmurnie",
+      "partlyCloudy": "Częściowe zachmurzenie",
+      "foggy": "Mgła/zamglenie",
+      "rain": "Deszcz",
+      "snow": "Śnieg",
+      "showers": "Przelotne opady",
+      "thunder": "Burza",
+      "analyzing": "Analizowanie pogody i stanu...",
+      "noAdvice": "Brak dostępnej porady",
+      "fetchError": "Dane pogodowe niedostępne — spróbuj ponownie."
+    },
+    "stats": {
+      "kmThisWeek": "KM W TYM TYGODNIU",
+      "daysInRow": "DNI Z RZĘDU",
+      "runsThisMonth": "BIEGI W TYM MIESIĄCU",
+      "of": "z",
+      "personalRecord": "Rekord osobisty",
+      "fromRecord": "{{count}} od Twojego rekordu",
+      "overOneWeek": "Ponad 1 tydzień z rzędu",
+      "keepingMomentum": "Utrzymujesz rozpęd",
+      "goodStart": "Dobry początek",
+      "keepGoing": "Tak trzymaj!",
+      "startStreak": "Zacznij serię dziś",
+      "bestMonthEver": "Najlepszy {{month}} w historii",
+      "oneFromRecord": "1 bieg do rekordowego miesiąca!",
+      "runsFromRecord": "{{count}} biegów do rekordu",
+      "runsInMonth": "{{count}} biegów w {{month}}"
+    },
+    "monthNames": ["Sty", "Lut", "Mar", "Kwi", "Maj", "Cze", "Lip", "Sie", "Wrz", "Paź", "Lis", "Gru"],
+    "workout": {
+      "nextWorkout": "NASTĘPNY TRENING",
+      "today": "DZIŚ",
+      "distance": "Dystans",
+      "time": "Czas",
+      "targetPace": "Docelowe tempo",
+      "targetHr": "Docelowe tętno"
+    },
+    "weekPlan": {
+      "title": "TEN TYDZIEŃ"
+    },
+    "milestone": {
+      "nextMilestone": "NASTĘPNY KAMIEŃ MILOWY",
+      "kmLeft": "km pozostało",
+      "total": "łącznie",
+      "thisWeek": "W tym tygodniu!",
+      "oneToTwoWeeks": "Około 1-2 tygodni",
+      "aboutWeeks": "Około {{count}} tygodni"
+    },
+    "diary": {
+      "title": "DZIENNIK BIEGOWY",
+      "subtitle": "Pisz notatki o swoich biegach — AI uczy się z nich",
+      "addNote": "+ Notatka",
+      "mood": "Nastrój",
+      "placeholder": "Jak poszło? Ciężkie nogi? Dobry dzień? Nowa trasa?",
+      "dayNames": ["Nd", "Pon", "Wt", "Śr", "Czw", "Pt", "Sob"]
+    },
+    "injury": {
+      "title": "RYZYKO KONTUZJI",
+      "low": "Niskie",
+      "moderate": "Umiarkowane",
+      "high": "Wysokie",
+      "kmIncrease": "Km wzrosły o {{pct}}% w porównaniu z poprzednim tygodniem",
+      "runsLast3Days": "{{count}} biegów w ostatnich 3 dniach",
+      "noRestToday": "Brak odpoczynku dziś",
+      "daysSinceRun": "{{count}} dni od ostatniego biegu — wypoczęty",
+      "noRiskFactors": "Brak specyficznych czynników ryzyka.",
+      "tip1": "Rozważ dzień odpoczynku po ciężkich biegach",
+      "tip2": "Nie zwiększaj km o więcej niż 10% tygodniowo",
+      "analyzed": "Przeanalizowano",
+      "aiAnalysis": "Analiza AI"
+    },
+    "racePredictor": {
+      "title": "Prognoza wyścigu",
+      "subtitle": "Zobacz przewidywane czasy wyścigu",
+      "noData": "Potrzebny jest co najmniej jeden bieg do prognozy.",
+      "analyzing": "AI analizuje Twoje biegi...",
+      "halfMarathon": "Półmaraton",
+      "confidence": "Pewność"
+    }
+  },
+  "tracker": {
+    "defaultRunner": "Biegacz",
+    "voiceOn": "Głos włączony",
+    "voiceOff": "Głos wyłączony",
+    "mapNotAvailable": "Mapa niedostępna",
+    "status": {
+      "ready": "Naciśnij Start, aby rozpocząć",
+      "paused": "Wstrzymano",
+      "tracking": "Nagrywanie..."
+    },
+    "gps": {
+      "active": "GPS aktywny",
+      "waiting": "Szukanie sygnału GPS...",
+      "denied": "Odmowa dostępu do GPS",
+      "unavailable": "GPS niedostępny",
+      "timeout": "Przekroczono limit czasu GPS",
+      "notAvailable": "GPS niedostępny",
+      "error": "Błąd GPS"
+    }
+  },
+  "chat": {
+    "title": "TRENER-AI",
+    "clear": "Wyczyść",
+    "placeholder": "Napisz do swojego trenera...",
+    "loadingHistory": "Ładowanie rozmowy...",
+    "planUpdated": "Plan zaktualizowany",
+    "defaultRunner": "Biegacz",
+    "greeting": "Cześć {{name}}! Jestem Twoim trenerem biegowym AI. Jak mogę Ci dziś pomóc?",
+    "clearedGreeting": "Rozmowa wyczyszczona! Jak mogę Ci pomóc, {{name}}?",
+    "connectionError": "Przepraszam, nie udało się połączyć. Proszę spróbuj ponownie."
+  },
+  "proUpsell": {
+    "title": "Odblokuj pełną moc",
+    "subtitle": "Uzyskaj dostęp do wszystkich funkcji i szybciej osiągaj swoje cele",
+    "price": "49 DKK",
+    "priceUnit": "/miesiąc",
+    "guarantee": "✓ Anuluj w dowolnym momencie • ✓ 7-dniowy bezpłatny okres próbny",
+    "startTrial": "Rozpocznij bezpłatny okres próbny",
+    "continueWithFree": "Kontynuuj z wersją bezpłatną",
+    "features": {
+      "aiCoach": {
+        "title": "Trener AI",
+        "desc": "Spersonalizowany plan treningowy, który dostosowuje się do Ciebie"
+      },
+      "advancedStats": {
+        "title": "Zaawansowane statystyki",
+        "desc": "Dogłębna analiza Twojego treningu"
+      },
+      "unlimitedGoals": {
+        "title": "Nieograniczone cele",
+        "desc": "Ustaw tyle celów, ile chcesz"
+      },
+      "routeLibrary": {
+        "title": "Biblioteka tras",
+        "desc": "Zapisuj i udostępniaj swoje ulubione trasy"
+      },
+      "aiChat": {
+        "title": "Czat AI",
+        "desc": "Zadawaj pytania o bieganie i otrzymuj odpowiedzi"
+      },
+      "progressReports": {
+        "title": "Raporty postępu",
+        "desc": "Tygodniowe i miesięczne podsumowania"
+      }
+    }
+  }
+}

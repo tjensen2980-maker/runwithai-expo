@@ -1,0 +1,512 @@
+{
+  "tabs": {
+    "plan": "Plan",
+    "run": "Löpning",
+    "coach": "Tränare",
+    "stats": "Statistik",
+    "settings": "Inställningar",
+    "calendar": "Kalender",
+    "progress": "Framsteg",
+    "start": "Starta"
+  },
+  "run": {
+    "title": "Löpning",
+    "walk": "Promenad",
+    "km": "KM",
+    "time": "TID",
+    "pace": "TEMPO",
+    "start": "Starta",
+    "pause": "Paus",
+    "resume": "Fortsätt",
+    "stop": "Stoppa",
+    "save": "Spara",
+    "discard": "Kassera",
+    "startRun": "Starta löpning",
+    "startThisWorkout": "Starta detta pass",
+    "nextWorkout": "Nästa träning",
+    "lastActivity": "Senaste aktivitet",
+    "gpsTracking": "GPS-spårning",
+    "walkTracking": "Promenadspårning",
+    "aiRoutes": "AI-rutter"
+  },
+  "pro": {
+    "badge": "PRO",
+    "upgrade": "Uppgradera",
+    "upgradeToPro": "Uppgradera till Pro",
+    "feature": "Pro-funktion",
+    "unlockFeatures": "Lås upp alla funktioner",
+    "fromOnly": "Från endast",
+    "limit": {
+      "title": "Pro-funktion",
+      "message": "Denna funktion kräver Pro-prenumeration",
+      "seePlans": "Se planer",
+      "cancel": "Avbryt"
+    },
+    "stats": {
+      "title": "Pro-statistik",
+      "features": "Avancerad statistik och insikter",
+      "unlock": "Lås upp"
+    },
+    "coach": {
+      "title": "AI-tränare",
+      "description": "Personlig träningsplan som anpassar sig efter dig"
+    },
+    "calendar": {
+      "title": "Träningskalender",
+      "description": "Se hela din träningsplan"
+    },
+    "aiRoutes": {
+      "title": "AI-rutter",
+      "description": "Få ruttrekommendationer baserade på din träning"
+    }
+  },
+  "stats": {
+    "title": "Statistik",
+    "totalRuns": "Totalt löpningar",
+    "totalKm": "Totalt km",
+    "avgPace": "Genomsnittstempo",
+    "thisWeek": "Denna vecka",
+    "thisMonth": "Denna månad",
+    "allTime": "Totalt",
+    "basic": "Grundläggande statistik",
+    "runs": "Löpningar"
+  },
+  "subscription": "Prenumeration",
+  "alerts": {
+    "deleteRun": "Är du säker på att du vill radera denna löpning?",
+    "deleteAccount": "Är du säker på att du vill radera ditt konto? Detta kan inte ångras.",
+    "logout": "Är du säker på att du vill logga ut?",
+    "discardRun": "Är du säker på att du vill kassera denna löpning?",
+    "unsavedChanges": "Du har osparade ändringar. Vill du kassera dem?",
+    "welcomePro": {
+      "title": "Välkommen till Pro!",
+      "message": "Du har nu tillgång till alla funktioner"
+    }
+  },
+  "auth": {
+    "login": "Logga in",
+    "register": "Skapa konto",
+    "email": "E-post",
+    "password": "Lösenord",
+    "confirmPassword": "Bekräfta lösenord",
+    "forgotPassword": "Glömt lösenord?",
+    "noAccount": "Inget konto?",
+    "hasAccount": "Har du redan konto?",
+    "loginButton": "Logga in",
+    "registerButton": "Skapa konto",
+    "orContinueWith": "eller fortsätt med",
+    "apple": "Apple",
+    "google": "Google",
+    "emailPlaceholder": "din@email.se",
+    "passwordPlaceholder": "••••••••",
+    "namePlaceholder": "Ditt namn",
+    "name": "Namn",
+    "loggingIn": "Loggar in...",
+    "registering": "Skapar konto...",
+    "tagline": "Din personliga AI-löptränare",
+    "createAccount": "Skapa konto",
+    "minChars": "min. tecken",
+    "repeatPassword": "upprepa lösenord",
+    "continue": "fortsätt",
+    "getStarted": "kom igång",
+    "step1of3": "steg 1 av 3",
+    "step2of3": "steg 2 av 3",
+    "step3of3": "steg 3 av 3",
+    "yourName": "ditt namn",
+    "age": "ÅLDER",
+    "weight": "VIKT",
+    "height": "LÄNGD",
+    "years": "År",
+    "runningLevel": "LÖPNIVÅ",
+    "levels.beginner": "Nybörjare",
+    "levels.intermediate": "Medel",
+    "levels.advanced": "Avancerad",
+    "yourGoals": "VAD ÄR DINA MÅL",
+    "goals.health": "Hälsa",
+    "goals.weight": "Viktminskning",
+    "goals.distance": "Springa längre",
+    "goals.speed": "Bli snabbare",
+    "goals.race": "Springa ett lopp",
+    "goals.fun": "Nöje",
+    "weeklyGoalKm": "VECKOVIS KM MÅL",
+    "weeklyGoalExample": "T.ex. 20",
+    "unlockFullPower": "Lås upp full tillgång",
+    "unlockDesc": "Få tillgång till alla funktioner och nå dina mål snabbare",
+    "proFeatures.aiCoachDesc": "AI-tränare",
+    "proFeatures.statsDesc": "Statistik",
+    "proFeatures.goalsDesc": "Mål",
+    "proFeatures.routesDesc": "Rutter",
+    "proFeatures.chatDesc": "AI-chatt",
+    "proFeatures.reportsDesc": "Rapporter",
+    "price": "49 kr",
+    "guarantee": "✓ Avsluta när som helst • ✓ 7 dagars gratis provperiod",
+    "perMonth": "/månad",
+    "startFreeTrial": "Starta gratis provperiod",
+    "continueWithFree": "Fortsätt med gratisversionen",
+    "levels.beginnerDesc": "Ny till löpning eller börjar igen efter lång paus",
+    "levels.intermediateDesc": "Springer regelbundet och vill förbättras",
+    "levels.advancedDesc": "Erfaren löpare med specifika mål",
+    "or": "eller",
+    "errors": {
+      "serverConnection": "Kan inte ansluta till servern"
+    }
+  },
+  "settings": {
+    "pageTitle": "Inställningar",
+    "title": "Inställningar",
+    "profile": "Profil",
+    "days": ["Mån", "Tis", "Ons", "Tor", "Fre", "Lör", "Sön"],
+    "saveChanges": "Spara ändringar",
+    "saved": "Sparat!",
+    "logout": "Logga ut",
+    "privacyPolicy": "Integritetspolicy",
+    "termsOfService": "Användarvillkor",
+    "dangerZone": "Riskzon",
+    "sections": {
+      "personalInfo": "Personlig information",
+      "level": "Nivå",
+      "runningGoals": "Löpmål",
+      "weeklyGoals": "Veckomål",
+      "trainingTypes": "Träningstyper",
+      "heartRateZones": "Pulszoner",
+      "injuries": "Skador",
+      "reminders": "Påminnelser",
+      "privacy": "Integritet",
+      "units": "Enheter",
+      "data": "Data"
+    },
+    "fields": {
+      "name": "Namn",
+      "age": "Ålder",
+      "weight": "Vikt (kg)",
+      "height": "Längd (cm)",
+      "sex": "Kön",
+      "restingHr": "Vilopuls",
+      "maxHr": "Maxpuls",
+      "vo2max": "VO2max",
+      "yearsRunning": "År av löpning",
+      "weeklyKm": "Vecko-km",
+      "weeklyKmGoal": "Vecko-km mål",
+      "weeklyRunsGoal": "Veckolöpningsmål",
+      "primaryGoal": "Huvudmål",
+      "raceDate": "Tävlingsdatum",
+      "injuries": "Skador/begränsningar",
+      "injuriesPlaceholder": "T.ex. knäproblem, ryggont...",
+      "preferredDays": "Föredragna dagar",
+      "preferredTypes": "Föredragna löpningstyper"
+    },
+    "sex": {
+      "male": "Man",
+      "female": "Kvinna"
+    },
+    "levels": {
+      "beginner": "Nybörjare",
+      "intermediate": "Medel",
+      "advanced": "Avancerad"
+    },
+    "goals": {
+      "fitness": "Allmän kondition",
+      "weight": "Viktminskning",
+      "half": "Halvmaraton",
+      "full": "Maraton"
+    },
+    "runTypes": {
+      "easy": "Lugnt löp",
+      "interval": "Intervaller",
+      "long": "Långpass",
+      "tempo": "Tempolöpning",
+      "recovery": "Återhämtning",
+      "race": "Tävling",
+      "trail": "Terränglöpning"
+    },
+    "zones": {
+      "calculated": "Beräknat från din maxpuls",
+      "z1": "Zon 1 (Återhämtning)",
+      "z2": "Zon 2 (Aerob)",
+      "z3": "Zon 3 (Tempo)",
+      "z4": "Zon 4 (Tröskel)",
+      "z5": "Zon 5 (Anaerob)"
+    },
+    "notifications": {
+      "push": "Push-notiser",
+      "pushSub": "Få träningspåminnelser",
+      "enabled": "Aktiverad",
+      "reminder": "Påminnelse",
+      "time": "Tid",
+      "days": "Dagar"
+    },
+    "privacy": {
+      "shareProfile": "Dela profil",
+      "shareProfileSub": "Andra kan se din profil",
+      "shareActivity": "Dela aktivitet",
+      "shareActivitySub": "Andra kan se dina löpningar",
+      "shareLocation": "Dela plats",
+      "shareLocationSub": "Visa din position på rutter"
+    },
+    "units": {
+      "distance": "Avstånd",
+      "pace": "Tempo"
+    },
+    "data": {
+      "export": "Exportera data",
+      "exportSub": "Ladda ner all din löpdata"
+    },
+    "shoes": {
+      "title": "Löparskor",
+      "addShoe": "Lägg till sko",
+      "namePlaceholder": "Skonamn",
+      "brandPlaceholder": "Märke",
+      "kmPlaceholder": "Start-km",
+      "saveShoe": "Spara sko",
+      "useForNextRun": "Använd för nästa löpning",
+      "active": "Aktiv",
+      "delete": "Radera",
+      "deleteConfirm": "Är du säker på att du vill radera denna sko?",
+      "empty": "Inga skor tillagda ännu",
+      "worn": "Utsliten",
+      "soonWorn": "Snart utsliten",
+      "wornMessage": "Denna sko har över 800 km och bör bytas ut"
+    },
+    "deleteAccount": {
+      "title": "Radera konto",
+      "button": "Radera mitt konto",
+      "warning": "Detta kan inte ångras!",
+      "confirmMessage": "Är du säker på att du vill radera ditt konto? All data kommer att raderas permanent.",
+      "confirmButton": "Ja, radera mitt konto",
+      "deletedTitle": "Konto raderat",
+      "deletedMessage": "Ditt konto har raderats.",
+      "error": "Kunde inte radera kontot"
+    }
+  },
+  "pricing": {
+    "title": "RunWithAI Pro",
+    "subtitle": "Lås upp alla funktioner",
+    "monthly": "Månadsvis",
+    "yearly": "Årsvis",
+    "perMonth": "/månad",
+    "perYear": "/år",
+    "save": "Spara",
+    "features": {
+      "aiCoach": "Personlig AI-tränare",
+      "unlimitedRuns": "Obegränsade löpningar",
+      "advancedStats": "Avancerad statistik",
+      "trainingPlans": "Anpassade träningsplaner",
+      "voiceCoach": "Rösttränare under löpning",
+      "exportData": "Dataexport"
+    },
+    "subscribe": "Prenumerera nu",
+    "restore": "Återställ köp",
+    "terms": "Villkor gäller. Automatisk förnyelse.",
+    "currentPlan": "Nuvarande plan",
+    "free": "Gratis",
+    "pro": "Pro",
+    "loading": "Laddar...",
+    "error": "Något gick fel",
+    "success": "Du är nu Pro!",
+    "alreadyPro": "Du är redan Pro-användare",
+    "tryAgain": "Försök igen"
+  },
+  "common": {
+    "cancel": "Avbryt",
+    "save": "Spara",
+    "delete": "Radera",
+    "edit": "Redigera",
+    "done": "Klar",
+    "next": "Nästa",
+    "back": "Tillbaka",
+    "skip": "Hoppa över",
+    "ok": "OK",
+    "yes": "Ja",
+    "no": "Nej",
+    "loading": "Laddar...",
+    "error": "Fel",
+    "success": "Lyckades",
+    "retry": "Försök igen"
+  },
+  "onboarding": {
+    "welcome": "Välkommen till",
+    "appName": "RunWithAI",
+    "subtitle": "Din personliga AI-löptränare",
+    "getStarted": "Kom igång",
+    "step1": {
+      "title": "Spåra dina löpningar",
+      "desc": "GPS-spårning med livedata och ruttvisning"
+    },
+    "step2": {
+      "title": "AI-driven träning",
+      "desc": "Få personliga träningsplaner och råd från din AI-tränare"
+    },
+    "step3": {
+      "title": "Nå dina mål",
+      "desc": "Sätt mål och följ dina framsteg med detaljerad statistik"
+    }
+  },
+  "dashboard": {
+    "defaultName": "LÖPARE",
+    "greeting": {
+      "morning": "GOD MORGON,",
+      "day": "GOD DAG,",
+      "evening": "GOD KVÄLL,"
+    },
+    "planUpdated": "PLAN UPPDATERAD",
+    "refresh": "Uppdatera",
+    "shoeAlert": {
+      "worn": "Skorna är utslitna!",
+      "soonWorn": "Skorna blir snart utslitna!"
+    },
+    "fatigue": {
+      "rested": "Utvilad",
+      "ok": "OK",
+      "slightlyTired": "Lite trött",
+      "veryTired": "Mycket trött"
+    },
+    "weather": {
+      "title": "VÄDER & FORM",
+      "wind": "Vind",
+      "clear": "Klart",
+      "partlyCloudy": "Delvis molnigt",
+      "foggy": "Dimma/dis",
+      "rain": "Regn",
+      "snow": "Snö",
+      "showers": "Skurar",
+      "thunder": "Åska",
+      "analyzing": "Analyserar väder och tillstånd...",
+      "noAdvice": "Inget råd tillgängligt",
+      "fetchError": "Väderdata ej tillgänglig — försök igen."
+    },
+    "stats": {
+      "kmThisWeek": "KM DENNA VECKA",
+      "daysInRow": "DAGAR I RAD",
+      "runsThisMonth": "LÖPNINGAR DENNA MÅNAD",
+      "of": "av",
+      "personalRecord": "Personligt rekord",
+      "fromRecord": "{{count}} från ditt rekord",
+      "overOneWeek": "Över 1 vecka i rad",
+      "keepingMomentum": "Du håller farten",
+      "goodStart": "Bra start",
+      "keepGoing": "Fortsätt!",
+      "startStreak": "Starta en svit idag",
+      "bestMonthEver": "Bästa {{month}} någonsin",
+      "oneFromRecord": "1 löpning till din rekordmånad!",
+      "runsFromRecord": "{{count}} löpningar till rekord",
+      "runsInMonth": "{{count}} löpningar i {{month}}"
+    },
+    "monthNames": ["Jan", "Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"],
+    "workout": {
+      "nextWorkout": "NÄSTA TRÄNING",
+      "today": "IDAG",
+      "distance": "Avstånd",
+      "time": "Tid",
+      "targetPace": "Måltempo",
+      "targetHr": "Målpuls"
+    },
+    "weekPlan": {
+      "title": "DENNA VECKA"
+    },
+    "milestone": {
+      "nextMilestone": "NÄSTA MILSTOLPE",
+      "kmLeft": "km kvar",
+      "total": "totalt",
+      "thisWeek": "Denna vecka!",
+      "oneToTwoWeeks": "Cirka 1-2 veckor",
+      "aboutWeeks": "Cirka {{count}} veckor"
+    },
+    "diary": {
+      "title": "LÖPDAGBOK",
+      "subtitle": "Skriv anteckningar om dina löpningar — AI lär sig av dem",
+      "addNote": "+ Anteckning",
+      "mood": "Humör",
+      "placeholder": "Hur gick det? Tunga ben? Bra dag? Ny rutt?",
+      "dayNames": ["Sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör"]
+    },
+    "injury": {
+      "title": "SKADERISK",
+      "low": "Låg",
+      "moderate": "Måttlig",
+      "high": "Hög",
+      "kmIncrease": "Km ökade med {{pct}}% jämfört med förra veckan",
+      "runsLast3Days": "{{count}} löpningar de senaste 3 dagarna",
+      "noRestToday": "Ingen vila idag",
+      "daysSinceRun": "{{count}} dagar sedan senaste löpningen — utvilad",
+      "noRiskFactors": "Inga specifika riskfaktorer.",
+      "tip1": "Överväg en vilodag efter tunga löpningar",
+      "tip2": "Öka inte km med mer än 10% per vecka",
+      "analyzed": "Analyserat",
+      "aiAnalysis": "AI-analys"
+    },
+    "racePredictor": {
+      "title": "Tävlingsprognos",
+      "subtitle": "Se dina förväntade tävlingstider",
+      "noData": "Minst en löpning krävs för prognos.",
+      "analyzing": "AI analyserar dina löpningar...",
+      "halfMarathon": "Halvmaraton",
+      "confidence": "Konfidensgrad"
+    }
+  },
+  "tracker": {
+    "defaultRunner": "Löpare",
+    "voiceOn": "Röst på",
+    "voiceOff": "Röst av",
+    "mapNotAvailable": "Karta ej tillgänglig",
+    "status": {
+      "ready": "Tryck Starta för att börja",
+      "paused": "Pausad",
+      "tracking": "Spelar in..."
+    },
+    "gps": {
+      "active": "GPS aktiv",
+      "waiting": "Söker GPS-signal...",
+      "denied": "GPS-tillstånd nekat",
+      "unavailable": "GPS ej tillgänglig",
+      "timeout": "GPS-timeout",
+      "notAvailable": "GPS ej tillgänglig",
+      "error": "GPS-fel"
+    }
+  },
+  "chat": {
+    "title": "AI-TRÄNARE",
+    "clear": "Rensa",
+    "placeholder": "Skriv till din tränare...",
+    "loadingHistory": "Laddar konversation...",
+    "planUpdated": "Plan uppdaterad",
+    "defaultRunner": "Löpare",
+    "greeting": "Hej {{name}}! Jag är din AI-löptränare. Hur kan jag hjälpa dig idag?",
+    "clearedGreeting": "Konversation rensad! Hur kan jag hjälpa dig, {{name}}?",
+    "connectionError": "Tyvärr kunde jag inte ansluta. Vänligen försök igen."
+  },
+  "proUpsell": {
+    "title": "Lås upp full kraft",
+    "subtitle": "Få tillgång till alla funktioner och nå dina mål snabbare",
+    "price": "49 DKK",
+    "priceUnit": "/månad",
+    "guarantee": "✓ Avsluta när som helst • ✓ 7 dagars gratis provperiod",
+    "startTrial": "Starta gratis provperiod",
+    "continueWithFree": "Fortsätt med gratisversionen",
+    "features": {
+      "aiCoach": {
+        "title": "AI-tränare",
+        "desc": "Personlig träningsplan som anpassar sig efter dig"
+      },
+      "advancedStats": {
+        "title": "Avancerad statistik",
+        "desc": "Djupgående analys av din träning"
+      },
+      "unlimitedGoals": {
+        "title": "Obegränsade mål",
+        "desc": "Sätt så många mål du vill"
+      },
+      "routeLibrary": {
+        "title": "Ruttbibliotek",
+        "desc": "Spara och dela dina favoritrutter"
+      },
+      "aiChat": {
+        "title": "AI-chatt",
+        "desc": "Ställ frågor om löpning och få svar"
+      },
+      "progressReports": {
+        "title": "Framstegsrapporter",
+        "desc": "Vecko- och månadssammanfattningar"
+      }
+    }
+  }
+}

@@ -1,0 +1,512 @@
+{
+  "tabs": {
+    "plan": "Pjan",
+    "run": "Ġirja",
+    "coach": "Kowċ",
+    "stats": "Statistika",
+    "settings": "Settings",
+    "calendar": "Kalendarju",
+    "progress": "Progress",
+    "start": "Ibda"
+  },
+  "run": {
+    "title": "Ġirja",
+    "walk": "Mixi",
+    "km": "KM",
+    "time": "ĦIN",
+    "pace": "RITMU",
+    "start": "Ibda",
+    "pause": "Pawża",
+    "resume": "Kompli",
+    "stop": "Ieqaf",
+    "save": "Salva",
+    "discard": "Armi",
+    "startRun": "Ibda l-ġirja",
+    "startThisWorkout": "Ibda din it-taħriġ",
+    "nextWorkout": "It-taħriġ li jmiss",
+    "lastActivity": "L-aħħar attività",
+    "gpsTracking": "Traċċar GPS",
+    "walkTracking": "Traċċar tal-mixi",
+    "aiRoutes": "Rotot AI"
+  },
+  "pro": {
+    "badge": "PRO",
+    "upgrade": "Aġġorna",
+    "upgradeToPro": "Aġġorna għal Pro",
+    "feature": "Karatteristika Pro",
+    "unlockFeatures": "Iftaħ il-karatteristiċi kollha",
+    "fromOnly": "Minn biss",
+    "limit": {
+      "title": "Karatteristika Pro",
+      "message": "Din il-karatteristika teħtieġ abbonament Pro",
+      "seePlans": "Ara l-pjanijiet",
+      "cancel": "Ikkanċella"
+    },
+    "stats": {
+      "title": "Statistika Pro",
+      "features": "Statistika u insights avvanzati",
+      "unlock": "Iftaħ"
+    },
+    "coach": {
+      "title": "Kowċ AI",
+      "description": "Pjan ta' taħriġ personalizzat li jadatta għalik"
+    },
+    "calendar": {
+      "title": "Kalendarju tat-taħriġ",
+      "description": "Ara l-pjan kollu tat-taħriġ tiegħek"
+    },
+    "aiRoutes": {
+      "title": "Rotot AI",
+      "description": "Ikseb rakkomandazzjonijiet ta' rotot ibbażati fuq it-taħriġ tiegħek"
+    }
+  },
+  "stats": {
+    "title": "Statistika",
+    "totalRuns": "Ġirjiet totali",
+    "totalKm": "Km totali",
+    "avgPace": "Ritmu medju",
+    "thisWeek": "Din il-ġimgħa",
+    "thisMonth": "Dan ix-xahar",
+    "allTime": "Dejjem",
+    "basic": "Statistika bażika",
+    "runs": "Ġirjiet"
+  },
+  "subscription": "Abbonament",
+  "alerts": {
+    "deleteRun": "Int ċert li trid tħassar din il-ġirja?",
+    "deleteAccount": "Int ċert li trid tħassar il-kont tiegħek? Dan ma jistax jiġi revers.",
+    "logout": "Int ċert li trid toħroġ?",
+    "discardRun": "Int ċert li trid tarmi din il-ġirja?",
+    "unsavedChanges": "Għandek bidliet mhux salvati. Trid tarmihom?",
+    "welcomePro": {
+      "title": "Merħba fi Pro!",
+      "message": "Issa għandek aċċess għall-karatteristiċi kollha"
+    }
+  },
+  "auth": {
+    "login": "Idħol",
+    "register": "Oħloq kont",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Ikkonferma l-password",
+    "forgotPassword": "Insejt il-password?",
+    "noAccount": "M'għandekx kont?",
+    "hasAccount": "Diġà għandek kont?",
+    "loginButton": "Idħol",
+    "registerButton": "Oħloq kont",
+    "orContinueWith": "jew kompli b'",
+    "apple": "Apple",
+    "google": "Google",
+    "emailPlaceholder": "tieghek@email.mt",
+    "passwordPlaceholder": "••••••••",
+    "namePlaceholder": "Ismek",
+    "name": "Isem",
+    "loggingIn": "Qed tidħol...",
+    "registering": "Qed toħloq kont...",
+    "tagline": "Il-kowċ AI personali tiegħek għall-ġiri",
+    "createAccount": "Oħloq kont",
+    "minChars": "min. karattri",
+    "repeatPassword": "irrepeti l-password",
+    "continue": "kompli",
+    "getStarted": "nibdew",
+    "step1of3": "pass 1 minn 3",
+    "step2of3": "pass 2 minn 3",
+    "step3of3": "pass 3 minn 3",
+    "yourName": "ismek",
+    "age": "ETÀ",
+    "weight": "PIŻ",
+    "height": "TULL",
+    "years": "Snin",
+    "runningLevel": "LIVELL TA' ĠIRI",
+    "levels.beginner": "Bidu",
+    "levels.intermediate": "Intermedju",
+    "levels.advanced": "Avvanzat",
+    "yourGoals": "X'INHUMA L-GĦANIJIET TIEGĦEK",
+    "goals.health": "Saħħa",
+    "goals.weight": "Telf ta' piż",
+    "goals.distance": "Iġri aktar fit-tul",
+    "goals.speed": "Sir aktar mgħaġġel",
+    "goals.race": "Iġri tellieqa",
+    "goals.fun": "Divertiment",
+    "weeklyGoalKm": "GĦAN KM TAL-ĠIMGĦA",
+    "weeklyGoalExample": "Eż. 20",
+    "unlockFullPower": "Iftaħ aċċess sħiħ",
+    "unlockDesc": "Ikseb aċċess għall-funzjonijiet kollha u ilħaq l-għanijiet tiegħek aktar malajr",
+    "proFeatures.aiCoachDesc": "Kowċ AI",
+    "proFeatures.statsDesc": "Statistiċi",
+    "proFeatures.goalsDesc": "Għanijiet",
+    "proFeatures.routesDesc": "Rotot",
+    "proFeatures.chatDesc": "Chat AI",
+    "proFeatures.reportsDesc": "Rapporti",
+    "price": "49 kr",
+    "guarantee": "✓ Ikkanċella meta trid • ✓ 7 ijiem b'xejn",
+    "perMonth": "/xahar",
+    "startFreeTrial": "Ibda prova b'xejn",
+    "continueWithFree": "Kompli bil-verżjoni b'xejn",
+    "levels.beginnerDesc": "Ġdid fil-ġiri jew qed tibda mill-ġdid wara pawża twila",
+    "levels.intermediateDesc": "Tiġri regolarment u trid titjieb",
+    "levels.advancedDesc": "Ġerrej b'esperjenza b'għanijiet speċifiċi",
+    "or": "jew",
+    "errors": {
+      "serverConnection": "Ma nistax nikkonnettja mas-server"
+    }
+  },
+  "settings": {
+    "pageTitle": "Settings",
+    "title": "Settings",
+    "profile": "Profil",
+    "days": ["Tn", "Tl", "Er", "Ħa", "Ġi", "Si", "Ħa"],
+    "saveChanges": "Salva l-bidliet",
+    "saved": "Salvat!",
+    "logout": "Oħroġ",
+    "privacyPolicy": "Politika tal-privatezza",
+    "termsOfService": "Termini tas-servizz",
+    "dangerZone": "Żona perikoluża",
+    "sections": {
+      "personalInfo": "Informazzjoni personali",
+      "level": "Livell",
+      "runningGoals": "Għanijiet tal-ġirja",
+      "weeklyGoals": "Għanijiet tal-ġimgħa",
+      "trainingTypes": "Tipi ta' taħriġ",
+      "heartRateZones": "Żoni tat-taħbit tal-qalb",
+      "injuries": "Korrimenti",
+      "reminders": "Reminders",
+      "privacy": "Privatezza",
+      "units": "Unitajiet",
+      "data": "Data"
+    },
+    "fields": {
+      "name": "Isem",
+      "age": "Età",
+      "weight": "Piż (kg)",
+      "height": "Għoli (cm)",
+      "sex": "Sess",
+      "restingHr": "Taħbit tal-qalb fil-mistrieħ",
+      "maxHr": "Taħbit tal-qalb massimu",
+      "vo2max": "VO2max",
+      "yearsRunning": "Snin ta' ġirja",
+      "weeklyKm": "Km tal-ġimgħa",
+      "weeklyKmGoal": "Għan ta' km tal-ġimgħa",
+      "weeklyRunsGoal": "Għan ta' ġirjiet tal-ġimgħa",
+      "primaryGoal": "Għan prinċipali",
+      "raceDate": "Data tat-tiġrija",
+      "injuries": "Korrimenti/limitazzjonijiet",
+      "injuriesPlaceholder": "Eż. problemi fil-irkoppa, uġigħ fid-dahar...",
+      "preferredDays": "Jiem preferuti",
+      "preferredTypes": "Tipi ta' ġirja preferuti"
+    },
+    "sex": {
+      "male": "Raġel",
+      "female": "Mara"
+    },
+    "levels": {
+      "beginner": "Bidu",
+      "intermediate": "Intermedju",
+      "advanced": "Avvanzat"
+    },
+    "goals": {
+      "fitness": "Fitness ġenerali",
+      "weight": "Telf tal-piż",
+      "half": "Nofs maratona",
+      "full": "Maratona"
+    },
+    "runTypes": {
+      "easy": "Ġirja faċli",
+      "interval": "Intervalli",
+      "long": "Ġirja twila",
+      "tempo": "Ġirja tempo",
+      "recovery": "Irkupru",
+      "race": "Tiġrija",
+      "trail": "Mogħdija"
+    },
+    "zones": {
+      "calculated": "Ikkalkulat mit-taħbit tal-qalb massimu tiegħek",
+      "z1": "Żona 1 (Irkupru)",
+      "z2": "Żona 2 (Aerobika)",
+      "z3": "Żona 3 (Tempo)",
+      "z4": "Żona 4 (Limitu)",
+      "z5": "Żona 5 (Anaerobika)"
+    },
+    "notifications": {
+      "push": "Push notifications",
+      "pushSub": "Irċievi reminders tat-taħriġ",
+      "enabled": "Attivat",
+      "reminder": "Reminder",
+      "time": "Ħin",
+      "days": "Jiem"
+    },
+    "privacy": {
+      "shareProfile": "Aqsam il-profil",
+      "shareProfileSub": "Oħrajn jistgħu jaraw il-profil tiegħek",
+      "shareActivity": "Aqsam l-attività",
+      "shareActivitySub": "Oħrajn jistgħu jaraw il-ġirjiet tiegħek",
+      "shareLocation": "Aqsam il-lokazzjoni",
+      "shareLocationSub": "Uri l-pożizzjoni tiegħek fuq ir-rotot"
+    },
+    "units": {
+      "distance": "Distanza",
+      "pace": "Ritmu"
+    },
+    "data": {
+      "export": "Esporta d-data",
+      "exportSub": "Niżżel id-data kollha tal-ġirja tiegħek"
+    },
+    "shoes": {
+      "title": "Żraben tal-ġirja",
+      "addShoe": "Żid żarbun",
+      "namePlaceholder": "Isem taż-żarbun",
+      "brandPlaceholder": "Marka",
+      "kmPlaceholder": "Km inizjali",
+      "saveShoe": "Salva ż-żarbun",
+      "useForNextRun": "Uża għall-ġirja li jmiss",
+      "active": "Attiv",
+      "delete": "Ħassar",
+      "deleteConfirm": "Int ċert li trid tħassar dan iż-żarbun?",
+      "empty": "Għadek ma żidtx żraben",
+      "worn": "Minfuħ",
+      "soonWorn": "Dalwaqt minfuħ",
+      "wornMessage": "Dan iż-żarbun għandu aktar minn 800 km u għandu jiġi mibdul"
+    },
+    "deleteAccount": {
+      "title": "Ħassar il-kont",
+      "button": "Ħassar il-kont tiegħi",
+      "warning": "Dan ma jistax jiġi revers!",
+      "confirmMessage": "Int ċert li trid tħassar il-kont tiegħek? Id-data kollha tiġi mħassra b'mod permanenti.",
+      "confirmButton": "Iva, ħassar il-kont tiegħi",
+      "deletedTitle": "Kont mħassar",
+      "deletedMessage": "Il-kont tiegħek ġie mħassar.",
+      "error": "Ma rnexxiex tħassar il-kont"
+    }
+  },
+  "pricing": {
+    "title": "RunWithAI Pro",
+    "subtitle": "Iftaħ il-karatteristiċi kollha",
+    "monthly": "Fix-xahar",
+    "yearly": "Fis-sena",
+    "perMonth": "/xahar",
+    "perYear": "/sena",
+    "save": "Iffrankar",
+    "features": {
+      "aiCoach": "Kowċ AI personali",
+      "unlimitedRuns": "Ġirjiet mingħajr limitu",
+      "advancedStats": "Statistika avvanzata",
+      "trainingPlans": "Pjanijiet ta' taħriġ personalizzati",
+      "voiceCoach": "Kowċ bil-vuċi waqt il-ġirja",
+      "exportData": "Esportazzjoni tad-data"
+    },
+    "subscribe": "Abbona issa",
+    "restore": "Irkupra x-xiri",
+    "terms": "Japplikaw it-termini. Tiġdid awtomatiku.",
+    "currentPlan": "Pjan kurrenti",
+    "free": "B'xejn",
+    "pro": "Pro",
+    "loading": "Qed jillowdja...",
+    "error": "Xi ħaġa marret ħażin",
+    "success": "Issa int Pro!",
+    "alreadyPro": "Int diġà utent Pro",
+    "tryAgain": "Erġa' pprova"
+  },
+  "common": {
+    "cancel": "Ikkanċella",
+    "save": "Salva",
+    "delete": "Ħassar",
+    "edit": "Editja",
+    "done": "Lest",
+    "next": "Li jmiss",
+    "back": "Lura",
+    "skip": "Aqbeż",
+    "ok": "OK",
+    "yes": "Iva",
+    "no": "Le",
+    "loading": "Qed jillowdja...",
+    "error": "Żball",
+    "success": "Suċċess",
+    "retry": "Erġa' pprova"
+  },
+  "onboarding": {
+    "welcome": "Merħba fi",
+    "appName": "RunWithAI",
+    "subtitle": "Il-kowċ tal-ġirja AI personali tiegħek",
+    "getStarted": "Ejja nibdew",
+    "step1": {
+      "title": "Traċċa l-ġirjiet tiegħek",
+      "desc": "Traċċar GPS b'statistika ħajja u wiri tar-rotta"
+    },
+    "step2": {
+      "title": "Taħriġ b'appoġġ tal-AI",
+      "desc": "Ikseb pjanijiet ta' taħriġ personalizzati u pariri mill-kowċ AI tiegħek"
+    },
+    "step3": {
+      "title": "Ilħaq l-għanijiet tiegħek",
+      "desc": "Issettja għanijiet u traċċa l-progress tiegħek b'statistika dettaljata"
+    }
+  },
+  "dashboard": {
+    "defaultName": "ĠERREJ",
+    "greeting": {
+      "morning": "BONĠU,",
+      "day": "IL-ĠURNATA T-TAJBA,",
+      "evening": "IL-LEJLA T-TAJBA,"
+    },
+    "planUpdated": "PJAN AĠĠORNAT",
+    "refresh": "Aġġorna",
+    "shoeAlert": {
+      "worn": "Iż-żraben minfuħin!",
+      "soonWorn": "Iż-żraben dalwaqt minfuħin!"
+    },
+    "fatigue": {
+      "rested": "Mistrieħ",
+      "ok": "OK",
+      "slightlyTired": "Ftit għajjien",
+      "veryTired": "Għajjien ħafna"
+    },
+    "weather": {
+      "title": "TEMP U FORMA",
+      "wind": "Riħ",
+      "clear": "Sema ċar",
+      "partlyCloudy": "Parzjalment imsaħħab",
+      "foggy": "Ċpar/ħażin",
+      "rain": "Xita",
+      "snow": "Borra",
+      "showers": "Ħalbiet",
+      "thunder": "Ragħad",
+      "analyzing": "Qed janalizza t-temp u l-istat...",
+      "noAdvice": "L-ebda parir disponibbli",
+      "fetchError": "Data tat-temp mhux disponibbli — erġa' pprova."
+    },
+    "stats": {
+      "kmThisWeek": "KM DIN IL-ĠIMGĦA",
+      "daysInRow": "JIEM KONSEKUTTIVI",
+      "runsThisMonth": "ĠIRJIET DAN IX-XAHAR",
+      "of": "minn",
+      "personalRecord": "Rekord personali",
+      "fromRecord": "{{count}} mir-rekord tiegħek",
+      "overOneWeek": "Aktar minn ġimgħa konsekuttiva",
+      "keepingMomentum": "Qed iżżomm il-momentum",
+      "goodStart": "Bidu tajjeb",
+      "keepGoing": "Kompli!",
+      "startStreak": "Ibda streak illum",
+      "bestMonthEver": "L-aħjar {{month}} qatt",
+      "oneFromRecord": "1 ġirja għar-rekord tax-xahar tiegħek!",
+      "runsFromRecord": "{{count}} ġirjiet għar-rekord",
+      "runsInMonth": "{{count}} ġirjiet fi {{month}}"
+    },
+    "monthNames": ["Jan", "Fra", "Mar", "Apr", "Mej", "Ġun", "Lul", "Awi", "Set", "Ott", "Nov", "Diċ"],
+    "workout": {
+      "nextWorkout": "IT-TAĦRIĠ LI JMISS",
+      "today": "ILLUM",
+      "distance": "Distanza",
+      "time": "Ħin",
+      "targetPace": "Ritmu fil-mira",
+      "targetHr": "Taħbit tal-qalb fil-mira"
+    },
+    "weekPlan": {
+      "title": "DIN IL-ĠIMGĦA"
+    },
+    "milestone": {
+      "nextMilestone": "IL-MILESTONE LI JMISS",
+      "kmLeft": "km fadal",
+      "total": "totali",
+      "thisWeek": "Din il-ġimgħa!",
+      "oneToTwoWeeks": "Madwar 1-2 ġimgħat",
+      "aboutWeeks": "Madwar {{count}} ġimgħat"
+    },
+    "diary": {
+      "title": "DJARJU TAL-ĠIRJA",
+      "subtitle": "Ikteb noti dwar il-ġirjiet tiegħek — AI jitgħallem minnhom",
+      "addNote": "+ Nota",
+      "mood": "Burdata",
+      "placeholder": "Kif mar? Riġlejn tqal? Ġurnata tajba? Rotta ġdida?",
+      "dayNames": ["Ħa", "Tn", "Tl", "Er", "Ħa", "Ġi", "Si"]
+    },
+    "injury": {
+      "title": "RISKJU TA' KORRIMENT",
+      "low": "Baxx",
+      "moderate": "Moderat",
+      "high": "Għoli",
+      "kmIncrease": "Km żdiedu b'{{pct}}% meta mqabbla mal-ġimgħa li għaddiet",
+      "runsLast3Days": "{{count}} ġirjiet fl-aħħar 3 ijiem",
+      "noRestToday": "L-ebda mistrieħ illum",
+      "daysSinceRun": "{{count}} jiem mill-aħħar ġirja — mistrieħ",
+      "noRiskFactors": "L-ebda fatturi ta' riskju speċifiċi.",
+      "tip1": "Ikkunsidra jum ta' mistrieħ wara ġirjiet diffiċli",
+      "tip2": "Tiżdiedx km b'aktar minn 10% fil-ġimgħa",
+      "analyzed": "Analizzat",
+      "aiAnalysis": "Analiżi AI"
+    },
+    "racePredictor": {
+      "title": "Tbassir tat-tiġrija",
+      "subtitle": "Ara l-ħinijiet tat-tiġrija mistennija tiegħek",
+      "noData": "Teħtieġ mill-inqas ġirja waħda għat-tbassir.",
+      "analyzing": "AI qed janalizza l-ġirjiet tiegħek...",
+      "halfMarathon": "Nofs maratona",
+      "confidence": "Kunfidenza"
+    }
+  },
+  "tracker": {
+    "defaultRunner": "Ġerrej",
+    "voiceOn": "Vuċi mixgħula",
+    "voiceOff": "Vuċi mitfija",
+    "mapNotAvailable": "Mappa mhux disponibbli",
+    "status": {
+      "ready": "Agħfas Ibda biex tibda",
+      "paused": "Mwaqqfa",
+      "tracking": "Qed jirrekordja..."
+    },
+    "gps": {
+      "active": "GPS attiv",
+      "waiting": "Qed tfittex sinjal GPS...",
+      "denied": "Permess GPS miċħud",
+      "unavailable": "GPS mhux disponibbli",
+      "timeout": "Timeout tal-GPS",
+      "notAvailable": "GPS mhux disponibbli",
+      "error": "Żball fil-GPS"
+    }
+  },
+  "chat": {
+    "title": "KOWĊ-AI",
+    "clear": "Ħassar",
+    "placeholder": "Ikteb lill-kowċ tiegħek...",
+    "loadingHistory": "Qed jillowdja l-konverżazzjoni...",
+    "planUpdated": "Pjan aġġornat",
+    "defaultRunner": "Ġerrej",
+    "greeting": "Bonġu {{name}}! Jien il-kowċ tal-ġirja AI tiegħek. Kif nista' ngħinek illum?",
+    "clearedGreeting": "Konverżazzjoni mħassra! Kif nista' ngħinek, {{name}}?",
+    "connectionError": "Skużani, ma stajtx nikkonnettja. Jekk jogħġbok erġa' pprova."
+  },
+  "proUpsell": {
+    "title": "Iftaħ il-qawwa sħiħa",
+    "subtitle": "Ikseb aċċess għall-karatteristiċi kollha u ilħaq l-għanijiet tiegħek aktar malajr",
+    "price": "49 DKK",
+    "priceUnit": "/xahar",
+    "guarantee": "✓ Ikkanċella meta trid • ✓ Prova ta' 7 ijiem b'xejn",
+    "startTrial": "Ibda prova b'xejn",
+    "continueWithFree": "Kompli bil-verżjoni b'xejn",
+    "features": {
+      "aiCoach": {
+        "title": "Kowċ AI",
+        "desc": "Pjan ta' taħriġ personalizzat li jadatta għalik"
+      },
+      "advancedStats": {
+        "title": "Statistika avvanzata",
+        "desc": "Analiżi fil-fond tat-taħriġ tiegħek"
+      },
+      "unlimitedGoals": {
+        "title": "Għanijiet mingħajr limitu",
+        "desc": "Issettja kemm trid għanijiet"
+      },
+      "routeLibrary": {
+        "title": "Librerija tar-rotot",
+        "desc": "Salva u aqsam ir-rotot favoriti tiegħek"
+      },
+      "aiChat": {
+        "title": "Chat AI",
+        "desc": "Staqsi mistoqsijiet dwar il-ġirja u ikseb tweġibiet"
+      },
+      "progressReports": {
+        "title": "Rapporti tal-progress",
+        "desc": "Sommarju tal-ġimgħa u tax-xahar"
+      }
+    }
+  }
+}

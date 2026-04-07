@@ -3,35 +3,73 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput } from 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, LEVELS } from '../data';
 import ProUpsell from '../components/ProUpsell';
+import { useTranslation } from 'react-i18next';
+import i18n from '../i18n';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const LANGUAGES = [
+  { code: 'da', flag: '🇩🇰', name: 'Dansk' },
+  { code: 'en', flag: '🇬🇧', name: 'English' },
+  { code: 'de', flag: '🇩🇪', name: 'Deutsch' },
+  { code: 'fr', flag: '🇫🇷', name: 'Français' },
+  { code: 'es', flag: '🇪🇸', name: 'Español' },
+  { code: 'it', flag: '🇮🇹', name: 'Italiano' },
+  { code: 'pt', flag: '🇵🇹', name: 'Português' },
+  { code: 'nl', flag: '🇳🇱', name: 'Nederlands' },
+  { code: 'pl', flag: '🇵🇱', name: 'Polski' },
+  { code: 'sv', flag: '🇸🇪', name: 'Svenska' },
+  { code: 'fi', flag: '🇫🇮', name: 'Suomi' },
+  { code: 'el', flag: '🇬🇷', name: 'Ελληνικά' },
+  { code: 'cs', flag: '🇨🇿', name: 'Čeština' },
+  { code: 'ro', flag: '🇷🇴', name: 'Română' },
+  { code: 'hu', flag: '🇭🇺', name: 'Magyar' },
+  { code: 'bg', flag: '🇧🇬', name: 'Български' },
+  { code: 'hr', flag: '🇭🇷', name: 'Hrvatski' },
+  { code: 'sk', flag: '🇸🇰', name: 'Slovenčina' },
+  { code: 'sl', flag: '🇸🇮', name: 'Slovenščina' },
+  { code: 'lt', flag: '🇱🇹', name: 'Lietuvių' },
+  { code: 'lv', flag: '🇱🇻', name: 'Latviešu' },
+  { code: 'et', flag: '🇪🇪', name: 'Eesti' },
+  { code: 'ga', flag: '🇮🇪', name: 'Gaeilge' },
+  { code: 'mt', flag: '🇲🇹', name: 'Malti' },
+];
 
 export default function Onboarding({ onDone }) {
+  const { t } = useTranslation();
   const [step, setStep] = useState(0);
   const [chosen, setChosen] = useState(null);
+  const [selectedLang, setSelectedLang] = useState(i18n.language || 'en');
   const [goalInfo, setGoalInfo] = useState({ name: '', age: '', weeklyKm: '', goal: '', raceDate: '' });
 
+  const changeLanguage = async (code) => {
+    setSelectedLang(code);
+    i18n.changeLanguage(code);
+    await AsyncStorage.setItem('userLanguage', code);
+  };
+
   const features = [
-    { emoji: '🤖', title: 'AI der forstår din krop', desc: 'Læser dine løbedata og laver en ny plan efter hvert løb' },
-    { emoji: '📈', title: 'Tilpasser sig i samtale', desc: 'Fortæl coachen du er træt — planen opdateres med det samme' },
-    { emoji: '🛡️', title: 'Skadeforebyggelse', desc: 'Opdager overbelastning før du mærker det' },
-    { emoji: '🎯', title: 'Alle dine mål på én gang', desc: 'Halvmaraton, vægttab og distance — AI balancerer dem' },
+    { emoji: '🤖', title: t('onboarding.features.ai.title'), desc: t('onboarding.features.ai.desc') },
+    { emoji: '📈', title: t('onboarding.features.adapts.title'), desc: t('onboarding.features.adapts.desc') },
+    { emoji: '🛡️', title: t('onboarding.features.injury.title'), desc: t('onboarding.features.injury.desc') },
+    { emoji: '🎯', title: t('onboarding.features.goals.title'), desc: t('onboarding.features.goals.desc') },
   ];
 
   const levels = [
-    { id: 'beginner',     label: 'Jeg er ny løber',      sub: 'Løber af og til eller netop startet',    emoji: '🌱', color: '#2ecc71' },
-    { id: 'intermediate', label: 'Jeg løber jævnligt',   sub: 'Løber et par gange om ugen',             emoji: '🏃', color: '#ff6b35' },
-    { id: 'advanced',     label: 'Jeg er seriøs løber',  sub: 'Kender pulszoner, HRV og træningsteori', emoji: '⚡', color: '#c8ff00' },
+    { id: 'beginner',     label: t('onboarding.levels.beginner.label'),     sub: t('onboarding.levels.beginner.sub'),     emoji: '🌱', color: '#2ecc71' },
+    { id: 'intermediate', label: t('onboarding.levels.intermediate.label'), sub: t('onboarding.levels.intermediate.sub'), emoji: '🏃', color: '#ff6b35' },
+    { id: 'advanced',     label: t('onboarding.levels.advanced.label'),     sub: t('onboarding.levels.advanced.sub'),     emoji: '⚡', color: '#c8ff00' },
   ];
 
   const goals = [
-    { id: 'fitness', label: '💪 Generel fitness', sub: 'Kom i form og hold vægten' },
-    { id: '5k',      label: '🏅 5 km race',       sub: 'Forbedre din 5 km tid' },
-    { id: '10k',     label: '🥈 10 km race',      sub: 'Træn til 10 km' },
-    { id: 'half',    label: '🥇 Halvmaraton',      sub: '21 km udfordring' },
-    { id: 'full',    label: '🏆 Maraton',          sub: '42 km challenge' },
-    { id: 'weight',  label: '⚖️ Vægttab',          sub: 'Løb og tab dig' },
+    { id: 'fitness', label: t('onboarding.goals.fitness.label'), sub: t('onboarding.goals.fitness.sub') },
+    { id: '5k',      label: t('onboarding.goals.5k.label'),      sub: t('onboarding.goals.5k.sub') },
+    { id: '10k',     label: t('onboarding.goals.10k.label'),     sub: t('onboarding.goals.10k.sub') },
+    { id: 'half',    label: t('onboarding.goals.half.label'),    sub: t('onboarding.goals.half.sub') },
+    { id: 'full',    label: t('onboarding.goals.full.label'),    sub: t('onboarding.goals.full.sub') },
+    { id: 'weight',  label: t('onboarding.goals.weight.label'),  sub: t('onboarding.goals.weight.sub') },
   ];
 
-  // ── STEP 0: Splash ──────────────────────────────────────────────────────────
+  // ── STEP 0: Language Selection ──────────────────────────────────────────────
   if (step === 0) return (
     <SafeAreaView style={s.safe}>
       <ScrollView contentContainerStyle={s.splash} showsVerticalScrollIndicator={false}>
@@ -40,11 +78,56 @@ export default function Onboarding({ onDone }) {
           <Text style={s.logoWith}>WITH</Text>
           <Text style={s.logoAi}>AI</Text>
         </View>
-        <Text style={s.tagline}>Din personlige AI løbecoach · Beta</Text>
+        
+        <Text style={s.langTitle}>🌍 Choose your language</Text>
+        <Text style={s.langSubtitle}>Vælg dit sprog • Wähle deine Sprache</Text>
+        
+        <View style={s.langGrid}>
+          {LANGUAGES.map(lang => (
+            <TouchableOpacity
+              key={lang.code}
+              style={[
+                s.langCard,
+                selectedLang === lang.code && { borderColor: colors.accent, backgroundColor: colors.accent + '15' }
+              ]}
+              onPress={() => changeLanguage(lang.code)}
+            >
+              <Text style={s.langFlag}>{lang.flag}</Text>
+              <Text style={[
+                s.langName,
+                selectedLang === lang.code && { color: colors.accent }
+              ]}>{lang.name}</Text>
+              {selectedLang === lang.code && (
+                <Text style={{ color: colors.accent, fontSize: 14 }}>✓</Text>
+              )}
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        <TouchableOpacity style={[s.ctaBtn, { marginTop: 24 }]} onPress={() => setStep(1)}>
+          <Text style={s.ctaBtnText}>{t('auth.continue') || 'Continue'} →</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
+  );
+
+  // ── STEP 1: Splash ──────────────────────────────────────────────────────────
+  if (step === 1) return (
+    <SafeAreaView style={s.safe}>
+      <ScrollView contentContainerStyle={s.splash} showsVerticalScrollIndicator={false}>
+        <TouchableOpacity onPress={() => setStep(0)} style={s.backBtn}>
+          <Text style={s.backBtnText}>← {t('common.back')}</Text>
+        </TouchableOpacity>
+        <View style={s.logoWrap}>
+          <Text style={s.logoRun}>RUN</Text>
+          <Text style={s.logoWith}>WITH</Text>
+          <Text style={s.logoAi}>AI</Text>
+        </View>
+        <Text style={s.tagline}>{t('onboarding.tagline')}</Text>
         <Text style={s.headline}>
-          Den første løbe-app der{' '}
-          <Text style={{ color: colors.accent }}>lytter til dig</Text>
-          {' '}— og justerer din plan mens I taler.
+          {t('onboarding.headline.before')}
+          <Text style={{ color: colors.accent }}>{t('onboarding.headline.highlight')}</Text>
+          {t('onboarding.headline.after')}
         </Text>
         <View style={s.featureGrid}>
           {features.map(f => (
@@ -55,22 +138,22 @@ export default function Onboarding({ onDone }) {
             </View>
           ))}
         </View>
-        <TouchableOpacity style={s.ctaBtn} onPress={() => setStep(1)}>
-          <Text style={s.ctaBtnText}>Prøv gratis →</Text>
+        <TouchableOpacity style={s.ctaBtn} onPress={() => setStep(2)}>
+          <Text style={s.ctaBtnText}>{t('onboarding.tryFree')} →</Text>
         </TouchableOpacity>
-        <Text style={s.fine}>Virker med Garmin · Ingen kreditkort · Beta adgang</Text>
+        <Text style={s.fine}>{t('onboarding.fine')}</Text>
       </ScrollView>
     </SafeAreaView>
   );
 
-  // ── STEP 1: Niveau ──────────────────────────────────────────────────────────
-  if (step === 1) return (
+  // ── STEP 2: Niveau ──────────────────────────────────────────────────────────
+  if (step === 2) return (
     <SafeAreaView style={s.safe}>
       <ScrollView contentContainerStyle={s.splash} showsVerticalScrollIndicator={false}>
-        <TouchableOpacity onPress={() => setStep(0)} style={s.backBtn}>
-          <Text style={s.backBtnText}>← Tilbage</Text>
+        <TouchableOpacity onPress={() => setStep(1)} style={s.backBtn}>
+          <Text style={s.backBtnText}>← {t('common.back')}</Text>
         </TouchableOpacity>
-        <Text style={s.levelTitle}>Hvad er dit løbeniveau?</Text>
+        <Text style={s.levelTitle}>{t('onboarding.levelQuestion')}</Text>
         {levels.map(opt => (
           <TouchableOpacity
             key={opt.id}
@@ -86,28 +169,28 @@ export default function Onboarding({ onDone }) {
         ))}
         <TouchableOpacity
           style={[s.ctaBtn, { marginTop: 24, opacity: chosen ? 1 : 0.4 }]}
-          onPress={() => chosen && setStep(2)}
+          onPress={() => chosen && setStep(3)}
           disabled={!chosen}>
-          <Text style={s.ctaBtnText}>{chosen ? 'Fortsæt →' : 'Vælg dit niveau'}</Text>
+          <Text style={s.ctaBtnText}>{chosen ? `${t('auth.continue')} →` : t('onboarding.selectLevel')}</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
 
-  // ── STEP 2: Profilinfo & mål ─────────────────────────────────────────────────
-  if (step === 2) return (
+  // ── STEP 3: Profilinfo & mål ─────────────────────────────────────────────────
+  if (step === 3) return (
     <SafeAreaView style={s.safe}>
       <ScrollView contentContainerStyle={s.splash} showsVerticalScrollIndicator={false}>
-        <TouchableOpacity onPress={() => setStep(1)} style={s.backBtn}>
-          <Text style={s.backBtnText}>← Tilbage</Text>
+        <TouchableOpacity onPress={() => setStep(2)} style={s.backBtn}>
+          <Text style={s.backBtnText}>← {t('common.back')}</Text>
         </TouchableOpacity>
-        <Text style={s.levelTitle}>Fortæl os om dig</Text>
-        <Text style={s.levelSubTitle}>AI coachen bruger dette til at tilpasse din træning</Text>
+        <Text style={s.levelTitle}>{t('onboarding.tellUsAboutYou')}</Text>
+        <Text style={s.levelSubTitle}>{t('onboarding.coachUsesThis')}</Text>
 
         {[
-          { key: 'name',     label: 'Dit navn',             placeholder: 'Thomas',  keyboard: 'default' },
-          { key: 'age',      label: 'Alder',                placeholder: '32',      keyboard: 'numeric' },
-          { key: 'weeklyKm', label: 'Km du løber om ugen',  placeholder: '25',      keyboard: 'numeric' },
+          { key: 'name',     label: t('onboarding.fields.name'),     placeholder: 'Thomas',  keyboard: 'default' },
+          { key: 'age',      label: t('onboarding.fields.age'),      placeholder: '32',      keyboard: 'numeric' },
+          { key: 'weeklyKm', label: t('onboarding.fields.weeklyKm'), placeholder: '25',      keyboard: 'numeric' },
         ].map(field => (
           <View key={field.key} style={s.fieldWrap}>
             <Text style={s.fieldLabel}>{field.label}</Text>
@@ -122,7 +205,7 @@ export default function Onboarding({ onDone }) {
           </View>
         ))}
 
-        <Text style={[s.fieldLabel, { marginTop: 8, marginBottom: 8 }]}>Dit primære mål</Text>
+        <Text style={[s.fieldLabel, { marginTop: 8, marginBottom: 8 }]}>{t('onboarding.primaryGoal')}</Text>
         <View style={s.goalGrid}>
           {goals.map(g => (
             <TouchableOpacity
@@ -137,10 +220,10 @@ export default function Onboarding({ onDone }) {
 
         {['half', 'full', '5k', '10k'].includes(goalInfo.goal) && (
           <View style={s.fieldWrap}>
-            <Text style={s.fieldLabel}>Race dato (valgfrit)</Text>
+            <Text style={s.fieldLabel}>{t('onboarding.raceDate')}</Text>
             <TextInput
               style={s.fieldInput}
-              placeholder="f.eks. 15. september 2025"
+              placeholder={t('onboarding.raceDatePlaceholder')}
               placeholderTextColor={colors.muted}
               value={goalInfo.raceDate}
               onChangeText={v => setGoalInfo(g => ({ ...g, raceDate: v }))}
@@ -148,18 +231,18 @@ export default function Onboarding({ onDone }) {
           </View>
         )}
 
-        <TouchableOpacity style={[s.ctaBtn, { marginTop: 24 }]} onPress={() => setStep(3)}>
-          <Text style={s.ctaBtnText}>Fortsæt →</Text>
+        <TouchableOpacity style={[s.ctaBtn, { marginTop: 24 }]} onPress={() => setStep(4)}>
+          <Text style={s.ctaBtnText}>{t('auth.continue')} →</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{ alignItems: 'center', marginTop: 12 }} onPress={() => setStep(3)}>
-          <Text style={{ color: colors.muted, fontSize: 13 }}>Spring over for nu</Text>
+        <TouchableOpacity style={{ alignItems: 'center', marginTop: 12 }} onPress={() => setStep(4)}>
+          <Text style={{ color: colors.muted, fontSize: 13 }}>{t('onboarding.skipForNow')}</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
 
-  // ── STEP 3: PRO Upsell ──────────────────────────────────────────────────────
-  if (step === 3) return (
+  // ── STEP 4: PRO Upsell ──────────────────────────────────────────────────────
+  if (step === 4) return (
     <ProUpsell 
       onSkip={() => onDone(chosen, goalInfo)}
       onUpgrade={() => onDone(chosen, goalInfo)}
@@ -170,7 +253,6 @@ export default function Onboarding({ onDone }) {
 }
 
 const s = StyleSheet.create({
-  // FIX: Ændret fra colors.black til colors.bg for lyst tema
   safe:          { flex: 1, backgroundColor: colors.bg },
   splash:        { padding: 24, paddingBottom: 60 },
   logoWrap:      { marginTop: 24, marginBottom: 8 },
@@ -202,4 +284,11 @@ const s = StyleSheet.create({
   goalCard:      { width: '47%', backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 14, padding: 12 },
   goalLabel:     { color: colors.text, fontWeight: '700', fontSize: 13, marginBottom: 3 },
   goalSub:       { color: colors.dim, fontSize: 11 },
+  // Language selector styles
+  langTitle:     { color: colors.text, fontSize: 22, fontWeight: '800', marginTop: 20, marginBottom: 4 },
+  langSubtitle:  { color: colors.dim, fontSize: 13, marginBottom: 20 },
+  langGrid:      { gap: 8 },
+  langCard:      { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, borderRadius: 12, padding: 14, borderWidth: 1, borderColor: colors.border, gap: 12 },
+  langFlag:      { fontSize: 24 },
+  langName:      { flex: 1, color: colors.text, fontSize: 15, fontWeight: '600' },
 });

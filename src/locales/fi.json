@@ -1,0 +1,512 @@
+{
+  "tabs": {
+    "plan": "Suunnitelma",
+    "run": "Juoksu",
+    "coach": "Valmentaja",
+    "stats": "Tilastot",
+    "settings": "Asetukset",
+    "calendar": "Kalenteri",
+    "progress": "Edistyminen",
+    "start": "Aloita"
+  },
+  "run": {
+    "title": "Juoksu",
+    "walk": "Kävely",
+    "km": "KM",
+    "time": "AIKA",
+    "pace": "VAUHTI",
+    "start": "Aloita",
+    "pause": "Tauko",
+    "resume": "Jatka",
+    "stop": "Lopeta",
+    "save": "Tallenna",
+    "discard": "Hylkää",
+    "startRun": "Aloita juoksu",
+    "startThisWorkout": "Aloita tämä harjoitus",
+    "nextWorkout": "Seuraava harjoitus",
+    "lastActivity": "Viimeisin aktiviteetti",
+    "gpsTracking": "GPS-seuranta",
+    "walkTracking": "Kävelyseuranta",
+    "aiRoutes": "AI-reitit"
+  },
+  "pro": {
+    "badge": "PRO",
+    "upgrade": "Päivitä",
+    "upgradeToPro": "Päivitä Pro-versioon",
+    "feature": "Pro-ominaisuus",
+    "unlockFeatures": "Avaa kaikki ominaisuudet",
+    "fromOnly": "Alkaen vain",
+    "limit": {
+      "title": "Pro-ominaisuus",
+      "message": "Tämä ominaisuus vaatii Pro-tilauksen",
+      "seePlans": "Näytä paketit",
+      "cancel": "Peruuta"
+    },
+    "stats": {
+      "title": "Pro-tilastot",
+      "features": "Edistyneet tilastot ja näkemykset",
+      "unlock": "Avaa"
+    },
+    "coach": {
+      "title": "AI-valmentaja",
+      "description": "Henkilökohtainen harjoitussuunnitelma, joka mukautuu sinuun"
+    },
+    "calendar": {
+      "title": "Harjoituskalenteri",
+      "description": "Katso koko harjoitussuunnitelmasi"
+    },
+    "aiRoutes": {
+      "title": "AI-reitit",
+      "description": "Saa reittisuosituksia harjoituksesi perusteella"
+    }
+  },
+  "stats": {
+    "title": "Tilastot",
+    "totalRuns": "Juoksuja yhteensä",
+    "totalKm": "Km yhteensä",
+    "avgPace": "Keskivauhti",
+    "thisWeek": "Tämä viikko",
+    "thisMonth": "Tämä kuukausi",
+    "allTime": "Kaikki",
+    "basic": "Perustilastot",
+    "runs": "Juoksut"
+  },
+  "subscription": "Tilaus",
+  "alerts": {
+    "deleteRun": "Haluatko varmasti poistaa tämän juoksun?",
+    "deleteAccount": "Haluatko varmasti poistaa tilisi? Tätä ei voi kumota.",
+    "logout": "Haluatko varmasti kirjautua ulos?",
+    "discardRun": "Haluatko varmasti hylätä tämän juoksun?",
+    "unsavedChanges": "Sinulla on tallentamattomia muutoksia. Haluatko hylätä ne?",
+    "welcomePro": {
+      "title": "Tervetuloa Pro-versioon!",
+      "message": "Sinulla on nyt pääsy kaikkiin ominaisuuksiin"
+    }
+  },
+  "auth": {
+    "login": "Kirjaudu sisään",
+    "register": "Luo tili",
+    "email": "Sähköposti",
+    "password": "Salasana",
+    "confirmPassword": "Vahvista salasana",
+    "forgotPassword": "Unohditko salasanan?",
+    "noAccount": "Ei tiliä?",
+    "hasAccount": "Onko sinulla jo tili?",
+    "loginButton": "Kirjaudu sisään",
+    "registerButton": "Luo tili",
+    "orContinueWith": "tai jatka",
+    "apple": "Apple",
+    "google": "Google",
+    "emailPlaceholder": "sinun@email.fi",
+    "passwordPlaceholder": "••••••••",
+    "namePlaceholder": "Nimesi",
+    "name": "Nimi",
+    "loggingIn": "Kirjaudutaan...",
+    "registering": "Luodaan tiliä...",
+    "tagline": "Henkilökohtainen AI-juoksuvalmentajasi",
+    "createAccount": "Luo tili",
+    "minChars": "vähintään merkkiä",
+    "repeatPassword": "toista salasana",
+    "continue": "jatka",
+    "getStarted": "aloitetaan",
+    "step1of3": "vaihe 1/3",
+    "step2of3": "vaihe 2/3",
+    "step3of3": "vaihe 3/3",
+    "yourName": "nimesi",
+    "age": "IKÄ",
+    "weight": "PAINO",
+    "height": "PITUUS",
+    "years": "Vuotta",
+    "runningLevel": "JUOKSUTASO",
+    "levels.beginner": "Aloittelija",
+    "levels.intermediate": "Keskitaso",
+    "levels.advanced": "Edistynyt",
+    "yourGoals": "MITKÄ OVAT TAVOITTEESI",
+    "goals.health": "Terveys",
+    "goals.weight": "Painonpudotus",
+    "goals.distance": "Juosta pidempään",
+    "goals.speed": "Tulla nopeammaksi",
+    "goals.race": "Juosta kilpailu",
+    "goals.fun": "Hauskuus",
+    "weeklyGoalKm": "VIIKOITTAINEN KM TAVOITE",
+    "weeklyGoalExample": "Esim. 20",
+    "unlockFullPower": "Avaa täysi pääsy",
+    "unlockDesc": "Saa pääsy kaikkiin ominaisuuksiin ja saavuta tavoitteesi nopeammin",
+    "proFeatures.aiCoachDesc": "AI-valmentaja",
+    "proFeatures.statsDesc": "Tilastot",
+    "proFeatures.goalsDesc": "Tavoitteet",
+    "proFeatures.routesDesc": "Reitit",
+    "proFeatures.chatDesc": "AI-chatti",
+    "proFeatures.reportsDesc": "Raportit",
+    "price": "49 kr",
+    "guarantee": "✓ Peruuta milloin vain • ✓ 7 päivän ilmainen kokeilu",
+    "perMonth": "/kuukausi",
+    "startFreeTrial": "Aloita ilmainen kokeilu",
+    "continueWithFree": "Jatka ilmaisversiolla",
+    "levels.beginnerDesc": "Uusi juoksussa tai aloittamassa uudelleen pitkän tauon jälkeen",
+    "levels.intermediateDesc": "Juoksee säännöllisesti ja haluaa parantua",
+    "levels.advancedDesc": "Kokenut juoksija erityisillä tavoitteilla",
+    "or": "tai",
+    "errors": {
+      "serverConnection": "Palvelimeen ei saada yhteyttä"
+    }
+  },
+  "settings": {
+    "pageTitle": "Asetukset",
+    "title": "Asetukset",
+    "profile": "Profiili",
+    "days": ["Ma", "Ti", "Ke", "To", "Pe", "La", "Su"],
+    "saveChanges": "Tallenna muutokset",
+    "saved": "Tallennettu!",
+    "logout": "Kirjaudu ulos",
+    "privacyPolicy": "Tietosuojakäytäntö",
+    "termsOfService": "Käyttöehdot",
+    "dangerZone": "Vaaravyöhyke",
+    "sections": {
+      "personalInfo": "Henkilötiedot",
+      "level": "Taso",
+      "runningGoals": "Juoksutavoitteet",
+      "weeklyGoals": "Viikkotavoitteet",
+      "trainingTypes": "Harjoitustyypit",
+      "heartRateZones": "Sykevälit",
+      "injuries": "Vammat",
+      "reminders": "Muistutukset",
+      "privacy": "Yksityisyys",
+      "units": "Yksiköt",
+      "data": "Tiedot"
+    },
+    "fields": {
+      "name": "Nimi",
+      "age": "Ikä",
+      "weight": "Paino (kg)",
+      "height": "Pituus (cm)",
+      "sex": "Sukupuoli",
+      "restingHr": "Leposyke",
+      "maxHr": "Maksimisyke",
+      "vo2max": "VO2max",
+      "yearsRunning": "Juoksuvuodet",
+      "weeklyKm": "Viikon km",
+      "weeklyKmGoal": "Viikon km-tavoite",
+      "weeklyRunsGoal": "Viikon juoksu-tavoite",
+      "primaryGoal": "Päätavoite",
+      "raceDate": "Kilpailupäivä",
+      "injuries": "Vammat/rajoitukset",
+      "injuriesPlaceholder": "Esim. polvivaivat, selkäkipu...",
+      "preferredDays": "Suosikkipäivät",
+      "preferredTypes": "Suosikkijuoksutyypit"
+    },
+    "sex": {
+      "male": "Mies",
+      "female": "Nainen"
+    },
+    "levels": {
+      "beginner": "Aloittelija",
+      "intermediate": "Keskitaso",
+      "advanced": "Edistynyt"
+    },
+    "goals": {
+      "fitness": "Yleiskunto",
+      "weight": "Painonpudotus",
+      "half": "Puolimaraton",
+      "full": "Maraton"
+    },
+    "runTypes": {
+      "easy": "Kevyt juoksu",
+      "interval": "Intervallit",
+      "long": "Pitkä juoksu",
+      "tempo": "Tempojuoksu",
+      "recovery": "Palautuminen",
+      "race": "Kilpailu",
+      "trail": "Polkujuoksu"
+    },
+    "zones": {
+      "calculated": "Laskettu maksimisykkeestäsi",
+      "z1": "Vyöhyke 1 (Palautuminen)",
+      "z2": "Vyöhyke 2 (Aerobinen)",
+      "z3": "Vyöhyke 3 (Tempo)",
+      "z4": "Vyöhyke 4 (Kynnys)",
+      "z5": "Vyöhyke 5 (Anaerobinen)"
+    },
+    "notifications": {
+      "push": "Push-ilmoitukset",
+      "pushSub": "Saa harjoitusmuistutuksia",
+      "enabled": "Käytössä",
+      "reminder": "Muistutus",
+      "time": "Aika",
+      "days": "Päivät"
+    },
+    "privacy": {
+      "shareProfile": "Jaa profiili",
+      "shareProfileSub": "Muut voivat nähdä profiilisi",
+      "shareActivity": "Jaa aktiviteetti",
+      "shareActivitySub": "Muut voivat nähdä juoksusi",
+      "shareLocation": "Jaa sijainti",
+      "shareLocationSub": "Näytä sijaintisi reiteillä"
+    },
+    "units": {
+      "distance": "Matka",
+      "pace": "Vauhti"
+    },
+    "data": {
+      "export": "Vie tiedot",
+      "exportSub": "Lataa kaikki juoksutietosi"
+    },
+    "shoes": {
+      "title": "Juoksukengät",
+      "addShoe": "Lisää kenkä",
+      "namePlaceholder": "Kengän nimi",
+      "brandPlaceholder": "Merkki",
+      "kmPlaceholder": "Aloitus-km",
+      "saveShoe": "Tallenna kenkä",
+      "useForNextRun": "Käytä seuraavassa juoksussa",
+      "active": "Aktiivinen",
+      "delete": "Poista",
+      "deleteConfirm": "Haluatko varmasti poistaa tämän kengän?",
+      "empty": "Kenkiä ei ole vielä lisätty",
+      "worn": "Kulunut",
+      "soonWorn": "Pian kulunut",
+      "wornMessage": "Tässä kengässä on yli 800 km ja se tulisi vaihtaa"
+    },
+    "deleteAccount": {
+      "title": "Poista tili",
+      "button": "Poista tilini",
+      "warning": "Tätä ei voi kumota!",
+      "confirmMessage": "Haluatko varmasti poistaa tilisi? Kaikki tiedot poistetaan pysyvästi.",
+      "confirmButton": "Kyllä, poista tilini",
+      "deletedTitle": "Tili poistettu",
+      "deletedMessage": "Tilisi on poistettu.",
+      "error": "Tilin poisto epäonnistui"
+    }
+  },
+  "pricing": {
+    "title": "RunWithAI Pro",
+    "subtitle": "Avaa kaikki ominaisuudet",
+    "monthly": "Kuukausittain",
+    "yearly": "Vuosittain",
+    "perMonth": "/kk",
+    "perYear": "/vuosi",
+    "save": "Säästä",
+    "features": {
+      "aiCoach": "Henkilökohtainen AI-valmentaja",
+      "unlimitedRuns": "Rajattomat juoksut",
+      "advancedStats": "Edistyneet tilastot",
+      "trainingPlans": "Räätälöidyt harjoitussuunnitelmat",
+      "voiceCoach": "Äänivalmentaja juoksun aikana",
+      "exportData": "Tietojen vienti"
+    },
+    "subscribe": "Tilaa nyt",
+    "restore": "Palauta ostos",
+    "terms": "Ehdot voimassa. Automaattinen uusinta.",
+    "currentPlan": "Nykyinen paketti",
+    "free": "Ilmainen",
+    "pro": "Pro",
+    "loading": "Ladataan...",
+    "error": "Jokin meni pieleen",
+    "success": "Olet nyt Pro!",
+    "alreadyPro": "Olet jo Pro-käyttäjä",
+    "tryAgain": "Yritä uudelleen"
+  },
+  "common": {
+    "cancel": "Peruuta",
+    "save": "Tallenna",
+    "delete": "Poista",
+    "edit": "Muokkaa",
+    "done": "Valmis",
+    "next": "Seuraava",
+    "back": "Takaisin",
+    "skip": "Ohita",
+    "ok": "OK",
+    "yes": "Kyllä",
+    "no": "Ei",
+    "loading": "Ladataan...",
+    "error": "Virhe",
+    "success": "Onnistui",
+    "retry": "Yritä uudelleen"
+  },
+  "onboarding": {
+    "welcome": "Tervetuloa",
+    "appName": "RunWithAI",
+    "subtitle": "Henkilökohtainen AI-juoksuvalmentajasi",
+    "getStarted": "Aloitetaan",
+    "step1": {
+      "title": "Seuraa juoksujasi",
+      "desc": "GPS-seuranta reaaliaikaisilla tiedoilla ja reitin näytöllä"
+    },
+    "step2": {
+      "title": "AI-avusteinen valmennus",
+      "desc": "Saa henkilökohtaisia harjoitussuunnitelmia ja neuvoja AI-valmentajaltasi"
+    },
+    "step3": {
+      "title": "Saavuta tavoitteesi",
+      "desc": "Aseta tavoitteita ja seuraa edistymistäsi yksityiskohtaisilla tilastoilla"
+    }
+  },
+  "dashboard": {
+    "defaultName": "JUOKSIJA",
+    "greeting": {
+      "morning": "HYVÄÄ HUOMENTA,",
+      "day": "HYVÄÄ PÄIVÄÄ,",
+      "evening": "HYVÄÄ ILTAA,"
+    },
+    "planUpdated": "SUUNNITELMA PÄIVITETTY",
+    "refresh": "Päivitä",
+    "shoeAlert": {
+      "worn": "Kengät ovat kuluneet!",
+      "soonWorn": "Kengät kuluvat pian!"
+    },
+    "fatigue": {
+      "rested": "Levännyt",
+      "ok": "OK",
+      "slightlyTired": "Hieman väsynyt",
+      "veryTired": "Hyvin väsynyt"
+    },
+    "weather": {
+      "title": "SÄÄ & KUNTO",
+      "wind": "Tuuli",
+      "clear": "Selkeä",
+      "partlyCloudy": "Puolipilvinen",
+      "foggy": "Sumu/utu",
+      "rain": "Sade",
+      "snow": "Lumi",
+      "showers": "Sadekuurot",
+      "thunder": "Ukkonen",
+      "analyzing": "Analysoidaan säätä ja tilaa...",
+      "noAdvice": "Ei neuvoja saatavilla",
+      "fetchError": "Säätietoja ei saatavilla — yritä uudelleen."
+    },
+    "stats": {
+      "kmThisWeek": "KM TÄLLÄ VIIKOLLA",
+      "daysInRow": "PÄIVÄÄ PERÄKKÄIN",
+      "runsThisMonth": "JUOKSUA TÄSSÄ KUUSSA",
+      "of": "/",
+      "personalRecord": "Henkilökohtainen ennätys",
+      "fromRecord": "{{count}} ennätyksestäsi",
+      "overOneWeek": "Yli 1 viikko peräkkäin",
+      "keepingMomentum": "Pidät vauhdin yllä",
+      "goodStart": "Hyvä alku",
+      "keepGoing": "Jatka samaan malliin!",
+      "startStreak": "Aloita putki tänään",
+      "bestMonthEver": "Paras {{month}} ikinä",
+      "oneFromRecord": "1 juoksu ennätyskuukausiisi!",
+      "runsFromRecord": "{{count}} juoksua ennätykseen",
+      "runsInMonth": "{{count}} juoksua {{month}}"
+    },
+    "monthNames": ["Tam", "Hel", "Maa", "Huh", "Tou", "Kes", "Hei", "Elo", "Syy", "Lok", "Mar", "Jou"],
+    "workout": {
+      "nextWorkout": "SEURAAVA HARJOITUS",
+      "today": "TÄNÄÄN",
+      "distance": "Matka",
+      "time": "Aika",
+      "targetPace": "Tavoitevauhti",
+      "targetHr": "Tavoitesyke"
+    },
+    "weekPlan": {
+      "title": "TÄMÄ VIIKKO"
+    },
+    "milestone": {
+      "nextMilestone": "SEURAAVA VIRSTANPYLVÄS",
+      "kmLeft": "km jäljellä",
+      "total": "yhteensä",
+      "thisWeek": "Tällä viikolla!",
+      "oneToTwoWeeks": "Noin 1-2 viikkoa",
+      "aboutWeeks": "Noin {{count}} viikkoa"
+    },
+    "diary": {
+      "title": "JUOKSUPÄIVÄKIRJA",
+      "subtitle": "Kirjoita muistiinpanoja juoksuistasi — AI oppii niistä",
+      "addNote": "+ Muistiinpano",
+      "mood": "Fiilis",
+      "placeholder": "Miten meni? Raskaat jalat? Hyvä päivä? Uusi reitti?",
+      "dayNames": ["Su", "Ma", "Ti", "Ke", "To", "Pe", "La"]
+    },
+    "injury": {
+      "title": "LOUKKAANTUMISRISKI",
+      "low": "Matala",
+      "moderate": "Kohtalainen",
+      "high": "Korkea",
+      "kmIncrease": "Km kasvoivat {{pct}}% viime viikkoon verrattuna",
+      "runsLast3Days": "{{count}} juoksua viimeisen 3 päivän aikana",
+      "noRestToday": "Ei lepoa tänään",
+      "daysSinceRun": "{{count}} päivää viimeisestä juoksusta — levännyt",
+      "noRiskFactors": "Ei erityisiä riskitekijöitä.",
+      "tip1": "Harkitse lepopäivää raskaiden juoksujen jälkeen",
+      "tip2": "Älä lisää km:ä yli 10% viikossa",
+      "analyzed": "Analysoitu",
+      "aiAnalysis": "AI-analyysi"
+    },
+    "racePredictor": {
+      "title": "Kilpailuennuste",
+      "subtitle": "Katso ennustetut kilpailuaikasi",
+      "noData": "Ennusteeseen tarvitaan vähintään yksi juoksu.",
+      "analyzing": "AI analysoi juoksujasi...",
+      "halfMarathon": "Puolimaraton",
+      "confidence": "Luottamus"
+    }
+  },
+  "tracker": {
+    "defaultRunner": "Juoksija",
+    "voiceOn": "Ääni päällä",
+    "voiceOff": "Ääni pois",
+    "mapNotAvailable": "Kartta ei saatavilla",
+    "status": {
+      "ready": "Paina Aloita aloittaaksesi",
+      "paused": "Tauolla",
+      "tracking": "Tallennetaan..."
+    },
+    "gps": {
+      "active": "GPS aktiivinen",
+      "waiting": "Etsitään GPS-signaalia...",
+      "denied": "GPS-lupa evätty",
+      "unavailable": "GPS ei saatavilla",
+      "timeout": "GPS-aikakatkaisu",
+      "notAvailable": "GPS ei saatavilla",
+      "error": "GPS-virhe"
+    }
+  },
+  "chat": {
+    "title": "AI-VALMENTAJA",
+    "clear": "Tyhjennä",
+    "placeholder": "Kirjoita valmentajallesi...",
+    "loadingHistory": "Ladataan keskustelua...",
+    "planUpdated": "Suunnitelma päivitetty",
+    "defaultRunner": "Juoksija",
+    "greeting": "Hei {{name}}! Olen AI-juoksuvalmentajasi. Kuinka voin auttaa sinua tänään?",
+    "clearedGreeting": "Keskustelu tyhjennetty! Kuinka voin auttaa sinua, {{name}}?",
+    "connectionError": "Valitan, yhteys epäonnistui. Yritä uudelleen."
+  },
+  "proUpsell": {
+    "title": "Avaa täysi voima",
+    "subtitle": "Saa pääsy kaikkiin ominaisuuksiin ja saavuta tavoitteesi nopeammin",
+    "price": "49 DKK",
+    "priceUnit": "/kk",
+    "guarantee": "✓ Peru milloin vain • ✓ 7 päivän ilmainen kokeilu",
+    "startTrial": "Aloita ilmainen kokeilu",
+    "continueWithFree": "Jatka ilmaisversiolla",
+    "features": {
+      "aiCoach": {
+        "title": "AI-valmentaja",
+        "desc": "Henkilökohtainen harjoitussuunnitelma, joka mukautuu sinuun"
+      },
+      "advancedStats": {
+        "title": "Edistyneet tilastot",
+        "desc": "Syvällinen harjoitusanalyysi"
+      },
+      "unlimitedGoals": {
+        "title": "Rajattomat tavoitteet",
+        "desc": "Aseta niin monta tavoitetta kuin haluat"
+      },
+      "routeLibrary": {
+        "title": "Reittikirjasto",
+        "desc": "Tallenna ja jaa suosikkireittejäsi"
+      },
+      "aiChat": {
+        "title": "AI-chat",
+        "desc": "Kysy juoksusta ja saa vastauksia"
+      },
+      "progressReports": {
+        "title": "Edistymisraportit",
+        "desc": "Viikko- ja kuukausiyhteenvedot"
+      }
+    }
+  }
+}

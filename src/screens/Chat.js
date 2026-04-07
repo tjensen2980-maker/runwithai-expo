@@ -6,10 +6,11 @@ import {
   Keyboard, Dimensions
 } from 'react-native';
 import { colors, LEVELS, sendToAI, loadMessages, clearMessages } from '../data';
+import { useTranslation } from 'react-i18next';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-function Message({ msg }) {
+function Message({ msg, t }) {
   const isAI = msg.role === 'ai' || msg.role === 'assistant';
   return (
     <View style={[s.msgWrap, isAI ? s.msgAI : s.msgUser]}>
@@ -19,7 +20,7 @@ function Message({ msg }) {
       </View>
       {msg.hasPlanUpdate && (
         <View style={s.planUpdateBadge}>
-          <Text style={s.planUpdateBadgeText}>✓ Plan opdateret</Text>
+          <Text style={s.planUpdateBadgeText}>✓ {t('chat.planUpdated')}</Text>
         </View>
       )}
     </View>
@@ -27,6 +28,7 @@ function Message({ msg }) {
 }
 
 export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpdate, runs }) {
+  const { t } = useTranslation();
   const lv = LEVELS[level] || LEVELS['intermediate'];
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -68,14 +70,14 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
         }));
         setMessages(converted);
       } else {
-        const name = (profile?.name || 'løber').split(' ')[0];
-        setMessages([{ role: 'ai', text: `Hej ${name}! Jeg er din AI løbecoach. Hvad kan jeg hjælpe dig med i dag?` }]);
+        const name = (profile?.name || t('chat.defaultRunner')).split(' ')[0];
+        setMessages([{ role: 'ai', text: t('chat.greeting', { name }) }]);
       }
       setLoadingHistory(false);
       setTimeout(() => scrollRef.current?.scrollToEnd({ animated: false }), 100);
     }
     fetchHistory();
-  }, []);
+  }, [t]);
 
   const send = async (text) => {
     if (!text.trim() || loading) return;
@@ -95,7 +97,7 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
       setMessages(prev => [...prev, aiMsg]);
       if (planUpdate) onPlanUpdate(planUpdate);
     } catch {
-      setMessages(prev => [...prev, { role: 'ai', text: 'Beklager, jeg kunne ikke forbinde. Prøv igen.' }]);
+      setMessages(prev => [...prev, { role: 'ai', text: t('chat.connectionError') }]);
     }
     setLoading(false);
     setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
@@ -103,14 +105,14 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
 
   const handleClear = async () => {
     await clearMessages();
-    const name = (profile?.name || 'løber').split(' ')[0];
-    setMessages([{ role: 'ai', text: `Samtale ryddet! Hvad kan jeg hjælpe dig med, ${name}?` }]);
+    const name = (profile?.name || t('chat.defaultRunner')).split(' ')[0];
+    setMessages([{ role: 'ai', text: t('chat.clearedGreeting', { name }) }]);
   };
 
   if (loadingHistory) return (
     <View style={{ flex: 1, backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center' }}>
       <ActivityIndicator color={colors.accent} />
-      <Text style={{ color: colors.muted, marginTop: 10, fontSize: 12 }}>Henter samtale...</Text>
+      <Text style={{ color: colors.muted, marginTop: 10, fontSize: 12 }}>{t('chat.loadingHistory')}</Text>
     </View>
   );
 
@@ -122,9 +124,9 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
       {/* Header */}
       <View style={s.header}>
         <View style={[s.dot, { backgroundColor: lv.color }]} />
-        <Text style={s.headerTitle}>AI COACH</Text>
+        <Text style={s.headerTitle}>{t('chat.title')}</Text>
         <TouchableOpacity onPress={handleClear} style={s.clearBtn}>
-          <Text style={s.clearBtnText}>Ryd</Text>
+          <Text style={s.clearBtnText}>{t('chat.clear')}</Text>
         </TouchableOpacity>
       </View>
 
@@ -137,7 +139,7 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive"
       >
-        {messages.map((m, i) => <Message key={i} msg={m} />)}
+        {messages.map((m, i) => <Message key={i} msg={m} t={t} />)}
         {loading && (
           <View style={[s.msgWrap, s.msgAI]}>
             <Text style={s.msgSender}>RUNWITHAI</Text>
@@ -154,7 +156,7 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
           style={s.input}
           value={input}
           onChangeText={setInput}
-          placeholder="Skriv til din coach..."
+          placeholder={t('chat.placeholder')}
           placeholderTextColor={colors.muted}
           onSubmitEditing={() => send(input)}
           returnKeyType="send"

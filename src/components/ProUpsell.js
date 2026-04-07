@@ -1,10 +1,16 @@
 // src/components/ProUpsell.js
 // Vis denne komponent til nye brugere efter onboarding
+// OPDATERET: Bruger RevenueCat i stedet for Stripe
 
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Platform, Linking } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Platform, Alert, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, SERVER, getAuthToken } from '../data';
+import Purchases from 'react-native-purchases';
+
+// RevenueCat API Keys
+const REVENUECAT_IOS_KEY = 'appl_RSTGHBSwwJLczMzoqgBiNYDFDIb';
+const REVENUECAT_ANDROID_KEY = 'goog_YOUR_REVENUECAT_ANDROID_KEY'; // TODO: Tilføj Android key
 
 const proFeatures = [
   { emoji: '🤖', title: 'AI Coach', desc: 'Personlig træningsplan der tilpasser sig dig' },
@@ -15,26 +21,175 @@ const proFeatures = [
   { emoji: '📈', title: 'Fremskridtsrapporter', desc: 'Ugentlige og månedlige opsummeringer' },
 ];
 
-export default function ProUpsell({ onSkip, onUpgrade }) {
+let isRevenueCatConfigured = false;
+
+async function initRevenueCat() {
+  if (isRevenueCatConfigured) return true;
   
-  const handleUpgrade = async () => {
-    try {
-      const token = await getAuthToken();
-      const res = await fetch(`${SERVER}/create-checkout-session`, {
-        method: 'POST',
-        headers: { 
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ priceId: 'price_1TBU4s5DwJ9LegdIxUvhaTJu' })
-      });
-      const data = await res.json();
-      if (data.url) {
-        if (Platform.OS === 'web') window.open(data.url, '_blank');
-        else Linking.openURL(data.url);
+  try {
+    // Skip på web
+    if (Platform.OS === 'web') {
+      console.log('RevenueCat: Web platform - skipping');
+      return false;
+    }
+    
+    const apiKey = Platform.OS === 'ios' ? REVENUECAT_IOS_KEY : REVENUECAT_ANDROID_KEY;
+    
+    if (apiKey.includes('YOUR_REVENUECAT')) {
+      console.log('RevenueCat: Not configured for this platform');
+      return false;
+    }
+    
+    await Purchases.configure({ apiKey });
+    isRevenueCatConfigured = true;
+    return true;
+  } catch (err) {
+    console.error('RevenueCat init error:', err);
+    return false;
+  }
+}
+
+export default function ProUpsell({ onSkip, onUpgrade }) {
+  const [loading, setLoading] = useState(false);
+  const [offerings, setOfferings] = useState(null);
+  const [priceString, setPriceString] = useState('49 kr');
+  const [isConfigured, setIsConfigured] = useState(false);
+
+  useEffect(() => {
+    const setup = async () => {
+      const configured = await initRevenueCat();
+      setIsConfigured(configured);
+      
+      if (configured) {
+        try {
+          const offerings = await Purchases.getOfferings();
+          if (offerings.current) {
+            setOfferings(offerings.current);
+            // Hent pris fra første package
+            const pkg = offerings.current.availablePackages?.[0];
+            if (pkg?.product?.priceString) {
+              setPriceString(pkg.product.priceString);
+            }
+          }
+        } catch (err) {
+          console.error('Error fetching offerings:', err);
+        }
       }
-    } catch (e) {
-      console.log('Checkout error:', e);
+    };
+    
+    setup();
+  }, []);
+
+  const handleUpgrade = async () => {
+    // Hvis RevenueCat ikke er konfigureret (web eller manglende key)
+    if (!isConfigured) {
+      if (Platform.OS === 'web') {
+        Alert.alert(
+          'Køb via app',
+          'In-app køb er kun tilgængelige i iOS og Android appen. Download appen for at opgradere til Pro.',
+          [{ text: 'OK' }]
+        );
+      } else {
+        Alert.alert(
+          'Kommer snart',
+          'In-app køb er under opsætning. Prøv igen senere.',
+          [{ text: 'OK' }]
+        );
+      }
+      return;
+    }
+
+    if (!offerings || !offerings.availablePackages?.length) {
+      Alert.alert('Fejl', 'Kunne ikke hente priser. Prøv igen senere.');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const pkg = offerings.availablePackages[0];
+      const { customerInfo } = await Purchases.purchasePackage(pkg);
+
+      // Tjek om købet gav Pro adgang
+      if (customerInfo.entitlements.active['pro']) {
+        // Opdater server med subscription status
+        const token = getAuthToken();
+        if (token) {
+          try {
+            await fetch(`${SERVER}/subscription/activate`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                revenueCatId: customerInfo.originalAppUserId,
+              }),
+            });
+          } catch (e) {
+            console.log('Server sync warning:', e);
+          }
+        }
+
+        Alert.alert(
+          '🎉 Velkommen til Pro!',
+          'Du har nu adgang til alle funktioner. God træning!',
+          [{ text: 'Kom i gang', onPress: onUpgrade || onSkip }]
+        );
+      }
+    } catch (err) {
+      if (!err.userCancelled) {
+        console.error('Purchase error:', err);
+        Alert.alert('Køb fejlede', 'Der opstod en fejl. Prøv igen senere.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRestore = async () => {
+    if (!isConfigured) {
+      Alert.alert('Kommer snart', 'Gendan køb er under opsætning.');
+      return;
+    }
+
+    setLoading(true);
+    
+    try {
+      const customerInfo = await Purchases.restorePurchases();
+      
+      if (customerInfo.entitlements.active['pro']) {
+        const token = getAuthToken();
+        if (token) {
+          try {
+            await fetch(`${SERVER}/subscription/activate`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                revenueCatId: customerInfo.originalAppUserId,
+              }),
+            });
+          } catch (e) {
+            console.log('Server sync warning:', e);
+          }
+        }
+
+        Alert.alert(
+          '✅ Køb gendannet!',
+          'Din Pro subscription er aktiveret.',
+          [{ text: 'Fortsæt', onPress: onUpgrade || onSkip }]
+        );
+      } else {
+        Alert.alert('Ingen køb fundet', 'Vi kunne ikke finde et aktivt abonnement.');
+      }
+    } catch (err) {
+      console.error('Restore error:', err);
+      Alert.alert('Fejl', 'Kunne ikke gendanne køb. Prøv igen.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,19 +213,35 @@ export default function ProUpsell({ onSkip, onUpgrade }) {
         </View>
 
         <View style={s.priceSection}>
-          <Text style={s.price}>49 kr</Text>
+          <Text style={s.price}>{priceString}</Text>
           <Text style={s.priceUnit}>/måned</Text>
         </View>
-        
+
         <Text style={s.guarantee}>✓ Annuller når som helst • ✓ 7 dages gratis prøveperiode</Text>
 
-        <TouchableOpacity style={s.upgradeBtn} onPress={handleUpgrade || onUpgrade}>
-          <Text style={s.upgradeBtnText}>🚀 Start gratis prøveperiode</Text>
+        <TouchableOpacity 
+          style={[s.upgradeBtn, loading && s.upgradeBtnDisabled]} 
+          onPress={handleUpgrade}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={s.upgradeBtnText}>🚀 Start gratis prøveperiode</Text>
+          )}
+        </TouchableOpacity>
+
+        <TouchableOpacity style={s.restoreBtn} onPress={handleRestore} disabled={loading}>
+          <Text style={s.restoreBtnText}>Gendan tidligere køb</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={s.skipBtn} onPress={onSkip}>
           <Text style={s.skipBtnText}>Fortsæt med gratis version</Text>
         </TouchableOpacity>
+
+        <Text style={s.terms}>
+          Betaling opkræves via din App Store konto. Abonnement fornyes automatisk medmindre det annulleres mindst 24 timer før periodens udløb.
+        </Text>
       </ScrollView>
     </SafeAreaView>
   );
@@ -178,12 +349,24 @@ const s = StyleSheet.create({
     marginBottom: 12,
     width: '100%',
     maxWidth: 320,
+    alignItems: 'center',
+  },
+  upgradeBtnDisabled: {
+    opacity: 0.6,
   },
   upgradeBtnText: {
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  restoreBtn: {
+    paddingVertical: 12,
+    marginBottom: 8,
+  },
+  restoreBtnText: {
+    color: colors.dim,
+    fontSize: 14,
   },
   skipBtn: {
     paddingVertical: 12,
@@ -192,5 +375,13 @@ const s = StyleSheet.create({
     color: colors.muted,
     fontSize: 14,
     textDecorationLine: 'underline',
+  },
+  terms: {
+    fontSize: 10,
+    color: colors.muted,
+    textAlign: 'center',
+    marginTop: 20,
+    paddingHorizontal: 20,
+    lineHeight: 14,
   },
 });

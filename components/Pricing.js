@@ -1,5 +1,6 @@
 // ═══════════════════════════════════════════════════════════════════════════
-// PRICING.JS - RunWithAI Pro Subscription Component (RevenueCat)
+// PRICING.JS - RunWithAI Pro Subscription Component (RevenueCat + i18n)
+// Sort/rød/hvid tema + Terms & Privacy links for App Store compliance
 // ═══════════════════════════════════════════════════════════════════════════
 
 import React, { useState, useEffect } from 'react';
@@ -13,39 +14,61 @@ import {
   Platform,
   Modal,
   ActivityIndicator,
+  Linking,
 } from 'react-native';
-import Purchases from 'react-native-purchases';
+import { useTranslation } from 'react-i18next';
 
 const API_URL = 'https://runwithai-server-production.up.railway.app';
 
-// RevenueCat API Keys - du får disse fra RevenueCat dashboard
-const REVENUECAT_IOS_KEY = 'appl_RSTGHBSwwJLczMzoqgBiNYDFDIb'; // Erstat med din rigtige nøgle
-const REVENUECAT_ANDROID_KEY = 'goog_YOUR_REVENUECAT_ANDROID_KEY'; // Erstat med din rigtige nøgle
+// Legal URLs
+const PRIVACY_POLICY_URL = 'https://www.runwithai.app/privacy';
+const TERMS_OF_USE_URL = 'https://www.runwithai.app/terms';
+
+// RevenueCat API Keys
+const REVENUECAT_IOS_KEY = 'appl_RSTGHBSwwJLczMzoqgBiNYDFDIb';
+const REVENUECAT_ANDROID_KEY = 'goog_YOUR_REVENUECAT_ANDROID_KEY';
+
+// ─── SAFE REVENUECAT IMPORT ─────────────────────────────────────────────────
+let Purchases = null;
+if (Platform.OS === 'ios' || Platform.OS === 'android') {
+  try {
+    Purchases = require('react-native-purchases').default;
+  } catch (e) {
+    console.log('RevenueCat not available:', e.message);
+  }
+}
 
 // ─── INITIALIZE REVENUECAT ──────────────────────────────────────────────────
 let isRevenueCatConfigured = false;
 
 async function initRevenueCat(userId) {
-  if (isRevenueCatConfigured) return;
+  if (Platform.OS === 'web' || isRevenueCatConfigured || !Purchases) {
+    return false;
+  }
   
   try {
     const apiKey = Platform.OS === 'ios' ? REVENUECAT_IOS_KEY : REVENUECAT_ANDROID_KEY;
     
-    // Check if keys are configured
     if (apiKey.includes('YOUR_REVENUECAT')) {
       console.log('RevenueCat not configured - using placeholder keys');
-      return;
+      return false;
     }
     
     await Purchases.configure({ apiKey });
     
     if (userId) {
-      await Purchases.logIn(userId);
+      try {
+        await Purchases.logIn(String(userId));
+      } catch (loginErr) {
+        console.log('RevenueCat login warning:', loginErr.message);
+      }
     }
     
     isRevenueCatConfigured = true;
+    return true;
   } catch (err) {
     console.error('RevenueCat init error:', err);
+    return false;
   }
 }
 
@@ -80,7 +103,7 @@ export function useSubscription(token) {
   }, [token]);
 
   const isPro = subscription?.tier === 'pro';
-  const canTrackRun = true; // Allow all users to track runs for now
+  const canTrackRun = true;
 
   return { subscription, isPro, canTrackRun, loading, refresh };
 }
@@ -103,6 +126,7 @@ export function Paywall({ visible, onClose, token }) {
 
 // ─── PRICING PAGE COMPONENT ─────────────────────────────────────────────────
 export default function PricingPage({ token, onClose, currentTier = 'free' }) {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [offerings, setOfferings] = useState(null);
   const [restoring, setRestoring] = useState(false);
@@ -111,27 +135,46 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
   // Initialize RevenueCat and fetch offerings
   useEffect(() => {
     const init = async () => {
-      await initRevenueCat(token);
-      
-      // Check if configured
-      if (REVENUECAT_IOS_KEY.includes('YOUR_REVENUECAT') && Platform.OS === 'ios') {
-        setIsConfigured(false);
-        return;
-      }
-      if (REVENUECAT_ANDROID_KEY.includes('YOUR_REVENUECAT') && Platform.OS === 'android') {
-        setIsConfigured(false);
-        return;
-      }
-      
-      setIsConfigured(true);
-      
       try {
-        const offerings = await Purchases.getOfferings();
-        if (offerings.current) {
-          setOfferings(offerings.current);
+        if (Platform.OS === 'web') {
+          setIsConfigured(false);
+          return;
+        }
+
+        if (!Purchases) {
+          console.log('Purchases module not available');
+          setIsConfigured(false);
+          return;
+        }
+
+        if (REVENUECAT_IOS_KEY.includes('YOUR_REVENUECAT') && Platform.OS === 'ios') {
+          setIsConfigured(false);
+          return;
+        }
+        if (REVENUECAT_ANDROID_KEY.includes('YOUR_REVENUECAT') && Platform.OS === 'android') {
+          setIsConfigured(false);
+          return;
+        }
+
+        const configured = await initRevenueCat(token);
+        
+        if (!configured) {
+          setIsConfigured(false);
+          return;
+        }
+        
+        setIsConfigured(true);
+        
+        try {
+          const offs = await Purchases.getOfferings();
+          if (offs.current) {
+            setOfferings(offs.current);
+          }
+        } catch (err) {
+          console.error('Error fetching offerings:', err);
         }
       } catch (err) {
-        console.error('Error fetching offerings:', err);
+        console.error('PricingPage init error:', err);
       }
     };
 
@@ -139,22 +182,30 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
   }, [token]);
 
   const handleSubscribe = async () => {
-    if (!isConfigured) {
-      Alert.alert(
-        '🚀 Kommer snart!', 
-        'Pro-abonnement vil snart være tilgængeligt. Vi arbejder på at færdiggøre betalingsintegration.',
-        [{ text: 'OK' }]
-      );
+    if (!isConfigured || !Purchases) {
+      if (Platform.OS === 'web') {
+        Alert.alert(
+          'Køb via app',
+          'In-app køb er kun tilgængelige i iOS og Android appen.',
+          [{ text: 'OK' }]
+        );
+      } else {
+        Alert.alert(
+          'Kommer snart',
+          'In-app køb er under opsætning. Prøv igen senere.',
+          [{ text: 'OK' }]
+        );
+      }
       return;
     }
 
     if (!token) {
-      Alert.alert('Log ind', 'Du skal være logget ind for at købe abonnement');
+      Alert.alert('Log ind påkrævet', 'Du skal være logget ind for at købe.');
       return;
     }
 
-    if (!offerings || !offerings.availablePackages.length) {
-      Alert.alert('Fejl', 'Kunne ikke hente produkter. Prøv igen.');
+    if (!offerings || !offerings.availablePackages || !offerings.availablePackages.length) {
+      Alert.alert(t('pricing.error') || 'Fejl', 'Kunne ikke hente priser. Prøv igen senere.');
       return;
     }
 
@@ -165,25 +216,28 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
       const { customerInfo } = await Purchases.purchasePackage(pkg);
       
       if (customerInfo.entitlements.active['pro']) {
-        // Update server
-        await fetch(`${API_URL}/subscription/activate`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            revenueCatId: customerInfo.originalAppUserId,
-          }),
-        });
+        try {
+          await fetch(`${API_URL}/subscription/activate`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              revenueCatId: customerInfo.originalAppUserId,
+            }),
+          });
+        } catch (syncErr) {
+          console.log('Server sync warning:', syncErr);
+        }
         
-        Alert.alert('🎉 Velkommen til Pro!', 'Dit abonnement er nu aktivt.');
+        Alert.alert('🎉 ' + (t('pricing.success') || 'Du er nu Pro!'), 'Du har nu adgang til alle funktioner.');
         onClose();
       }
     } catch (err) {
       if (!err.userCancelled) {
         console.error('Purchase error:', err);
-        Alert.alert('Fejl', 'Køb fejlede. Prøv igen.');
+        Alert.alert(t('pricing.error') || 'Fejl', t('pricing.tryAgain') || 'Der opstod en fejl. Prøv igen.');
       }
     } finally {
       setLoading(false);
@@ -191,8 +245,14 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
   };
 
   const handleRestorePurchases = async () => {
-    if (!isConfigured) {
-      Alert.alert('Gendan køb', 'Denne funktion kommer snart.', [{ text: 'OK' }]);
+    if (!isConfigured || !Purchases) {
+      Alert.alert(
+        t('pricing.restore') || 'Gendan køb',
+        Platform.OS === 'web' 
+          ? 'Gendan køb er kun tilgængeligt i iOS og Android appen.'
+          : 'Kommer snart.',
+        [{ text: 'OK' }]
+      );
       return;
     }
 
@@ -202,26 +262,29 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
       const customerInfo = await Purchases.restorePurchases();
       
       if (customerInfo.entitlements.active['pro']) {
-        // Update server
-        await fetch(`${API_URL}/subscription/activate`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            revenueCatId: customerInfo.originalAppUserId,
-          }),
-        });
+        try {
+          await fetch(`${API_URL}/subscription/activate`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              revenueCatId: customerInfo.originalAppUserId,
+            }),
+          });
+        } catch (syncErr) {
+          console.log('Server sync warning:', syncErr);
+        }
         
-        Alert.alert('✅ Gendannet!', 'Dit Pro abonnement er gendannet.');
+        Alert.alert('✅ Køb gendannet!', 'Din Pro subscription er aktiveret.');
         onClose();
       } else {
-        Alert.alert('Info', 'Ingen aktive abonnementer fundet.');
+        Alert.alert('Ingen køb fundet', 'Vi kunne ikke finde et aktivt abonnement.');
       }
     } catch (err) {
       console.error('Restore error:', err);
-      Alert.alert('Fejl', 'Kunne ikke gendanne køb. Prøv igen.');
+      Alert.alert(t('pricing.error') || 'Fejl', 'Kunne ikke gendanne køb. Prøv igen.');
     } finally {
       setRestoring(false);
     }
@@ -230,38 +293,55 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
   // Get price from offerings or use fallback
   const productPrice = offerings?.availablePackages?.[0]?.product?.priceString || '49 kr';
 
-  // ─── PRO FEATURES ─────────────────────────────────────────────────────────
-  const proFeatures = [
-    '🎯 Personlige træningsplaner',
-    '🤖 AI Voice Coach under løb',
-    '📊 Avanceret statistik og analyse',
-    '🎵 Spotify musik-integration',
-    '💬 Ubegrænset AI Coach chat',
-    '🏃 Interval træning med timer',
-    '❤️ Pulszoner og kalorier',
-    '🗺️ Detaljerede rutekort',
-  ];
+  // Build features array from the nested object structure in da.json
+  const featuresObj = t('pricing.features', { returnObjects: true });
+  let proFeatures = [];
+  
+  if (featuresObj && typeof featuresObj === 'object' && !Array.isArray(featuresObj)) {
+    proFeatures = Object.values(featuresObj);
+  } else if (Array.isArray(featuresObj)) {
+    proFeatures = featuresObj;
+  } else {
+    proFeatures = [
+      'Personlig AI-coach',
+      'Ubegrænsede løb',
+      'Avanceret statistik',
+      'Skræddersyede træningsplaner',
+      'Stemme-coach under løb',
+      'Eksportér data'
+    ];
+  }
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.title}>RunWithAI Pro</Text>
-        <Text style={styles.subtitle}>Få mest muligt ud af din løbetræning</Text>
+        <Text style={styles.title}>{t('pricing.title') || 'RunWithAI Pro'}</Text>
+        <Text style={styles.subtitle}>{t('pricing.subtitle') || 'Lås op for alle funktioner'}</Text>
       </View>
 
       {/* Price Card */}
       <View style={styles.priceCard}>
         <Text style={styles.price}>{productPrice}</Text>
-        <Text style={styles.period}>/ måned</Text>
-        <Text style={styles.trial}>Prøv gratis i 7 dage</Text>
+        <Text style={styles.period}>{t('pricing.perMonth') || '/måned'}</Text>
+        <Text style={styles.trial}>7 dages gratis prøveperiode</Text>
+      </View>
+
+      {/* Subscription Info - Required by Apple */}
+      <View style={styles.subscriptionInfo}>
+        <Text style={styles.subscriptionInfoTitle}>Abonnementsdetaljer</Text>
+        <Text style={styles.subscriptionInfoText}>• RunWithAI Pro - Månedligt abonnement</Text>
+        <Text style={styles.subscriptionInfoText}>• Varighed: 1 måned, fornyes automatisk</Text>
+        <Text style={styles.subscriptionInfoText}>• Pris: {productPrice} pr. måned</Text>
+        <Text style={styles.subscriptionInfoText}>• 7 dages gratis prøveperiode</Text>
       </View>
 
       {/* Features List */}
       <View style={styles.featuresContainer}>
-        <Text style={styles.featuresTitle}>Alt inkluderet:</Text>
+        <Text style={styles.featuresTitle}>Inkluderet i Pro</Text>
         {proFeatures.map((feature, index) => (
           <View key={index} style={styles.featureRow}>
+            <Text style={styles.checkmark}>✓</Text>
             <Text style={styles.featureText}>{feature}</Text>
           </View>
         ))}
@@ -276,7 +356,9 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
         {loading ? (
           <ActivityIndicator color="#ffffff" />
         ) : (
-          <Text style={styles.subscribeButtonText}>Start gratis prøveperiode</Text>
+          <Text style={styles.subscribeButtonText}>
+            {t('pricing.subscribe') || 'Start gratis prøveperiode'}
+          </Text>
         )}
       </TouchableOpacity>
 
@@ -289,29 +371,42 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
         {restoring ? (
           <ActivityIndicator color="#888888" />
         ) : (
-          <Text style={styles.restoreButtonText}>Gendan tidligere køb</Text>
+          <Text style={styles.restoreButtonText}>{t('pricing.restore') || 'Gendan køb'}</Text>
         )}
       </TouchableOpacity>
 
-      {/* Terms */}
-      <Text style={styles.terms}>
-        Abonnementet fornyes automatisk. Du kan opsige når som helst.
-        {'\n'}Ved at fortsætte accepterer du vores vilkår og betingelser.
-      </Text>
+      {/* Terms & Privacy - Required by Apple */}
+      <View style={styles.legalContainer}>
+        <Text style={styles.legalText}>
+          Betaling opkræves via din Apple ID-konto ved bekræftelse af køb. 
+          Abonnementet fornyes automatisk, medmindre det annulleres mindst 24 timer før den aktuelle periodes udløb. 
+          Du kan administrere og annullere dit abonnement i dine Apple ID-kontoindstillinger.
+        </Text>
+        
+        <View style={styles.legalLinks}>
+          <TouchableOpacity onPress={() => Linking.openURL(TERMS_OF_USE_URL)}>
+            <Text style={styles.legalLink}>Vilkår og betingelser</Text>
+          </TouchableOpacity>
+          <Text style={styles.legalSeparator}>•</Text>
+          <TouchableOpacity onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}>
+            <Text style={styles.legalLink}>Privatlivspolitik</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
 
       {/* Close Button */}
       <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-        <Text style={styles.closeButtonText}>Luk</Text>
+        <Text style={styles.closeButtonText}>{t('common.cancel') || 'Luk'}</Text>
       </TouchableOpacity>
     </ScrollView>
   );
 }
 
-// ─── STYLES ─────────────────────────────────────────────────────────────────
+// ─── STYLES - SORT/RØD/HVID TEMA ────────────────────────────────────────────
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a0a0a',
+    backgroundColor: '#000000',
   },
   content: {
     padding: 24,
@@ -320,6 +415,7 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginBottom: 32,
+    paddingTop: 20,
   },
   title: {
     fontSize: 32,
@@ -329,7 +425,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 16,
-    color: '#888888',
+    color: '#aaaaaa',
     textAlign: 'center',
   },
   priceCard: {
@@ -337,18 +433,18 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 32,
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 24,
     borderWidth: 2,
-    borderColor: '#FF4500',
+    borderColor: '#FF3B30',
   },
   price: {
     fontSize: 48,
     fontWeight: 'bold',
-    color: '#FF4500',
+    color: '#FF3B30',
   },
   period: {
     fontSize: 18,
-    color: '#888888',
+    color: '#aaaaaa',
     marginTop: 4,
   },
   trial: {
@@ -357,8 +453,26 @@ const styles = StyleSheet.create({
     marginTop: 12,
     fontWeight: '600',
   },
+  subscriptionInfo: {
+    backgroundColor: '#1a1a1a',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 24,
+  },
+  subscriptionInfoTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#ffffff',
+    marginBottom: 10,
+  },
+  subscriptionInfoText: {
+    fontSize: 13,
+    color: '#aaaaaa',
+    marginBottom: 4,
+    lineHeight: 20,
+  },
   featuresContainer: {
-    marginBottom: 32,
+    marginBottom: 24,
   },
   featuresTitle: {
     fontSize: 18,
@@ -371,14 +485,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#222222',
+    borderBottomColor: '#333333',
+  },
+  checkmark: {
+    fontSize: 18,
+    color: '#FF3B30',
+    marginRight: 12,
+    fontWeight: 'bold',
   },
   featureText: {
     fontSize: 16,
     color: '#ffffff',
+    flex: 1,
   },
   subscribeButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FF3B30',
     borderRadius: 12,
     padding: 18,
     alignItems: 'center',
@@ -400,12 +521,33 @@ const styles = StyleSheet.create({
     color: '#888888',
     fontSize: 14,
   },
-  terms: {
-    fontSize: 12,
+  legalContainer: {
+    marginTop: 24,
+    paddingTop: 20,
+    borderTopWidth: 1,
+    borderTopColor: '#333333',
+  },
+  legalText: {
+    fontSize: 11,
     color: '#666666',
     textAlign: 'center',
-    marginTop: 16,
     lineHeight: 18,
+    marginBottom: 16,
+  },
+  legalLinks: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  legalLink: {
+    fontSize: 13,
+    color: '#FF3B30',
+    textDecorationLine: 'underline',
+  },
+  legalSeparator: {
+    fontSize: 13,
+    color: '#666666',
+    marginHorizontal: 12,
   },
   closeButton: {
     marginTop: 24,
@@ -413,7 +555,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   closeButtonText: {
-    color: '#FF4500',
+    color: '#FF3B30',
     fontSize: 16,
   },
 });

@@ -1,0 +1,512 @@
+{
+  "tabs": {
+    "plan": "Plan",
+    "run": "Laufen",
+    "coach": "Coach",
+    "stats": "Statistik",
+    "settings": "Einstellungen",
+    "calendar": "Kalender",
+    "progress": "Fortschritt",
+    "start": "Start"
+  },
+  "run": {
+    "title": "Laufen",
+    "walk": "Gehen",
+    "km": "KM",
+    "time": "ZEIT",
+    "pace": "TEMPO",
+    "start": "Start",
+    "pause": "Pause",
+    "resume": "Fortsetzen",
+    "stop": "Stopp",
+    "save": "Speichern",
+    "discard": "Verwerfen",
+    "startRun": "Lauf starten",
+    "startThisWorkout": "Dieses Training starten",
+    "nextWorkout": "Nächstes Training",
+    "lastActivity": "Letzte Aktivität",
+    "gpsTracking": "GPS-Tracking",
+    "walkTracking": "Geh-Tracking",
+    "aiRoutes": "KI-Routen"
+  },
+  "pro": {
+    "badge": "PRO",
+    "upgrade": "Upgraden",
+    "upgradeToPro": "Auf Pro upgraden",
+    "feature": "Pro-Funktion",
+    "unlockFeatures": "Alle Funktionen freischalten",
+    "fromOnly": "Ab nur",
+    "limit": {
+      "title": "Pro-Funktion",
+      "message": "Diese Funktion erfordert ein Pro-Abonnement",
+      "seePlans": "Pläne ansehen",
+      "cancel": "Abbrechen"
+    },
+    "stats": {
+      "title": "Pro-Statistiken",
+      "features": "Erweiterte Statistiken und Einblicke",
+      "unlock": "Freischalten"
+    },
+    "coach": {
+      "title": "KI-Coach",
+      "description": "Persönlicher Trainingsplan, der sich an dich anpasst"
+    },
+    "calendar": {
+      "title": "Trainingskalender",
+      "description": "Sieh deinen vollständigen Trainingsplan"
+    },
+    "aiRoutes": {
+      "title": "KI-Routen",
+      "description": "Erhalte Routenvorschläge basierend auf deinem Training"
+    }
+  },
+  "stats": {
+    "title": "Statistiken",
+    "totalRuns": "Gesamtläufe",
+    "totalKm": "Gesamt-km",
+    "avgPace": "Durchschn. Tempo",
+    "thisWeek": "Diese Woche",
+    "thisMonth": "Dieser Monat",
+    "allTime": "Gesamt",
+    "basic": "Basis-Statistiken",
+    "runs": "Läufe"
+  },
+  "subscription": "Abonnement",
+  "alerts": {
+    "deleteRun": "Bist du sicher, dass du diesen Lauf löschen möchtest?",
+    "deleteAccount": "Bist du sicher, dass du dein Konto löschen möchtest? Dies kann nicht rückgängig gemacht werden.",
+    "logout": "Bist du sicher, dass du dich abmelden möchtest?",
+    "discardRun": "Bist du sicher, dass du diesen Lauf verwerfen möchtest?",
+    "unsavedChanges": "Du hast ungespeicherte Änderungen. Möchtest du sie verwerfen?",
+    "welcomePro": {
+      "title": "Willkommen bei Pro!",
+      "message": "Du hast jetzt Zugriff auf alle Funktionen"
+    }
+  },
+  "auth": {
+    "login": "Anmelden",
+    "register": "Konto erstellen",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "confirmPassword": "Passwort bestätigen",
+    "forgotPassword": "Passwort vergessen?",
+    "noAccount": "Noch kein Konto?",
+    "hasAccount": "Bereits ein Konto?",
+    "loginButton": "Anmelden",
+    "registerButton": "Konto erstellen",
+    "orContinueWith": "oder weiter mit",
+    "apple": "Apple",
+    "google": "Google",
+    "emailPlaceholder": "deine@email.de",
+    "passwordPlaceholder": "••••••••",
+    "namePlaceholder": "Dein Name",
+    "name": "Name",
+    "loggingIn": "Anmelden...",
+    "registering": "Konto wird erstellt...",
+    "tagline": "Dein persönlicher KI-Laufcoach",
+    "createAccount": "Konto erstellen",
+    "minChars": "mind. Zeichen",
+    "repeatPassword": "Passwort wiederholen",
+    "continue": "weiter",
+    "getStarted": "los geht's",
+    "step1of3": "Schritt 1 von 3",
+    "step2of3": "Schritt 2 von 3",
+    "step3of3": "Schritt 3 von 3",
+    "yourName": "dein Name",
+    "age": "ALTER",
+    "weight": "GEWICHT",
+    "height": "GRÖSSE",
+    "years": "Jahre",
+    "runningLevel": "LAUFNIVEAU",
+    "levels.beginner": "Anfänger",
+    "levels.intermediate": "Fortgeschritten",
+    "levels.advanced": "Erfahren",
+    "yourGoals": "WAS SIND DEINE ZIELE",
+    "goals.health": "Gesundheit",
+    "goals.weight": "Abnehmen",
+    "goals.distance": "Länger laufen",
+    "goals.speed": "Schneller werden",
+    "goals.race": "Ein Rennen laufen",
+    "goals.fun": "Spaß",
+    "weeklyGoalKm": "WÖCHENTLICHES KM-ZIEL",
+    "weeklyGoalExample": "Z.B. 20",
+    "unlockFullPower": "Vollen Zugang freischalten",
+    "unlockDesc": "Erhalte Zugang zu allen Funktionen und erreiche deine Ziele schneller",
+    "proFeatures.aiCoachDesc": "KI-Coach",
+    "proFeatures.statsDesc": "Statistiken",
+    "proFeatures.goalsDesc": "Ziele",
+    "proFeatures.routesDesc": "Routen",
+    "proFeatures.chatDesc": "KI-Chat",
+    "proFeatures.reportsDesc": "Berichte",
+    "price": "49 kr",
+    "guarantee": "✓ Jederzeit kündbar • ✓ 7 Tage kostenlos testen",
+    "perMonth": "/Monat",
+    "startFreeTrial": "Kostenlose Testversion starten",
+    "continueWithFree": "Mit kostenloser Version fortfahren",
+    "levels.beginnerDesc": "Neu beim Laufen oder Neustart nach langer Pause",
+    "levels.intermediateDesc": "Läuft regelmäßig und möchte sich verbessern",
+    "levels.advancedDesc": "Erfahrener Läufer mit spezifischen Zielen",
+    "or": "oder",
+    "errors": {
+      "serverConnection": "Verbindung zum Server nicht möglich"
+    }
+  },
+  "settings": {
+    "pageTitle": "Einstellungen",
+    "title": "Einstellungen",
+    "profile": "Profil",
+    "days": ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
+    "saveChanges": "Änderungen speichern",
+    "saved": "Gespeichert!",
+    "logout": "Abmelden",
+    "privacyPolicy": "Datenschutzrichtlinie",
+    "termsOfService": "Nutzungsbedingungen",
+    "dangerZone": "Gefahrenzone",
+    "sections": {
+      "personalInfo": "Persönliche Informationen",
+      "level": "Niveau",
+      "runningGoals": "Laufziele",
+      "weeklyGoals": "Wochenziele",
+      "trainingTypes": "Trainingsarten",
+      "heartRateZones": "Herzfrequenzzonen",
+      "injuries": "Verletzungen",
+      "reminders": "Erinnerungen",
+      "privacy": "Privatsphäre",
+      "units": "Einheiten",
+      "data": "Daten"
+    },
+    "fields": {
+      "name": "Name",
+      "age": "Alter",
+      "weight": "Gewicht (kg)",
+      "height": "Größe (cm)",
+      "sex": "Geschlecht",
+      "restingHr": "Ruhepuls",
+      "maxHr": "Maximalpuls",
+      "vo2max": "VO2max",
+      "yearsRunning": "Jahre gelaufen",
+      "weeklyKm": "Wöchentliche km",
+      "weeklyKmGoal": "Wöchentliches km-Ziel",
+      "weeklyRunsGoal": "Wöchentliches Laufziel",
+      "primaryGoal": "Hauptziel",
+      "raceDate": "Wettkampfdatum",
+      "injuries": "Verletzungen/Einschränkungen",
+      "injuriesPlaceholder": "Z.B. Knieprobleme, Rückenschmerzen...",
+      "preferredDays": "Bevorzugte Tage",
+      "preferredTypes": "Bevorzugte Laufarten"
+    },
+    "sex": {
+      "male": "Männlich",
+      "female": "Weiblich"
+    },
+    "levels": {
+      "beginner": "Anfänger",
+      "intermediate": "Fortgeschritten",
+      "advanced": "Erfahren"
+    },
+    "goals": {
+      "fitness": "Allgemeine Fitness",
+      "weight": "Gewichtsabnahme",
+      "half": "Halbmarathon",
+      "full": "Marathon"
+    },
+    "runTypes": {
+      "easy": "Lockerer Lauf",
+      "interval": "Intervalle",
+      "long": "Langer Lauf",
+      "tempo": "Tempolauf",
+      "recovery": "Erholung",
+      "race": "Wettkampf",
+      "trail": "Trail"
+    },
+    "zones": {
+      "calculated": "Berechnet aus deinem Maximalpuls",
+      "z1": "Zone 1 (Erholung)",
+      "z2": "Zone 2 (Aerob)",
+      "z3": "Zone 3 (Tempo)",
+      "z4": "Zone 4 (Schwelle)",
+      "z5": "Zone 5 (Anaerob)"
+    },
+    "notifications": {
+      "push": "Push-Benachrichtigungen",
+      "pushSub": "Trainingserinnerungen erhalten",
+      "enabled": "Aktiviert",
+      "reminder": "Erinnerung",
+      "time": "Zeit",
+      "days": "Tage"
+    },
+    "privacy": {
+      "shareProfile": "Profil teilen",
+      "shareProfileSub": "Andere können dein Profil sehen",
+      "shareActivity": "Aktivität teilen",
+      "shareActivitySub": "Andere können deine Läufe sehen",
+      "shareLocation": "Standort teilen",
+      "shareLocationSub": "Deine Position auf Routen anzeigen"
+    },
+    "units": {
+      "distance": "Distanz",
+      "pace": "Tempo"
+    },
+    "data": {
+      "export": "Daten exportieren",
+      "exportSub": "Alle deine Laufdaten herunterladen"
+    },
+    "shoes": {
+      "title": "Laufschuhe",
+      "addShoe": "Schuh hinzufügen",
+      "namePlaceholder": "Schuhname",
+      "brandPlaceholder": "Marke",
+      "kmPlaceholder": "Start-km",
+      "saveShoe": "Schuh speichern",
+      "useForNextRun": "Für nächsten Lauf verwenden",
+      "active": "Aktiv",
+      "delete": "Löschen",
+      "deleteConfirm": "Bist du sicher, dass du diesen Schuh löschen möchtest?",
+      "empty": "Noch keine Schuhe hinzugefügt",
+      "worn": "Abgenutzt",
+      "soonWorn": "Fast abgenutzt",
+      "wornMessage": "Dieser Schuh hat über 800 km und sollte ersetzt werden"
+    },
+    "deleteAccount": {
+      "title": "Konto löschen",
+      "button": "Mein Konto löschen",
+      "warning": "Dies kann nicht rückgängig gemacht werden!",
+      "confirmMessage": "Bist du sicher, dass du dein Konto löschen möchtest? Alle Daten werden dauerhaft gelöscht.",
+      "confirmButton": "Ja, mein Konto löschen",
+      "deletedTitle": "Konto gelöscht",
+      "deletedMessage": "Dein Konto wurde gelöscht.",
+      "error": "Konto konnte nicht gelöscht werden"
+    }
+  },
+  "pricing": {
+    "title": "RunWithAI Pro",
+    "subtitle": "Alle Funktionen freischalten",
+    "monthly": "Monatlich",
+    "yearly": "Jährlich",
+    "perMonth": "/Monat",
+    "perYear": "/Jahr",
+    "save": "Spare",
+    "features": {
+      "aiCoach": "Persönlicher KI-Coach",
+      "unlimitedRuns": "Unbegrenzte Läufe",
+      "advancedStats": "Erweiterte Statistiken",
+      "trainingPlans": "Individuelle Trainingspläne",
+      "voiceCoach": "Stimm-Coach während des Laufens",
+      "exportData": "Daten exportieren"
+    },
+    "subscribe": "Jetzt abonnieren",
+    "restore": "Kauf wiederherstellen",
+    "terms": "Bedingungen gelten. Automatische Verlängerung.",
+    "currentPlan": "Aktueller Plan",
+    "free": "Kostenlos",
+    "pro": "Pro",
+    "loading": "Laden...",
+    "error": "Etwas ist schiefgelaufen",
+    "success": "Du bist jetzt Pro!",
+    "alreadyPro": "Du bist bereits Pro-Nutzer",
+    "tryAgain": "Erneut versuchen"
+  },
+  "common": {
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "done": "Fertig",
+    "next": "Weiter",
+    "back": "Zurück",
+    "skip": "Überspringen",
+    "ok": "OK",
+    "yes": "Ja",
+    "no": "Nein",
+    "loading": "Laden...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "retry": "Wiederholen"
+  },
+  "onboarding": {
+    "welcome": "Willkommen bei",
+    "appName": "RunWithAI",
+    "subtitle": "Dein persönlicher KI-Laufcoach",
+    "getStarted": "Los geht's",
+    "step1": {
+      "title": "Verfolge deine Läufe",
+      "desc": "GPS-Tracking mit Live-Statistiken und Routenanzeige"
+    },
+    "step2": {
+      "title": "KI-gestütztes Coaching",
+      "desc": "Erhalte personalisierte Trainingspläne und Tipps von deinem KI-Coach"
+    },
+    "step3": {
+      "title": "Erreiche deine Ziele",
+      "desc": "Setze Ziele und verfolge deinen Fortschritt mit detaillierten Statistiken"
+    }
+  },
+  "dashboard": {
+    "defaultName": "LÄUFER",
+    "greeting": {
+      "morning": "GUTEN MORGEN,",
+      "day": "GUTEN TAG,",
+      "evening": "GUTEN ABEND,"
+    },
+    "planUpdated": "PLAN AKTUALISIERT",
+    "refresh": "Aktualisieren",
+    "shoeAlert": {
+      "worn": "Schuhe abgenutzt!",
+      "soonWorn": "Schuhe fast abgenutzt!"
+    },
+    "fatigue": {
+      "rested": "Erholt",
+      "ok": "OK",
+      "slightlyTired": "Leicht müde",
+      "veryTired": "Sehr müde"
+    },
+    "weather": {
+      "title": "WETTER & FORM",
+      "wind": "Wind",
+      "clear": "Klarer Himmel",
+      "partlyCloudy": "Teilweise bewölkt",
+      "foggy": "Nebel/Dunst",
+      "rain": "Regen",
+      "snow": "Schnee",
+      "showers": "Schauer",
+      "thunder": "Gewitter",
+      "analyzing": "Analysiere Wetter und Zustand...",
+      "noAdvice": "Keine Empfehlung verfügbar",
+      "fetchError": "Wetterdaten konnten nicht abgerufen werden — versuche es erneut."
+    },
+    "stats": {
+      "kmThisWeek": "KM DIESE WOCHE",
+      "daysInRow": "TAGE IN FOLGE",
+      "runsThisMonth": "LÄUFE IM MONAT",
+      "of": "von",
+      "personalRecord": "Persönlicher Rekord",
+      "fromRecord": "{{count}} von deinem Rekord",
+      "overOneWeek": "Über 1 Woche am Stück",
+      "keepingMomentum": "Bleibst am Ball",
+      "goodStart": "Anfang von etwas Gutem",
+      "keepGoing": "Weiter so!",
+      "startStreak": "Starte heute eine Serie",
+      "bestMonthEver": "Bester {{month}} aller Zeiten",
+      "oneFromRecord": "1 Lauf bis zu deinem Rekordmonat!",
+      "runsFromRecord": "{{count}} Läufe bis zum Rekord",
+      "runsInMonth": "{{count}} Läufe im {{month}}"
+    },
+    "monthNames": ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"],
+    "workout": {
+      "nextWorkout": "NÄCHSTES TRAINING",
+      "today": "HEUTE",
+      "distance": "Distanz",
+      "time": "Zeit",
+      "targetPace": "Zieltempo",
+      "targetHr": "Ziel-HF"
+    },
+    "weekPlan": {
+      "title": "DIESE WOCHE"
+    },
+    "milestone": {
+      "nextMilestone": "NÄCHSTER MEILENSTEIN",
+      "kmLeft": "km übrig",
+      "total": "gesamt",
+      "thisWeek": "Diese Woche!",
+      "oneToTwoWeeks": "Etwa 1-2 Wochen",
+      "aboutWeeks": "Etwa {{count}} Wochen"
+    },
+    "diary": {
+      "title": "LAUFTAGEBUCH",
+      "subtitle": "Schreibe Notizen zu deinen Läufen — die KI lernt davon",
+      "addNote": "+ Notiz",
+      "mood": "Stimmung",
+      "placeholder": "Wie lief es? Schwere Beine? Guter Tag? Neue Route?",
+      "dayNames": ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]
+    },
+    "injury": {
+      "title": "VERLETZUNGSRISIKO",
+      "low": "Niedrig",
+      "moderate": "Mittel",
+      "high": "Hoch",
+      "kmIncrease": "Km um {{pct}}% gestiegen vs. letzte Woche",
+      "runsLast3Days": "{{count}} Läufe in den letzten 3 Tagen",
+      "noRestToday": "Kein Ruhetag heute",
+      "daysSinceRun": "{{count}} Tage seit dem letzten Lauf — erholt",
+      "noRiskFactors": "Keine besonderen Risikofaktoren.",
+      "tip1": "Denke an einen Ruhetag nach harten Läufen",
+      "tip2": "Erhöhe die km nicht um mehr als 10% pro Woche",
+      "analyzed": "Analysiert",
+      "aiAnalysis": "KI-Analyse"
+    },
+    "racePredictor": {
+      "title": "Wettkampf-Prognose",
+      "subtitle": "Sieh deine erwarteten Wettkampfzeiten",
+      "noData": "Du brauchst mindestens einen Lauf für eine Prognose.",
+      "analyzing": "KI analysiert deine Läufe...",
+      "halfMarathon": "Halbmarathon",
+      "confidence": "Konfidenz"
+    }
+  },
+  "tracker": {
+    "defaultRunner": "Läufer",
+    "voiceOn": "Stimme an",
+    "voiceOff": "Stimme aus",
+    "mapNotAvailable": "Karte nicht verfügbar",
+    "status": {
+      "ready": "Drücke Start um zu beginnen",
+      "paused": "Pausiert",
+      "tracking": "Aufzeichnung..."
+    },
+    "gps": {
+      "active": "GPS aktiv",
+      "waiting": "Suche GPS-Signal...",
+      "denied": "GPS-Berechtigung verweigert",
+      "unavailable": "GPS nicht verfügbar",
+      "timeout": "GPS-Timeout",
+      "notAvailable": "GPS nicht verfügbar",
+      "error": "GPS-Fehler"
+    }
+  },
+  "chat": {
+    "title": "KI-COACH",
+    "clear": "Löschen",
+    "placeholder": "Schreibe deinem Coach...",
+    "loadingHistory": "Lade Unterhaltung...",
+    "planUpdated": "Plan aktualisiert",
+    "defaultRunner": "Läufer",
+    "greeting": "Hallo {{name}}! Ich bin dein KI-Laufcoach. Wie kann ich dir heute helfen?",
+    "clearedGreeting": "Unterhaltung gelöscht! Wie kann ich dir helfen, {{name}}?",
+    "connectionError": "Entschuldigung, ich konnte keine Verbindung herstellen. Bitte versuche es erneut."
+  },
+  "proUpsell": {
+    "title": "Volle Power freischalten",
+    "subtitle": "Erhalte Zugang zu allen Funktionen und erreiche deine Ziele schneller",
+    "price": "49 DKK",
+    "priceUnit": "/Monat",
+    "guarantee": "✓ Jederzeit kündbar • ✓ 7 Tage kostenlos testen",
+    "startTrial": "Kostenlose Testversion starten",
+    "continueWithFree": "Mit kostenloser Version fortfahren",
+    "features": {
+      "aiCoach": {
+        "title": "KI-Coach",
+        "desc": "Persönlicher Trainingsplan, der sich an dich anpasst"
+      },
+      "advancedStats": {
+        "title": "Erweiterte Statistiken",
+        "desc": "Tiefgehende Analyse deines Trainings"
+      },
+      "unlimitedGoals": {
+        "title": "Unbegrenzte Ziele",
+        "desc": "Setze so viele Ziele wie du möchtest"
+      },
+      "routeLibrary": {
+        "title": "Routenbibliothek",
+        "desc": "Speichere und teile deine Lieblingsrouten"
+      },
+      "aiChat": {
+        "title": "KI-Chat",
+        "desc": "Stelle Fragen zum Laufen und erhalte Antworten"
+      },
+      "progressReports": {
+        "title": "Fortschrittsberichte",
+        "desc": "Wöchentliche und monatliche Zusammenfassungen"
+      }
+    }
+  }
+}

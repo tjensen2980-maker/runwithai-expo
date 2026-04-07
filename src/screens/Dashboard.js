@@ -2,9 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Icon } from '../components/Icons';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator, TextInput } from 'react-native';
 import { colors, LEVELS, DEFAULT_WEEK_PLAN, SERVER, getAuthToken } from '../data';
+import { useTranslation } from 'react-i18next';
 
 // ─── VEJR + TRÆTHED ANBEFALING ────────────────────────────────────────────────
 function WeatherAdvice({ runs, nextWorkout, level, profile }) {
+  const { t } = useTranslation();
   const [advice, setAdvice] = useState(null);
   const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -12,7 +14,7 @@ function WeatherAdvice({ runs, nextWorkout, level, profile }) {
 
   // Beregn træthedsniveau fra seneste løb
   const fatigue = useCallback(() => {
-    if (!runs || runs.length === 0) return { score: 0, label: 'Udhvilet', icon: 'zap' };
+    if (!runs || runs.length === 0) return { score: 0, label: t('dashboard.fatigue.rested'), icon: 'zap' };
     const now = Date.now();
     const last48h = runs.filter(r => {
       const d = new Date(r.created_at || r.date || 0);
@@ -25,17 +27,16 @@ function WeatherAdvice({ runs, nextWorkout, level, profile }) {
     const kmLast48h = last48h.reduce((s, r) => s + (r.km || 0), 0);
     const kmLast7d  = last7d.reduce((s, r) => s + (r.km || 0), 0);
     const score = Math.min(10, kmLast48h * 0.8 + kmLast7d * 0.15);
-    if (score >= 7) return { score, label: 'Meget træt', icon: 'frown' };
-    if (score >= 4) return { score, label: 'Let træt', icon: 'meh' };
-    if (score >= 2) return { score, label: 'OK', icon: 'smile' };
-    return { score, label: 'Udhvilet', icon: 'zap' };
-  }, [runs]);
+    if (score >= 7) return { score, label: t('dashboard.fatigue.veryTired'), icon: 'frown' };
+    if (score >= 4) return { score, label: t('dashboard.fatigue.slightlyTired'), icon: 'meh' };
+    if (score >= 2) return { score, label: t('dashboard.fatigue.ok'), icon: 'smile' };
+    return { score, label: t('dashboard.fatigue.rested'), icon: 'zap' };
+  }, [runs, t]);
 
   // Hent vejr fra Open-Meteo (gratis, ingen API-nøgle)
   const fetchWeather = useCallback(async () => {
     setLoading(true);
     try {
-      // Brug brugerens position hvis tilgængelig, ellers Aarhus som default
       let lat = 56.15, lon = 10.21;
       try {
         const pos = await new Promise((res, rej) =>
@@ -50,16 +51,15 @@ function WeatherAdvice({ runs, nextWorkout, level, profile }) {
       const data = await resp.json();
       const c = data.current;
 
-      // Vejrkode til emoji + beskrivelse
       const wCode = c.weathercode;
       let weatherDesc, weatherEmoji;
-      if (wCode === 0)                        { weatherDesc = 'Klar himmel'; weatherEmoji = 'sun'; }
-      else if (wCode <= 3)                    { weatherDesc = 'Let skyet'; weatherEmoji = 'cloud'; }
-      else if (wCode <= 49)                   { weatherDesc = 'Tåge/dis'; weatherEmoji = 'wind'; }
-      else if (wCode <= 67)                   { weatherDesc = 'Regn'; weatherEmoji = 'rain'; }
-      else if (wCode <= 77)                   { weatherDesc = 'Sne'; weatherEmoji = 'snow'; }
-      else if (wCode <= 82)                   { weatherDesc = 'Byger'; weatherEmoji = 'rain'; }
-      else                                    { weatherDesc = 'Tordenvejr'; weatherEmoji = 'rain'; }
+      if (wCode === 0)                        { weatherDesc = t('dashboard.weather.clear'); weatherEmoji = 'sun'; }
+      else if (wCode <= 3)                    { weatherDesc = t('dashboard.weather.partlyCloudy'); weatherEmoji = 'cloud'; }
+      else if (wCode <= 49)                   { weatherDesc = t('dashboard.weather.foggy'); weatherEmoji = 'wind'; }
+      else if (wCode <= 67)                   { weatherDesc = t('dashboard.weather.rain'); weatherEmoji = 'rain'; }
+      else if (wCode <= 77)                   { weatherDesc = t('dashboard.weather.snow'); weatherEmoji = 'snow'; }
+      else if (wCode <= 82)                   { weatherDesc = t('dashboard.weather.showers'); weatherEmoji = 'rain'; }
+      else                                    { weatherDesc = t('dashboard.weather.thunder'); weatherEmoji = 'rain'; }
 
       const weather = {
         temp: Math.round(c.temperature_2m),
@@ -73,7 +73,6 @@ function WeatherAdvice({ runs, nextWorkout, level, profile }) {
       };
       setWeatherData(weather);
 
-      // Hent AI-anbefaling
       const fat = fatigue();
       const workoutName = typeof nextWorkout?.name === 'object'
         ? nextWorkout.name[level] || nextWorkout.name.intermediate
@@ -96,14 +95,13 @@ Giv en KORT vejr- og træthedstilpasset anbefaling på 2-3 sætninger. Foreslå 
         }),
       });
       const aiData = await aiResp.json();
-      setAdvice(aiData.reply || aiData.message || 'Ingen anbefaling tilgængelig');
+      setAdvice(aiData.reply || aiData.message || t('dashboard.weather.noAdvice'));
     } catch (e) {
-      setAdvice('Kunne ikke hente vejrdata — prøv igen.');
+      setAdvice(t('dashboard.weather.fetchError'));
     }
     setLoading(false);
-  }, [runs, nextWorkout, level, profile, fatigue]);
+  }, [runs, nextWorkout, level, profile, fatigue, t]);
 
-  // Hent vejr automatisk ved mount
   useEffect(() => { fetchWeather(); }, []);
 
   const fat = fatigue();
@@ -119,15 +117,14 @@ Giv en KORT vejr- og træthedstilpasset anbefaling på 2-3 sætninger. Foreslå 
       style={[s.weatherCard, { borderColor: accentColor + '60' }]}
       activeOpacity={0.8}
     >
-      {/* Header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <Icon name={weatherData?.emoji || 'sun'} size={22} color={wColors[weatherData?.emoji] || '#f59e0b'}/>
           <View>
-            <Text style={[s.weatherTitle, { color: accentColor }]}>VEJR & FORM</Text>
+            <Text style={[s.weatherTitle, { color: accentColor }]}>{t('dashboard.weather.title')}</Text>
             {weatherData && (
               <Text style={s.weatherSub}>
-                {weatherData.temp}°C · {weatherData.desc} · Vind {weatherData.wind} km/t
+                {weatherData.temp}°C · {weatherData.desc} · {t('dashboard.weather.wind')} {weatherData.wind} km/t
               </Text>
             )}
           </View>
@@ -139,19 +136,18 @@ Giv en KORT vejr- og træthedstilpasset anbefaling på 2-3 sætninger. Foreslå 
         </View>
       </View>
 
-      {/* Expanded anbefaling */}
       {expanded && (
         <View style={s.weatherAdviceBox}>
           {loading ? (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
               <ActivityIndicator size="small" color={accentColor} />
-              <Text style={{ color: colors.dim, fontSize: 13 }}>Analyserer vejr og form...</Text>
+              <Text style={{ color: colors.dim, fontSize: 13 }}>{t('dashboard.weather.analyzing')}</Text>
             </View>
           ) : (
             <>
               <Text style={s.weatherAdviceText}>{advice}</Text>
               <TouchableOpacity onPress={(e) => { e.stopPropagation?.(); fetchWeather(); }} style={s.refreshBtn}>
-                <Text style={[s.refreshBtnText, { color: accentColor }]}>↻ Opdater</Text>
+                <Text style={[s.refreshBtnText, { color: accentColor }]}>↻ {t('dashboard.refresh')}</Text>
               </TouchableOpacity>
             </>
           )}
@@ -162,7 +158,7 @@ Giv en KORT vejr- og træthedstilpasset anbefaling på 2-3 sætninger. Foreslå 
 }
 
 // ─── STREAK & STATS BEREGNING ─────────────────────────────────────────────────
-function computeStats(runs) {
+function computeStats(runs, t) {
   if (!runs || runs.length === 0) return { kmThisWeek: 0, streak: 0, runsThisWeek: 0, streakContext: null, monthContext: null };
 
   const now = new Date();
@@ -175,7 +171,6 @@ function computeStats(runs) {
   const kmThisWeek = runs.filter(r => new Date(r.date) >= monday && r.km > 0).reduce((s,r) => s + r.km, 0);
   const runsThisWeek = runs.filter(r => new Date(r.date) >= monday && r.km > 0).length;
 
-  // Streak
   const runDays = new Set(runs.filter(r => r.km > 0).map(r => dayKey(new Date(r.date))));
   let streak = 0;
   const checkDate = new Date(); checkDate.setHours(0,0,0,0);
@@ -185,8 +180,6 @@ function computeStats(runs) {
     else break;
   }
 
-  // ── STREAK KONTEKST ──
-  // Find bedste streak nogensinde
   const sortedDays = [...runDays].sort();
   let bestStreak = 0, curStreak = 0, prevDate = null;
   for (const dk of sortedDays) {
@@ -200,13 +193,11 @@ function computeStats(runs) {
     prevDate = d;
   }
 
-  // Løb denne måned vs. rekord
   const thisMonth = now.getMonth(), thisYear = now.getFullYear();
   const runsThisMonth = runs.filter(r => {
     const d = new Date(r.date); return d.getMonth() === thisMonth && d.getFullYear() === thisYear && r.km > 0;
   }).length;
 
-  // Find bedste måned nogensinde
   const monthCounts = {};
   runs.filter(r => r.km > 0).forEach(r => {
     const d = new Date(r.date);
@@ -219,12 +210,10 @@ function computeStats(runs) {
   const isBestMonth = bestMonthKey === currentMonthKey;
   const toRecord = bestMonthCount - runsThisMonth;
 
-  // Km denne måned
   const kmThisMonth = runs.filter(r => {
     const d = new Date(r.date); return d.getMonth() === thisMonth && d.getFullYear() === thisYear && r.km > 0;
   }).reduce((s,r) => s+r.km, 0);
 
-  // Bedste km-måned
   const monthKm = {};
   runs.filter(r => r.km > 0).forEach(r => {
     const d = new Date(r.date);
@@ -233,29 +222,27 @@ function computeStats(runs) {
   });
   const bestMonthKm = Math.max(0, ...Object.values(monthKm));
 
-  // Streak kontekst-tekst
   let streakContext = null;
   if (streak > 0) {
-    if (streak >= bestStreak && bestStreak > 1) streakContext = { text: `Personlig rekord`, hot: true };
-    else if (streak >= bestStreak * 0.8 && bestStreak > 2) streakContext = { text: `${bestStreak - streak} fra din rekord`, hot: true };
-    else if (streak >= 7) streakContext = { text: `Over 1 uge i træk`, hot: true };
-    else if (streak >= 3) streakContext = { text: `Holder momentum`, hot: false };
-    else streakContext = { text: `${streak === 1 ? 'Start på noget godt' : 'Fortsæt!'}`, hot: false };
+    if (streak >= bestStreak && bestStreak > 1) streakContext = { text: t('dashboard.stats.personalRecord'), hot: true };
+    else if (streak >= bestStreak * 0.8 && bestStreak > 2) streakContext = { text: t('dashboard.stats.fromRecord', { count: bestStreak - streak }), hot: true };
+    else if (streak >= 7) streakContext = { text: t('dashboard.stats.overOneWeek'), hot: true };
+    else if (streak >= 3) streakContext = { text: t('dashboard.stats.keepingMomentum'), hot: false };
+    else streakContext = { text: streak === 1 ? t('dashboard.stats.goodStart') : t('dashboard.stats.keepGoing'), hot: false };
   } else {
-    streakContext = { text: 'Start en streak i dag', hot: false };
+    streakContext = { text: t('dashboard.stats.startStreak'), hot: false };
   }
 
-  // Måned kontekst-tekst
   let monthContext = null;
-  const monthNames = ['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'];
+  const monthNames = t('dashboard.monthNames', { returnObjects: true }) || ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
   if (isBestMonth && runsThisMonth > 0) {
-    monthContext = { text: `Bedste ${monthNames[thisMonth]} nogensinde`, record: true };
+    monthContext = { text: t('dashboard.stats.bestMonthEver', { month: monthNames[thisMonth] }), record: true };
   } else if (toRecord === 1) {
-    monthContext = { text: `1 løb fra din bedste måned!`, record: false };
+    monthContext = { text: t('dashboard.stats.oneFromRecord'), record: false };
   } else if (toRecord <= 3 && toRecord > 0) {
-    monthContext = { text: `${toRecord} løb fra rekord`, record: false };
+    monthContext = { text: t('dashboard.stats.runsFromRecord', { count: toRecord }), record: false };
   } else if (runsThisMonth > 0) {
-    monthContext = { text: `${runsThisMonth} løb i ${monthNames[thisMonth]}`, record: false };
+    monthContext = { text: t('dashboard.stats.runsInMonth', { count: runsThisMonth, month: monthNames[thisMonth] }), record: false };
   }
 
   return {
@@ -269,7 +256,8 @@ function computeStats(runs) {
 
 // ─── STATS PILLS ──────────────────────────────────────────────────────────────
 function StatsRow({ runs, profile }) {
-  const stats = computeStats(runs);
+  const { t } = useTranslation();
+  const stats = computeStats(runs, t);
   const { kmThisWeek, streak, runsThisWeek, streakContext, monthContext, runsThisMonth, kmThisMonth, bestMonthKm } = stats;
   const weeklyGoal = profile?.weeklyKmGoal ? parseFloat(profile.weeklyKmGoal) : 20;
   const goalPct = Math.min(100, Math.round((kmThisWeek / weeklyGoal) * 100));
@@ -277,22 +265,20 @@ function StatsRow({ runs, profile }) {
 
   return (
     <View style={s.pillRow}>
-      {/* KM denne uge */}
       <View style={[s.pill, { borderColor: colors.accent + '50' }]}>
         <Text style={[s.pillVal, { color: colors.accent }]}>{kmThisWeek}</Text>
-        <Text style={s.pillLabel}>KM DENNE UGE</Text>
+        <Text style={s.pillLabel}>{t('dashboard.stats.kmThisWeek')}</Text>
         <View style={s.progressBar}>
           <View style={[s.progressFill, { width: goalPct + '%', backgroundColor: colors.accent }]} />
         </View>
-        <Text style={s.pillSub}>{goalPct}% af {weeklyGoal}km</Text>
+        <Text style={s.pillSub}>{goalPct}% {t('dashboard.stats.of')} {weeklyGoal}km</Text>
       </View>
 
-      {/* Streak med kontekst */}
       <View style={[s.pill, { borderColor: streak > 0 ? colors.secondary + '60' : colors.border }]}>
         <Text style={[s.pillVal, { color: streak > 0 ? colors.secondary : colors.muted }]}>
-          {streak > 0 ? streak : '–'}{streak > 0 ? '' : ''}
+          {streak > 0 ? streak : '–'}
         </Text>
-        <Text style={s.pillLabel}>DAGE I TRÆK</Text>
+        <Text style={s.pillLabel}>{t('dashboard.stats.daysInRow')}</Text>
         {streakContext && (
           <Text style={[s.pillContext, { color: streakContext.hot ? colors.secondary : colors.muted }]}>
             {streakContext.text}
@@ -300,12 +286,11 @@ function StatsRow({ runs, profile }) {
         )}
       </View>
 
-      {/* Måneds-løb med kontekst */}
       <View style={[s.pill, { borderColor: monthContext?.record ? colors.yellow + '60' : colors.blue + '40' }]}>
         <Text style={[s.pillVal, { color: monthContext?.record ? colors.yellow : colors.blue }]}>
           {runsThisMonth}
         </Text>
-        <Text style={s.pillLabel}>LØB I MND.</Text>
+        <Text style={s.pillLabel}>{t('dashboard.stats.runsThisMonth')}</Text>
         {monthContext && (
           <Text style={[s.pillContext, { color: monthContext.record ? colors.yellow : colors.muted }]}>
             {monthContext.text}
@@ -323,17 +308,18 @@ function StatsRow({ runs, profile }) {
 
 // ─── WORKOUT CARD ─────────────────────────────────────────────────────────────
 function WorkoutCard({ workout, level, onNavigate, onStartActivity }) {
+  const { t } = useTranslation();
   const lv = LEVELS[level] || LEVELS['intermediate'];
   return (
     <View style={[s.workoutCard, { borderColor: colors.accent + '35' }]}>
       <View style={s.workoutAccentLine} />
       <View style={s.workoutHeader}>
         <View style={{ flex: 1 }}>
-          <Text style={s.workoutLabel}>NÆSTE TRÆNING</Text>
+          <Text style={s.workoutLabel}>{t('dashboard.workout.nextWorkout')}</Text>
           <Text style={s.workoutName}>{workout.name[level]}</Text>
         </View>
         <View style={[s.badge, { backgroundColor: colors.accent + '12', borderColor: colors.accent + '35' }]}>
-          <Text style={[s.badgeText, { color: colors.accent }]}>I DAG</Text>
+          <Text style={[s.badgeText, { color: colors.accent }]}>{t('dashboard.workout.today')}</Text>
         </View>
       </View>
 
@@ -342,32 +328,32 @@ function WorkoutCard({ workout, level, onNavigate, onStartActivity }) {
       <View style={s.workoutStats}>
         <View style={s.workoutStat}>
           <Text style={s.workoutStatVal}>{workout.km} km</Text>
-          <Text style={s.workoutStatLabel}>Distance</Text>
+          <Text style={s.workoutStatLabel}>{t('dashboard.workout.distance')}</Text>
         </View>
         <View style={s.workoutStat}>
           <Text style={s.workoutStatVal}>~{workout.duration} min</Text>
-          <Text style={s.workoutStatLabel}>Tid</Text>
+          <Text style={s.workoutStatLabel}>{t('dashboard.workout.time')}</Text>
         </View>
         {level !== 'beginner' && (
           <View style={s.workoutStat}>
             <Text style={s.workoutStatVal}>{workout.targetPace}/km</Text>
-            <Text style={s.workoutStatLabel}>Mål-pace</Text>
+            <Text style={s.workoutStatLabel}>{t('dashboard.workout.targetPace')}</Text>
           </View>
         )}
         {level !== 'beginner' && (
           <View style={s.workoutStat}>
             <Text style={s.workoutStatVal}>{workout.targetHr} bpm</Text>
-            <Text style={s.workoutStatLabel}>Mål-puls</Text>
+            <Text style={s.workoutStatLabel}>{t('dashboard.workout.targetHr')}</Text>
           </View>
         )}
       </View>
 
       <View style={{ flexDirection: 'row', gap: 8 }}>
         <TouchableOpacity style={s.startBtn} onPress={() => onStartActivity ? onStartActivity('run') : onNavigate && onNavigate('tracker')}>
-          <Text style={s.startBtnText}>▶  Løb</Text>
+          <Text style={s.startBtnText}>▶  {t('run.title')}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={s.walkBtn} onPress={() => onStartActivity ? onStartActivity('walk') : onNavigate && onNavigate('tracker')}>
-          <Text style={s.walkBtnText}>Gå</Text>
+          <Text style={s.walkBtnText}>{t('run.walk')}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -376,9 +362,10 @@ function WorkoutCard({ workout, level, onNavigate, onStartActivity }) {
 
 // ─── UGE PLAN ─────────────────────────────────────────────────────────────────
 function WeekPlan({ weekPlan }) {
+  const { t } = useTranslation();
   return (
     <View style={s.weekCard}>
-      <Text style={s.sectionTitle}>DENNE UGE</Text>
+      <Text style={s.sectionTitle}>{t('dashboard.weekPlan.title')}</Text>
       {weekPlan.map((d, i) => (
         <View key={d.day} style={[s.weekRow, i < weekPlan.length - 1 && s.weekRowBorder]}>
           <View style={[s.dayDot, { backgroundColor: d.today ? d.color : 'transparent', borderColor: d.color }]} />
@@ -396,12 +383,11 @@ function WeekPlan({ weekPlan }) {
   );
 }
 
-// ─── HOVED KOMPONENT ──────────────────────────────────────────────────────────
-
 // ─── NÆSTE MILEPÆL WIDGET ─────────────────────────────────────────────────────
 const MILESTONES = [50, 100, 200, 300, 500, 750, 1000, 1500, 2000, 3000, 5000];
 
 function MilestoneWidget({ runs }) {
+  const { t } = useTranslation();
   const totalKm = (runs || []).reduce((s, r) => s + (r.km || 0), 0);
   const rounded = Math.round(totalKm * 10) / 10;
 
@@ -412,34 +398,17 @@ function MilestoneWidget({ runs }) {
   const pct = Math.min(1, (rounded - prev) / (next - prev));
   const kmLeft = Math.round((next - rounded) * 10) / 10;
 
-  // Beregn momentum — løber hurtigere end normalt mod milepælen?
   const last4Weeks = (runs || []).filter(r => Date.now() - new Date(r.date) < 28*86400000);
   const recentKm = last4Weeks.reduce((s, r) => s + (r.km||0), 0);
-  const weeklyRate = recentKm / 4; // km/uge
+  const weeklyRate = recentKm / 4;
   const weeksToMilestone = weeklyRate > 0 ? kmLeft / weeklyRate : null;
 
-  const contexts = {
-    50:   { text: 'Første 50 km', sub: null },
-    100:  { text: 'Første 100 km', sub: null },
-    200:  { text: 'Solide ben', sub: null },
-    300:  { text: '300 km-klubben', sub: null },
-    500:  { text: 'Halvvejs til 1.000 km', sub: null },
-    750:  { text: '750 km — eliteläufer', sub: null },
-    1000: { text: '1.000 km — legendarisk', sub: null },
-    1500: { text: 'Over 1.000 km', sub: null },
-    2000: { text: 'Mod 2.000 km', sub: null },
-    3000: { text: 'Ultra-territorium', sub: null },
-    5000: { text: 'Mod 5.000 km', sub: null },
-  };
-
-  const ctx = contexts[next];
   const etaText = weeksToMilestone !== null
-    ? weeksToMilestone < 1 ? 'Denne uge!'
-    : weeksToMilestone < 2 ? 'Ca. 1-2 uger'
-    : `Ca. ${Math.round(weeksToMilestone)} uger`
+    ? weeksToMilestone < 1 ? t('dashboard.milestone.thisWeek')
+    : weeksToMilestone < 2 ? t('dashboard.milestone.oneToTwoWeeks')
+    : t('dashboard.milestone.aboutWeeks', { count: Math.round(weeksToMilestone) })
     : null;
 
-  // Farve baseret på progress — tæt på = mere intens
   const accentColor = pct > 0.85 ? colors.secondary : pct > 0.6 ? colors.accent : colors.accent;
 
   return (
@@ -447,13 +416,12 @@ function MilestoneWidget({ runs }) {
       {pct > 0.85 && <View style={[s.workoutAccentLine, { backgroundColor: colors.secondary }]} />}
       <View style={s.milestoneTop}>
         <View style={{ flex: 1 }}>
-          <Text style={s.milestoneLabel}>NÆSTE MILEPÆL</Text>
+          <Text style={s.milestoneLabel}>{t('dashboard.milestone.nextMilestone')}</Text>
           <Text style={[s.milestoneTarget, { color: pct > 0.85 ? colors.secondary : colors.text }]}>{next} km</Text>
-          <Text style={s.milestoneContext}>{ctx.text}</Text>
         </View>
         <View style={s.milestoneRight}>
           <Text style={[s.milestoneKmLeft, { color: accentColor }]}>{kmLeft}</Text>
-          <Text style={s.milestoneKmLeftLabel}>km tilbage</Text>
+          <Text style={s.milestoneKmLeftLabel}>{t('dashboard.milestone.kmLeft')}</Text>
           {etaText && <Text style={[s.milestoneEta, { color: pct > 0.85 ? colors.secondary : colors.muted }]}>{etaText}</Text>}
         </View>
       </View>
@@ -462,7 +430,7 @@ function MilestoneWidget({ runs }) {
         <View style={[s.milestoneDot, { left: `${pct * 100}%`, backgroundColor: accentColor, borderColor: colors.card }]} />
       </View>
       <View style={s.milestoneLabelRow}>
-        <Text style={s.milestonePrev}>{rounded.toFixed(0)} km total</Text>
+        <Text style={s.milestonePrev}>{rounded.toFixed(0)} km {t('dashboard.milestone.total')}</Text>
         <Text style={[s.milestoneNext, { color: accentColor }]}>{next} km</Text>
       </View>
     </View>
@@ -471,7 +439,8 @@ function MilestoneWidget({ runs }) {
 
 // ─── LØBE-DAGBOG (seneste løb) ────────────────────────────────────────────────
 function RunDiary({ runs, onRunUpdated }) {
-  const recent = (runs || []).slice(0, 5); // vis de 5 seneste
+  const { t } = useTranslation();
+  const recent = (runs || []).slice(0, 5);
   const [expanded, setExpanded] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [draftText, setDraftText] = useState('');
@@ -483,8 +452,8 @@ function RunDiary({ runs, onRunUpdated }) {
   const fmtDate = (d) => {
     if (!d) return '';
     const dt = new Date(d);
-    const days = ['Søn','Man','Tir','Ons','Tor','Fre','Lør'];
-    const months = ['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'];
+    const days = t('dashboard.diary.dayNames', { returnObjects: true }) || ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const months = t('dashboard.monthNames', { returnObjects: true }) || ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
     return `${days[dt.getDay()]} ${dt.getDate()}. ${months[dt.getMonth()]}`;
   };
 
@@ -517,8 +486,8 @@ function RunDiary({ runs, onRunUpdated }) {
     <View style={s.diaryCard}>
       <TouchableOpacity style={s.diaryHeader} onPress={() => setExpanded(e => !e)}>
         <View>
-          <Text style={s.sectionTitle}>LØBE-DAGBOG</Text>
-          <Text style={s.diarySub}>Skriv noter til dine løb — AI'en lærer af det</Text>
+          <Text style={s.sectionTitle}>{t('dashboard.diary.title')}</Text>
+          <Text style={s.diarySub}>{t('dashboard.diary.subtitle')}</Text>
         </View>
         <Text style={s.diaryChevron}>{expanded ? '▲' : '▼'}</Text>
       </TouchableOpacity>
@@ -530,7 +499,6 @@ function RunDiary({ runs, onRunUpdated }) {
             const isEditing = editingId === run.id;
             return (
               <View key={run.id} style={[s.diaryEntry, idx < recent.length - 1 && s.diaryEntryBorder]}>
-                {/* Løb-info */}
                 <View style={s.diaryEntryTop}>
                   <View style={{ flex: 1 }}>
                     <Text style={s.diaryDate}>{fmtDate(run.date || run.created_at)}</Text>
@@ -545,24 +513,21 @@ function RunDiary({ runs, onRunUpdated }) {
                     <TouchableOpacity
                       style={s.diaryEditBtn}
                       onPress={() => { setEditingId(run.id); setDraftText(note); }}>
-                      <Text style={s.diaryEditBtnText}>{note ? '✎' : '+ Note'}</Text>
+                      <Text style={s.diaryEditBtnText}>{note ? '✎' : t('dashboard.diary.addNote')}</Text>
                     </TouchableOpacity>
                   )}
                 </View>
 
-                {/* Eksisterende note */}
                 {note && !isEditing && (
                   <View style={s.diaryNoteWrap}>
                     <Text style={s.diaryNoteText}>"{note}"</Text>
                   </View>
                 )}
 
-                {/* Redigering */}
                 {isEditing && (
                   <View style={s.diaryEditWrap}>
-                    {/* Hurtig stemning */}
                     <View style={s.moodRow}>
-                      <Text style={s.moodLabel}>Stemning:</Text>
+                      <Text style={s.moodLabel}>{t('dashboard.diary.mood')}:</Text>
                       {moodEmojis.map(em => (
                         <TouchableOpacity
                           key={em}
@@ -579,7 +544,7 @@ function RunDiary({ runs, onRunUpdated }) {
                       style={s.diaryInput}
                       value={draftText}
                       onChangeText={setDraftText}
-                      placeholder="Hvordan gik det? Ben tunge? God dag? Ny rute?"
+                      placeholder={t('dashboard.diary.placeholder')}
                       placeholderTextColor={colors.muted}
                       multiline
                       autoFocus
@@ -588,13 +553,13 @@ function RunDiary({ runs, onRunUpdated }) {
                       <TouchableOpacity
                         style={s.diaryCancelBtn}
                         onPress={() => setEditingId(null)}>
-                        <Text style={s.diaryCancelBtnText}>Annuller</Text>
+                        <Text style={s.diaryCancelBtnText}>{t('common.cancel')}</Text>
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={s.diarySaveBtn}
                         onPress={() => saveNote(run.id)}
                         disabled={saving}>
-                        <Text style={s.diarySaveBtnText}>{saving ? '...' : 'Gem'}</Text>
+                        <Text style={s.diarySaveBtnText}>{saving ? '...' : t('common.save')}</Text>
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -610,12 +575,12 @@ function RunDiary({ runs, onRunUpdated }) {
 
 // ─── INJURY RISK SCORE ────────────────────────────────────────────────────────
 function InjuryRisk({ runs, profile, level }) {
+  const { t } = useTranslation();
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [lastAnalyzed, setLastAnalyzed] = useState(null);
 
-  // Beregn en lokal risiko-score baseret på data (uden AI)
   const localRisk = React.useMemo(() => {
     if (!runs || runs.length < 2) return null;
     const now = Date.now();
@@ -644,12 +609,12 @@ function InjuryRisk({ runs, profile, level }) {
     score = Math.max(1, Math.min(10, score));
 
     const signals = [];
-    if (riseRatio > 1.3) signals.push(`Km steget ${Math.round((riseRatio-1)*100)}% ift. forrige uge`);
-    if (runs3d >= 2) signals.push(`${runs3d} løb de seneste 3 dage`);
-    if (restDays === 0) signals.push('Ingen hviledag i dag');
-    if (restDays >= 2) signals.push(`${restDays} dage siden sidste løb — frisk`);
+    if (riseRatio > 1.3) signals.push(t('dashboard.injury.kmIncrease', { pct: Math.round((riseRatio-1)*100) }));
+    if (runs3d >= 2) signals.push(t('dashboard.injury.runsLast3Days', { count: runs3d }));
+    if (restDays === 0) signals.push(t('dashboard.injury.noRestToday'));
+    if (restDays >= 2) signals.push(t('dashboard.injury.daysSinceRun', { count: restDays }));
     return { score, signals, km7: Math.round(km7*10)/10, riseRatio };
-  }, [runs]);
+  }, [runs, t]);
 
   const analyze = async () => {
     if (!runs || runs.length < 2) return;
@@ -679,10 +644,10 @@ function InjuryRisk({ runs, profile, level }) {
       setLastAnalyzed(new Date().toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }));
     } catch { setResult(localRisk ? {
       score: localRisk.score,
-      level: localRisk.score <= 3 ? 'Lav' : localRisk.score <= 6 ? 'Moderat' : 'Høj',
+      level: localRisk.score <= 3 ? t('dashboard.injury.low') : localRisk.score <= 6 ? t('dashboard.injury.moderate') : t('dashboard.injury.high'),
       color: localRisk.score <= 3 ? colors.green : localRisk.score <= 6 ? colors.yellow : colors.red,
-      summary: localRisk.signals.join('. ') || 'Ingen specielle risikofaktorer.',
-      tips: ['Husk hviledag efter hårde løb', 'Øg ikke km med mere end 10% per uge'],
+      summary: localRisk.signals.join('. ') || t('dashboard.injury.noRiskFactors'),
+      tips: [t('dashboard.injury.tip1'), t('dashboard.injury.tip2')],
     } : null); }
     setLoading(false);
   };
@@ -691,13 +656,13 @@ function InjuryRisk({ runs, profile, level }) {
 
   const displayScore = result?.score ?? localRisk.score;
   const displayColor = result?.color ?? (displayScore <= 3 ? colors.green : displayScore <= 6 ? colors.yellow : colors.red);
-  const displayLevel = result?.level ?? (displayScore <= 3 ? 'Lav' : displayScore <= 6 ? 'Moderat' : 'Høj');
+  const displayLevel = result?.level ?? (displayScore <= 3 ? t('dashboard.injury.low') : displayScore <= 6 ? t('dashboard.injury.moderate') : t('dashboard.injury.high'));
 
   return (
     <View style={s.injuryCard}>
       <TouchableOpacity style={s.injuryHeader} onPress={() => setExpanded(e => !e)} activeOpacity={0.8}>
         <View style={s.injuryLeft}>
-          <Text style={s.sectionTitle}>SKADERISIKO</Text>
+          <Text style={s.sectionTitle}>{t('dashboard.injury.title')}</Text>
           <View style={s.injuryScoreRow}>
             <Text style={[s.injuryScore, { color: displayColor }]}>{displayScore}</Text>
             <Text style={s.injuryScoreDenom}>/10</Text>
@@ -707,7 +672,6 @@ function InjuryRisk({ runs, profile, level }) {
           </View>
         </View>
         <View style={s.injuryRight}>
-          {/* Mini-gauge */}
           <View style={s.injuryGaugeWrap}>
             {[1,2,3,4,5,6,7,8,9,10].map(n => (
               <View key={n} style={[s.injuryGaugeBar, {
@@ -723,7 +687,6 @@ function InjuryRisk({ runs, profile, level }) {
 
       {expanded && (
         <View style={s.injuryBody}>
-          {/* Signaler */}
           {localRisk.signals.length > 0 && (
             <View style={s.injurySignals}>
               {localRisk.signals.map((sig, i) => (
@@ -735,7 +698,6 @@ function InjuryRisk({ runs, profile, level }) {
             </View>
           )}
 
-          {/* AI analyse */}
           {result ? (
             <View style={s.injuryAnalysis}>
               <Text style={s.injurySummary}>{result.summary}</Text>
@@ -745,13 +707,13 @@ function InjuryRisk({ runs, profile, level }) {
                   <Text style={s.injuryTipText}>{tip}</Text>
                 </View>
               ))}
-              {lastAnalyzed && <Text style={s.injuryTimestamp}>Analyseret {lastAnalyzed}</Text>}
+              {lastAnalyzed && <Text style={s.injuryTimestamp}>{t('dashboard.injury.analyzed')} {lastAnalyzed}</Text>}
             </View>
           ) : (
             <TouchableOpacity style={s.injuryAnalyzeBtn} onPress={analyze} disabled={loading}>
               {loading
                 ? <ActivityIndicator size="small" color={colors.accent} />
-                : <View style={{flexDirection:'row',alignItems:'center',gap:6}}><Icon name='brain' size={14} color='#ffffff'/><Text style={s.injuryAnalyzeBtnText}>AI-analyse</Text></View>
+                : <View style={{flexDirection:'row',alignItems:'center',gap:6}}><Icon name='brain' size={14} color='#ffffff'/><Text style={s.injuryAnalyzeBtnText}>{t('dashboard.injury.aiAnalysis')}</Text></View>
               }
             </TouchableOpacity>
           )}
@@ -762,6 +724,7 @@ function InjuryRisk({ runs, profile, level }) {
 }
 
 function RacePredictor({ runs, profile, level }) {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [expanded, setExpanded] = useState(false);
@@ -816,8 +779,8 @@ ${profile?.age ? `Alder: ${profile.age}` : ''}` }),
         <View style={rp.headerLeft}>
           <Icon name='trophy' size={32} color='#f5a623'/>
           <View>
-            <Text style={rp.title}>Race Predictor</Text>
-            <Text style={rp.subtitle}>Se dine forventede race-tider</Text>
+            <Text style={rp.title}>{t('dashboard.racePredictor.title')}</Text>
+            <Text style={rp.subtitle}>{t('dashboard.racePredictor.subtitle')}</Text>
           </View>
         </View>
         <Text style={rp.chevron}>{expanded ? '▲' : '▼'}</Text>
@@ -826,11 +789,11 @@ ${profile?.age ? `Alder: ${profile.age}` : ''}` }),
       {expanded && (
         <View style={rp.body}>
           {validRuns.length === 0 ? (
-            <Text style={rp.noData}>Du skal have mindst ét løb for at få en race-forudsigelse.</Text>
+            <Text style={rp.noData}>{t('dashboard.racePredictor.noData')}</Text>
           ) : loading ? (
             <View style={rp.loadingWrap}>
               <ActivityIndicator color={colors.accent} />
-              <Text style={rp.loadingText}>AI analyserer dine løb...</Text>
+              <Text style={rp.loadingText}>{t('dashboard.racePredictor.analyzing')}</Text>
             </View>
           ) : result ? (
             <>
@@ -838,7 +801,7 @@ ${profile?.age ? `Alder: ${profile.age}` : ''}` }),
                 {[
                   { label: '5 km', val: result['5k'] },
                   { label: '10 km', val: result['10k'] },
-                  { label: 'Halvmaraton', val: result.halfMarathon },
+                  { label: t('dashboard.racePredictor.halfMarathon'), val: result.halfMarathon },
                 ].map(r => (
                   <View key={r.label} style={rp.raceCard}>
                     <Text style={rp.raceLabel}>{r.label}</Text>
@@ -849,11 +812,11 @@ ${profile?.age ? `Alder: ${profile.age}` : ''}` }),
               <View style={rp.footer}>
                 <View style={[rp.confidenceBadge, { backgroundColor: confidenceColor + '20', borderColor: confidenceColor }]}>
                   <Text style={[rp.confidenceText, { color: confidenceColor }]}>
-                    {result.confidence === 'høj' ? '✓' : result.confidence === 'medium' ? '~' : '?'} {result.confidence} sikkerhed
+                    {result.confidence === 'høj' ? '✓' : result.confidence === 'medium' ? '~' : '?'} {result.confidence} {t('dashboard.racePredictor.confidence')}
                   </Text>
                 </View>
                 <TouchableOpacity onPress={predict} style={rp.refreshBtn}>
-                  <Text style={rp.refreshText}>↻ Opdater</Text>
+                  <Text style={rp.refreshText}>↻ {t('dashboard.refresh')}</Text>
                 </TouchableOpacity>
               </View>
               {result.tip && (
@@ -870,14 +833,14 @@ ${profile?.age ? `Alder: ${profile.age}` : ''}` }),
 }
 
 export default function Dashboard({ level, nextWorkout, weekPlan, planChanges, profile, runs, onNavigate, onStartActivity }) {
-  const name = (profile?.name || 'LØBER').split(' ')[0].toUpperCase();
+  const { t } = useTranslation();
+  const name = (profile?.name || t('dashboard.defaultName')).split(' ')[0].toUpperCase();
   const hour = new Date().getHours();
-  const greeting = hour < 10 ? 'GOD MORGEN,' : hour < 17 ? 'GOD DAG,' : 'GOD AFTEN,';
+  const greeting = hour < 10 ? t('dashboard.greeting.morning') : hour < 17 ? t('dashboard.greeting.day') : t('dashboard.greeting.evening');
   const dayName = new Date().toLocaleDateString('da-DK', { weekday: 'long' }).toUpperCase();
 
   return (
     <ScrollView style={s.container} showsVerticalScrollIndicator={false} contentContainerStyle={{ padding: 16, paddingBottom: 100 }}>
-      {/* Header */}
       <View style={s.header}>
         <View>
           <Text style={s.greeting}>{greeting}</Text>
@@ -891,23 +854,19 @@ export default function Dashboard({ level, nextWorkout, weekPlan, planChanges, p
         </View>
       </View>
 
-      {/* Stats fra rigtige løb */}
       <StatsRow runs={runs || []} profile={profile} />
 
-      {/* Næste milepæl */}
       <MilestoneWidget runs={runs || []} />
 
-      {/* Plan update log */}
       {planChanges.length > 0 && (
         <View style={s.changeLog}>
-          <Text style={s.changeLogTitle}>PLAN OPDATERET</Text>
+          <Text style={s.changeLogTitle}>{t('dashboard.planUpdated')}</Text>
           {planChanges.slice(-2).map((c, i) => (
             <Text key={i} style={s.changeLogItem}>· {c.note} ({c.time})</Text>
           ))}
         </View>
       )}
 
-      {/* Sko-advarsel */}
       {(() => {
         const shoes = profile?.shoes || [];
         const activeId = profile?.activeShoeId;
@@ -921,7 +880,7 @@ export default function Dashboard({ level, nextWorkout, weekPlan, planChanges, p
             <Icon name='warning' size={18} color={isDead ? colors.red : colors.yellow}/>
             <View style={{ flex: 1 }}>
               <Text style={[s.shoeAlertTitle, { color: isDead ? '#ef4444' : '#f59e0b' }]}>
-                {isDead ? 'Sko slidt op!' : 'Sko snart slidt!'}
+                {isDead ? t('dashboard.shoeAlert.worn') : t('dashboard.shoeAlert.soonWorn')}
               </Text>
               <Text style={s.shoeAlertSub}>{active.name} — {km.toFixed(0)} km / 800 km max</Text>
             </View>
@@ -929,22 +888,16 @@ export default function Dashboard({ level, nextWorkout, weekPlan, planChanges, p
         );
       })()}
 
-      {/* Vejr & Form anbefaling */}
       <WeatherAdvice runs={runs} nextWorkout={nextWorkout} level={level} profile={profile} />
 
-      {/* Next workout */}
       <WorkoutCard workout={nextWorkout} level={level} onNavigate={onNavigate} onStartActivity={onStartActivity} />
 
-      {/* Week plan */}
       <WeekPlan weekPlan={weekPlan} />
 
-      {/* Løbe-dagbog */}
       <RunDiary runs={runs} />
 
-      {/* Skaderisiko */}
       <InjuryRisk runs={runs} profile={profile} level={level} />
 
-      {/* Race Predictor */}
       <RacePredictor runs={runs} profile={profile} level={level} />
     </ScrollView>
   );
@@ -959,7 +912,6 @@ const s = StyleSheet.create({
   dateBadge:        { backgroundColor: colors.surface, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 6 },
   dateText:         { fontSize: 10, color: colors.muted, letterSpacing: 1.5, fontWeight: '600' },
 
-  // Injury Risk
   injuryCard:         { backgroundColor: colors.card, borderRadius: 18, marginBottom: 14, overflow: 'hidden', shadowColor: '#000', shadowOffset:{width:0,height:1}, shadowOpacity:0.06, shadowRadius:8, elevation:2 },
   injuryHeader:       { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 18 },
   injuryLeft:         { flex: 1 },
@@ -1002,7 +954,6 @@ const s = StyleSheet.create({
   milestonePrev:        { fontSize: 10, color: colors.muted, fontWeight: '600' },
   milestoneNext:        { fontSize: 10, color: colors.accent, fontWeight: '700' },
 
-  // Løbe-dagbog
   diaryCard:          { backgroundColor: colors.card, borderRadius: 18, marginBottom: 14, overflow: 'hidden', shadowColor: '#000', shadowOffset:{width:0,height:1}, shadowOpacity:0.06, shadowRadius:8, elevation:2 },
   diaryHeader:        { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 18 },
   diarySub:           { fontSize: 11, color: colors.muted, marginTop: 2 },

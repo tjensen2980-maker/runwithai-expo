@@ -1,0 +1,513 @@
+{
+  "tabs": {
+    "plan": "Plan",
+    "run": "Løb",
+    "coach": "Coach",
+    "stats": "Statistik",
+    "settings": "Indstillinger",
+    "calendar": "Kalender",
+    "progress": "Fremgang",
+    "start": "Start"
+  },
+  "run": {
+    "title": "Løb",
+    "walk": "Gå",
+    "km": "KM",
+    "time": "TID",
+    "pace": "TEMPO",
+    "start": "Start",
+    "pause": "Pause",
+    "resume": "Genoptag",
+    "stop": "Stop",
+    "save": "Gem",
+    "discard": "Kassér",
+    "startRun": "Start løb",
+    "startThisWorkout": "Start denne træning",
+    "nextWorkout": "Næste træning",
+    "lastActivity": "Seneste aktivitet",
+    "gpsTracking": "GPS tracking",
+    "walkTracking": "Gå tracking",
+    "aiRoutes": "AI ruter"
+  },
+  "pro": {
+    "badge": "PRO",
+    "upgrade": "Opgrader",
+    "upgradeToPro": "Opgrader til Pro",
+    "feature": "Pro-funktion",
+    "unlockFeatures": "Lås op for alle funktioner",
+    "fromOnly": "Fra kun",
+    "limit": {
+      "title": "Pro-funktion",
+      "message": "Denne funktion kræver Pro-abonnement",
+      "seePlans": "Se planer",
+      "cancel": "Annuller"
+    },
+    "stats": {
+      "title": "Pro Statistik",
+      "features": "Avanceret statistik og indsigt",
+      "unlock": "Lås op"
+    },
+    "coach": {
+      "title": "AI Coach",
+      "description": "Personlig træningsplan der tilpasser sig dig"
+    },
+    "calendar": {
+      "title": "Træningskalender",
+      "description": "Se din fulde træningsplan"
+    },
+    "aiRoutes": {
+      "title": "AI Ruter",
+      "description": "Få foreslået ruter baseret på din træning"
+    }
+  },
+  "stats": {
+    "title": "Statistik",
+    "totalRuns": "Løb i alt",
+    "totalKm": "Km i alt",
+    "avgPace": "Gns. tempo",
+    "thisWeek": "Denne uge",
+    "thisMonth": "Denne måned",
+    "allTime": "Alt tid",
+    "basic": "Basis statistik",
+    "runs": "løb"
+  },
+  "subscription": "Abonnement",
+  "alerts": {
+    "deleteRun": "Er du sikker på, at du vil slette dette løb?",
+    "deleteAccount": "Er du sikker på, at du vil slette din konto? Dette kan ikke fortrydes.",
+    "logout": "Er du sikker på, at du vil logge ud?",
+    "discardRun": "Er du sikker på, at du vil kassere dette løb?",
+    "unsavedChanges": "Du har ændringer, der ikke er gemt. Vil du kassere dem?",
+    "welcomePro": {
+      "title": "Velkommen til Pro!",
+      "message": "Du har nu adgang til alle funktioner"
+    }
+  },
+  "auth": {
+    "login": "Log ind",
+    "register": "Opret konto",
+    "email": "E-mail",
+    "password": "Adgangskode",
+    "confirmPassword": "Bekræft adgangskode",
+    "forgotPassword": "Glemt adgangskode?",
+    "noAccount": "Har du ikke en konto?",
+    "hasAccount": "Har du allerede en konto?",
+    "loginButton": "Log ind",
+    "registerButton": "Opret konto",
+    "orContinueWith": "eller fortsæt med",
+    "apple": "Apple",
+    "google": "Google",
+    "emailPlaceholder": "din@email.dk",
+    "passwordPlaceholder": "••••••••",
+    "namePlaceholder": "Dit navn",
+    "name": "Navn",
+    "loggingIn": "Logger ind...",
+    "registering": "Opretter konto...",
+    "tagline": "Din personlige AI-løbecoach",
+    "createAccount": "Opret konto",
+    "minChars": "min kode",
+    "repeatPassword": "gentag kode",
+    "continue": "forsæt",
+    "getStarted": "kom igang",
+    "step1of3": "trin 1 af 3",
+    "step2of3": "trin 2 af 3",
+    "step3of3": "trin 3 af 3",
+    "yourName": "dit navn",
+    "age": "ALDER",
+    "weight": "VÆGT",
+    "height": "HØJDE",
+    "years": "År",
+    "runningLevel": "LØBENIVEAU",
+    "levels.beginner": "Begynder",
+    "levels.intermediate": "Øvet",
+    "levels.advanced": "Erfaren",
+    "yourGoals": "HVAD ER DINE MÅL",
+    "goals.health": "Sundhed",
+    "goals.weight": "Vægttab",
+    "goals.distance": "Løbe længere",
+    "goals.speed": "Blive hurtigere",
+    "goals.race": "Løb et løb",
+    "goals.fun": "Hygge",
+    "weeklyGoalKm": "UGENTLIG KM MÅL",
+    "weeklyGoalExample": "F.eks. 20",
+    "unlockFullPower": "Lås op for fuld adgang",
+    "unlockDesc": "Få adgang til alle funktioner og nå dine mål hurtigere",
+    "proFeatures.aiCoachDesc": "AI Coach",
+    "proFeatures.statsDesc": "Statistik",
+    "proFeatures.goalsDesc": "Mål",
+    "proFeatures.routesDesc": "Ruter",
+    "proFeatures.chatDesc": "AI Chat",
+    "proFeatures.reportsDesc": "Raporter",
+    "price": "49 kr",
+    "guarantee": "✓ Annuller når som helst • ✓ 7 dages gratis prøveperiode",
+    "perMonth": "/måned",
+    "startFreeTrial": "Start gratis prøveperiode",
+    "continueWithFree": "Fortsæt med gratis version",
+    "levels.beginnerDesc": "Nye til løb eller starter igen efter lang pause",
+    "levels.intermediateDesc": "Løber regelmæssigt og ønsker at forbedre sig",
+    "levels.advancedDesc": "Erfaren løber der træner til specifikke mål",
+    "or": "eller",
+    "errors": {
+      "serverConnection": "Kunne ikke forbinde til serveren"
+    }
+  },
+
+  "settings": {
+    "pageTitle": "Indstillinger",
+    "title": "Indstillinger",
+    "profile": "Profil",
+    "days": ["Man", "Tir", "Ons", "Tor", "Fre", "Lør", "Søn"],
+    "saveChanges": "Gem ændringer",
+    "saved": "Gemt!",
+    "logout": "Log ud",
+    "privacyPolicy": "Privatlivspolitik",
+    "termsOfService": "Servicevilkår",
+    "dangerZone": "Farezone",
+    "sections": {
+      "personalInfo": "Personlige oplysninger",
+      "level": "Niveau",
+      "runningGoals": "Løbemål",
+      "weeklyGoals": "Ugentlige mål",
+      "trainingTypes": "Træningstyper",
+      "heartRateZones": "Pulszoner",
+      "injuries": "Skader",
+      "reminders": "Påmindelser",
+      "privacy": "Privatliv",
+      "units": "Enheder",
+      "data": "Data"
+    },
+    "fields": {
+      "name": "Navn",
+      "age": "Alder",
+      "weight": "Vægt (kg)",
+      "height": "Højde (cm)",
+      "sex": "Køn",
+      "restingHr": "Hvilepuls",
+      "maxHr": "Max puls",
+      "vo2max": "VO2max",
+      "yearsRunning": "År som løber",
+      "weeklyKm": "Ugentlige km",
+      "weeklyKmGoal": "Ugentligt km-mål",
+      "weeklyRunsGoal": "Ugentlige løb mål",
+      "primaryGoal": "Primært mål",
+      "raceDate": "Race dato",
+      "injuries": "Skader/begrænsninger",
+      "injuriesPlaceholder": "F.eks. knæproblemer, rygsmerter...",
+      "preferredDays": "Foretrukne dage",
+      "preferredTypes": "Foretrukne løbetyper"
+    },
+    "sex": {
+      "male": "Mand",
+      "female": "Kvinde"
+    },
+    "levels": {
+      "beginner": "Begynder",
+      "intermediate": "Øvet",
+      "advanced": "Avanceret"
+    },
+    "goals": {
+      "fitness": "Generel fitness",
+      "weight": "Vægttab",
+      "half": "Halvmaraton",
+      "full": "Maraton"
+    },
+    "runTypes": {
+      "easy": "Roligt løb",
+      "interval": "Intervaller",
+      "long": "Langt løb",
+      "tempo": "Tempo løb",
+      "recovery": "Restitution",
+      "race": "Løb",
+      "trail": "Trail"
+    },
+    "zones": {
+      "calculated": "Beregnet ud fra din max puls",
+      "z1": "Zone 1 (Restitution)",
+      "z2": "Zone 2 (Aerob)",
+      "z3": "Zone 3 (Tempo)",
+      "z4": "Zone 4 (Tærskel)",
+      "z5": "Zone 5 (Anaerob)"
+    },
+    "notifications": {
+      "push": "Push notifikationer",
+      "pushSub": "Få påmindelser om træning",
+      "enabled": "Aktiveret",
+      "reminder": "Påmindelse",
+      "time": "Tidspunkt",
+      "days": "Dage"
+    },
+    "privacy": {
+      "shareProfile": "Del profil",
+      "shareProfileSub": "Lad andre se din profil",
+      "shareActivity": "Del aktivitet",
+      "shareActivitySub": "Lad andre se dine løb",
+      "shareLocation": "Del lokation",
+      "shareLocationSub": "Vis din position på ruter"
+    },
+    "units": {
+      "distance": "Distance",
+      "pace": "Tempo"
+    },
+    "data": {
+      "export": "Eksportér data",
+      "exportSub": "Download alle dine løbedata"
+    },
+    "shoes": {
+      "title": "Løbesko",
+      "addShoe": "Tilføj sko",
+      "namePlaceholder": "Skonavn",
+      "brandPlaceholder": "Mærke",
+      "kmPlaceholder": "Start km",
+      "saveShoe": "Gem sko",
+      "useForNextRun": "Brug til næste løb",
+      "active": "Aktiv",
+      "delete": "Slet",
+      "deleteConfirm": "Er du sikker på at du vil slette denne sko?",
+      "empty": "Ingen sko tilføjet endnu",
+      "worn": "Slidt",
+      "soonWorn": "Snart slidt",
+      "wornMessage": "Denne sko har løbet over 800 km og bør udskiftes"
+    },
+    "deleteAccount": {
+      "title": "Slet konto",
+      "button": "Slet min konto",
+      "warning": "Dette kan ikke fortrydes!",
+      "confirmMessage": "Er du sikker på at du vil slette din konto? Alle data vil blive slettet permanent.",
+      "confirmButton": "Ja, slet min konto",
+      "deletedTitle": "Konto slettet",
+      "deletedMessage": "Din konto er blevet slettet.",
+      "error": "Kunne ikke slette konto"
+    }
+  },
+  "pricing": {
+    "title": "RunWithAI Pro",
+    "subtitle": "Lås op for alle funktioner",
+    "monthly": "Månedlig",
+    "yearly": "Årlig",
+    "perMonth": "/måned",
+    "perYear": "/år",
+    "save": "Spar",
+    "features": {
+      "aiCoach": "Personlig AI-coach",
+      "unlimitedRuns": "Ubegrænsede løb",
+      "advancedStats": "Avanceret statistik",
+      "trainingPlans": "Skræddersyede træningsplaner",
+      "voiceCoach": "Stemme-coach under løb",
+      "exportData": "Eksportér data"
+    },
+    "subscribe": "Abonnér nu",
+    "restore": "Gendan køb",
+    "terms": "Vilkår gælder. Forny automatisk.",
+    "currentPlan": "Nuværende plan",
+    "free": "Gratis",
+    "pro": "Pro",
+    "loading": "Indlæser...",
+    "error": "Noget gik galt",
+    "success": "Du er nu Pro!",
+    "alreadyPro": "Du er allerede Pro-bruger",
+    "tryAgain": "Prøv igen"
+  },
+  "common": {
+    "cancel": "Annuller",
+    "save": "Gem",
+    "delete": "Slet",
+    "edit": "Rediger",
+    "done": "Færdig",
+    "next": "Næste",
+    "back": "Tilbage",
+    "skip": "Spring over",
+    "ok": "OK",
+    "yes": "Ja",
+    "no": "Nej",
+    "loading": "Indlæser...",
+    "error": "Fejl",
+    "success": "Success",
+    "retry": "Prøv igen"
+  },
+  "onboarding": {
+    "welcome": "Velkommen til",
+    "appName": "RunWithAI",
+    "subtitle": "Din personlige AI-løbecoach",
+    "getStarted": "Kom i gang",
+    "step1": {
+      "title": "Spor dine løb",
+      "desc": "GPS-tracking med live statistik og rutevisning"
+    },
+    "step2": {
+      "title": "AI-drevet coaching",
+      "desc": "Få personlige træningsplaner og tips fra din AI-coach"
+    },
+    "step3": {
+      "title": "Nå dine mål",
+      "desc": "Sæt mål og følg din fremgang med detaljeret statistik"
+    }
+  },
+  "dashboard": {
+    "defaultName": "LØBER",
+    "greeting": {
+      "morning": "GOD MORGEN,",
+      "day": "GOD DAG,",
+      "evening": "GOD AFTEN,"
+    },
+    "planUpdated": "PLAN OPDATERET",
+    "refresh": "Opdater",
+    "shoeAlert": {
+      "worn": "Sko slidt op!",
+      "soonWorn": "Sko snart slidt!"
+    },
+    "fatigue": {
+      "rested": "Udhvilet",
+      "ok": "OK",
+      "slightlyTired": "Let træt",
+      "veryTired": "Meget træt"
+    },
+    "weather": {
+      "title": "VEJR & FORM",
+      "wind": "Vind",
+      "clear": "Klar himmel",
+      "partlyCloudy": "Let skyet",
+      "foggy": "Tåge/dis",
+      "rain": "Regn",
+      "snow": "Sne",
+      "showers": "Byger",
+      "thunder": "Tordenvejr",
+      "analyzing": "Analyserer vejr og form...",
+      "noAdvice": "Ingen anbefaling tilgængelig",
+      "fetchError": "Kunne ikke hente vejrdata — prøv igen."
+    },
+    "stats": {
+      "kmThisWeek": "KM DENNE UGE",
+      "daysInRow": "DAGE I TRÆK",
+      "runsThisMonth": "LØB I MND.",
+      "of": "af",
+      "personalRecord": "Personlig rekord",
+      "fromRecord": "{{count}} fra din rekord",
+      "overOneWeek": "Over 1 uge i træk",
+      "keepingMomentum": "Holder momentum",
+      "goodStart": "Start på noget godt",
+      "keepGoing": "Fortsæt!",
+      "startStreak": "Start en streak i dag",
+      "bestMonthEver": "Bedste {{month}} nogensinde",
+      "oneFromRecord": "1 løb fra din bedste måned!",
+      "runsFromRecord": "{{count}} løb fra rekord",
+      "runsInMonth": "{{count}} løb i {{month}}"
+    },
+    "monthNames": ["jan", "feb", "mar", "apr", "maj", "jun", "jul", "aug", "sep", "okt", "nov", "dec"],
+    "workout": {
+      "nextWorkout": "NÆSTE TRÆNING",
+      "today": "I DAG",
+      "distance": "Distance",
+      "time": "Tid",
+      "targetPace": "Mål-pace",
+      "targetHr": "Mål-puls"
+    },
+    "weekPlan": {
+      "title": "DENNE UGE"
+    },
+    "milestone": {
+      "nextMilestone": "NÆSTE MILEPÆL",
+      "kmLeft": "km tilbage",
+      "total": "total",
+      "thisWeek": "Denne uge!",
+      "oneToTwoWeeks": "Ca. 1-2 uger",
+      "aboutWeeks": "Ca. {{count}} uger"
+    },
+    "diary": {
+      "title": "LØBE-DAGBOG",
+      "subtitle": "Skriv noter til dine løb — AI'en lærer af det",
+      "addNote": "+ Note",
+      "mood": "Stemning",
+      "placeholder": "Hvordan gik det? Ben tunge? God dag? Ny rute?",
+      "dayNames": ["Søn", "Man", "Tir", "Ons", "Tor", "Fre", "Lør"]
+    },
+    "injury": {
+      "title": "SKADERISIKO",
+      "low": "Lav",
+      "moderate": "Moderat",
+      "high": "Høj",
+      "kmIncrease": "Km steget {{pct}}% ift. forrige uge",
+      "runsLast3Days": "{{count}} løb de seneste 3 dage",
+      "noRestToday": "Ingen hviledag i dag",
+      "daysSinceRun": "{{count}} dage siden sidste løb — frisk",
+      "noRiskFactors": "Ingen specielle risikofaktorer.",
+      "tip1": "Husk hviledag efter hårde løb",
+      "tip2": "Øg ikke km med mere end 10% per uge",
+      "analyzed": "Analyseret",
+      "aiAnalysis": "AI-analyse"
+    },
+    "racePredictor": {
+      "title": "Race Predictor",
+      "subtitle": "Se dine forventede race-tider",
+      "noData": "Du skal have mindst ét løb for at få en race-forudsigelse.",
+      "analyzing": "AI analyserer dine løb...",
+      "halfMarathon": "Halvmaraton",
+      "confidence": "sikkerhed"
+    }
+  },
+  "tracker": {
+    "defaultRunner": "løber",
+    "voiceOn": "Stemme til",
+    "voiceOff": "Stemme fra",
+    "mapNotAvailable": "Kort ikke tilgængeligt",
+    "status": {
+      "ready": "Tryk start for at begynde",
+      "paused": "På pause",
+      "tracking": "Tracker..."
+    },
+    "gps": {
+      "active": "GPS aktiv",
+      "waiting": "Finder GPS signal...",
+      "denied": "GPS tilladelse nægtet",
+      "unavailable": "GPS utilgængelig",
+      "timeout": "GPS timeout",
+      "notAvailable": "GPS ikke tilgængelig",
+      "error": "GPS fejl"
+    }
+  },
+  "chat": {
+    "title": "AI COACH",
+    "clear": "Ryd",
+    "placeholder": "Skriv til din coach...",
+    "loadingHistory": "Henter samtale...",
+    "planUpdated": "Plan opdateret",
+    "defaultRunner": "løber",
+    "greeting": "Hej {{name}}! Jeg er din AI løbecoach. Hvad kan jeg hjælpe dig med i dag?",
+    "clearedGreeting": "Samtale ryddet! Hvad kan jeg hjælpe dig med, {{name}}?",
+    "connectionError": "Beklager, jeg kunne ikke forbinde. Prøv igen."
+  },
+  "proUpsell": {
+    "title": "Lås op for fuld kraft",
+    "subtitle": "Få adgang til alle funktioner og nå dine mål hurtigere",
+    "price": "49 kr",
+    "priceUnit": "/måned",
+    "guarantee": "✓ Annuller når som helst • ✓ 7 dages gratis prøveperiode",
+    "startTrial": "Start gratis prøveperiode",
+    "continueWithFree": "Fortsæt med gratis version",
+    "features": {
+      "aiCoach": {
+        "title": "AI Coach",
+        "desc": "Personlig træningsplan der tilpasser sig dig"
+      },
+      "advancedStats": {
+        "title": "Avanceret statistik",
+        "desc": "Dybdegående analyse af din træning"
+      },
+      "unlimitedGoals": {
+        "title": "Ubegrænsede mål",
+        "desc": "Sæt så mange mål du vil"
+      },
+      "routeLibrary": {
+        "title": "Rutebibliotek",
+        "desc": "Gem og del dine yndlingsruter"
+      },
+      "aiChat": {
+        "title": "AI Chat",
+        "desc": "Stil spørgsmål om løb og få svar"
+      },
+      "progressReports": {
+        "title": "Fremskridtsrapporter",
+        "desc": "Ugentlige og månedlige opsummeringer"
+      }
+    }
+  }
+}

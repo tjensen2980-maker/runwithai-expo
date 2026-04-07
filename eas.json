@@ -28,7 +28,7 @@
       "node": "20.18.0",
       "ios": {
         "resourceClass": "m-medium",
-        "image": "macos-sequoia-15.3-xcode-16.2"
+        "image": "macos-sequoia-15.6-xcode-26.2"
       },
       "android": {
         "buildType": "app-bundle"

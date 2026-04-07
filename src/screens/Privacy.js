@@ -17,7 +17,7 @@ export default function Privacy({ onBack }) {
         )}
 
         <Text style={s.title}>Privatlivspolitik</Text>
-        <Text style={s.updated}>Sidst opdateret: Marts 2026</Text>
+        <Text style={s.updated}>Sidst opdateret: April 2026</Text>
 
         <Text style={s.intro}>
           Hos RunWithAI tager vi dit privatliv alvorligt. Denne politik beskriver, hvordan vi indsamler, bruger og beskytter dine personlige oplysninger.
@@ -34,7 +34,7 @@ export default function Privacy({ onBack }) {
         <Text style={s.listItem}>• <Text style={s.bold}>Fysiske data:</Text> Vægt, højde (valgfrit)</Text>
         <Text style={s.listItem}>• <Text style={s.bold}>Træningsdata:</Text> Løbeaktiviteter, distance, tempo, puls, GPS-ruter</Text>
         <Text style={s.listItem}>• <Text style={s.bold}>App-brug:</Text> Præferencer, mål, niveau</Text>
-        <Text style={s.listItem}>• <Text style={s.bold}>Betalingsinfo:</Text> Håndteres sikkert via Stripe</Text>
+        <Text style={s.listItem}>• <Text style={s.bold}>Betalingsinfo:</Text> Håndteres sikkert via App Store / Google Play</Text>
 
         <Text style={s.sectionTitle}>3. Hvordan bruger vi dine data?</Text>
         <Text style={s.paragraph}>Vi bruger dine data til at:</Text>
@@ -46,15 +46,15 @@ export default function Privacy({ onBack }) {
 
         <Text style={s.sectionTitle}>4. Integration med tredjeparter</Text>
         <Text style={s.paragraph}>
-          RunWithAI kan integrere med Garmin Connect for at importere dine løbedata. 
-          Når du forbinder din Garmin-konto, henter vi kun træningsdata — aldrig dine login-oplysninger.
+          RunWithAI kan integrere med Garmin Connect for at importere dine løbedata.
+          Når du forbinder din Garmin-konto, henter vi kun træningsdata – aldrig dine login-oplysninger.
         </Text>
 
         <Text style={s.sectionTitle}>5. Datadeling</Text>
         <Text style={s.paragraph}>
           Vi sælger aldrig dine data. Vi deler kun data med:
         </Text>
-        <Text style={s.listItem}>• <Text style={s.bold}>Stripe:</Text> Til sikker betalingshåndtering</Text>
+        <Text style={s.listItem}>• <Text style={s.bold}>Apple/Google:</Text> Til sikker betalingshåndtering via App Store / Google Play</Text>
         <Text style={s.listItem}>• <Text style={s.bold}>OpenAI:</Text> Til AI-coaching (anonymiseret)</Text>
         <Text style={s.listItem}>• <Text style={s.bold}>Hosting:</Text> Vercel og Railway (data opbevaring)</Text>
 
@@ -79,25 +79,25 @@ export default function Privacy({ onBack }) {
 
         <Text style={s.sectionTitle}>8. Opbevaring af data</Text>
         <Text style={s.paragraph}>
-          Vi opbevarer dine data så længe du har en aktiv konto. 
+          Vi opbevarer dine data så længe du har en aktiv konto.
           Hvis du sletter din konto, fjernes alle dine data inden for 30 dage.
         </Text>
 
         <Text style={s.sectionTitle}>9. Cookies og tracking</Text>
         <Text style={s.paragraph}>
-          Vi bruger minimale cookies til at holde dig logget ind. 
+          Vi bruger minimale cookies til at holde dig logget ind.
           Vi bruger ikke tredjepartstracking eller reklame-cookies.
         </Text>
 
         <Text style={s.sectionTitle}>10. Børns privatliv</Text>
         <Text style={s.paragraph}>
-          RunWithAI er ikke beregnet til børn under 13 år. 
+          RunWithAI er ikke beregnet til børn under 13 år.
           Vi indsamler ikke bevidst data fra børn under denne alder.
         </Text>
 
         <Text style={s.sectionTitle}>11. Ændringer i politikken</Text>
         <Text style={s.paragraph}>
-          Vi kan opdatere denne politik fra tid til anden. 
+          Vi kan opdatere denne politik fra tid til anden.
           Ved væsentlige ændringer vil vi informere dig via app eller email.
         </Text>
 

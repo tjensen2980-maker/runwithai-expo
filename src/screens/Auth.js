@@ -1,5 +1,6 @@
 // ═══════════════════════════════════════════════════════════════════════════
-// AUTH.JS - RunWithAI Login & Registration (med PRO Upsell + Glemt Password)
+// AUTH.JS - RunWithAI Login & Registration (med PRO Upsell + Glemt Password + i18n)
+// OPDATERET: Bruger RevenueCat i stedet for Stripe
 // ═══════════════════════════════════════════════════════════════════════════
 
 import React, { useState } from 'react';
@@ -14,61 +15,40 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
-  Linking,
+  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
 import { colors } from '../data';
 
 const API_URL = 'https://runwithai-server-production.up.railway.app';
 
-// Web-specifik text stroke for "WITH"
-const logoWithStyle = Platform.OS === 'web'
-  ? {
-      color: '#ffffff',
-      fontWeight: '700',
-      letterSpacing: 2,
-      WebkitTextStroke: '1px #000000',
-      textShadow: '1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000',
-    }
-  : {
-      color: '#ffffff',
-      fontWeight: '700',
-      letterSpacing: 2,
-      textShadowColor: '#000',
-      textShadowOffset: { width: 1, height: 1 },
-      textShadowRadius: 1,
-    };
+// ─── REVENUECAT SETUP ─────────────────────────────────────────────────────────
+let Purchases = null;
+if (Platform.OS === 'ios' || Platform.OS === 'android') {
+  try {
+    Purchases = require('react-native-purchases').default;
+  } catch (e) {
+    console.log('RevenueCat not available');
+  }
+}
+const REVENUECAT_IOS_KEY = 'appl_RSTGHBSwwJLczMzoqgBiNYDFDIb';
+const REVENUECAT_ANDROID_KEY = 'goog_YOUR_REVENUECAT_ANDROID_KEY';
 
-// ─── LEVEL OPTIONS ──────────────────────────────────────────────────────────
-const LEVELS = [
-  { id: 'beginner', label: 'Begynder', emoji: '🌱', desc: 'Ny til løb eller starter igen' },
-  { id: 'intermediate', label: 'Øvet', emoji: '🏃', desc: 'Løber regelmæssigt, 5-20 km/uge' },
-  { id: 'advanced', label: 'Erfaren', emoji: '🔥', desc: 'Seriøs løber, 20+ km/uge' },
-];
-
-// ─── GOAL OPTIONS ───────────────────────────────────────────────────────────
-const GOALS = [
-  { id: 'health', label: 'Sundhed', emoji: '❤️' },
-  { id: 'weight', label: 'Vægttab', emoji: '⚖️' },
-  { id: 'distance', label: 'Løbe længere', emoji: '📏' },
-  { id: 'speed', label: 'Blive hurtigere', emoji: '⚡' },
-  { id: 'race', label: 'Løb et løb', emoji: '🏅' },
-  { id: 'fun', label: 'Hygge', emoji: '😊' },
-];
-
-// ─── PRO FEATURES ───────────────────────────────────────────────────────────
-const PRO_FEATURES = [
-  { emoji: '🤖', title: 'AI Coach', desc: 'Personlig træningsplan' },
-  { emoji: '📊', title: 'Statistik', desc: 'Dybdegående analyse' },
-  { emoji: '🎯', title: 'Mål', desc: 'Ubegrænsede mål' },
-  { emoji: '🗺️', title: 'Ruter', desc: 'Gem yndlingsruter' },
-  { emoji: '💬', title: 'AI Chat', desc: 'Spørg om alt' },
-  { emoji: '📈', title: 'Rapporter', desc: 'Ugentlige opsummeringer' },
-];
+// ─── APP LOGO COMPONENT ───────────────────────────────────────────────────────
+const AppLogo = ({ size = 140 }) => (
+  <Image 
+    source={require('../../assets/icon.png')} 
+    style={{ width: size, height: size, borderRadius: size * 0.18 }}
+    resizeMode="contain"
+  />
+);
 
 export default function Auth({ onAuth }) {
-  const [mode, setMode] = useState('login'); // 'login' | 'register' | 'register_profile' | 'register_upsell' | 'forgot_password' | 'reset_password'
+  const { t } = useTranslation();
+  
+  const [mode, setMode] = useState('login');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -97,9 +77,36 @@ export default function Auth({ onAuth }) {
   const [pendingUser, setPendingUser] = useState(null);
   const [pendingProfile, setPendingProfile] = useState(null);
 
+  // ─── LEVEL OPTIONS ──────────────────────────────────────────────────────────
+  const LEVELS = [
+    { id: 'beginner', label: t('auth.levels.beginner'), emoji: '🌱', desc: t('auth.levels.beginnerDesc') },
+    { id: 'intermediate', label: t('auth.levels.intermediate'), emoji: '🏃', desc: t('auth.levels.intermediateDesc') },
+    { id: 'advanced', label: t('auth.levels.advanced'), emoji: '🔥', desc: t('auth.levels.advancedDesc') },
+  ];
+
+  // ─── GOAL OPTIONS ───────────────────────────────────────────────────────────
+  const GOALS = [
+    { id: 'health', label: t('auth.goals.health'), emoji: '❤️' },
+    { id: 'weight', label: t('auth.goals.weight'), emoji: '⚖️' },
+    { id: 'distance', label: t('auth.goals.distance'), emoji: '📏' },
+    { id: 'speed', label: t('auth.goals.speed'), emoji: '⚡' },
+    { id: 'race', label: t('auth.goals.race'), emoji: '🏅' },
+    { id: 'fun', label: t('auth.goals.fun'), emoji: '😊' },
+  ];
+
+  // ─── PRO FEATURES ───────────────────────────────────────────────────────────
+  const PRO_FEATURES = [
+    { emoji: '🤖', title: t('auth.proFeatures.aiCoach'), desc: t('auth.proFeatures.aiCoachDesc') },
+    { emoji: '📊', title: t('auth.proFeatures.stats'), desc: t('auth.proFeatures.statsDesc') },
+    { emoji: '🎯', title: t('auth.proFeatures.goals'), desc: t('auth.proFeatures.goalsDesc') },
+    { emoji: '🗺️', title: t('auth.proFeatures.routes'), desc: t('auth.proFeatures.routesDesc') },
+    { emoji: '💬', title: t('auth.proFeatures.chat'), desc: t('auth.proFeatures.chatDesc') },
+    { emoji: '📈', title: t('auth.proFeatures.reports'), desc: t('auth.proFeatures.reportsDesc') },
+  ];
+
   const handleLogin = async () => {
     if (!email || !password) {
-      setError('Udfyld email og adgangskode');
+      setError(t('auth.errors.fillEmailPassword'));
       return;
     }
 
@@ -118,10 +125,10 @@ export default function Auth({ onAuth }) {
       if (res.ok && data.token) {
         onAuth(data.token, data.user);
       } else {
-        setError(data.error || 'Login fejlede');
+        setError(data.error || t('auth.errors.loginFailed'));
       }
     } catch (err) {
-      setError('Kunne ikke forbinde til server');
+      setError(t('auth.errors.serverConnection'));
     } finally {
       setLoading(false);
     }
@@ -129,7 +136,7 @@ export default function Auth({ onAuth }) {
 
   const handleForgotPassword = async () => {
     if (!email) {
-      setError('Indtast din email');
+      setError(t('auth.errors.enterEmail'));
       return;
     }
 
@@ -147,13 +154,13 @@ export default function Auth({ onAuth }) {
       const data = await res.json();
 
       if (res.ok) {
-        setSuccessMessage('Vi har sendt en nulstillingskode til din email');
+        setSuccessMessage(t('auth.success.resetCodeSent'));
         setMode('reset_password');
       } else {
-        setError(data.error || 'Kunne ikke sende nulstillingskode');
+        setError(data.error || t('auth.errors.resetCodeFailed'));
       }
     } catch (err) {
-      setError('Kunne ikke forbinde til server');
+      setError(t('auth.errors.serverConnection'));
     } finally {
       setLoading(false);
     }
@@ -161,17 +168,17 @@ export default function Auth({ onAuth }) {
 
   const handleResetPassword = async () => {
     if (!resetCode || !newPassword) {
-      setError('Udfyld kode og ny adgangskode');
+      setError(t('auth.errors.fillCodePassword'));
       return;
     }
 
     if (newPassword !== confirmNewPassword) {
-      setError('Adgangskoder matcher ikke');
+      setError(t('auth.errors.passwordMismatch'));
       return;
     }
 
     if (newPassword.length < 6) {
-      setError('Adgangskode skal være mindst 6 tegn');
+      setError(t('auth.errors.passwordTooShort'));
       return;
     }
 
@@ -188,17 +195,17 @@ export default function Auth({ onAuth }) {
       const data = await res.json();
 
       if (res.ok) {
-        setSuccessMessage('Adgangskode nulstillet! Du kan nu logge ind.');
+        setSuccessMessage(t('auth.success.passwordReset'));
         setMode('login');
         setResetCode('');
         setNewPassword('');
         setConfirmNewPassword('');
-        setPassword(''); // Ryd password feltet på login-skærmen
+        setPassword('');
       } else {
-        setError(data.error || 'Kunne ikke nulstille adgangskode');
+        setError(data.error || t('auth.errors.resetFailed'));
       }
     } catch (err) {
-      setError('Kunne ikke forbinde til server');
+      setError(t('auth.errors.serverConnection'));
     } finally {
       setLoading(false);
     }
@@ -206,17 +213,17 @@ export default function Auth({ onAuth }) {
 
   const handleRegisterStep1 = async () => {
     if (!email || !password) {
-      setError('Udfyld email og adgangskode');
+      setError(t('auth.errors.fillEmailPassword'));
       return;
     }
 
     if (password !== confirmPassword) {
-      setError('Adgangskoder matcher ikke');
+      setError(t('auth.errors.passwordMismatch'));
       return;
     }
 
     if (password.length < 6) {
-      setError('Adgangskode skal være mindst 6 tegn');
+      setError(t('auth.errors.passwordTooShort'));
       return;
     }
 
@@ -233,15 +240,14 @@ export default function Auth({ onAuth }) {
       const data = await res.json();
 
       if (res.ok && data.token) {
-        // Gem token midlertidigt og gå til profil-step
         setPendingToken(data.token);
         setPendingUser(data.user);
         setMode('register_profile');
       } else {
-        setError(data.error || 'Oprettelse fejlede');
+        setError(data.error || t('auth.errors.registerFailed'));
       }
     } catch (err) {
-      setError('Kunne ikke forbinde til server');
+      setError(t('auth.errors.serverConnection'));
     } finally {
       setLoading(false);
     }
@@ -249,12 +255,12 @@ export default function Auth({ onAuth }) {
 
   const handleRegisterStep2 = async () => {
     if (!name.trim()) {
-      setError('Indtast dit navn');
+      setError(t('auth.errors.enterName'));
       return;
     }
 
     if (!level) {
-      setError('Vælg dit niveau');
+      setError(t('auth.errors.selectLevel'));
       return;
     }
 
@@ -262,7 +268,6 @@ export default function Auth({ onAuth }) {
     setError('');
 
     try {
-      // Gem profil til server
       const profileData = {
         name: name.trim(),
         age: age ? parseInt(age) : null,
@@ -286,53 +291,74 @@ export default function Auth({ onAuth }) {
         console.log('Profile save failed, continuing anyway');
       }
 
-      // Gem onboarding status lokalt
       await AsyncStorage.setItem('onboardingCompleted', 'true');
       await AsyncStorage.setItem('userLevel', level);
 
-      // Gem profil data til næste step
       setPendingProfile(profileData);
-
-      // Gå til PRO upsell step
       setMode('register_upsell');
 
     } catch (err) {
       console.log('Profile save error:', err);
-      // Fortsæt alligevel til upsell
       setMode('register_upsell');
     } finally {
       setLoading(false);
     }
   };
 
+  // ─── REVENUECAT PURCHASE (erstatter Stripe) ─────────────────────────────────
   const handleStartTrial = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}/create-checkout-session`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${pendingToken}`,
-        },
-        body: JSON.stringify({ priceId: 'price_1TBU4s5DwJ9LegdIxUvhaTJu' }),
-      });
-
-      const data = await res.json();
-
-      if (data.url) {
-        if (Platform.OS === 'web') {
-          window.open(data.url, '_blank');
-        } else {
-          Linking.openURL(data.url);
-        }
+      // Skip på web - gå direkte videre
+      if (Platform.OS === 'web' || !Purchases) {
+        onAuth(pendingToken, { ...pendingUser, profile: pendingProfile });
+        return;
       }
 
-      // Fuldfør login efter checkout åbnes
+      // Konfigurer RevenueCat
+      const apiKey = Platform.OS === 'ios' ? REVENUECAT_IOS_KEY : REVENUECAT_ANDROID_KEY;
+      if (!apiKey.includes('YOUR_REVENUECAT')) {
+        try {
+          await Purchases.configure({ apiKey });
+          
+          // Hent offerings
+          const offerings = await Purchases.getOfferings();
+          if (offerings.current && offerings.current.availablePackages.length > 0) {
+            const pkg = offerings.current.availablePackages[0];
+            const { customerInfo } = await Purchases.purchasePackage(pkg);
+            
+            if (customerInfo.entitlements.active['pro']) {
+              // Sync med server
+              try {
+                await fetch(`${API_URL}/subscription/activate`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${pendingToken}`,
+                  },
+                  body: JSON.stringify({
+                    revenueCatId: customerInfo.originalAppUserId,
+                  }),
+                });
+              } catch (syncErr) {
+                console.log('Server sync warning:', syncErr);
+              }
+              
+              Alert.alert('🎉 Velkommen til Pro!', 'Du har nu adgang til alle funktioner.');
+            }
+          }
+        } catch (purchaseErr) {
+          if (!purchaseErr.userCancelled) {
+            console.log('Purchase error:', purchaseErr);
+          }
+        }
+      }
+      
+      // Gå videre uanset om køb lykkedes
       onAuth(pendingToken, { ...pendingUser, profile: pendingProfile });
 
     } catch (err) {
-      console.log('Checkout error:', err);
-      // Fortsæt alligevel
+      console.log('Trial error:', err);
       onAuth(pendingToken, { ...pendingUser, profile: pendingProfile });
     } finally {
       setLoading(false);
@@ -340,7 +366,6 @@ export default function Auth({ onAuth }) {
   };
 
   const handleSkipTrial = () => {
-    // Fuldfør login uden PRO
     onAuth(pendingToken, { ...pendingUser, profile: pendingProfile });
   };
 
@@ -361,30 +386,24 @@ export default function Auth({ onAuth }) {
           style={styles.keyboardView}
         >
           <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
-            {/* Logo */}
             <View style={styles.logoContainer}>
-              <Text style={styles.logoText}>
-                <Text style={styles.logoRun}>RUN</Text>
-                <Text style={logoWithStyle}>WITH</Text>
-                <Text style={styles.logoAI}>AI</Text>
-              </Text>
-              <Text style={styles.tagline}>Din personlige AI løbecoach</Text>
+              <AppLogo size={350} />
+              <Text style={styles.tagline}>{t('auth.tagline')}</Text>
             </View>
 
-            {/* Form */}
             <View style={styles.formCard}>
-              <Text style={styles.formTitle}>Log ind</Text>
+              <Text style={styles.formTitle}>{t('auth.login')}</Text>
 
               {error ? <Text style={styles.errorText}>{error}</Text> : null}
               {successMessage ? <Text style={styles.successText}>{successMessage}</Text> : null}
 
               <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Email</Text>
+                <Text style={styles.inputLabel}>{t('auth.email')}</Text>
                 <TextInput
                   style={styles.input}
                   value={email}
                   onChangeText={setEmail}
-                  placeholder="din@email.dk"
+                  placeholder={t('auth.emailPlaceholder')}
                   placeholderTextColor={colors.muted}
                   keyboardType="email-address"
                   autoCapitalize="none"
@@ -393,7 +412,7 @@ export default function Auth({ onAuth }) {
               </View>
 
               <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Adgangskode</Text>
+                <Text style={styles.inputLabel}>{t('auth.password')}</Text>
                 <TextInput
                   style={styles.input}
                   value={password}
@@ -408,7 +427,7 @@ export default function Auth({ onAuth }) {
                 style={styles.forgotPasswordLink}
                 onPress={() => { setMode('forgot_password'); setError(''); setSuccessMessage(''); }}
               >
-                <Text style={styles.forgotPasswordText}>Glemt adgangskode?</Text>
+                <Text style={styles.forgotPasswordText}>{t('auth.forgotPassword')}</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -419,13 +438,13 @@ export default function Auth({ onAuth }) {
                 {loading ? (
                   <ActivityIndicator color={colors.black} />
                 ) : (
-                  <Text style={styles.primaryButtonText}>Log ind</Text>
+                  <Text style={styles.primaryButtonText}>{t('auth.login')}</Text>
                 )}
               </TouchableOpacity>
 
               <View style={styles.divider}>
                 <View style={styles.dividerLine} />
-                <Text style={styles.dividerText}>eller</Text>
+                <Text style={styles.dividerText}>{t('auth.or')}</Text>
                 <View style={styles.dividerLine} />
               </View>
 
@@ -433,7 +452,7 @@ export default function Auth({ onAuth }) {
                 style={styles.secondaryButton}
                 onPress={() => { setMode('register'); setError(''); setSuccessMessage(''); }}
               >
-                <Text style={styles.secondaryButtonText}>Opret ny konto</Text>
+                <Text style={styles.secondaryButtonText}>{t('auth.createAccount')}</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
@@ -451,30 +470,24 @@ export default function Auth({ onAuth }) {
           style={styles.keyboardView}
         >
           <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
-            {/* Logo */}
             <View style={styles.logoContainer}>
-              <Text style={styles.logoText}>
-                <Text style={styles.logoRun}>RUN</Text>
-                <Text style={logoWithStyle}>WITH</Text>
-                <Text style={styles.logoAI}>AI</Text>
-              </Text>
-              <Text style={styles.tagline}>Nulstil din adgangskode</Text>
+              <AppLogo size={240} />
+              <Text style={styles.tagline}>{t('auth.resetPassword')}</Text>
             </View>
 
-            {/* Form */}
             <View style={styles.formCard}>
-              <Text style={styles.formTitle}>Glemt adgangskode</Text>
-              <Text style={styles.formSubtitle}>Indtast din email, så sender vi en nulstillingskode</Text>
+              <Text style={styles.formTitle}>{t('auth.forgotPassword')}</Text>
+              <Text style={styles.formSubtitle}>{t('auth.forgotPasswordDesc')}</Text>
 
               {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
               <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Email</Text>
+                <Text style={styles.inputLabel}>{t('auth.email')}</Text>
                 <TextInput
                   style={styles.input}
                   value={email}
                   onChangeText={setEmail}
-                  placeholder="din@email.dk"
+                  placeholder={t('auth.emailPlaceholder')}
                   placeholderTextColor={colors.muted}
                   keyboardType="email-address"
                   autoCapitalize="none"
@@ -490,7 +503,7 @@ export default function Auth({ onAuth }) {
                 {loading ? (
                   <ActivityIndicator color={colors.black} />
                 ) : (
-                  <Text style={styles.primaryButtonText}>Send nulstillingskode</Text>
+                  <Text style={styles.primaryButtonText}>{t('auth.sendResetCode')}</Text>
                 )}
               </TouchableOpacity>
 
@@ -498,7 +511,7 @@ export default function Auth({ onAuth }) {
                 style={styles.linkButton}
                 onPress={() => { setMode('login'); setError(''); }}
               >
-                <Text style={styles.linkButtonText}>← Tilbage til login</Text>
+                <Text style={styles.linkButtonText}>← {t('auth.backToLogin')}</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
@@ -516,31 +529,25 @@ export default function Auth({ onAuth }) {
           style={styles.keyboardView}
         >
           <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
-            {/* Logo */}
             <View style={styles.logoContainer}>
-              <Text style={styles.logoText}>
-                <Text style={styles.logoRun}>RUN</Text>
-                <Text style={logoWithStyle}>WITH</Text>
-                <Text style={styles.logoAI}>AI</Text>
-              </Text>
-              <Text style={styles.tagline}>Opret ny adgangskode</Text>
+              <AppLogo size={240} />
+              <Text style={styles.tagline}>{t('auth.createNewPassword')}</Text>
             </View>
 
-            {/* Form */}
             <View style={styles.formCard}>
-              <Text style={styles.formTitle}>Nulstil adgangskode</Text>
-              <Text style={styles.formSubtitle}>Tjek din email for koden</Text>
+              <Text style={styles.formTitle}>{t('auth.resetPassword')}</Text>
+              <Text style={styles.formSubtitle}>{t('auth.checkEmail')}</Text>
 
               {error ? <Text style={styles.errorText}>{error}</Text> : null}
               {successMessage ? <Text style={styles.successText}>{successMessage}</Text> : null}
 
               <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Nulstillingskode</Text>
+                <Text style={styles.inputLabel}>{t('auth.resetCode')}</Text>
                 <TextInput
                   style={styles.input}
                   value={resetCode}
                   onChangeText={setResetCode}
-                  placeholder="6-cifret kode"
+                  placeholder={t('auth.resetCodePlaceholder')}
                   placeholderTextColor={colors.muted}
                   keyboardType="number-pad"
                   maxLength={6}
@@ -549,24 +556,24 @@ export default function Auth({ onAuth }) {
               </View>
 
               <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Ny adgangskode</Text>
+                <Text style={styles.inputLabel}>{t('auth.newPassword')}</Text>
                 <TextInput
                   style={styles.input}
                   value={newPassword}
                   onChangeText={setNewPassword}
-                  placeholder="Mindst 6 tegn"
+                  placeholder={t('auth.minChars')}
                   placeholderTextColor={colors.muted}
                   secureTextEntry
                 />
               </View>
 
               <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Bekræft ny adgangskode</Text>
+                <Text style={styles.inputLabel}>{t('auth.confirmNewPassword')}</Text>
                 <TextInput
                   style={styles.input}
                   value={confirmNewPassword}
                   onChangeText={setConfirmNewPassword}
-                  placeholder="Gentag adgangskode"
+                  placeholder={t('auth.repeatPassword')}
                   placeholderTextColor={colors.muted}
                   secureTextEntry
                 />
@@ -580,7 +587,7 @@ export default function Auth({ onAuth }) {
                 {loading ? (
                   <ActivityIndicator color={colors.black} />
                 ) : (
-                  <Text style={styles.primaryButtonText}>Nulstil adgangskode</Text>
+                  <Text style={styles.primaryButtonText}>{t('auth.resetPassword')}</Text>
                 )}
               </TouchableOpacity>
 
@@ -588,7 +595,7 @@ export default function Auth({ onAuth }) {
                 style={styles.linkButton}
                 onPress={() => { setMode('forgot_password'); setError(''); }}
               >
-                <Text style={styles.linkButtonText}>Fik du ikke koden? Send igen</Text>
+                <Text style={styles.linkButtonText}>{t('auth.resendCode')}</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
@@ -606,30 +613,24 @@ export default function Auth({ onAuth }) {
           style={styles.keyboardView}
         >
           <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
-            {/* Logo */}
             <View style={styles.logoContainer}>
-              <Text style={styles.logoText}>
-                <Text style={styles.logoRun}>RUN</Text>
-                <Text style={logoWithStyle}>WITH</Text>
-                <Text style={styles.logoAI}>AI</Text>
-              </Text>
-              <Text style={styles.tagline}>Kom i gang på 2 minutter</Text>
+              <AppLogo size={240} />
+              <Text style={styles.tagline}>{t('auth.getStarted')}</Text>
             </View>
 
-            {/* Form */}
             <View style={styles.formCard}>
-              <Text style={styles.formTitle}>Opret konto</Text>
-              <Text style={styles.stepIndicator}>Trin 1 af 3</Text>
+              <Text style={styles.formTitle}>{t('auth.createAccount')}</Text>
+              <Text style={styles.stepIndicator}>{t('auth.step1of3')}</Text>
 
               {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
               <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Email</Text>
+                <Text style={styles.inputLabel}>{t('auth.email')}</Text>
                 <TextInput
                   style={styles.input}
                   value={email}
                   onChangeText={setEmail}
-                  placeholder="din@email.dk"
+                  placeholder={t('auth.emailPlaceholder')}
                   placeholderTextColor={colors.muted}
                   keyboardType="email-address"
                   autoCapitalize="none"
@@ -638,24 +639,24 @@ export default function Auth({ onAuth }) {
               </View>
 
               <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Adgangskode</Text>
+                <Text style={styles.inputLabel}>{t('auth.password')}</Text>
                 <TextInput
                   style={styles.input}
                   value={password}
                   onChangeText={setPassword}
-                  placeholder="Mindst 6 tegn"
+                  placeholder={t('auth.minChars')}
                   placeholderTextColor={colors.muted}
                   secureTextEntry
                 />
               </View>
 
               <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Bekræft adgangskode</Text>
+                <Text style={styles.inputLabel}>{t('auth.confirmPassword')}</Text>
                 <TextInput
                   style={styles.input}
                   value={confirmPassword}
                   onChangeText={setConfirmPassword}
-                  placeholder="Gentag adgangskode"
+                  placeholder={t('auth.repeatPassword')}
                   placeholderTextColor={colors.muted}
                   secureTextEntry
                 />
@@ -669,7 +670,7 @@ export default function Auth({ onAuth }) {
                 {loading ? (
                   <ActivityIndicator color={colors.black} />
                 ) : (
-                  <Text style={styles.primaryButtonText}>Fortsæt →</Text>
+                  <Text style={styles.primaryButtonText}>{t('auth.continue')} →</Text>
                 )}
               </TouchableOpacity>
 
@@ -677,7 +678,7 @@ export default function Auth({ onAuth }) {
                 style={styles.linkButton}
                 onPress={() => { setMode('login'); setError(''); }}
               >
-                <Text style={styles.linkButtonText}>Har allerede en konto? Log ind</Text>
+                <Text style={styles.linkButtonText}>{t('auth.hasAccount')}</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
@@ -695,45 +696,41 @@ export default function Auth({ onAuth }) {
           style={styles.keyboardView}
         >
           <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
-            {/* Header */}
             <View style={styles.profileHeader}>
-              <Text style={styles.profileTitle}>Fortæl os om dig selv</Text>
-              <Text style={styles.stepIndicator}>Trin 2 af 3</Text>
+              <Text style={styles.profileTitle}>{t('auth.tellUsAboutYou')}</Text>
+              <Text style={styles.stepIndicator}>{t('auth.step2of3')}</Text>
             </View>
 
-            {/* Form */}
             <View style={styles.profileForm}>
               {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-              {/* Name */}
               <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Navn *</Text>
+                <Text style={styles.inputLabel}>{t('auth.name')} *</Text>
                 <TextInput
                   style={styles.input}
                   value={name}
                   onChangeText={setName}
-                  placeholder="Dit navn"
+                  placeholder={t('auth.yourName')}
                   placeholderTextColor={colors.muted}
                   autoCapitalize="words"
                 />
               </View>
 
-              {/* Age, Weight, Height in row */}
               <View style={styles.inputRow}>
                 <View style={styles.inputGroupSmall}>
-                  <Text style={styles.inputLabel}>Alder</Text>
+                  <Text style={styles.inputLabel}>{t('auth.age')}</Text>
                   <TextInput
                     style={styles.input}
                     value={age}
                     onChangeText={setAge}
-                    placeholder="År"
+                    placeholder={t('auth.years')}
                     placeholderTextColor={colors.muted}
                     keyboardType="number-pad"
                     maxLength={2}
                   />
                 </View>
                 <View style={styles.inputGroupSmall}>
-                  <Text style={styles.inputLabel}>Vægt</Text>
+                  <Text style={styles.inputLabel}>{t('auth.weight')}</Text>
                   <TextInput
                     style={styles.input}
                     value={weight}
@@ -745,7 +742,7 @@ export default function Auth({ onAuth }) {
                   />
                 </View>
                 <View style={styles.inputGroupSmall}>
-                  <Text style={styles.inputLabel}>Højde</Text>
+                  <Text style={styles.inputLabel}>{t('auth.height')}</Text>
                   <TextInput
                     style={styles.input}
                     value={height}
@@ -758,9 +755,8 @@ export default function Auth({ onAuth }) {
                 </View>
               </View>
 
-              {/* Level Selection */}
               <View style={styles.sectionGroup}>
-                <Text style={styles.sectionLabel}>Dit løbeniveau *</Text>
+                <Text style={styles.sectionLabel}>{t('auth.runningLevel')} *</Text>
                 <View style={styles.levelOptions}>
                   {LEVELS.map(l => (
                     <TouchableOpacity
@@ -776,9 +772,8 @@ export default function Auth({ onAuth }) {
                 </View>
               </View>
 
-              {/* Goals */}
               <View style={styles.sectionGroup}>
-                <Text style={styles.sectionLabel}>Hvad er dine mål? (vælg gerne flere)</Text>
+                <Text style={styles.sectionLabel}>{t('auth.yourGoals')}</Text>
                 <View style={styles.goalsGrid}>
                   {GOALS.map(g => (
                     <TouchableOpacity
@@ -793,21 +788,19 @@ export default function Auth({ onAuth }) {
                 </View>
               </View>
 
-              {/* Weekly Goal */}
               <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Ugentligt km mål</Text>
+                <Text style={styles.inputLabel}>{t('auth.weeklyGoalKm')}</Text>
                 <TextInput
                   style={styles.input}
                   value={weeklyGoalKm}
                   onChangeText={setWeeklyGoalKm}
-                  placeholder="F.eks. 20"
+                  placeholder={t('auth.weeklyGoalExample')}
                   placeholderTextColor={colors.muted}
                   keyboardType="number-pad"
                   maxLength={3}
                 />
               </View>
 
-              {/* Submit */}
               <TouchableOpacity
                 style={[styles.primaryButton, loading && styles.buttonDisabled]}
                 onPress={handleRegisterStep2}
@@ -816,7 +809,7 @@ export default function Auth({ onAuth }) {
                 {loading ? (
                   <ActivityIndicator color={colors.black} />
                 ) : (
-                  <Text style={styles.primaryButtonText}>Fortsæt →</Text>
+                  <Text style={styles.primaryButtonText}>{t('auth.continue')} →</Text>
                 )}
               </TouchableOpacity>
             </View>
@@ -831,16 +824,15 @@ export default function Auth({ onAuth }) {
     return (
       <SafeAreaView style={styles.upsellContainer}>
         <ScrollView contentContainerStyle={styles.upsellContent} showsVerticalScrollIndicator={false}>
-          {/* Header */}
           <View style={styles.upsellHeader}>
+            <AppLogo size={200} />
             <View style={styles.proBadge}>
               <Text style={styles.proBadgeText}>⭐ PRO</Text>
             </View>
-            <Text style={styles.upsellTitle}>Lås op for fuld kraft</Text>
-            <Text style={styles.upsellSubtitle}>Få adgang til alle funktioner og nå dine mål hurtigere</Text>
+            <Text style={styles.upsellTitle}>{t('auth.unlockFullPower')}</Text>
+            <Text style={styles.upsellSubtitle}>{t('auth.unlockDesc')}</Text>
           </View>
 
-          {/* Features Grid */}
           <View style={styles.featuresGrid}>
             {PRO_FEATURES.map((f, i) => (
               <View key={i} style={styles.featureCard}>
@@ -851,15 +843,13 @@ export default function Auth({ onAuth }) {
             ))}
           </View>
 
-          {/* Price */}
           <View style={styles.priceSection}>
-            <Text style={styles.priceAmount}>49 kr</Text>
-            <Text style={styles.priceUnit}>/måned</Text>
+            <Text style={styles.priceAmount}>{t('auth.price')}</Text>
+            <Text style={styles.priceUnit}>{t('auth.perMonth')}</Text>
           </View>
 
-          <Text style={styles.guarantee}>✓ Annuller når som helst • ✓ 7 dages gratis prøveperiode</Text>
+          <Text style={styles.guarantee}>{t('auth.guarantee')}</Text>
 
-          {/* CTA Buttons */}
           <TouchableOpacity
             style={[styles.upsellButton, loading && styles.buttonDisabled]}
             onPress={handleStartTrial}
@@ -868,12 +858,12 @@ export default function Auth({ onAuth }) {
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={styles.upsellButtonText}>🚀 Start gratis prøveperiode</Text>
+              <Text style={styles.upsellButtonText}>🚀 {t('auth.startFreeTrial')}</Text>
             )}
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.skipButton} onPress={handleSkipTrial}>
-            <Text style={styles.skipButtonText}>Fortsæt med gratis version</Text>
+            <Text style={styles.skipButtonText}>{t('auth.continueWithFree')}</Text>
           </TouchableOpacity>
         </ScrollView>
       </SafeAreaView>
@@ -894,34 +884,18 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    padding: 24,
+    padding: 0,
     justifyContent: 'center',
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 32,
-  },
-  logoText: {
-    fontSize: 36,
-    letterSpacing: -1,
-  },
-  logoRun: {
-    color: colors.accent,
-    fontWeight: '900',
-  },
-  logoWithBase: {
-    color: '#ffffff',
-    fontWeight: '700',
-    letterSpacing: 2,
-  },
-  logoAI: {
-    color: colors.accent,
-    fontWeight: '900',
+    marginBottom: -150,
+    marginTop: -160,
   },
   tagline: {
     fontSize: 16,
     color: colors.muted,
-    marginTop: 8,
+    marginTop: 80,
   },
   formCard: {
     backgroundColor: colors.card,
@@ -1045,7 +1019,6 @@ const styles = StyleSheet.create({
     color: colors.muted,
     fontSize: 14,
   },
-  // Profile step styles
   profileHeader: {
     marginBottom: 24,
   },
@@ -1133,7 +1106,6 @@ const styles = StyleSheet.create({
   goalLabelSelected: {
     color: colors.accent,
   },
-  // ─── PRO UPSELL STYLES ────────────────────────────────────────────────────
   upsellContainer: {
     flex: 1,
     backgroundColor: '#09090b',
@@ -1153,6 +1125,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 6,
     borderRadius: 20,
+    marginTop: 16,
     marginBottom: 16,
   },
   proBadgeText: {

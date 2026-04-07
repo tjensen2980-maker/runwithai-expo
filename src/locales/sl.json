@@ -1,0 +1,512 @@
+{
+  "tabs": {
+    "plan": "Načrt",
+    "run": "Tek",
+    "coach": "Trener",
+    "stats": "Statistika",
+    "settings": "Nastavitve",
+    "calendar": "Koledar",
+    "progress": "Napredek",
+    "start": "Start"
+  },
+  "run": {
+    "title": "Tek",
+    "walk": "Hoja",
+    "km": "KM",
+    "time": "ČAS",
+    "pace": "TEMPO",
+    "start": "Start",
+    "pause": "Premor",
+    "resume": "Nadaljuj",
+    "stop": "Stop",
+    "save": "Shrani",
+    "discard": "Zavrzi",
+    "startRun": "Začni tek",
+    "startThisWorkout": "Začni ta trening",
+    "nextWorkout": "Naslednji trening",
+    "lastActivity": "Zadnja aktivnost",
+    "gpsTracking": "GPS sledenje",
+    "walkTracking": "Sledenje hoje",
+    "aiRoutes": "AI poti"
+  },
+  "pro": {
+    "badge": "PRO",
+    "upgrade": "Nadgradi",
+    "upgradeToPro": "Nadgradi na Pro",
+    "feature": "Pro funkcija",
+    "unlockFeatures": "Odkleni vse funkcije",
+    "fromOnly": "Že od",
+    "limit": {
+      "title": "Pro funkcija",
+      "message": "Ta funkcija zahteva Pro naročnino",
+      "seePlans": "Poglej načrte",
+      "cancel": "Prekliči"
+    },
+    "stats": {
+      "title": "Pro statistika",
+      "features": "Napredna statistika in vpogledi",
+      "unlock": "Odkleni"
+    },
+    "coach": {
+      "title": "AI trener",
+      "description": "Personaliziran načrt treninga, ki se prilagaja tebi"
+    },
+    "calendar": {
+      "title": "Koledar treningov",
+      "description": "Poglej celoten načrt treningov"
+    },
+    "aiRoutes": {
+      "title": "AI poti",
+      "description": "Pridobi priporočila poti na podlagi tvojega treninga"
+    }
+  },
+  "stats": {
+    "title": "Statistika",
+    "totalRuns": "Skupno tekov",
+    "totalKm": "Skupno km",
+    "avgPace": "Povprečni tempo",
+    "thisWeek": "Ta teden",
+    "thisMonth": "Ta mesec",
+    "allTime": "Skupno",
+    "basic": "Osnovna statistika",
+    "runs": "Teki"
+  },
+  "subscription": "Naročnina",
+  "alerts": {
+    "deleteRun": "Ali ste prepričani, da želite izbrisati ta tek?",
+    "deleteAccount": "Ali ste prepričani, da želite izbrisati svoj račun? Tega ni mogoče razveljaviti.",
+    "logout": "Ali ste prepričani, da se želite odjaviti?",
+    "discardRun": "Ali ste prepričani, da želite zavreči ta tek?",
+    "unsavedChanges": "Imate neshranjene spremembe. Ali jih želite zavreči?",
+    "welcomePro": {
+      "title": "Dobrodošli v Pro!",
+      "message": "Zdaj imate dostop do vseh funkcij"
+    }
+  },
+  "auth": {
+    "login": "Prijava",
+    "register": "Ustvari račun",
+    "email": "E-pošta",
+    "password": "Geslo",
+    "confirmPassword": "Potrdi geslo",
+    "forgotPassword": "Si pozabil geslo?",
+    "noAccount": "Nimaš računa?",
+    "hasAccount": "Že imaš račun?",
+    "loginButton": "Prijava",
+    "registerButton": "Ustvari račun",
+    "orContinueWith": "ali nadaljuj z",
+    "apple": "Apple",
+    "google": "Google",
+    "emailPlaceholder": "tvoj@email.si",
+    "passwordPlaceholder": "••••••••",
+    "namePlaceholder": "Tvoje ime",
+    "name": "Ime",
+    "loggingIn": "Prijavljanje...",
+    "registering": "Ustvarjanje računa...",
+    "tagline": "Tvoj osebni AI trener teka",
+    "createAccount": "Ustvari račun",
+    "minChars": "min. znakov",
+    "repeatPassword": "ponovi geslo",
+    "continue": "nadaljuj",
+    "getStarted": "začnimo",
+    "step1of3": "korak 1 od 3",
+    "step2of3": "korak 2 od 3",
+    "step3of3": "korak 3 od 3",
+    "yourName": "tvoje ime",
+    "age": "STAROST",
+    "weight": "TEŽA",
+    "height": "VIŠINA",
+    "years": "Let",
+    "runningLevel": "RAVEN TEKA",
+    "levels.beginner": "Začetnik",
+    "levels.intermediate": "Srednji",
+    "levels.advanced": "Napreden",
+    "yourGoals": "KAKŠNI SO TVOJI CILJI",
+    "goals.health": "Zdravje",
+    "goals.weight": "Izguba teže",
+    "goals.distance": "Teči dlje",
+    "goals.speed": "Postani hitrejši",
+    "goals.race": "Teči tekmo",
+    "goals.fun": "Zabava",
+    "weeklyGoalKm": "TEDENSKI CILJ KM",
+    "weeklyGoalExample": "Npr. 20",
+    "unlockFullPower": "Odkleni polni dostop",
+    "unlockDesc": "Pridobi dostop do vseh funkcij in doseži cilje hitreje",
+    "proFeatures.aiCoachDesc": "AI Trener",
+    "proFeatures.statsDesc": "Statistike",
+    "proFeatures.goalsDesc": "Cilji",
+    "proFeatures.routesDesc": "Poti",
+    "proFeatures.chatDesc": "AI Klepet",
+    "proFeatures.reportsDesc": "Poročila",
+    "price": "49 kr",
+    "guarantee": "✓ Prekliči kadarkoli • ✓ 7 dni brezplačno",
+    "perMonth": "/mesec",
+    "startFreeTrial": "Začni brezplačno preizkusno obdobje",
+    "continueWithFree": "Nadaljuj z brezplačno različico",
+    "levels.beginnerDesc": "Nov v teku ali začenjaš po dolgem premoru",
+    "levels.intermediateDesc": "Tečeš redno in se želiš izboljšati",
+    "levels.advancedDesc": "Izkušen tekač s specifičnimi cilji",
+    "or": "ali",
+    "errors": {
+      "serverConnection": "Ni mogoče vzpostaviti povezave s strežnikom"
+    }
+  },
+  "settings": {
+    "pageTitle": "Nastavitve",
+    "title": "Nastavitve",
+    "profile": "Profil",
+    "days": ["Pon", "Tor", "Sre", "Čet", "Pet", "Sob", "Ned"],
+    "saveChanges": "Shrani spremembe",
+    "saved": "Shranjeno!",
+    "logout": "Odjava",
+    "privacyPolicy": "Pravilnik o zasebnosti",
+    "termsOfService": "Pogoji uporabe",
+    "dangerZone": "Nevarna cona",
+    "sections": {
+      "personalInfo": "Osebni podatki",
+      "level": "Raven",
+      "runningGoals": "Tekaški cilji",
+      "weeklyGoals": "Tedenski cilji",
+      "trainingTypes": "Vrste treningov",
+      "heartRateZones": "Cone srčnega utripa",
+      "injuries": "Poškodbe",
+      "reminders": "Opomniki",
+      "privacy": "Zasebnost",
+      "units": "Enote",
+      "data": "Podatki"
+    },
+    "fields": {
+      "name": "Ime",
+      "age": "Starost",
+      "weight": "Teža (kg)",
+      "height": "Višina (cm)",
+      "sex": "Spol",
+      "restingHr": "Srčni utrip v mirovanju",
+      "maxHr": "Maksimalni srčni utrip",
+      "vo2max": "VO2max",
+      "yearsRunning": "Leta teka",
+      "weeklyKm": "Tedenski km",
+      "weeklyKmGoal": "Tedenski km cilj",
+      "weeklyRunsGoal": "Tedenski cilj tekov",
+      "primaryGoal": "Primarni cilj",
+      "raceDate": "Datum tekme",
+      "injuries": "Poškodbe/omejitve",
+      "injuriesPlaceholder": "Npr. težave s koleni, bolečine v hrbtu...",
+      "preferredDays": "Preferirani dnevi",
+      "preferredTypes": "Preferirane vrste teka"
+    },
+    "sex": {
+      "male": "Moški",
+      "female": "Ženska"
+    },
+    "levels": {
+      "beginner": "Začetnik",
+      "intermediate": "Srednji",
+      "advanced": "Napredni"
+    },
+    "goals": {
+      "fitness": "Splošna kondicija",
+      "weight": "Izguba teže",
+      "half": "Polmaraton",
+      "full": "Maraton"
+    },
+    "runTypes": {
+      "easy": "Lahek tek",
+      "interval": "Intervali",
+      "long": "Dolg tek",
+      "tempo": "Tempo tek",
+      "recovery": "Regeneracija",
+      "race": "Tekma",
+      "trail": "Teren"
+    },
+    "zones": {
+      "calculated": "Izračunano iz vašega maksimalnega srčnega utripa",
+      "z1": "Cona 1 (Regeneracija)",
+      "z2": "Cona 2 (Aerobna)",
+      "z3": "Cona 3 (Tempo)",
+      "z4": "Cona 4 (Prag)",
+      "z5": "Cona 5 (Anaerobna)"
+    },
+    "notifications": {
+      "push": "Push obvestila",
+      "pushSub": "Prejemajte opomnike za trening",
+      "enabled": "Omogočeno",
+      "reminder": "Opomnik",
+      "time": "Čas",
+      "days": "Dnevi"
+    },
+    "privacy": {
+      "shareProfile": "Deli profil",
+      "shareProfileSub": "Drugi lahko vidijo vaš profil",
+      "shareActivity": "Deli aktivnost",
+      "shareActivitySub": "Drugi lahko vidijo vaše teke",
+      "shareLocation": "Deli lokacijo",
+      "shareLocationSub": "Prikaži svojo pozicijo na poteh"
+    },
+    "units": {
+      "distance": "Razdalja",
+      "pace": "Tempo"
+    },
+    "data": {
+      "export": "Izvozi podatke",
+      "exportSub": "Prenesite vse svoje tekaške podatke"
+    },
+    "shoes": {
+      "title": "Tekaški čevlji",
+      "addShoe": "Dodaj čevelj",
+      "namePlaceholder": "Ime čevlja",
+      "brandPlaceholder": "Znamka",
+      "kmPlaceholder": "Začetni km",
+      "saveShoe": "Shrani čevelj",
+      "useForNextRun": "Uporabi za naslednji tek",
+      "active": "Aktiven",
+      "delete": "Izbriši",
+      "deleteConfirm": "Ali ste prepričani, da želite izbrisati ta čevelj?",
+      "empty": "Še ni dodanih čevljev",
+      "worn": "Izrabljen",
+      "soonWorn": "Kmalu izrabljen",
+      "wornMessage": "Ta čevelj ima več kot 800 km in bi ga bilo treba zamenjati"
+    },
+    "deleteAccount": {
+      "title": "Izbriši račun",
+      "button": "Izbriši moj račun",
+      "warning": "Tega ni mogoče razveljaviti!",
+      "confirmMessage": "Ali ste prepričani, da želite izbrisati svoj račun? Vsi podatki bodo trajno izbrisani.",
+      "confirmButton": "Da, izbriši moj račun",
+      "deletedTitle": "Račun izbrisan",
+      "deletedMessage": "Vaš račun je bil izbrisan.",
+      "error": "Brisanje računa ni uspelo"
+    }
+  },
+  "pricing": {
+    "title": "RunWithAI Pro",
+    "subtitle": "Odklenite vse funkcije",
+    "monthly": "Mesečno",
+    "yearly": "Letno",
+    "perMonth": "/mesec",
+    "perYear": "/leto",
+    "save": "Prihranite",
+    "features": {
+      "aiCoach": "Osebni AI trener",
+      "unlimitedRuns": "Neomejeni teki",
+      "advancedStats": "Napredna statistika",
+      "trainingPlans": "Prilagojeni načrti treningov",
+      "voiceCoach": "Glasovni trener med tekom",
+      "exportData": "Izvoz podatkov"
+    },
+    "subscribe": "Naroči se zdaj",
+    "restore": "Obnovi nakup",
+    "terms": "Veljajo pogoji. Samodejna obnova.",
+    "currentPlan": "Trenutni načrt",
+    "free": "Brezplačno",
+    "pro": "Pro",
+    "loading": "Nalaganje...",
+    "error": "Nekaj je šlo narobe",
+    "success": "Zdaj ste Pro!",
+    "alreadyPro": "Že ste Pro uporabnik",
+    "tryAgain": "Poskusi znova"
+  },
+  "common": {
+    "cancel": "Prekliči",
+    "save": "Shrani",
+    "delete": "Izbriši",
+    "edit": "Uredi",
+    "done": "Končano",
+    "next": "Naprej",
+    "back": "Nazaj",
+    "skip": "Preskoči",
+    "ok": "OK",
+    "yes": "Da",
+    "no": "Ne",
+    "loading": "Nalaganje...",
+    "error": "Napaka",
+    "success": "Uspeh",
+    "retry": "Ponovi"
+  },
+  "onboarding": {
+    "welcome": "Dobrodošli v",
+    "appName": "RunWithAI",
+    "subtitle": "Vaš osebni AI tekaški trener",
+    "getStarted": "Začnimo",
+    "step1": {
+      "title": "Sledite svojim tekom",
+      "desc": "GPS sledenje z živimi statistikami in prikazom poti"
+    },
+    "step2": {
+      "title": "AI-podprto treniranje",
+      "desc": "Pridobite personalizirane načrte treningov in nasvete od vašega AI trenerja"
+    },
+    "step3": {
+      "title": "Dosezite svoje cilje",
+      "desc": "Nastavite cilje in sledite svojemu napredku z podrobnimi statistikami"
+    }
+  },
+  "dashboard": {
+    "defaultName": "TEKAČ",
+    "greeting": {
+      "morning": "DOBRO JUTRO,",
+      "day": "DOBER DAN,",
+      "evening": "DOBER VEČER,"
+    },
+    "planUpdated": "NAČRT POSODOBLJEN",
+    "refresh": "Osveži",
+    "shoeAlert": {
+      "worn": "Čevlji so izrabljeni!",
+      "soonWorn": "Čevlji bodo kmalu izrabljeni!"
+    },
+    "fatigue": {
+      "rested": "Spočit",
+      "ok": "OK",
+      "slightlyTired": "Rahlo utrujen",
+      "veryTired": "Zelo utrujen"
+    },
+    "weather": {
+      "title": "VREME IN FORMA",
+      "wind": "Veter",
+      "clear": "Jasno nebo",
+      "partlyCloudy": "Delno oblačno",
+      "foggy": "Megla/meglica",
+      "rain": "Dež",
+      "snow": "Sneg",
+      "showers": "Plohe",
+      "thunder": "Nevihta",
+      "analyzing": "Analiziranje vremena in stanja...",
+      "noAdvice": "Ni na voljo nasvetov",
+      "fetchError": "Vremenski podatki niso na voljo — poskusite znova."
+    },
+    "stats": {
+      "kmThisWeek": "KM TA TEDEN",
+      "daysInRow": "ZAPOREDNIH DNI",
+      "runsThisMonth": "TEKOV TA MESEC",
+      "of": "od",
+      "personalRecord": "Osebni rekord",
+      "fromRecord": "{{count}} od vašega rekorda",
+      "overOneWeek": "Več kot 1 teden zapored",
+      "keepingMomentum": "Ohranjate zagon",
+      "goodStart": "Začetek nečesa dobrega",
+      "keepGoing": "Nadaljujte!",
+      "startStreak": "Začnite niz danes",
+      "bestMonthEver": "Najboljši {{month}} doslej",
+      "oneFromRecord": "1 tek do vašega rekordnega meseca!",
+      "runsFromRecord": "{{count}} tekov do rekorda",
+      "runsInMonth": "{{count}} tekov v {{month}}"
+    },
+    "monthNames": ["Jan", "Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Avg", "Sep", "Okt", "Nov", "Dec"],
+    "workout": {
+      "nextWorkout": "NASLEDNJI TRENING",
+      "today": "DANES",
+      "distance": "Razdalja",
+      "time": "Čas",
+      "targetPace": "Ciljni tempo",
+      "targetHr": "Ciljni srčni utrip"
+    },
+    "weekPlan": {
+      "title": "TA TEDEN"
+    },
+    "milestone": {
+      "nextMilestone": "NASLEDNJI MEJNIK",
+      "kmLeft": "km preostalo",
+      "total": "skupno",
+      "thisWeek": "Ta teden!",
+      "oneToTwoWeeks": "Približno 1-2 tedna",
+      "aboutWeeks": "Približno {{count}} tednov"
+    },
+    "diary": {
+      "title": "TEKAŠKI DNEVNIK",
+      "subtitle": "Pišite zapiske o svojih tekih — AI se iz njih uči",
+      "addNote": "+ Zapisek",
+      "mood": "Razpoloženje",
+      "placeholder": "Kako je bilo? Težke noge? Dober dan? Nova pot?",
+      "dayNames": ["Ned", "Pon", "Tor", "Sre", "Čet", "Pet", "Sob"]
+    },
+    "injury": {
+      "title": "TVEGANJE POŠKODBE",
+      "low": "Nizko",
+      "moderate": "Zmerno",
+      "high": "Visoko",
+      "kmIncrease": "Km so se povečali za {{pct}}% glede na prejšnji teden",
+      "runsLast3Days": "{{count}} tekov v zadnjih 3 dneh",
+      "noRestToday": "Danes ni počitka",
+      "daysSinceRun": "{{count}} dni od zadnjega teka — spočit",
+      "noRiskFactors": "Ni posebnih dejavnikov tveganja.",
+      "tip1": "Razmislite o dnevu počitka po napornih tekih",
+      "tip2": "Ne povečujte km za več kot 10% tedensko",
+      "analyzed": "Analizirano",
+      "aiAnalysis": "AI analiza"
+    },
+    "racePredictor": {
+      "title": "Napoved tekme",
+      "subtitle": "Oglejte si pričakovane čase tekme",
+      "noData": "Za napoved potrebujete vsaj en tek.",
+      "analyzing": "AI analizira vaše teke...",
+      "halfMarathon": "Polmaraton",
+      "confidence": "Zanesljivost"
+    }
+  },
+  "tracker": {
+    "defaultRunner": "Tekač",
+    "voiceOn": "Glas vklopljen",
+    "voiceOff": "Glas izklopljen",
+    "mapNotAvailable": "Zemljevid ni na voljo",
+    "status": {
+      "ready": "Pritisnite Start za začetek",
+      "paused": "Zaustavljeno",
+      "tracking": "Snemanje..."
+    },
+    "gps": {
+      "active": "GPS aktiven",
+      "waiting": "Iskanje GPS signala...",
+      "denied": "GPS dovoljenje zavrnjeno",
+      "unavailable": "GPS ni na voljo",
+      "timeout": "GPS časovna omejitev",
+      "notAvailable": "GPS ni na voljo",
+      "error": "GPS napaka"
+    }
+  },
+  "chat": {
+    "title": "AI-TRENER",
+    "clear": "Počisti",
+    "placeholder": "Pišite svojemu trenerju...",
+    "loadingHistory": "Nalaganje pogovora...",
+    "planUpdated": "Načrt posodobljen",
+    "defaultRunner": "Tekač",
+    "greeting": "Živjo {{name}}! Sem tvoj AI tekaški trener. Kako ti lahko danes pomagam?",
+    "clearedGreeting": "Pogovor počiščen! Kako ti lahko pomagam, {{name}}?",
+    "connectionError": "Oprostite, nisem se mogel povezati. Prosimo, poskusite znova."
+  },
+  "proUpsell": {
+    "title": "Odklenite polno moč",
+    "subtitle": "Pridobite dostop do vseh funkcij in hitreje dosezite svoje cilje",
+    "price": "49 DKK",
+    "priceUnit": "/mesec",
+    "guarantee": "✓ Preklic kadarkoli • ✓ 7-dnevno brezplačno preizkusno obdobje",
+    "startTrial": "Začni brezplačno preizkusno obdobje",
+    "continueWithFree": "Nadaljuj z brezplačno verzijo",
+    "features": {
+      "aiCoach": {
+        "title": "AI trener",
+        "desc": "Personaliziran načrt treninga, ki se prilagaja tebi"
+      },
+      "advancedStats": {
+        "title": "Napredna statistika",
+        "desc": "Poglobljena analiza tvojega treninga"
+      },
+      "unlimitedGoals": {
+        "title": "Neomejeni cilji",
+        "desc": "Nastavi toliko ciljev, kot želiš"
+      },
+      "routeLibrary": {
+        "title": "Knjižnica poti",
+        "desc": "Shrani in deli svoje najljubše poti"
+      },
+      "aiChat": {
+        "title": "AI klepet",
+        "desc": "Postavljaj vprašanja o teku in pridobi odgovore"
+      },
+      "progressReports": {
+        "title": "Poročila o napredku",
+        "desc": "Tedenski in mesečni povzetki"
+      }
+    }
+  }
+}

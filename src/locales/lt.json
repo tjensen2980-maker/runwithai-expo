@@ -1,0 +1,512 @@
+{
+  "tabs": {
+    "plan": "Planas",
+    "run": "Bėgimas",
+    "coach": "Treneris",
+    "stats": "Statistika",
+    "settings": "Nustatymai",
+    "calendar": "Kalendorius",
+    "progress": "Progresas",
+    "start": "Pradėti"
+  },
+  "run": {
+    "title": "Bėgimas",
+    "walk": "Ėjimas",
+    "km": "KM",
+    "time": "LAIKAS",
+    "pace": "TEMPAS",
+    "start": "Pradėti",
+    "pause": "Pauzė",
+    "resume": "Tęsti",
+    "stop": "Stabdyti",
+    "save": "Išsaugoti",
+    "discard": "Atmesti",
+    "startRun": "Pradėti bėgimą",
+    "startThisWorkout": "Pradėti šią treniruotę",
+    "nextWorkout": "Kita treniruotė",
+    "lastActivity": "Paskutinė veikla",
+    "gpsTracking": "GPS sekimas",
+    "walkTracking": "Ėjimo sekimas",
+    "aiRoutes": "AI maršrutai"
+  },
+  "pro": {
+    "badge": "PRO",
+    "upgrade": "Atnaujinti",
+    "upgradeToPro": "Atnaujinti iki Pro",
+    "feature": "Pro funkcija",
+    "unlockFeatures": "Atrakinti visas funkcijas",
+    "fromOnly": "Tik nuo",
+    "limit": {
+      "title": "Pro funkcija",
+      "message": "Šiai funkcijai reikia Pro prenumeratos",
+      "seePlans": "Peržiūrėti planus",
+      "cancel": "Atšaukti"
+    },
+    "stats": {
+      "title": "Pro statistika",
+      "features": "Išplėstinė statistika ir įžvalgos",
+      "unlock": "Atrakinti"
+    },
+    "coach": {
+      "title": "AI treneris",
+      "description": "Asmeninis treniruočių planas, kuris prisitaiko prie tavęs"
+    },
+    "calendar": {
+      "title": "Treniruočių kalendorius",
+      "description": "Peržiūrėk visą savo treniruočių planą"
+    },
+    "aiRoutes": {
+      "title": "AI maršrutai",
+      "description": "Gauk maršrutų rekomendacijas pagal savo treniruotes"
+    }
+  },
+  "stats": {
+    "title": "Statistika",
+    "totalRuns": "Iš viso bėgimų",
+    "totalKm": "Iš viso km",
+    "avgPace": "Vidutinis tempas",
+    "thisWeek": "Šią savaitę",
+    "thisMonth": "Šį mėnesį",
+    "allTime": "Visų laikų",
+    "basic": "Pagrindinė statistika",
+    "runs": "Bėgimai"
+  },
+  "subscription": "Prenumerata",
+  "alerts": {
+    "deleteRun": "Ar tikrai norite ištrinti šį bėgimą?",
+    "deleteAccount": "Ar tikrai norite ištrinti savo paskyrą? To negalima atšaukti.",
+    "logout": "Ar tikrai norite atsijungti?",
+    "discardRun": "Ar tikrai norite atmesti šį bėgimą?",
+    "unsavedChanges": "Turite neišsaugotų pakeitimų. Ar norite juos atmesti?",
+    "welcomePro": {
+      "title": "Sveiki atvykę į Pro!",
+      "message": "Dabar turite prieigą prie visų funkcijų"
+    }
+  },
+  "auth": {
+    "login": "Prisijungti",
+    "register": "Sukurti paskyrą",
+    "email": "El. paštas",
+    "password": "Slaptažodis",
+    "confirmPassword": "Patvirtinti slaptažodį",
+    "forgotPassword": "Pamiršai slaptažodį?",
+    "noAccount": "Neturi paskyros?",
+    "hasAccount": "Jau turi paskyrą?",
+    "loginButton": "Prisijungti",
+    "registerButton": "Sukurti paskyrą",
+    "orContinueWith": "arba tęsk su",
+    "apple": "Apple",
+    "google": "Google",
+    "emailPlaceholder": "tavo@email.lt",
+    "passwordPlaceholder": "••••••••",
+    "namePlaceholder": "Tavo vardas",
+    "name": "Vardas",
+    "loggingIn": "Jungiamasi...",
+    "registering": "Kuriama paskyra...",
+    "tagline": "Tavo asmeninis AI bėgimo treneris",
+    "createAccount": "Sukurti paskyrą",
+    "minChars": "min. simbolių",
+    "repeatPassword": "pakartok slaptažodį",
+    "continue": "tęsti",
+    "getStarted": "pradėkime",
+    "step1of3": "1 žingsnis iš 3",
+    "step2of3": "2 žingsnis iš 3",
+    "step3of3": "3 žingsnis iš 3",
+    "yourName": "tavo vardas",
+    "age": "AMŽIUS",
+    "weight": "SVORIS",
+    "height": "ŪGIS",
+    "years": "Metų",
+    "runningLevel": "BĖGIMO LYGIS",
+    "levels.beginner": "Pradedantysis",
+    "levels.intermediate": "Vidutinis",
+    "levels.advanced": "Pažengęs",
+    "yourGoals": "KOKIE TAVO TIKSLAI",
+    "goals.health": "Sveikata",
+    "goals.weight": "Svorio metimas",
+    "goals.distance": "Bėgti toliau",
+    "goals.speed": "Tapti greitesniu",
+    "goals.race": "Bėgti varžybas",
+    "goals.fun": "Pramoga",
+    "weeklyGoalKm": "SAVAITINIS KM TIKSLAS",
+    "weeklyGoalExample": "Pvz. 20",
+    "unlockFullPower": "Atrakinti pilną prieigą",
+    "unlockDesc": "Gauk prieigą prie visų funkcijų ir pasiek tikslus greičiau",
+    "proFeatures.aiCoachDesc": "AI Treneris",
+    "proFeatures.statsDesc": "Statistika",
+    "proFeatures.goalsDesc": "Tikslai",
+    "proFeatures.routesDesc": "Maršrutai",
+    "proFeatures.chatDesc": "AI Pokalbis",
+    "proFeatures.reportsDesc": "Ataskaitos",
+    "price": "49 kr",
+    "guarantee": "✓ Atšauk bet kada • ✓ 7 dienos nemokamai",
+    "perMonth": "/mėnesį",
+    "startFreeTrial": "Pradėti nemokamą bandomąjį laikotarpį",
+    "continueWithFree": "Tęsti su nemokama versija",
+    "levels.beginnerDesc": "Naujas bėgime arba pradedi po ilgos pertraukos",
+    "levels.intermediateDesc": "Bėgioji reguliariai ir nori tobulėti",
+    "levels.advancedDesc": "Patyręs bėgikas su specifiniais tikslais",
+    "or": "arba",
+    "errors": {
+      "serverConnection": "Nepavyko prisijungti prie serverio"
+    }
+  },
+  "settings": {
+    "pageTitle": "Nustatymai",
+    "title": "Nustatymai",
+    "profile": "Profilis",
+    "days": ["Pr", "An", "Tr", "Kt", "Pn", "Št", "Sk"],
+    "saveChanges": "Išsaugoti pakeitimus",
+    "saved": "Išsaugota!",
+    "logout": "Atsijungti",
+    "privacyPolicy": "Privatumo politika",
+    "termsOfService": "Naudojimo sąlygos",
+    "dangerZone": "Pavojinga zona",
+    "sections": {
+      "personalInfo": "Asmeninė informacija",
+      "level": "Lygis",
+      "runningGoals": "Bėgimo tikslai",
+      "weeklyGoals": "Savaitės tikslai",
+      "trainingTypes": "Treniruočių tipai",
+      "heartRateZones": "Širdies ritmo zonos",
+      "injuries": "Traumos",
+      "reminders": "Priminimai",
+      "privacy": "Privatumas",
+      "units": "Vienetai",
+      "data": "Duomenys"
+    },
+    "fields": {
+      "name": "Vardas",
+      "age": "Amžius",
+      "weight": "Svoris (kg)",
+      "height": "Ūgis (cm)",
+      "sex": "Lytis",
+      "restingHr": "Ramybės pulsas",
+      "maxHr": "Maksimalus pulsas",
+      "vo2max": "VO2max",
+      "yearsRunning": "Bėgimo metai",
+      "weeklyKm": "Savaitės km",
+      "weeklyKmGoal": "Savaitės km tikslas",
+      "weeklyRunsGoal": "Savaitės bėgimų tikslas",
+      "primaryGoal": "Pagrindinis tikslas",
+      "raceDate": "Varžybų data",
+      "injuries": "Traumos/apribojimai",
+      "injuriesPlaceholder": "Pvz., kelių problemos, nugaros skausmai...",
+      "preferredDays": "Pageidaujamos dienos",
+      "preferredTypes": "Pageidaujami bėgimo tipai"
+    },
+    "sex": {
+      "male": "Vyras",
+      "female": "Moteris"
+    },
+    "levels": {
+      "beginner": "Pradedantysis",
+      "intermediate": "Vidutinis",
+      "advanced": "Pažengęs"
+    },
+    "goals": {
+      "fitness": "Bendra forma",
+      "weight": "Svorio metimas",
+      "half": "Pusmaratonis",
+      "full": "Maratonas"
+    },
+    "runTypes": {
+      "easy": "Lengvas bėgimas",
+      "interval": "Intervalai",
+      "long": "Ilgas bėgimas",
+      "tempo": "Tempo bėgimas",
+      "recovery": "Atsigavimas",
+      "race": "Varžybos",
+      "trail": "Bėgimas gamtoje"
+    },
+    "zones": {
+      "calculated": "Apskaičiuota pagal jūsų maksimalų pulsą",
+      "z1": "Zona 1 (Atsigavimas)",
+      "z2": "Zona 2 (Aerobinė)",
+      "z3": "Zona 3 (Tempo)",
+      "z4": "Zona 4 (Slenkstis)",
+      "z5": "Zona 5 (Anaerobinė)"
+    },
+    "notifications": {
+      "push": "Push pranešimai",
+      "pushSub": "Gauti treniruočių priminimus",
+      "enabled": "Įjungta",
+      "reminder": "Priminimas",
+      "time": "Laikas",
+      "days": "Dienos"
+    },
+    "privacy": {
+      "shareProfile": "Dalintis profiliu",
+      "shareProfileSub": "Kiti gali matyti jūsų profilį",
+      "shareActivity": "Dalintis veikla",
+      "shareActivitySub": "Kiti gali matyti jūsų bėgimus",
+      "shareLocation": "Dalintis vieta",
+      "shareLocationSub": "Rodyti savo poziciją maršrutuose"
+    },
+    "units": {
+      "distance": "Atstumas",
+      "pace": "Tempas"
+    },
+    "data": {
+      "export": "Eksportuoti duomenis",
+      "exportSub": "Atsisiųskite visus savo bėgimo duomenis"
+    },
+    "shoes": {
+      "title": "Bėgimo batai",
+      "addShoe": "Pridėti batus",
+      "namePlaceholder": "Batų pavadinimas",
+      "brandPlaceholder": "Prekės ženklas",
+      "kmPlaceholder": "Pradiniai km",
+      "saveShoe": "Išsaugoti batus",
+      "useForNextRun": "Naudoti kitam bėgimui",
+      "active": "Aktyvūs",
+      "delete": "Ištrinti",
+      "deleteConfirm": "Ar tikrai norite ištrinti šiuos batus?",
+      "empty": "Dar nepridėta batų",
+      "worn": "Nusidėvėję",
+      "soonWorn": "Greitai nusidėvės",
+      "wornMessage": "Šie batai turi daugiau nei 800 km ir turėtų būti pakeisti"
+    },
+    "deleteAccount": {
+      "title": "Ištrinti paskyrą",
+      "button": "Ištrinti mano paskyrą",
+      "warning": "To negalima atšaukti!",
+      "confirmMessage": "Ar tikrai norite ištrinti savo paskyrą? Visi duomenys bus visam laikui ištrinti.",
+      "confirmButton": "Taip, ištrinti mano paskyrą",
+      "deletedTitle": "Paskyra ištrinta",
+      "deletedMessage": "Jūsų paskyra buvo ištrinta.",
+      "error": "Nepavyko ištrinti paskyros"
+    }
+  },
+  "pricing": {
+    "title": "RunWithAI Pro",
+    "subtitle": "Atrakinkite visas funkcijas",
+    "monthly": "Mėnesinis",
+    "yearly": "Metinis",
+    "perMonth": "/mėn.",
+    "perYear": "/metus",
+    "save": "Sutaupykite",
+    "features": {
+      "aiCoach": "Asmeninis AI treneris",
+      "unlimitedRuns": "Neriboti bėgimai",
+      "advancedStats": "Išplėstinė statistika",
+      "trainingPlans": "Individualūs treniruočių planai",
+      "voiceCoach": "Balso treneris bėgimo metu",
+      "exportData": "Duomenų eksportas"
+    },
+    "subscribe": "Prenumeruoti dabar",
+    "restore": "Atkurti pirkinį",
+    "terms": "Taikomos sąlygos. Automatinis atnaujinimas.",
+    "currentPlan": "Dabartinis planas",
+    "free": "Nemokamas",
+    "pro": "Pro",
+    "loading": "Kraunama...",
+    "error": "Kažkas nepavyko",
+    "success": "Dabar esate Pro!",
+    "alreadyPro": "Jau esate Pro vartotojas",
+    "tryAgain": "Bandyti dar kartą"
+  },
+  "common": {
+    "cancel": "Atšaukti",
+    "save": "Išsaugoti",
+    "delete": "Ištrinti",
+    "edit": "Redaguoti",
+    "done": "Baigta",
+    "next": "Kitas",
+    "back": "Atgal",
+    "skip": "Praleisti",
+    "ok": "Gerai",
+    "yes": "Taip",
+    "no": "Ne",
+    "loading": "Kraunama...",
+    "error": "Klaida",
+    "success": "Sėkmė",
+    "retry": "Kartoti"
+  },
+  "onboarding": {
+    "welcome": "Sveiki atvykę į",
+    "appName": "RunWithAI",
+    "subtitle": "Jūsų asmeninis AI bėgimo treneris",
+    "getStarted": "Pradėkime",
+    "step1": {
+      "title": "Sekite savo bėgimus",
+      "desc": "GPS sekimas su tiesiogine statistika ir maršruto rodymu"
+    },
+    "step2": {
+      "title": "AI palaikomas treniravimas",
+      "desc": "Gaukite asmeninius treniruočių planus ir patarimus iš savo AI trenerio"
+    },
+    "step3": {
+      "title": "Pasiekite savo tikslus",
+      "desc": "Nustatykite tikslus ir sekite savo progresą su išsamia statistika"
+    }
+  },
+  "dashboard": {
+    "defaultName": "BĖGIKAS",
+    "greeting": {
+      "morning": "LABAS RYTAS,",
+      "day": "LABA DIENA,",
+      "evening": "LABAS VAKARAS,"
+    },
+    "planUpdated": "PLANAS ATNAUJINTAS",
+    "refresh": "Atnaujinti",
+    "shoeAlert": {
+      "worn": "Batai nusidėvėję!",
+      "soonWorn": "Batai greitai nusidėvės!"
+    },
+    "fatigue": {
+      "rested": "Pailsėjęs",
+      "ok": "Gerai",
+      "slightlyTired": "Šiek tiek pavargęs",
+      "veryTired": "Labai pavargęs"
+    },
+    "weather": {
+      "title": "ORAS IR FORMA",
+      "wind": "Vėjas",
+      "clear": "Giedras dangus",
+      "partlyCloudy": "Dalinai debesuota",
+      "foggy": "Rūkas/migla",
+      "rain": "Lietus",
+      "snow": "Sniegas",
+      "showers": "Lietūs",
+      "thunder": "Perkūnija",
+      "analyzing": "Analizuojamas oras ir būsena...",
+      "noAdvice": "Nėra patarimo",
+      "fetchError": "Oro duomenys nepasiekiami — bandykite dar kartą."
+    },
+    "stats": {
+      "kmThisWeek": "KM ŠIĄ SAVAITĘ",
+      "daysInRow": "DIENŲ IŠ EILĖS",
+      "runsThisMonth": "BĖGIMŲ ŠĮ MĖNESĮ",
+      "of": "iš",
+      "personalRecord": "Asmeninis rekordas",
+      "fromRecord": "{{count}} nuo jūsų rekordo",
+      "overOneWeek": "Daugiau nei 1 savaitė iš eilės",
+      "keepingMomentum": "Išlaikote pagreitį",
+      "goodStart": "Kažko gero pradžia",
+      "keepGoing": "Tęskite!",
+      "startStreak": "Pradėkite seriją šiandien",
+      "bestMonthEver": "Geriausias {{month}} kada nors",
+      "oneFromRecord": "1 bėgimas iki jūsų rekordinio mėnesio!",
+      "runsFromRecord": "{{count}} bėgimų iki rekordo",
+      "runsInMonth": "{{count}} bėgimų {{month}}"
+    },
+    "monthNames": ["Sau", "Vas", "Kov", "Bal", "Geg", "Bir", "Lie", "Rgp", "Rgs", "Spa", "Lap", "Grd"],
+    "workout": {
+      "nextWorkout": "KITA TRENIRUOTĖ",
+      "today": "ŠIANDIEN",
+      "distance": "Atstumas",
+      "time": "Laikas",
+      "targetPace": "Tikslinis tempas",
+      "targetHr": "Tikslinis pulsas"
+    },
+    "weekPlan": {
+      "title": "ŠIĄ SAVAITĘ"
+    },
+    "milestone": {
+      "nextMilestone": "KITAS ETAPAS",
+      "kmLeft": "km liko",
+      "total": "iš viso",
+      "thisWeek": "Šią savaitę!",
+      "oneToTwoWeeks": "Maždaug 1-2 savaitės",
+      "aboutWeeks": "Maždaug {{count}} savaičių"
+    },
+    "diary": {
+      "title": "BĖGIMO DIENORAŠTIS",
+      "subtitle": "Rašykite pastabas apie savo bėgimus — AI mokosi iš jų",
+      "addNote": "+ Pastaba",
+      "mood": "Nuotaika",
+      "placeholder": "Kaip sekėsi? Sunkios kojos? Gera diena? Naujas maršrutas?",
+      "dayNames": ["Sk", "Pr", "An", "Tr", "Kt", "Pn", "Št"]
+    },
+    "injury": {
+      "title": "TRAUMOS RIZIKA",
+      "low": "Žema",
+      "moderate": "Vidutinė",
+      "high": "Aukšta",
+      "kmIncrease": "Km padidėjo {{pct}}% lyginant su praėjusia savaite",
+      "runsLast3Days": "{{count}} bėgimai per paskutines 3 dienas",
+      "noRestToday": "Šiandien nėra poilsio",
+      "daysSinceRun": "{{count}} dienų nuo paskutinio bėgimo — pailsėjęs",
+      "noRiskFactors": "Nėra konkrečių rizikos veiksnių.",
+      "tip1": "Apsvarstykite poilsio dieną po sunkių bėgimų",
+      "tip2": "Nedidinkite km daugiau nei 10% per savaitę",
+      "analyzed": "Analizuota",
+      "aiAnalysis": "AI analizė"
+    },
+    "racePredictor": {
+      "title": "Varžybų prognozė",
+      "subtitle": "Peržiūrėkite savo numatomus varžybų laikus",
+      "noData": "Prognozei reikia bent vieno bėgimo.",
+      "analyzing": "AI analizuoja jūsų bėgimus...",
+      "halfMarathon": "Pusmaratonis",
+      "confidence": "Pasitikėjimas"
+    }
+  },
+  "tracker": {
+    "defaultRunner": "Bėgikas",
+    "voiceOn": "Balsas įjungtas",
+    "voiceOff": "Balsas išjungtas",
+    "mapNotAvailable": "Žemėlapis nepasiekiamas",
+    "status": {
+      "ready": "Paspauskite Pradėti",
+      "paused": "Pristabdyta",
+      "tracking": "Įrašoma..."
+    },
+    "gps": {
+      "active": "GPS aktyvus",
+      "waiting": "Ieškoma GPS signalo...",
+      "denied": "GPS leidimas atmestas",
+      "unavailable": "GPS nepasiekiamas",
+      "timeout": "GPS skirtasis laikas",
+      "notAvailable": "GPS nepasiekiamas",
+      "error": "GPS klaida"
+    }
+  },
+  "chat": {
+    "title": "AI-TRENERIS",
+    "clear": "Išvalyti",
+    "placeholder": "Rašykite savo treneriui...",
+    "loadingHistory": "Kraunamas pokalbis...",
+    "planUpdated": "Planas atnaujintas",
+    "defaultRunner": "Bėgikas",
+    "greeting": "Sveiki {{name}}! Aš esu jūsų AI bėgimo treneris. Kaip galiu jums šiandien padėti?",
+    "clearedGreeting": "Pokalbis išvalytas! Kaip galiu jums padėti, {{name}}?",
+    "connectionError": "Atsiprašau, nepavyko prisijungti. Prašome bandyti dar kartą."
+  },
+  "proUpsell": {
+    "title": "Atrakinkite visą galią",
+    "subtitle": "Gaukite prieigą prie visų funkcijų ir greičiau pasiekite savo tikslus",
+    "price": "49 DKK",
+    "priceUnit": "/mėn.",
+    "guarantee": "✓ Atšaukimas bet kada • ✓ 7 dienų nemokamas bandymas",
+    "startTrial": "Pradėti nemokamą bandymą",
+    "continueWithFree": "Tęsti su nemokama versija",
+    "features": {
+      "aiCoach": {
+        "title": "AI treneris",
+        "desc": "Asmeninis treniruočių planas, kuris prisitaiko prie tavęs"
+      },
+      "advancedStats": {
+        "title": "Išplėstinė statistika",
+        "desc": "Išsami treniruočių analizė"
+      },
+      "unlimitedGoals": {
+        "title": "Neriboti tikslai",
+        "desc": "Nustatyk tiek tikslų, kiek nori"
+      },
+      "routeLibrary": {
+        "title": "Maršrutų biblioteka",
+        "desc": "Išsaugok ir dalinkis mėgstamais maršrutais"
+      },
+      "aiChat": {
+        "title": "AI pokalbis",
+        "desc": "Užduok klausimus apie bėgimą ir gauk atsakymus"
+      },
+      "progressReports": {
+        "title": "Progreso ataskaitos",
+        "desc": "Savaitės ir mėnesio suvestinės"
+      }
+    }
+  }
+}
