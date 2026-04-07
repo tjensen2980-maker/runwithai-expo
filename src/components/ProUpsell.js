@@ -1,16 +1,29 @@
 // src/components/ProUpsell.js
 // Vis denne komponent til nye brugere efter onboarding
-// OPDATERET: Bruger RevenueCat i stedet for Stripe
+// OPDATERET: Bruger RevenueCat + Terms/Privacy links for App Store compliance
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Platform, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Platform, Alert, ActivityIndicator, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, SERVER, getAuthToken } from '../data';
-import Purchases from 'react-native-purchases';
+
+// RevenueCat - conditional import for web compatibility
+let Purchases = null;
+if (Platform.OS === 'ios' || Platform.OS === 'android') {
+  try {
+    Purchases = require('react-native-purchases').default;
+  } catch (e) {
+    console.log('RevenueCat not available');
+  }
+}
 
 // RevenueCat API Keys
 const REVENUECAT_IOS_KEY = 'appl_RSTGHBSwwJLczMzoqgBiNYDFDIb';
-const REVENUECAT_ANDROID_KEY = 'goog_YOUR_REVENUECAT_ANDROID_KEY'; // TODO: Tilføj Android key
+const REVENUECAT_ANDROID_KEY = 'goog_YOUR_REVENUECAT_ANDROID_KEY';
+
+// Legal URLs - Required by Apple
+const TERMS_OF_USE_URL = 'https://www.runwithai.app/terms';
+const PRIVACY_POLICY_URL = 'https://www.runwithai.app/privacy';
 
 const proFeatures = [
   { emoji: '🤖', title: 'AI Coach', desc: 'Personlig træningsplan der tilpasser sig dig' },
@@ -25,21 +38,21 @@ let isRevenueCatConfigured = false;
 
 async function initRevenueCat() {
   if (isRevenueCatConfigured) return true;
-  
+  if (!Purchases) return false;
+
   try {
-    // Skip på web
     if (Platform.OS === 'web') {
       console.log('RevenueCat: Web platform - skipping');
       return false;
     }
-    
+
     const apiKey = Platform.OS === 'ios' ? REVENUECAT_IOS_KEY : REVENUECAT_ANDROID_KEY;
-    
+
     if (apiKey.includes('YOUR_REVENUECAT')) {
       console.log('RevenueCat: Not configured for this platform');
       return false;
     }
-    
+
     await Purchases.configure({ apiKey });
     isRevenueCatConfigured = true;
     return true;
@@ -59,13 +72,12 @@ export default function ProUpsell({ onSkip, onUpgrade }) {
     const setup = async () => {
       const configured = await initRevenueCat();
       setIsConfigured(configured);
-      
-      if (configured) {
+
+      if (configured && Purchases) {
         try {
           const offerings = await Purchases.getOfferings();
           if (offerings.current) {
             setOfferings(offerings.current);
-            // Hent pris fra første package
             const pkg = offerings.current.availablePackages?.[0];
             if (pkg?.product?.priceString) {
               setPriceString(pkg.product.priceString);
@@ -76,13 +88,12 @@ export default function ProUpsell({ onSkip, onUpgrade }) {
         }
       }
     };
-    
+
     setup();
   }, []);
 
   const handleUpgrade = async () => {
-    // Hvis RevenueCat ikke er konfigureret (web eller manglende key)
-    if (!isConfigured) {
+    if (!isConfigured || !Purchases) {
       if (Platform.OS === 'web') {
         Alert.alert(
           'Køb via app',
@@ -110,9 +121,7 @@ export default function ProUpsell({ onSkip, onUpgrade }) {
       const pkg = offerings.availablePackages[0];
       const { customerInfo } = await Purchases.purchasePackage(pkg);
 
-      // Tjek om købet gav Pro adgang
       if (customerInfo.entitlements.active['pro']) {
-        // Opdater server med subscription status
         const token = getAuthToken();
         if (token) {
           try {
@@ -148,16 +157,16 @@ export default function ProUpsell({ onSkip, onUpgrade }) {
   };
 
   const handleRestore = async () => {
-    if (!isConfigured) {
+    if (!isConfigured || !Purchases) {
       Alert.alert('Kommer snart', 'Gendan køb er under opsætning.');
       return;
     }
 
     setLoading(true);
-    
+
     try {
       const customerInfo = await Purchases.restorePurchases();
-      
+
       if (customerInfo.entitlements.active['pro']) {
         const token = getAuthToken();
         if (token) {
@@ -212,6 +221,12 @@ export default function ProUpsell({ onSkip, onUpgrade }) {
           ))}
         </View>
 
+        {/* Subscription Info - Required by Apple */}
+        <View style={s.subscriptionInfo}>
+          <Text style={s.subscriptionTitle}>RunWithAI Pro</Text>
+          <Text style={s.subscriptionDetail}>Månedligt abonnement</Text>
+        </View>
+
         <View style={s.priceSection}>
           <Text style={s.price}>{priceString}</Text>
           <Text style={s.priceUnit}>/måned</Text>
@@ -219,8 +234,8 @@ export default function ProUpsell({ onSkip, onUpgrade }) {
 
         <Text style={s.guarantee}>✓ Annuller når som helst • ✓ 7 dages gratis prøveperiode</Text>
 
-        <TouchableOpacity 
-          style={[s.upgradeBtn, loading && s.upgradeBtnDisabled]} 
+        <TouchableOpacity
+          style={[s.upgradeBtn, loading && s.upgradeBtnDisabled]}
           onPress={handleUpgrade}
           disabled={loading}
         >
@@ -239,9 +254,21 @@ export default function ProUpsell({ onSkip, onUpgrade }) {
           <Text style={s.skipBtnText}>Fortsæt med gratis version</Text>
         </TouchableOpacity>
 
+        {/* Legal Text - Required by Apple */}
         <Text style={s.terms}>
-          Betaling opkræves via din App Store konto. Abonnement fornyes automatisk medmindre det annulleres mindst 24 timer før periodens udløb.
+          Betaling opkræves via din App Store konto. Abonnement fornyes automatisk medmindre det annulleres mindst 24 timer før periodens udløb. Du kan administrere dit abonnement i dine App Store-indstillinger.
         </Text>
+
+        {/* Terms & Privacy Links - REQUIRED by Apple */}
+        <View style={s.legalLinks}>
+          <TouchableOpacity onPress={() => Linking.openURL(TERMS_OF_USE_URL)}>
+            <Text style={s.legalLink}>Vilkår for brug</Text>
+          </TouchableOpacity>
+          <Text style={s.legalSeparator}>•</Text>
+          <TouchableOpacity onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}>
+            <Text style={s.legalLink}>Privatlivspolitik</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -320,6 +347,19 @@ const s = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 17,
   },
+  subscriptionInfo: {
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  subscriptionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: colors.text,
+  },
+  subscriptionDetail: {
+    fontSize: 14,
+    color: colors.dim,
+  },
   priceSection: {
     flexDirection: 'row',
     alignItems: 'baseline',
@@ -383,5 +423,21 @@ const s = StyleSheet.create({
     marginTop: 20,
     paddingHorizontal: 20,
     lineHeight: 14,
+  },
+  legalLinks: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 16,
+    gap: 8,
+  },
+  legalLink: {
+    fontSize: 12,
+    color: colors.accent,
+    textDecorationLine: 'underline',
+  },
+  legalSeparator: {
+    fontSize: 12,
+    color: colors.muted,
   },
 });
