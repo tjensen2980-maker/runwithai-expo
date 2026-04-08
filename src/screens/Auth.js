@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════════════════════════════
 // AUTH.JS - RunWithAI Login & Registration (med PRO Upsell + Glemt Password + i18n)
-// OPDATERET: Bruger RevenueCat i stedet for Stripe
+// OPDATERET: Bruger RevenueCat + Terms/Privacy links for App Store compliance
 // ═══════════════════════════════════════════════════════════════════════════
 
 import React, { useState } from 'react';
@@ -16,6 +16,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Image,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -35,6 +36,10 @@ if (Platform.OS === 'ios' || Platform.OS === 'android') {
 }
 const REVENUECAT_IOS_KEY = 'appl_RSTGHBSwwJLczMzoqgBiNYDFDIb';
 const REVENUECAT_ANDROID_KEY = 'goog_YOUR_REVENUECAT_ANDROID_KEY';
+
+// Legal URLs - Required by Apple
+const TERMS_OF_USE_URL = 'https://www.runwithai.app/terms';
+const PRIVACY_POLICY_URL = 'https://www.runwithai.app/privacy';
 
 // ─── APP LOGO COMPONENT ───────────────────────────────────────────────────────
 const AppLogo = ({ size = 140 }) => (
@@ -94,14 +99,14 @@ export default function Auth({ onAuth }) {
     { id: 'fun', label: t('auth.goals.fun'), emoji: '😊' },
   ];
 
-  // ─── PRO FEATURES ───────────────────────────────────────────────────────────
+  // ─── PRO FEATURES (hardcoded for reliability) ───────────────────────────────
   const PRO_FEATURES = [
-    { emoji: '🤖', title: t('auth.proFeatures.aiCoach'), desc: t('auth.proFeatures.aiCoachDesc') },
-    { emoji: '📊', title: t('auth.proFeatures.stats'), desc: t('auth.proFeatures.statsDesc') },
-    { emoji: '🎯', title: t('auth.proFeatures.goals'), desc: t('auth.proFeatures.goalsDesc') },
-    { emoji: '🗺️', title: t('auth.proFeatures.routes'), desc: t('auth.proFeatures.routesDesc') },
-    { emoji: '💬', title: t('auth.proFeatures.chat'), desc: t('auth.proFeatures.chatDesc') },
-    { emoji: '📈', title: t('auth.proFeatures.reports'), desc: t('auth.proFeatures.reportsDesc') },
+    { emoji: '🤖', title: 'AI Coach', desc: 'Personlig træningsplan der tilpasser sig dig' },
+    { emoji: '📊', title: 'Avanceret statistik', desc: 'Dybdegående analyse af din træning' },
+    { emoji: '🎯', title: 'Ubegrænsede mål', desc: 'Sæt så mange mål du vil' },
+    { emoji: '🗺️', title: 'Rutebibliotek', desc: 'Gem og del dine yndlingsruter' },
+    { emoji: '💬', title: 'AI Chat', desc: 'Stil spørgsmål om løb og få svar' },
+    { emoji: '📈', title: 'Fremskridtsrapporter', desc: 'Ugentlige og månedlige opsummeringer' },
   ];
 
   const handleLogin = async () => {
@@ -305,30 +310,26 @@ export default function Auth({ onAuth }) {
     }
   };
 
-  // ─── REVENUECAT PURCHASE (erstatter Stripe) ─────────────────────────────────
+  // ─── REVENUECAT PURCHASE ────────────────────────────────────────────────────
   const handleStartTrial = async () => {
     setLoading(true);
     try {
-      // Skip på web - gå direkte videre
       if (Platform.OS === 'web' || !Purchases) {
         onAuth(pendingToken, { ...pendingUser, profile: pendingProfile });
         return;
       }
 
-      // Konfigurer RevenueCat
       const apiKey = Platform.OS === 'ios' ? REVENUECAT_IOS_KEY : REVENUECAT_ANDROID_KEY;
       if (!apiKey.includes('YOUR_REVENUECAT')) {
         try {
           await Purchases.configure({ apiKey });
           
-          // Hent offerings
           const offerings = await Purchases.getOfferings();
           if (offerings.current && offerings.current.availablePackages.length > 0) {
             const pkg = offerings.current.availablePackages[0];
             const { customerInfo } = await Purchases.purchasePackage(pkg);
             
             if (customerInfo.entitlements.active['pro']) {
-              // Sync med server
               try {
                 await fetch(`${API_URL}/subscription/activate`, {
                   method: 'POST',
@@ -354,12 +355,57 @@ export default function Auth({ onAuth }) {
         }
       }
       
-      // Gå videre uanset om køb lykkedes
       onAuth(pendingToken, { ...pendingUser, profile: pendingProfile });
 
     } catch (err) {
       console.log('Trial error:', err);
       onAuth(pendingToken, { ...pendingUser, profile: pendingProfile });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ─── RESTORE PURCHASES ──────────────────────────────────────────────────────
+  const handleRestorePurchases = async () => {
+    if (Platform.OS === 'web' || !Purchases) {
+      Alert.alert('Gendan køb', 'Gendan køb er kun tilgængeligt i iOS og Android appen.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const apiKey = Platform.OS === 'ios' ? REVENUECAT_IOS_KEY : REVENUECAT_ANDROID_KEY;
+      if (!apiKey.includes('YOUR_REVENUECAT')) {
+        await Purchases.configure({ apiKey });
+      }
+
+      const customerInfo = await Purchases.restorePurchases();
+
+      if (customerInfo.entitlements.active['pro']) {
+        try {
+          await fetch(`${API_URL}/subscription/activate`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${pendingToken}`,
+            },
+            body: JSON.stringify({
+              revenueCatId: customerInfo.originalAppUserId,
+            }),
+          });
+        } catch (syncErr) {
+          console.log('Server sync warning:', syncErr);
+        }
+
+        Alert.alert('✅ Køb gendannet!', 'Din Pro subscription er aktiveret.', [
+          { text: 'Fortsæt', onPress: () => onAuth(pendingToken, { ...pendingUser, profile: pendingProfile }) }
+        ]);
+      } else {
+        Alert.alert('Ingen køb fundet', 'Vi kunne ikke finde et aktivt abonnement.');
+      }
+    } catch (err) {
+      console.error('Restore error:', err);
+      Alert.alert('Fejl', 'Kunne ikke gendanne køb. Prøv igen.');
     } finally {
       setLoading(false);
     }
@@ -819,7 +865,7 @@ export default function Auth({ onAuth }) {
     );
   }
 
-  // ─── REGISTER STEP 3 - PRO UPSELL ─────────────────────────────────────────
+  // ─── REGISTER STEP 3 - PRO UPSELL (with Terms/Privacy/Restore) ────────────
   if (mode === 'register_upsell') {
     return (
       <SafeAreaView style={styles.upsellContainer}>
@@ -829,8 +875,8 @@ export default function Auth({ onAuth }) {
             <View style={styles.proBadge}>
               <Text style={styles.proBadgeText}>⭐ PRO</Text>
             </View>
-            <Text style={styles.upsellTitle}>{t('auth.unlockFullPower')}</Text>
-            <Text style={styles.upsellSubtitle}>{t('auth.unlockDesc')}</Text>
+            <Text style={styles.upsellTitle}>Lås op for fuld adgang</Text>
+            <Text style={styles.upsellSubtitle}>Få adgang til alle funktioner og nå dine mål hurtigere</Text>
           </View>
 
           <View style={styles.featuresGrid}>
@@ -843,12 +889,18 @@ export default function Auth({ onAuth }) {
             ))}
           </View>
 
-          <View style={styles.priceSection}>
-            <Text style={styles.priceAmount}>{t('auth.price')}</Text>
-            <Text style={styles.priceUnit}>{t('auth.perMonth')}</Text>
+          {/* Subscription Info */}
+          <View style={styles.subscriptionInfo}>
+            <Text style={styles.subscriptionTitle}>RunWithAI Pro</Text>
+            <Text style={styles.subscriptionDetail}>Månedligt abonnement</Text>
           </View>
 
-          <Text style={styles.guarantee}>{t('auth.guarantee')}</Text>
+          <View style={styles.priceSection}>
+            <Text style={styles.priceAmount}>49 kr</Text>
+            <Text style={styles.priceUnit}>/måned</Text>
+          </View>
+
+          <Text style={styles.guarantee}>✓ Annuller når som helst • ✓ 7 dages gratis prøveperiode</Text>
 
           <TouchableOpacity
             style={[styles.upsellButton, loading && styles.buttonDisabled]}
@@ -858,13 +910,34 @@ export default function Auth({ onAuth }) {
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={styles.upsellButtonText}>🚀 {t('auth.startFreeTrial')}</Text>
+              <Text style={styles.upsellButtonText}>🚀 Start gratis prøveperiode</Text>
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.skipButton} onPress={handleSkipTrial}>
-            <Text style={styles.skipButtonText}>{t('auth.continueWithFree')}</Text>
+          {/* Restore Purchases - Required by Apple */}
+          <TouchableOpacity style={styles.restoreButton} onPress={handleRestorePurchases} disabled={loading}>
+            <Text style={styles.restoreButtonText}>Gendan tidligere køb</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity style={styles.skipButton} onPress={handleSkipTrial}>
+            <Text style={styles.skipButtonText}>Fortsæt med gratis version</Text>
+          </TouchableOpacity>
+
+          {/* Legal Text */}
+          <Text style={styles.legalText}>
+            Betaling opkræves via din App Store konto. Abonnement fornyes automatisk medmindre det annulleres mindst 24 timer før periodens udløb. Du kan administrere dit abonnement i dine App Store-indstillinger.
+          </Text>
+
+          {/* Terms & Privacy Links - REQUIRED by Apple */}
+          <View style={styles.legalLinks}>
+            <TouchableOpacity onPress={() => Linking.openURL(TERMS_OF_USE_URL)}>
+              <Text style={styles.legalLink}>Vilkår for brug</Text>
+            </TouchableOpacity>
+            <Text style={styles.legalSeparator}>•</Text>
+            <TouchableOpacity onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}>
+              <Text style={styles.legalLink}>Privatlivspolitik</Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       </SafeAreaView>
     );
@@ -1178,6 +1251,19 @@ const styles = StyleSheet.create({
     color: '#888',
     textAlign: 'center',
   },
+  subscriptionInfo: {
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  subscriptionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  subscriptionDetail: {
+    fontSize: 14,
+    color: '#888',
+  },
   priceSection: {
     flexDirection: 'row',
     alignItems: 'baseline',
@@ -1214,11 +1300,43 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  restoreButton: {
+    paddingVertical: 12,
+    marginBottom: 4,
+  },
+  restoreButtonText: {
+    color: '#888',
+    fontSize: 14,
+  },
   skipButton: {
     paddingVertical: 12,
   },
   skipButtonText: {
     color: '#666',
     fontSize: 14,
+  },
+  legalText: {
+    fontSize: 10,
+    color: '#666',
+    textAlign: 'center',
+    marginTop: 16,
+    paddingHorizontal: 20,
+    lineHeight: 14,
+  },
+  legalLinks: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 12,
+    gap: 8,
+  },
+  legalLink: {
+    fontSize: 12,
+    color: colors.accent,
+    textDecorationLine: 'underline',
+  },
+  legalSeparator: {
+    fontSize: 12,
+    color: '#666',
   },
 });
