@@ -57,7 +57,6 @@ const resources = {
 
 const supportedLanguages = Object.keys(resources);
 
-// Export a promise that resolves when language is ready
 export const languageReady = (async () => {
   let lng = 'en';
   try {
@@ -76,7 +75,7 @@ export const languageReady = (async () => {
     .use(initReactI18next)
     .init({
       resources,
-      lng,                    // ← korrekt sprog fra start
+      lng,
       fallbackLng: 'en',
       interpolation: { escapeValue: false },
       react: { useSuspense: false },
