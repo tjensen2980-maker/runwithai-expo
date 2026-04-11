@@ -1,4 +1,4 @@
-const { withDangerousMod } = require('expo/config-plugins');
+const { withDangerousMod, IOSConfig } = require('expo/config-plugins');
 const fs = require('fs');
 const path = require('path');
 
@@ -12,11 +12,17 @@ function withLocales(config) {
   return withDangerousMod(config, [
     'ios',
     (config) => {
-      const projectRoot = config.modRequest.projectRoot;
-      const iosPath = path.join(projectRoot, 'ios', config.modRequest.projectName);
+      const iosRoot = config.modRequest.platformProjectRoot;
 
+      // Find the .xcodeproj to determine the project name
+      const items = fs.readdirSync(iosRoot);
+      const xcodeproj = items.find(i => i.endsWith('.xcodeproj'));
+      const projectName = xcodeproj ? xcodeproj.replace('.xcodeproj', '') : config.modRequest.projectName || 'RunWithAI';
+      const projectDir = path.join(iosRoot, projectName);
+
+      // Create .lproj directories with InfoPlist.strings
       LOCALES.forEach((locale) => {
-        const lprojDir = path.join(iosPath, locale + '.lproj');
+        const lprojDir = path.join(projectDir, locale + '.lproj');
         if (!fs.existsSync(lprojDir)) {
           fs.mkdirSync(lprojDir, { recursive: true });
         }
