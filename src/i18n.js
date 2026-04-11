@@ -80,7 +80,7 @@ const loadSavedLanguage = async () => {
     if (saved && supportedLanguages.includes(saved)) {
       await i18n.changeLanguage(saved);
     } else {
-      const deviceLang = Localization.locale?.split('-')[0] || 'en';
+      const deviceLang = Localization.getLocales()?.[0]?.languageCode || 'en';
       const lang = supportedLanguages.includes(deviceLang) ? deviceLang : 'en';
       await i18n.changeLanguage(lang);
     }
