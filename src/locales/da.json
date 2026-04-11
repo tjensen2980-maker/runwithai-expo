@@ -151,12 +151,19 @@
       "serverConnection": "Kunne ikke forbinde til serveren"
     }
   },
-
   "settings": {
     "pageTitle": "Indstillinger",
     "title": "Indstillinger",
     "profile": "Profil",
-    "days": ["Man", "Tir", "Ons", "Tor", "Fre", "Lør", "Søn"],
+    "days": [
+      "Man",
+      "Tir",
+      "Ons",
+      "Tor",
+      "Fre",
+      "Lør",
+      "Søn"
+    ],
     "saveChanges": "Gem ændringer",
     "saved": "Gemt!",
     "logout": "Log ud",
@@ -277,7 +284,9 @@
       "deletedTitle": "Konto slettet",
       "deletedMessage": "Din konto er blevet slettet.",
       "error": "Kunne ikke slette konto"
-    }
+    },
+    "language": "Sprog",
+    "changeLanguageInSettings": "Skift sprog i Indstillinger"
   },
   "pricing": {
     "title": "RunWithAI Pro",
@@ -392,7 +401,20 @@
       "runsFromRecord": "{{count}} løb fra rekord",
       "runsInMonth": "{{count}} løb i {{month}}"
     },
-    "monthNames": ["jan", "feb", "mar", "apr", "maj", "jun", "jul", "aug", "sep", "okt", "nov", "dec"],
+    "monthNames": [
+      "jan",
+      "feb",
+      "mar",
+      "apr",
+      "maj",
+      "jun",
+      "jul",
+      "aug",
+      "sep",
+      "okt",
+      "nov",
+      "dec"
+    ],
     "workout": {
       "nextWorkout": "NÆSTE TRÆNING",
       "today": "I DAG",
@@ -418,7 +440,15 @@
       "addNote": "+ Note",
       "mood": "Stemning",
       "placeholder": "Hvordan gik det? Ben tunge? God dag? Ny rute?",
-      "dayNames": ["Søn", "Man", "Tir", "Ons", "Tor", "Fre", "Lør"]
+      "dayNames": [
+        "Søn",
+        "Man",
+        "Tir",
+        "Ons",
+        "Tor",
+        "Fre",
+        "Lør"
+      ]
     },
     "injury": {
       "title": "SKADERISIKO",
