@@ -384,6 +384,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   const positionsRef = useRef([]);
   const lastValidPositionRef = useRef(null);
   const appStateRef = useRef(AppState.currentState);
+  const handlePositionUpdateRef = useRef(null);
 
   // ─── PHOTO STORY STATE ──────────────────────────────────────────────────
   const [savedRunId, setSavedRunId] = useState(null);
@@ -410,15 +411,16 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     return R * c;
   };
 
-  // ─── PROCESS BACKGROUND LOCATIONS ─────────────────────────────────────────
+  // ─── PROCESS BACKGROUND LOCATIONS ───────────────────────────────────────
   const processBackgroundLocations = () => {
     if (!isWeb && global._backgroundLocations && global._backgroundLocations.length > 0) {
       const bgLocations = [...global._backgroundLocations];
       global._backgroundLocations = [];
-      
       console.log('Processing', bgLocations.length, 'background locations');
       bgLocations.forEach(newPos => {
-        handlePositionUpdate(newPos, true);
+        if (handlePositionUpdateRef.current) {
+          handlePositionUpdateRef.current(newPos, true);
+        }
       });
     }
   };
@@ -428,9 +430,22 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     if (isWeb) return;
 
     const subscription = AppState.addEventListener('change', nextAppState => {
-      if (appStateRef.current.match(/inactive|background/) && nextAppState === 'active') {
+      if (
+        appStateRef.current.match(/inactive|background/) &&
+        nextAppState === 'active'
+      ) {
         console.log('App foregrounded, processing background locations...');
-        processBackgroundLocations();
+        // Use ref to always get latest handlePositionUpdate
+        if (global._backgroundLocations && global._backgroundLocations.length > 0) {
+          const bgLocations = [...global._backgroundLocations];
+          global._backgroundLocations = [];
+          console.log('Foreground: processing', bgLocations.length, 'buffered BG points');
+          bgLocations.forEach(newPos => {
+            if (handlePositionUpdateRef.current) {
+              handlePositionUpdateRef.current(newPos, true);
+            }
+          });
+        }
       }
       appStateRef.current = nextAppState;
     });
@@ -438,12 +453,20 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     return () => subscription?.remove();
   }, []);
 
-  // ─── PERIODIC CHECK FOR BACKGROUND LOCATIONS ──────────────────────────────
+  // ─── PERIODIC CHECK FOR BACKGROUND LOCATIONS ────────────────────────────
   useEffect(() => {
     if (!isTracking || isPaused || isWeb) return;
 
     const bgInterval = setInterval(() => {
-      processBackgroundLocations();
+      if (global._backgroundLocations && global._backgroundLocations.length > 0) {
+        const bgLocations = [...global._backgroundLocations];
+        global._backgroundLocations = [];
+        bgLocations.forEach(newPos => {
+          if (handlePositionUpdateRef.current) {
+            handlePositionUpdateRef.current(newPos, true);
+          }
+        });
+      }
     }, 1000);
 
     return () => clearInterval(bgInterval);
@@ -518,6 +541,9 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       }
     }
   };
+
+  // Keep ref in sync so background/AppState callbacks use latest version
+  handlePositionUpdateRef.current = handlePositionUpdate;
 
   const startBackgroundLocationTracking = async () => {
     if (isWeb || !Location || !TaskManager) return false;
@@ -632,7 +658,8 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
             distanceInterval: 1
           },
           (location) => {
-            handlePositionUpdate({
+            const update = handlePositionUpdateRef.current || handlePositionUpdate;
+            update({
               latitude: location.coords.latitude,
               longitude: location.coords.longitude,
               timestamp: location.timestamp,
@@ -651,7 +678,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     if (isWeb && typeof navigator !== 'undefined' && navigator.geolocation) {
       watchSubscriptionRef.current = navigator.geolocation.watchPosition(
         (position) => {
-          handlePositionUpdate({
+          (handlePositionUpdateRef.current || handlePositionUpdate)({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
             timestamp: position.timestamp,
