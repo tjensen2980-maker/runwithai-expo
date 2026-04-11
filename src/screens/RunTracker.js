@@ -414,7 +414,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   // ─── PROCESS BACKGROUND LOCATIONS ───────────────────────────────────────
   const processBackgroundLocations = () => {
     if (!isWeb && global._backgroundLocations && global._backgroundLocations.length > 0) {
-      const bgLocations = [...global._backgroundLocations];
+      const bgLocations = [...global._backgroundLocations].sort((a, b) => a.timestamp - b.timestamp);
       global._backgroundLocations = [];
       console.log('Processing', bgLocations.length, 'background locations');
       bgLocations.forEach(newPos => {
@@ -436,7 +436,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       ) {
         console.log('App foregrounded, processing background locations...');
         if (global._backgroundLocations && global._backgroundLocations.length > 0) {
-          const bgLocations = [...global._backgroundLocations];
+          const bgLocations = [...global._backgroundLocations].sort((a, b) => a.timestamp - b.timestamp);
           global._backgroundLocations = [];
           console.log('Foreground: processing', bgLocations.length, 'buffered BG points');
           bgLocations.forEach(newPos => {
@@ -458,7 +458,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
 
     const bgInterval = setInterval(() => {
       if (global._backgroundLocations && global._backgroundLocations.length > 0) {
-        const bgLocations = [...global._backgroundLocations];
+        const bgLocations = [...global._backgroundLocations].sort((a, b) => a.timestamp - b.timestamp);
         global._backgroundLocations = [];
         bgLocations.forEach(newPos => {
           if (handlePositionUpdateRef.current) {
@@ -496,7 +496,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       const isReasonableSpeed = speedKmh <= MAX_SPEED_KMH;
       const isAccurate = accuracy <= (fromBackground ? MAX_ACCURACY * 1.5 : MAX_ACCURACY);
       
-      const isValidPoint = isMinDistance && isNotTeleport && isReasonableSpeed && isAccurate;
+      const isValidPoint = isMinDistance && isNotTeleport && (fromBackground || isReasonableSpeed) && isAccurate;
       
       if (isValidPoint) {
         const newDistance = distanceRef.current + dist;
