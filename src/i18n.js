@@ -59,20 +59,15 @@ const supportedLanguages = Object.keys(resources);
 
 export const languageReady = (async () => {
   let lng = 'en';
+
   try {
-    // Always detect device language first
+    // Always use device/per-app locale as the primary language source
+    // On iOS, getLocales() returns the per-app language when set in iOS Settings
     const deviceLang = Localization.getLocales()?.[0]?.languageCode || 'en';
-    const detectedLng = supportedLanguages.includes(deviceLang) ? deviceLang : 'en';
-    
-    // Only override with saved language if user explicitly chose one (not 'auto')
-    const saved = await AsyncStorage.getItem('userLanguage');
-    if (saved && saved !== 'auto' && supportedLanguages.includes(saved)) {
-      lng = saved;
-    } else {
-      // Clear any old saved language so device language is always used
-      await AsyncStorage.removeItem('userLanguage');
-      lng = detectedLng;
-    }
+    lng = supportedLanguages.includes(deviceLang) ? deviceLang : 'en';
+
+    // Clear any stale saved language - we always follow the device/OS language
+    await AsyncStorage.removeItem('userLanguage');
   } catch (e) {
     console.log('Language load error:', e);
   }
