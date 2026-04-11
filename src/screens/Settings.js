@@ -242,7 +242,7 @@ function LanguageSelector() {
 
   const setAutoLanguage = async () => {
     await AsyncStorage.removeItem('userLanguage');
-    const deviceLang = Localization.locale?.split('-')[0] || 'en';
+    const deviceLang = Localization.getLocales()?.[0]?.languageCode || 'en';
     const supportedCodes = LANGUAGES.map(l => l.code);
     const lang = supportedCodes.includes(deviceLang) ? deviceLang : 'en';
     await i18n.changeLanguage(lang);
