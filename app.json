@@ -20,7 +20,32 @@
       "buildNumber": "22",
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
-        "CFBundleLocalizations": ["da", "en", "de", "fr", "es", "it", "pt", "nl", "pl", "sv", "fi", "el", "cs", "ro", "hu", "bg", "hr", "sk", "sl", "lt", "lv", "et", "ga", "mt"],
+        "CFBundleLocalizations": [
+          "da",
+          "en",
+          "de",
+          "fr",
+          "es",
+          "it",
+          "pt",
+          "nl",
+          "pl",
+          "sv",
+          "fi",
+          "el",
+          "cs",
+          "ro",
+          "hu",
+          "bg",
+          "hr",
+          "sk",
+          "sl",
+          "lt",
+          "lv",
+          "et",
+          "ga",
+          "mt"
+        ],
         "CFBundleDevelopmentRegion": "da",
         "NSLocationWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter i realtid.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter, også når appen kører i baggrunden under dit løb.",
@@ -85,7 +110,38 @@
         }
       ],
       "expo-dev-client",
-      "expo-localization"
+      [
+        "expo-localization",
+        {
+          "supportedLocales": [
+            "da",
+            "en",
+            "de",
+            "fr",
+            "es",
+            "it",
+            "pt",
+            "nl",
+            "pl",
+            "sv",
+            "fi",
+            "el",
+            "cs",
+            "ro",
+            "hu",
+            "bg",
+            "hr",
+            "sk",
+            "sl",
+            "lt",
+            "lv",
+            "et",
+            "ga",
+            "mt"
+          ]
+        }
+      ],
+      "./plugins/withLocales"
     ],
     "owner": "tj2970",
     "extra": {
