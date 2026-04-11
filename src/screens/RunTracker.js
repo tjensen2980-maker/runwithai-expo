@@ -507,7 +507,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
           ...newPos,
           speed: speedKmh,
           segmentDistance: dist,
-          isRunning: speedKmh >= 7,
+          isRunning: speedKmh >= 9,
         };
         
         positionsRef.current = [...positionsRef.current, posWithData];
