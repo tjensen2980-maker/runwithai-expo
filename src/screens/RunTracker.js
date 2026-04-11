@@ -46,7 +46,6 @@ if (!isWeb) {
 }
 
 // ─── BACKGROUND LOCATION TASK DEFINITION ───────────────────────────────────
-// Global storage for background locations (TaskManager runs outside React)
 if (!isWeb && typeof global !== 'undefined') {
   global._backgroundLocations = global._backgroundLocations || [];
   global._isBackgroundTracking = false;
@@ -67,7 +66,6 @@ if (!isWeb && TaskManager) {
           timestamp: loc.timestamp,
           accuracy: loc.coords.accuracy,
         }));
-        // Store in global for pickup by component
         global._backgroundLocations = [
           ...(global._backgroundLocations || []),
           ...newLocations,
@@ -148,6 +146,7 @@ function NativeTrackerMap({ positions, currentPosition, t }) {
     </MapView>
   );
 }
+
 // ─── WEB TRACKER MAP (Leaflet) ──────────────────────────────────────────────
 function WebTrackerMap({ positions, currentPosition }) {
   const mapRef = useRef(null);
@@ -216,6 +215,7 @@ function WebTrackerMap({ positions, currentPosition }) {
   }, [positions, currentPosition]);
   return <View ref={mapRef} style={styles.map} />;
 }
+
 // ─── UNIFIED TRACKER MAP ────────────────────────────────────────────────────
 function TrackerMap(props) {
   if (isWeb) return <WebTrackerMap {...props} />;
@@ -435,7 +435,6 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         nextAppState === 'active'
       ) {
         console.log('App foregrounded, processing background locations...');
-        // Use ref to always get latest handlePositionUpdate
         if (global._backgroundLocations && global._backgroundLocations.length > 0) {
           const bgLocations = [...global._backgroundLocations];
           global._backgroundLocations = [];
@@ -486,13 +485,11 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       const speedKmh = speedMs * 3.6;
       const accuracy = newPos.accuracy || 15;
       
-      // ═══════════════════════════════════════════════════════════════════
-      // STRICT GPS FILTERING - prevents phantom distance from GPS jumps
-      // ═══════════════════════════════════════════════════════════════════
-      const MIN_DISTANCE = 2;        // Minimum 2m movement to count
-      const MAX_SINGLE_JUMP = 80;    // Max 80m per update (allows background gaps)
-      const MAX_SPEED_KMH = 35;      // Max 35 km/h (sprint pace)
-      const MAX_ACCURACY = 50;       // Reject points with >50m accuracy (iOS often 30-40m)
+      // ── GPS FILTERING ──────────────────────────────────────────────────
+      const MIN_DISTANCE = 2;
+      const MAX_SINGLE_JUMP = 150;   // ← øget fra 80
+      const MAX_SPEED_KMH = 40;      // ← øget fra 35
+      const MAX_ACCURACY = 80;       // ← øget fra 50 (iOS er ofte 30-65m)
       
       const isMinDistance = dist >= MIN_DISTANCE;
       const isNotTeleport = dist <= (fromBackground ? MAX_SINGLE_JUMP * 2 : MAX_SINGLE_JUMP);
@@ -528,9 +525,9 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         console.log(`✗ GPS filtered: ${dist.toFixed(1)}m, ${speedKmh.toFixed(1)}km/h, acc:${accuracy.toFixed(0)}m [${reasons.join(', ')}]`);
       }
     } else {
-      // First position - always accept if accuracy is reasonable
+      // Første position
       const accuracy = newPos.accuracy || 15;
-      if (accuracy <= 50) {
+      if (accuracy <= 80) {  // ← øget fra 50
         const firstPos = { ...newPos, speed: 0, segmentDistance: 0, isRunning: false };
         positionsRef.current = [firstPos];
         setPositions([firstPos]);
@@ -542,7 +539,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     }
   };
 
-  // Keep ref in sync so background/AppState callbacks use latest version
+  // Keep ref in sync
   handlePositionUpdateRef.current = handlePositionUpdate;
 
   const startBackgroundLocationTracking = async () => {
@@ -718,10 +715,52 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     await stopBackgroundLocationTracking();
   };
 
-  const resumeTracking = () => {
+  // ─── RESUME TRACKING (FIX: nulstiller ikke distance/positions) ───────────
+  const resumeTracking = async () => {
     setIsPaused(false);
+    setGpsStatus('waiting');
     startTimeRef.current = Date.now() - (duration * 1000);
-    startTracking();
+
+    const token = getAuthToken();
+    setVoiceAuthToken(token);
+
+    intervalRef.current = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000);
+      setDuration(elapsed);
+      if (voiceCoachRef.current) {
+        const km = distanceRef.current / 1000;
+        const paceMinPerKm = km > 0 ? (elapsed / 60) / km : 0;
+        voiceCoachRef.current.update({ km, durationSecs: elapsed, paceMinPerKm });
+      }
+    }, 1000);
+
+    if (!isWeb && Location) {
+      await startBackgroundLocationTracking();
+      watchSubscriptionRef.current = await Location.watchPositionAsync(
+        { accuracy: Location.Accuracy.BestForNavigation, timeInterval: 500, distanceInterval: 1 },
+        (location) => {
+          (handlePositionUpdateRef.current || handlePositionUpdate)({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            timestamp: location.timestamp,
+            accuracy: location.coords.accuracy,
+          });
+        }
+      );
+    } else if (isWeb && typeof navigator !== 'undefined' && navigator.geolocation) {
+      watchSubscriptionRef.current = navigator.geolocation.watchPosition(
+        (position) => {
+          (handlePositionUpdateRef.current || handlePositionUpdate)({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            timestamp: position.timestamp,
+            accuracy: position.coords.accuracy,
+          });
+        },
+        (error) => { setGpsStatus('error'); },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 1000 }
+      );
+    }
   };
 
   const stopAndSave = async () => {
@@ -742,7 +781,6 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
 
     const route = positionsRef.current.map(p => ({ lat: p.latitude, lng: p.longitude }));
 
-    // Calculate running vs walking distance
     let runningDistance = 0;
     let walkingDistance = 0;
     positionsRef.current.forEach(p => {
@@ -774,8 +812,6 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       walking_km: walkingKm,
     };
 
-    console.log('Saving run data:', JSON.stringify({ km, duration, runningKm, walkingKm, routePoints: route.length }));
-
     try {
       const token = getAuthToken();
       if (token) {
@@ -797,8 +833,6 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
           setShowStory(true);
           return;
         }
-      } else {
-        console.log('No auth token!');
       }
     } catch (e) {
       console.log('Failed to save run:', e);
@@ -869,7 +903,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         </View>
       </View>
       <Text style={s.subtitle}>
-          {!isTracking ? t('tracker.status.ready') : isPaused ? t('tracker.status.paused') : t('tracker.status.tracking')}
+        {!isTracking ? t('tracker.status.ready') : isPaused ? t('tracker.status.paused') : t('tracker.status.tracking')}
       </Text>
 
       {!isTracking && runs && runs.length > 0 && (
