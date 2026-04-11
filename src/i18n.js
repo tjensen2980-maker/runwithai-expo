@@ -3,7 +3,6 @@ import { initReactI18next } from 'react-i18next';
 import * as Localization from 'expo-localization';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Import all language files
 import da from './locales/da.json';
 import en from './locales/en.json';
 import de from './locales/de.json';
@@ -58,37 +57,30 @@ const resources = {
 
 const supportedLanguages = Object.keys(resources);
 
-// Initialize with fallback, then load saved language
-i18n
-  .use(initReactI18next)
-  .init({
-    resources,
-    lng: 'en',
-    fallbackLng: 'en',
-    interpolation: {
-      escapeValue: false,
-    },
-    react: {
-      useSuspense: false,
-    },
-  });
-
-// Load saved language preference
-const loadSavedLanguage = async () => {
+// Export a promise that resolves when language is ready
+export const languageReady = (async () => {
+  let lng = 'en';
   try {
     const saved = await AsyncStorage.getItem('userLanguage');
     if (saved && supportedLanguages.includes(saved)) {
-      await i18n.changeLanguage(saved);
+      lng = saved;
     } else {
       const deviceLang = Localization.getLocales()?.[0]?.languageCode || 'en';
-      const lang = supportedLanguages.includes(deviceLang) ? deviceLang : 'en';
-      await i18n.changeLanguage(lang);
+      lng = supportedLanguages.includes(deviceLang) ? deviceLang : 'en';
     }
   } catch (e) {
     console.log('Language load error:', e);
   }
-};
 
-loadSavedLanguage();
+  await i18n
+    .use(initReactI18next)
+    .init({
+      resources,
+      lng,                    // ← korrekt sprog fra start
+      fallbackLng: 'en',
+      interpolation: { escapeValue: false },
+      react: { useSuspense: false },
+    });
+})();
 
 export default i18n;
