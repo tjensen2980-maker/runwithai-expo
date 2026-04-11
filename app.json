@@ -19,6 +19,9 @@
       "bundleIdentifier": "app.runwithai",
       "buildNumber": "22",
       "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true,
+        "CFBundleLocalizations": ["da", "en", "de", "fr", "es", "it", "pt", "nl", "pl", "sv", "fi", "el", "cs", "ro", "hu", "bg", "hr", "sk", "sl", "lt", "lv", "et", "ga", "mt"],
+        "CFBundleDevelopmentRegion": "da",
         "NSLocationWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter i realtid.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter, også når appen kører i baggrunden under dit løb.",
         "NSMotionUsageDescription": "RunWithAI bruger bevægelsessensorer til at forbedre distance-beregning og skridttælling under dine løbeture.",
