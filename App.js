@@ -1,4 +1,5 @@
 import './src/i18n';
+import { languageReady } from './src/i18n';
 import { useTranslation } from 'react-i18next';
 import PricingPage, { useSubscription, Paywall } from './components/Pricing';
 import React, { useState, useEffect } from 'react';
@@ -77,7 +78,6 @@ const IconZap = ({ color = '#ffffff' }) => (
 const AppLogo = ({ size = 50 }) => (
   <Image 
     source={require('./assets/icon.png')} 
-    
     style={{ width: size, height: size, borderRadius: size * 0.18, marginVertical: -30 }}
     resizeMode="contain"
   />
@@ -122,7 +122,6 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, onShowPric
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.bg }}>
-      {/* Sub-tabs */}
       <View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingTop: 16, gap: 10 }}>
         {[['start', t('run.startRun')],['routes', t('run.aiRoutes')]].map(([id, label]) => (
           <TouchableOpacity key={id}
@@ -138,7 +137,6 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, onShowPric
 
       {activeTab === 'start' ? (
         <ScrollView contentContainerStyle={{ padding: 16 }}>
-          {/* Løb knap */}
           <TouchableOpacity onPress={() => onStartActivity('run')}
             style={{ backgroundColor: colors.black, borderRadius: 20, padding: 28, marginBottom: 12, alignItems: 'center' }}>
             <Text style={{ fontSize: 40, marginBottom: 8 }}>🏃</Text>
@@ -146,7 +144,6 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, onShowPric
             <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>{t('run.gpsTracking')}</Text>
           </TouchableOpacity>
 
-          {/* Gå knap */}
           <TouchableOpacity onPress={() => onStartActivity('walk')}
             style={{ backgroundColor: colors.surface, borderRadius: 20, padding: 28, marginBottom: 20, alignItems: 'center', borderWidth: 2, borderColor: colors.border2 }}>
             <Text style={{ fontSize: 40, marginBottom: 8 }}>🚶</Text>
@@ -154,7 +151,6 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, onShowPric
             <Text style={{ fontSize: 13, color: colors.muted, marginTop: 4 }}>{t('run.walkTracking')}</Text>
           </TouchableOpacity>
 
-          {/* Næste træning */}
           {nextWorkout && (
             <View style={{ backgroundColor: colors.card, borderRadius: 16, padding: 18, marginBottom: 12, borderWidth: 1, borderColor: colors.border }}>
               <Text style={{ fontSize: 10, color: colors.muted, letterSpacing: 2, fontWeight: '700', marginBottom: 8 }}>{t('run.nextWorkout')}</Text>
@@ -167,7 +163,6 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, onShowPric
             </View>
           )}
 
-          {/* Seneste løb */}
           {lastRun && (
             <View style={{ backgroundColor: colors.card, borderRadius: 16, padding: 18, borderWidth: 1, borderColor: colors.border }}>
               <Text style={{ fontSize: 10, color: colors.muted, letterSpacing: 2, fontWeight: '700', marginBottom: 8 }}>{t('run.lastActivity')}</Text>
@@ -179,7 +174,6 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, onShowPric
             </View>
           )}
 
-          {/* Free bruger teaser */}
           {!isPro && (
             <TouchableOpacity
               style={{ backgroundColor: 'rgba(200, 255, 0, 0.1)', borderRadius: 16, padding: 18, marginTop: 12, borderWidth: 1, borderColor: colors.accent }}
@@ -197,7 +191,6 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, onShowPric
           )}
         </ScrollView>
       ) : (
-        // AI Ruter - Pro only
         isPro ? (
           <RoutesTabWrapper profile={profile} runs={runs} />
         ) : (
@@ -238,7 +231,6 @@ function CalendarTab({ runs, weekPlan, trainingPlan, isPro, onShowPricing }) {
 function StatsTab({ runs, profile, level, isPro, onShowPricing }) {
   const { t } = useTranslation();
   
-  // Free brugere får kun basis statistik
   if (!isPro) {
     const totalKm = runs.reduce((sum, r) => sum + (parseFloat(r.km) || 0), 0);
     const totalRuns = runs.length;
@@ -247,7 +239,6 @@ function StatsTab({ runs, profile, level, isPro, onShowPricing }) {
       <ScrollView style={{ flex: 1, backgroundColor: colors.bg }} contentContainerStyle={{ padding: 16 }}>
         <Text style={{ fontSize: 11, color: colors.muted, letterSpacing: 2, fontWeight: '700', marginBottom: 16 }}>{t('stats.basic')}</Text>
 
-        {/* Basis stats */}
         <View style={{ backgroundColor: colors.card, borderRadius: 16, padding: 20, marginBottom: 16, borderWidth: 1, borderColor: colors.border }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
             <View style={{ alignItems: 'center' }}>
@@ -261,19 +252,18 @@ function StatsTab({ runs, profile, level, isPro, onShowPricing }) {
           </View>
         </View>
 
-        {/* Pro features teaser */}
         <View style={{ backgroundColor: colors.surface, borderRadius: 16, padding: 20, borderWidth: 2, borderColor: colors.border2 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
             <Text style={{ fontSize: 24, marginRight: 12 }}>🔒</Text>
             <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>{t('pro.stats.title')}</Text>
           </View>
-<View style={{ gap: 12 }}>
-  {['📊 Detaljeret pace-analyse', '📈 Ugentlig/månedlig fremgang', '🏆 Personlige rekorder', '❤️ Pulszone-statistik'].map((item, i) => (
-    <View key={i} style={{ flexDirection: 'row', alignItems: 'center', opacity: 0.6 }}>
-      <Text style={{ fontSize: 14, color: colors.muted }}>{item}</Text>
-    </View>
-  ))}
-</View>
+          <View style={{ gap: 12 }}>
+            {['📊 Detaljeret pace-analyse', '📈 Ugentlig/månedlig fremgang', '🏆 Personlige rekorder', '❤️ Pulszone-statistik'].map((item, i) => (
+              <View key={i} style={{ flexDirection: 'row', alignItems: 'center', opacity: 0.6 }}>
+                <Text style={{ fontSize: 14, color: colors.muted }}>{item}</Text>
+              </View>
+            ))}
+          </View>
           <TouchableOpacity
             style={{ backgroundColor: colors.accent, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 20 }}
             onPress={onShowPricing}
@@ -285,7 +275,6 @@ function StatsTab({ runs, profile, level, isPro, onShowPricing }) {
     );
   }
 
-  // Pro brugere får fuld Stats komponent
   return <Stats runs={runs} profile={profile} level={level} />;
 }
 
@@ -331,15 +320,15 @@ function RoutesTabWrapper({ profile, runs }) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// TABS CONFIG - med oversættelser
+// TAB BAR
 // ═══════════════════════════════════════════════════════════════════════════════
 function TabBar({ tab, setTab }) {
   const { t } = useTranslation();
   
   const TABS = [
-    { id: 'dashboard', label: t('tabs.plan'),      Icon: IconPlan     },
+    { id: 'dashboard', label: t('tabs.plan'),     Icon: IconPlan     },
     { id: 'activity',  label: t('tabs.progress'), Icon: IconProgress },
-    { id: 'run',       label: '',                  Icon: null         },
+    { id: 'run',       label: '',                 Icon: null         },
     { id: 'stats',     label: t('tabs.stats'),    Icon: IconStats    },
     { id: 'calendar',  label: t('tabs.calendar'), Icon: IconCalendar },
   ];
@@ -378,10 +367,22 @@ function TabBar({ tab, setTab }) {
   );
 }
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// APP
+// ═══════════════════════════════════════════════════════════════════════════════
 export default function App() {
   const { t } = useTranslation();
-  
-  // Al state samlet ét sted
+
+  // ── SPROG FIX ──────────────────────────────────────────────────────────────
+  const [langReady, setLangReady] = useState(false);
+
+  useEffect(() => {
+    languageReady.then(() => setLangReady(true));
+  }, []);
+
+  if (!langReady) return null;
+  // ──────────────────────────────────────────────────────────────────────────
+
   const [user, setUser]                       = useState(null);
   const [showOnboarding, setShowOnboarding]   = useState(true);
   const [level, setLevel]                     = useState(null);
@@ -394,35 +395,25 @@ export default function App() {
   const [runs, setRuns]                       = useState([]);
   const [loading, setLoading]                 = useState(true);
   const [activityType, setActivityType]       = useState('run');
+  const [showPricing, setShowPricing]         = useState(false);
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SUBSCRIPTION STATE
-  // ═══════════════════════════════════════════════════════════════════════════
-  const [showPricing, setShowPricing] = useState(false);
-
-  // Hent subscription status via hook
   const token = getAuthToken();
   const { subscription, isPro, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
 
-  // Håndter deep links fra Stripe checkout (kun på web)
   useEffect(() => {
-    // På web tjekker vi URL parameteren direkte
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('subscription') === 'success') {
         Alert.alert(t('alerts.welcomePro.title'), t('alerts.welcomePro.message'));
         refreshSubscription();
-        // Fjern query parameter fra URL
         window.history.replaceState({}, document.title, window.location.pathname);
       }
     }
   }, []);
 
-  // Hent data fra database
   const loadData = async () => {
     setLoading(true);
 
-    // Tjek først om onboarding er completed lokalt
     try {
       const onboardingCompleted = await AsyncStorage.getItem('onboardingCompleted');
       const savedLevel = await AsyncStorage.getItem('userLevel');
@@ -444,7 +435,6 @@ export default function App() {
     if (savedRuns) setRuns(savedRuns);
 
     if (savedTrainingPlan) {
-      // FIX: parse data hvis den stadig er en string (dobbelt-JSON-encoded)
       if (savedTrainingPlan.data && typeof savedTrainingPlan.data === 'string') {
         try { savedTrainingPlan.data = JSON.parse(savedTrainingPlan.data); } catch {}
       }
@@ -452,13 +442,9 @@ export default function App() {
         try { savedTrainingPlan.data = JSON.parse(savedTrainingPlan.data); } catch {}
       }
       setTrainingPlan(savedTrainingPlan);
-      // FIX: kun kald .map() hvis data er et rigtigt array
       if (Array.isArray(savedTrainingPlan.data) && savedTrainingPlan.data.length > 0) {
         const todayShort = ['Søn','Man','Tir','Ons','Tor','Fre','Lør'][new Date().getDay()];
-        const synced = savedTrainingPlan.data.map(d => ({
-          ...d,
-          today: d.day === todayShort,
-        }));
+        const synced = savedTrainingPlan.data.map(d => ({ ...d, today: d.day === todayShort }));
         setWeekPlanState(synced);
       }
     } else if (savedPlan) {
@@ -476,7 +462,6 @@ export default function App() {
     setLoading(false);
   };
 
-  // Tjek om token allerede er gemt fra forrige session
   useEffect(() => {
     const savedToken = getAuthToken();
     if (savedToken) {
@@ -570,11 +555,7 @@ export default function App() {
     }
   };
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // START ACTIVITY MED SUBSCRIPTION CHECK
-  // ═══════════════════════════════════════════════════════════════════════════
   const handleStartActivity = (type) => {
-    // Tjek om free bruger har nået grænsen (10 løb/måned)
     if (!canTrackRun && !isPro) {
       Alert.alert(
         t('pro.limit.title'),
@@ -590,7 +571,6 @@ export default function App() {
     setTab('tracker');
   };
 
-  // Vis auth skærm hvis ikke logget ind
   if (!user) return (
     <SafeAreaProvider>
       <Auth onAuth={(token, userData) => {
@@ -612,7 +592,6 @@ export default function App() {
     </SafeAreaProvider>
   );
 
-  // Run Tracker
   if (tab === 'tracker') {
     if (!RunTracker) return <SafeAreaProvider><View style={{flex:1,alignItems:'center',justifyContent:'center'}}><Text>RunTracker mangler</Text></View></SafeAreaProvider>;
     return (
@@ -630,31 +609,23 @@ export default function App() {
     );
   }
 
-  // Onboarding
   if (showOnboarding) return (
     <SafeAreaProvider>
       <StatusBar barStyle="light-content" backgroundColor={colors.black} />
       <Onboarding onDone={async (chosenLevel, goalInfo) => {
         setLevel(chosenLevel);
         const merged = { ...profile, ...(goalInfo || {}), level: chosenLevel };
-
-        // Gem lokalt FØRST så vi undgår loop selv hvis server fejler
         try {
           await AsyncStorage.setItem('onboardingCompleted', 'true');
           await AsyncStorage.setItem('userLevel', chosenLevel);
         } catch (e) {
           console.log('AsyncStorage write error:', e);
         }
-
-        // Gem profil til server
         setProfileState(merged);
         await saveProfile(merged);
-
         if (goalInfo && Object.values(goalInfo).some(v => v)) {
           generateTrainingPlan(merged, chosenLevel, []);
         }
-
-        // Sæt onboarding til false EFTER alt er gemt
         setShowOnboarding(false);
       }} />
     </SafeAreaProvider>
@@ -687,11 +658,9 @@ export default function App() {
     <SafeAreaProvider>
       <StatusBar barStyle="dark-content" backgroundColor={colors.card} />
       <SafeAreaView style={s.safe} edges={['top']}>
-        {/* Top bar */}
         <View style={s.topBar}>
           <AppLogo size={168} />
           <View style={s.topRight}>
-            {/* Pro Badge eller Upgrade knap */}
             {isPro ? (
               <View style={s.proBadge}>
                 <Text style={s.proBadgeText}>{t('pro.badge')}</Text>
@@ -712,20 +681,13 @@ export default function App() {
           </View>
         </View>
 
-        {/* Aktiv skærm */}
         <View style={{ flex: 1 }}>{renderScreen()}</View>
 
-        {/* Bottom tab bar */}
         <SafeAreaView edges={['bottom']} style={{ backgroundColor: colors.card }}>
           <TabBar tab={tab} setTab={setTab} />
         </SafeAreaView>
 
-        {/* PRICING MODAL */}
-        <Modal
-          visible={showPricing}
-          animationType="slide"
-          presentationStyle="pageSheet"
-        >
+        <Modal visible={showPricing} animationType="slide" presentationStyle="pageSheet">
           <PricingPage
             token={token}
             onClose={() => {
@@ -766,9 +728,6 @@ const s = StyleSheet.create({
   tabIconActive:   { opacity: 1 },
   tabLabel:        { fontSize: 10, color: colors.muted, letterSpacing: 0.3, fontWeight: '500', marginTop: 4 },
   tabLabelActive:  { color: colors.black, fontWeight: '700' },
-  // ═══════════════════════════════════════════════════════════════════════════
-  // PRO / UPGRADE STYLES
-  // ═══════════════════════════════════════════════════════════════════════════
   proBadge: {
     backgroundColor: 'rgba(255, 255, 0, 0.64)',
     paddingHorizontal: 10,
