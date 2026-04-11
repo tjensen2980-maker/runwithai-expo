@@ -155,7 +155,15 @@
     "pageTitle": "Settings",
     "title": "Settings",
     "profile": "Profile",
-    "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "days": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ],
     "saveChanges": "Save changes",
     "saved": "Saved!",
     "logout": "Log out",
@@ -276,7 +284,9 @@
       "deletedTitle": "Account deleted",
       "deletedMessage": "Your account has been deleted.",
       "error": "Could not delete account"
-    }
+    },
+    "language": "Language",
+    "changeLanguageInSettings": "Change language in Settings"
   },
   "pricing": {
     "title": "RunWithAI Pro",
@@ -391,7 +401,20 @@
       "runsFromRecord": "{{count}} runs from record",
       "runsInMonth": "{{count}} runs in {{month}}"
     },
-    "monthNames": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    "monthNames": [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ],
     "workout": {
       "nextWorkout": "NEXT WORKOUT",
       "today": "TODAY",
@@ -417,7 +440,15 @@
       "addNote": "+ Note",
       "mood": "Mood",
       "placeholder": "How did it go? Legs heavy? Good day? New route?",
-      "dayNames": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+      "dayNames": [
+        "Sun",
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat"
+      ]
     },
     "injury": {
       "title": "INJURY RISK",
