@@ -60,12 +60,18 @@ const supportedLanguages = Object.keys(resources);
 export const languageReady = (async () => {
   let lng = 'en';
   try {
+    // Always detect device language first
+    const deviceLang = Localization.getLocales()?.[0]?.languageCode || 'en';
+    const detectedLng = supportedLanguages.includes(deviceLang) ? deviceLang : 'en';
+    
+    // Only override with saved language if user explicitly chose one (not 'auto')
     const saved = await AsyncStorage.getItem('userLanguage');
-    if (saved && supportedLanguages.includes(saved)) {
+    if (saved && saved !== 'auto' && supportedLanguages.includes(saved)) {
       lng = saved;
     } else {
-      const deviceLang = Localization.getLocales()?.[0]?.languageCode || 'en';
-      lng = supportedLanguages.includes(deviceLang) ? deviceLang : 'en';
+      // Clear any old saved language so device language is always used
+      await AsyncStorage.removeItem('userLanguage');
+      lng = detectedLng;
     }
   } catch (e) {
     console.log('Language load error:', e);
