@@ -7,6 +7,7 @@ import { Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
+import * as Localization from 'expo-localization';
 
 function Field({ label, value, onChange, keyboard, placeholder }) {
   return (
@@ -222,22 +223,48 @@ const LANGUAGES = [
 ];
 
 function LanguageSelector() {
+  const { t } = useTranslation();
   const [currentLang, setCurrentLang] = useState(i18n.language);
+  const [isAuto, setIsAuto] = useState(false);
+
+  useEffect(() => {
+    AsyncStorage.getItem('userLanguage').then(saved => {
+      setIsAuto(!saved);
+    });
+  }, []);
 
   const changeLanguage = async (code) => {
     await i18n.changeLanguage(code);
     await AsyncStorage.setItem('userLanguage', code);
     setCurrentLang(code);
+    setIsAuto(false);
+  };
+
+  const setAutoLanguage = async () => {
+    await AsyncStorage.removeItem('userLanguage');
+    const deviceLang = Localization.locale?.split('-')[0] || 'en';
+    const supportedCodes = LANGUAGES.map(l => l.code);
+    const lang = supportedCodes.includes(deviceLang) ? deviceLang : 'en';
+    await i18n.changeLanguage(lang);
+    setCurrentLang(lang);
+    setIsAuto(true);
   };
 
   return (
     <View>
-      <Text style={s.sectionTitle}>LANGUAGE</Text>
+      <Text style={s.sectionTitle}>{t('settings.language') || 'LANGUAGE'}</Text>
       <View style={s.card}>
+        <TouchableOpacity
+          style={[s.langBtn, { marginBottom: 10, flexDirection: 'row', gap: 8, alignSelf: 'flex-start' },
+            isAuto && { borderColor: colors.accent, backgroundColor: colors.accent + '15' }]}
+          onPress={setAutoLanguage}>
+          <Text style={{ fontSize: 20 }}>🌐</Text>
+          <Text style={[s.langBtnText, isAuto && { color: colors.accent }]}>AUTO</Text>
+        </TouchableOpacity>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={{ flexDirection: 'row', gap: 8 }}>
             {LANGUAGES.map(lang => {
-              const isActive = currentLang === lang.code;
+              const isActive = !isAuto && currentLang === lang.code;
               return (
                 <TouchableOpacity
                   key={lang.code}
@@ -800,7 +827,7 @@ const st = StyleSheet.create({
   addBtn:         { alignItems: 'center', paddingVertical: 10, borderRadius: 10, borderWidth: 1, borderColor: colors.border2, marginTop: 4 },
   addBtnText:     { color: colors.accent, fontSize: 13, fontWeight: '600' },
   addForm:        { marginTop: 12, gap: 8 },
-  input:          { backgroundColor: colors.surface, borderRadius: 10, padding: 12, color: colors.text, fontSize: 14, borderWidth: 1, borderColor: colors.border2 },
+  input:          { backgroundColor: colors.surfhace, borderRadius: 10, padding: 12, color: colors.text, fontSize: 14, borderWidth: 1, borderColor: colors.border2 },
   saveShoeBtn:    { backgroundColor: colors.accent, borderRadius: 10, paddingVertical: 12, alignItems: 'center' },
   saveShoeBtnText:{ color: colors.black, fontWeight: '700', fontSize: 14 },
 });
