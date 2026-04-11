@@ -466,15 +466,15 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       // ═══════════════════════════════════════════════════════════════════
       // STRICT GPS FILTERING - prevents phantom distance from GPS jumps
       // ═══════════════════════════════════════════════════════════════════
-      const MIN_DISTANCE = 1;        // Minimum 1m movement to count
-      const MAX_SINGLE_JUMP = 30;    // Max 30m per single update (prevents teleports)
-      const MAX_SPEED_KMH = 25;      // Max 25 km/h (fast run = ~20 km/h)
-      const MAX_ACCURACY = 25;       // Reject points with >25m accuracy
+      const MIN_DISTANCE = 2;        // Minimum 2m movement to count
+      const MAX_SINGLE_JUMP = 80;    // Max 80m per update (allows background gaps)
+      const MAX_SPEED_KMH = 35;      // Max 35 km/h (sprint pace)
+      const MAX_ACCURACY = 50;       // Reject points with >50m accuracy (iOS often 30-40m)
       
       const isMinDistance = dist >= MIN_DISTANCE;
-      const isNotTeleport = dist <= MAX_SINGLE_JUMP;
+      const isNotTeleport = dist <= (fromBackground ? MAX_SINGLE_JUMP * 2 : MAX_SINGLE_JUMP);
       const isReasonableSpeed = speedKmh <= MAX_SPEED_KMH;
-      const isAccurate = accuracy <= MAX_ACCURACY;
+      const isAccurate = accuracy <= (fromBackground ? MAX_ACCURACY * 1.5 : MAX_ACCURACY);
       
       const isValidPoint = isMinDistance && isNotTeleport && isReasonableSpeed && isAccurate;
       
