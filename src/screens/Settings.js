@@ -194,39 +194,65 @@ function ShoesSection({ profile, onProfileChange, runs, t }) {
 }
 
 // ─── LANGUAGE SELECTOR ──────────────────────────────────────────────────────
+const LANGUAGES = [
+  { code: 'da', flag: '🇩🇰', name: 'Dansk' },
+  { code: 'en', flag: '🇬🇧', name: 'English' },
+  { code: 'de', flag: '🇩🇪', name: 'Deutsch' },
+  { code: 'fr', flag: '🇫🇷', name: 'Français' },
+  { code: 'es', flag: '🇪🇸', name: 'Español' },
+  { code: 'it', flag: '🇮🇹', name: 'Italiano' },
+  { code: 'pt', flag: '🇵🇹', name: 'Português' },
+  { code: 'nl', flag: '🇳🇱', name: 'Nederlands' },
+  { code: 'pl', flag: '🇵🇱', name: 'Polski' },
+  { code: 'sv', flag: '🇸🇪', name: 'Svenska' },
+  { code: 'fi', flag: '🇫🇮', name: 'Suomi' },
+  { code: 'el', flag: '🇬🇷', name: 'Ελληνικά' },
+  { code: 'cs', flag: '🇨🇿', name: 'Čeština' },
+  { code: 'ro', flag: '🇷🇴', name: 'Română' },
+  { code: 'hu', flag: '🇭🇺', name: 'Magyar' },
+  { code: 'bg', flag: '🇧🇬', name: 'Български' },
+  { code: 'hr', flag: '🇭🇷', name: 'Hrvatski' },
+  { code: 'sk', flag: '🇸🇰', name: 'Slovenčina' },
+  { code: 'sl', flag: '🇸🇮', name: 'Slovenščina' },
+  { code: 'lt', flag: '🇱🇹', name: 'Lietuvių' },
+  { code: 'lv', flag: '🇱🇻', name: 'Latviešu' },
+  { code: 'et', flag: '🇪🇪', name: 'Eesti' },
+  { code: 'ga', flag: '🇮🇪', name: 'Gaeilge' },
+  { code: 'mt', flag: '🇲🇹', name: 'Malti' },
+];
+
 function LanguageSelector() {
-  const { t, i18n: i18nInstance } = useTranslation();
-  const currentLang = i18nInstance.language;
-  const currentFlag = { da: '🇩🇰', en: '🇬🇧', de: '🇩🇪', fr: '🇫🇷', es: '🇪🇸', it: '🇮🇹', pt: '🇵🇹', nl: '🇳🇱', pl: '🇵🇱', sv: '🇸🇪', fi: '🇫🇮', el: '🇬🇷', cs: '🇨🇿', ro: '🇷🇴', hu: '🇭🇺', bg: '🇧🇬', hr: '🇭🇷', sk: '🇸🇰', sl: '🇸🇮', lt: '🇱🇹', lv: '🇱🇻', et: '🇪🇪', ga: '🇮🇪', mt: '🇲🇹' }[currentLang] || '🌐';
-  const currentName = { da: 'Dansk', en: 'English', de: 'Deutsch', fr: 'Français', es: 'Español', it: 'Italiano', pt: 'Português', nl: 'Nederlands', pl: 'Polski', sv: 'Svenska', fi: 'Suomi', el: 'Ελληνικά', cs: 'Čeština', ro: 'Română', hu: 'Magyar', bg: 'Български', hr: 'Hrvatski', sk: 'Slovenčina', sl: 'Slovenščina', lt: 'Lietuvių', lv: 'Latviešu', et: 'Eesti', ga: 'Gaeilge', mt: 'Malti' }[currentLang] || currentLang;
+  const [currentLang, setCurrentLang] = useState(i18n.language);
+
+  const changeLanguage = async (code) => {
+    await i18n.changeLanguage(code);
+    await AsyncStorage.setItem('userLanguage', code);
+    setCurrentLang(code);
+  };
 
   return (
     <View>
-      <Text style={s.sectionTitle}>{t('settings.language') || 'LANGUAGE'}</Text>
+      <Text style={s.sectionTitle}>LANGUAGE</Text>
       <View style={s.card}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-          <Text style={{ fontSize: 28 }}>{currentFlag}</Text>
-          <Text style={{ color: colors.text, fontSize: 16, fontWeight: '700' }}>{currentName}</Text>
-        </View>
-        <TouchableOpacity
-          style={{
-            backgroundColor: colors.surface,
-            borderRadius: 12,
-            paddingVertical: 13,
-            paddingHorizontal: 16,
-            alignItems: 'center',
-            borderWidth: 1,
-            borderColor: colors.border2,
-          }}
-          onPress={() => {
-            if (Platform.OS === 'ios') {
-              Linking.openSettings();
-            }
-          }}>
-          <Text style={{ color: colors.accent, fontSize: 14, fontWeight: '700' }}>
-            {Platform.OS === 'ios' ? (t('settings.changeLanguageInSettings') || 'Change language in Settings') : (t('settings.language') || 'Language')}
-          </Text>
-        </TouchableOpacity>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View style={{ flexDirection: 'row', gap: 8 }}>
+            {LANGUAGES.map(lang => {
+              const isActive = currentLang === lang.code;
+              return (
+                <TouchableOpacity
+                  key={lang.code}
+                  style={[
+                    s.langBtn,
+                    isActive && { borderColor: colors.accent, backgroundColor: colors.accent + '15' }
+                  ]}
+                  onPress={() => changeLanguage(lang.code)}>
+                  <Text style={{ fontSize: 24 }}>{lang.flag}</Text>
+                  <Text style={[s.langBtnText, isActive && { color: colors.accent }]}>{lang.code.toUpperCase()}</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </ScrollView>
       </View>
     </View>
   );
@@ -774,7 +800,7 @@ const st = StyleSheet.create({
   addBtn:         { alignItems: 'center', paddingVertical: 10, borderRadius: 10, borderWidth: 1, borderColor: colors.border2, marginTop: 4 },
   addBtnText:     { color: colors.accent, fontSize: 13, fontWeight: '600' },
   addForm:        { marginTop: 12, gap: 8 },
-  input:          { backgroundColor: colors.surfhace, borderRadius: 10, padding: 12, color: colors.text, fontSize: 14, borderWidth: 1, borderColor: colors.border2 },
+  input:          { backgroundColor: colors.surface, borderRadius: 10, padding: 12, color: colors.text, fontSize: 14, borderWidth: 1, borderColor: colors.border2 },
   saveShoeBtn:    { backgroundColor: colors.accent, borderRadius: 10, paddingVertical: 12, alignItems: 'center' },
   saveShoeBtnText:{ color: colors.black, fontWeight: '700', fontSize: 14 },
 });

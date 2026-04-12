@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next';
 import * as Localization from 'expo-localization';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Import all language files
 import da from './locales/da.json';
 import en from './locales/en.json';
 import de from './locales/de.json';
@@ -57,30 +58,37 @@ const resources = {
 
 const supportedLanguages = Object.keys(resources);
 
-export const languageReady = (async () => {
-  let lng = 'en';
+// Initialize with fallback, then load saved language
+i18n
+  .use(initReactI18next)
+  .init({
+    resources,
+    lng: 'en',
+    fallbackLng: 'en',
+    interpolation: {
+      escapeValue: false,
+    },
+    react: {
+      useSuspense: false,
+    },
+  });
 
+// Load saved language preference
+const loadSavedLanguage = async () => {
   try {
-    // Always use device/per-app locale as the primary language source
-    // On iOS, getLocales() returns the per-app language when set in iOS Settings
-    const deviceLang = Localization.getLocales()?.[0]?.languageCode || 'en';
-    lng = supportedLanguages.includes(deviceLang) ? deviceLang : 'en';
-
-    // Clear any stale saved language - we always follow the device/OS language
-    await AsyncStorage.removeItem('userLanguage');
+    const saved = await AsyncStorage.getItem('userLanguage');
+    if (saved && supportedLanguages.includes(saved)) {
+      await i18n.changeLanguage(saved);
+    } else {
+      const deviceLang = Localization.locale?.split('-')[0] || 'en';
+      const lang = supportedLanguages.includes(deviceLang) ? deviceLang : 'en';
+      await i18n.changeLanguage(lang);
+    }
   } catch (e) {
     console.log('Language load error:', e);
   }
+};
 
-  await i18n
-    .use(initReactI18next)
-    .init({
-      resources,
-      lng,
-      fallbackLng: 'en',
-      interpolation: { escapeValue: false },
-      react: { useSuspense: false },
-    });
-})();
+loadSavedLanguage();
 
 export default i18n;
