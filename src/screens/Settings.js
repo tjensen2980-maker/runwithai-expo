@@ -193,66 +193,29 @@ function ShoesSection({ profile, onProfileChange, runs, t }) {
   );
 }
 
-// ─── LANGUAGE SELECTOR ──────────────────────────────────────────────────────
-const LANGUAGES = [
-  { code: 'da', flag: '🇩🇰', name: 'Dansk' },
-  { code: 'en', flag: '🇬🇧', name: 'English' },
-  { code: 'de', flag: '🇩🇪', name: 'Deutsch' },
-  { code: 'fr', flag: '🇫🇷', name: 'Français' },
-  { code: 'es', flag: '🇪🇸', name: 'Español' },
-  { code: 'it', flag: '🇮🇹', name: 'Italiano' },
-  { code: 'pt', flag: '🇵🇹', name: 'Português' },
-  { code: 'nl', flag: '🇳🇱', name: 'Nederlands' },
-  { code: 'pl', flag: '🇵🇱', name: 'Polski' },
-  { code: 'sv', flag: '🇸🇪', name: 'Svenska' },
-  { code: 'fi', flag: '🇫🇮', name: 'Suomi' },
-  { code: 'el', flag: '🇬🇷', name: 'Ελληνικά' },
-  { code: 'cs', flag: '🇨🇿', name: 'Čeština' },
-  { code: 'ro', flag: '🇷🇴', name: 'Română' },
-  { code: 'hu', flag: '🇭🇺', name: 'Magyar' },
-  { code: 'bg', flag: '🇧🇬', name: 'Български' },
-  { code: 'hr', flag: '🇭🇷', name: 'Hrvatski' },
-  { code: 'sk', flag: '🇸🇰', name: 'Slovenčina' },
-  { code: 'sl', flag: '🇸🇮', name: 'Slovenščina' },
-  { code: 'lt', flag: '🇱🇹', name: 'Lietuvių' },
-  { code: 'lv', flag: '🇱🇻', name: 'Latviešu' },
-  { code: 'et', flag: '🇪🇪', name: 'Eesti' },
-  { code: 'ga', flag: '🇮🇪', name: 'Gaeilge' },
-  { code: 'mt', flag: '🇲🇹', name: 'Malti' },
-];
-
+// ─── LANGUAGE SELECTOR ────────────────────────────────────────────────────────
 function LanguageSelector() {
-  const [currentLang, setCurrentLang] = useState(i18n.language);
-
-  const changeLanguage = async (code) => {
-    await i18n.changeLanguage(code);
-    await AsyncStorage.setItem('userLanguage', code);
-    setCurrentLang(code);
-  };
+  const { t } = useTranslation();
+  const currentLang = i18n.language;
+  const langNames = { da: 'Dansk', en: 'English', de: 'Deutsch', fr: 'Français', es: 'Español', it: 'Italiano', pt: 'Português', nl: 'Nederlands', pl: 'Polski', sv: 'Svenska', fi: 'Suomi', el: 'Ελληνικά', cs: 'Čeština', ro: 'Română', hu: 'Magyar', bg: 'Български', hr: 'Hrvatski', sk: 'Slovenčina', sl: 'Slovenščina', lt: 'Lietuvių', lv: 'Latviešu', et: 'Eesti', ga: 'Gaeilge', mt: 'Malti' };
 
   return (
     <View>
-      <Text style={s.sectionTitle}>LANGUAGE</Text>
+      <Text style={s.sectionTitle}>{t('settings.sections.language') || 'LANGUAGE'}</Text>
       <View style={s.card}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View style={{ flexDirection: 'row', gap: 8 }}>
-            {LANGUAGES.map(lang => {
-              const isActive = currentLang === lang.code;
-              return (
-                <TouchableOpacity
-                  key={lang.code}
-                  style={[
-                    s.langBtn,
-                    isActive && { borderColor: colors.accent, backgroundColor: colors.accent + '15' }
-                  ]}
-                  onPress={() => changeLanguage(lang.code)}>
-                  <Text style={{ fontSize: 24 }}>{lang.flag}</Text>
-                  <Text style={[s.langBtnText, isActive && { color: colors.accent }]}>{lang.code.toUpperCase()}</Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </ScrollView>
+        <Text style={{ color: colors.text, fontSize: 15, fontWeight: '600', marginBottom: 8 }}>
+          {langNames[currentLang] || currentLang.toUpperCase()}
+        </Text>
+        <TouchableOpacity
+          style={s.exportBtn}
+          onPress={() => Linking.openSettings()}>
+          <Text style={s.exportBtnText}>
+            {t('settings.changeLanguageInSettings') || 'Change language in Settings'}
+          </Text>
+        </TouchableOpacity>
+        <Text style={{ color: colors.muted, fontSize: 11, marginTop: 6, textAlign: 'center', lineHeight: 16 }}>
+          {t('settings.languageHint') || 'Settings \u2192 RunWithAI \u2192 Language'}
+        </Text>
       </View>
     </View>
   );
