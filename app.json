@@ -2,7 +2,7 @@
   "expo": {
     "name": "RunWithAI",
     "slug": "runwithai",
-    "version": "1.6.9",
+    "version": "1.7.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -17,10 +17,13 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "app.runwithai",
-      "buildNumber": "25",
+      "buildNumber": "30",
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
-        "CFBundleLocalizations": ["da", "en"],
+        "CFBundleLocalizations": [
+          "da",
+          "en"
+        ],
         "CFBundleDevelopmentRegion": "da",
         "NSLocationWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter i realtid.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter, også når appen kører i baggrunden under dit løb.",
@@ -85,7 +88,15 @@
         }
       ],
       "expo-dev-client",
-      ["expo-localization", {"supportedLocales": ["da", "en"]}],
+      [
+        "expo-localization",
+        {
+          "supportedLocales": [
+            "da",
+            "en"
+          ]
+        }
+      ],
       "./plugins/withLocales"
     ],
     "owner": "tj2970",

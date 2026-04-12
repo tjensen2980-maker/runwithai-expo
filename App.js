@@ -264,7 +264,7 @@ function StatsTab({ runs, profile, level, isPro, onShowPricing }) {
             ))}
           </View>
           <TouchableOpacity
-            style={{ backgroundColor: colors.accent, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 20 }}
+            style={{ backgroundColor: colors.accent, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 10 }}
             onPress={onShowPricing}
           >
             <Text style={{ color: colors.black, fontWeight: 'bold', fontSize: 15 }}>{t('pro.stats.unlock')}</Text>
@@ -651,7 +651,7 @@ export default function App() {
       <StatusBar barStyle="dark-content" backgroundColor={colors.card} />
       <SafeAreaView style={s.safe} edges={['top']}>
         <View style={s.topBar}>
-          <AppLogo size={100} />
+          <AppLogo size={90} />
           <View style={s.topRight}>
             {isPro ? (
               <View style={s.proBadge}>
@@ -696,7 +696,7 @@ export default function App() {
 
 const s = StyleSheet.create({
   safe:            { flex: 1, backgroundColor: colors.bg },
-  topBar:          { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: -10, backgroundColor: colors.card, borderBottomWidth: 1, borderBottomColor: colors.border },
+  topBar:          { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 35, backgroundColor: colors.card, borderBottomWidth: 1, borderBottomColor: colors.border },
   logoText:        { fontSize: 17, letterSpacing: -0.5 },
   logoRun:         { color: colors.black, fontWeight: '900' },
   logoWith:        { color: colors.muted, fontWeight: '300', letterSpacing: 2 },
