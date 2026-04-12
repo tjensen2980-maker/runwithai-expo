@@ -36,22 +36,36 @@ function withLocales(config) {
     },
   ]);
 
-  // Step 2: Add .lproj files to Xcode project so iOS recognizes them
+  // Step 2: Add known regions and .lproj resource files to Xcode project
   config = withXcodeProject(config, (config) => {
-    const project = config.modResults;
+    const xcodeProject = config.modResults;
     const projectName = config.modRequest.projectName || 'RunWithAI';
 
-    LOCALES.forEach((locale) => {
-      const filePath = projectName + '/' + locale + '.lproj/InfoPlist.strings';
+    // Add all locales as known regions in the Xcode project
+    const knownRegions = xcodeProject.pbxProjectSection();
+    for (const key in knownRegions) {
+      if (knownRegions[key].knownRegions) {
+        const regions = knownRegions[key].knownRegions;
+        LOCALES.forEach((locale) => {
+          if (!regions.includes(locale)) {
+            regions.push(locale);
+          }
+        });
+      }
+    }
 
-      // Check if already added
-      const hasFile = project.hasFile(filePath);
-      if (!hasFile) {
-        project.addKnownRegion(locale);
-        project.addResourceFile(
-          filePath,
-          { lastKnownFileType: 'text.plist.strings' },
-          project.getFirstProject().uuid
+    // Add InfoPlist.strings as variant group resource for each locale
+    LOCALES.forEach((locale) => {
+      const lprojPath = projectName + '/' + locale + '.lproj/InfoPlist.strings';
+      // Only add if not already present
+      const files = xcodeProject.pbxFileReferenceSection();
+      const alreadyAdded = Object.values(files).some(
+        f => f && typeof f === 'object' && f.path && f.path.includes(locale + '.lproj/InfoPlist.strings')
+      );
+      if (!alreadyAdded) {
+        xcodeProject.addResourceFile(
+          lprojPath,
+          { lastKnownFileType: 'text.plist.strings' }
         );
       }
     });
