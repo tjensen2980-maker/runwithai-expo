@@ -1,4 +1,4 @@
-const { withDangerousMod, IOSConfig } = require('expo/config-plugins');
+const { withXcodeProject, withDangerousMod } = require('expo/config-plugins');
 const fs = require('fs');
 const path = require('path');
 
@@ -9,18 +9,18 @@ const LOCALES = [
 ];
 
 function withLocales(config) {
-  return withDangerousMod(config, [
+  // Step 1: Create .lproj directories and InfoPlist.strings files on disk
+  config = withDangerousMod(config, [
     'ios',
     (config) => {
       const iosRoot = config.modRequest.platformProjectRoot;
-
-      // Find the .xcodeproj to determine the project name
       const items = fs.readdirSync(iosRoot);
       const xcodeproj = items.find(i => i.endsWith('.xcodeproj'));
-      const projectName = xcodeproj ? xcodeproj.replace('.xcodeproj', '') : config.modRequest.projectName || 'RunWithAI';
+      const projectName = xcodeproj
+        ? xcodeproj.replace('.xcodeproj', '')
+        : config.modRequest.projectName || 'RunWithAI';
       const projectDir = path.join(iosRoot, projectName);
 
-      // Create .lproj directories with InfoPlist.strings
       LOCALES.forEach((locale) => {
         const lprojDir = path.join(projectDir, locale + '.lproj');
         if (!fs.existsSync(lprojDir)) {
@@ -35,6 +35,31 @@ function withLocales(config) {
       return config;
     },
   ]);
+
+  // Step 2: Add .lproj files to Xcode project so iOS recognizes them
+  config = withXcodeProject(config, (config) => {
+    const project = config.modResults;
+    const projectName = config.modRequest.projectName || 'RunWithAI';
+
+    LOCALES.forEach((locale) => {
+      const filePath = projectName + '/' + locale + '.lproj/InfoPlist.strings';
+
+      // Check if already added
+      const hasFile = project.hasFile(filePath);
+      if (!hasFile) {
+        project.addKnownRegion(locale);
+        project.addResourceFile(
+          filePath,
+          { lastKnownFileType: 'text.plist.strings' },
+          project.getFirstProject().uuid
+        );
+      }
+    });
+
+    return config;
+  });
+
+  return config;
 }
 
 module.exports = withLocales;
