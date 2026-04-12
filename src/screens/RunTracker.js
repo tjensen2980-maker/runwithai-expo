@@ -492,11 +492,11 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       const MAX_ACCURACY = 80;       // ← øget fra 50 (iOS er ofte 30-65m)
       
       const isMinDistance = dist >= MIN_DISTANCE;
-      const isNotTeleport = dist <= (fromBackground ? MAX_SINGLE_JUMP * 2 : MAX_SINGLE_JUMP);
+    const isNotTeleport = dist <= (fromBackground ? MAX_SINGLE_JUMP * 5 : MAX_SINGLE_JUMP);
       const isReasonableSpeed = speedKmh <= MAX_SPEED_KMH;
-      const isAccurate = accuracy <= (fromBackground ? MAX_ACCURACY * 1.5 : MAX_ACCURACY);
+    const isAccurate = accuracy <= (fromBackground ? 500 : MAX_ACCURACY);
       
-      const isValidPoint = isMinDistance && isNotTeleport && (fromBackground || isReasonableSpeed) && isAccurate;
+    const isValidPoint = (fromBackground || isMinDistance) && isNotTeleport && (fromBackground || isReasonableSpeed) && isAccurate;
       
       if (isValidPoint) {
         const newDistance = distanceRef.current + dist;
@@ -527,7 +527,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     } else {
       // Første position
       const accuracy = newPos.accuracy || 15;
-      if (accuracy <= 80) {  // ← øget fra 50
+      if (accuracy <= 200) {  // ← øget fra 50
         const firstPos = { ...newPos, speed: 0, segmentDistance: 0, isRunning: false };
         positionsRef.current = [firstPos];
         setPositions([firstPos]);
