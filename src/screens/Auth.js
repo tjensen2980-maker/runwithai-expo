@@ -433,7 +433,7 @@ export default function Auth({ onAuth }) {
         >
           <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
             <View style={styles.logoContainer}>
-              <AppLogo size={350} />
+              <AppLogo size={250} />
               <Text style={styles.tagline}>{t('auth.tagline')}</Text>
             </View>
 
@@ -962,8 +962,8 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: -150,
-    marginTop: -160,
+    marginBottom: -100,
+    marginTop: -100,
   },
   tagline: {
     fontSize: 16,
