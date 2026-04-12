@@ -1,0 +1,10 @@
+{
+  "CFBundleDisplayName": "RunWithAI",
+  "NSLocationWhenInUseUsageDescription": "RunWithAI uses your location to track your running routes in real time.",
+  "NSLocationAlwaysAndWhenInUseUsageDescription": "RunWithAI uses your location to track your running routes, even in the background.",
+  "NSMotionUsageDescription": "RunWithAI uses motion sensors to improve distance calculation.",
+  "NSHealthShareUsageDescription": "RunWithAI uses your health data to show heart rate and calories.",
+  "NSHealthUpdateUsageDescription": "RunWithAI saves your runs to Apple Health.",
+  "NSCameraUsageDescription": "RunWithAI uses the camera to take photos.",
+  "NSMicrophoneUsageDescription": "RunWithAI uses the microphone for voice commands while running."
+}
