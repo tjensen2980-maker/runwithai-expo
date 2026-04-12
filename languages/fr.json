@@ -1,10 +1,12 @@
 {
-  "CFBundleDisplayName": "RunWithAI",
-  "NSLocationWhenInUseUsageDescription": "RunWithAI utilise votre position pour suivre vos parcours de course en temps réel.",
-  "NSLocationAlwaysAndWhenInUseUsageDescription": "RunWithAI utilise votre position pour suivre vos parcours, même en arrière-plan.",
-  "NSMotionUsageDescription": "RunWithAI utilise les capteurs de mouvement pour améliorer le calcul de distance.",
-  "NSHealthShareUsageDescription": "RunWithAI utilise vos données de santé pour afficher la fréquence cardiaque et les calories.",
-  "NSHealthUpdateUsageDescription": "RunWithAI enregistre vos courses dans Apple Health.",
-  "NSCameraUsageDescription": "RunWithAI utilise la caméra pour prendre des photos.",
-  "NSMicrophoneUsageDescription": "RunWithAI utilise le microphone pour les commandes vocales."
+  "ios": {
+    "CFBundleDisplayName": "RunWithAI",
+    "NSLocationWhenInUseUsageDescription": "RunWithAI utilise votre position pour suivre vos parcours de course en temps réel.",
+    "NSLocationAlwaysAndWhenInUseUsageDescription": "RunWithAI utilise votre position pour suivre vos parcours de course, même en arrière-plan.",
+    "NSMotionUsageDescription": "RunWithAI utilise les capteurs de mouvement pour améliorer le calcul de la distance.",
+    "NSHealthShareUsageDescription": "RunWithAI utilise vos données de santé pour afficher la fréquence cardiaque et les calories.",
+    "NSHealthUpdateUsageDescription": "RunWithAI enregistre vos courses dans Apple Health.",
+    "NSCameraUsageDescription": "RunWithAI utilise la caméra pour prendre des photos.",
+    "NSMicrophoneUsageDescription": "RunWithAI utilise le microphone pour les commandes vocales pendant la course."
+  }
 }
