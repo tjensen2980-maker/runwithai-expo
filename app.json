@@ -20,10 +20,7 @@
       "buildNumber": "30",
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
-        "CFBundleLocalizations": [
-          "da",
-          "en"
-        ],
+        "CFBundleLocalizations": ["da", "en", "de", "fr", "es", "it", "pt", "nl", "pl", "sv", "fi", "el", "cs", "ro", "hu", "bg", "hr", "sk", "sl", "lt", "lv", "et", "ga", "mt"],
         "CFBundleDevelopmentRegion": "da",
         "NSLocationWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter i realtid.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter, også når appen kører i baggrunden under dit løb.",
@@ -91,10 +88,7 @@
       [
         "expo-localization",
         {
-          "supportedLocales": [
-            "da",
-            "en"
-          ]
+          "supportedLocales": ["da", "en", "de", "fr", "es", "it", "pt", "nl", "pl", "sv", "fi", "el", "cs", "ro", "hu", "bg", "hr", "sk", "sl", "lt", "lv", "et", "ga", "mt"]
         }
       ],
       "./plugins/withLocales"
@@ -107,7 +101,29 @@
     },
     "locales": {
       "da": "./languages/da.json",
-      "en": "./languages/en.json"
+      "en": "./languages/en.json",
+      "de": "./languages/de.json",
+      "fr": "./languages/fr.json",
+      "es": "./languages/es.json",
+      "it": "./languages/it.json",
+      "pt": "./languages/pt.json",
+      "nl": "./languages/nl.json",
+      "pl": "./languages/pl.json",
+      "sv": "./languages/sv.json",
+      "fi": "./languages/fi.json",
+      "el": "./languages/el.json",
+      "cs": "./languages/cs.json",
+      "ro": "./languages/ro.json",
+      "hu": "./languages/hu.json",
+      "bg": "./languages/bg.json",
+      "hr": "./languages/hr.json",
+      "sk": "./languages/sk.json",
+      "sl": "./languages/sl.json",
+      "lt": "./languages/lt.json",
+      "lv": "./languages/lv.json",
+      "et": "./languages/et.json",
+      "ga": "./languages/ga.json",
+      "mt": "./languages/mt.json"
     }
   }
 }
