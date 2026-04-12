@@ -373,9 +373,6 @@ export default function App() {
   const { t } = useTranslation();
 
   // ── SPROG FIX ──────────────────────────────────────────────────────────────
-  const [langReady, setLangReady] = useState(false);
-
-  if (!langReady) return null;
   // ──────────────────────────────────────────────────────────────────────────
 
   const [user, setUser]                       = useState(null);
