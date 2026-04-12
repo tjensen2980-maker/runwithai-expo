@@ -1,5 +1,4 @@
 import './src/i18n';
-import { languageReady } from './src/i18n';
 import { useTranslation } from 'react-i18next';
 import PricingPage, { useSubscription, Paywall } from './components/Pricing';
 import React, { useState, useEffect } from 'react';
@@ -375,10 +374,6 @@ export default function App() {
 
   // ── SPROG FIX ──────────────────────────────────────────────────────────────
   const [langReady, setLangReady] = useState(false);
-
-  useEffect(() => {
-    languageReady.then(() => setLangReady(true));
-  }, []);
 
   if (!langReady) return null;
   // ──────────────────────────────────────────────────────────────────────────
