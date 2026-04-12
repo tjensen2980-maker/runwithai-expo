@@ -578,8 +578,8 @@ export default function App() {
     <SafeAreaProvider>
       <StatusBar barStyle="light-content" backgroundColor={colors.black} />
       <View style={{ flex:1, backgroundColor: colors.black, alignItems:'center', justifyContent:'center' }}>
-        <AppLogo size={280} />
-        <ActivityIndicator color={colors.accent} style={{ marginTop: 32 }} />
+        <AppLogo size={200} />
+        <ActivityIndicator color={colors.accent} style={{ marginTop: 2 }} />
       </View>
     </SafeAreaProvider>
   );
@@ -651,7 +651,7 @@ export default function App() {
       <StatusBar barStyle="dark-content" backgroundColor={colors.card} />
       <SafeAreaView style={s.safe} edges={['top']}>
         <View style={s.topBar}>
-          <AppLogo size={168} />
+          <AppLogo size={100} />
           <View style={s.topRight}>
             {isPro ? (
               <View style={s.proBadge}>
