@@ -40,7 +40,7 @@
         "com.apple.developer.healthkit.access": []
       },
       "config": {
-        "googleMapsApiKey": "YOUR_GOOGLE_MAPS_API_KEY"
+        "googleMapsApiKey": "AIzaSyBWEWmIbDI57D9p2gsUnJrJmEzrnLdC808"
       }
     },
     "android": {
@@ -63,7 +63,7 @@
       ],
       "config": {
         "googleMaps": {
-          "apiKey": "YOUR_GOOGLE_MAPS_API_KEY"
+          "apiKey": "AIzaSyBWEWmIbDI57D9p2gsUnJrJmEzrnLdC808"
         }
       }
     },
