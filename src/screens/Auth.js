@@ -45,7 +45,7 @@ const PRIVACY_POLICY_URL = 'https://www.runwithai.app/privacy';
 const AppLogo = ({ size = 140 }) => (
   <Image 
     source={require('../../assets/icon.png')} 
-    style={{ width: size, height: size, borderRadius: size * 0.18 }}
+    style={{ width: size, height: size }}
     resizeMode="contain"
   />
 );
@@ -433,7 +433,7 @@ export default function Auth({ onAuth }) {
         >
           <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
             <View style={styles.logoContainer}>
-              <AppLogo size={250} />
+              <AppLogo size={160} />
               <Text style={styles.tagline}>{t('auth.tagline')}</Text>
             </View>
 
@@ -517,7 +517,7 @@ export default function Auth({ onAuth }) {
         >
           <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
             <View style={styles.logoContainer}>
-              <AppLogo size={240} />
+              <AppLogo size={140} />
               <Text style={styles.tagline}>{t('auth.resetPassword')}</Text>
             </View>
 
@@ -576,7 +576,7 @@ export default function Auth({ onAuth }) {
         >
           <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
             <View style={styles.logoContainer}>
-              <AppLogo size={240} />
+              <AppLogo size={140} />
               <Text style={styles.tagline}>{t('auth.createNewPassword')}</Text>
             </View>
 
@@ -660,7 +660,7 @@ export default function Auth({ onAuth }) {
         >
           <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
             <View style={styles.logoContainer}>
-              <AppLogo size={240} />
+              <AppLogo size={140} />
               <Text style={styles.tagline}>{t('auth.getStarted')}</Text>
             </View>
 
@@ -957,18 +957,18 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    padding: 0,
+    padding: 20,
     justifyContent: 'center',
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: -80,
-    marginTop: -30,
+    marginBottom: 16,
+    marginTop: 0,
   },
   tagline: {
     fontSize: 16,
     color: colors.muted,
-    marginTop: 80,
+    marginTop: 8,
   },
   formCard: {
     backgroundColor: colors.card,
