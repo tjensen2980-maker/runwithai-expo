@@ -99,8 +99,7 @@ function ProFeatureLock({ feature, description, onUpgrade }) {
         <Text style={proLockStyles.price}>{t('pro.fromOnly')}</Text>
       </View>
     </View>
-  );
-}
+setNextWorkout}
 
 const proLockStyles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 32, backgroundColor: colors.bg },
@@ -388,6 +387,31 @@ export default function App() {
   const [loading, setLoading]                 = useState(true);
   const [activityType, setActivityType]       = useState('run');
   const [showPricing, setShowPricing]         = useState(false);
+
+                // Compute nextWorkout from weekPlan
+        useEffect(() => {
+                       if (!weekPlan || weekPlan.length === 0) return;
+          const DAY_NAMES = ['Man','Tir','Ons','Tor','Fre','Lør','Søn'];
+          const now = new Date();
+                       const todayIdx = (now.getDay() + 6) % 7; // 0=Man..6=Søn
+                       // Look for today first, then upcoming days
+                                                                  for (let offset = 0; offset < 7; offset++) {
+            const idx = (todayIdx + offset) % 7;
+            const plan = weekPlan[idx];
+                        if (plan && plan.type !== 'rest' && !plan.rest && plan.km > 0) {
+                          const dayLabel = offset === 0 ? 'I dag' : offset === 1 ? 'I morgen' : DAY_NAMES[idx];
+              setNextWorkout({
+                ...DEFAULT_NEXT_WORKOUT,
+                                                                        name: { beginner: plan.workout, intermediate: plan.workout, advanced: plan.workout },
+                desc: { beginner: plan.workout, intermediate: plan.workout, advanced: plan.workout },
+                km: plan.km,
+                duration: '~' + Math.round(plan.km * 6),
+                dayLabel,
+      });
+              return;
+      }
+        }
+            }, [weekPlan]);
 
   const token = getAuthToken();
   const { subscription, isPro, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
