@@ -99,7 +99,8 @@ function ProFeatureLock({ feature, description, onUpgrade }) {
         <Text style={proLockStyles.price}>{t('pro.fromOnly')}</Text>
       </View>
     </View>
-setNextWorkout}
+  );
+}
 
 const proLockStyles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 32, backgroundColor: colors.bg },
