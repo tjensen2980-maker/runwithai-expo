@@ -319,7 +319,7 @@ function WorkoutCard({ workout, level, onNavigate, onStartActivity }) {
           <Text style={s.workoutName}>{workout.name[level]}</Text>
         </View>
         <View style={[s.badge, { backgroundColor: colors.accent + '12', borderColor: colors.accent + '35' }]}>
-          <Text style={[s.badgeText, { color: colors.accent }]}>{t('dashboard.workout.today')}</Text>
+          <Text style={[s.badgeText, { color: colors.accent }]}>{workout.dayLabel || t('dashboard.workout.today')}</Text>
         </View>
       </View>
 
