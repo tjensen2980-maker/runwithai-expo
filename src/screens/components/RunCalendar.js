@@ -10,7 +10,8 @@ export function RunCalendar({ runs, weekPlan, trainingPlan }) {
   const today = new Date();
   const [year, setYear] = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth());
-  const [selected, setSelected] = useState(null);
+  const todayKey = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+  const [selected, setSelected] = useState(todayKey);
 
   // Byg et map: 'YYYY-MM-DD' → løb
   const runMap = {};
