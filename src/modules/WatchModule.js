@@ -1,6 +1,6 @@
 /**
  * WatchModule.js
- * 
+ *
  * Wrapper modul til Apple Watch kommunikation via TurboModule.
  * Håndterer native bridge og event emission.
  */
@@ -12,137 +12,116 @@ const { RCTWatchConnectivity } = NativeModules;
 
 // Event emitter til at lytte på native events
 let eventEmitter = null;
+
+// Initialiser event emitter (kun iOS)
 if (Platform.OS === 'ios' && RCTWatchConnectivity) {
-  eventEmitter = new NativeEventEmitter(RCTWatchConnectivity);
+    try {
+          eventEmitter = new NativeEventEmitter(RCTWatchConnectivity);
+    } catch (e) {
+          console.warn('[WatchModule] Could not create event emitter:', e);
+    }
 }
 
-/**
- * WatchModule API
- */
 const WatchModule = {
-  /**
-   * Tjek om Watch connectivity er understøttet
-   */
-  isSupported: Platform.OS === 'ios' && !!RCTWatchConnectivity,
+    isSupported: Platform.OS === 'ios' && !!RCTWatchConnectivity,
 
-  /**
-   * Hent aktuel Watch status
-   * @returns {Promise<Object>} Watch status objekt
-   */
-  getWatchStatus: async () => {
-    if (!WatchModule.isSupported) {
-      return {
-        isPaired: false,
-        isWatchAppInstalled: false,
-        isReachable: false,
-      };
-    }
+    /**
+         * Hent Watch status (paired, installed, reachable)
+     */
+    getWatchStatus: async () => {
+          if (!WatchModule.isSupported) {
+                  return { isPaired: false, isWatchAppInstalled: false, isReachable: false };
+          }
+          try {
+                  const status = await RCTWatchConnectivity.getWatchStatus();
+                  return status;
+          } catch (err) {
+                  console.warn('[WatchModule] getWatchStatus error:', err);
+                  return {
+                            isPaired: false,
+                            isWatchAppInstalled: false,
+                            isReachable: false,
+                  };
+          }
+    },
 
-    try {
-      const status = await RCTWatchConnectivity.getWatchStatus();
-      return status;
-    } catch (err) {
-      console.warn('[WatchModule] getWatchStatus error:', err);
-      return {
-        isPaired: false,
-        isWatchAppInstalled: false,
-        isReachable: false,
-      };
-    }
-  },
+    /**
+         * Send data til Apple Watch
+     */
+    sendUpdateToWatch: async (update) => {
+          if (!WatchModule.isSupported) {
+                  console.warn('[WatchModule] Watch connectivity not supported');
+                  return null;
+          }
+          try {
+                  const result = await RCTWatchConnectivity.sendUpdateToWatch(update);
+                  return result;
+          } catch (err) {
+                  console.error('[WatchModule] sendUpdateToWatch error:', err);
+                  throw err;
+          }
+    },
 
-  /**
-   * Send data til Apple Watch
-   * @param {Object} update - Data at sende
-   * @returns {Promise<Object>} Resultat
-   */
-  sendUpdateToWatch: async (update) => {
-    if (!WatchModule.isSupported) {
-      console.warn('[WatchModule] Watch connectivity not supported');
-      return { status: 'unsupported' };
-    }
+    /**
+         * Tilføj listener for beskeder fra Watch
+     */
+    addListener: (callback) => {
+          if (!eventEmitter) {
+                  console.warn('[WatchModule] Event emitter not available');
+                  return { remove: () => {} };
+          }
 
-    try {
-      const result = await RCTWatchConnectivity.sendUpdateToWatch(update);
-      return result;
-    } catch (err) {
-      console.error('[WatchModule] sendUpdateToWatch error:', err);
-      throw err;
-    }
-  },
+      const subscription = eventEmitter.addListener('WatchMessage', (event) => {
+              callback(event);
+      });
 
-  /**
-   * Tilføj listener for beskeder fra Watch
-   * @param {Function} callback - Callback funktion
-   * @returns {Object} Subscription objekt med remove() metode
-   */
-  addListener: (callback) => {
-    if (!eventEmitter) {
-      console.warn('[WatchModule] Event emitter not available');
-      return { remove: () => {} };
-    }
+      return subscription;
+    },
 
-    const subscription = eventEmitter.addListener('WatchMessage', (event) => {
-      callback(event);
-    });
+    /**
+         * Tilføj listener for workout complete fra Watch
+     */
+    addWorkoutCompleteListener: (callback) => {
+          if (!eventEmitter) {
+                  return { remove: () => {} };
+          }
 
-    return subscription;
-  },
+      const subscription = eventEmitter.addListener('WatchWorkoutComplete', (event) => {
+              callback(event);
+      });
 
-  /**
-   * Tilføj listener for reachability ændringer
-   * @param {Function} callback - Callback funktion med boolean parameter
-   * @returns {Object} Subscription objekt
-   */
-  addReachabilityListener: (callback) => {
-    if (!eventEmitter) {
-      return { remove: () => {} };
-    }
+      return subscription;
+    },
 
-    const subscription = eventEmitter.addListener('WatchReachability', (event) => {
-      callback(event.isReachable);
-    });
+    /**
+         * Tilføj listener for live updates fra Watch
+     */
+    addLiveUpdateListener: (callback) => {
+          if (!eventEmitter) {
+                  return { remove: () => {} };
+          }
 
-    return subscription;
-  },
+      const subscription = eventEmitter.addListener('WatchLiveUpdate', (event) => {
+              callback(event);
+      });
 
-  /**
-   * Send application context til Watch
-   * Application context er persistent og sendes når Watch app åbnes
-   * @param {Object} context - Context data
-   */
-  updateApplicationContext: async (context) => {
-    if (!WatchModule.isSupported) {
-      return { status: 'unsupported' };
-    }
+      return subscription;
+    },
 
-    try {
-      const result = await RCTWatchConnectivity.updateApplicationContext(context);
-      return result;
-    } catch (err) {
-      console.error('[WatchModule] updateApplicationContext error:', err);
-      throw err;
-    }
-  },
+    /**
+         * Tilføj listener for reachability ændringer
+     */
+    addReachabilityListener: (callback) => {
+          if (!eventEmitter) {
+                  return { remove: () => {} };
+          }
 
-  /**
-   * Send fil til Watch
-   * @param {string} filePath - Sti til fil
-   * @param {Object} metadata - Metadata om filen
-   */
-  transferFile: async (filePath, metadata = {}) => {
-    if (!WatchModule.isSupported) {
-      return { status: 'unsupported' };
-    }
+      const subscription = eventEmitter.addListener('WatchReachabilityChanged', (event) => {
+              callback(event.isReachable);
+      });
 
-    try {
-      const result = await RCTWatchConnectivity.transferFile(filePath, metadata);
-      return result;
-    } catch (err) {
-      console.error('[WatchModule] transferFile error:', err);
-      throw err;
-    }
-  },
+      return subscription;
+    },
 };
 
 export default WatchModule;
