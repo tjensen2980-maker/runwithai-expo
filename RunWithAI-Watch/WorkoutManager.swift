@@ -76,7 +76,7 @@ class WorkoutManager: NSObject, ObservableObject {
           // Auto-pause
           private var autoPauseEnabled = true
           private var lastMovementDate = Date()
-          private let autoPauseSpeedThreshold: Double = 0.5
+          private let autoPauseSpeedThreshold: Double = 0.3
 
           override init() {
                         super.init()
@@ -303,7 +303,7 @@ class WorkoutManager: NSObject, ObservableObject {
                         if speed < autoPauseSpeedThreshold {
                                           if !autoPaused && !isPaused {
                                                                 let timeSinceLastMovement = Date().timeIntervalSince(lastMovementDate)
-                                                                if timeSinceLastMovement > 3.0 {
+                                                                if timeSinceLastMovement > 8.0 {
                                                                                           DispatchQueue.main.async { self.autoPaused = true }
                                                                                           pauseWorkout()
                                                                                           WKInterfaceDevice.current().play(.stop)
@@ -478,34 +478,31 @@ class WorkoutManager: NSObject, ObservableObject {
           }
 
           // MARK: - Phone Communication
-          private func sendWorkoutSummaryToPhone() {
-                        guard WCSession.default.isReachable else { return }
+    private func sendWorkoutSummaryToPhone() {
+        let splitData = splits.map { split -> [String: Any] in
+            return [
+                "km": split.km,
+                "pace": split.pace,
+                "time": split.time,
+                "heartRate": split.heartRate
+            ]
+        }
 
-                        let splitData = splits.map { split -> [String: Any] in
-                                                                return [
-                                                                                      "km": split.km,
-                                                                                      "pace": split.pace,
-                                                                                      "time": split.time,
-                                                                                      "heartRate": split.heartRate
-                                                                ]
-                                                   }
+        let summary: [String: Any] = [
+            "type": "WORKOUT_COMPLETE",
+            "distance": distance,
+            "duration": elapsedSeconds,
+            "calories": activeCalories,
+            "avgHeartRate": heartRateAverage,
+            "avgPace": averagePace,
+            "totalSteps": totalSteps,
+            "cadence": currentCadence,
+            "totalAscent": totalAscent,
+            "splits": splitData,
+            "timestamp": Date().timeIntervalSince1970
+        ]
 
-                        let summary: [String: Any] = [
-                                          "type": "WORKOUT_COMPLETE",
-                                          "distance": distance,
-                                          "duration": elapsedSeconds,
-                                          "calories": activeCalories,
-                                          "avgHeartRate": heartRate,
-                                          "avgPace": averagePace,
-                                          "totalSteps": totalSteps,
-                                          "cadence": currentCadence,
-                                          "totalAscent": totalAscent,
-                                          "splits": splitData,
-                                          "timestamp": Date().timeIntervalSince1970
-                        ]
-
-                        WCSession.default.sendMessage(summary, replyHandler: nil, errorHandler: nil)
-          }
+        WatchConnectivityManager.shared.sendWorkoutEnded(summary: summary)          }
 
           func sendLiveDataToPhone() {
                         guard WCSession.default.isReachable else { return }
