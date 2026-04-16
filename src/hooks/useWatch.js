@@ -16,7 +16,7 @@ import { Platform } from 'react-native';
 import WatchModule from '../modules/WatchModule';
 import { saveRun } from '../../data';
 
-export function useWatch({ onCommand, onWorkoutComplete, enabled = true = true } = {}) {
+export function useWatch({ onCommand, onWorkoutComplete, enabled = true } = {}) {
     const [isReachable, setIsReachable] = useState(false);
     const [isPaired, setIsPaired] = useState(false);
     const [isWatchAppInstalled, setIsWatchAppInstalled] = useState(false);
