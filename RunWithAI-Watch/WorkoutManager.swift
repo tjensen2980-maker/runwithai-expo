@@ -493,7 +493,7 @@ class WorkoutManager: NSObject, ObservableObject {
             "distance": distance,
             "duration": elapsedSeconds,
             "calories": activeCalories,
-            "avgHeartRate": heartRateAverage,
+            "avgHeartRate": heartRate,
             "avgPace": averagePace,
             "totalSteps": totalSteps,
             "cadence": currentCadence,
