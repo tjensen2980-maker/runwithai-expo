@@ -11,6 +11,7 @@ import {
   colors, DEFAULT_WEEK_PLAN, DEFAULT_NEXT_WORKOUT, DEFAULT_PROFILE,
   loadProfile, saveProfile, loadWeekPlan, saveWeekPlan, setAuthToken, generateTrainingPlan, getAuthToken, loadTrainingPlan, loadRuns,
 } from './src/data';
+import { useWatch } from './src/hooks/useWatch';
 import Auth from './src/screens/Auth';
 import Onboarding from './src/screens/Onboarding';
 import Dashboard from './src/screens/Dashboard';
@@ -374,6 +375,12 @@ export default function App() {
 
   // ── SPROG FIX ──────────────────────────────────────────────────────────────
   // ──────────────────────────────────────────────────────────────────────────
+    // Apple Watch integration - lytter efter workout data fra Watch
+        useWatch({
+          onWorkoutComplete: (run, saved) => {
+            console.log('[App] Watch workout saved:', saved ? 'success' : 'failed');
+      },
+      });
 
   const [user, setUser]                       = useState(null);
   const [showOnboarding, setShowOnboarding]   = useState(true);
