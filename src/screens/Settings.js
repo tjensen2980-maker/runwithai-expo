@@ -7,6 +7,7 @@ import { Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
+import WatchModule from '../modules/WatchModule';
 
 function Field({ label, value, onChange, keyboard, placeholder }) {
   return (
@@ -221,6 +222,86 @@ function LanguageSelector() {
   );
 }
 
+
+// Apple Watch sync sektion
+function WatchSyncSection() {
+  const [watchStatus, setWatchStatus] = React.useState({ isPaired: false, isReachable: false });
+  const [syncing, setSyncing] = React.useState(false);
+  const [lastSync, setLastSync] = React.useState(null);
+
+  React.useEffect(() => {
+    WatchModule.getWatchStatus().then(setWatchStatus).catch(() => {});
+  }, []);
+
+  const handleSync = async () => {
+    setSyncing(true);
+    try {
+      const { loadWeekPlan } = require('../../data');
+      const plan = await loadWeekPlan();
+      if (plan && plan.length > 0) {
+        const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+        const todayPlan = plan.find(p => p.day && p.day.toLowerCase() === today) || plan[0];
+        await WatchModule.sendTodayTraining(todayPlan, plan);
+        setLastSync(new Date().toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }));
+      }
+    } catch (err) {
+      console.warn('[Settings] Watch sync error:', err);
+    }
+    setSyncing(false);
+  };
+
+  return (
+    <View style={{ marginTop: 18, marginBottom: 4 }}>
+      <Text style={{ color: '#888', fontSize: 11, fontWeight: '700', letterSpacing: 1.5, marginBottom: 8, marginLeft: 2 }}>
+        APPLE WATCH
+      </Text>
+      <View style={{ backgroundColor: '#1a1a1a', borderRadius: 14, padding: 14 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <Text style={{ fontSize: 20 }}>\u231A</Text>
+            <View>
+              <Text style={{ color: '#fff', fontSize: 14, fontWeight: '600' }}>
+                {watchStatus.isPaired ? 'Watch tilsluttet' : 'Watch ikke tilsluttet'}
+              </Text>
+              <Text style={{ color: watchStatus.isReachable ? '#4ade80' : '#888', fontSize: 12 }}>
+                {watchStatus.isReachable ? '\u25CF Tilg\u00E6ngelig' : '\u25CB Ikke tilg\u00E6ngelig'}
+              </Text>
+            </View>
+          </View>
+        </View>
+        <TouchableOpacity
+          onPress={handleSync}
+          disabled={syncing || !watchStatus.isReachable}
+          style={{
+            backgroundColor: watchStatus.isReachable ? '#4ade80' : '#333',
+            borderRadius: 10,
+            paddingVertical: 10,
+            paddingHorizontal: 16,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 8,
+          }}
+        >
+          <Text style={{ color: watchStatus.isReachable ? '#000' : '#666', fontWeight: '700', fontSize: 14 }}>
+            {syncing ? 'Synkroniserer...' : '\u21BB  Synk tr\u00E6ningsplan til Watch'}
+          </Text>
+        </TouchableOpacity>
+        {lastSync && (
+          <Text style={{ color: '#666', fontSize: 11, marginTop: 6, textAlign: 'center' }}>
+            Sidst synkroniseret: {lastSync}
+          </Text>
+        )}
+        {!watchStatus.isReachable && (
+          <Text style={{ color: '#555', fontSize: 11, marginTop: 6, textAlign: 'center' }}>
+            \u00C5bn Watch-appen for at synkronisere
+          </Text>
+        )}
+      </View>
+    </View>
+  );
+}
+
 export default function Settings({ profile, level, onProfileChange, onLevelChange, onLogout, onBack }) {
   const { t } = useTranslation();
   const [form, setForm] = useState(profile || {});
@@ -377,6 +458,7 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
   return (
     <SafeAreaView style={s.safe} edges={['top']}>
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
+        <WatchSyncSection />
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
           {onBack && (
             <TouchableOpacity onPress={onBack} style={{ marginRight: 12, padding: 4 }}>
