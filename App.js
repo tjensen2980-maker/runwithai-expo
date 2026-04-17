@@ -338,6 +338,23 @@ function TabBar({ tab, setTab }) {
       {TABS.map(t_item => {
 
 // ─── TAB IKONER (React Native SVG) ───────────────────────────────────────────
+        const active = tab === t_item.id;
+        return (
+          <TouchableOpacity
+            key={t_item.id}
+            style={[s.tabItem, t_item.id === "run" && s.tabItemRun]}
+            onPress={() => { if (t_item.id !== "run") setTab(t_item.id); }}
+          >
+            {t_item.Icon && <View style={s.tabIconWrap}><t_item.Icon active={active} /></View>}
+            <Text style={[s.tabLabel, active && s.tabLabelActive]}>{t_item.label}</Text>
+            <View style={[s.tabActiveDot, { opacity: active ? 1 : 0 }]} />
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+}
+
 const IconPlan = ({ active }) => {
   const color = active ? '#0a0a0a' : '#b0b0b0';
   return (
