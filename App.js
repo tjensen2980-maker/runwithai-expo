@@ -104,6 +104,112 @@ const proLockStyles = StyleSheet.create({
   price: { color: colors.muted, fontSize: 13 },
 });
 
+function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, onShowPricing }) {
+  const { t } = useTranslation();
+  const [activeTab, setActiveTab] = useState('start');
+  const lastRun = runs && runs.length > 0 ? [...runs].sort((a,b) => new Date(b.date||0) - new Date(a.date||0))[0] : null;
+  return (
+    <View style={{ flex: 1, backgroundColor: colors.bg }}>
+      <View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingTop: 16, gap: 10 }}>
+        {[['start', t('run.startRun')],['routes', t('run.aiRoutes')]].map(([id, label]) => (
+          <TouchableOpacity key={id}
+            style={{ flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center', backgroundColor: activeTab === id ? colors.black : colors.surface, borderWidth: 2, borderColor: activeTab === id ? colors.black : colors.border2 }}
+            onPress={() => setActiveTab(id)}>
+            <Text style={{ fontSize: 14, fontWeight: '800', color: activeTab === id ? colors.card : colors.muted }}>
+              {label}{id === 'routes' && !isPro && ' 🔒'}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      {activeTab === 'start' ? (
+        <ScrollView contentContainerStyle={{ padding: 16 }}>
+          <TouchableOpacity onPress={() => onStartActivity('run')}
+            style={{ backgroundColor: colors.black, borderRadius: 20, padding: 28, marginBottom: 12, alignItems: 'center' }}>
+            <Text style={{ fontSize: 40, marginBottom: 8 }}>🏃</Text>
+            <Text style={{ fontSize: 22, fontWeight: '900', color: colors.card, letterSpacing: -0.5 }}>{t('run.title')}</Text>
+            <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>{t('run.gpsTracking')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => onStartActivity('walk')}
+            style={{ backgroundColor: colors.surface, borderRadius: 20, padding: 28, marginBottom: 20, alignItems: 'center', borderWidth: 2, borderColor: colors.border2 }}>
+            <Text style={{ fontSize: 40, marginBottom: 8 }}>🚶</Text>
+            <Text style={{ fontSize: 22, fontWeight: '900', color: colors.black, letterSpacing: -0.5 }}>{t('run.walk')}</Text>
+            <Text style={{ fontSize: 13, color: colors.muted, marginTop: 4 }}>{t('run.walkTracking')}</Text>
+          </TouchableOpacity>
+          {lastRun && (
+            <View style={{ backgroundColor: colors.card, borderRadius: 16, padding: 18, borderWidth: 1, borderColor: colors.border }}>
+              <Text style={{ fontSize: 10, color: colors.muted, letterSpacing: 2, fontWeight: '700', marginBottom: 8 }}>{t('run.lastActivity')}</Text>
+              <View style={{ flexDirection: 'row', gap: 20 }}>
+                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.accent }}>{lastRun.km || '–'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.km')}</Text></View>
+                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.text }}>{lastRun.duration || '–'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.time')}</Text></View>
+                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.text }}>{lastRun.pace || '–'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.pace')}</Text></View>
+              </View>
+            </View>
+          )}
+        </ScrollView>
+      ) : (
+        isPro ? <RoutesTabWrapper profile={profile} runs={runs} /> : <ProFeatureLock feature={t('pro.aiRoutes.title')} description={t('pro.aiRoutes.description')} onUpgrade={onShowPricing} />
+      )}
+    </View>
+  );
+}
+function CalendarTab({ runs, weekPlan, trainingPlan, isPro, onShowPricing }) {
+  const { t } = useTranslation();
+  if (!isPro) return <ProFeatureLock feature={t('pro.calendar.title')} description={t('pro.calendar.description')} onUpgrade={onShowPricing} />;
+  return (
+    <ScrollView style={{ flex: 1, backgroundColor: colors.bg }} contentContainerStyle={{ padding: 16, paddingBottom: 100 }}>
+      <Text style={{ fontSize: 11, color: colors.muted, letterSpacing: 2, fontWeight: '700', marginBottom: 16 }}>{t('tabs.calendar').toUpperCase()}</Text>
+      <RunCalendar runs={runs} weekPlan={weekPlan} trainingPlan={trainingPlan} />
+    </ScrollView>
+  );
+}
+function StatsTab({ runs, profile, level, isPro, onShowPricing }) {
+  const { t } = useTranslation();
+  if (!isPro) {
+    const totalKm = runs.reduce((sum, r) => sum + (parseFloat(r.km) || 0), 0);
+    return (
+      <ScrollView style={{ flex: 1, backgroundColor: colors.bg }} contentContainerStyle={{ padding: 16 }}>
+        <View style={{ backgroundColor: colors.card, borderRadius: 16, padding: 20, marginBottom: 16, borderWidth: 1, borderColor: colors.border }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+            <View style={{ alignItems: 'center' }}><Text style={{ fontSize: 32, fontWeight: '900', color: colors.accent }}>{runs.length}</Text><Text style={{ fontSize: 12, color: colors.muted }}>{t('stats.runs')}</Text></View>
+            <View style={{ alignItems: 'center' }}><Text style={{ fontSize: 32, fontWeight: '900', color: colors.text }}>{totalKm.toFixed(1)}</Text><Text style={{ fontSize: 12, color: colors.muted }}>{t('stats.totalKm')}</Text></View>
+          </View>
+        </View>
+        <TouchableOpacity style={{ backgroundColor: colors.accent, borderRadius: 12, paddingVertical: 14, alignItems: 'center' }} onPress={onShowPricing}>
+          <Text style={{ color: colors.black, fontWeight: 'bold', fontSize: 15 }}>{t('pro.stats.unlock')}</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    );
+  }
+  return <Stats runs={runs} profile={profile} level={level} />;
+}
+function PlanTab({ level, nextWorkout, weekPlan, planChanges, profile, runs, onNavigate, onStartActivity, trainingPlan, onPlanUpdate, isPro, onShowPricing }) {
+  const { t } = useTranslation();
+  const [activeTab, setActiveTab] = useState('plan');
+  return (
+    <View style={{ flex: 1 }}>
+      <View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingTop: 16, gap: 10, backgroundColor: colors.bg }}>
+        {[['plan', t('tabs.plan')],['coach','AI Coach']].map(([id, label]) => (
+          <TouchableOpacity key={id}
+            style={{ flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center', backgroundColor: activeTab === id ? colors.black : colors.surface, borderWidth: 2, borderColor: activeTab === id ? colors.black : colors.border2 }}
+            onPress={() => setActiveTab(id)}>
+            <Text style={{ fontSize: 14, fontWeight: '800', color: activeTab === id ? colors.card : colors.muted }}>
+              {label}{id === 'coach' && !isPro && ' 🔒'}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      <View style={{ flex: 1 }}>
+        {activeTab === 'plan'
+          ? <Dashboard level={level} nextWorkout={nextWorkout} weekPlan={weekPlan} planChanges={planChanges} profile={profile} runs={runs} onNavigate={onNavigate} onStartActivity={onStartActivity} />
+          : isPro
+            ? <Chat level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} onPlanUpdate={onPlanUpdate} runs={runs} />
+            : <ProFeatureLock feature={t('pro.coach.title')} description={t('pro.coach.description')} onUpgrade={onShowPricing} />
+        }
+      </View>
+    </View>
+  );
+}
+
 function RoutesTabWrapper({ profile, runs }) {
   return <RoutesTabComponent profile={profile} runs={runs} />;
 }
