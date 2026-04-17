@@ -122,6 +122,25 @@ const WatchModule = {
 
       return subscription;
     },
+
+    /**
+     * Send data til Watch via transferUserInfo (background, guaranteed delivery)
+     * Bruges som fallback når Watch ikke er nåeligt
+     */
+    transferUserInfo: async (data) => {
+        if (!WatchModule.isSupported) {
+            console.warn('[WatchModule] Watch connectivity not supported');
+            return null;
+        }
+        try {
+            const result = await RCTWatchConnectivity.transferUserInfo(data);
+            return result;
+        } catch (err) {
+            console.error('[WatchModule] transferUserInfo error:', err);
+            throw err;
+        }
+    },
+
 };
 
 export default WatchModule;
