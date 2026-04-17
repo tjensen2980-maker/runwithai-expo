@@ -2,7 +2,7 @@
  * useWatch.js
  *
  * Custom hook til bidirektionel kommunikation med Apple Watch.
- * Bruger WatchConnectivity framework via native bridge.
+ * Bruger WatchConnectivity framework via native bridge (RCTWatchConnectivity).
  *
  * Features:
  * - Send løbedata til Watch (distance, tempo, puls)
@@ -17,218 +17,170 @@ import WatchModule from '../modules/WatchModule';
 import { saveRun } from '../../data';
 
 export function useWatch({
-      enabled = true,
-      onCommand,
-      onWorkoutComplete,
+    enabled = true,
+    onCommand,
+    onWorkoutComplete,
 } = {}) {
-      const [isReachable, setIsReachable] = useState(false);
-      const [isPaired, setIsPaired] = useState(false);
-      const [isWatchAppInstalled, setIsWatchAppInstalled] = useState(false);
-      const [lastWatchWorkout, setLastWatchWorkout] = useState(null);
+    const [isReachable, setIsReachable] = useState(false);
+    const [isPaired, setIsPaired] = useState(false);
+    const [isWatchAppInstalled, setIsWatchAppInstalled] = useState(false);
+    const [lastWatchWorkout, setLastWatchWorkout] = useState(null);
 
-  const messageSubscriptionRef = useRef(null);
-      const workoutSubscriptionRef = useRef(null);
-      const reachabilitySubscriptionRef = useRef(null);
+    const messageSubscriptionRef = useRef(null);
+    const workoutSubscriptionRef = useRef(null);
+    const liveUpdateSubscriptionRef = useRef(null);
+    const reachabilitySubscriptionRef = useRef(null);
 
-  useEffect(() => {
-          if (!enabled || Platform.OS !== 'ios') return;
+    // Gem todayTraining reference så vi kan sende den hurtigt
+    const todayTrainingRef = useRef(null);
 
-                // Håndter kommandoer fra Watch
-                messageSubscriptionRef.current = WatchModule.addListener((event) => {
-                          if (event.command) {
-                                      // Svar på GET_TODAY_TRAINING request fra uret
-                            if (event.command === 'GET_TODAY_TRAINING') {
-                                          // onCommand callback bruges til at bede App.js sende planen
-                                        onCommand?.('GET_TODAY_TRAINING', event.data);
-                            } else {
-                                          onCommand?.(event.command, event.data);
-                            }
-                          }
-                });
-
-                // Håndter workout complete fra Watch
-                workoutSubscriptionRef.current = WatchModule.addWorkoutCompleteListener(async (event) => {
-                          console.log('[Watch] Workout complete received:', event);
-                          setLastWatchWorkout(event);
-
-                                                                                              // Konverter Watch data til server format og gem
-                                                                                              try {
-                                                                                                          const distanceKm = (event.distanceMeters || 0) / 1000;
-                                                                                                          const durationSecs = event.durationSeconds || 0;
-                                                                                                          const paceSecsPerKm = distanceKm > 0 ? durationSecs / distanceKm : 0;
-
-                            const run = {
-                                          km: parseFloat(distanceKm.toFixed(2)),
-                                          duration: durationSecs,
-                                          duration_secs: durationSecs,
-                                          pace: parseFloat(paceSecsPerKm.toFixed(1)),
-                                          pace_secs_per_km: parseFloat(paceSecsPerKm.toFixed(1)),
-                                          heart_rate: event.avgHeartRate || 0,
-                                          avg_hr: event.avgHeartRate || 0,
-                                          calories: event.calories || 0,
-                                          cadence: event.cadence || 0,
-                                          total_steps: event.totalSteps || 0,
-                                          total_ascent: event.totalAscent || 0,
-                                          source: 'apple_watch',
-                                          date: new Date(event.timestamp ? event.timestamp * 1000 : Date.now()).toISOString(),
-                                          splits: (event.splits || []).map(s => ({
-                                                          km: s.km,
-                                                          pace: s.pace,
-                                                          time: s.time,
-                                                          heartRate: s.heartRate,
-                                          })),
-                            };
-
-                            const saved = await saveRun(run);
-                                                                                                          console.log('[Watch] Run saved to server:', saved);
-                                                                                                          onWorkoutComplete?.(run, saved);
-                                                                                                  } catch (err) {
-                                                                                                          console.error('[Watch] Failed to save watch workout:', err);
-                                                                                                          onWorkoutComplete?.(event, null);
-                                                                                                  }
-                });
-
-                // Lyt efter reachability ændringer
-                reachabilitySubscriptionRef.current = WatchModule.addReachabilityListener((reachable) => {
-                          console.log('[Watch] Reachability changed:', reachable);
-                          setIsReachable(reachable);
-                });
-
-                // Tjek initial status
-                WatchModule.getWatchStatus().then((status) => {
-                          setIsPaired(status.isPaired);
-                          setIsWatchAppInstalled(status.isWatchAppInstalled);
-                          setIsReachable(status.isReachable);
-                }).catch((err) => {
-                          console.warn('[Watch] Could not get status:', err);
-                });
-
-                return () => {
-                          messageSubscriptionRef.current?.remove?.();
-                          workoutSubscriptionRef.current?.remove?.();
-                          reachabilitySubscriptionRef.current?.remove?.();
-                };
-  }, [enabled]);
-
-  /**
-       * Send løbedata til Watch under aktivt løb
-       */
-  const sendRunUpdate = useCallback(async (data) => {
-          if (!enabled || Platform.OS !== 'ios') return;
-
-                                        try {
-                                                  await WatchModule.sendUpdateToWatch({
-                                                              type: 'RUN_UPDATE',
-                                                              distance: data.distance,
-                                                              duration: data.duration,
-                                                              pace: data.pace,
-                                                              heartRate: data.heartRate,
-                                                              calories: data.calories,
-                                                              timestamp: Date.now(),
-                                                  });
-                                        } catch (err) {
-                                                  console.warn('[Watch] Failed to send run update:', err);
-                                        }
-  }, [enabled]);
-
-  /**
-       * Send besked til Watch om at starte løb
-       */
-  const sendStartCommand = useCallback(async () => {
-          if (!enabled || Platform.OS !== 'ios') return;
-
-                                           try {
-                                                     await WatchModule.sendUpdateToWatch({
-                                                                 type: 'COMMAND',
-                                                                 command: 'START_RUN',
-                                                                 timestamp: Date.now(),
-                                                     });
-                                           } catch (err) {
-                                                     console.warn('[Watch] Failed to send start command:', err);
-                                           }
-  }, [enabled]);
-
-  /**
-       * Send stop kommando til Watch
-       */
-  const sendStopCommand = useCallback(async () => {
-          if (!enabled || Platform.OS !== 'ios') return;
-
-                                          try {
-                                                    await WatchModule.sendUpdateToWatch({
-                                                                type: 'COMMAND',
-                                                                command: 'STOP_RUN',
-                                                                timestamp: Date.now(),
-                                                    });
-                                          } catch (err) {
-                                                    console.warn('[Watch] Failed to send stop command:', err);
-                                          }
-  }, [enabled]);
-
-  /**
-       * Send pause kommando til Watch
-       */
-  const sendPauseCommand = useCallback(async () => {
-          if (!enabled || Platform.OS !== 'ios') return;
-
-                                           try {
-                                                     await WatchModule.sendUpdateToWatch({
-                                                                 type: 'COMMAND',
-                                                                 command: 'PAUSE_RUN',
-                                                                 timestamp: Date.now(),
-                                                     });
-                                           } catch (err) {
-                                                     console.warn('[Watch] Failed to send pause command:', err);
-                                           }
-  }, [enabled]);
-
-  /**
-       * Send dagens træningsplan til Watch (som Garmin)
-       * @param {object} plan - { name, km, description, workout, type }
-       */
-  const sendTodayTraining = useCallback(async (plan) => {
-          if (!enabled || Platform.OS !== 'ios' || !plan) return;
-
-                                            const payload = {
-                                                      type: 'TODAY_TRAINING',
-                                                      name: plan.name || plan.workout || 'Dagens træning',
-                                                      km: plan.km || 0,
-                                                      description: plan.description || plan.workout || '',
-                                                      workoutType: plan.type || 'run',
-                                                      date: new Date().toISOString(),
-                                                      timestamp: Date.now(),
-                                            };
-
-                                            try {
-                                                      // Prøv direkte besked først (kræver at uret er nåeligt)
-            await WatchModule.sendUpdateToWatch(payload);
-                                                      console.log('[Watch] Today training sent via message');
-                                            } catch (err) {
-                                                      // Fallback: brug transferUserInfo (leveres i baggrunden)
-            try {
-                        await WatchModule.transferUserInfo(payload);
-                        console.log('[Watch] Today training sent via transferUserInfo');
-            } catch (err2) {
-                        console.warn('[Watch] Failed to send today training:', err2);
+    // Funktion til at sende dagens træning til Watch
+    const sendTodayTraining = useCallback(async (todayPlan, fullPlan) => {
+        if (!WatchModule.isSupported) return;
+        
+        const payload = {
+            todayTraining: todayPlan || null,
+            trainingPlan: fullPlan || [],
+            timestamp: Date.now(),
+        };
+        
+        // Gem lokalt til hurtig adgang
+        todayTrainingRef.current = payload;
+        
+        console.log('[useWatch] Sending today training to Watch:', todayPlan?.type || 'null');
+        
+        try {
+            // Prøv direkte sendMessage hvis Watch er reachable
+            if (isReachable) {
+                await WatchModule.sendUpdateToWatch(payload);
+                console.log('[useWatch] sendUpdateToWatch success');
+            } else {
+                // Brug transferUserInfo som background delivery
+                await WatchModule.transferUserInfo(payload);
+                console.log('[useWatch] transferUserInfo success');
             }
-                                            }
-  }, [enabled]);
+        } catch (err) {
+            console.warn('[useWatch] sendTodayTraining error:', err.message);
+            // Prøv transferUserInfo som fallback
+            try {
+                await WatchModule.transferUserInfo(payload);
+            } catch (err2) {
+                console.error('[useWatch] transferUserInfo fallback failed:', err2.message);
+            }
+        }
+    }, [isReachable]);
 
-  return {
-          // Status
-          isSupported: Platform.OS === 'ios',
-          isReachable,
-          isPaired,
-          isWatchAppInstalled,
-          lastWatchWorkout,
+    useEffect(() => {
+        if (!enabled || Platform.OS !== 'ios') return;
 
-          // Actions
-          sendRunUpdate,
-          sendStartCommand,
-          sendStopCommand,
-          sendPauseCommand,
-          sendTodayTraining,
-  };
+        // Tjek initial Watch status
+        WatchModule.getWatchStatus().then(status => {
+            setIsPaired(status.isPaired);
+            setIsWatchAppInstalled(status.isWatchAppInstalled);
+            setIsReachable(status.isReachable);
+        }).catch(err => {
+            console.warn('[useWatch] getWatchStatus error:', err);
+        });
+
+        // Håndter kommandoer fra Watch
+        messageSubscriptionRef.current = WatchModule.addListener((event) => {
+            console.log('[useWatch] Received from Watch:', event);
+            
+            if (event.command) {
+                // Svar på GET_TODAY_TRAINING request fra uret
+                if (event.command === 'GET_TODAY_TRAINING') {
+                    // Send den gemte træning direkte
+                    if (todayTrainingRef.current) {
+                        WatchModule.sendUpdateToWatch(todayTrainingRef.current)
+                            .catch(() => WatchModule.transferUserInfo(todayTrainingRef.current));
+                    }
+                    // onCommand callback bruges til at bede App.js sende plan
+                    onCommand?.('GET_TODAY_TRAINING', event.data);
+                } else {
+                    onCommand?.(event.command, event.data);
+                }
+            }
+        });
+
+        // Håndter workout complete fra Watch
+        workoutSubscriptionRef.current = WatchModule.addWorkoutCompleteListener(async (event) => {
+            console.log('[Watch] Workout complete received:', event);
+            setLastWatchWorkout(event);
+
+            // Konverter og gem løbet
+            try {
+                const distanceKm = parseFloat((event.distance || 0).toFixed(2));
+                const durationSecs = Math.round(event.elapsedTime || 0);
+                const paceSecsPerKm = distanceKm > 0 ? durationSecs / distanceKm : 0;
+
+                const run = {
+                    km: distanceKm,
+                    duration: durationSecs,
+                    duration_secs: durationSecs,
+                    pace: parseFloat(paceSecsPerKm.toFixed(1)),
+                    pace_secs_per_km: parseFloat(paceSecsPerKm.toFixed(1)),
+                    heart_rate: event.heartRate || event.avgHeartRate || 0,
+                    avg_hr: event.avgHeartRate || event.heartRate || 0,
+                    max_hr: event.maxHeartRate || 0,
+                    cadence: event.cadence || 0,
+                    date: new Date().toISOString(),
+                    source: 'apple_watch',
+                    created_at: new Date().toISOString(),
+                };
+
+                const saved = await saveRun(run);
+                console.log('[Watch] Run saved:', saved ? 'success' : 'failed');
+                onWorkoutComplete?.(run, saved);
+            } catch (err) {
+                console.error('[Watch] Error saving run:', err);
+            }
+        });
+
+        // Håndter live workout opdateringer fra Watch
+        liveUpdateSubscriptionRef.current = WatchModule.addLiveUpdateListener((event) => {
+            // Kan bruges til live tracking UI på iPhone
+            onCommand?.('LIVE_UPDATE', event);
+        });
+
+        // Håndter reachability ændringer
+        reachabilitySubscriptionRef.current = WatchModule.addReachabilityListener((reachable) => {
+            console.log('[useWatch] Reachability changed:', reachable);
+            setIsReachable(reachable);
+            
+            // Når Watch bliver reachable, send straks træningsdata
+            if (reachable && todayTrainingRef.current) {
+                WatchModule.sendUpdateToWatch(todayTrainingRef.current)
+                    .catch(err => console.warn('[useWatch] Auto-send on reachable failed:', err.message));
+            }
+        });
+
+        return () => {
+            messageSubscriptionRef.current?.remove();
+            workoutSubscriptionRef.current?.remove();
+            liveUpdateSubscriptionRef.current?.remove();
+            reachabilitySubscriptionRef.current?.remove();
+        };
+    }, [enabled, onCommand, onWorkoutComplete]);
+
+    // Send live løbedata til Watch under aktivt løb
+    const sendRunUpdate = useCallback(async (data) => {
+        if (!WatchModule.isSupported || !isReachable) return;
+        try {
+            await WatchModule.sendUpdateToWatch({
+                type: 'RUN_UPDATE',
+                ...data,
+            });
+        } catch (err) {
+            console.warn('[useWatch] sendRunUpdate error:', err);
+        }
+    }, [isReachable]);
+
+    return {
+        isReachable,
+        isPaired,
+        isWatchAppInstalled,
+        lastWatchWorkout,
+        sendTodayTraining,
+        sendRunUpdate,
+    };
 }
-
-export default useWatch;
