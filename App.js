@@ -336,31 +336,6 @@ function TabBar({ tab, setTab }) {
   return (
     <View style={s.tabBar}>
       {TABS.map(t_item => {
-import { useTranslation } from 'react-i18next';
-import PricingPage, { useSubscription, Paywall } from './components/Pricing';
-import React, { useState, useEffect } from 'react';
-import { Icon } from './src/components/Icons';
-import { View, Text, TouchableOpacity, StyleSheet, StatusBar, ActivityIndicator, ScrollView, Modal, Alert, Platform, Image } from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Svg, { Path, Line, Rect, Polyline, Polygon } from 'react-native-svg';
-import {
-  colors, DEFAULT_WEEK_PLAN, DEFAULT_NEXT_WORKOUT, DEFAULT_PROFILE,
-  loadProfile, saveProfile, loadWeekPlan, saveWeekPlan, setAuthToken, generateTrainingPlan, getAuthToken, loadTrainingPlan, loadRuns,
-} from './src/data';
-import { useWatch } from './src/hooks/useWatch';
-import Auth from './src/screens/Auth';
-import Onboarding from './src/screens/Onboarding';
-import Dashboard from './src/screens/Dashboard';
-import Chat from './src/screens/Chat';
-import Activity, { RunCalendar } from './src/screens/Activity';
-import Settings from './src/screens/Settings';
-import RunTracker from './src/screens/RunTracker';
-import Stats from './src/screens/Stats';
-import { RoutesTab as RoutesTabComponent } from './src/screens/RoutesTab';
-import Privacy from './src/screens/Privacy';
-import * as WebBrowser from 'expo-web-browser';
-WebBrowser.maybeCompleteAuthSession();
 
 // ─── TAB IKONER (React Native SVG) ───────────────────────────────────────────
 const IconPlan = ({ active }) => {
