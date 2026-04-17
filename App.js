@@ -27,13 +27,56 @@ WebBrowser.maybeCompleteAuthSession();
 
 // ─── TAB IKONER (React Native SVG) ───────────────────────────────────────────
 
+const IconPlan = ({ active }) => {
+  const color = active ? '#0a0a0a' : '#b0b0b0';
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <Path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+      <Polyline points="9 22 9 12 15 12 15 22" />
+    </Svg>
+  );
+};
 
+const IconProgress = ({ active }) => {
+  const color = active ? '#0a0a0a' : '#b0b0b0';
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <Polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+    </Svg>
+  );
+};
 
+const IconStats = ({ active }) => {
+  const color = active ? '#0a0a0a' : '#b0b0b0';
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <Line x1="18" y1="20" x2="18" y2="10" />
+      <Line x1="12" y1="20" x2="12" y2="4" />
+      <Line x1="6" y1="20" x2="6" y2="14" />
+    </Svg>
+  );
+};
 
-  <Svg width={22} height={22} viewBox="0 0 24 24" fill={color}>
-    <Polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-  </Svg>
-);
+const IconCalendar = ({ active }) => {
+  const color = active ? '#0a0a0a' : '#b0b0b0';
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <Rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+      <Line x1="16" y1="2" x2="16" y2="6" />
+      <Line x1="8" y1="2" x2="8" y2="6" />
+      <Line x1="3" y1="10" x2="21" y2="10" />
+    </Svg>
+  );
+};
+
+const IconZap = ({ active }) => {
+  const color = active ? '#0a0a0a' : '#b0b0b0';
+  return (
+    <Svg width={22} height={22} viewBox="0 0 24 24" fill={color}>
+      <Polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+    </Svg>
+  );
+};
 
 // ─── APP LOGO COMPONENT ───────────────────────────────────────────────────────
 const AppLogo = ({ size = 50 }) => (
