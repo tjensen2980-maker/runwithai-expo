@@ -375,12 +375,33 @@ export default function App() {
 
   // ── SPROG FIX ──────────────────────────────────────────────────────────────
   // ──────────────────────────────────────────────────────────────────────────
-    // Apple Watch integration - lytter efter workout data fra Watch
-        useWatch({
-          onWorkoutComplete: (run, saved) => {
-            console.log('[App] Watch workout saved:', saved ? 'success' : 'failed');
-      },
-      });
+    // Apple Watch integration - lytter efter workout data fra Watch og sender daglig plan
+  const { sendTodayTraining } = useWatch({
+    onCommand: (command) => {
+      // Uret beder om dagens træningsplan
+      if (command === 'GET_TODAY_TRAINING' && weekPlan) {
+        const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+        const todayPlan = weekPlan.find(p => p.day && p.day.toLowerCase() === today) || weekPlan[0];
+        if (todayPlan) {
+          sendTodayTraining(todayPlan).catch(err => console.warn('[App] sendTodayTraining error:', err));
+        }
+      }
+    },
+    onWorkoutComplete: (run, saved) => {
+      console.log('[App] Watch workout saved:', saved ? 'success' : 'failed');
+    },
+  });
+
+  // Automatisk send dagens træning til Watch når weekPlan ændres
+  useEffect(() => {
+    if (weekPlan && weekPlan.length > 0 && sendTodayTraining) {
+      const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+      const todayPlan = weekPlan.find(p => p.day && p.day.toLowerCase() === today) || weekPlan[0];
+      if (todayPlan) {
+        sendTodayTraining(todayPlan).catch(err => console.warn('[App] auto sendTodayTraining:', err));
+      }
+    }
+  }, [weekPlan, sendTodayTraining]);
 
   const [user, setUser]                       = useState(null);
   const [showOnboarding, setShowOnboarding]   = useState(true);
