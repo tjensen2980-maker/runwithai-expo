@@ -8,7 +8,8 @@
       "developmentClient": true,
       "distribution": "internal",
       "ios": {
-        "simulator": true
+                "simulator": false,
+                "image": "macos-sequoia-15.6-xcode-26.2"
       },
       "android": {
         "buildType": "apk"
