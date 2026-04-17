@@ -20,6 +20,13 @@ echo "npm: $NPM_BIN"
 echo "pod: $POD_BIN"
 echo "npx: $NPX_BIN"
 
+echo "=== Updating xcodeproj gem for Xcode 26 compatibility ==="
+# Xcode 26 uses objectVersion=70 which requires a newer xcodeproj gem
+# Use --user-install since we don't have sudo
+gem install xcodeproj --user-install || true
+# Add user gem bin to PATH so pod uses the new xcodeproj
+export PATH="$(ruby -e 'puts Gem.user_dir')/bin:$PATH"
+
 echo "=== Installing Node.js dependencies ==="
 cd "$CI_PRIMARY_REPOSITORY_PATH"
 "$NPM_BIN" install --legacy-peer-deps
