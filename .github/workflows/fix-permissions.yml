@@ -1,0 +1,29 @@
+name: Fix ci_post_clone.sh permissions
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'ios/ci_scripts/ci_post_clone.sh'
+  workflow_dispatch:
+
+jobs:
+  fix-permissions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set executable permission
+        run: |
+          git update-index --chmod=+x ios/ci_scripts/ci_post_clone.sh
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if ! git diff --cached --quiet; then
+            git commit -m "Fix: set +x on ios/ci_scripts/ci_post_clone.sh"
+            git push
+          else
+            echo "Already executable"
+          fi
