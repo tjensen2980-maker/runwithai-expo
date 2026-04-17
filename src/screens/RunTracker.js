@@ -487,9 +487,9 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       
       // ── GPS FILTERING ──────────────────────────────────────────────────
       const MIN_DISTANCE = 2;
-      const MAX_SINGLE_JUMP = 150;   // ← øget fra 80
+      const MAX_SINGLE_JUMP = 200;  // iOS kan have større GPS-spring   // ← øget fra 80
       const MAX_SPEED_KMH = 40;      // ← øget fra 35
-      const MAX_ACCURACY = 80;       // ← øget fra 50 (iOS er ofte 30-65m)
+      const MAX_ACCURACY = 150;  // iOS starter ofte med 100-200m accuracy       // ← øget fra 50 (iOS er ofte 30-65m)
       
       const isMinDistance = dist >= MIN_DISTANCE;
     const isNotTeleport = dist <= (fromBackground ? MAX_SINGLE_JUMP * 5 : MAX_SINGLE_JUMP);
