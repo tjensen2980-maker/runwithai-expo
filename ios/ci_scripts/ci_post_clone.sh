@@ -5,15 +5,19 @@
 
 set -e
 
-# Prevent bash from finding local files named npm/pod/npx
-# by using full absolute paths
-NPM_BIN=$(command -v npm 2>/dev/null || echo "/usr/local/bin/npm")
-POD_BIN=$(command -v pod 2>/dev/null || echo "/usr/local/bin/pod")
-NPX_BIN=$(command -v npx 2>/dev/null || echo "/usr/local/bin/npx")
+echo "=== Installing Homebrew packages ==="
+brew install node@20 || brew upgrade node@20 || true
+brew link --overwrite node@20 || true
+brew install cocoapods || brew upgrade cocoapods || true
 
-echo "npm path: $NPM_BIN"
-echo "pod path: $POD_BIN"
-echo "npx path: $NPX_BIN"
+# Get absolute paths after brew install
+NPM_BIN=$(brew --prefix)/bin/npm
+POD_BIN=$(brew --prefix)/bin/pod
+NPX_BIN=$(brew --prefix)/bin/npx
+
+echo "npm: $NPM_BIN"
+echo "pod: $POD_BIN"
+echo "npx: $NPX_BIN"
 
 echo "=== Installing Node.js dependencies ==="
 cd "$CI_PRIMARY_REPOSITORY_PATH"
