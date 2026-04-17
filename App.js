@@ -26,7 +26,6 @@ import * as WebBrowser from 'expo-web-browser';
 WebBrowser.maybeCompleteAuthSession();
 
 // ─── TAB IKONER (React Native SVG) ───────────────────────────────────────────
-
 const IconPlan = ({ active }) => {
   const color = active ? '#0a0a0a' : '#b0b0b0';
   return (
@@ -69,14 +68,11 @@ const IconCalendar = ({ active }) => {
   );
 };
 
-const IconZap = ({ active }) => {
-  const color = active ? '#0a0a0a' : '#b0b0b0';
-  return (
-    <Svg width={22} height={22} viewBox="0 0 24 24" fill={color}>
-      <Polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-    </Svg>
-  );
-};
+const IconZap = ({ color = '#ffffff' }) => (
+  <Svg width={22} height={22} viewBox="0 0 24 24" fill={color}>
+    <Polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+  </Svg>
+);
 
 // ─── APP LOGO COMPONENT ───────────────────────────────────────────────────────
 const AppLogo = ({ size = 50 }) => (
@@ -340,15 +336,365 @@ function TabBar({ tab, setTab }) {
   return (
     <View style={s.tabBar}>
       {TABS.map(t_item => {
+import { useTranslation } from 'react-i18next';
+import PricingPage, { useSubscription, Paywall } from './components/Pricing';
+import React, { useState, useEffect } from 'react';
+import { Icon } from './src/components/Icons';
+import { View, Text, TouchableOpacity, StyleSheet, StatusBar, ActivityIndicator, ScrollView, Modal, Alert, Platform, Image } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Svg, { Path, Line, Rect, Polyline, Polygon } from 'react-native-svg';
+import {
+  colors, DEFAULT_WEEK_PLAN, DEFAULT_NEXT_WORKOUT, DEFAULT_PROFILE,
+  loadProfile, saveProfile, loadWeekPlan, saveWeekPlan, setAuthToken, generateTrainingPlan, getAuthToken, loadTrainingPlan, loadRuns,
+} from './src/data';
+import { useWatch } from './src/hooks/useWatch';
+import Auth from './src/screens/Auth';
+import Onboarding from './src/screens/Onboarding';
+import Dashboard from './src/screens/Dashboard';
+import Chat from './src/screens/Chat';
+import Activity, { RunCalendar } from './src/screens/Activity';
+import Settings from './src/screens/Settings';
+import RunTracker from './src/screens/RunTracker';
+import Stats from './src/screens/Stats';
+import { RoutesTab as RoutesTabComponent } from './src/screens/RoutesTab';
+import Privacy from './src/screens/Privacy';
+import * as WebBrowser from 'expo-web-browser';
+WebBrowser.maybeCompleteAuthSession();
 
-        const active = tab === t_item.id;
-        return (
+// ─── TAB IKONER (React Native SVG) ───────────────────────────────────────────
+const IconPlan = ({ active }) => {
+  const color = active ? '#0a0a0a' : '#b0b0b0';
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <Path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+      <Polyline points="9 22 9 12 15 12 15 22" />
+    </Svg>
+  );
+};
+
+const IconProgress = ({ active }) => {
+  const color = active ? '#0a0a0a' : '#b0b0b0';
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <Polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+    </Svg>
+  );
+};
+
+const IconStats = ({ active }) => {
+  const color = active ? '#0a0a0a' : '#b0b0b0';
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <Line x1="18" y1="20" x2="18" y2="10" />
+      <Line x1="12" y1="20" x2="12" y2="4" />
+      <Line x1="6" y1="20" x2="6" y2="14" />
+    </Svg>
+  );
+};
+
+const IconCalendar = ({ active }) => {
+  const color = active ? '#0a0a0a' : '#b0b0b0';
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <Rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+      <Line x1="16" y1="2" x2="16" y2="6" />
+      <Line x1="8" y1="2" x2="8" y2="6" />
+      <Line x1="3" y1="10" x2="21" y2="10" />
+    </Svg>
+  );
+};
+
+const IconZap = ({ color = '#ffffff' }) => (
+  <Svg width={22} height={22} viewBox="0 0 24 24" fill={color}>
+    <Polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+  </Svg>
+);
+
+// ─── APP LOGO COMPONENT ───────────────────────────────────────────────────────
+const AppLogo = ({ size = 50 }) => (
+  <Image 
+    source={require('./assets/icon.png')} 
+    style={{ width: size, height: size, borderRadius: size * 0.18, marginVertical: -30 }}
+    resizeMode="contain"
+  />
+);
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// PRO FEATURE LOCK COMPONENT
+// ═══════════════════════════════════════════════════════════════════════════════
+function ProFeatureLock({ feature, description, onUpgrade }) {
+  const { t } = useTranslation();
+  return (
+    <View style={proLockStyles.container}>
+      <View style={proLockStyles.card}>
+        <Text style={proLockStyles.icon}>🔒</Text>
+        <Text style={proLockStyles.title}>{feature}</Text>
+        <Text style={proLockStyles.description}>{description}</Text>
+        <TouchableOpacity style={proLockStyles.button} onPress={onUpgrade}>
+          <Text style={proLockStyles.buttonText}>{t('pro.upgradeToPro')} →</Text>
+        </TouchableOpacity>
+        <Text style={proLockStyles.price}>{t('pro.fromOnly')}</Text>
+      </View>
+    </View>
+  );
+}
+
+const proLockStyles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 32, backgroundColor: colors.bg },
+  card: { backgroundColor: colors.card, borderRadius: 24, padding: 32, alignItems: 'center', maxWidth: 320, borderWidth: 1, borderColor: colors.border },
+  icon: { fontSize: 56, marginBottom: 16 },
+  title: { fontSize: 24, fontWeight: 'bold', color: colors.text, marginBottom: 8 },
+  description: { fontSize: 15, color: colors.muted, textAlign: 'center', marginBottom: 24, lineHeight: 22 },
+  button: { backgroundColor: colors.accent, borderRadius: 14, paddingVertical: 16, paddingHorizontal: 32, marginBottom: 12 },
+  buttonText: { color: colors.black, fontWeight: 'bold', fontSize: 16 },
+  price: { color: colors.muted, fontSize: 13 },
+});
+
+// ─── RUN TAB — med Pro-låst Ruter ───────────────────────────────────────────
+function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, onShowPricing }) {
+  const { t } = useTranslation();
+  const [activeTab, setActiveTab] = useState('start');
+  const lastRun = runs && runs.length > 0 ? [...runs].sort((a,b) => new Date(b.date||0) - new Date(a.date||0))[0] : null;
+
+  return (
+    <View style={{ flex: 1, backgroundColor: colors.bg }}>
+      <View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingTop: 16, gap: 10 }}>
+        {[['start', t('run.startRun')],['routes', t('run.aiRoutes')]].map(([id, label]) => (
+          <TouchableOpacity key={id}
+            style={{ flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center', backgroundColor: activeTab === id ? colors.black : colors.surface, borderWidth: 2, borderColor: activeTab === id ? colors.black : colors.border2 }}
+            onPress={() => setActiveTab(id)}>
+            <Text style={{ fontSize: 14, fontWeight: '800', color: activeTab === id ? colors.card : colors.muted }}>
+              {label}
+              {id === 'routes' && !isPro && ' 🔒'}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      {activeTab === 'start' ? (
+        <ScrollView contentContainerStyle={{ padding: 16 }}>
+          <TouchableOpacity onPress={() => onStartActivity('run')}
+            style={{ backgroundColor: colors.black, borderRadius: 20, padding: 28, marginBottom: 12, alignItems: 'center' }}>
+            <Text style={{ fontSize: 40, marginBottom: 8 }}>🏃</Text>
+            <Text style={{ fontSize: 22, fontWeight: '900', color: colors.card, letterSpacing: -0.5 }}>{t('run.title')}</Text>
+            <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>{t('run.gpsTracking')}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => onStartActivity('walk')}
+            style={{ backgroundColor: colors.surface, borderRadius: 20, padding: 28, marginBottom: 20, alignItems: 'center', borderWidth: 2, borderColor: colors.border2 }}>
+            <Text style={{ fontSize: 40, marginBottom: 8 }}>🚶</Text>
+            <Text style={{ fontSize: 22, fontWeight: '900', color: colors.black, letterSpacing: -0.5 }}>{t('run.walk')}</Text>
+            <Text style={{ fontSize: 13, color: colors.muted, marginTop: 4 }}>{t('run.walkTracking')}</Text>
+          </TouchableOpacity>
+
+          {nextWorkout && (
+            <View style={{ backgroundColor: colors.card, borderRadius: 16, padding: 18, marginBottom: 12, borderWidth: 1, borderColor: colors.border }}>
+              <Text style={{ fontSize: 10, color: colors.muted, letterSpacing: 2, fontWeight: '700', marginBottom: 8 }}>{t('run.nextWorkout')}</Text>
+              <Text style={{ fontSize: 17, fontWeight: '800', color: colors.text, marginBottom: 4 }}>{typeof nextWorkout?.name === 'object' ? (nextWorkout.name.intermediate || Object.values(nextWorkout.name)[0]) : (nextWorkout?.name || '')}</Text>
+              {nextWorkout.description && <Text style={{ fontSize: 13, color: colors.dim, lineHeight: 18 }}>{typeof nextWorkout.description === 'object' ? (nextWorkout.description.intermediate || Object.values(nextWorkout.description)[0]) : nextWorkout.description}</Text>}
+              <TouchableOpacity onPress={() => onStartActivity('run')}
+                style={{ backgroundColor: colors.accent, borderRadius: 12, paddingVertical: 12, alignItems: 'center', marginTop: 14 }}>
+                <Text style={{ color: colors.black, fontWeight: '800', fontSize: 14 }}>▶  {t('run.startThisWorkout')}</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {lastRun && (
+            <View style={{ backgroundColor: colors.card, borderRadius: 16, padding: 18, borderWidth: 1, borderColor: colors.border }}>
+              <Text style={{ fontSize: 10, color: colors.muted, letterSpacing: 2, fontWeight: '700', marginBottom: 8 }}>{t('run.lastActivity')}</Text>
+              <View style={{ flexDirection: 'row', gap: 20 }}>
+                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.accent }}>{lastRun.km || '–'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.km')}</Text></View>
+                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.text }}>{lastRun.duration || '–'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.time')}</Text></View>
+                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.text }}>{lastRun.pace || '–'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.pace')}</Text></View>
+              </View>
+            </View>
+          )}
+
+          {!isPro && (
+            <TouchableOpacity
+              style={{ backgroundColor: 'rgba(200, 255, 0, 0.1)', borderRadius: 16, padding: 18, marginTop: 12, borderWidth: 1, borderColor: colors.accent }}
+              onPress={onShowPricing}
+            >
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                <Text style={{ fontSize: 32 }}>⭐</Text>
+                <View style={{ flex: 1 }}>
+                  <Text style={{ fontSize: 15, fontWeight: '700', color: colors.text }}>{t('pro.upgradeToPro')}</Text>
+                  <Text style={{ fontSize: 12, color: colors.muted, marginTop: 2 }}>{t('pro.unlockFeatures')}</Text>
+                </View>
+                <Text style={{ color: colors.accent, fontWeight: 'bold' }}>→</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+        </ScrollView>
+      ) : (
+        isPro ? (
+          <RoutesTabWrapper profile={profile} runs={runs} />
+        ) : (
+          <ProFeatureLock
+            feature={t('pro.aiRoutes.title')}
+            description={t('pro.aiRoutes.description')}
+            onUpgrade={onShowPricing}
+          />
+        )
+      )}
+    </View>
+  );
+}
+
+// ─── CALENDAR TAB — Pro only ───────────────────────────────────────────────
+function CalendarTab({ runs, weekPlan, trainingPlan, isPro, onShowPricing }) {
+  const { t } = useTranslation();
+  
+  if (!isPro) {
+    return (
+      <ProFeatureLock
+        feature={t('pro.calendar.title')}
+        description={t('pro.calendar.description')}
+        onUpgrade={onShowPricing}
+      />
+    );
+  }
+
+  return (
+    <ScrollView style={{ flex: 1, backgroundColor: colors.bg }} contentContainerStyle={{ padding: 16, paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
+      <Text style={{ fontSize: 11, color: colors.muted, letterSpacing: 2, fontWeight: '700', marginBottom: 16 }}>{t('tabs.calendar').toUpperCase()}</Text>
+      <RunCalendar runs={runs} weekPlan={weekPlan} trainingPlan={trainingPlan} />
+    </ScrollView>
+  );
+}
+
+// ─── STATS TAB — Basis for Free, Avanceret for Pro ───────────────────────────
+function StatsTab({ runs, profile, level, isPro, onShowPricing }) {
+  const { t } = useTranslation();
+  
+  if (!isPro) {
+    const totalKm = runs.reduce((sum, r) => sum + (parseFloat(r.km) || 0), 0);
+    const totalRuns = runs.length;
+
+    return (
+      <ScrollView style={{ flex: 1, backgroundColor: colors.bg }} contentContainerStyle={{ padding: 16 }}>
+        <Text style={{ fontSize: 11, color: colors.muted, letterSpacing: 2, fontWeight: '700', marginBottom: 16 }}>{t('stats.basic')}</Text>
+
+        <View style={{ backgroundColor: colors.card, borderRadius: 16, padding: 20, marginBottom: 16, borderWidth: 1, borderColor: colors.border }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+            <View style={{ alignItems: 'center' }}>
+              <Text style={{ fontSize: 32, fontWeight: '900', color: colors.accent }}>{totalRuns}</Text>
+              <Text style={{ fontSize: 12, color: colors.muted, fontWeight: '600' }}>{t('stats.runs')}</Text>
+            </View>
+            <View style={{ alignItems: 'center' }}>
+              <Text style={{ fontSize: 32, fontWeight: '900', color: colors.text }}>{totalKm.toFixed(1)}</Text>
+              <Text style={{ fontSize: 12, color: colors.muted, fontWeight: '600' }}>{t('stats.totalKm')}</Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={{ backgroundColor: colors.surface, borderRadius: 16, padding: 20, borderWidth: 2, borderColor: colors.border2 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
+            <Text style={{ fontSize: 24, marginRight: 12 }}>🔒</Text>
+            <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>{t('pro.stats.title')}</Text>
+          </View>
+          <View style={{ gap: 12 }}>
+            {['📊 Detaljeret pace-analyse', '📈 Ugentlig/månedlig fremgang', '🏆 Personlige rekorder', '❤️ Pulszone-statistik'].map((item, i) => (
+              <View key={i} style={{ flexDirection: 'row', alignItems: 'center', opacity: 0.6 }}>
+                <Text style={{ fontSize: 14, color: colors.muted }}>{item}</Text>
+              </View>
+            ))}
+          </View>
           <TouchableOpacity
-            key={t_item.id}
-            style={[s.tabItem, t_item.id === "run" && s.tabItemRun]}
-            onPress={() => { if (t_item.id !== "run") setTab(t_item.id); }}
+            style={{ backgroundColor: colors.accent, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 10 }}
+            onPress={onShowPricing}
           >
-            {t_item.Icon && <View style={s.tabIconWrap}><t_item.Icon active={active} /></View>}
+            <Text style={{ color: colors.black, fontWeight: 'bold', fontSize: 15 }}>{t('pro.stats.unlock')}</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    );
+  }
+
+  return <Stats runs={runs} profile={profile} level={level} />;
+}
+
+// ─── PLAN TAB — med Coach låst for Free ───────────────────────────────────────
+function PlanTab({ level, nextWorkout, weekPlan, planChanges, profile, runs, onNavigate, onStartActivity, trainingPlan, onPlanUpdate, isPro, onShowPricing }) {
+  const { t } = useTranslation();
+  const [activeTab, setActiveTab] = useState('plan');
+
+  return (
+    <View style={{ flex: 1 }}>
+      <View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingTop: 16, gap: 10, backgroundColor: colors.bg }}>
+        {[['plan', t('tabs.plan')],['coach','AI Coach']].map(([id, label]) => (
+          <TouchableOpacity key={id}
+            style={{ flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center', backgroundColor: activeTab === id ? colors.black : colors.surface, borderWidth: 2, borderColor: activeTab === id ? colors.black : colors.border2 }}
+            onPress={() => setActiveTab(id)}>
+            <Text style={{ fontSize: 14, fontWeight: '800', color: activeTab === id ? colors.card : colors.muted }}>
+              {label}
+              {id === 'coach' && !isPro && ' 🔒'}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      <View style={{ flex: 1 }}>
+        {activeTab === 'plan'
+          ? <Dashboard level={level} nextWorkout={nextWorkout} weekPlan={weekPlan} planChanges={planChanges} profile={profile} runs={runs} onNavigate={onNavigate} onStartActivity={onStartActivity} />
+          : isPro
+            ? <Chat level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} onPlanUpdate={onPlanUpdate} runs={runs} />
+            : (
+              <ProFeatureLock
+                feature={t('pro.coach.title')}
+                description={t('pro.coach.description')}
+                onUpgrade={onShowPricing}
+              />
+            )
+        }
+      </View>
+    </View>
+  );
+}
+
+function RoutesTabWrapper({ profile, runs }) {
+  return <RoutesTabComponent profile={profile} runs={runs} />;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// TAB BAR
+// ═══════════════════════════════════════════════════════════════════════════════
+function TabBar({ tab, setTab }) {
+  const { t } = useTranslation();
+  
+  const TABS = [
+    { id: 'dashboard', label: t('tabs.plan'),     Icon: IconPlan     },
+    { id: 'activity',  label: t('tabs.progress'), Icon: IconProgress },
+    { id: 'run',       label: '',                 Icon: null         },
+    { id: 'stats',     label: t('tabs.stats'),    Icon: IconStats    },
+    { id: 'calendar',  label: t('tabs.calendar'), Icon: IconCalendar },
+  ];
+
+  return (
+    <View style={s.tabBar}>
+      {TABS.map(t_item => {
+        const active = tab === t_item.id;
+        const TabIcon = t_item.Icon;
+
+        if (t_item.id === 'run') {
+          return (
+            <TouchableOpacity key={t_item.id} style={s.tabItemRun} onPress={() => setTab(t_item.id)}>
+              <View style={s.runBtnContainer}>
+                <View style={[s.runBtn, active && s.runBtnActive]}>
+                  <IconZap color="#ffffff" />
+                </View>
+              </View>
+              <Text style={s.tabLabel}>{t('tabs.start')}</Text>
+              <View style={[s.tabActiveDot, { opacity: active ? 1 : 0 }]} />
+            </TouchableOpacity>
+          );
+        }
+
+        return (
+          <TouchableOpacity key={t_item.id} style={s.tabItem} onPress={() => setTab(t_item.id)}>
+            <View style={s.tabIconWrap}>
+              <TabIcon active={active} />
+            </View>
             <Text style={[s.tabLabel, active && s.tabLabelActive]}>{t_item.label}</Text>
             <View style={[s.tabActiveDot, { opacity: active ? 1 : 0 }]} />
           </TouchableOpacity>
@@ -358,6 +704,9 @@ function TabBar({ tab, setTab }) {
   );
 }
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// APP
+// ═══════════════════════════════════════════════════════════════════════════════
 export default function App() {
   const { t } = useTranslation();
 
