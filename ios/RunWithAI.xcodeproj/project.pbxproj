@@ -44,6 +44,20 @@
 DC27E2AC2F924179008D2915 /* RunWithAI Watch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = DC27E1DB2F924179008D2915 /* RunWithAI Watch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		DC27E2AA2F924179008D2915 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				DC27E2AC2F924179008D2915 /* RunWithAI Watch Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXContainerItemProxy section */
 		DC27E1EB2F92417B008D2915 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -479,6 +493,7 @@ DC27E2AC2F924179008D2915 /* RunWithAI Watch Watch App.app in Embed Watch Content
 			buildRules = (
 			);
 			dependencies = (
+				DC27E2AB2F924179008D2915 /* PBXTargetDependency */,
 			);
 			name = RunWithAI;
 			productName = RunWithAI;
