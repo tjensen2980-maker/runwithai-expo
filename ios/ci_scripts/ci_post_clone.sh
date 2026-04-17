@@ -1,17 +1,19 @@
 #!/bin/sh
 
 # ci_post_clone.sh - Xcode Cloud post-clone script
-# Must be at ios/ci_scripts/ci_post_clone.sh (next to .xcworkspace)
-# Runs npm install + pod install to generate RunWithAI.xcworkspace
+# Location: ios/ci_scripts/ci_post_clone.sh
 
 set -e
 
+# Ensure clean PATH with known npm/pod locations
+export PATH="/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+
 echo "=== Installing Node.js dependencies ==="
-cd $CI_PRIMARY_REPOSITORY_PATH
-npm install --legacy-peer-deps
+cd "$CI_PRIMARY_REPOSITORY_PATH"
+which npm && npm install --legacy-peer-deps
 
 echo "=== Installing CocoaPods dependencies ==="
-cd ios
-pod install --repo-update
+cd "$CI_PRIMARY_REPOSITORY_PATH/ios"
+which pod && pod install --repo-update
 
 echo "=== Done - xcworkspace generated ==="
