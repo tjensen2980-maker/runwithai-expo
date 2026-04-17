@@ -5,15 +5,19 @@
 
 set -e
 
-# Ensure clean PATH with known npm/pod locations
+# Ensure clean PATH
 export PATH="/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 
 echo "=== Installing Node.js dependencies ==="
 cd "$CI_PRIMARY_REPOSITORY_PATH"
-which npm && npm install --legacy-peer-deps
+npm install --legacy-peer-deps
+
+echo "=== Generating Podfile via expo prebuild ==="
+cd "$CI_PRIMARY_REPOSITORY_PATH"
+npx expo prebuild --no-install --platform ios
 
 echo "=== Installing CocoaPods dependencies ==="
 cd "$CI_PRIMARY_REPOSITORY_PATH/ios"
-which pod && pod install --repo-update
+pod install --repo-update
 
-echo "=== Done - xcworkspace generated ==="
+echo "=== Done ==="
