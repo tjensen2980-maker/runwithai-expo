@@ -356,6 +356,8 @@ function TabBar({ tab, setTab }) {
       })}
     </View>
   );
+}
+
 export default function App() {
   const { t } = useTranslation();
 
