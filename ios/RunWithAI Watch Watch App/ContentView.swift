@@ -3,10 +3,11 @@
 //  RunWithAI Watch Watch App
 //
 //  Watch UI - virker som Garmin:
-//  1. Se dagens træning (hentet fra iPhone på forhånd)
-//  2. Start løb direkte på uret
-//  3. Live stats: tid, km, pace, puls
-//  4. Stop og gem - synkroniserer til iPhone bagefter
+//  - Se dagens træning (hentet fra iPhone, gemt lokalt)
+//  - Manuel synk-knap (som Garmin Connect sync)
+//  - Start løb direkte på uret
+//  - Live stats: tid, km, pace, puls
+//  - Stop og gem - synkroniserer til iPhone bagefter
 //
 
 import SwiftUI
@@ -33,26 +34,60 @@ struct ContentView: View {
 struct HomeView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
     @EnvironmentObject var connectivityManager: WatchConnectivityManager
+    @State private var isSyncing = false
 
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
 
-                // App navn
+                // Header med sync-knap (som Garmin Connect)
                 HStack {
                     Image(systemName: "figure.run")
                         .foregroundColor(.green)
                     Text("RunWithAI")
                         .font(.headline)
                         .foregroundColor(.green)
+                    Spacer()
+                    Button(action: {
+                        isSyncing = true
+                        connectivityManager.requestTodayTraining()
+                        // Vis spinner i 2 sek
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            isSyncing = false
+                        }
+                    }) {
+                        if isSyncing {
+                            ProgressView()
+                                .progressViewStyle(.circular)
+                                .frame(width: 18, height: 18)
+                        } else {
+                            Image(systemName: "arrow.clockwise")
+                                .foregroundColor(connectivityManager.isReachable ? .blue : .gray)
+                                .font(.system(size: 14))
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(!connectivityManager.isReachable || isSyncing)
                 }
                 .padding(.top, 4)
 
-                // Dagens træning (fra iPhone)
+                // Reachability status
+                if !connectivityManager.isReachable {
+                    HStack(spacing: 4) {
+                        Image(systemName: "iphone.slash")
+                            .font(.caption2)
+                        Text("iPhone ikke tilgængelig")
+                            .font(.caption2)
+                    }
+                    .foregroundColor(.gray)
+                }
+
+                // Dagens træning
                 if let training = connectivityManager.todayTraining {
                     TodayTrainingCard(training: training)
                 } else {
                     NoTrainingCard()
+                        .environmentObject(connectivityManager)
                 }
 
                 // Start løb knap
@@ -74,7 +109,10 @@ struct HomeView: View {
             .padding(.horizontal, 8)
         }
         .onAppear {
-            connectivityManager.requestTodayTraining()
+            // Auto-sync ved opstart hvis iPhone er tilgængelig
+            if connectivityManager.isReachable {
+                connectivityManager.requestTodayTraining()
+            }
         }
     }
 }
@@ -122,25 +160,19 @@ struct TodayTrainingCard: View {
     }
 }
 
-// MARK: - Ingen træning sat op
+// MARK: - Ingen træning
 struct NoTrainingCard: View {
     @EnvironmentObject var connectivityManager: WatchConnectivityManager
 
     var body: some View {
         VStack(spacing: 6) {
-            Image(systemName: "iphone.slash")
+            Image(systemName: connectivityManager.isReachable ? "calendar.badge.exclamationmark" : "iphone.slash")
                 .font(.title2)
                 .foregroundColor(.gray)
-            Text("Ingen træning i dag")
-                .font(.caption)
+            Text(connectivityManager.isReachable ? "Ingen træning sat op" : "Åbn iPhone-appen for at synkronisere")
+                .font(.caption2)
                 .foregroundColor(.gray)
                 .multilineTextAlignment(.center)
-            Button("Hent fra iPhone") {
-                connectivityManager.requestTodayTraining()
-            }
-            .font(.caption2)
-            .buttonStyle(.bordered)
-            .tint(.blue)
         }
         .padding(10)
         .background(Color.gray.opacity(0.15))
@@ -148,7 +180,7 @@ struct NoTrainingCard: View {
     }
 }
 
-// MARK: - Aktivt løb (Garmin-stil live skærm)
+// MARK: - Aktivt løb
 struct ActiveWorkoutView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
     @EnvironmentObject var connectivityManager: WatchConnectivityManager
@@ -159,30 +191,21 @@ struct ActiveWorkoutView: View {
                 .environmentObject(workoutManager)
         } else {
             TabView {
-                // Side 1: Hoved-stats
-                MainStatsView()
-                    .environmentObject(workoutManager)
-
-                // Side 2: Puls + kalorier
-                HeartRateView()
-                    .environmentObject(workoutManager)
-
-                // Side 3: Stop/pause
-                ControlView()
-                    .environmentObject(workoutManager)
+                MainStatsView().environmentObject(workoutManager)
+                HeartRateView().environmentObject(workoutManager)
+                ControlView().environmentObject(workoutManager)
             }
             .tabViewStyle(.page)
         }
     }
 }
 
-// MARK: - Hoved live stats (tid + km + pace)
+// MARK: - Live stats
 struct MainStatsView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
 
     var body: some View {
         VStack(spacing: 2) {
-            // Tid
             Text(workoutManager.formattedTime())
                 .font(.system(size: 32, weight: .bold, design: .monospaced))
                 .foregroundColor(.green)
@@ -190,32 +213,23 @@ struct MainStatsView: View {
             Divider()
 
             HStack(spacing: 0) {
-                // Distance
                 VStack(spacing: 0) {
                     Text(workoutManager.formattedDistance())
                         .font(.system(size: 22, weight: .bold))
-                        .foregroundColor(.white)
-                    Text("KM")
-                        .font(.system(size: 10))
-                        .foregroundColor(.gray)
+                    Text("KM").font(.system(size: 10)).foregroundColor(.gray)
                 }
                 .frame(maxWidth: .infinity)
 
                 Divider().frame(height: 30)
 
-                // Pace
                 VStack(spacing: 0) {
                     Text(workoutManager.formattedPace())
                         .font(.system(size: 22, weight: .bold))
-                        .foregroundColor(.white)
-                    Text("MIN/KM")
-                        .font(.system(size: 10))
-                        .foregroundColor(.gray)
+                    Text("MIN/KM").font(.system(size: 10)).foregroundColor(.gray)
                 }
                 .frame(maxWidth: .infinity)
             }
 
-            // Pause knap
             Button(action: { workoutManager.togglePause() }) {
                 Image(systemName: workoutManager.isPaused ? "play.fill" : "pause.fill")
                     .foregroundColor(.black)
@@ -228,34 +242,21 @@ struct MainStatsView: View {
     }
 }
 
-// MARK: - Puls skærm
+// MARK: - Puls
 struct HeartRateView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
 
     var body: some View {
         VStack(spacing: 6) {
-            Image(systemName: "heart.fill")
-                .foregroundColor(.red)
-                .font(.title3)
-
+            Image(systemName: "heart.fill").foregroundColor(.red).font(.title3)
             Text("\(Int(workoutManager.heartRate))")
-                .font(.system(size: 40, weight: .bold))
-                .foregroundColor(.red)
-
-            Text("BPM")
-                .font(.caption)
-                .foregroundColor(.gray)
-
+                .font(.system(size: 40, weight: .bold)).foregroundColor(.red)
+            Text("BPM").font(.caption).foregroundColor(.gray)
             Divider()
-
             HStack {
                 VStack {
-                    Text("\(Int(workoutManager.calories))")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                    Text("KCAL")
-                        .font(.system(size: 10))
-                        .foregroundColor(.gray)
+                    Text("\(Int(workoutManager.calories))").font(.title3).fontWeight(.semibold)
+                    Text("KCAL").font(.system(size: 10)).foregroundColor(.gray)
                 }
             }
         }
@@ -271,18 +272,14 @@ struct ControlView: View {
             Button(action: { workoutManager.stopWorkout() }) {
                 HStack {
                     Image(systemName: "stop.fill")
-                    Text("Stop løb")
-                        .fontWeight(.bold)
+                    Text("Stop løb").fontWeight(.bold)
                 }
-                .foregroundColor(.black)
-                .frame(maxWidth: .infinity)
+                .foregroundColor(.black).frame(maxWidth: .infinity)
             }
-            .buttonStyle(.borderedProminent)
-            .tint(.red)
+            .buttonStyle(.borderedProminent).tint(.red)
 
             Button(action: { workoutManager.togglePause() }) {
-                Text(workoutManager.isPaused ? "Fortsæt" : "Pause")
-                    .frame(maxWidth: .infinity)
+                Text(workoutManager.isPaused ? "Fortsæt" : "Pause").frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
             .tint(workoutManager.isPaused ? .green : .orange)
@@ -291,20 +288,16 @@ struct ControlView: View {
     }
 }
 
-// MARK: - Opsummering efter løb (som Garmin's result screen)
+// MARK: - Opsummering efter løb
 struct WorkoutSummaryView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
 
     var body: some View {
         ScrollView {
             VStack(spacing: 8) {
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.title)
-                    .foregroundColor(.green)
-
-                Text("Løb afsluttet!")
-                    .font(.headline)
-                    .foregroundColor(.green)
+                Image(systemName: "checkmark.circle.fill").font(.title).foregroundColor(.green)
+                Text("Løb gemt!").font(.headline).foregroundColor(.green)
+                Text("Synkroniserer til iPhone...").font(.caption2).foregroundColor(.gray)
 
                 Divider()
 
@@ -314,16 +307,8 @@ struct WorkoutSummaryView: View {
                 SummaryRow(icon: "heart.fill", label: "Puls", value: "\(Int(workoutManager.heartRate)) bpm", color: .red)
                 SummaryRow(icon: "flame.fill", label: "Kalorier", value: "\(Int(workoutManager.calories)) kcal", color: .orange)
 
-                Text("Synkroniserer til iPhone...")
-                    .font(.caption2)
-                    .foregroundColor(.gray)
-                    .padding(.top, 4)
-
-                Button("Ny træning") {
-                    workoutManager.resetWorkout()
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.green)
+                Button("Ny træning") { workoutManager.resetWorkout() }
+                    .buttonStyle(.borderedProminent).tint(.green)
             }
             .padding(.horizontal, 8)
         }
@@ -338,16 +323,10 @@ struct SummaryRow: View {
 
     var body: some View {
         HStack {
-            Image(systemName: icon)
-                .foregroundColor(color)
-                .frame(width: 20)
-            Text(label)
-                .font(.caption)
-                .foregroundColor(.gray)
+            Image(systemName: icon).foregroundColor(color).frame(width: 20)
+            Text(label).font(.caption).foregroundColor(.gray)
             Spacer()
-            Text(value)
-                .font(.caption)
-                .fontWeight(.semibold)
+            Text(value).font(.caption).fontWeight(.semibold)
                 .foregroundColor(color == .white ? .white : color)
         }
     }
