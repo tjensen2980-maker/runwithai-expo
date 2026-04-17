@@ -337,7 +337,6 @@ function TabBar({ tab, setTab }) {
     <View style={s.tabBar}>
       {TABS.map(t_item => {
 
-// ─── TAB IKONER (React Native SVG) ───────────────────────────────────────────
         const active = tab === t_item.id;
         return (
           <TouchableOpacity
