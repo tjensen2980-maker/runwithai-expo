@@ -20,13 +20,6 @@ echo "npm: $NPM_BIN"
 echo "pod: $POD_BIN"
 echo "npx: $NPX_BIN"
 
-echo "=== Updating xcodeproj gem for Xcode 26 compatibility ==="
-# Xcode 26 uses objectVersion=70 which requires a newer xcodeproj gem
-# Use --user-install since we don't have sudo
-gem install xcodeproj --user-install || true
-# Add user gem bin to PATH so pod uses the new xcodeproj
-export PATH="$(ruby -e 'puts Gem.user_dir')/bin:$PATH"
-
 echo "=== Installing Node.js dependencies ==="
 cd "$CI_PRIMARY_REPOSITORY_PATH"
 "$NPM_BIN" install --legacy-peer-deps
@@ -57,6 +50,10 @@ echo "=== Generating iOS native files via expo prebuild ==="
 cd "$REPO"
 "$NPX_BIN" expo prebuild --no-install --platform ios
 
+echo "=== Running pod install (before restoring Watch xcodeproj) ==="
+cd "$IOS_DIR"
+"$POD_BIN" install --repo-update
+
 echo "=== Restoring Watch targets and xcodeproj ==="
 cp -R "$BACKUP_DIR/RunWithAI Watch Watch App" "$IOS_DIR/" 2>/dev/null || true
 cp -R "$BACKUP_DIR/RunWithAI Watch Watch AppTests" "$IOS_DIR/" 2>/dev/null || true
@@ -68,9 +65,5 @@ cp -R "$BACKUP_DIR/RunWithAI.xcodeproj" "$IOS_DIR/" 2>/dev/null || true
 cp "$BACKUP_DIR/RCTWatchConnectivity.h" "$IOS_DIR/" 2>/dev/null || true
 cp "$BACKUP_DIR/RCTWatchConnectivity.mm" "$IOS_DIR/" 2>/dev/null || true
 cp -R "$BACKUP_DIR/ci_scripts" "$IOS_DIR/" 2>/dev/null || true
-
-echo "=== Running pod install ==="
-cd "$IOS_DIR"
-"$POD_BIN" install --repo-update
 
 echo "=== ci_post_clone.sh completed successfully ==="
