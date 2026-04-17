@@ -133,8 +133,15 @@ const WatchModule = {
             return null;
         }
         try {
-            const result = await RCTWatchConnectivity.transferUserInfo(data);
-            return result;
+            // Try native transferUserInfo if available, otherwise use sendUpdateToWatch
+            if (RCTWatchConnectivity.transferUserInfo) {
+                const result = await RCTWatchConnectivity.transferUserInfo(data);
+                return result;
+            } else {
+                // Fallback: brug sendUpdateToWatch (kræver reachable)
+                const result = await RCTWatchConnectivity.sendUpdateToWatch(data);
+                return result;
+            }
         } catch (err) {
             console.error('[WatchModule] transferUserInfo error:', err);
             throw err;
