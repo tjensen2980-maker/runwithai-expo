@@ -2,7 +2,7 @@
   "expo": {
     "name": "RunWithAI",
     "slug": "runwithai",
-    "version": "1.8.0",
+    "version": "1.8.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
