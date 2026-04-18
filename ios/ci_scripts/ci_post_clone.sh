@@ -1,8 +1,6 @@
 #!/bin/sh
 
 # ci_post_clone.sh - Xcode Cloud post-clone script
-# Location: ios/ci_scripts/ci_post_clone.sh
-
 set -e
 
 echo "=== Installing Homebrew packages ==="
@@ -13,10 +11,6 @@ brew install cocoapods || brew upgrade cocoapods || true
 NPM_BIN=$(brew --prefix)/bin/npm
 POD_BIN=$(brew --prefix)/bin/pod
 NPX_BIN=$(brew --prefix)/bin/npx
-
-echo "npm: $NPM_BIN"
-echo "pod: $POD_BIN"
-echo "npx: $NPX_BIN"
 
 echo "=== Installing Node.js dependencies ==="
 cd "$CI_PRIMARY_REPOSITORY_PATH"
@@ -65,56 +59,22 @@ cp -R "$BACKUP_DIR/ci_scripts" "$IOS_DIR/" 2>/dev/null || true
 
 PBXPROJ="$IOS_DIR/RunWithAI.xcodeproj/project.pbxproj"
 
-echo "=== Fixing Watch app settings ==="
+echo "=== Fixing Watch pbxproj settings ==="
 
-# Fix WKCompanionAppBundleIdentifier (empty -> app.runwithai)
 sed -i "" 's/INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "";/INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "app.runwithai";/g' "$PBXPROJ"
 
-# Get iOS app version from app.json
 APP_VERSION=$(node -e "console.log(require('$REPO/app.json').expo.version)" 2>/dev/null || echo "1.8.5")
 echo "App version: $APP_VERSION"
 
-# Fix Watch MARKETING_VERSION using perl multiline replace
 perl -i -0pe "s/(DC27E1FC2F92417B008D2915.*?MARKETING_VERSION = )([^;]+)(;)/\${1}${APP_VERSION}\${3}/s" "$PBXPROJ"
 perl -i -0pe "s/(DC27E1FD2F92417B008D2915.*?MARKETING_VERSION = )([^;]+)(;)/\${1}${APP_VERSION}\${3}/s" "$PBXPROJ"
 
-# Add NSHealth usage descriptions if missing
 grep -q "NSHealthUpdateUsageDescription" "$PBXPROJ" || \
   sed -i "" 's/INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "app.runwithai";/INFOPLIST_KEY_NSHealthShareUsageDescription = "RunWithAI reads health data to show workout stats.";\n\t\t\t\tINFOPLIST_KEY_NSHealthUpdateUsageDescription = "RunWithAI needs HealthKit to track your workouts.";\n\t\t\t\tINFOPLIST_KEY_WKCompanionAppBundleIdentifier = "app.runwithai";/g' "$PBXPROJ"
 
-  echo "Watch settings fixed successfully"
-
-  echo "=== Fixing Watch app icon ==="
+  echo "=== Copying icon to Watch app ==="
   WATCH_ICON_DIR="$IOS_DIR/RunWithAI Watch Watch App/Assets.xcassets/AppIcon.appiconset"
+  cp "$REPO/assets/icon.png" "$WATCH_ICON_DIR/AppIcon.png" || true
+  echo "Watch icon copy done"
 
-  # Copy iOS app icon (1024x1024) to use as Watch icon
-  IOS_ICON="$REPO/assets/icon.png"
-  if [ -f "$IOS_ICON" ]; then
-    cp "$IOS_ICON" "$WATCH_ICON_DIR/AppIcon.png"
-      echo "Copied iOS icon to Watch icon dir"
-      else
-        echo "iOS icon not found at $IOS_ICON, trying alternatives..."
-          find "$REPO/assets" -name "*.png" | head -1 | xargs -I{} cp {} "$WATCH_ICON_DIR/AppIcon.png" || true
-          fi
-
-          # Write correct Contents.json with filename reference
-          cat > "$WATCH_ICON_DIR/Contents.json" << 'EOF'
-          {
-            "images" : [
-                {
-                      "filename" : "AppIcon.png",
-                            "idiom" : "universal",
-                                  "platform" : "watchos",
-                                        "size" : "1024x1024"
-                                            }
-                                              ],
-                                                "info" : {
-                                                    "author" : "xcode",
-                                                        "version" : 1
-                                                          }
-                                                          }
-                                                          EOF
-
-                                                          echo "Watch icon fixed"
-
-                                                          echo "=== ci_post_clone.sh completed ==="
+  echo "=== ci_post_clone.sh completed ==="
