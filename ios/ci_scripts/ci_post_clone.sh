@@ -30,6 +30,13 @@ for LOCALE in el lt en hu cs sl fr ga et ro es mt sk nl da sv pl lv hr it fi de 
               fi
               done
 
+              echo "=== Creating Watch app entitlements file ==="
+              WATCH_ENTITLEMENTS="$IOS_DIR/RunWithAI Watch Watch App/RunWithAI Watch Watch App.entitlements"
+              if [ ! -f "$WATCH_ENTITLEMENTS" ]; then
+                printf '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n<plist version="1.0">\n<dict>\n\t<key>com.apple.developer.healthkit</key>\n\t<true/>\n\t<key>com.apple.developer.healthkit.access</key>\n\t<array/>\n</dict>\n</plist>\n' > "$WATCH_ENTITLEMENTS"
+                  echo "Created Watch entitlements: $WATCH_ENTITLEMENTS"
+                  fi
+
 echo "=== Installing Node.js dependencies ==="
 cd "$REPO"
 "$NPM_BIN" install --legacy-peer-deps
