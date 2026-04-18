@@ -3,6 +3,10 @@
 # ci_post_clone.sh - Xcode Cloud post-clone script
 set -e
 
+REPO="$CI_PRIMARY_REPOSITORY_PATH"
+IOS_DIR="$REPO/ios"
+BACKUP_DIR="$REPO/_watch_backup"
+
 echo "=== Installing Homebrew packages ==="
 brew install node@20 || brew upgrade node@20 || true
 brew link --overwrite node@20 || true
@@ -10,17 +14,30 @@ brew install cocoapods || brew upgrade cocoapods || true
 
 NPM_BIN=$(brew --prefix)/bin/npm
 POD_BIN=$(brew --prefix)/bin/pod
+NPX_BIN=$(brew --prefix)/bin/npx
 
 echo "=== Installing Node.js dependencies ==="
-cd "$CI_PRIMARY_REPOSITORY_PATH"
+cd "$REPO"
 "$NPM_BIN" install --legacy-peer-deps
 
-echo "=== Installing pods ==="
-REPO="$CI_PRIMARY_REPOSITORY_PATH"
-IOS_DIR="$REPO/ios"
+echo "=== Backing up Watch targets ==="
+mkdir -p "$BACKUP_DIR"
+cp -R "$IOS_DIR/RunWithAI Watch Watch App" "$BACKUP_DIR/" 2>/dev/null || true
+cp -R "$IOS_DIR/RunWithAI Watch Watch AppTests" "$BACKUP_DIR/" 2>/dev/null || true
+cp -R "$IOS_DIR/RunWithAI Watch Watch AppUITests" "$BACKUP_DIR/" 2>/dev/null || true
 
+echo "=== Running Expo prebuild (generates Podfile + AppDelegate) ==="
+cd "$REPO"
+"$NPX_BIN" expo prebuild --platform ios --clean 2>&1 | tail -30
+
+echo "=== Restoring Watch targets ==="
+cp -R "$BACKUP_DIR/RunWithAI Watch Watch App" "$IOS_DIR/" 2>/dev/null || true
+cp -R "$BACKUP_DIR/RunWithAI Watch Watch AppTests" "$IOS_DIR/" 2>/dev/null || true
+cp -R "$BACKUP_DIR/RunWithAI Watch Watch AppUITests" "$IOS_DIR/" 2>/dev/null || true
+
+echo "=== Installing pods ==="
 cd "$IOS_DIR"
-"$POD_BIN" install --repo-update
+"$POD_BIN" install
 
 echo "=== Fixing Watch app configuration ==="
 PBXPROJ="$IOS_DIR/RunWithAI.xcodeproj/project.pbxproj"
@@ -53,7 +70,6 @@ perl -i -pe '
                       WATCH_ICON_DIR="$IOS_DIR/RunWithAI Watch Watch App/Assets.xcassets/AppIcon.appiconset"
                       mkdir -p "$WATCH_ICON_DIR"
 
-                      # Copy icon and strip alpha channel using sips
                       cp "$REPO/assets/icon.png" "$WATCH_ICON_DIR/AppIcon.png"
                       sips -s format png --out "$WATCH_ICON_DIR/AppIcon.png" "$WATCH_ICON_DIR/AppIcon.png" 2>/dev/null || true
                       sips -d transparency "$WATCH_ICON_DIR/AppIcon.png" 2>/dev/null || true
