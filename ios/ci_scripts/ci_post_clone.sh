@@ -17,6 +17,7 @@ POD_BIN=$(brew --prefix)/bin/pod
 echo "=== Installing Node.js dependencies ==="
 cd "$REPO"
 "$NPM_BIN" install --legacy-peer-deps
+"$NPM_BIN" install --legacy-peer-deps @react-native-community/cli
 
 echo "=== Installing pods ==="
 cd "$IOS_DIR"
