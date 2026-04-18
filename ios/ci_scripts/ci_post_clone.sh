@@ -51,6 +51,52 @@ for LOCALE in el lt en hu cs sl fr ga et ro es mt sk nl da sv pl lv hr it fi de 
                           echo "Created Expo.plist"
                           fi
 
+# Create AppDelegate.swift if missing
+APP_DELEGATE="$IOS_DIR/RunWithAI/AppDelegate.swift"
+if [ ! -f "$APP_DELEGATE" ]; then
+  python3 -c "
+  content = '''import UIKit
+  import React
+  import React_RCTAppDelegate
+  import ReactAppDependencyProvider
+
+  @main
+  class AppDelegate: RCTAppDelegate {
+    override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        self.automaticallyLoadReactNativeWindow = true
+            self.moduleName = \"main\"
+                self.dependencyProvider = RCTAppDependencyProvider()
+                    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+                      }
+                      }
+                      '''
+                      import sys
+                      with open(sys.argv[1], 'w') as f:
+                          f.write(content)
+                          " "$APP_DELEGATE"
+                            echo "Created AppDelegate.swift"
+                            fi
+
+                            # Create RunWithAI-Bridging-Header.h if missing
+                            BRIDGING_HEADER="$IOS_DIR/RunWithAI/RunWithAI-Bridging-Header.h"
+                            if [ ! -f "$BRIDGING_HEADER" ]; then
+                              python3 -c "
+                              content = '''//
+                              // RunWithAI-Bridging-Header.h
+                              // RunWithAI
+                              //
+                              #ifndef RunWithAI_Bridging_Header_h
+                              #define RunWithAI_Bridging_Header_h
+                              // React Native bridging headers are managed by CocoaPods
+                              #endif
+                              '''
+                              import sys
+                              with open(sys.argv[1], 'w') as f:
+                                  f.write(content)
+                                  " "$BRIDGING_HEADER"
+                                    echo "Created RunWithAI-Bridging-Header.h"
+                                    fi
+                                    
 echo "=== Installing Node.js dependencies ==="
 cd "$REPO"
 "$NPM_BIN" install --legacy-peer-deps
