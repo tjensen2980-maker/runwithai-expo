@@ -5,7 +5,6 @@ set -e
 
 REPO="$CI_PRIMARY_REPOSITORY_PATH"
 IOS_DIR="$REPO/ios"
-BACKUP_DIR="$REPO/_watch_backup"
 
 echo "=== Installing Homebrew packages ==="
 brew install node@20 || brew upgrade node@20 || true
@@ -14,26 +13,10 @@ brew install cocoapods || brew upgrade cocoapods || true
 
 NPM_BIN=$(brew --prefix)/bin/npm
 POD_BIN=$(brew --prefix)/bin/pod
-NPX_BIN=$(brew --prefix)/bin/npx
 
 echo "=== Installing Node.js dependencies ==="
 cd "$REPO"
 "$NPM_BIN" install --legacy-peer-deps
-
-echo "=== Backing up Watch targets ==="
-mkdir -p "$BACKUP_DIR"
-cp -R "$IOS_DIR/RunWithAI Watch Watch App" "$BACKUP_DIR/" 2>/dev/null || true
-cp -R "$IOS_DIR/RunWithAI Watch Watch AppTests" "$BACKUP_DIR/" 2>/dev/null || true
-cp -R "$IOS_DIR/RunWithAI Watch Watch AppUITests" "$BACKUP_DIR/" 2>/dev/null || true
-
-echo "=== Running Expo prebuild (generates Podfile + AppDelegate) ==="
-cd "$REPO"
-"$NPX_BIN" expo prebuild --platform ios --clean
-
-echo "=== Restoring Watch targets ==="
-cp -R "$BACKUP_DIR/RunWithAI Watch Watch App" "$IOS_DIR/" 2>/dev/null || true
-cp -R "$BACKUP_DIR/RunWithAI Watch Watch AppTests" "$IOS_DIR/" 2>/dev/null || true
-cp -R "$BACKUP_DIR/RunWithAI Watch Watch AppUITests" "$IOS_DIR/" 2>/dev/null || true
 
 echo "=== Installing pods ==="
 cd "$IOS_DIR"
