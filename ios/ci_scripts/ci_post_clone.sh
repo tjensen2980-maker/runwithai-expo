@@ -74,15 +74,47 @@ sed -i "" 's/INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "";/INFOPLIST_KEY_WK
 APP_VERSION=$(node -e "console.log(require('$REPO/app.json').expo.version)" 2>/dev/null || echo "1.8.5")
 echo "App version: $APP_VERSION"
 
-# Fix Watch MARKETING_VERSION - replace 1.0 with app version in Watch Debug config block
-# Use perl for reliable multi-line replacement
+# Fix Watch MARKETING_VERSION using perl multiline replace
 perl -i -0pe "s/(DC27E1FC2F92417B008D2915.*?MARKETING_VERSION = )([^;]+)(;)/\${1}${APP_VERSION}\${3}/s" "$PBXPROJ"
 perl -i -0pe "s/(DC27E1FD2F92417B008D2915.*?MARKETING_VERSION = )([^;]+)(;)/\${1}${APP_VERSION}\${3}/s" "$PBXPROJ"
 
-# Add NSHealth usage descriptions to Watch Debug config (DC27E1FC) if missing
+# Add NSHealth usage descriptions if missing
 grep -q "NSHealthUpdateUsageDescription" "$PBXPROJ" || \
   sed -i "" 's/INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "app.runwithai";/INFOPLIST_KEY_NSHealthShareUsageDescription = "RunWithAI reads health data to show workout stats.";\n\t\t\t\tINFOPLIST_KEY_NSHealthUpdateUsageDescription = "RunWithAI needs HealthKit to track your workouts.";\n\t\t\t\tINFOPLIST_KEY_WKCompanionAppBundleIdentifier = "app.runwithai";/g' "$PBXPROJ"
 
   echo "Watch settings fixed successfully"
 
-  echo "=== ci_post_clone.sh completed ==="
+  echo "=== Fixing Watch app icon ==="
+  WATCH_ICON_DIR="$IOS_DIR/RunWithAI Watch Watch App/Assets.xcassets/AppIcon.appiconset"
+
+  # Copy iOS app icon (1024x1024) to use as Watch icon
+  IOS_ICON="$REPO/assets/icon.png"
+  if [ -f "$IOS_ICON" ]; then
+    cp "$IOS_ICON" "$WATCH_ICON_DIR/AppIcon.png"
+      echo "Copied iOS icon to Watch icon dir"
+      else
+        echo "iOS icon not found at $IOS_ICON, trying alternatives..."
+          find "$REPO/assets" -name "*.png" | head -1 | xargs -I{} cp {} "$WATCH_ICON_DIR/AppIcon.png" || true
+          fi
+
+          # Write correct Contents.json with filename reference
+          cat > "$WATCH_ICON_DIR/Contents.json" << 'EOF'
+          {
+            "images" : [
+                {
+                      "filename" : "AppIcon.png",
+                            "idiom" : "universal",
+                                  "platform" : "watchos",
+                                        "size" : "1024x1024"
+                                            }
+                                              ],
+                                                "info" : {
+                                                    "author" : "xcode",
+                                                        "version" : 1
+                                                          }
+                                                          }
+                                                          EOF
+
+                                                          echo "Watch icon fixed"
+
+                                                          echo "=== ci_post_clone.sh completed ==="
