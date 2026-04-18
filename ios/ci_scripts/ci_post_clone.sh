@@ -20,6 +20,16 @@ sed -i '' 's/objectVersion = 70;/objectVersion = 60;/g' "$PBXPROJ"
 echo "objectVersion after patch:"
 grep "objectVersion" "$PBXPROJ"
 
+echo "=== Creating missing InfoPlist.strings locale files ==="
+SUPPORTING_DIR="$IOS_DIR/RunWithAI/Supporting"
+for LOCALE in el lt en hu cs sl fr ga et ro es mt sk nl da sv pl lv hr it fi de bg pt; do
+  mkdir -p "$SUPPORTING_DIR/$LOCALE.lproj"
+    if [ ! -f "$SUPPORTING_DIR/$LOCALE.lproj/InfoPlist.strings" ]; then
+        printf '/* InfoPlist.strings */\n' > "$SUPPORTING_DIR/$LOCALE.lproj/InfoPlist.strings"
+            echo "Created $LOCALE.lproj/InfoPlist.strings"
+              fi
+              done
+
 echo "=== Installing Node.js dependencies ==="
 cd "$REPO"
 "$NPM_BIN" install --legacy-peer-deps
