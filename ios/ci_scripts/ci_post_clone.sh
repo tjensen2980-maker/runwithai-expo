@@ -26,55 +26,57 @@ mkdir -p "$BACKUP_DIR"
 cp -R "$IOS_DIR/RunWithAI Watch Watch App" "$BACKUP_DIR/" 2>/dev/null || true
 cp -R "$IOS_DIR/RunWithAI Watch Watch AppTests" "$BACKUP_DIR/" 2>/dev/null || true
 cp -R "$IOS_DIR/RunWithAI Watch Watch AppUITests" "$BACKUP_DIR/" 2>/dev/null || true
-cp -R "$IOS_DIR/watchkitapp Watch App" "$BACKUP_DIR/" 2>/dev/null || true
-cp -R "$IOS_DIR/watchkitapp Watch AppTests" "$BACKUP_DIR/" 2>/dev/null || true
-cp -R "$IOS_DIR/watchkitapp Watch AppUITests" "$BACKUP_DIR/" 2>/dev/null || true
-cp -R "$IOS_DIR/RunWithAI.xcodeproj" "$BACKUP_DIR/" 2>/dev/null || true
-cp "$IOS_DIR/RCTWatchConnectivity.h" "$BACKUP_DIR/" 2>/dev/null || true
-cp "$IOS_DIR/RCTWatchConnectivity.mm" "$BACKUP_DIR/" 2>/dev/null || true
-cp -R "$IOS_DIR/ci_scripts" "$BACKUP_DIR/" 2>/dev/null || true
 
-echo "=== Removing ios/ folder for clean prebuild ==="
-rm -rf "$IOS_DIR"
-
-echo "=== Generating iOS native files via expo prebuild ==="
+echo "=== Running Expo prebuild ==="
 cd "$REPO"
-"$NPX_BIN" expo prebuild --no-install --platform ios
+"$NPX_BIN" expo prebuild --platform ios --no-install 2>&1 | tail -20
 
-echo "=== Running pod install ==="
-cd "$IOS_DIR"
-"$POD_BIN" install --repo-update
-
-echo "=== Restoring Watch targets and xcodeproj ==="
+echo "=== Restoring Watch targets ==="
 cp -R "$BACKUP_DIR/RunWithAI Watch Watch App" "$IOS_DIR/" 2>/dev/null || true
 cp -R "$BACKUP_DIR/RunWithAI Watch Watch AppTests" "$IOS_DIR/" 2>/dev/null || true
 cp -R "$BACKUP_DIR/RunWithAI Watch Watch AppUITests" "$IOS_DIR/" 2>/dev/null || true
-cp -R "$BACKUP_DIR/watchkitapp Watch App" "$IOS_DIR/" 2>/dev/null || true
-cp -R "$BACKUP_DIR/watchkitapp Watch AppTests" "$IOS_DIR/" 2>/dev/null || true
-cp -R "$BACKUP_DIR/watchkitapp Watch AppUITests" "$IOS_DIR/" 2>/dev/null || true
-cp -R "$BACKUP_DIR/RunWithAI.xcodeproj" "$IOS_DIR/" 2>/dev/null || true
-cp "$BACKUP_DIR/RCTWatchConnectivity.h" "$IOS_DIR/" 2>/dev/null || true
-cp "$BACKUP_DIR/RCTWatchConnectivity.mm" "$IOS_DIR/" 2>/dev/null || true
-cp -R "$BACKUP_DIR/ci_scripts" "$IOS_DIR/" 2>/dev/null || true
 
+echo "=== Installing pods ==="
+cd "$IOS_DIR"
+"$POD_BIN" install --repo-update
+
+echo "=== Fixing Watch app configuration ==="
 PBXPROJ="$IOS_DIR/RunWithAI.xcodeproj/project.pbxproj"
 
-echo "=== Fixing Watch pbxproj settings ==="
+# Fix WKCompanionAppBundleIdentifier
+sed -i '' 's/WKCompanionAppBundleIdentifier = "";/WKCompanionAppBundleIdentifier = "app.runwithai";/g' "$PBXPROJ"
+sed -i '' 's/WKCompanionAppBundleIdentifier = ;/WKCompanionAppBundleIdentifier = "app.runwithai";/g' "$PBXPROJ"
 
-sed -i "" 's/INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "";/INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "app.runwithai";/g' "$PBXPROJ"
-
-APP_VERSION=$(node -e "console.log(require('$REPO/app.json').expo.version)" 2>/dev/null || echo "1.8.5")
+# Fix Watch app MARKETING_VERSION to match iOS
+APP_VERSION=$(grep '"version"' "$REPO/app.json" | head -1 | sed 's/.*"version": "\(.*\)".*/\1/')
 echo "App version: $APP_VERSION"
 
-perl -i -0pe "s/(DC27E1FC2F92417B008D2915.*?MARKETING_VERSION = )([^;]+)(;)/\${1}${APP_VERSION}\${3}/s" "$PBXPROJ"
-perl -i -0pe "s/(DC27E1FD2F92417B008D2915.*?MARKETING_VERSION = )([^;]+)(;)/\${1}${APP_VERSION}\${3}/s" "$PBXPROJ"
+perl -i -pe '
+  if (/DC27E1FC|DC27E1FD/) { $in_watch = 1 }
+    if ($in_watch && /MARKETING_VERSION/) {
+        s/MARKETING_VERSION = [^;]+;/MARKETING_VERSION = '"$APP_VERSION"';/;
+            $in_watch = 0;
+              }
+              ' "$PBXPROJ"
 
-grep -q "NSHealthUpdateUsageDescription" "$PBXPROJ" || \
-  sed -i "" 's/INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "app.runwithai";/INFOPLIST_KEY_NSHealthShareUsageDescription = "RunWithAI reads health data to show workout stats.";\n\t\t\t\tINFOPLIST_KEY_NSHealthUpdateUsageDescription = "RunWithAI needs HealthKit to track your workouts.";\n\t\t\t\tINFOPLIST_KEY_WKCompanionAppBundleIdentifier = "app.runwithai";/g' "$PBXPROJ"
+              # Fix NSHealth usage descriptions in Watch Info.plist
+              WATCH_PLIST="$IOS_DIR/RunWithAI Watch Watch App/Info.plist"
+              if [ -f "$WATCH_PLIST" ]; then
+                if ! grep -q "NSHealthUpdateUsageDescription" "$WATCH_PLIST"; then
+                    sed -i '' 's|</dict>|<key>NSHealthUpdateUsageDescription</key><string>RunWithAI uses HealthKit to save your workout data.</string><key>NSHealthShareUsageDescription</key><string>RunWithAI reads your health data to personalize your training.</string></dict>|' "$WATCH_PLIST"
+                      fi
+                      fi
 
-  echo "=== Copying icon to Watch app ==="
-  WATCH_ICON_DIR="$IOS_DIR/RunWithAI Watch Watch App/Assets.xcassets/AppIcon.appiconset"
-  cp "$REPO/assets/icon.png" "$WATCH_ICON_DIR/AppIcon.png" || true
-  echo "Watch icon copy done"
+                      echo "=== Fixing Watch app icon ==="
+                      WATCH_ICON_DIR="$IOS_DIR/RunWithAI Watch Watch App/Assets.xcassets/AppIcon.appiconset"
+                      mkdir -p "$WATCH_ICON_DIR"
 
-  echo "=== ci_post_clone.sh completed ==="
+                      # Copy icon and strip alpha channel using sips
+                      cp "$REPO/assets/icon.png" "$WATCH_ICON_DIR/AppIcon.png"
+                      sips -s format png --out "$WATCH_ICON_DIR/AppIcon.png" "$WATCH_ICON_DIR/AppIcon.png" 2>/dev/null || true
+                      sips -d transparency "$WATCH_ICON_DIR/AppIcon.png" 2>/dev/null || true
+
+                      echo "Icon info:"
+                      sips -g all "$WATCH_ICON_DIR/AppIcon.png" 2>/dev/null | grep -E "pixelWidth|pixelHeight|hasAlpha|format" || true
+
+                      echo "=== Done ==="
