@@ -37,6 +37,20 @@ for LOCALE in el lt en hu cs sl fr ga et ro es mt sk nl da sv pl lv hr it fi de 
                   echo "Created Watch entitlements: $WATCH_ENTITLEMENTS"
                   fi
 
+                  echo "=== Creating missing iOS resource files ==="
+                  # Create SplashScreen.storyboard if missing
+                  SPLASH="$IOS_DIR/RunWithAI/SplashScreen.storyboard"
+                  if [ ! -f "$SPLASH" ]; then
+                    printf '<?xml version="1.0" encoding="UTF-8"?>\n<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="AppleCocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">\n    <dependencies>\n        <deployment identifier="iOS"/>\n        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>\n        <capability name="Safe area layout guides" minToolsVersion="9.0"/>\n        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>\n    </dependencies>\n    <scenes>\n        <scene sceneID="EHf-IW-A2E">\n            <objects>\n                <viewController id="01J-lp-oVM" sceneMemberID="viewController">\n                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">\n                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>\n                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>\n                        <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>\n                    </view>\n                </viewController>\n                <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>\n            </objects>\n            <point key="canvasLocation" x="53" y="375"/>\n        </scene>\n    </scenes>\n</document>\n' > "$SPLASH"
+                      echo "Created SplashScreen.storyboard"
+                      fi
+                      # Create Expo.plist if missing
+                      EXPO_PLIST="$IOS_DIR/RunWithAI/Supporting/Expo.plist"
+                      if [ ! -f "$EXPO_PLIST" ]; then
+                        printf '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n<plist version="1.0">\n<dict>\n\t<key>EXUpdatesCheckOnLaunch</key>\n\t<string>ALWAYS</string>\n\t<key>EXUpdatesEnabled</key>\n\t<false/>\n\t<key>EXUpdatesLaunchWaitMs</key>\n\t<integer>0</integer>\n</dict>\n</plist>\n' > "$EXPO_PLIST"
+                          echo "Created Expo.plist"
+                          fi
+
 echo "=== Installing Node.js dependencies ==="
 cd "$REPO"
 "$NPM_BIN" install --legacy-peer-deps
