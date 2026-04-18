@@ -15,11 +15,13 @@ NPM_BIN=$(brew --prefix)/bin/npm
 POD_BIN=$(brew --prefix)/bin/pod
 
 echo "=== Upgrading xcodeproj gem inside CocoaPods ==="
-PODS_GEM_DIR=$($(brew --prefix)/bin/pod env | grep GEM_HOME | cut -d'=' -f2 | tr -d ' "' || true)
-if [ -n "$PODS_GEM_DIR" ]; then
-  /usr/local/Cellar/cocoapods/1.16.2_2/libexec/bin/gem install xcodeproj --install-dir "$PODS_GEM_DIR" --no-document || true
+PODS_GEMS_DIR=$(find /usr/local/Cellar/cocoapods -name "gems" -type d 2>/dev/null | head -1)
+RUBY_GEM_BIN=$(find /usr/local/Cellar/ruby -name "gem" -type f 2>/dev/null | head -1)
+echo "CocoaPods gems dir: $PODS_GEMS_DIR"
+echo "Ruby gem binary: $RUBY_GEM_BIN"
+if [ -n "$PODS_GEMS_DIR" ] && [ -n "$RUBY_GEM_BIN" ]; then
+  "$RUBY_GEM_BIN" install xcodeproj --install-dir "$PODS_GEMS_DIR" --no-document || true
   fi
-  /usr/local/Cellar/cocoapods/1.16.2_2/libexec/bin/gem install xcodeproj --install-dir /usr/local/Cellar/cocoapods/1.16.2_2/libexec/gems --no-document || true
 
   echo "=== Installing Node.js dependencies ==="
   cd "$REPO"
@@ -49,23 +51,23 @@ if [ -n "$PODS_GEM_DIR" ]; then
          }
           ' "$PBXPROJ"
 
-            # Fix NSHealth usage descriptions in Watch Info.plist
-              WATCH_PLIST="$IOS_DIR/RunWithAI Watch Watch App/Info.plist"
-                if [ -f "$WATCH_PLIST" ]; then
-                  if ! grep -q "NSHealthUpdateUsageDescription" "$WATCH_PLIST"; then
-                    sed -i '' 's|</dict>|<key>NSHealthUpdateUsageDescription</key><string>RunWithAI uses HealthKit to save your workout data.</string><key>NSHealthShareUsageDescription</key><string>RunWithAI reads your health data to personalize your training.</string></dict>|' "$WATCH_PLIST"
-                      fi
-                        fi
+          # Fix NSHealth usage descriptions in Watch Info.plist
+          WATCH_PLIST="$IOS_DIR/RunWithAI Watch Watch App/Info.plist"
+          if [ -f "$WATCH_PLIST" ]; then
+            if ! grep -q "NSHealthUpdateUsageDescription" "$WATCH_PLIST"; then
+                sed -i '' 's|</dict>|<key>NSHealthUpdateUsageDescription</key><string>RunWithAI uses HealthKit to save your workout data.</string><key>NSHealthShareUsageDescription</key><string>RunWithAI reads your health data to personalize your training.</string></dict>|' "$WATCH_PLIST"
+                  fi
+                  fi
 
-                          echo "=== Fixing Watch app icon ==="
-                            WATCH_ICON_DIR="$IOS_DIR/RunWithAI Watch Watch App/Assets.xcassets/AppIcon.appiconset"
-                              mkdir -p "$WATCH_ICON_DIR"
+                  echo "=== Fixing Watch app icon ==="
+                  WATCH_ICON_DIR="$IOS_DIR/RunWithAI Watch Watch App/Assets.xcassets/AppIcon.appiconset"
+                  mkdir -p "$WATCH_ICON_DIR"
 
-                                cp "$REPO/assets/icon.png" "$WATCH_ICON_DIR/AppIcon.png"
-                                  sips -s format png --out "$WATCH_ICON_DIR/AppIcon.png" "$WATCH_ICON_DIR/AppIcon.png" 2>/dev/null || true
-                                    sips -d transparency "$WATCH_ICON_DIR/AppIcon.png" 2>/dev/null || true
+                  cp "$REPO/assets/icon.png" "$WATCH_ICON_DIR/AppIcon.png"
+                  sips -s format png --out "$WATCH_ICON_DIR/AppIcon.png" "$WATCH_ICON_DIR/AppIcon.png" 2>/dev/null || true
+                  sips -d transparency "$WATCH_ICON_DIR/AppIcon.png" 2>/dev/null || true
 
-                                      echo "Icon info:"
-                                        sips -g all "$WATCH_ICON_DIR/AppIcon.png" 2>/dev/null | grep -E "pixelWidth|pixelHeight|hasAlpha|format" || true
+                  echo "Icon info:"
+                  sips -g all "$WATCH_ICON_DIR/AppIcon.png" 2>/dev/null | grep -E "pixelWidth|pixelHeight|hasAlpha|format" || true
 
-                                          echo "=== Done ==="
+                  echo "=== Done ==="
