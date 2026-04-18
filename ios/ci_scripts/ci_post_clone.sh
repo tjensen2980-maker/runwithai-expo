@@ -66,10 +66,10 @@ cp "$BACKUP_DIR/RCTWatchConnectivity.h" "$IOS_DIR/" 2>/dev/null || true
 cp "$BACKUP_DIR/RCTWatchConnectivity.mm" "$IOS_DIR/" 2>/dev/null || true
 cp -R "$BACKUP_DIR/ci_scripts" "$IOS_DIR/" 2>/dev/null || true
 
-echo "=== Setting build number ==="
-BUILD_NUMBER=${CI_BUILD_NUMBER:-100}
-if [ "$BUILD_NUMBER" -lt 78 ]; then BUILD_NUMBER=78; fi
-find "$IOS_DIR" -name "*.xcodeproj" -prune -o -name "Info.plist" -print | xargs -I {} /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" {} 2>/dev/null || true
+echo "=== Setting build number in pbxproj ==="
+BUILD_NUMBER=78
+PBXPROJ="$IOS_DIR/RunWithAI.xcodeproj/project.pbxproj"
+sed -i "" "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = $BUILD_NUMBER/g" "$PBXPROJ"
 echo "Build number set to: $BUILD_NUMBER"
 
 echo "=== ci_post_clone.sh completed successfully ==="
