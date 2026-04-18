@@ -24,6 +24,14 @@ target 'RunWithAI' do
       installer,
       config[:reactNativePath],
       :mac_catalyst_enabled => false,
+      )
+      installer.pods_project.targets.each do |target|
+        if target.name == 'fmt'
+          target.build_configurations.each do |config|
+            config.build_settings['OTHER_CPLUSPLUSFLAGS'] = '$(inherited) -DFMT_USE_CONSTEVAL=0'
+          end
+        end
+      end
     )
   end
 end
