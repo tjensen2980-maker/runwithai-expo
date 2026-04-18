@@ -8,8 +8,6 @@ ENV['RCT_NEW_ARCH_ENABLED'] = podfile_properties['newArchEnabled'] == 'true' ? '
 platform :ios, podfile_properties['ios.deploymentTarget'] || '15.1'
 install! 'cocoapods', :deterministic_uuids => false
 
-prepare_react_native_project!
-
 target 'RunWithAI' do
   use_expo_modules!
   config = use_native_modules!
