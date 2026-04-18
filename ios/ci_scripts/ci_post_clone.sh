@@ -28,7 +28,7 @@ cp -R "$IOS_DIR/RunWithAI Watch Watch AppUITests" "$BACKUP_DIR/" 2>/dev/null || 
 
 echo "=== Running Expo prebuild (generates Podfile + AppDelegate) ==="
 cd "$REPO"
-"$NPX_BIN" expo prebuild --platform ios --clean 2>&1 | tail -30
+"$NPX_BIN" expo prebuild --platform ios --clean
 
 echo "=== Restoring Watch targets ==="
 cp -R "$BACKUP_DIR/RunWithAI Watch Watch App" "$IOS_DIR/" 2>/dev/null || true
