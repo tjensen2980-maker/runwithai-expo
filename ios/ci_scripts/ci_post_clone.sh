@@ -13,6 +13,8 @@ brew install cocoapods || brew upgrade cocoapods || true
 
 NPM_BIN=$(brew --prefix)/bin/npm
 POD_BIN=$(brew --prefix)/bin/pod
+echo "=== Upgrading xcodeproj gem ==="
+gem install xcodeproj --no-document || true
 
 echo "=== Installing Node.js dependencies ==="
 cd "$REPO"
