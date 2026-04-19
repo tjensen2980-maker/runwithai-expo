@@ -31,8 +31,37 @@ sed -i '' 's/objectVersion = 70;/objectVersion = 60;/g' "$PBXPROJ"
 
 echo "=== Fixing version numbers ==="
 sed -i '' 's/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = 1.7.3;/g' "$PBXPROJ"
-sed -i '' 's/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = 177;/g' "$PBXPROJ"
+sed -i '' 's/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = 178;/g' "$PBXPROJ"
 echo "MARKETING_VERSION after:"; grep "MARKETING_VERSION" "$PBXPROJ" | head -4
+
+echo "=== Removing conflicting AppDelegate.h (causes EXAppDelegateWrapper vs RCTAppDelegate conflict) ==="
+# AppDelegate.h defines @interface AppDelegate : EXAppDelegateWrapper
+# but AppDelegate.swift defines class AppDelegate: RCTAppDelegate
+# This conflict causes a runtime crash. Remove .h and its references from pbxproj.
+APPDEL_H="$IOS_DIR/RunWithAI/AppDelegate.h"
+if [ -f "$APPDEL_H" ]; then
+  rm -f "$APPDEL_H"
+  echo "Deleted AppDelegate.h"
+else
+  echo "AppDelegate.h not found, skipping"
+fi
+# Remove AppDelegate.h references from pbxproj
+python3 -c "
+import sys, re
+path = sys.argv[1]
+f = open(path, 'r')
+content = f.read()
+f.close()
+# Remove any line referencing AppDelegate.h in pbxproj
+lines = content.split(chr(10))
+filtered = [l for l in lines if 'AppDelegate.h' not in l]
+result = chr(10).join(filtered)
+f = open(path, 'w')
+f.write(result)
+f.close()
+removed = len(lines) - len(filtered)
+print('Removed', removed, 'AppDelegate.h references from pbxproj')
+" "$PBXPROJ"
 
 echo "=== Adding NSHealth keys to Watch target in pbxproj ==="
 python3 -c "import sys; path=sys.argv[1]; f=open(path,'r'); c=f.read(); f.close(); q=chr(34); old='INFOPLIST_KEY_WKBackgroundModes = '+q+'workout-processing'+q+';'; new=old+'\n\t\t\t\tINFOPLIST_KEY_NSHealthShareUsageDescription = '+q+'RunWithAI reads health data.'+q+';\n\t\t\t\tINFOPLIST_KEY_NSHealthUpdateUsageDescription = '+q+'RunWithAI writes workout data.'+q+';'; f=open(path,'w'); f.write(c.replace(old,new) if old in c else c); f.close()" "$PBXPROJ"
@@ -52,8 +81,9 @@ echo "=== Creating iOS support files ==="
 EXPO_PLIST="$IOS_DIR/RunWithAI/Supporting/Expo.plist"
 [ -f "$EXPO_PLIST" ] || printf '<?xml version="1.0" encoding="UTF-8"?>\n<plist version="1.0">\n<dict>\n\t<key>EXUpdatesEnabled</key>\n\t<false/>\n</dict>\n</plist>\n' > "$EXPO_PLIST"
 
+# Always overwrite AppDelegate.swift to ensure it uses RCTAppDelegate (not EXAppDelegateWrapper)
 APP_DELEGATE="$IOS_DIR/RunWithAI/AppDelegate.swift"
-[ -f "$APP_DELEGATE" ] || python3 -c "import sys; q=chr(34); f=open(sys.argv[1],'w'); f.write('import UIKit\nimport React\nimport React_RCTAppDelegate\nimport ReactAppDependencyProvider\n\n@main\nclass AppDelegate: RCTAppDelegate {\n override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {\n self.automaticallyLoadReactNativeWindow = true\n self.moduleName = '+q+'main'+q+'\n self.dependencyProvider = RCTAppDependencyProvider()\n return super.application(application, didFinishLaunchingWithOptions: launchOptions)\n }\n override func bundleURL() -> URL? {\n #if DEBUG\n return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: \".expo/.virtual-metro-entry\")\n #else\n return Bundle.main.url(forResource: \"main\", withExtension: \"jsbundle\")\n #endif\n }\n}\n'); f.close()" "$APP_DELEGATE"
+python3 -c "import sys; q=chr(34); f=open(sys.argv[1],'w'); f.write('import UIKit\nimport React\nimport React_RCTAppDelegate\nimport ReactAppDependencyProvider\n\n@main\nclass AppDelegate: RCTAppDelegate {\n override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {\n self.automaticallyLoadReactNativeWindow = true\n self.moduleName = '+q+'main'+q+'\n self.dependencyProvider = RCTAppDependencyProvider()\n return super.application(application, didFinishLaunchingWithOptions: launchOptions)\n }\n override func bundleURL() -> URL? {\n #if DEBUG\n return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: \".expo/.virtual-metro-entry\")\n #else\n return Bundle.main.url(forResource: \"main\", withExtension: \"jsbundle\")\n #endif\n }\n}\n'); f.close(); print('AppDelegate.swift written')" "$APP_DELEGATE"
 
 BRIDGING_HEADER="$IOS_DIR/RunWithAI/RunWithAI-Bridging-Header.h"
 [ -f "$BRIDGING_HEADER" ] || printf '#ifndef RunWithAI_Bridging_Header_h\n#define RunWithAI_Bridging_Header_h\n#endif\n' > "$BRIDGING_HEADER"
@@ -108,9 +138,6 @@ cd "$REPO"
 BUNDLE_OUTPUT="$IOS_DIR/RunWithAI/main.jsbundle"
 ASSETS_OUTPUT="$IOS_DIR/RunWithAI/assets"
 mkdir -p "$ASSETS_OUTPUT"
-
-# Use expo export:embed which is the correct command for Xcode integration
-# This produces a proper production bundle compatible with the installed Hermes version
 node_modules/.bin/expo export:embed \
   --platform ios \
   --entry-file node_modules/expo/AppEntry.js \
@@ -118,7 +145,6 @@ node_modules/.bin/expo export:embed \
   --assets-dest "$ASSETS_OUTPUT" \
   --dev false \
   --minify true
-
 if [ -f "$BUNDLE_OUTPUT" ]; then
   BUNDLE_SIZE=$(wc -c < "$BUNDLE_OUTPUT")
   echo "main.jsbundle created: $BUNDLE_SIZE bytes"
@@ -129,13 +155,13 @@ fi
 echo "=== Setting SKIP_BUNDLING=1 to prevent Xcode from re-bundling ==="
 XCODE_ENV_LOCAL="$IOS_DIR/.xcode.env.local"
 echo "export SKIP_BUNDLING=1" >> "$XCODE_ENV_LOCAL"
-echo "SKIP_BUNDLING=1 appended to $XCODE_ENV_LOCAL"
-cat "$XCODE_ENV_LOCAL"
+echo "SKIP_BUNDLING=1 appended"; cat "$XCODE_ENV_LOCAL"
 
 echo "=== Adding main.jsbundle to Xcode project resources ==="
 python3 -c "import sys, hashlib; path = sys.argv[1]; f = open(path, 'r'); content = f.read(); f.close(); q = chr(34); lt = chr(60); gt = chr(62); file_ref_uuid = hashlib.md5(b'main_jsbundle_fileref').hexdigest()[:24].upper(); build_file_uuid = hashlib.md5(b'main_jsbundle_buildfile').hexdigest()[:24].upper(); already = 'main.jsbundle' in content; file_ref_entry = chr(9)+chr(9)+file_ref_uuid+' /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = '+q+'main.jsbundle'+q+'; path = RunWithAI/main.jsbundle; sourceTree = '+q+lt+'group'+gt+q+'; };'+chr(10); build_file_entry = chr(9)+chr(9)+build_file_uuid+' /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = '+file_ref_uuid+' /* main.jsbundle */; };'+chr(10); group_line = 'F11748412D0307B40044C1D9 /* AppDelegate.swift */,'; group_entry = chr(9)+chr(9)+chr(9)+chr(9)+file_ref_uuid+' /* main.jsbundle */,'; resource_line = 'BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,'; resource_entry = chr(9)+chr(9)+chr(9)+chr(9)+build_file_uuid+' /* main.jsbundle in Resources */,'; content = content if already else content.replace('/* End PBXFileReference section */', file_ref_entry + chr(9)+chr(9)+'/* End PBXFileReference section */').replace('/* End PBXBuildFile section */', build_file_entry + chr(9)+chr(9)+'/* End PBXBuildFile section */').replace(group_line, group_line+chr(10)+group_entry).replace(resource_line, resource_entry+chr(10)+chr(9)+chr(9)+chr(9)+chr(9)+resource_line.strip()); f = open(path, 'w'); f.write(content); f.close(); print('Already present' if already else 'Added main.jsbundle to Xcode project resources')" "$PBXPROJ"
 
-echo "=== Verifying main.jsbundle in pbxproj ==="
-grep -c "main.jsbundle" "$PBXPROJ" && echo "main.jsbundle entries found in pbxproj" || echo "WARNING: main.jsbundle not in pbxproj"
+echo "=== Verifying ==="
+grep -c "main.jsbundle" "$PBXPROJ" && echo "main.jsbundle entries found in pbxproj"
+grep -c "AppDelegate.h" "$PBXPROJ" 2>/dev/null && echo "WARNING: AppDelegate.h still in pbxproj" || echo "AppDelegate.h successfully removed from pbxproj"
 
 echo "Command executed successfully"
