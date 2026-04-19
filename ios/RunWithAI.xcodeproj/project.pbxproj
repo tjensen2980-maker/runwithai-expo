@@ -16,7 +16,6 @@
 		32A1309BD13E450DA6258778 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C20654CE11804A0FB7535CDB /* InfoPlist.strings */; };
 		3AA68EE2B64041B0BB2159C0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D11DB2ADC4D148EDAA3F3AE0 /* InfoPlist.strings */; };
 		3AB349A7E3144D149C4B5A37 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 91C8FF2D570A444CBE2CE607 /* InfoPlist.strings */; };
-		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		4E354104A066468C8970B28E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 69DD1DF11D754511861DCC04 /* InfoPlist.strings */; };
 		4E71998A34F145F4998F95E7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B132A3841F81462180288613 /* InfoPlist.strings */; };
 		56162E32D3AA093DD1527AAB /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4A336CAAD63C1BEC90664BC4 /* PrivacyInfo.xcprivacy */; };
@@ -93,7 +92,6 @@ DC27E2AC2F924179008D2915 /* RunWithAI Watch Watch App.app in Embed Watch Content
 		91C8FF2D570A444CBE2CE607 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = ro.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A36F9A339943B1BC93C2A9F9 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-RunWithAI/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		A6ADE36F70B94F0F80B15B6A /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = RunWithAI/SplashScreen.storyboard; sourceTree = "<group>"; };
 		B132A3841F81462180288613 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = mt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B73E3D6A55BF4EA08EF91486 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = sk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B943D38ABB2945A296041C70 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -187,7 +185,6 @@ DC27E2AC2F924179008D2915 /* RunWithAI Watch Watch App.app in Embed Watch Content
 				BB2F792B24A3F905000567C9 /* Supporting */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
 				4A336CAAD63C1BEC90664BC4 /* PrivacyInfo.xcprivacy */,
 			);
 			name = RunWithAI;
@@ -644,7 +641,6 @@ DC27E2AC2F924179008D2915 /* RunWithAI Watch Watch App.app in Embed Watch Content
 			files = (
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
 				32A1309BD13E450DA6258778 /* InfoPlist.strings in Resources */,
 				62661CE893AE4496820CD2E4 /* InfoPlist.strings in Resources */,
 				AE51D5BA802248979561A13E /* InfoPlist.strings in Resources */,
