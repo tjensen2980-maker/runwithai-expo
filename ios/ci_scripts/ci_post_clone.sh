@@ -208,6 +208,16 @@ echo "=== Fixing WKCompanionAppBundleIdentifier ==="
 sed -i '' 's/WKCompanionAppBundleIdentifier = "";/WKCompanionAppBundleIdentifier = "app.runwithai";/g' "$PBXPROJ"
 sed -i '' 's/WKCompanionAppBundleIdentifier = ;/WKCompanionAppBundleIdentifier = "app.runwithai";/g' "$PBXPROJ"
 
+echo "=== Syncing Watch Swift files from RunWithAI-Watch to Xcode target ==="
+WATCH_SRC="$REPO/RunWithAI-Watch"
+WATCH_DST="$IOS_DIR/RunWithAI Watch Watch App"
+for f in WorkoutManager.swift WatchConnectivityManager.swift ContentView.swift RunningView.swift WorkoutSummaryView.swift TrainingPickerView.swift TrainingPlan.swift RunWithAI_WatchApp.swift RunUploader.swift; do
+  if [ -f "$WATCH_SRC/$f" ]; then
+    cp "$WATCH_SRC/$f" "$WATCH_DST/$f"
+    echo "Synced: $f"
+  fi
+done
+
 echo "=== Copying app icons (flatten alpha via JPEG roundtrip) ==="
 SRC_ICON="$REPO/assets/icon.png"
 FLAT_ICON="/tmp/icon_flat_$$.png"
