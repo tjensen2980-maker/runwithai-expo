@@ -31,7 +31,7 @@ sed -i '' 's/objectVersion = 70;/objectVersion = 60;/g' "$PBXPROJ"
 
 echo "=== Fixing version numbers ==="
 sed -i '' 's/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = 1.7.3;/g' "$PBXPROJ"
-sed -i '' 's/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = 176;/g' "$PBXPROJ"
+sed -i '' 's/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = 177;/g' "$PBXPROJ"
 echo "MARKETING_VERSION after:"; grep "MARKETING_VERSION" "$PBXPROJ" | head -4
 
 echo "=== Adding NSHealth keys to Watch target in pbxproj ==="
@@ -103,17 +103,27 @@ printf '{
 WATCH_ICON_DIR="$IOS_DIR/RunWithAI Watch Watch App/Assets.xcassets/AppIcon.appiconset"; mkdir -p "$WATCH_ICON_DIR"
 cp "$FLAT_ICON" "$WATCH_ICON_DIR/AppIcon.png"; rm -f "$FLAT_ICON"
 
-echo "=== Building JavaScript bundle (main.jsbundle) ==="
+echo "=== Building JavaScript bundle with expo export:embed (production) ==="
 cd "$REPO"
-BUNDLE_OUTPUT="$IOS_DIR/RunWithAI/main.jsbundle"; EXPORT_DIR="$IOS_DIR/RunWithAI/expo-bundle"
-node_modules/.bin/expo export --platform ios --output-dir "$EXPORT_DIR"
-echo "Expo export output:"; ls -la "$EXPORT_DIR/" 2>/dev/null || true
-BUNDLE_FILE=$(find "$EXPORT_DIR" -name "*.hbc" -o -name "*.js" 2>/dev/null | grep -v metadata | head -1)
-if [ -n "$BUNDLE_FILE" ]; then
-  cp "$BUNDLE_FILE" "$BUNDLE_OUTPUT"
-  echo "main.jsbundle created from: $BUNDLE_FILE"
+BUNDLE_OUTPUT="$IOS_DIR/RunWithAI/main.jsbundle"
+ASSETS_OUTPUT="$IOS_DIR/RunWithAI/assets"
+mkdir -p "$ASSETS_OUTPUT"
+
+# Use expo export:embed which is the correct command for Xcode integration
+# This produces a proper production bundle compatible with the installed Hermes version
+node_modules/.bin/expo export:embed \
+  --platform ios \
+  --entry-file node_modules/expo/AppEntry.js \
+  --bundle-output "$BUNDLE_OUTPUT" \
+  --assets-dest "$ASSETS_OUTPUT" \
+  --dev false \
+  --minify true
+
+if [ -f "$BUNDLE_OUTPUT" ]; then
+  BUNDLE_SIZE=$(wc -c < "$BUNDLE_OUTPUT")
+  echo "main.jsbundle created: $BUNDLE_SIZE bytes"
 else
-  echo "ERROR: No bundle file found"; find "$EXPORT_DIR" -type f 2>/dev/null || true; exit 1
+  echo "ERROR: main.jsbundle not created"; exit 1
 fi
 
 echo "=== Setting SKIP_BUNDLING=1 to prevent Xcode from re-bundling ==="
