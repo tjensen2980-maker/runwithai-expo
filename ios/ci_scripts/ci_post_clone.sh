@@ -6,27 +6,35 @@ REPO="$CI_PRIMARY_REPOSITORY_PATH"
 IOS_DIR="$REPO/ios"
 PBXPROJ="$IOS_DIR/RunWithAI.xcodeproj/project.pbxproj"
 
-echo "=== Installing Homebrew packages ==="
+echo "=== Setting up Node.js via nvm ==="
+export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+if [ -s "$NVM_DIR/nvm.sh" ]; then
+  . "$NVM_DIR/nvm.sh"
+  nvm install 20
+  nvm use 20
+  NPM_BIN="$(which npm)"
+else
+  # nvm not found, try brew (may take time)
+  export HOMEBREW_NO_AUTO_UPDATE=1
+  export HOMEBREW_NO_INSTALL_CLEANUP=1
+  if ! command -v node >/dev/null 2>&1; then
+    brew install node || true
+  fi
+  NPM_BIN="$(command -v npm)"
+fi
+echo "Node: $(node --version 2>/dev/null || echo unknown)"
+echo "NPM: $NPM_BIN"
+
+echo "=== Setting up CocoaPods ==="
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_INSTALL_CLEANUP=1
-export HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK=0
-export HOMEBREW_CURL_RETRIES=3
-
-if command -v node >/dev/null 2>&1; then
-  NPM_BIN=$(command -v npm)
-else
-  brew install node@20 --build-from-source 2>/dev/null || brew install node@20 || true
-  brew link --overwrite node@20 || true
-  NPM_BIN=$(brew --prefix)/bin/npm
-fi
-
 if command -v pod >/dev/null 2>&1; then
-  POD_BIN=$(command -v pod)
+  POD_BIN="$(command -v pod)"
 else
-  brew install cocoapods --build-from-source 2>/dev/null || brew install cocoapods || true
-  POD_BIN=$(brew --prefix)/bin/pod
+  brew install cocoapods || true
+  POD_BIN="$(brew --prefix)/bin/pod"
 fi
-echo "Using npm: $NPM_BIN / pod: $POD_BIN"
+echo "Pod: $POD_BIN"
 
 echo "=== Patching objectVersion ==="
 sed -i '' 's/objectVersion = 70;/objectVersion = 60;/g' "$PBXPROJ"
@@ -64,7 +72,7 @@ import ReactAppDependencyProvider
 class AppDelegate: RCTAppDelegate {
   override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
     self.automaticallyLoadReactNativeWindow = true
-    self.moduleName = \"main\"
+    self.moduleName = "main"
     self.dependencyProvider = RCTAppDependencyProvider()
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
@@ -82,73 +90,74 @@ echo "=== Creating iOS Info.plist (via python3) ==="
 INFO_PLIST="$IOS_DIR/RunWithAI/Info.plist"
 python3 - "$INFO_PLIST" << 'PYEOF'
 import sys
-content = open("/dev/stdin").read() if False else """\
+content = """\
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
-	<key>CFBundleDisplayName</key>
-	<string>RunWithAI</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIconName</key>
-	<string>AppIcon</string>
-	<key>CFBundleIcons</key>
-	<dict>
-		<key>CFBundlePrimaryIcon</key>
-		<dict>
-			<key>CFBundleIconName</key>
-			<string>AppIcon</string>
-			<key>CFBundleIconFiles</key>
-			<array/>
-		</dict>
-	</dict>
-	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>$(PRODUCT_NAME)</string>
-	<key>CFBundlePackageType</key>
-	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
-	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
-	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>RunWithAI needs location to track your runs.</string>
-	<key>NSMotionUsageDescription</key>
-	<string>RunWithAI uses motion to track activity.</string>
-	<key>NSHealthShareUsageDescription</key>
-	<string>RunWithAI reads health data to personalize training.</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>RunWithAI saves workout data to Health.</string>
-	<key>UILaunchScreen</key>
-	<dict/>
-	<key>UIRequiredDeviceCapabilities</key>
-	<array>
-		<string>armv7</string>
-	</array>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-	<key>CFBundleAllowMixedLocalizations</key>
-	<true/>
+  <key>CFBundleDevelopmentRegion</key>
+  <string>en</string>
+  <key>CFBundleDisplayName</key>
+  <string>RunWithAI</string>
+  <key>CFBundleExecutable</key>
+  <string>$(EXECUTABLE_NAME)</string>
+  <key>CFBundleIconName</key>
+  <string>AppIcon</string>
+  <key>CFBundleIcons</key>
+  <dict>
+    <key>CFBundlePrimaryIcon</key>
+    <dict>
+      <key>CFBundleIconName</key>
+      <string>AppIcon</string>
+      <key>CFBundleIconFiles</key>
+      <array/>
+    </dict>
+  </dict>
+  <key>CFBundleIdentifier</key>
+  <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+  <key>CFBundleInfoDictionaryVersion</key>
+  <string>6.0</string>
+  <key>CFBundleName</key>
+  <string>$(PRODUCT_NAME)</string>
+  <key>CFBundlePackageType</key>
+  <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+  <key>CFBundleShortVersionString</key>
+  <string>$(MARKETING_VERSION)</string>
+  <key>CFBundleVersion</key>
+  <string>$(CURRENT_PROJECT_VERSION)</string>
+  <key>LSRequiresIPhoneOS</key>
+  <true/>
+  <key>NSAppTransportSecurity</key>
+  <dict>
+    <key>NSAllowsArbitraryLoads</key>
+    <true/>
+  </dict>
+  <key>NSLocationWhenInUseUsageDescription</key>
+  <string>RunWithAI needs location to track your runs.</string>
+  <key>NSMotionUsageDescription</key>
+  <string>RunWithAI uses motion to track activity.</string>
+  <key>NSHealthShareUsageDescription</key>
+  <string>RunWithAI reads health data to personalize training.</string>
+  <key>NSHealthUpdateUsageDescription</key>
+  <string>RunWithAI saves workout data to Health.</string>
+  <key>UILaunchScreen</key>
+  <dict/>
+  <key>UIRequiredDeviceCapabilities</key>
+  <array>
+    <string>armv7</string>
+  </array>
+  <key>UISupportedInterfaceOrientations</key>
+  <array>
+    <string>UIInterfaceOrientationPortrait</string>
+  </array>
+  <key>UIViewControllerBasedStatusBarAppearance</key>
+  <false/>
+  <key>CFBundleAllowMixedLocalizations</key>
+  <true/>
 </dict>
 </plist>"""
-with open(sys.argv[1], "w") as f: f.write(content.lstrip())
+with open(sys.argv[1], "w") as f:
+    f.write(content.lstrip())
 PYEOF
 echo "Created iOS Info.plist"
 
@@ -161,35 +170,36 @@ content = """\
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
-	<key>CFBundleDisplayName</key>
-	<string>RunWithAI</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>$(PRODUCT_NAME)</string>
-	<key>CFBundlePackageType</key>
-	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
-	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
-	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>NSHealthShareUsageDescription</key>
-	<string>RunWithAI reads your health data to personalize your training.</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>RunWithAI uses HealthKit to save your workout data.</string>
-	<key>UISupportedInterfaceOrientations</key>
-	<array/>
-	<key>WKWatchOnly</key>
-	<false/>
+  <key>CFBundleDevelopmentRegion</key>
+  <string>$(DEVELOPMENT_LANGUAGE)</string>
+  <key>CFBundleDisplayName</key>
+  <string>RunWithAI</string>
+  <key>CFBundleExecutable</key>
+  <string>$(EXECUTABLE_NAME)</string>
+  <key>CFBundleIdentifier</key>
+  <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+  <key>CFBundleInfoDictionaryVersion</key>
+  <string>6.0</string>
+  <key>CFBundleName</key>
+  <string>$(PRODUCT_NAME)</string>
+  <key>CFBundlePackageType</key>
+  <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+  <key>CFBundleShortVersionString</key>
+  <string>$(MARKETING_VERSION)</string>
+  <key>CFBundleVersion</key>
+  <string>$(CURRENT_PROJECT_VERSION)</string>
+  <key>NSHealthShareUsageDescription</key>
+  <string>RunWithAI reads your health data to personalize your training.</string>
+  <key>NSHealthUpdateUsageDescription</key>
+  <string>RunWithAI uses HealthKit to save your workout data.</string>
+  <key>UISupportedInterfaceOrientations</key>
+  <array/>
+  <key>WKWatchOnly</key>
+  <false/>
 </dict>
 </plist>"""
-with open(sys.argv[1], "w") as f: f.write(content.lstrip())
+with open(sys.argv[1], "w") as f:
+    f.write(content.lstrip())
 PYEOF
 echo "Created Watch Info.plist"
 
@@ -221,6 +231,7 @@ echo "=== Copying app icons (flatten alpha via JPEG roundtrip) ==="
 SRC_ICON="$REPO/assets/icon.png"
 FLAT_ICON="/tmp/icon_flat_$$.png"
 TEMP_JPEG="/tmp/icon_flat_$$.jpg"
+
 # PNG -> JPEG (drops alpha) -> PNG (no alpha)
 sips -s format jpeg "$SRC_ICON" --out "$TEMP_JPEG" 2>/dev/null && \
   sips -s format png "$TEMP_JPEG" --out "$FLAT_ICON" 2>/dev/null || cp "$SRC_ICON" "$FLAT_ICON"
