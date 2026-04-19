@@ -61,6 +61,12 @@ class WatchConnectivityManager: NSObject, ObservableObject, WCSessionDelegate {
     // MARK: - Bed iPhone om dagens træning
     // Kun nødvendigt hvis ingen lokal data eller brugeren trykker "Opdater"
     func requestTodayTraining() {
+        // Prøv Railway direkte første (hurtigere, ingen afhængighed af iPhone)
+        if RailwayManager.shared.isAuthenticated {
+            fetchTodayTrainingFromRailway()
+            return
+        }
+        // Fallback: bed iPhone om data
         guard WCSession.default.isReachable else {
             print("[WCM] iPhone ikke tilgængelig - bruger lokal data")
             return
@@ -152,9 +158,37 @@ class WatchConnectivityManager: NSObject, ObservableObject, WCSessionDelegate {
             print("[WCM] Modtog træningsplan: \(plan.count) dage")
         }
 
+        // Modtag JWT token + userId fra iPhone (sendes ved login)
+        if let token = data["jwtToken"] as? String {
+            RailwayManager.shared.jwtToken = token
+            print("[WCM] JWT token gemt fra iPhone")
+            updated = true
+            // Hent træning fra Railway direkte nu vi har token
+            fetchTodayTrainingFromRailway()
+            // Retry eventuelle gemte løb
+            RailwayManager.shared.retryPendingRuns()
+        }
+        if let uid = data["userId"] as? Int {
+            RailwayManager.shared.userId = uid
+        }
+
         // Gem lokalt så uret husker det næste gang (offline)
         if updated {
             saveLocally(training: self.todayTraining, plan: self.trainingPlan.isEmpty ? nil : self.trainingPlan)
+        }
+    }
+
+    // MARK: - Hent dagens træning direkte fra Railway
+    func fetchTodayTrainingFromRailway() {
+        guard RailwayManager.shared.isAuthenticated else {
+            print("[WCM] Ingen Railway token - bruger lokal data eller iPhone")
+            return
+        }
+        RailwayManager.shared.fetchTodayTraining { [weak self] training in
+            guard let self, let training = training else { return }
+            self.todayTraining = training
+            self.saveLocally(training: training, plan: nil)
+            print("[WCM] Dagens træning hentet fra Railway: \(training["type"] ?? training["name"] ?? "?")")
         }
     }
 }
