@@ -42,6 +42,15 @@ sed -i '' 's/objectVersion = 70;/objectVersion = 60;/g' "$PBXPROJ"
 echo "objectVersion after patch:"
 grep "objectVersion" "$PBXPROJ"
 
+echo "=== Fixing version numbers ==="
+# Set MARKETING_VERSION to 1.7.3 for ALL targets in pbxproj
+sed -i '' 's/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = 1.7.3;/g' "$PBXPROJ"
+# Set CURRENT_PROJECT_VERSION (build number) to 153 for all targets
+sed -i '' 's/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = 153;/g' "$PBXPROJ"
+echo "Version after patch:"
+grep "MARKETING_VERSION" "$PBXPROJ" | head -5
+grep "CURRENT_PROJECT_VERSION" "$PBXPROJ" | head -5
+
 echo "=== Creating missing InfoPlist.strings locale files ==="
 SUPPORTING_DIR="$IOS_DIR/RunWithAI/Supporting"
 for LOCALE in el lt en hu cs sl fr ga et ro es mt sk nl da sv pl lv hr it fi de bg pt; do
@@ -88,7 +97,7 @@ class AppDelegate: RCTAppDelegate {
 '''
 import sys
 with open(sys.argv[1], 'w') as f:
-    f.write(content)
+  f.write(content)
 " "$APP_DELEGATE"
   echo "Created AppDelegate.swift"
 fi
@@ -108,15 +117,15 @@ content = '''//
 '''
 import sys
 with open(sys.argv[1], 'w') as f:
-    f.write(content)
+  f.write(content)
 " "$BRIDGING_HEADER"
   echo "Created RunWithAI-Bridging-Header.h"
 fi
 
 echo "=== Creating Info.plist ==="
 INFO_PLIST="$IOS_DIR/RunWithAI/Info.plist"
-if [ ! -f "$INFO_PLIST" ]; then
-  cat > "$INFO_PLIST" << 'PLIST_EOF'
+# Always overwrite to ensure CFBundleIconName and CFBundleIconFiles are present
+cat > "$INFO_PLIST" << 'PLIST_EOF'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -127,6 +136,10 @@ if [ ! -f "$INFO_PLIST" ]; then
 	<string>RunWithAI</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIconName</key>
+	<string>AppIcon</string>
+	<key>CFBundleIconFiles</key>
+	<array/>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -173,10 +186,7 @@ if [ ! -f "$INFO_PLIST" ]; then
 </dict>
 </plist>
 PLIST_EOF
-  echo "Created Info.plist at $INFO_PLIST"
-else
-  echo "Info.plist already exists"
-fi
+echo "Created/updated Info.plist at $INFO_PLIST"
 
 echo "=== Installing Node.js dependencies ==="
 cd "$REPO"
@@ -213,17 +223,6 @@ echo "=== Fixing Watch app configuration ==="
 sed -i '' 's/WKCompanionAppBundleIdentifier = "";/WKCompanionAppBundleIdentifier = "app.runwithai";/g' "$PBXPROJ"
 sed -i '' 's/WKCompanionAppBundleIdentifier = ;/WKCompanionAppBundleIdentifier = "app.runwithai";/g' "$PBXPROJ"
 
-# Fix Watch app MARKETING_VERSION to match iOS
-APP_VERSION=$(grep '"version"' "$REPO/app.json" | head -1 | sed 's/.*"version": "\(.*\)".*/\1/')
-echo "App version: $APP_VERSION"
-perl -i -pe '
-  if (/DC27E1FC|DC27E1FD/) { $in_watch = 1 }
-  if ($in_watch && /MARKETING_VERSION/) {
-    s/MARKETING_VERSION = [^;]+;/MARKETING_VERSION = '"$APP_VERSION"';/;
-    $in_watch = 0;
-  }
-' "$PBXPROJ"
-
 # Fix NSHealth usage descriptions in Watch Info.plist
 WATCH_PLIST="$IOS_DIR/RunWithAI Watch Watch App/Info.plist"
 if [ -f "$WATCH_PLIST" ]; then
@@ -232,12 +231,27 @@ if [ -f "$WATCH_PLIST" ]; then
   fi
 fi
 
-echo "=== Fixing Watch app icon ==="
+echo "=== Fixing Watch app icon (remove alpha channel) ==="
 WATCH_ICON_DIR="$IOS_DIR/RunWithAI Watch Watch App/Assets.xcassets/AppIcon.appiconset"
 mkdir -p "$WATCH_ICON_DIR"
 cp "$REPO/assets/icon.png" "$WATCH_ICON_DIR/AppIcon.png"
-sips -s format png --out "$WATCH_ICON_DIR/AppIcon.png" "$WATCH_ICON_DIR/AppIcon.png" 2>/dev/null || true
-sips -d transparency "$WATCH_ICON_DIR/AppIcon.png" 2>/dev/null || true
+# Use Python to flatten alpha channel properly
+python3 - "$WATCH_ICON_DIR/AppIcon.png" << 'PYEOF'
+import sys, os
+img_path = sys.argv[1]
+try:
+    from PIL import Image
+    img = Image.open(img_path).convert('RGBA')
+    background = Image.new('RGB', img.size, (255, 255, 255))
+    background.paste(img, mask=img.split()[3])
+    background.save(img_path, 'PNG')
+    print(f"Removed alpha channel from {img_path} using PIL")
+except ImportError:
+    # PIL not available - use sips
+    os.system(f"sips -s format png --out '{img_path}' '{img_path}' 2>/dev/null || true")
+    os.system(f"sips -d transparency '{img_path}' 2>/dev/null || true")
+    print("Used sips to process icon (PIL not available)")
+PYEOF
 echo "Icon info:"
 sips -g all "$WATCH_ICON_DIR/AppIcon.png" 2>/dev/null | grep -E "pixelWidth|pixelHeight|hasAlpha|format" || true
 
