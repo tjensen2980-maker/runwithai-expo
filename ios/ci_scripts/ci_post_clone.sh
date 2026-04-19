@@ -31,7 +31,7 @@ sed -i '' 's/objectVersion = 70;/objectVersion = 60;/g' "$PBXPROJ"
 
 echo "=== Fixing version numbers ==="
 sed -i '' 's/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = 1.7.3;/g' "$PBXPROJ"
-sed -i '' 's/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = 173;/g' "$PBXPROJ"
+sed -i '' 's/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = 176;/g' "$PBXPROJ"
 echo "MARKETING_VERSION after:"; grep "MARKETING_VERSION" "$PBXPROJ" | head -4
 
 echo "=== Adding NSHealth keys to Watch target in pbxproj ==="
@@ -53,7 +53,7 @@ EXPO_PLIST="$IOS_DIR/RunWithAI/Supporting/Expo.plist"
 [ -f "$EXPO_PLIST" ] || printf '<?xml version="1.0" encoding="UTF-8"?>\n<plist version="1.0">\n<dict>\n\t<key>EXUpdatesEnabled</key>\n\t<false/>\n</dict>\n</plist>\n' > "$EXPO_PLIST"
 
 APP_DELEGATE="$IOS_DIR/RunWithAI/AppDelegate.swift"
-[ -f "$APP_DELEGATE" ] || python3 -c "import sys; q=chr(34); f=open(sys.argv[1],'w'); f.write('import UIKit\nimport React\nimport React_RCTAppDelegate\nimport ReactAppDependencyProvider\n\n@main\nclass AppDelegate: RCTAppDelegate {\n  override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {\n    self.automaticallyLoadReactNativeWindow = true\n    self.moduleName = '+q+'main'+q+'\n    self.dependencyProvider = RCTAppDependencyProvider()\n    return super.application(application, didFinishLaunchingWithOptions: launchOptions)\n  }\n  override func bundleURL() -> URL? {\n  #if DEBUG\n    return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: ".expo/.virtual-metro-entry")\n  #else\n    return Bundle.main.url(forResource: "main", withExtension: "jsbundle")\n  #endif\n  }\n}\n'); f.close()" "$APP_DELEGATE"
+[ -f "$APP_DELEGATE" ] || python3 -c "import sys; q=chr(34); f=open(sys.argv[1],'w'); f.write('import UIKit\nimport React\nimport React_RCTAppDelegate\nimport ReactAppDependencyProvider\n\n@main\nclass AppDelegate: RCTAppDelegate {\n override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {\n self.automaticallyLoadReactNativeWindow = true\n self.moduleName = '+q+'main'+q+'\n self.dependencyProvider = RCTAppDependencyProvider()\n return super.application(application, didFinishLaunchingWithOptions: launchOptions)\n }\n override func bundleURL() -> URL? {\n #if DEBUG\n return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: \".expo/.virtual-metro-entry\")\n #else\n return Bundle.main.url(forResource: \"main\", withExtension: \"jsbundle\")\n #endif\n }\n}\n'); f.close()" "$APP_DELEGATE"
 
 BRIDGING_HEADER="$IOS_DIR/RunWithAI/RunWithAI-Bridging-Header.h"
 [ -f "$BRIDGING_HEADER" ] || printf '#ifndef RunWithAI_Bridging_Header_h\n#define RunWithAI_Bridging_Header_h\n#endif\n' > "$BRIDGING_HEADER"
@@ -74,8 +74,8 @@ cd "$IOS_DIR"
 echo "=== Patching fmt consteval ==="
 FMT_DIR="$IOS_DIR/Pods/fmt"
 if [ -d "$FMT_DIR" ]; then
-  find "$FMT_DIR" -type f \( -name "*.h" -o -name "*.cc" -o -name "*.cpp" \) | while read f; do
-    if grep -q "consteval" "$f"; then sed -i '' 's/consteval/inline/g' "$f"; fi
+  find "$FMT_DIR" -type f \( -name '*.h' -o -name '*.cc' -o -name '*.cpp' \) | while read f; do
+    if grep -q 'consteval' "$f"; then sed -i '' 's/consteval/inline/g' "$f"; fi
   done
 fi
 
@@ -95,7 +95,11 @@ sips -s format jpeg "$SRC_ICON" --out "$TEMP_JPEG" 2>/dev/null && sips -s format
 rm -f "$TEMP_JPEG"
 IOS_ICON_DIR="$IOS_DIR/RunWithAI/Images.xcassets/AppIcon.appiconset"; mkdir -p "$IOS_ICON_DIR"
 cp "$FLAT_ICON" "$IOS_ICON_DIR/AppIcon.png"
-printf '{\n  "images": [{"filename": "AppIcon.png", "idiom": "universal", "platform": "ios", "size": "1024x1024"}],\n  "info": {"author": "xcode", "version": 1}\n}\n' > "$IOS_ICON_DIR/Contents.json"
+printf '{
+  "images": [{"filename": "AppIcon.png", "idiom": "universal", "platform": "ios", "size": "1024x1024"}],
+  "info": {"author": "xcode", "version": 1}
+}
+' > "$IOS_ICON_DIR/Contents.json"
 WATCH_ICON_DIR="$IOS_DIR/RunWithAI Watch Watch App/Assets.xcassets/AppIcon.appiconset"; mkdir -p "$WATCH_ICON_DIR"
 cp "$FLAT_ICON" "$WATCH_ICON_DIR/AppIcon.png"; rm -f "$FLAT_ICON"
 
@@ -112,36 +116,14 @@ else
   echo "ERROR: No bundle file found"; find "$EXPORT_DIR" -type f 2>/dev/null || true; exit 1
 fi
 
+echo "=== Setting SKIP_BUNDLING=1 to prevent Xcode from re-bundling ==="
+XCODE_ENV_LOCAL="$IOS_DIR/.xcode.env.local"
+echo "export SKIP_BUNDLING=1" >> "$XCODE_ENV_LOCAL"
+echo "SKIP_BUNDLING=1 appended to $XCODE_ENV_LOCAL"
+cat "$XCODE_ENV_LOCAL"
+
 echo "=== Adding main.jsbundle to Xcode project resources ==="
-python3 -c "
-import sys, hashlib
-path = sys.argv[1]
-f = open(path, 'r')
-content = f.read()
-f.close()
-if 'main.jsbundle' in content:
-    print('main.jsbundle already in project')
-    sys.exit(0)
-q = chr(34)
-lt = chr(60)
-gt = chr(62)
-file_ref_uuid = hashlib.md5(b'main_jsbundle_fileref').hexdigest()[:24].upper()
-build_file_uuid = hashlib.md5(b'main_jsbundle_buildfile').hexdigest()[:24].upper()
-file_ref_entry = chr(9)+chr(9)+file_ref_uuid+' /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = '+q+'main.jsbundle'+q+'; path = RunWithAI/main.jsbundle; sourceTree = '+q+lt+'group'+gt+q+'; };'+chr(10)
-content = content.replace('/* End PBXFileReference section */', file_ref_entry + chr(9)+chr(9)+'/* End PBXFileReference section */')
-build_file_entry = chr(9)+chr(9)+build_file_uuid+' /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = '+file_ref_uuid+' /* main.jsbundle */; };'+chr(10)
-content = content.replace('/* End PBXBuildFile section */', build_file_entry + chr(9)+chr(9)+'/* End PBXBuildFile section */')
-group_line = 'F11748412D0307B40044C1D9 /* AppDelegate.swift */,'
-group_entry = chr(9)+chr(9)+chr(9)+chr(9)+file_ref_uuid+' /* main.jsbundle */,'
-content = content.replace(group_line, group_line+chr(10)+group_entry)
-resource_line = 'BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,'
-resource_entry = chr(9)+chr(9)+chr(9)+chr(9)+build_file_uuid+' /* main.jsbundle in Resources */,'
-content = content.replace(resource_line, resource_entry+chr(10)+chr(9)+chr(9)+chr(9)+chr(9)+resource_line.strip())
-f = open(path, 'w')
-f.write(content)
-f.close()
-print('Added main.jsbundle to Xcode project resources')
-" "$PBXPROJ"
+python3 -c "import sys, hashlib; path = sys.argv[1]; f = open(path, 'r'); content = f.read(); f.close(); q = chr(34); lt = chr(60); gt = chr(62); file_ref_uuid = hashlib.md5(b'main_jsbundle_fileref').hexdigest()[:24].upper(); build_file_uuid = hashlib.md5(b'main_jsbundle_buildfile').hexdigest()[:24].upper(); already = 'main.jsbundle' in content; file_ref_entry = chr(9)+chr(9)+file_ref_uuid+' /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = '+q+'main.jsbundle'+q+'; path = RunWithAI/main.jsbundle; sourceTree = '+q+lt+'group'+gt+q+'; };'+chr(10); build_file_entry = chr(9)+chr(9)+build_file_uuid+' /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = '+file_ref_uuid+' /* main.jsbundle */; };'+chr(10); group_line = 'F11748412D0307B40044C1D9 /* AppDelegate.swift */,'; group_entry = chr(9)+chr(9)+chr(9)+chr(9)+file_ref_uuid+' /* main.jsbundle */,'; resource_line = 'BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,'; resource_entry = chr(9)+chr(9)+chr(9)+chr(9)+build_file_uuid+' /* main.jsbundle in Resources */,'; content = content if already else content.replace('/* End PBXFileReference section */', file_ref_entry + chr(9)+chr(9)+'/* End PBXFileReference section */').replace('/* End PBXBuildFile section */', build_file_entry + chr(9)+chr(9)+'/* End PBXBuildFile section */').replace(group_line, group_line+chr(10)+group_entry).replace(resource_line, resource_entry+chr(10)+chr(9)+chr(9)+chr(9)+chr(9)+resource_line.strip()); f = open(path, 'w'); f.write(content); f.close(); print('Already present' if already else 'Added main.jsbundle to Xcode project resources')" "$PBXPROJ"
 
 echo "=== Verifying main.jsbundle in pbxproj ==="
 grep -c "main.jsbundle" "$PBXPROJ" && echo "main.jsbundle entries found in pbxproj" || echo "WARNING: main.jsbundle not in pbxproj"
