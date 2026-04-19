@@ -467,6 +467,9 @@ class WorkoutManager: NSObject, ObservableObject {
 
               // MARK: - Phone Communication
               private func sendWorkoutSummaryToPhone() {
+        // 1. Upload direkte til Railway (uafhængigt af iPhone)
+        RunUploader.shared.uploadRun(from: self)
+
                                 let splitData = splits.map { split -> [String: Any] in
                                                                         ["km": split.km, "pace": split.pace, "time": split.time, "heartRate": split.heartRate]
                                                            }
