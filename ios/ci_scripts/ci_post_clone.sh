@@ -103,9 +103,7 @@ content = '''//
 //
 #ifndef RunWithAI_Bridging_Header_h
 #define RunWithAI_Bridging_Header_h
-
 // React Native bridging headers are managed by CocoaPods
-
 #endif
 '''
 import sys
@@ -113,6 +111,71 @@ with open(sys.argv[1], 'w') as f:
     f.write(content)
 " "$BRIDGING_HEADER"
   echo "Created RunWithAI-Bridging-Header.h"
+fi
+
+echo "=== Creating Info.plist ==="
+INFO_PLIST="$IOS_DIR/RunWithAI/Info.plist"
+if [ ! -f "$INFO_PLIST" ]; then
+  cat > "$INFO_PLIST" << 'PLIST_EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>RunWithAI</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>RunWithAI needs location to track your runs.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>RunWithAI uses motion to track activity.</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>RunWithAI reads health data to personalize training.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>RunWithAI saves workout data to Health.</string>
+	<key>UILaunchScreen</key>
+	<dict/>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>CFBundleAllowMixedLocalizations</key>
+	<true/>
+</dict>
+</plist>
+PLIST_EOF
+  echo "Created Info.plist at $INFO_PLIST"
+else
+  echo "Info.plist already exists"
 fi
 
 echo "=== Installing Node.js dependencies ==="
@@ -123,63 +186,6 @@ cd "$REPO"
 echo "=== Installing pods ==="
 cd "$IOS_DIR"
 "$POD_BIN" install
-
-echo "=== Creating Info.plist ==="
-INFO_PLIST="$IOS_DIR/RunWithAI/Info.plist"
-if [ ! -f "$INFO_PLIST" ]; then
-python3 -c "
-import plistlib, sys
-d = {
-    'CFBundleDevelopmentRegion': 'en',
-    'CFBundleDisplayName': 'RunWithAI',
-    'CFBundleExecutable': '$(EXECUTABLE_NAME)',
-    'CFBundleIdentifier': '$(PRODUCT_BUNDLE_IDENTIFIER)',
-    'CFBundleInfoDictionaryVersion': '6.0',
-    'CFBundleName': '$(PRODUCT_NAME)',
-    'CFBundlePackageType': '$(PRODUCT_BUNDLE_PACKAGE_TYPE)',
-    'CFBundleShortVersionString': '$(MARKETING_VERSION)',
-    'CFBundleSignature': '????',
-    'CFBundleVersion': '$(CURRENT_PROJECT_VERSION)',
-    'LSRequiresIPhoneOS': True,
-    'NSAppTransportSecurity': {'NSAllowsArbitraryLoads': True},
-    'NSLocationWhenInUseUsageDescription': 'RunWithAI needs location access to track your runs.',
-    'NSMotionUsageDescription': 'RunWithAI uses motion data to track your activity.',
-    'NSHealthShareUsageDescription': 'RunWithAI reads health data to personalize training.',
-    'NSHealthUpdateUsageDescription': 'RunWithAI saves workout data to Health.',
-    'UILaunchScreen': {'UIColorName': 'systemBackground'},
-    'UIRequiredDeviceCapabilities': ['armv7'],
-    'UISupportedInterfaceOrientations': ['UIInterfaceOrientationPortrait'],
-    'UIViewControllerBasedStatusBarAppearance': False,
-}
-with open(sys.argv[1], 'wb') as f:
-    plistlib.dump(d, f)
-print('Created Info.plist at ' + sys.argv[1])
-" "$INFO_PLIST" || echo "ERROR: failed to create Info.plist"
-else
-  echo "Info.plist already exists"
-  # Still patch UILaunchScreen if needed
-  python3 -c "
-import plistlib, sys
-path = sys.argv[1]
-with open(path, 'rb') as f:
-    d = plistlib.load(f)
-changed = False
-if 'UILaunchStoryboardName' in d:
-    del d['UILaunchStoryboardName']
-    changed = True
-if 'UILaunchScreen' not in d:
-    d['UILaunchScreen'] = {'UIColorName': 'systemBackground'}
-    changed = True
-if changed:
-    with open(path, 'wb') as f:
-        plistlib.dump(d, f)
-    print('Patched Info.plist')
-else:
-    print('Info.plist already correct')
-" "$INFO_PLIST" || true
-fi
-
-echo "=== Installing Node.js dependencies ==="
 
 echo "=== Patching fmt for Xcode 26 consteval compatibility ==="
 # fmt headers are at Pods/fmt/include/fmt/ (not Pods/fmt/fmt/)
@@ -210,7 +216,6 @@ sed -i '' 's/WKCompanionAppBundleIdentifier = ;/WKCompanionAppBundleIdentifier =
 # Fix Watch app MARKETING_VERSION to match iOS
 APP_VERSION=$(grep '"version"' "$REPO/app.json" | head -1 | sed 's/.*"version": "\(.*\)".*/\1/')
 echo "App version: $APP_VERSION"
-
 perl -i -pe '
   if (/DC27E1FC|DC27E1FD/) { $in_watch = 1 }
   if ($in_watch && /MARKETING_VERSION/) {
