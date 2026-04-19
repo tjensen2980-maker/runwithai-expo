@@ -258,12 +258,15 @@ cp "$FLAT_ICON" "$WATCH_ICON_DIR/AppIcon.png"
 rm -f "$FLAT_ICON"
 echo "=== Building JavaScript bundle (main.jsbundle) ==="
 cd "$REPO"
-"$NPM_BIN" install --legacy-peer-deps @react-native/metro-config || true
-node_modules/.bin/react-native bundle \
+node_modules/.bin/expo export \
   --platform ios \
-    --dev false \
-      --entry-file index.js \
-        --bundle-output ios/RunWithAI/main.jsbundle \
-          --assets-dest ios/RunWithAI
-          echo "main.jsbundle created at ios/RunWithAI/main.jsbundle"
-          
+    --output-dir ios/RunWithAI/expo-bundle
+    cp ios/RunWithAI/expo-bundle/bundles/ios-*.js ios/RunWithAI/main.jsbundle 2>/dev/null || \
+      node_modules/.bin/react-native bundle \
+          --platform ios \
+              --dev false \
+                  --entry-file node_modules/expo/AppEntry.js \
+                      --bundle-output ios/RunWithAI/main.jsbundle \
+                          --assets-dest ios/RunWithAI
+                          echo "main.jsbundle created"
+                          
