@@ -124,17 +124,28 @@ echo "=== Installing pods ==="
 cd "$IOS_DIR"
 "$POD_BIN" install
 
-echo "=== Fixing SplashScreen.storyboard ==="
-SPLASH_DEST="$IOS_DIR/RunWithAI/SplashScreen.storyboard"
-SPLASH_POD=$(find "$IOS_DIR/Pods" -name "SplashScreen.storyboard" 2>/dev/null | head -1)
-if [ -n "$SPLASH_POD" ]; then
-  cp "$SPLASH_POD" "$SPLASH_DEST"
-  echo "Copied SplashScreen.storyboard from: $SPLASH_POD"
-  echo "File size: $(wc -c < "$SPLASH_DEST") bytes"
+echo "=== Patching Info.plist – replace UILaunchStoryboardName with UILaunchScreen ==="
+INFO_PLIST="$IOS_DIR/RunWithAI/Info.plist"
+if [ -f "$INFO_PLIST" ]; then
+  if grep -q "UILaunchStoryboardName" "$INFO_PLIST"; then
+    python3 -c "
+import plistlib, sys
+path = sys.argv[1]
+with open(path, 'rb') as f:
+    d = plistlib.load(f)
+if 'UILaunchStoryboardName' in d:
+    del d['UILaunchStoryboardName']
+if 'UILaunchScreen' not in d:
+    d['UILaunchScreen'] = {'UIColorName': 'systemBackground'}
+with open(path, 'wb') as f:
+    plistlib.dump(d, f)
+print('Patched Info.plist: removed UILaunchStoryboardName, added UILaunchScreen')
+" "$INFO_PLIST" || echo "python3 patch failed"
+  else
+    echo "UILaunchStoryboardName not found in Info.plist, skipping patch"
+  fi
 else
-  echo "WARNING: No SplashScreen.storyboard found in Pods"
-  echo "Searched in: $IOS_DIR/Pods"
-  ls "$IOS_DIR/Pods/" | grep -i expo | head -5 || true
+  echo "INFO: Info.plist not found yet at $INFO_PLIST (may be generated later)"
 fi
 
 echo "=== Patching fmt for Xcode 26 consteval compatibility ==="
