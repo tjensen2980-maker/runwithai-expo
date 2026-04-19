@@ -115,6 +115,13 @@ extension WatchConnectivityManager: WCSessionDelegate {
                                                 if let type = message["type"] as? String, type == "TODAY_TRAINING" {
                                                                         self.todayTraining = message
                                                 }
+
+                                                // Gem JWT token fra iPhone → bruges til direkte Railway upload
+                                                if let type = message["type"] as? String, type == "AUTH_UPDATE",
+                                                   let token = message["jwtToken"] as? String, !token.isEmpty {
+                                                                        RunUploader.shared.jwtToken = token
+                                                                        RunUploader.shared.retryPending()
+                                                }
                             }
             }
 
