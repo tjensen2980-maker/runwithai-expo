@@ -487,7 +487,7 @@ class WorkoutManager: NSObject, ObservableObject {
                                                       "splits": splitData,
                                                       "timestamp": Date().timeIntervalSince1970
                                 ]
-                                WatchConnectivityManager.shared.sendWorkoutData(summary)
+                                WatchConnectivityManager.shared.sendWorkoutEnded(summary: summary)
               }
 
               func sendLiveDataToPhone() {
