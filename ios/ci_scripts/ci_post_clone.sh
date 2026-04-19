@@ -206,7 +206,10 @@ echo "=== Patching fmt consteval ==="
 FMT_DIR="$IOS_DIR/Pods/fmt"
 if [ -d "$FMT_DIR" ]; then
   find "$FMT_DIR" -type f \( -name "*.h" -o -name "*.cc" -o -name "*.cpp" \) | while read f; do
-    grep -q "consteval" "$f" && sed -i '' 's/consteval/inline/g' "$f"
+    if grep -q "consteval" "$f"; then
+      sed -i '' 's/consteval/inline/g' "$f"
+      echo "Patched: $f"
+    fi
   done
 fi
 
