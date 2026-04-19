@@ -16,7 +16,7 @@ echo "=== Patching objectVersion ==="
 sed -i '' 's/objectVersion = 70;/objectVersion = 60;/g' "$PBXPROJ"
 echo "=== Fixing version numbers ==="
 sed -i '' 's/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = 1.7.3;/g' "$PBXPROJ"
-sed -i '' 's/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = 172;/g' "$PBXPROJ"
+sed -i '' 's/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = 173;/g' "$PBXPROJ"
 echo "MARKETING_VERSION after:"; grep "MARKETING_VERSION" "$PBXPROJ" | head -4
 echo "=== Adding NSHealth keys to Watch target in pbxproj ==="
 python3 -c "import sys; path=sys.argv[1]; f=open(path,'r'); c=f.read(); f.close(); q=chr(34); old='INFOPLIST_KEY_WKBackgroundModes = '+q+'workout-processing'+q+';'; new=old+'\n\t\t\t\tINFOPLIST_KEY_NSHealthShareUsageDescription = '+q+'RunWithAI reads health data.'+q+';\n\t\t\t\tINFOPLIST_KEY_NSHealthUpdateUsageDescription = '+q+'RunWithAI writes workout data.'+q+';'; f=open(path,'w'); f.write(c.replace(old,new) if old in c else c); f.close()" "$PBXPROJ"
@@ -65,5 +65,7 @@ echo "=== Building JavaScript bundle (main.jsbundle) ==="
 cd "$REPO"
 BUNDLE_OUTPUT="$IOS_DIR/RunWithAI/main.jsbundle"; EXPORT_DIR="$IOS_DIR/RunWithAI/expo-bundle"
 node_modules/.bin/expo export --platform ios --output-dir "$EXPORT_DIR"
-BUNDLE_FILE=$(find "$EXPORT_DIR/bundles" -name "*.hbc" -o -name "*.js" 2>/dev/null | head -1)
-if [ -n "$BUNDLE_FILE" ]; then cp "$BUNDLE_FILE" "$BUNDLE_OUTPUT"; echo "main.jsbundle created from: $BUNDLE_FILE"; else echo "ERROR: No bundle file found in $EXPORT_DIR/bundles"; ls -la "$EXPORT_DIR/bundles/" || true; exit 1; fi
+echo "Expo export output:"
+ls -la "$EXPORT_DIR/" 2>/dev/null || true
+BUNDLE_FILE=$(find "$EXPORT_DIR" -name "*.hbc" -o -name "*.js" 2>/dev/null | grep -v metadata | head -1)
+if [ -n "$BUNDLE_FILE" ]; then cp "$BUNDLE_FILE" "$BUNDLE_OUTPUT"; echo "main.jsbundle created from: $BUNDLE_FILE"; else echo "ERROR: No bundle file found"; find "$EXPORT_DIR" -type f 2>/dev/null || true; exit 1; fi
