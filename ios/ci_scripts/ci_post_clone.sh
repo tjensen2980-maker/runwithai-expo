@@ -124,29 +124,62 @@ echo "=== Installing pods ==="
 cd "$IOS_DIR"
 "$POD_BIN" install
 
-echo "=== Patching Info.plist – replace UILaunchStoryboardName with UILaunchScreen ==="
+echo "=== Creating Info.plist ==="
 INFO_PLIST="$IOS_DIR/RunWithAI/Info.plist"
-if [ -f "$INFO_PLIST" ]; then
-  if grep -q "UILaunchStoryboardName" "$INFO_PLIST"; then
-    python3 -c "
+if [ ! -f "$INFO_PLIST" ]; then
+python3 -c "
+import plistlib, sys
+d = {
+    'CFBundleDevelopmentRegion': 'en',
+    'CFBundleDisplayName': 'RunWithAI',
+    'CFBundleExecutable': '$(EXECUTABLE_NAME)',
+    'CFBundleIdentifier': '$(PRODUCT_BUNDLE_IDENTIFIER)',
+    'CFBundleInfoDictionaryVersion': '6.0',
+    'CFBundleName': '$(PRODUCT_NAME)',
+    'CFBundlePackageType': '$(PRODUCT_BUNDLE_PACKAGE_TYPE)',
+    'CFBundleShortVersionString': '$(MARKETING_VERSION)',
+    'CFBundleSignature': '????',
+    'CFBundleVersion': '$(CURRENT_PROJECT_VERSION)',
+    'LSRequiresIPhoneOS': True,
+    'NSAppTransportSecurity': {'NSAllowsArbitraryLoads': True},
+    'NSLocationWhenInUseUsageDescription': 'RunWithAI needs location access to track your runs.',
+    'NSMotionUsageDescription': 'RunWithAI uses motion data to track your activity.',
+    'NSHealthShareUsageDescription': 'RunWithAI reads health data to personalize training.',
+    'NSHealthUpdateUsageDescription': 'RunWithAI saves workout data to Health.',
+    'UILaunchScreen': {'UIColorName': 'systemBackground'},
+    'UIRequiredDeviceCapabilities': ['armv7'],
+    'UISupportedInterfaceOrientations': ['UIInterfaceOrientationPortrait'],
+    'UIViewControllerBasedStatusBarAppearance': False,
+}
+with open(sys.argv[1], 'wb') as f:
+    plistlib.dump(d, f)
+print('Created Info.plist at ' + sys.argv[1])
+" "$INFO_PLIST" || echo "ERROR: failed to create Info.plist"
+else
+  echo "Info.plist already exists"
+  # Still patch UILaunchScreen if needed
+  python3 -c "
 import plistlib, sys
 path = sys.argv[1]
 with open(path, 'rb') as f:
     d = plistlib.load(f)
+changed = False
 if 'UILaunchStoryboardName' in d:
     del d['UILaunchStoryboardName']
+    changed = True
 if 'UILaunchScreen' not in d:
     d['UILaunchScreen'] = {'UIColorName': 'systemBackground'}
-with open(path, 'wb') as f:
-    plistlib.dump(d, f)
-print('Patched Info.plist: removed UILaunchStoryboardName, added UILaunchScreen')
-" "$INFO_PLIST" || echo "python3 patch failed"
-  else
-    echo "UILaunchStoryboardName not found in Info.plist, skipping patch"
-  fi
-else
-  echo "INFO: Info.plist not found yet at $INFO_PLIST (may be generated later)"
+    changed = True
+if changed:
+    with open(path, 'wb') as f:
+        plistlib.dump(d, f)
+    print('Patched Info.plist')
+else:
+    print('Info.plist already correct')
+" "$INFO_PLIST" || true
 fi
+
+echo "=== Installing Node.js dependencies ==="
 
 echo "=== Patching fmt for Xcode 26 consteval compatibility ==="
 # fmt headers are at Pods/fmt/include/fmt/ (not Pods/fmt/fmt/)
