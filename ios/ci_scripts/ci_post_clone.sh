@@ -40,7 +40,7 @@ sed -i '' 's/objectVersion = 70;/objectVersion = 60;/g' "$PBXPROJ"
 
 echo "=== Fixing version numbers ==="
 sed -i '' 's/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = 1.7.3;/g' "$PBXPROJ"
-sed -i '' 's/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = 155;/g' "$PBXPROJ"
+sed -i '' 's/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = 167;/g' "$PBXPROJ"
 echo "MARKETING_VERSION after:"
 grep "MARKETING_VERSION" "$PBXPROJ" | head -4
 
@@ -256,5 +256,10 @@ WATCH_ICON_DIR="$IOS_DIR/RunWithAI Watch Watch App/Assets.xcassets/AppIcon.appic
 mkdir -p "$WATCH_ICON_DIR"
 cp "$FLAT_ICON" "$WATCH_ICON_DIR/AppIcon.png"
 rm -f "$FLAT_ICON"
-
+echo "=== Building JavaScript bundle (main.jsbundle) ==="
+cd "$REPO"
+node_modules/.bin/react-native bundle \
+  --platform ios \
+    --dev false \
+      --entry-file index.js \
 echo "=== Done ==="
