@@ -7,13 +7,11 @@ IOS_DIR="$REPO/ios"
 PBXPROJ="$IOS_DIR/RunWithAI.xcodeproj/project.pbxproj"
 
 echo "=== Installing Homebrew packages ==="
-# Disable bottle downloads that fail in Xcode Cloud network sandbox
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_INSTALL_CLEANUP=1
 export HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK=0
 export HOMEBREW_CURL_RETRIES=3
 
-# Check if node is already available (Xcode Cloud may have it pre-installed)
 if command -v node >/dev/null 2>&1; then
   echo "Node.js already available: $(node --version)"
   NPM_BIN=$(command -v npm)
@@ -24,7 +22,6 @@ else
   NPM_BIN=$(brew --prefix)/bin/npm
 fi
 
-# Check if cocoapods is already available
 if command -v pod >/dev/null 2>&1; then
   echo "CocoaPods already available: $(pod --version)"
   POD_BIN=$(command -v pod)
@@ -39,17 +36,12 @@ echo "Using pod: $POD_BIN"
 
 echo "=== Patching objectVersion for CocoaPods compatibility ==="
 sed -i '' 's/objectVersion = 70;/objectVersion = 60;/g' "$PBXPROJ"
-echo "objectVersion after patch:"
-grep "objectVersion" "$PBXPROJ"
 
 echo "=== Fixing version numbers ==="
-# Set MARKETING_VERSION to 1.7.3 for ALL targets in pbxproj
 sed -i '' 's/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = 1.7.3;/g' "$PBXPROJ"
-# Set CURRENT_PROJECT_VERSION (build number) to 153 for all targets
-sed -i '' 's/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = 153;/g' "$PBXPROJ"
-echo "Version after patch:"
-grep "MARKETING_VERSION" "$PBXPROJ" | head -5
-grep "CURRENT_PROJECT_VERSION" "$PBXPROJ" | head -5
+sed -i '' 's/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = 154;/g' "$PBXPROJ"
+echo "Versions after patch:"
+grep "MARKETING_VERSION" "$PBXPROJ" | head -4
 
 echo "=== Creating missing InfoPlist.strings locale files ==="
 SUPPORTING_DIR="$IOS_DIR/RunWithAI/Supporting"
@@ -57,7 +49,6 @@ for LOCALE in el lt en hu cs sl fr ga et ro es mt sk nl da sv pl lv hr it fi de 
   mkdir -p "$SUPPORTING_DIR/$LOCALE.lproj"
   if [ ! -f "$SUPPORTING_DIR/$LOCALE.lproj/InfoPlist.strings" ]; then
     printf '/* InfoPlist.strings */\n' > "$SUPPORTING_DIR/$LOCALE.lproj/InfoPlist.strings"
-    echo "Created $LOCALE.lproj/InfoPlist.strings"
   fi
 done
 
@@ -65,18 +56,15 @@ echo "=== Creating Watch app entitlements file ==="
 WATCH_ENTITLEMENTS="$IOS_DIR/RunWithAI Watch Watch App/RunWithAI Watch Watch App.entitlements"
 if [ ! -f "$WATCH_ENTITLEMENTS" ]; then
   printf '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n<plist version="1.0">\n<dict>\n\t<key>com.apple.developer.healthkit</key>\n\t<true/>\n</dict>\n</plist>\n' > "$WATCH_ENTITLEMENTS"
-  echo "Created Watch entitlements: $WATCH_ENTITLEMENTS"
+  echo "Created Watch entitlements"
 fi
 
 echo "=== Creating missing iOS resource files ==="
-# Create Expo.plist if missing
 EXPO_PLIST="$IOS_DIR/RunWithAI/Supporting/Expo.plist"
 if [ ! -f "$EXPO_PLIST" ]; then
   printf '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n<plist version="1.0">\n<dict>\n\t<key>EXUpdatesCheckOnLaunch</key>\n\t<string>ALWAYS</string>\n\t<key>EXUpdatesEnabled</key>\n\t<false/>\n\t<key>EXUpdatesLaunchWaitMs</key>\n\t<integer>0</integer>\n</dict>\n</plist>\n' > "$EXPO_PLIST"
-  echo "Created Expo.plist"
 fi
 
-# Create AppDelegate.swift if missing
 APP_DELEGATE="$IOS_DIR/RunWithAI/AppDelegate.swift"
 if [ ! -f "$APP_DELEGATE" ]; then
   python3 -c "
@@ -99,32 +87,25 @@ import sys
 with open(sys.argv[1], 'w') as f:
   f.write(content)
 " "$APP_DELEGATE"
-  echo "Created AppDelegate.swift"
 fi
 
-# Create RunWithAI-Bridging-Header.h if missing
 BRIDGING_HEADER="$IOS_DIR/RunWithAI/RunWithAI-Bridging-Header.h"
 if [ ! -f "$BRIDGING_HEADER" ]; then
   python3 -c "
 content = '''//
 // RunWithAI-Bridging-Header.h
-// RunWithAI
-//
 #ifndef RunWithAI_Bridging_Header_h
 #define RunWithAI_Bridging_Header_h
-// React Native bridging headers are managed by CocoaPods
 #endif
 '''
 import sys
 with open(sys.argv[1], 'w') as f:
   f.write(content)
 " "$BRIDGING_HEADER"
-  echo "Created RunWithAI-Bridging-Header.h"
 fi
 
-echo "=== Creating Info.plist ==="
+echo "=== Creating Info.plist (always overwrite) ==="
 INFO_PLIST="$IOS_DIR/RunWithAI/Info.plist"
-# Always overwrite to ensure CFBundleIconName and CFBundleIconFiles are present
 cat > "$INFO_PLIST" << 'PLIST_EOF'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -138,8 +119,16 @@ cat > "$INFO_PLIST" << 'PLIST_EOF'
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIconName</key>
 	<string>AppIcon</string>
-	<key>CFBundleIconFiles</key>
-	<array/>
+	<key>CFBundleIcons</key>
+	<dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconName</key>
+			<string>AppIcon</string>
+			<key>CFBundleIconFiles</key>
+			<array/>
+		</dict>
+	</dict>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -186,7 +175,7 @@ cat > "$INFO_PLIST" << 'PLIST_EOF'
 </dict>
 </plist>
 PLIST_EOF
-echo "Created/updated Info.plist at $INFO_PLIST"
+echo "Created/updated Info.plist"
 
 echo "=== Installing Node.js dependencies ==="
 cd "$REPO"
@@ -198,61 +187,80 @@ cd "$IOS_DIR"
 "$POD_BIN" install
 
 echo "=== Patching fmt for Xcode 26 consteval compatibility ==="
-# fmt headers are at Pods/fmt/include/fmt/ (not Pods/fmt/fmt/)
 FMT_INCLUDE="$IOS_DIR/Pods/fmt/include/fmt"
 if [ -d "$FMT_INCLUDE" ]; then
-  echo "Found fmt include dir: $FMT_INCLUDE"
   find "$FMT_INCLUDE" -type f \( -name "*.h" -o -name "*.cc" -o -name "*.cpp" \) | while read f; do
     if grep -q "consteval" "$f"; then
       sed -i '' 's/consteval/inline/g' "$f"
-      echo "Patched consteval in: $f"
     fi
   done
 else
-  echo "WARNING: fmt include dir not found, trying broader search"
   find "$IOS_DIR/Pods/fmt" -type f -name "*.h" 2>/dev/null | while read f; do
     if grep -q "consteval" "$f"; then
       sed -i '' 's/consteval/inline/g' "$f"
-      echo "Patched consteval in: $f"
     fi
   done
 fi
 
 echo "=== Fixing Watch app configuration ==="
-# Fix WKCompanionAppBundleIdentifier
 sed -i '' 's/WKCompanionAppBundleIdentifier = "";/WKCompanionAppBundleIdentifier = "app.runwithai";/g' "$PBXPROJ"
 sed -i '' 's/WKCompanionAppBundleIdentifier = ;/WKCompanionAppBundleIdentifier = "app.runwithai";/g' "$PBXPROJ"
 
-# Fix NSHealth usage descriptions in Watch Info.plist
+echo "=== Fixing Watch Info.plist (overwrite entire file) ==="
 WATCH_PLIST="$IOS_DIR/RunWithAI Watch Watch App/Info.plist"
 if [ -f "$WATCH_PLIST" ]; then
-  if ! grep -q "NSHealthUpdateUsageDescription" "$WATCH_PLIST"; then
-    sed -i '' 's|</dict>|<key>NSHealthUpdateUsageDescription</key><string>RunWithAI uses HealthKit to save your workout data.</string><key>NSHealthShareUsageDescription</key><string>RunWithAI reads your health data to personalize your training.</string></dict>|' "$WATCH_PLIST"
-  fi
+  cat > "$WATCH_PLIST" << 'WATCH_PLIST_EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>RunWithAI</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>RunWithAI reads your health data to personalize your training.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>RunWithAI uses HealthKit to save your workout data.</string>
+	<key>UISupportedInterfaceOrientations</key>
+	<array/>
+	<key>WKWatchOnly</key>
+	<false/>
+</dict>
+</plist>
+WATCH_PLIST_EOF
+  echo "Overwrote Watch Info.plist"
 fi
 
-echo "=== Fixing Watch app icon (remove alpha channel) ==="
+echo "=== Fixing Watch app icon (remove alpha via sips flatten) ==="
 WATCH_ICON_DIR="$IOS_DIR/RunWithAI Watch Watch App/Assets.xcassets/AppIcon.appiconset"
 mkdir -p "$WATCH_ICON_DIR"
-cp "$REPO/assets/icon.png" "$WATCH_ICON_DIR/AppIcon.png"
-# Use Python to flatten alpha channel properly
-python3 - "$WATCH_ICON_DIR/AppIcon.png" << 'PYEOF'
-import sys, os
-img_path = sys.argv[1]
-try:
-    from PIL import Image
-    img = Image.open(img_path).convert('RGBA')
-    background = Image.new('RGB', img.size, (255, 255, 255))
-    background.paste(img, mask=img.split()[3])
-    background.save(img_path, 'PNG')
-    print(f"Removed alpha channel from {img_path} using PIL")
-except ImportError:
-    # PIL not available - use sips
-    os.system(f"sips -s format png --out '{img_path}' '{img_path}' 2>/dev/null || true")
-    os.system(f"sips -d transparency '{img_path}' 2>/dev/null || true")
-    print("Used sips to process icon (PIL not available)")
-PYEOF
-echo "Icon info:"
-sips -g all "$WATCH_ICON_DIR/AppIcon.png" 2>/dev/null | grep -E "pixelWidth|pixelHeight|hasAlpha|format" || true
+SRC_ICON="$REPO/assets/icon.png"
+DEST_ICON="$WATCH_ICON_DIR/AppIcon.png"
+
+# Flatten alpha by converting PNG -> JPEG (loses alpha) -> PNG
+TEMP_JPEG="/tmp/icon_flat_$$.jpg"
+sips -s format jpeg "$SRC_ICON" --out "$TEMP_JPEG" 2>/dev/null || cp "$SRC_ICON" "$DEST_ICON"
+if [ -f "$TEMP_JPEG" ]; then
+  sips -s format png "$TEMP_JPEG" --out "$DEST_ICON" 2>/dev/null || cp "$SRC_ICON" "$DEST_ICON"
+  rm -f "$TEMP_JPEG"
+fi
+
+echo "Icon info after flatten:"
+sips -g all "$DEST_ICON" 2>/dev/null | grep -E "pixelWidth|pixelHeight|hasAlpha|format" || true
 
 echo "=== Done ==="
