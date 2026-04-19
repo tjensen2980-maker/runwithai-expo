@@ -103,7 +103,9 @@ content = '''//
 //
 #ifndef RunWithAI_Bridging_Header_h
 #define RunWithAI_Bridging_Header_h
+
 // React Native bridging headers are managed by CocoaPods
+
 #endif
 '''
 import sys
@@ -121,6 +123,19 @@ cd "$REPO"
 echo "=== Installing pods ==="
 cd "$IOS_DIR"
 "$POD_BIN" install
+
+echo "=== Fixing SplashScreen.storyboard ==="
+SPLASH_DEST="$IOS_DIR/RunWithAI/SplashScreen.storyboard"
+SPLASH_POD=$(find "$IOS_DIR/Pods" -name "SplashScreen.storyboard" 2>/dev/null | head -1)
+if [ -n "$SPLASH_POD" ]; then
+  cp "$SPLASH_POD" "$SPLASH_DEST"
+  echo "Copied SplashScreen.storyboard from: $SPLASH_POD"
+  echo "File size: $(wc -c < "$SPLASH_DEST") bytes"
+else
+  echo "WARNING: No SplashScreen.storyboard found in Pods"
+  echo "Searched in: $IOS_DIR/Pods"
+  ls "$IOS_DIR/Pods/" | grep -i expo | head -5 || true
+fi
 
 echo "=== Patching fmt for Xcode 26 consteval compatibility ==="
 # fmt headers are at Pods/fmt/include/fmt/ (not Pods/fmt/fmt/)
@@ -151,12 +166,13 @@ sed -i '' 's/WKCompanionAppBundleIdentifier = ;/WKCompanionAppBundleIdentifier =
 # Fix Watch app MARKETING_VERSION to match iOS
 APP_VERSION=$(grep '"version"' "$REPO/app.json" | head -1 | sed 's/.*"version": "\(.*\)".*/\1/')
 echo "App version: $APP_VERSION"
+
 perl -i -pe '
-if (/DC27E1FC|DC27E1FD/) { $in_watch = 1 }
-if ($in_watch && /MARKETING_VERSION/) {
-  s/MARKETING_VERSION = [^;]+;/MARKETING_VERSION = '"$APP_VERSION"';/;
-  $in_watch = 0;
-}
+  if (/DC27E1FC|DC27E1FD/) { $in_watch = 1 }
+  if ($in_watch && /MARKETING_VERSION/) {
+    s/MARKETING_VERSION = [^;]+;/MARKETING_VERSION = '"$APP_VERSION"';/;
+    $in_watch = 0;
+  }
 ' "$PBXPROJ"
 
 # Fix NSHealth usage descriptions in Watch Info.plist
