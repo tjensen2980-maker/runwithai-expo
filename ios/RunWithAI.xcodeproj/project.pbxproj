@@ -1102,6 +1102,7 @@ targetProxy = DC27E2AD2F924179008D2915 /* PBXContainerItemProxy */;
 				INFOPLIST_KEY_CFBundleDisplayName = "RunWithAI Watch";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "";
+				INFOPLIST_KEY_WKBackgroundModes = "workout-processing";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1150,6 +1151,7 @@ targetProxy = DC27E2AD2F924179008D2915 /* PBXContainerItemProxy */;
 				INFOPLIST_KEY_CFBundleDisplayName = "RunWithAI Watch";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "";
+				INFOPLIST_KEY_WKBackgroundModes = "workout-processing";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
