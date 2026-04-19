@@ -114,46 +114,29 @@ fi
 
 echo "=== Adding main.jsbundle to Xcode project resources ==="
 python3 -c "
-import sys, re, uuid
-
+import sys, hashlib
 path = sys.argv[1]
 f = open(path, 'r')
 content = f.read()
 f.close()
-
-# Check if already registered
 if 'main.jsbundle' in content:
     print('main.jsbundle already in project')
     sys.exit(0)
-
-# Generate two UUIDs (no hyphens, uppercase, 24 chars each)
-import hashlib
+q = chr(34)
+lt = chr(60)
+gt = chr(62)
 file_ref_uuid = hashlib.md5(b'main_jsbundle_fileref').hexdigest()[:24].upper()
 build_file_uuid = hashlib.md5(b'main_jsbundle_buildfile').hexdigest()[:24].upper()
-
-# Add PBXFileReference entry
-file_ref_entry = '		' + file_ref_uuid + ' /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "main.jsbundle"; path = RunWithAI/main.jsbundle; sourceTree = "<group>"; };
-'
-# Insert after '/* End PBXBuildFile section */'
-content = content.replace('/* End PBXFileReference section */', file_ref_entry + '		/* End PBXFileReference section */')
-
-# Add PBXBuildFile entry
-build_file_entry = '		' + build_file_uuid + ' /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = ' + file_ref_uuid + ' /* main.jsbundle */; };
-'
-content = content.replace('/* End PBXBuildFile section */', build_file_entry + '		/* End PBXBuildFile section */')
-
-# Add to RunWithAI group (after AppDelegate.swift line)
-group_entry = '				' + file_ref_uuid + ' /* main.jsbundle */,
-'
-content = content.replace('F11748412D0307B40044C1D9 /* AppDelegate.swift */,', 'F11748412D0307B40044C1D9 /* AppDelegate.swift */,
-' + group_entry)
-
-# Add to Resources build phase (13B07F8E1A680F5B00A75B9A)
-resource_entry = '				' + build_file_uuid + ' /* main.jsbundle in Resources */,
-'
-# Find the Resources build phase and add the file
-content = content.replace('BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,', resource_entry + '				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,')
-
+file_ref_entry = chr(9)+chr(9)+file_ref_uuid+' /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = '+q+'main.jsbundle'+q+'; path = RunWithAI/main.jsbundle; sourceTree = '+q+lt+'group'+gt+q+'; };'+chr(10)
+content = content.replace('/* End PBXFileReference section */', file_ref_entry + chr(9)+chr(9)+'/* End PBXFileReference section */')
+build_file_entry = chr(9)+chr(9)+build_file_uuid+' /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = '+file_ref_uuid+' /* main.jsbundle */; };'+chr(10)
+content = content.replace('/* End PBXBuildFile section */', build_file_entry + chr(9)+chr(9)+'/* End PBXBuildFile section */')
+group_line = 'F11748412D0307B40044C1D9 /* AppDelegate.swift */,'
+group_entry = chr(9)+chr(9)+chr(9)+chr(9)+file_ref_uuid+' /* main.jsbundle */,'
+content = content.replace(group_line, group_line+chr(10)+group_entry)
+resource_line = 'BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,'
+resource_entry = chr(9)+chr(9)+chr(9)+chr(9)+build_file_uuid+' /* main.jsbundle in Resources */,'
+content = content.replace(resource_line, resource_entry+chr(10)+chr(9)+chr(9)+chr(9)+chr(9)+resource_line.strip())
 f = open(path, 'w')
 f.write(content)
 f.close()
