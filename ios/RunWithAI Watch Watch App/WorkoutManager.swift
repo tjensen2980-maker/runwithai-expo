@@ -334,7 +334,12 @@ class WorkoutManager: NSObject, ObservableObject {
                                     "splits": splitData,
                                     "timestamp": Date().timeIntervalSince1970
                     ]
-                    WatchConnectivityManager.shared.sendWorkoutData(summary)
+                    // Send til iPhone (WatchConnectivity - fallback)
+        WatchConnectivityManager.shared.sendWorkoutData(summary)
+        // Upload direkte til Railway (primær metode)
+        RailwayManager.shared.uploadRun(summary) { success in
+            print("[WorkoutManager] Railway upload: \(success ? "✓" : "fejlede - gemt lokalt")")
+        }
         }
 
         func sendLiveDataToPhone() {
