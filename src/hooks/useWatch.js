@@ -184,6 +184,22 @@ export function useWatch({
           }
   }, [isReachable]);
 
+  // Send JWT token til Watch så den kan kommunikere direkte med Railway
+  const sendAuthToWatch = async (jwtToken, userId) => {
+    if (!jwtToken) return;
+    try {
+      await WatchModule.sendMessage({
+        type: 'AUTH_UPDATE',
+        jwtToken,
+        userId: userId || null,
+        timestamp: Date.now(),
+      });
+      console.log('[useWatch] JWT token sendt til Watch');
+    } catch (e) {
+      console.warn('[useWatch] Kunne ikke sende token til Watch:', e?.message);
+    }
+  };
+
   return {
           isReachable,
           isPaired,
@@ -191,5 +207,6 @@ export function useWatch({
           lastWatchWorkout,
           sendTodayTraining,
           sendRunUpdate,
+          sendAuthToWatch,
   };
 }
