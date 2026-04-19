@@ -14,7 +14,6 @@ if [ -s "$NVM_DIR/nvm.sh" ]; then
   nvm use 20
   NPM_BIN="$(which npm)"
 else
-  # nvm not found, try brew (may take time)
   export HOMEBREW_NO_AUTO_UPDATE=1
   export HOMEBREW_NO_INSTALL_CLEANUP=1
   if ! command -v node >/dev/null 2>&1; then
@@ -44,6 +43,30 @@ sed -i '' 's/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = 1.7.3;/g' "$PBXPROJ"
 sed -i '' 's/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = 155;/g' "$PBXPROJ"
 echo "MARKETING_VERSION after:"
 grep "MARKETING_VERSION" "$PBXPROJ" | head -4
+
+echo "=== Adding NSHealth keys to Watch target in pbxproj ==="
+# The Watch target uses GENERATE_INFOPLIST_FILE = YES with INFOPLIST_KEY_* build settings.
+# We add NSHealth usage description keys after INFOPLIST_KEY_WKBackgroundModes.
+# Use python3 to do multi-line replacement safely.
+python3 - "$PBXPROJ" << 'PYEOF'
+import sys
+path = sys.argv[1]
+with open(path, "r") as f:
+    content = f.read()
+
+old = 'INFOPLIST_KEY_WKBackgroundModes = "workout-processing";'
+new = ('INFOPLIST_KEY_WKBackgroundModes = "workout-processing";\n'
+       '\t\t\t\tINFOPLIST_KEY_NSHealthShareUsageDescription = "RunWithAI reads your health data to personalize your training.";\n'
+       '\t\t\t\tINFOPLIST_KEY_NSHealthUpdateUsageDescription = "RunWithAI uses HealthKit to save your workout data.";')
+
+if old in content:
+    content = content.replace(old, new)
+    with open(path, "w") as f:
+        f.write(content)
+    print("Added NSHealth keys to Watch target")
+else:
+    print("WKBackgroundModes key not found - skipping")
+PYEOF
 
 echo "=== Creating locale files ==="
 SUPPORTING_DIR="$IOS_DIR/RunWithAI/Supporting"
@@ -160,48 +183,6 @@ with open(sys.argv[1], "w") as f:
     f.write(content.lstrip())
 PYEOF
 echo "Created iOS Info.plist"
-
-echo "=== Creating Watch Info.plist (via python3) ==="
-WATCH_PLIST_PATH="$IOS_DIR/RunWithAI Watch Watch App/Info.plist"
-python3 - "$WATCH_PLIST_PATH" << 'PYEOF'
-import sys
-content = """\
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-  <key>CFBundleDevelopmentRegion</key>
-  <string>$(DEVELOPMENT_LANGUAGE)</string>
-  <key>CFBundleDisplayName</key>
-  <string>RunWithAI</string>
-  <key>CFBundleExecutable</key>
-  <string>$(EXECUTABLE_NAME)</string>
-  <key>CFBundleIdentifier</key>
-  <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-  <key>CFBundleInfoDictionaryVersion</key>
-  <string>6.0</string>
-  <key>CFBundleName</key>
-  <string>$(PRODUCT_NAME)</string>
-  <key>CFBundlePackageType</key>
-  <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
-  <key>CFBundleShortVersionString</key>
-  <string>$(MARKETING_VERSION)</string>
-  <key>CFBundleVersion</key>
-  <string>$(CURRENT_PROJECT_VERSION)</string>
-  <key>NSHealthShareUsageDescription</key>
-  <string>RunWithAI reads your health data to personalize your training.</string>
-  <key>NSHealthUpdateUsageDescription</key>
-  <string>RunWithAI uses HealthKit to save your workout data.</string>
-  <key>UISupportedInterfaceOrientations</key>
-  <array/>
-  <key>WKWatchOnly</key>
-  <false/>
-</dict>
-</plist>"""
-with open(sys.argv[1], "w") as f:
-    f.write(content.lstrip())
-PYEOF
-echo "Created Watch Info.plist"
 
 echo "=== Installing Node.js dependencies ==="
 cd "$REPO"
