@@ -258,7 +258,7 @@ function TabBar({ tab, setTab }) {
 export default function App() {
   const { t } = useTranslation();
 
-  setUser]                     = useState(null);
+  const [user, setUser] = useState(null);
   const [showOnboarding, setShowOnboarding] = useState(true);
   const [level, setLevel]                   = useState(null);
   const [tab, setTab]                       = useState('dashboard');
