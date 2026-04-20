@@ -35,8 +35,6 @@ RCT_EXPORT_MODULE();
   }
   return self;
 }
-    return self;
-}
 
 // MARK: - RCTEventEmitter
 
