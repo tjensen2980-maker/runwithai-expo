@@ -1,12 +1,12 @@
 {
   "name": "runwithai",
   "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
+  "main": "./index.js",
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
-        "eas-build-pre-install": "gem install xcodeproj --user-install"
+    "eas-build-pre-install": "gem install xcodeproj --user-install"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
+    "@react-native-community/cli": "^20.1.3",
     "babel-preset-expo": "~54.0.10"
   }
 }
