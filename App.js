@@ -11,7 +11,7 @@ import {
   colors, DEFAULT_WEEK_PLAN, DEFAULT_NEXT_WORKOUT, DEFAULT_PROFILE,
   loadProfile, saveProfile, loadWeekPlan, saveWeekPlan, setAuthToken, generateTrainingPlan, getAuthToken, loadTrainingPlan, loadRuns,
 } from './src/data';
-import { useWatch } from './src/hooks/useWatch';
+import { useWatch } from './src/hooks/useWatch'
 import Auth from './src/screens/Auth';
 import Onboarding from './src/screens/Onboarding';
 import Dashboard from './src/screens/Dashboard';
@@ -258,7 +258,20 @@ function TabBar({ tab, setTab }) {
 export default function App() {
   const { t } = useTranslation();
 
-  const { sendTodayTraining } = useWatch({
+  setUser]                     = useState(null);
+  const [showOnboarding, setShowOnboarding] = useState(true);
+  const [level, setLevel]                   = useState(null);
+  const [tab, setTab]                       = useState('dashboard');
+  const [profile, setProfileState]          = useState(DEFAULT_PROFILE);
+  const [weekPlan, setWeekPlanState]        = useState(DEFAULT_WEEK_PLAN);
+  const [nextWorkout, setNextWorkout]       = useState(DEFAULT_NEXT_WORKOUT);
+  const [planChanges, setPlanChanges]       = useState([]);
+  const [trainingPlan, setTrainingPlan]     = useState(null);
+  const [runs, setRuns]                     = useState([]);
+  const [loading, setLoading]               = useState(true);
+  const [activityType, setActivityType]     = useState('run');
+  const [showPricing, setShowPricing]       = useState(false);
+const { sendTodayTraining } = useWatch({
     onCommand: (command) => {
       if (command === 'GET_TODAY_TRAINING' && weekPlan) {
         const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
@@ -273,19 +286,7 @@ export default function App() {
     },
   });
 
-  const [user, setUser]                     = useState(null);
-  const [showOnboarding, setShowOnboarding] = useState(true);
-  const [level, setLevel]                   = useState(null);
-  const [tab, setTab]                       = useState('dashboard');
-  const [profile, setProfileState]          = useState(DEFAULT_PROFILE);
-  const [weekPlan, setWeekPlanState]        = useState(DEFAULT_WEEK_PLAN);
-  const [nextWorkout, setNextWorkout]       = useState(DEFAULT_NEXT_WORKOUT);
-  const [planChanges, setPlanChanges]       = useState([]);
-  const [trainingPlan, setTrainingPlan]     = useState(null);
-  const [runs, setRuns]                     = useState([]);
-  const [loading, setLoading]               = useState(true);
-  const [activityType, setActivityType]     = useState('run');
-  const [showPricing, setShowPricing]       = useState(false);
+  const [user, 
 
   const token = getAuthToken();
   const { subscription, isPro, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
