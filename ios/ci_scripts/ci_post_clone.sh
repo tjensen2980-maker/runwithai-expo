@@ -31,7 +31,7 @@ sed -i '' 's/objectVersion = 70;/objectVersion = 60;/g' "$PBXPROJ"
 
 echo "=== Fixing version numbers ==="
 sed -i '' 's/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = 1.7.3;/g' "$PBXPROJ"
-sed -i '' 's/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = 200;/g' "$PBXPROJ"
+sed -i '' 's/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = 201;/g' "$PBXPROJ"
 echo "MARKETING_VERSION after:"; grep "MARKETING_VERSION" "$PBXPROJ" | head -4
 
 echo "=== Removing conflicting AppDelegate.h (causes EXAppDelegateWrapper vs RCTAppDelegate conflict) ==="
@@ -96,6 +96,78 @@ echo "=== Installing Node.js dependencies ==="
 cd "$REPO"
 "$NPM_BIN" install --legacy-peer-deps
 "$NPM_BIN" install --legacy-peer-deps @react-native-community/cli
+
+echo "=== Bundling JS for Release ==="
+cd "$REPO"
+mkdir -p "$IOS_DIR/RunWithAI"
+"$NPM_BIN" exec --yes -- expo export:embed \
+  --entry-file index.js \
+  --platform ios \
+  --dev false \
+  --reset-cache \
+  --bundle-output "$IOS_DIR/RunWithAI/main.jsbundle" \
+  --assets-dest "$IOS_DIR/RunWithAI" || \
+"$NPM_BIN" exec --yes -- react-native bundle \
+  --entry-file index.js \
+  --platform ios \
+  --dev false \
+  --reset-cache \
+  --bundle-output "$IOS_DIR/RunWithAI/main.jsbundle" \
+  --assets-dest "$IOS_DIR/RunWithAI"
+
+echo "=== Verifying bundle exists ==="
+ls -lh "$IOS_DIR/RunWithAI/main.jsbundle" || { echo "ERROR: main.jsbundle missing!"; exit 1; }
+
+echo "=== Adding main.jsbundle to pbxproj as resource ==="
+python3 <<'PYEOF'
+import re, uuid, sys
+pbxproj = "/Volumes/workspace/repository/ios/RunWithAI.xcodeproj/project.pbxproj"
+# Fallback to env-based path
+import os
+repo = os.environ.get("CI_PRIMARY_REPOSITORY_PATH", "")
+if repo:
+    pbxproj = repo + "/ios/RunWithAI.xcodeproj/project.pbxproj"
+
+with open(pbxproj, 'r') as f:
+    c = f.read()
+
+if 'main.jsbundle' in c:
+    print("main.jsbundle already referenced in pbxproj")
+    sys.exit(0)
+
+def gen_id():
+    return uuid.uuid4().hex[:24].upper()
+
+file_ref_id = gen_id()
+build_file_id = gen_id()
+
+# Add PBXFileReference
+file_ref = f'\t\t{file_ref_id} /* main.jsbundle */ = {{isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; }};\n'
+c = c.replace('/* End PBXFileReference section */', file_ref + '/* End PBXFileReference section */')
+
+# Add PBXBuildFile
+build_file = f'\t\t{build_file_id} /* main.jsbundle in Resources */ = {{isa = PBXBuildFile; fileRef = {file_ref_id} /* main.jsbundle */; }};\n'
+c = c.replace('/* End PBXBuildFile section */', build_file + '/* End PBXBuildFile section */')
+
+# Add to RunWithAI group (find the group containing Info.plist)
+# Find RunWithAI group children list and add our file ref
+m = re.search(r'(/\* RunWithAI \*/ = \{[^}]*?children = \([^)]*?)(\s*\);)', c, re.DOTALL)
+if m:
+    c = c[:m.start(2)] + f'\n\t\t\t\t{file_ref_id} /* main.jsbundle */,' + m.group(2) + c[m.end():]
+
+# Add to Resources build phase of RunWithAI target
+# Find all Resources build phases and add to the one that already has resources for RunWithAI
+resources_pattern = re.compile(r'(/\* Resources \*/ = \{[^}]*?isa = PBXResourcesBuildPhase;[^}]*?files = \()([^)]*?)(\s*\);)', re.DOTALL)
+def add_to_resources(match):
+    if 'Images.xcassets' in match.group(2) or 'AppIcon' in match.group(2):
+        return match.group(1) + match.group(2) + f'\n\t\t\t\t{build_file_id} /* main.jsbundle in Resources */,' + match.group(3)
+    return match.group(0)
+c = resources_pattern.sub(add_to_resources, c, count=1)
+
+with open(pbxproj, 'w') as f:
+    f.write(c)
+print(f"Added main.jsbundle to pbxproj (fileRef={file_ref_id}, buildFile={build_file_id})")
+PYEOF
 
 echo "=== Installing pods ==="
 cd "$IOS_DIR"
