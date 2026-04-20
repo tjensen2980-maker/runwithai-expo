@@ -295,10 +295,19 @@ export default function App() {
   const [loading, setLoading]               = useState(true);
   const [activityType, setActivityType]     = useState('run');
   const [showPricing, setShowPricing]       = useState(false);
-// Watch sync - step 1: import only, no listeners yet
-  const { sendTodayTraining } = useWatch({
-    onCommand: () => {},
-    onWorkoutComplete: () => {},
+const { sendTodayTraining } = useWatch({
+    onCommand: (command) => {
+      if (command === 'GET_TODAY_TRAINING' && weekPlan) {
+        const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+        const todayPlan = weekPlan.find(p => p.day && p.day.toLowerCase() === today) || weekPlan[0];
+        if (todayPlan) {
+          sendTodayTraining(todayPlan, weekPlan).catch(err => console.warn('[App] sendTodayTraining error:', err));
+        }
+      }
+    },
+    onWorkoutComplete: (run, saved) => {
+      console.log('[App] Watch workout saved:', saved ? 'success' : 'failed');
+    },
   });
 
   const token = getAuthToken();
