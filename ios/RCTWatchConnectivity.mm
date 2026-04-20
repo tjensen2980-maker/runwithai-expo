@@ -24,13 +24,17 @@ RCT_EXPORT_MODULE();
 }
 
 - (instancetype)init {
-    if (self = [super init]) {
-        if ([WCSession isSupported]) {
-            self.session = [WCSession defaultSession];
-            self.session.delegate = self;
-            [self.session activateSession];
-        }
+  if (self = [super init]) {
+    if ([WCSession isSupported]) {
+      dispatch_async(dispatch_get_main_queue(), ^{
+        self.session = [WCSession defaultSession];
+        self.session.delegate = self;
+        [self.session activateSession];
+      });
     }
+  }
+  return self;
+}
     return self;
 }
 
