@@ -74,7 +74,11 @@
         "backgroundColor": "#ffffff"
       },
       "package": "app.runwithai",
+<<<<<<< Updated upstream
       "versionCode": 50,
+=======
+      "versionCode": 22,
+>>>>>>> Stashed changes
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
