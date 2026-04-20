@@ -133,35 +133,8 @@ printf '{
 WATCH_ICON_DIR="$IOS_DIR/RunWithAI Watch Watch App/Assets.xcassets/AppIcon.appiconset"; mkdir -p "$WATCH_ICON_DIR"
 cp "$FLAT_ICON" "$WATCH_ICON_DIR/AppIcon.png"; rm -f "$FLAT_ICON"
 
-echo "=== Building JavaScript bundle with expo export:embed (production) ==="
-cd "$REPO"
-BUNDLE_OUTPUT="$IOS_DIR/RunWithAI/main.jsbundle"
-ASSETS_OUTPUT="$IOS_DIR/RunWithAI/assets"
-mkdir -p "$ASSETS_OUTPUT"
-node_modules/.bin/expo export:embed \
-  --platform ios \
-  --entry-file node_modules/expo/AppEntry.js \
-  --bundle-output "$BUNDLE_OUTPUT" \
-  --assets-dest "$ASSETS_OUTPUT" \
-  --dev false \
-  --minify true
-if [ -f "$BUNDLE_OUTPUT" ]; then
-  BUNDLE_SIZE=$(wc -c < "$BUNDLE_OUTPUT")
-  echo "main.jsbundle created: $BUNDLE_SIZE bytes"
-else
-  echo "ERROR: main.jsbundle not created"; exit 1
-fi
-
-echo "=== Setting SKIP_BUNDLING=1 to prevent Xcode from re-bundling ==="
-XCODE_ENV_LOCAL="$IOS_DIR/.xcode.env.local"
-echo "export SKIP_BUNDLING=1" >> "$XCODE_ENV_LOCAL"
-echo "SKIP_BUNDLING=1 appended"; cat "$XCODE_ENV_LOCAL"
-
-echo "=== Adding main.jsbundle to Xcode project resources ==="
-python3 -c "import sys, hashlib; path = sys.argv[1]; f = open(path, 'r'); content = f.read(); f.close(); q = chr(34); lt = chr(60); gt = chr(62); file_ref_uuid = hashlib.md5(b'main_jsbundle_fileref').hexdigest()[:24].upper(); build_file_uuid = hashlib.md5(b'main_jsbundle_buildfile').hexdigest()[:24].upper(); already = 'main.jsbundle' in content; file_ref_entry = chr(9)+chr(9)+file_ref_uuid+' /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = '+q+'main.jsbundle'+q+'; path = RunWithAI/main.jsbundle; sourceTree = '+q+lt+'group'+gt+q+'; };'+chr(10); build_file_entry = chr(9)+chr(9)+build_file_uuid+' /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = '+file_ref_uuid+' /* main.jsbundle */; };'+chr(10); group_line = 'F11748412D0307B40044C1D9 /* AppDelegate.swift */,'; group_entry = chr(9)+chr(9)+chr(9)+chr(9)+file_ref_uuid+' /* main.jsbundle */,'; resource_line = 'BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,'; resource_entry = chr(9)+chr(9)+chr(9)+chr(9)+build_file_uuid+' /* main.jsbundle in Resources */,'; content = content if already else content.replace('/* End PBXFileReference section */', file_ref_entry + chr(9)+chr(9)+'/* End PBXFileReference section */').replace('/* End PBXBuildFile section */', build_file_entry + chr(9)+chr(9)+'/* End PBXBuildFile section */').replace(group_line, group_line+chr(10)+group_entry).replace(resource_line, resource_entry+chr(10)+chr(9)+chr(9)+chr(9)+chr(9)+resource_line.strip()); f = open(path, 'w'); f.write(content); f.close(); print('Already present' if already else 'Added main.jsbundle to Xcode project resources')" "$PBXPROJ"
 
 echo "=== Verifying ==="
-grep -c "main.jsbundle" "$PBXPROJ" && echo "main.jsbundle entries found in pbxproj"
 grep -c "AppDelegate.h" "$PBXPROJ" 2>/dev/null && echo "WARNING: AppDelegate.h still in pbxproj" || echo "AppDelegate.h successfully removed from pbxproj"
 
 echo "Command executed successfully"
