@@ -11,6 +11,7 @@ import {
   colors, DEFAULT_WEEK_PLAN, DEFAULT_NEXT_WORKOUT, DEFAULT_PROFILE,
   loadProfile, saveProfile, loadWeekPlan, saveWeekPlan, setAuthToken, generateTrainingPlan, getAuthToken, loadTrainingPlan, loadRuns,
 } from './src/data';
+import { useWatch } from './src/hooks/useWatch'
 import Auth from './src/screens/Auth';
 import Onboarding from './src/screens/Onboarding';
 import Dashboard from './src/screens/Dashboard';
@@ -294,8 +295,11 @@ export default function App() {
   const [loading, setLoading]               = useState(true);
   const [activityType, setActivityType]     = useState('run');
   const [showPricing, setShowPricing]       = useState(false);
-// Watch sync disabled for diagnostics
-  const sendTodayTraining = () => Promise.resolve();
+// Watch sync - step 1: import only, no listeners yet
+  const { sendTodayTraining } = useWatch({
+    onCommand: () => {},
+    onWorkoutComplete: () => {},
+  });
 
   const token = getAuthToken();
   const { subscription, isPro, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
