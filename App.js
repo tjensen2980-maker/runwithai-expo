@@ -255,6 +255,30 @@ function TabBar({ tab, setTab }) {
   );
 }
 
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+  componentDidCatch(error, info) {
+    console.error('[ErrorBoundary] Caught:', error, info);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <View style={{ flex: 1, backgroundColor: '#111', justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+          <Text style={{ color: 'red', fontSize: 16, marginBottom: 10 }}>App Error:</Text>
+          <Text style={{ color: '#fff', fontSize: 12 }}>{String(this.state.error)}</Text>
+        </View>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 export default function App() {
   const { t } = useTranslation();
 
@@ -507,7 +531,8 @@ const { sendTodayTraining } = useWatch({
   };
 
   return (
-    <SafeAreaProvider>
+<ErrorBoundary>
+        <SafeAreaProvider>
       <StatusBar barStyle="dark-content" backgroundColor={colors.card} />
       <SafeAreaView style={s.safe} edges={['top']}>
         <View style={s.topBar}>
@@ -545,6 +570,7 @@ const { sendTodayTraining } = useWatch({
         </Modal>
       </SafeAreaView>
     </SafeAreaProvider>
+    </ErrorBoundary>
   );
 }
 
