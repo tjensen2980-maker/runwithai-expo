@@ -286,7 +286,7 @@ const { sendTodayTraining } = useWatch({
     },
   });
 
-  const [user, 
+  const [user, setUser] = useState(null);
 
   const token = getAuthToken();
   const { subscription, isPro, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
