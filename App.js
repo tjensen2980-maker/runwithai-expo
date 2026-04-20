@@ -11,7 +11,6 @@ import {
   colors, DEFAULT_WEEK_PLAN, DEFAULT_NEXT_WORKOUT, DEFAULT_PROFILE,
   loadProfile, saveProfile, loadWeekPlan, saveWeekPlan, setAuthToken, generateTrainingPlan, getAuthToken, loadTrainingPlan, loadRuns,
 } from './src/data';
-import { useWatch } from './src/hooks/useWatch'
 import Auth from './src/screens/Auth';
 import Onboarding from './src/screens/Onboarding';
 import Dashboard from './src/screens/Dashboard';
@@ -295,33 +294,13 @@ export default function App() {
   const [loading, setLoading]               = useState(true);
   const [activityType, setActivityType]     = useState('run');
   const [showPricing, setShowPricing]       = useState(false);
-const { sendTodayTraining } = useWatch({
-    onCommand: (command) => {
-      if (command === 'GET_TODAY_TRAINING' && weekPlan) {
-        const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-        const todayPlan = weekPlan.find(p => p.day && p.day.toLowerCase() === today) || weekPlan[0];
-        if (todayPlan) {
-          sendTodayTraining(todayPlan, weekPlan).catch(err => console.warn('[App] sendTodayTraining error:', err));
-        }
-      }
-    },
-    onWorkoutComplete: (run, saved) => {
-      console.log('[App] Watch workout saved:', saved ? 'success' : 'failed');
-    },
-  });
+// Watch sync disabled for diagnostics
+  const sendTodayTraining = () => Promise.resolve();
 
   const token = getAuthToken();
   const { subscription, isPro, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
 
-  useEffect(() => {
-    if (weekPlan && weekPlan.length > 0 && sendTodayTraining) {
-      const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-      const todayPlan = weekPlan.find(p => p.day && p.day.toLowerCase() === today) || weekPlan[0];
-      if (todayPlan) {
-        sendTodayTraining(todayPlan, weekPlan).catch(err => console.warn('[App] auto send:', err));
-      }
-    }
-  }, [weekPlan]);
+  // Watch auto-sync disabled
 
   useEffect(() => {
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
