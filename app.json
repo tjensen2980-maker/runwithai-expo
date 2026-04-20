@@ -110,7 +110,6 @@
           "healthUpdatePermission": "RunWithAI gemmer dine løbeture i Apple Health."
         }
       ],
-      "expo-dev-client",
       [
         "expo-localization",
         {
