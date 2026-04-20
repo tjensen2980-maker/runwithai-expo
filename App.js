@@ -295,25 +295,25 @@ export default function App() {
   const [loading, setLoading]               = useState(true);
   const [activityType, setActivityType]     = useState('run');
   const [showPricing, setShowPricing]       = useState(false);
-const { sendTodayTraining } = useWatch({
-    onCommand: (command) => {
-      if (command === 'GET_TODAY_TRAINING' && weekPlan) {
-        const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-        const todayPlan = weekPlan.find(p => p.day && p.day.toLowerCase() === today) || weekPlan[0];
-        if (todayPlan) {
-          sendTodayTraining(todayPlan, weekPlan).catch(err => console.warn('[App] sendTodayTraining error:', err));
-        }
-      }
-    },
-    onWorkoutComplete: (run, saved) => {
-      console.log('[App] Watch workout saved:', saved ? 'success' : 'failed');
-    },
+// Watch sync - step 1: import only, no listeners yet
+  const { sendTodayTraining } = useWatch({
+    onCommand: () => {},
+    onWorkoutComplete: () => {},
   });
 
   const token = getAuthToken();
   const { subscription, isPro, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
 
-  // Watch auto-sync disabled
+  // Watch auto-sync: send today's training when weekPlan loads
+  useEffect(() => {
+    if (weekPlan && weekPlan.length > 0 && sendTodayTraining) {
+      const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+      const todayPlan = weekPlan.find(p => p.day && p.day.toLowerCase() === today) || weekPlan[0];
+      if (todayPlan) {
+        sendTodayTraining(todayPlan, weekPlan).catch(err => console.warn('[App] auto send:', err));
+      }
+    }
+  }, [weekPlan]);
 
   useEffect(() => {
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
