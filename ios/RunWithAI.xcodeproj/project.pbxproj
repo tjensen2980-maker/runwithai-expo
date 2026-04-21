@@ -599,6 +599,8 @@
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
+					"-framework",
+					"WatchConnectivity",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "app.runwithai";
 				PRODUCT_NAME = "RunWithAI";
@@ -628,6 +630,8 @@
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
+					"-framework",
+					"WatchConnectivity",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "app.runwithai";
 				PRODUCT_NAME = "RunWithAI";
