@@ -1,15 +1,23 @@
 #!/bin/sh
 set -e
-echo "=== Installing Node via nvm ==="
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-nvm install 20
-nvm use 20
+
+echo "=== Installing Node via Homebrew ==="
+export HOMEBREW_NO_AUTO_UPDATE=1
+export HOMEBREW_NO_INSTALL_CLEANUP=1
+brew install node
+
 echo "Node: $(node --version)"
+echo "NPM: $(npm --version)"
+
 echo "=== Installing npm packages ==="
 cd "$CI_PRIMARY_REPOSITORY_PATH"
 npm ci
+
+echo "=== Installing CocoaPods ==="
+brew install cocoapods || true
+
 echo "=== Installing pods ==="
 cd "$CI_PRIMARY_REPOSITORY_PATH/ios"
 pod install
+
 echo "=== Done ==="
