@@ -1,13 +1,3 @@
 //
-// RunWithAI-Bridging-Header.h
-// RunWithAI
+// Use this file to import your target's public headers that you would like to expose to Swift.
 //
-// React Native bridging headers are managed by CocoaPods
-//
-
-#ifndef RunWithAI_Bridging_Header_h
-#define RunWithAI_Bridging_Header_h
-
-// React Native bridging headers are managed by CocoaPods
-
-#endif /* RunWithAI_Bridging_Header_h */

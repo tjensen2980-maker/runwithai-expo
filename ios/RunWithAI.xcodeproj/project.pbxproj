@@ -3,153 +3,77 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		02243AC736654A24B1876058 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E53DF77F33F041BDB0476168 /* InfoPlist.strings */; };
-		095367FADAF14985BE0A1B24 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B943D38ABB2945A296041C70 /* InfoPlist.strings */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		14684A973CFC4EEF8EA9AE10 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A6ADE36F70B94F0F80B15B6A /* InfoPlist.strings */; };
-		165617833E484A45B89A885A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F945AB03AE914778BCE226A2 /* InfoPlist.strings */; };
-		2E26F1F23F5E49328B9F74F5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F17E4B57203B4497A77CE6B3 /* InfoPlist.strings */; };
-		32A1309BD13E450DA6258778 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C20654CE11804A0FB7535CDB /* InfoPlist.strings */; };
-		3AA68EE2B64041B0BB2159C0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D11DB2ADC4D148EDAA3F3AE0 /* InfoPlist.strings */; };
-		3AB349A7E3144D149C4B5A37 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 91C8FF2D570A444CBE2CE607 /* InfoPlist.strings */; };
-		4E354104A066468C8970B28E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 69DD1DF11D754511861DCC04 /* InfoPlist.strings */; };
-		4E71998A34F145F4998F95E7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B132A3841F81462180288613 /* InfoPlist.strings */; };
-		56162E32D3AA093DD1527AAB /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4A336CAAD63C1BEC90664BC4 /* PrivacyInfo.xcprivacy */; };
-		5B8328AEC3EC4ECF80AC4B08 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8E47454920D540F59C7867F6 /* InfoPlist.strings */; };
-		5E48B155D3644D6EA33B9A21 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 27DEAD1E4F7A42ECBDAF224F /* InfoPlist.strings */; };
-		6218875C8FFC1EE9DC27D622 /* libPods-RunWithAI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D3590D91A114297B6C89A4A4 /* libPods-RunWithAI.a */; };
-		62661CE893AE4496820CD2E4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2213338F7DD844A5BD50FE24 /* InfoPlist.strings */; };
-		646F2C2B8881474AB0E08739 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6328FBA4283948CCB748FF98 /* InfoPlist.strings */; };
-		701CDA70323F3430F655E6FF /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A36F9A339943B1BC93C2A9F9 /* ExpoModulesProvider.swift */; };
-		79785A5A494A451EB168E312 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7138E1AE0134DB4A5EABEC4 /* InfoPlist.strings */; };
-		8BEE3B17DFB2435284DED704 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E3D01FD137794592AAD36753 /* InfoPlist.strings */; };
-		92867380713A4625B1E64485 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1366AF7E7E3D4045BC2BBE36 /* InfoPlist.strings */; };
-		96E47ED25A574622A6E38E15 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F29FF7BCB1A14109821C76AE /* InfoPlist.strings */; };
-		9EDCB4E00F4647B6BEB3448C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0BBD5685AA204C82BD04FFE5 /* InfoPlist.strings */; };
-		9FDB38E51E1C41788F17297E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F46D4593A10A49079E208961 /* InfoPlist.strings */; };
-		AE51D5BA802248979561A13E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F2D38F30325D4682AC5D7FF0 /* InfoPlist.strings */; };
-		B0E76A338CE3448CA791C2DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B73E3D6A55BF4EA08EF91486 /* InfoPlist.strings */; };
-		B3FF45F27FD147088FBEBB86 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2BCA1EA3FE6A4157997BC809 /* InfoPlist.strings */; };
+		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		DC82CC5D2F9252CD00A495DD /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC82CC5C2F9252CD00A495DD /* WatchConnectivity.framework */; };
-		DCA926A92F924E9A00FB7605 /* RCTWatchConnectivity.mm in Sources */ = {isa = PBXBuildFile; fileRef = DCA926A82F924E9A00FB7605 /* RCTWatchConnectivity.mm */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
-		FBDFE620713540B38A74F741 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5C9362AD1FF348E2B029211A /* InfoPlist.strings */; };
-
-DC27E2AC2F924179008D2915 /* RunWithAI Watch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = DC27E1DB2F924179008D2915 /* RunWithAI Watch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2ACC311F4DCC4EE3811216F2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 728634AA73ED4E01947AA986 /* InfoPlist.strings */; };
+		1363AE01E2C54DDCBBFD515B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = ED070680E6954067BB184248 /* InfoPlist.strings */; };
+		70C591D14DB0466CA0AC8B73 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 79FD9D7D274D4FB484E68364 /* InfoPlist.strings */; };
+		D1E25EA25F874B5883490AAF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 807C4D56DF3C421E92058E08 /* InfoPlist.strings */; };
+		05ADE9EB86654D19A4253611 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0E9939309A2A4E5C80A17A79 /* InfoPlist.strings */; };
+		C5AE7932D89F4A76B2352E0F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 50441815E1F4488D966CF33D /* InfoPlist.strings */; };
+		3E73E8C588F64F45B9BA737A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 64D54E852CB848E78D1A23F6 /* InfoPlist.strings */; };
+		E729E15794BC46678CDBFD49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BEA55E973C7641D2A51D5CF3 /* InfoPlist.strings */; };
+		57FD1DB5C42441E8B17C7DF8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E68B301C920A428F94E565B0 /* InfoPlist.strings */; };
+		76F63A84392D465BA5821594 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CF218EFF82D47F1A2B1B273 /* InfoPlist.strings */; };
+		74F3207B4F7F4EC7AE15F471 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 19D19F9FE0CD4910919198E4 /* InfoPlist.strings */; };
+		6C82E8AB7C324F589145B283 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D8D038CB892B4B67AEAE5151 /* InfoPlist.strings */; };
+		2CF92C1F4C364856838CF831 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0BCE7CCA64EC40699D765100 /* InfoPlist.strings */; };
+		310773CD1FE94BCA95F3B43D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 481B1D112F88448F99E4F069 /* InfoPlist.strings */; };
+		3DB7954BEE8042F4836E2AF3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = ABB21578932D43ADBDE3286E /* InfoPlist.strings */; };
+		4D68128A6CFB4743B80232BC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6F1547E478C34A45A67B96D8 /* InfoPlist.strings */; };
+		257FB4E927C341E7850D74FD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8CED72D37BDC47278F49941A /* InfoPlist.strings */; };
+		54E2E1DEB54D4B53AED0C9C0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 794669D26CE74D86ACD2D33D /* InfoPlist.strings */; };
+		EEC9EA05F6F5414AA1AFDF83 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F96F1AA176434430BAB873C8 /* InfoPlist.strings */; };
+		EA9C0B3BE173443BAC6C20CC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 54B5621D31CE4C07ACE71C65 /* InfoPlist.strings */; };
+		909D1599284745C0882AF40B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FCD9E999071C472CB2BDDFB7 /* InfoPlist.strings */; };
+		1578E56244BC47B0B3BA2B7B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43E8103DF9CA43F184C19530 /* InfoPlist.strings */; };
+		6502BBF325ED4A6EA55C6876 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FF9B095EC3214EEE87781D6C /* InfoPlist.strings */; };
+		C826C8F71476429C969FB056 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4AFDDC1DE20D4DB0B04F832C /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		DC27E2AA2F924179008D2915 /* Embed Watch Content */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
-			dstSubfolderSpec = 16;
-			files = (
-				DC27E2AC2F924179008D2915 /* RunWithAI Watch Watch App.app in Embed Watch Content */,
-			);
-			name = "Embed Watch Content";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
-/* Begin PBXContainerItemProxy section */
-		DC27E1EB2F92417B008D2915 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DC27E1DA2F924179008D2915;
-			remoteInfo = "RunWithAI Watch Watch App";
-		};
-		DC27E1F52F92417B008D2915 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DC27E1DA2F924179008D2915;
-			remoteInfo = "RunWithAI Watch Watch App";
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		0BBD5685AA204C82BD04FFE5 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = el.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		1366AF7E7E3D4045BC2BBE36 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = lt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* RunWithAI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RunWithAI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = RunWithAI/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = RunWithAI/Info.plist; sourceTree = "<group>"; };
-		2213338F7DD844A5BD50FE24 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		27DEAD1E4F7A42ECBDAF224F /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = hu.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		2BCA1EA3FE6A4157997BC809 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		2BD1D93CC2642854078D5821 /* Pods-RunWithAI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunWithAI.release.xcconfig"; path = "Target Support Files/Pods-RunWithAI/Pods-RunWithAI.release.xcconfig"; sourceTree = "<group>"; };
-		4A336CAAD63C1BEC90664BC4 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = RunWithAI/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		5C9362AD1FF348E2B029211A /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = sl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6328FBA4283948CCB748FF98 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		69DD1DF11D754511861DCC04 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = ga.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		8E47454920D540F59C7867F6 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = et.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		91C8FF2D570A444CBE2CE607 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = ro.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		A36F9A339943B1BC93C2A9F9 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-RunWithAI/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		A6ADE36F70B94F0F80B15B6A /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		B132A3841F81462180288613 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = mt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		B73E3D6A55BF4EA08EF91486 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = sk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		B943D38ABB2945A296041C70 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = RunWithAI/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		C20654CE11804A0FB7535CDB /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = da.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		D11DB2ADC4D148EDAA3F3AE0 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = sv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		D3590D91A114297B6C89A4A4 /* libPods-RunWithAI.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RunWithAI.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DC27E1DB2F924179008D2915 /* RunWithAI Watch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RunWithAI Watch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DC27E1EA2F92417B008D2915 /* RunWithAI Watch Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RunWithAI Watch Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DC27E1F42F92417B008D2915 /* RunWithAI Watch Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RunWithAI Watch Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DC82CC5C2F9252CD00A495DD /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = System/Library/Frameworks/WatchConnectivity.framework; sourceTree = SDKROOT; };
-		DCA926A72F924E9A00FB7605 /* RCTWatchConnectivity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTWatchConnectivity.h; sourceTree = "<group>"; };
-		DCA926A82F924E9A00FB7605 /* RCTWatchConnectivity.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTWatchConnectivity.mm; sourceTree = "<group>"; };
-		E3D01FD137794592AAD36753 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = pl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		E53DF77F33F041BDB0476168 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = lv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		E7138E1AE0134DB4A5EABEC4 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = hr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = RunWithAI/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* RunWithAI-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "RunWithAI-Bridging-Header.h"; path = "RunWithAI/RunWithAI-Bridging-Header.h"; sourceTree = "<group>"; };
-		F17E4B57203B4497A77CE6B3 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		F29FF7BCB1A14109821C76AE /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		F2D38F30325D4682AC5D7FF0 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		F46D4593A10A49079E208961 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = bg.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		F8E9088ED748CAA4A7DC6881 /* Pods-RunWithAI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunWithAI.debug.xcconfig"; path = "Target Support Files/Pods-RunWithAI/Pods-RunWithAI.debug.xcconfig"; sourceTree = "<group>"; };
-		F945AB03AE914778BCE226A2 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		728634AA73ED4E01947AA986 /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "da.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		ED070680E6954067BB184248 /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "en.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		79FD9D7D274D4FB484E68364 /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "de.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		807C4D56DF3C421E92058E08 /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "fr.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		0E9939309A2A4E5C80A17A79 /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "es.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		50441815E1F4488D966CF33D /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "it.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		64D54E852CB848E78D1A23F6 /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "pt.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		BEA55E973C7641D2A51D5CF3 /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "nl.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		E68B301C920A428F94E565B0 /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "pl.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		4CF218EFF82D47F1A2B1B273 /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "sv.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		19D19F9FE0CD4910919198E4 /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "fi.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		D8D038CB892B4B67AEAE5151 /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "el.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		0BCE7CCA64EC40699D765100 /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "cs.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		481B1D112F88448F99E4F069 /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "ro.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		ABB21578932D43ADBDE3286E /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "hu.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		6F1547E478C34A45A67B96D8 /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "bg.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		8CED72D37BDC47278F49941A /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "hr.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		794669D26CE74D86ACD2D33D /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "sk.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		F96F1AA176434430BAB873C8 /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "sl.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		54B5621D31CE4C07ACE71C65 /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "lt.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		FCD9E999071C472CB2BDDFB7 /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "lv.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		43E8103DF9CA43F184C19530 /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "et.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		FF9B095EC3214EEE87781D6C /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "ga.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
+		4AFDDC1DE20D4DB0B04F832C /* InfoPlist.strings */ = {isa = PBXFileReference; name = "InfoPlist.strings"; path = "mt.lproj/InfoPlist.strings"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		DC27E1DC2F924179008D2915 /* RunWithAI Watch Watch App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "RunWithAI Watch Watch App"; sourceTree = "<group>"; };
-		DC27E1ED2F92417B008D2915 /* RunWithAI Watch Watch AppTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "RunWithAI Watch Watch AppTests"; sourceTree = "<group>"; };
-		DC27E1F72F92417B008D2915 /* RunWithAI Watch Watch AppUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "RunWithAI Watch Watch AppUITests"; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		13B07F8C1A680F5B00A75B9A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6218875C8FFC1EE9DC27D622 /* libPods-RunWithAI.a in Frameworks */,
-				DC82CC5D2F9252CD00A495DD /* WatchConnectivity.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DC27E1D82F924179008D2915 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DC27E1E72F92417B008D2915 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DC27E1F12F92417B008D2915 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -159,117 +83,25 @@ DC27E2AC2F924179008D2915 /* RunWithAI Watch Watch App.app in Embed Watch Content
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0424E3A7BDF64610A621DF49 /* bg.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				F46D4593A10A49079E208961 /* InfoPlist.strings */,
-			);
-			name = bg.lproj;
-			sourceTree = "<group>";
-		};
-		0B30377399A745748EB81093 /* ga.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				69DD1DF11D754511861DCC04 /* InfoPlist.strings */,
-			);
-			name = ga.lproj;
-			sourceTree = "<group>";
-		};
 		13B07FAE1A68108700A75B9A /* RunWithAI */ = {
 			isa = PBXGroup;
 			children = (
 				F11748412D0307B40044C1D9 /* AppDelegate.swift */,
-				DCA926A72F924E9A00FB7605 /* RCTWatchConnectivity.h */,
-				DCA926A82F924E9A00FB7605 /* RCTWatchConnectivity.mm */,
 				F11748442D0722820044C1D9 /* RunWithAI-Bridging-Header.h */,
 				BB2F792B24A3F905000567C9 /* Supporting */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				4A336CAAD63C1BEC90664BC4 /* PrivacyInfo.xcprivacy */,
+				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
 			);
 			name = RunWithAI;
-			sourceTree = "<group>";
-		};
-		199967BDACCB4AB1AF2F0683 /* el.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				0BBD5685AA204C82BD04FFE5 /* InfoPlist.strings */,
-			);
-			name = el.lproj;
-			sourceTree = "<group>";
-		};
-		2CE4428C1286443593D44ABD /* de.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				F2D38F30325D4682AC5D7FF0 /* InfoPlist.strings */,
-			);
-			name = de.lproj;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				DC82CC5C2F9252CD00A495DD /* WatchConnectivity.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				D3590D91A114297B6C89A4A4 /* libPods-RunWithAI.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		3019BF7D356A42C3931D4FC2 /* ro.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				91C8FF2D570A444CBE2CE607 /* InfoPlist.strings */,
-			);
-			name = ro.lproj;
-			sourceTree = "<group>";
-		};
-		37405D3821E64F32AAC968B1 /* hr.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				E7138E1AE0134DB4A5EABEC4 /* InfoPlist.strings */,
-			);
-			name = hr.lproj;
-			sourceTree = "<group>";
-		};
-		391D1849A8504893BF652B02 /* nl.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				B943D38ABB2945A296041C70 /* InfoPlist.strings */,
-			);
-			name = nl.lproj;
-			sourceTree = "<group>";
-		};
-		45EA05A0A19F424E87A8E3E7 /* sv.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				D11DB2ADC4D148EDAA3F3AE0 /* InfoPlist.strings */,
-			);
-			name = sv.lproj;
-			sourceTree = "<group>";
-		};
-		4EBDC71E90D4BEFB50A47CFF /* ExpoModulesProviders */ = {
-			isa = PBXGroup;
-			children = (
-				DAFA14114E965DA9DD9AFBAD /* RunWithAI */,
-			);
-			name = ExpoModulesProviders;
-			sourceTree = "<group>";
-		};
-		64C2CBF2FD4E478AB6134A7C /* en.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				2213338F7DD844A5BD50FE24 /* InfoPlist.strings */,
-			);
-			name = en.lproj;
-			sourceTree = "<group>";
-		};
-		755CF110106649B69995FF0C /* fi.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				F29FF7BCB1A14109821C76AE /* InfoPlist.strings */,
-			);
-			name = fi.lproj;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -284,13 +116,8 @@ DC27E2AC2F924179008D2915 /* RunWithAI Watch Watch App.app in Embed Watch Content
 			children = (
 				13B07FAE1A68108700A75B9A /* RunWithAI */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				DC27E1DC2F924179008D2915 /* RunWithAI Watch Watch App */,
-				DC27E1ED2F92417B008D2915 /* RunWithAI Watch Watch AppTests */,
-				DC27E1F72F92417B008D2915 /* RunWithAI Watch Watch AppUITests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				A01D9302C45151B633E34E29 /* Pods */,
-				4EBDC71E90D4BEFB50A47CFF /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -301,174 +128,258 @@ DC27E2AC2F924179008D2915 /* RunWithAI Watch Watch App.app in Embed Watch Content
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* RunWithAI.app */,
-				DC27E1DB2F924179008D2915 /* RunWithAI Watch Watch App.app */,
-				DC27E1EA2F92417B008D2915 /* RunWithAI Watch Watch AppTests.xctest */,
-				DC27E1F42F92417B008D2915 /* RunWithAI Watch Watch AppUITests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		8A0149ECCB2A4690A5DB46C1 /* fr.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				6328FBA4283948CCB748FF98 /* InfoPlist.strings */,
-			);
-			name = fr.lproj;
-			sourceTree = "<group>";
-		};
-		8A5D342D47F7483DB0DFFFCF /* hu.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				27DEAD1E4F7A42ECBDAF224F /* InfoPlist.strings */,
-			);
-			name = hu.lproj;
-			sourceTree = "<group>";
-		};
-		8B65171FE8D041169D124F36 /* cs.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				2BCA1EA3FE6A4157997BC809 /* InfoPlist.strings */,
-			);
-			name = cs.lproj;
-			sourceTree = "<group>";
-		};
-		96C7B4BF9F1846659CE49F66 /* pt.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				F945AB03AE914778BCE226A2 /* InfoPlist.strings */,
-			);
-			name = pt.lproj;
-			sourceTree = "<group>";
-		};
-		A01D9302C45151B633E34E29 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				F8E9088ED748CAA4A7DC6881 /* Pods-RunWithAI.debug.xcconfig */,
-				2BD1D93CC2642854078D5821 /* Pods-RunWithAI.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
-		ABCDE0A03F5847DF977DBB36 /* pl.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				E3D01FD137794592AAD36753 /* InfoPlist.strings */,
-			);
-			name = pl.lproj;
 			sourceTree = "<group>";
 		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
 				BB2F792C24A3F905000567C9 /* Expo.plist */,
-				DB6BEA7ADAE84D7DA2941C5A /* da.lproj */,
-				64C2CBF2FD4E478AB6134A7C /* en.lproj */,
-				2CE4428C1286443593D44ABD /* de.lproj */,
-				8A0149ECCB2A4690A5DB46C1 /* fr.lproj */,
-				C8FAE943F5534EC68AD7C747 /* es.lproj */,
-				C40901708C61432DA8877164 /* it.lproj */,
-				96C7B4BF9F1846659CE49F66 /* pt.lproj */,
-				391D1849A8504893BF652B02 /* nl.lproj */,
-				ABCDE0A03F5847DF977DBB36 /* pl.lproj */,
-				45EA05A0A19F424E87A8E3E7 /* sv.lproj */,
-				755CF110106649B69995FF0C /* fi.lproj */,
-				199967BDACCB4AB1AF2F0683 /* el.lproj */,
-				8B65171FE8D041169D124F36 /* cs.lproj */,
-				3019BF7D356A42C3931D4FC2 /* ro.lproj */,
-				8A5D342D47F7483DB0DFFFCF /* hu.lproj */,
-				0424E3A7BDF64610A621DF49 /* bg.lproj */,
-				37405D3821E64F32AAC968B1 /* hr.lproj */,
-				D3CB5540AAA54A5FBD214724 /* sk.lproj */,
-				F03003F13C1546828A901389 /* sl.lproj */,
-				FF4A5CF59C9A4E7D8BF6C070 /* lt.lproj */,
-				BF56E69F46D44A848F60890E /* lv.lproj */,
-				EA43050B285D4AFF98601BAB /* et.lproj */,
-				0B30377399A745748EB81093 /* ga.lproj */,
-				F096E91C88FB4D5292FCCE92 /* mt.lproj */,
+				9CA9BF1AAAD944B586699BBB /* da.lproj */,
+				39814466F8AD41FA8DB2371D /* en.lproj */,
+				FCFAE2AE964D4AEA9BD0F27E /* de.lproj */,
+				D027EF5B0C564DA8865A372A /* fr.lproj */,
+				2C404F13A9554AE8A6CA50A0 /* es.lproj */,
+				85D8B8F54D2C4536B4C4B4D8 /* it.lproj */,
+				E8987FECBDB949E3B301D89A /* pt.lproj */,
+				7D0A30409B0F4F40B7DA7443 /* nl.lproj */,
+				D3ADF9CCB7FB4D7CA0812430 /* pl.lproj */,
+				426FEBFDA5BC41A38C96E35C /* sv.lproj */,
+				FA05642D787846DD8AE5573B /* fi.lproj */,
+				A69F68486DF04715BB5BD51F /* el.lproj */,
+				FFE875D855594121A3E8ED78 /* cs.lproj */,
+				9CA59A9C51DD421CAA95F652 /* ro.lproj */,
+				AE9D6064D18C4B2F8FB8CECD /* hu.lproj */,
+				EB1BEA34805A4134B4BB5EF3 /* bg.lproj */,
+				5BA7A40D79B244ECACA3C0A9 /* hr.lproj */,
+				B9E13BDEB7D64B21AF4448BC /* sk.lproj */,
+				4ED96DCBA4204F7091B9E5BA /* sl.lproj */,
+				61BEA2057F534D168B5A79E6 /* lt.lproj */,
+				8D183B1857CF411EBE83019A /* lv.lproj */,
+				386B92C7BA94440B9C375482 /* et.lproj */,
+				0CA6CEAA8C964730ADF44FCE /* ga.lproj */,
+				5DAA6A6D9BAB4E50B1535AF2 /* mt.lproj */,
 			);
 			name = Supporting;
 			path = RunWithAI/Supporting;
 			sourceTree = "<group>";
 		};
-		BF56E69F46D44A848F60890E /* lv.lproj */ = {
-			isa = PBXGroup;
+		9CA9BF1AAAD944B586699BBB /* da.lproj */ = {
+			isa = "PBXGroup";
 			children = (
-				E53DF77F33F041BDB0476168 /* InfoPlist.strings */,
-			);
-			name = lv.lproj;
-			sourceTree = "<group>";
-		};
-		C40901708C61432DA8877164 /* it.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				F17E4B57203B4497A77CE6B3 /* InfoPlist.strings */,
-			);
-			name = it.lproj;
-			sourceTree = "<group>";
-		};
-		C8FAE943F5534EC68AD7C747 /* es.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				A6ADE36F70B94F0F80B15B6A /* InfoPlist.strings */,
-			);
-			name = es.lproj;
-			sourceTree = "<group>";
-		};
-		D3CB5540AAA54A5FBD214724 /* sk.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				B73E3D6A55BF4EA08EF91486 /* InfoPlist.strings */,
-			);
-			name = sk.lproj;
-			sourceTree = "<group>";
-		};
-		DAFA14114E965DA9DD9AFBAD /* RunWithAI */ = {
-			isa = PBXGroup;
-			children = (
-				A36F9A339943B1BC93C2A9F9 /* ExpoModulesProvider.swift */,
-			);
-			name = RunWithAI;
-			sourceTree = "<group>";
-		};
-		DB6BEA7ADAE84D7DA2941C5A /* da.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				C20654CE11804A0FB7535CDB /* InfoPlist.strings */,
+				728634AA73ED4E01947AA986 /* InfoPlist.strings */,
 			);
 			name = da.lproj;
 			sourceTree = "<group>";
+			path = "";
 		};
-		EA43050B285D4AFF98601BAB /* et.lproj */ = {
-			isa = PBXGroup;
+		39814466F8AD41FA8DB2371D /* en.lproj */ = {
+			isa = "PBXGroup";
 			children = (
-				8E47454920D540F59C7867F6 /* InfoPlist.strings */,
+				ED070680E6954067BB184248 /* InfoPlist.strings */,
 			);
-			name = et.lproj;
+			name = en.lproj;
 			sourceTree = "<group>";
+			path = "";
 		};
-		F03003F13C1546828A901389 /* sl.lproj */ = {
-			isa = PBXGroup;
+		FCFAE2AE964D4AEA9BD0F27E /* de.lproj */ = {
+			isa = "PBXGroup";
 			children = (
-				5C9362AD1FF348E2B029211A /* InfoPlist.strings */,
+				79FD9D7D274D4FB484E68364 /* InfoPlist.strings */,
+			);
+			name = de.lproj;
+			sourceTree = "<group>";
+			path = "";
+		};
+		D027EF5B0C564DA8865A372A /* fr.lproj */ = {
+			isa = "PBXGroup";
+			children = (
+				807C4D56DF3C421E92058E08 /* InfoPlist.strings */,
+			);
+			name = fr.lproj;
+			sourceTree = "<group>";
+			path = "";
+		};
+		2C404F13A9554AE8A6CA50A0 /* es.lproj */ = {
+			isa = "PBXGroup";
+			children = (
+				0E9939309A2A4E5C80A17A79 /* InfoPlist.strings */,
+			);
+			name = es.lproj;
+			sourceTree = "<group>";
+			path = "";
+		};
+		85D8B8F54D2C4536B4C4B4D8 /* it.lproj */ = {
+			isa = "PBXGroup";
+			children = (
+				50441815E1F4488D966CF33D /* InfoPlist.strings */,
+			);
+			name = it.lproj;
+			sourceTree = "<group>";
+			path = "";
+		};
+		E8987FECBDB949E3B301D89A /* pt.lproj */ = {
+			isa = "PBXGroup";
+			children = (
+				64D54E852CB848E78D1A23F6 /* InfoPlist.strings */,
+			);
+			name = pt.lproj;
+			sourceTree = "<group>";
+			path = "";
+		};
+		7D0A30409B0F4F40B7DA7443 /* nl.lproj */ = {
+			isa = "PBXGroup";
+			children = (
+				BEA55E973C7641D2A51D5CF3 /* InfoPlist.strings */,
+			);
+			name = nl.lproj;
+			sourceTree = "<group>";
+			path = "";
+		};
+		D3ADF9CCB7FB4D7CA0812430 /* pl.lproj */ = {
+			isa = "PBXGroup";
+			children = (
+				E68B301C920A428F94E565B0 /* InfoPlist.strings */,
+			);
+			name = pl.lproj;
+			sourceTree = "<group>";
+			path = "";
+		};
+		426FEBFDA5BC41A38C96E35C /* sv.lproj */ = {
+			isa = "PBXGroup";
+			children = (
+				4CF218EFF82D47F1A2B1B273 /* InfoPlist.strings */,
+			);
+			name = sv.lproj;
+			sourceTree = "<group>";
+			path = "";
+		};
+		FA05642D787846DD8AE5573B /* fi.lproj */ = {
+			isa = "PBXGroup";
+			children = (
+				19D19F9FE0CD4910919198E4 /* InfoPlist.strings */,
+			);
+			name = fi.lproj;
+			sourceTree = "<group>";
+			path = "";
+		};
+		A69F68486DF04715BB5BD51F /* el.lproj */ = {
+			isa = "PBXGroup";
+			children = (
+				D8D038CB892B4B67AEAE5151 /* InfoPlist.strings */,
+			);
+			name = el.lproj;
+			sourceTree = "<group>";
+			path = "";
+		};
+		FFE875D855594121A3E8ED78 /* cs.lproj */ = {
+			isa = "PBXGroup";
+			children = (
+				0BCE7CCA64EC40699D765100 /* InfoPlist.strings */,
+			);
+			name = cs.lproj;
+			sourceTree = "<group>";
+			path = "";
+		};
+		9CA59A9C51DD421CAA95F652 /* ro.lproj */ = {
+			isa = "PBXGroup";
+			children = (
+				481B1D112F88448F99E4F069 /* InfoPlist.strings */,
+			);
+			name = ro.lproj;
+			sourceTree = "<group>";
+			path = "";
+		};
+		AE9D6064D18C4B2F8FB8CECD /* hu.lproj */ = {
+			isa = "PBXGroup";
+			children = (
+				ABB21578932D43ADBDE3286E /* InfoPlist.strings */,
+			);
+			name = hu.lproj;
+			sourceTree = "<group>";
+			path = "";
+		};
+		EB1BEA34805A4134B4BB5EF3 /* bg.lproj */ = {
+			isa = "PBXGroup";
+			children = (
+				6F1547E478C34A45A67B96D8 /* InfoPlist.strings */,
+			);
+			name = bg.lproj;
+			sourceTree = "<group>";
+			path = "";
+		};
+		5BA7A40D79B244ECACA3C0A9 /* hr.lproj */ = {
+			isa = "PBXGroup";
+			children = (
+				8CED72D37BDC47278F49941A /* InfoPlist.strings */,
+			);
+			name = hr.lproj;
+			sourceTree = "<group>";
+			path = "";
+		};
+		B9E13BDEB7D64B21AF4448BC /* sk.lproj */ = {
+			isa = "PBXGroup";
+			children = (
+				794669D26CE74D86ACD2D33D /* InfoPlist.strings */,
+			);
+			name = sk.lproj;
+			sourceTree = "<group>";
+			path = "";
+		};
+		4ED96DCBA4204F7091B9E5BA /* sl.lproj */ = {
+			isa = "PBXGroup";
+			children = (
+				F96F1AA176434430BAB873C8 /* InfoPlist.strings */,
 			);
 			name = sl.lproj;
 			sourceTree = "<group>";
+			path = "";
 		};
-		F096E91C88FB4D5292FCCE92 /* mt.lproj */ = {
-			isa = PBXGroup;
+		61BEA2057F534D168B5A79E6 /* lt.lproj */ = {
+			isa = "PBXGroup";
 			children = (
-				B132A3841F81462180288613 /* InfoPlist.strings */,
-			);
-			name = mt.lproj;
-			sourceTree = "<group>";
-		};
-		FF4A5CF59C9A4E7D8BF6C070 /* lt.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				1366AF7E7E3D4045BC2BBE36 /* InfoPlist.strings */,
+				54B5621D31CE4C07ACE71C65 /* InfoPlist.strings */,
 			);
 			name = lt.lproj;
 			sourceTree = "<group>";
+			path = "";
+		};
+		8D183B1857CF411EBE83019A /* lv.lproj */ = {
+			isa = "PBXGroup";
+			children = (
+				FCD9E999071C472CB2BDDFB7 /* InfoPlist.strings */,
+			);
+			name = lv.lproj;
+			sourceTree = "<group>";
+			path = "";
+		};
+		386B92C7BA94440B9C375482 /* et.lproj */ = {
+			isa = "PBXGroup";
+			children = (
+				43E8103DF9CA43F184C19530 /* InfoPlist.strings */,
+			);
+			name = et.lproj;
+			sourceTree = "<group>";
+			path = "";
+		};
+		0CA6CEAA8C964730ADF44FCE /* ga.lproj */ = {
+			isa = "PBXGroup";
+			children = (
+				FF9B095EC3214EEE87781D6C /* InfoPlist.strings */,
+			);
+			name = ga.lproj;
+			sourceTree = "<group>";
+			path = "";
+		};
+		5DAA6A6D9BAB4E50B1535AF2 /* mt.lproj */ = {
+			isa = "PBXGroup";
+			children = (
+				4AFDDC1DE20D4DB0B04F832C /* InfoPlist.strings */,
+			);
+			name = mt.lproj;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -478,92 +389,20 @@ DC27E2AC2F924179008D2915 /* RunWithAI Watch Watch App.app in Embed Watch Content
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "RunWithAI" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				C12BE5E1B010DDC14ADF5942 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				75C8F66B9D3AF80FE8395A59 /* [CP] Embed Pods Frameworks */,
-			DC27E2AA2F924179008D2915 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				DC27E2AB2F924179008D2915 /* PBXTargetDependency */,
 			);
 			name = RunWithAI;
 			productName = RunWithAI;
 			productReference = 13B07F961A680F5B00A75B9A /* RunWithAI.app */;
 			productType = "com.apple.product-type.application";
-		};
-		DC27E1DA2F924179008D2915 /* RunWithAI Watch Watch App */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DC27E2022F92417B008D2915 /* Build configuration list for PBXNativeTarget "RunWithAI Watch Watch App" */;
-			buildPhases = (
-				DC27E1D72F924179008D2915 /* Sources */,
-				DC27E1D82F924179008D2915 /* Frameworks */,
-				DC27E1D92F924179008D2915 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				DC27E1DC2F924179008D2915 /* RunWithAI Watch Watch App */,
-			);
-			name = "RunWithAI Watch Watch App";
-			packageProductDependencies = (
-			);
-			productName = "RunWithAI Watch Watch App";
-			productReference = DC27E1DB2F924179008D2915 /* RunWithAI Watch Watch App.app */;
-			productType = "com.apple.product-type.application";
-		};
-		DC27E1E92F92417B008D2915 /* RunWithAI Watch Watch AppTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DC27E2032F92417B008D2915 /* Build configuration list for PBXNativeTarget "RunWithAI Watch Watch AppTests" */;
-			buildPhases = (
-				DC27E1E62F92417B008D2915 /* Sources */,
-				DC27E1E72F92417B008D2915 /* Frameworks */,
-				DC27E1E82F92417B008D2915 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				DC27E1EC2F92417B008D2915 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				DC27E1ED2F92417B008D2915 /* RunWithAI Watch Watch AppTests */,
-			);
-			name = "RunWithAI Watch Watch AppTests";
-			packageProductDependencies = (
-			);
-			productName = "RunWithAI Watch Watch AppTests";
-			productReference = DC27E1EA2F92417B008D2915 /* RunWithAI Watch Watch AppTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		DC27E1F32F92417B008D2915 /* RunWithAI Watch Watch AppUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DC27E2042F92417B008D2915 /* Build configuration list for PBXNativeTarget "RunWithAI Watch Watch AppUITests" */;
-			buildPhases = (
-				DC27E1F02F92417B008D2915 /* Sources */,
-				DC27E1F12F92417B008D2915 /* Frameworks */,
-				DC27E1F22F92417B008D2915 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				DC27E1F62F92417B008D2915 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				DC27E1F72F92417B008D2915 /* RunWithAI Watch Watch AppUITests */,
-			);
-			name = "RunWithAI Watch Watch AppUITests";
-			packageProductDependencies = (
-			);
-			productName = "RunWithAI Watch Watch AppUITests";
-			productReference = DC27E1F42F92417B008D2915 /* RunWithAI Watch Watch AppUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
@@ -571,22 +410,10 @@ DC27E2AC2F924179008D2915 /* RunWithAI Watch Watch App.app in Embed Watch Content
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
 						LastSwiftMigration = 1250;
-					};
-					DC27E1DA2F924179008D2915 = {
-						CreatedOnToolsVersion = 16.2;
-					};
-					DC27E1E92F92417B008D2915 = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = DC27E1DA2F924179008D2915;
-					};
-					DC27E1F32F92417B008D2915 = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = DC27E1DA2F924179008D2915;
 					};
 				};
 			};
@@ -627,9 +454,6 @@ DC27E2AC2F924179008D2915 /* RunWithAI Watch Watch App.app in Embed Watch Content
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* RunWithAI */,
-				DC27E1DA2F924179008D2915 /* RunWithAI Watch Watch App */,
-				DC27E1E92F92417B008D2915 /* RunWithAI Watch Watch AppTests */,
-				DC27E1F32F92417B008D2915 /* RunWithAI Watch Watch AppUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -641,52 +465,31 @@ DC27E2AC2F924179008D2915 /* RunWithAI Watch Watch App.app in Embed Watch Content
 			files = (
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				32A1309BD13E450DA6258778 /* InfoPlist.strings in Resources */,
-				62661CE893AE4496820CD2E4 /* InfoPlist.strings in Resources */,
-				AE51D5BA802248979561A13E /* InfoPlist.strings in Resources */,
-				646F2C2B8881474AB0E08739 /* InfoPlist.strings in Resources */,
-				14684A973CFC4EEF8EA9AE10 /* InfoPlist.strings in Resources */,
-				2E26F1F23F5E49328B9F74F5 /* InfoPlist.strings in Resources */,
-				165617833E484A45B89A885A /* InfoPlist.strings in Resources */,
-				095367FADAF14985BE0A1B24 /* InfoPlist.strings in Resources */,
-				8BEE3B17DFB2435284DED704 /* InfoPlist.strings in Resources */,
-				3AA68EE2B64041B0BB2159C0 /* InfoPlist.strings in Resources */,
-				96E47ED25A574622A6E38E15 /* InfoPlist.strings in Resources */,
-				9EDCB4E00F4647B6BEB3448C /* InfoPlist.strings in Resources */,
-				B3FF45F27FD147088FBEBB86 /* InfoPlist.strings in Resources */,
-				3AB349A7E3144D149C4B5A37 /* InfoPlist.strings in Resources */,
-				5E48B155D3644D6EA33B9A21 /* InfoPlist.strings in Resources */,
-				9FDB38E51E1C41788F17297E /* InfoPlist.strings in Resources */,
-				79785A5A494A451EB168E312 /* InfoPlist.strings in Resources */,
-				B0E76A338CE3448CA791C2DA /* InfoPlist.strings in Resources */,
-				FBDFE620713540B38A74F741 /* InfoPlist.strings in Resources */,
-				92867380713A4625B1E64485 /* InfoPlist.strings in Resources */,
-				02243AC736654A24B1876058 /* InfoPlist.strings in Resources */,
-				5B8328AEC3EC4ECF80AC4B08 /* InfoPlist.strings in Resources */,
-				4E354104A066468C8970B28E /* InfoPlist.strings in Resources */,
-				4E71998A34F145F4998F95E7 /* InfoPlist.strings in Resources */,
-				56162E32D3AA093DD1527AAB /* PrivacyInfo.xcprivacy in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DC27E1D92F924179008D2915 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DC27E1E82F92417B008D2915 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DC27E1F22F92417B008D2915 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
+				2ACC311F4DCC4EE3811216F2 /* InfoPlist.strings in Resources */,
+				1363AE01E2C54DDCBBFD515B /* InfoPlist.strings in Resources */,
+				70C591D14DB0466CA0AC8B73 /* InfoPlist.strings in Resources */,
+				D1E25EA25F874B5883490AAF /* InfoPlist.strings in Resources */,
+				05ADE9EB86654D19A4253611 /* InfoPlist.strings in Resources */,
+				C5AE7932D89F4A76B2352E0F /* InfoPlist.strings in Resources */,
+				3E73E8C588F64F45B9BA737A /* InfoPlist.strings in Resources */,
+				E729E15794BC46678CDBFD49 /* InfoPlist.strings in Resources */,
+				57FD1DB5C42441E8B17C7DF8 /* InfoPlist.strings in Resources */,
+				76F63A84392D465BA5821594 /* InfoPlist.strings in Resources */,
+				74F3207B4F7F4EC7AE15F471 /* InfoPlist.strings in Resources */,
+				6C82E8AB7C324F589145B283 /* InfoPlist.strings in Resources */,
+				2CF92C1F4C364856838CF831 /* InfoPlist.strings in Resources */,
+				310773CD1FE94BCA95F3B43D /* InfoPlist.strings in Resources */,
+				3DB7954BEE8042F4836E2AF3 /* InfoPlist.strings in Resources */,
+				4D68128A6CFB4743B80232BC /* InfoPlist.strings in Resources */,
+				257FB4E927C341E7850D74FD /* InfoPlist.strings in Resources */,
+				54E2E1DEB54D4B53AED0C9C0 /* InfoPlist.strings in Resources */,
+				EEC9EA05F6F5414AA1AFDF83 /* InfoPlist.strings in Resources */,
+				EA9C0B3BE173443BAC6C20CC /* InfoPlist.strings in Resources */,
+				909D1599284745C0882AF40B /* InfoPlist.strings in Resources */,
+				1578E56244BC47B0B3BA2B7B /* InfoPlist.strings in Resources */,
+				6502BBF325ED4A6EA55C6876 /* InfoPlist.strings in Resources */,
+				C826C8F71476429C969FB056 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -732,28 +535,6 @@ DC27E2AC2F924179008D2915 /* RunWithAI Watch Watch App.app in Embed Watch Content
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		75C8F66B9D3AF80FE8395A59 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-RunWithAI/Pods-RunWithAI-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/React-Core-prebuilt/React.framework/React",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ReactNativeDependencies/ReactNativeDependencies.framework/ReactNativeDependencies",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactNativeDependencies.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RunWithAI/Pods-RunWithAI-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -761,74 +542,20 @@ DC27E2AC2F924179008D2915 /* RunWithAI Watch Watch App.app in Embed Watch Content
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RunWithAI/Pods-RunWithAI-resources.sh",
-				"${PODS_CONFIGURATION_BUILD_DIR}/EXApplication/ExpoApplication_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/EXConstants.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/ExpoConstants_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/EXTaskManager/ExpoTaskManager_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoFileSystem/ExpoFileSystem_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoLocalization/ExpoLocalization_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/GoogleMaps/GoogleMapsResources.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/PurchasesHybridCommon/PurchasesHybridCommon.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/RNCAsyncStorage/RNCAsyncStorage_resources.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/RNSVG/RNSVGFilters.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React-Core_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/React-cxxreact_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/RevenueCat/RevenueCat.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/RevenueCatUI/RevenueCat_RevenueCatUI.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/expo-dev-launcher/EXDevLauncher.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/expo-dev-menu/EXDevMenu.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/react-native-google-maps/GoogleMapsPrivacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/react-native-maps/ReactNativeMapsPrivacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/EXUpdates/EXUpdates.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/RCTI18nStrings.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoApplication_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXConstants.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoConstants_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoTaskManager_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoFileSystem_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoLocalization_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMapsResources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/PurchasesHybridCommon.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNCAsyncStorage_resources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNSVGFilters.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-Core_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-cxxreact_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RevenueCat.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RevenueCat_RevenueCatUI.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevLauncher.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevMenu.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMapsPrivacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ReactNativeMapsPrivacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXUpdates.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RCTI18nStrings.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RunWithAI/Pods-RunWithAI-resources.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		C12BE5E1B010DDC14ADF5942 /* [Expo] Configure project */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/.xcode.env",
-				"$(SRCROOT)/.xcode.env.local",
-				"$(SRCROOT)/RunWithAI/RunWithAI.entitlements",
-				"$(SRCROOT)/Pods/Target Support Files/Pods-RunWithAI/expo-configure-project.sh",
-			);
-			name = "[Expo] Configure project";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(SRCROOT)/Pods/Target Support Files/Pods-RunWithAI/ExpoModulesProvider.swift",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-RunWithAI/expo-configure-project.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -838,63 +565,18 @@ DC27E2AC2F924179008D2915 /* RunWithAI Watch Watch App.app in Embed Watch Content
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				DCA926A92F924E9A00FB7605 /* RCTWatchConnectivity.mm in Sources */,
-				701CDA70323F3430F655E6FF /* ExpoModulesProvider.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DC27E1D72F924179008D2915 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DC27E1E62F92417B008D2915 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DC27E1F02F92417B008D2915 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		DC27E1EC2F92417B008D2915 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DC27E1DA2F924179008D2915 /* RunWithAI Watch Watch App */;
-			targetProxy = DC27E1EB2F92417B008D2915 /* PBXContainerItemProxy */;
-		};
-		DC27E1F62F92417B008D2915 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DC27E1DA2F924179008D2915 /* RunWithAI Watch Watch App */;
-			targetProxy = DC27E1F52F92417B008D2915 /* PBXContainerItemProxy */;
-		};
-
-DC27E2AB2F924179008D2915 /* PBXTargetDependency */ = {
-isa = PBXTargetDependency;
-target = DC27E1DA2F924179008D2915 /* RunWithAI Watch Watch App */;
-targetProxy = DC27E2AD2F924179008D2915 /* PBXContainerItemProxy */;
-};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F8E9088ED748CAA4A7DC6881 /* Pods-RunWithAI.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = RunWithAI/RunWithAI.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 67936DLJC3;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -912,26 +594,23 @@ targetProxy = DC27E2AD2F924179008D2915 /* PBXContainerItemProxy */;
 					"-ObjC",
 					"-lc++",
 				);
-				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = app.runwithai;
-				PRODUCT_NAME = RunWithAI;
+				PRODUCT_BUNDLE_IDENTIFIER = "app.runwithai";
+				PRODUCT_NAME = "RunWithAI";
 				SWIFT_OBJC_BRIDGING_HEADER = "RunWithAI/RunWithAI-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
+				TARGETED_DEVICE_FAMILY = "1";
+				CODE_SIGN_ENTITLEMENTS = RunWithAI/RunWithAI.entitlements;
 			};
 			name = Debug;
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2BD1D93CC2642854078D5821 /* Pods-RunWithAI.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = RunWithAI/RunWithAI.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 67936DLJC3;
 				INFOPLIST_FILE = RunWithAI/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -944,13 +623,13 @@ targetProxy = DC27E2AD2F924179008D2915 /* PBXContainerItemProxy */;
 					"-ObjC",
 					"-lc++",
 				);
-				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
-				PRODUCT_BUNDLE_IDENTIFIER = app.runwithai;
-				PRODUCT_NAME = RunWithAI;
+				PRODUCT_BUNDLE_IDENTIFIER = "app.runwithai";
+				PRODUCT_NAME = "RunWithAI";
 				SWIFT_OBJC_BRIDGING_HEADER = "RunWithAI/RunWithAI-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
+				TARGETED_DEVICE_FAMILY = "1";
+				CODE_SIGN_ENTITLEMENTS = RunWithAI/RunWithAI.entitlements;
 			};
 			name = Release;
 		};
@@ -1006,14 +685,10 @@ targetProxy = DC27E2AD2F924179008D2915 /* PBXContainerItemProxy */;
 					/usr/lib/swift,
 					"$(inherited)",
 				);
-				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
+				LIBRARY_SEARCH_PATHS = "\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
-				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
-				USE_HERMES = true;
 			};
 			name = Debug;
 		};
@@ -1062,248 +737,10 @@ targetProxy = DC27E2AD2F924179008D2915 /* PBXContainerItemProxy */;
 					/usr/lib/swift,
 					"$(inherited)",
 				);
-				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
+				LIBRARY_SEARCH_PATHS = "\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
-				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
-				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		DC27E1FC2F92417B008D2915 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = "RunWithAI Watch Watch App/RunWithAI Watch Watch App.entitlements";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_ASSET_PATHS = "\"RunWithAI Watch Watch App/Preview Content\"";
-				DEVELOPMENT_TEAM = 67936DLJC3;
-				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "RunWithAI Watch";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "app.runwithai";
-				INFOPLIST_KEY_WKBackgroundModes = "workout-processing";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = app.runwithai.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
-			};
-			name = Debug;
-		};
-		DC27E1FD2F92417B008D2915 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = "RunWithAI Watch Watch App/RunWithAI Watch Watch App.entitlements";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_ASSET_PATHS = "\"RunWithAI Watch Watch App/Preview Content\"";
-				DEVELOPMENT_TEAM = 67936DLJC3;
-				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "RunWithAI Watch";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "app.runwithai";
-				INFOPLIST_KEY_WKBackgroundModes = "workout-processing";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = app.runwithai.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
-			};
-			name = Release;
-		};
-		DC27E1FE2F92417B008D2915 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 67936DLJC3;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "runwithai.RunWithAI-Watch-Watch-AppTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RunWithAI Watch Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/RunWithAI Watch Watch App";
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
-			};
-			name = Debug;
-		};
-		DC27E1FF2F92417B008D2915 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 67936DLJC3;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "runwithai.RunWithAI-Watch-Watch-AppTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RunWithAI Watch Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/RunWithAI Watch Watch App";
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
-			};
-			name = Release;
-		};
-		DC27E2002F92417B008D2915 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 67936DLJC3;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "runwithai.RunWithAI-Watch-Watch-AppUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				TEST_TARGET_NAME = "RunWithAI Watch Watch App";
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
-			};
-			name = Debug;
-		};
-		DC27E2012F92417B008D2915 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 67936DLJC3;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "runwithai.RunWithAI-Watch-Watch-AppUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				TEST_TARGET_NAME = "RunWithAI Watch Watch App";
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
 			};
 			name = Release;
 		};
@@ -1324,33 +761,6 @@ targetProxy = DC27E2AD2F924179008D2915 /* PBXContainerItemProxy */;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DC27E2022F92417B008D2915 /* Build configuration list for PBXNativeTarget "RunWithAI Watch Watch App" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DC27E1FC2F92417B008D2915 /* Debug */,
-				DC27E1FD2F92417B008D2915 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DC27E2032F92417B008D2915 /* Build configuration list for PBXNativeTarget "RunWithAI Watch Watch AppTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DC27E1FE2F92417B008D2915 /* Debug */,
-				DC27E1FF2F92417B008D2915 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DC27E2042F92417B008D2915 /* Build configuration list for PBXNativeTarget "RunWithAI Watch Watch AppUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DC27E2002F92417B008D2915 /* Debug */,
-				DC27E2012F92417B008D2915 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

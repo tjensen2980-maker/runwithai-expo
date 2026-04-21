@@ -59,6 +59,12 @@
           <string>app.runwithai</string>
         </array>
       </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>exp+runwithai</string>
+        </array>
+      </dict>
     </array>
     <key>CFBundleVersion</key>
     <string>81</string>
