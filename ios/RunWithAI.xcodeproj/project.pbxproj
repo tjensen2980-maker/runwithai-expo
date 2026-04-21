@@ -34,6 +34,7 @@
 		C826C8F71476429C969FB056 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4AFDDC1DE20D4DB0B04F832C /* InfoPlist.strings */; };
 		CC800E0B308E05980FF07CF8 /* libPods-RunWithAI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FFD0584B492186D81F75E2B /* libPods-RunWithAI.a */; };
 		D1E25EA25F874B5883490AAF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 807C4D56DF3C421E92058E08 /* InfoPlist.strings */; };
+		DC9D98A32F980466006AA004 /* watchkitapp Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = DCCFA0BC2F97F3BB0043FC45 /* watchkitapp Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E729E15794BC46678CDBFD49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BEA55E973C7641D2A51D5CF3 /* InfoPlist.strings */; };
 		EA9C0B3BE173443BAC6C20CC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 54B5621D31CE4C07ACE71C65 /* InfoPlist.strings */; };
 		EEC9EA05F6F5414AA1AFDF83 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F96F1AA176434430BAB873C8 /* InfoPlist.strings */; };
@@ -42,6 +43,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		DC9D98A42F980466006AA004 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DCCFA0BB2F97F3BB0043FC45;
+			remoteInfo = "watchkitapp Watch App";
+		};
+		DC9D98A72F980493006AA004 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DCCFA0BB2F97F3BB0043FC45;
+			remoteInfo = "watchkitapp Watch App";
+		};
+		DC9D98A92F9804E2006AA004 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DCCFA0BB2F97F3BB0043FC45;
+			remoteInfo = "watchkitapp Watch App";
+		};
 		DCCFA0CC2F97F3BE0043FC45 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
@@ -57,6 +79,20 @@
 			remoteInfo = "watchkitapp Watch App";
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		DC9D98A62F980466006AA004 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				DC9D98A32F980466006AA004 /* watchkitapp Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0BCE7CCA64EC40699D765100 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -468,10 +504,14 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
 				32D31CD79107D53813B4F7B4 /* [CP] Embed Pods Frameworks */,
+				DC9D98A62F980466006AA004 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				DC9D98A52F980466006AA004 /* PBXTargetDependency */,
+				DC9D98A82F980493006AA004 /* PBXTargetDependency */,
+				DC9D98AA2F9804E2006AA004 /* PBXTargetDependency */,
 			);
 			name = RunWithAI;
 			productName = RunWithAI;
@@ -845,6 +885,21 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		DC9D98A52F980466006AA004 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DCCFA0BB2F97F3BB0043FC45 /* watchkitapp Watch App */;
+			targetProxy = DC9D98A42F980466006AA004 /* PBXContainerItemProxy */;
+		};
+		DC9D98A82F980493006AA004 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DCCFA0BB2F97F3BB0043FC45 /* watchkitapp Watch App */;
+			targetProxy = DC9D98A72F980493006AA004 /* PBXContainerItemProxy */;
+		};
+		DC9D98AA2F9804E2006AA004 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DCCFA0BB2F97F3BB0043FC45 /* watchkitapp Watch App */;
+			targetProxy = DC9D98A92F9804E2006AA004 /* PBXContainerItemProxy */;
+		};
 		DCCFA0CD2F97F3BE0043FC45 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DCCFA0BB2F97F3BB0043FC45 /* watchkitapp Watch App */;
@@ -866,6 +921,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = RunWithAI/RunWithAI.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 67936DLJC3;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -904,6 +960,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = RunWithAI/RunWithAI.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 67936DLJC3;
 				INFOPLIST_FILE = RunWithAI/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
