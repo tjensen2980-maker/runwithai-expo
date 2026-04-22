@@ -53,12 +53,11 @@ class WorkoutManager: ObservableObject {
         }
         elapsedSeconds = accumulatedSeconds
 
-        // Gem workout lokalt
         if let start = workoutStartDate, elapsedSeconds > 5 {
             let routePoints = locationManager.route.map { Workout.RoutePoint(from: $0) }
             let distanceM = locationManager.distance
             let pace = Workout.calculatePace(durationSec: elapsedSeconds, distanceMeters: distanceM)
-            let activityType = pace > 8.0 ? "walk" : "run"  // over 8 min/km = gåtur
+            let activityType = pace > 8.0 ? "walk" : "run"
 
             let workout = Workout(
                 id: UUID().uuidString,
@@ -72,6 +71,11 @@ class WorkoutManager: ObservableObject {
                 synced: false
             )
             store.save(workout)
+
+            // Trigger sync til Railway
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                SyncManager.shared.syncPending()
+            }
         }
 
         workoutStartDate = nil

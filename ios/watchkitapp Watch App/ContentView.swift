@@ -4,6 +4,7 @@ struct ContentView: View {
     @StateObject private var workout = WorkoutManager()
     @StateObject private var store = WorkoutStore.shared
     @StateObject private var auth = AuthManager.shared
+    @StateObject private var sync = SyncManager.shared
 
     var body: some View {
         ScrollView {
@@ -63,7 +64,6 @@ struct ContentView: View {
                     Text("RunWithAI")
                         .font(.headline)
 
-                    // AUTH STATUS
                     if auth.isAuthenticated {
                         HStack(spacing: 3) {
                             Image(systemName: "checkmark.circle.fill")
@@ -94,14 +94,30 @@ struct ContentView: View {
                                 .font(.system(size: 10))
                                 .foregroundColor(.blue)
                             if !store.pendingSync.isEmpty {
-                                Text("\(store.pendingSync.count) venter på sync")
-                                    .font(.system(size: 9))
-                                    .foregroundColor(.orange)
+                                HStack(spacing: 3) {
+                                    if sync.isSyncing {
+                                        ProgressView()
+                                            .scaleEffect(0.5)
+                                    }
+                                    Text("\(store.pendingSync.count) venter på sync")
+                                        .font(.system(size: 9))
+                                        .foregroundColor(.orange)
+                                }
+
+                                // Manuel sync-knap
+                                Button(action: { sync.syncPending() }) {
+                                    Label("Synk nu", systemImage: "arrow.triangle.2.circlepath")
+                                        .font(.system(size: 10))
+                                }
+                                .buttonStyle(.bordered)
+                                .controlSize(.mini)
                             }
+                            Text(sync.lastSyncStatus)
+                                .font(.system(size: 8))
+                                .foregroundColor(.gray)
                         }
                     }
 
-                    // Debug
                     Text(auth.debugStatus)
                         .font(.system(size: 8))
                         .foregroundColor(.gray)
