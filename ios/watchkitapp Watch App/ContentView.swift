@@ -7,7 +7,6 @@ struct ContentView: View {
         ScrollView {
             VStack(spacing: 8) {
                 if workout.isRunning {
-                    // AKTIV TRACKING
                     Text(workout.formattedTime)
                         .font(.system(size: 32, weight: .bold, design: .rounded))
                         .monospacedDigit()
@@ -30,6 +29,12 @@ struct ContentView: View {
                         }
                     }
 
+                    // DEBUG-INFO
+                    Text(workout.locationManager.debugMessage)
+                        .font(.system(size: 9))
+                        .foregroundColor(.yellow)
+                        .multilineTextAlignment(.center)
+
                     if workout.isPaused {
                         Button(action: { workout.resume() }) {
                             Label("Fortsæt", systemImage: "play.fill")
@@ -51,7 +56,6 @@ struct ContentView: View {
                     .tint(.red)
 
                 } else {
-                    // KLAR TIL START
                     Image(systemName: "figure.run")
                         .font(.system(size: 40))
                         .foregroundColor(.green)
@@ -59,6 +63,11 @@ struct ContentView: View {
                         .font(.headline)
                     Text("Klar til løb")
                         .font(.caption)
+                        .foregroundColor(.gray)
+
+                    // Vis auth status på startskærm
+                    Text("Auth: \(workout.locationManager.authStatus.rawValue)")
+                        .font(.system(size: 9))
                         .foregroundColor(.gray)
 
                     Button(action: { workout.start() }) {

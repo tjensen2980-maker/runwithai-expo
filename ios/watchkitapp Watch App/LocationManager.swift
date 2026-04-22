@@ -5,25 +5,28 @@ import Combine
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let manager = CLLocationManager()
 
-    @Published var distance: Double = 0.0          // meter
-    @Published var currentPace: Double = 0.0       // min/km
+    @Published var distance: Double = 0.0
+    @Published var currentPace: Double = 0.0
     @Published var isTracking: Bool = false
     @Published var authStatus: CLAuthorizationStatus = .notDetermined
+    @Published var debugMessage: String = "Init"
 
     private var lastLocation: CLLocation?
     private(set) var route: [CLLocation] = []
     private var startTime: Date?
+    private var pendingStart: Bool = false
 
     override init() {
         super.init()
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.distanceFilter = 5.0
-        // manager.allowsBackgroundLocationUpdates = true // kraever Background Modes capability
         authStatus = manager.authorizationStatus
+        debugMessage = "Auth: \(authStatus.rawValue)"
     }
 
     func requestPermission() {
+        debugMessage = "Requesting perm"
         manager.requestWhenInUseAuthorization()
     }
 
@@ -34,33 +37,64 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         route.removeAll()
         startTime = Date()
         isTracking = true
-        manager.startUpdatingLocation()
+
+        let status = manager.authorizationStatus
+        authStatus = status
+
+        switch status {
+        case .notDetermined:
+            pendingStart = true
+            debugMessage = "Asking permission..."
+            manager.requestWhenInUseAuthorization()
+        case .authorizedWhenInUse, .authorizedAlways:
+            debugMessage = "GPS started"
+            manager.startUpdatingLocation()
+        case .denied, .restricted:
+            debugMessage = "Permission denied"
+            isTracking = false
+        @unknown default:
+            debugMessage = "Unknown auth"
+            isTracking = false
+        }
     }
 
     func pauseTracking() {
         manager.stopUpdatingLocation()
+        debugMessage = "Paused"
     }
 
     func resumeTracking() {
         manager.startUpdatingLocation()
+        debugMessage = "Resumed"
     }
 
     func stopTracking() {
         manager.stopUpdatingLocation()
         isTracking = false
+        pendingStart = false
+        debugMessage = "Stopped"
     }
 
     // MARK: - CLLocationManagerDelegate
 
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        DispatchQueue.main.async { self.authStatus = status }
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        let status = manager.authorizationStatus
+        DispatchQueue.main.async {
+            self.authStatus = status
+            self.debugMessage = "Auth changed: \(status.rawValue)"
+
+            if self.pendingStart && (status == .authorizedWhenInUse || status == .authorizedAlways) {
+                self.pendingStart = false
+                self.debugMessage = "GPS started after auth"
+                self.manager.startUpdatingLocation()
+            }
+        }
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard isTracking else { return }
         for newLocation in locations {
-            // Ignorér dårlig GPS-kvalitet
-            guard newLocation.horizontalAccuracy > 0 && newLocation.horizontalAccuracy < 30 else { continue }
+            guard newLocation.horizontalAccuracy > 0 && newLocation.horizontalAccuracy < 50 else { continue }
 
             if let last = lastLocation {
                 let delta = newLocation.distance(from: last)
@@ -70,8 +104,8 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             }
             lastLocation = newLocation
             route.append(newLocation)
+            debugMessage = "GPS: \(Int(newLocation.horizontalAccuracy))m"
 
-            // Beregn pace (min/km) baseret på sidste 30 sek
             if let start = startTime, distance > 0 {
                 let elapsed = Date().timeIntervalSince(start)
                 let km = distance / 1000.0
@@ -83,10 +117,8 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Location error: \(error.localizedDescription)")
+        debugMessage = "Error: \(error.localizedDescription)"
     }
-
-    // MARK: - Formateret output
 
     var formattedDistance: String {
         String(format: "%.2f km", distance / 1000.0)
