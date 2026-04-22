@@ -1128,6 +1128,11 @@
 				INFOPLIST_KEY_CFBundleDisplayName = watchkitapp;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = app.runwithai;
+INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "RunWithAI bruger GPS til at tracke din rute under løb";
+INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "RunWithAI bruger GPS i baggrunden til at tracke hele dit lob";
+INFOPLIST_KEY_NSHealthShareUsageDescription = "RunWithAI laeser puls under traening";
+INFOPLIST_KEY_NSHealthUpdateUsageDescription = "RunWithAI gemmer din traening i Health";
+INFOPLIST_KEY_NSMotionUsageDescription = "RunWithAI bruger bevaegelsesdata til at tracke din aktivitet";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1175,6 +1180,11 @@
 				INFOPLIST_KEY_CFBundleDisplayName = watchkitapp;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = app.runwithai;
+INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "RunWithAI bruger GPS til at tracke din rute under løb";
+INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "RunWithAI bruger GPS i baggrunden til at tracke hele dit lob";
+INFOPLIST_KEY_NSHealthShareUsageDescription = "RunWithAI laeser puls under traening";
+INFOPLIST_KEY_NSHealthUpdateUsageDescription = "RunWithAI gemmer din traening i Health";
+INFOPLIST_KEY_NSMotionUsageDescription = "RunWithAI bruger bevaegelsesdata til at tracke din aktivitet";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
