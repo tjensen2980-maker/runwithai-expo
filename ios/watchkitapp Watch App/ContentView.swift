@@ -3,6 +3,7 @@ import SwiftUI
 struct ContentView: View {
     @StateObject private var workout = WorkoutManager()
     @StateObject private var store = WorkoutStore.shared
+    @StateObject private var auth = AuthManager.shared
 
     var body: some View {
         ScrollView {
@@ -61,11 +62,32 @@ struct ContentView: View {
                         .foregroundColor(.green)
                     Text("RunWithAI")
                         .font(.headline)
+
+                    // AUTH STATUS
+                    if auth.isAuthenticated {
+                        HStack(spacing: 3) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.green)
+                                .font(.system(size: 10))
+                            Text("Logged in")
+                                .font(.system(size: 10))
+                                .foregroundColor(.green)
+                        }
+                    } else {
+                        HStack(spacing: 3) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundColor(.orange)
+                                .font(.system(size: 10))
+                            Text("Ikke logget ind")
+                                .font(.system(size: 10))
+                                .foregroundColor(.orange)
+                        }
+                    }
+
                     Text("Klar til løb")
                         .font(.caption)
                         .foregroundColor(.gray)
 
-                    // Viser gemte + ikke-synkede workouts
                     if !store.workouts.isEmpty {
                         VStack(spacing: 2) {
                             Text("\(store.workouts.count) gemte løb")
@@ -79,9 +101,11 @@ struct ContentView: View {
                         }
                     }
 
-                    Text("Auth: \(workout.locationManager.authStatus.rawValue)")
-                        .font(.system(size: 9))
+                    // Debug
+                    Text(auth.debugStatus)
+                        .font(.system(size: 8))
                         .foregroundColor(.gray)
+                        .multilineTextAlignment(.center)
 
                     Button(action: { workout.start() }) {
                         Label("Start", systemImage: "play.fill")

@@ -12,6 +12,7 @@ import {
   loadProfile, saveProfile, loadWeekPlan, saveWeekPlan, setAuthToken, generateTrainingPlan, getAuthToken, loadTrainingPlan, loadRuns,
 } from './src/data';
 import { useWatch } from './src/hooks/useWatch'
+import { syncAuthToWatch } from './src/services/WatchSync';
 import Auth from './src/screens/Auth';
 import Onboarding from './src/screens/Onboarding';
 import Dashboard from './src/screens/Dashboard';
@@ -371,7 +372,7 @@ export default function App() {
       fetch('https://runwithai-server-production.up.railway.app/profile', {
         headers: { Authorization: `Bearer ${savedToken}`, 'Content-Type': 'application/json' }
       }).then(r => {
-        if (r.ok) { setAuthToken(savedToken); setUser({ token: savedToken }); }
+        if (r.ok) { setAuthToken(savedToken); setUser({ token: savedToken }); syncAuthToWatch(savedToken, 'user'); }
         else { setAuthToken(null); setLoading(false); }
       }).catch(() => { setAuthToken(null); setLoading(false); });
     } else {
@@ -454,7 +455,7 @@ export default function App() {
   if (!user) return (
     <SafeAreaProvider>
       <Auth onAuth={(token, userData) => {
-        setAuthToken(token); setUser(userData); setLoading(true); loadData();
+        setAuthToken(token); setUser(userData); syncAuthToWatch(token, (userData && (userData.email || userData.id || userData._id)) || 'user'); setLoading(true); loadData();
       }} />
     </SafeAreaProvider>
   );
