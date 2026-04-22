@@ -6,18 +6,20 @@ class WorkoutManager: ObservableObject {
     @Published var isPaused: Bool = false
     @Published var elapsedSeconds: Int = 0
 
-    // GPS
     let locationManager = LocationManager()
+    let store = WorkoutStore.shared
 
     private var timer: Timer?
-    private var startDate: Date?
+    private var workoutStartDate: Date?
+    private var timerStartDate: Date?
     private var accumulatedSeconds: Int = 0
 
     func start() {
         locationManager.requestPermission()
         elapsedSeconds = 0
         accumulatedSeconds = 0
-        startDate = Date()
+        workoutStartDate = Date()
+        timerStartDate = Date()
         isRunning = true
         isPaused = false
         locationManager.startTracking()
@@ -26,10 +28,10 @@ class WorkoutManager: ObservableObject {
 
     func pause() {
         guard isRunning, !isPaused else { return }
-        if let s = startDate {
+        if let s = timerStartDate {
             accumulatedSeconds += Int(Date().timeIntervalSince(s))
         }
-        startDate = nil
+        timerStartDate = nil
         isPaused = true
         timer?.invalidate()
         locationManager.pauseTracking()
@@ -37,7 +39,7 @@ class WorkoutManager: ObservableObject {
 
     func resume() {
         guard isRunning, isPaused else { return }
-        startDate = Date()
+        timerStartDate = Date()
         isPaused = false
         locationManager.resumeTracking()
         startTimer()
@@ -46,11 +48,34 @@ class WorkoutManager: ObservableObject {
     func stop() {
         timer?.invalidate()
         timer = nil
-        if let s = startDate {
+        if let s = timerStartDate {
             accumulatedSeconds += Int(Date().timeIntervalSince(s))
         }
         elapsedSeconds = accumulatedSeconds
-        startDate = nil
+
+        // Gem workout lokalt
+        if let start = workoutStartDate, elapsedSeconds > 5 {
+            let routePoints = locationManager.route.map { Workout.RoutePoint(from: $0) }
+            let distanceM = locationManager.distance
+            let pace = Workout.calculatePace(durationSec: elapsedSeconds, distanceMeters: distanceM)
+            let activityType = pace > 8.0 ? "walk" : "run"  // over 8 min/km = gåtur
+
+            let workout = Workout(
+                id: UUID().uuidString,
+                startTime: start,
+                endTime: Date(),
+                durationSeconds: elapsedSeconds,
+                distanceMeters: distanceM,
+                averagePaceMinPerKm: pace,
+                type: activityType,
+                route: routePoints,
+                synced: false
+            )
+            store.save(workout)
+        }
+
+        workoutStartDate = nil
+        timerStartDate = nil
         isRunning = false
         isPaused = false
         locationManager.stopTracking()
@@ -59,7 +84,7 @@ class WorkoutManager: ObservableObject {
     private func startTimer() {
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-            guard let self = self, let s = self.startDate else { return }
+            guard let self = self, let s = self.timerStartDate else { return }
             self.elapsedSeconds = self.accumulatedSeconds + Int(Date().timeIntervalSince(s))
         }
     }

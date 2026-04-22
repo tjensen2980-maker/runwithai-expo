@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var workout = WorkoutManager()
+    @StateObject private var store = WorkoutStore.shared
 
     var body: some View {
         ScrollView {
@@ -29,7 +30,6 @@ struct ContentView: View {
                         }
                     }
 
-                    // DEBUG-INFO
                     Text(workout.locationManager.debugMessage)
                         .font(.system(size: 9))
                         .foregroundColor(.yellow)
@@ -65,7 +65,20 @@ struct ContentView: View {
                         .font(.caption)
                         .foregroundColor(.gray)
 
-                    // Vis auth status på startskærm
+                    // Viser gemte + ikke-synkede workouts
+                    if !store.workouts.isEmpty {
+                        VStack(spacing: 2) {
+                            Text("\(store.workouts.count) gemte løb")
+                                .font(.system(size: 10))
+                                .foregroundColor(.blue)
+                            if !store.pendingSync.isEmpty {
+                                Text("\(store.pendingSync.count) venter på sync")
+                                    .font(.system(size: 9))
+                                    .foregroundColor(.orange)
+                            }
+                        }
+                    }
+
                     Text("Auth: \(workout.locationManager.authStatus.rawValue)")
                         .font(.system(size: 9))
                         .foregroundColor(.gray)
