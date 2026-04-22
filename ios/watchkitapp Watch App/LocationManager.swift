@@ -19,7 +19,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.distanceFilter = 5.0
-        manager.allowsBackgroundLocationUpdates = true
+        // manager.allowsBackgroundLocationUpdates = true // kraever Background Modes capability
         authStatus = manager.authorizationStatus
     }
 
