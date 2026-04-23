@@ -175,6 +175,7 @@ class SyncManager: ObservableObject {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         request.timeoutInterval = 30
 
         session.dataTask(with: request) { [weak self] data, response, error in
