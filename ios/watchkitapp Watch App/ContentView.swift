@@ -5,6 +5,7 @@ struct ContentView: View {
     @StateObject private var store = WorkoutStore.shared
     @StateObject private var auth = AuthManager.shared
     @StateObject private var sync = SyncManager.shared
+    @StateObject private var training = TrainingManager.shared
 
     var body: some View {
         ScrollView {
@@ -79,6 +80,43 @@ struct ContentView: View {
                         Text("\(store.workouts.count) gemte løb")
                             .font(.system(size: 11))
                             .foregroundColor(.blue)
+                    }
+
+                    if let today = training.todayTraining {
+                        VStack(spacing: 4) {
+                            HStack(spacing: 4) {
+                                Image(systemName: "calendar")
+                                    .font(.system(size: 11))
+                                    .foregroundColor(.cyan)
+                                Text("Dagens træning")
+                                    .font(.system(size: 11, weight: .semibold))
+                                    .foregroundColor(.cyan)
+                            }
+                            Text(today.name)
+                                .font(.system(size: 13, weight: .bold))
+                                .multilineTextAlignment(.center)
+                            if today.km > 0 {
+                                Text(String(format: "%.1f km", today.km))
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.white)
+                            }
+                            if !today.pace.isEmpty {
+                                Text("Tempo: \(today.pace)")
+                                    .font(.system(size: 10))
+                                    .foregroundColor(.gray)
+                            }
+                            if !today.description.isEmpty {
+                                Text(today.description)
+                                    .font(.system(size: 9))
+                                    .foregroundColor(.gray)
+                                    .multilineTextAlignment(.center)
+                                    .lineLimit(3)
+                            }
+                        }
+                        .padding(.vertical, 6)
+                        .padding(.horizontal, 8)
+                        .background(Color.cyan.opacity(0.15))
+                        .cornerRadius(8)
                     }
 
                     Button(action: { workout.start() }) {

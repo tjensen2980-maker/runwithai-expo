@@ -96,19 +96,34 @@ class AuthManager: NSObject, ObservableObject, WCSessionDelegate {
 
     func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
         DispatchQueue.main.async {
-            self.applyAuthBundle(applicationContext)
+            self.route(applicationContext)
         }
     }
 
     func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
         DispatchQueue.main.async {
-            self.applyAuthBundle(message)
+            self.route(message)
         }
     }
 
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any] = [:]) {
         DispatchQueue.main.async {
-            self.applyAuthBundle(userInfo)
+            self.route(userInfo)
+        }
+    }
+
+    // Router beskeder til den rigtige manager baseret paa type felt
+    private func route(_ dict: [String: Any]) {
+        let type = (dict["type"] as? String) ?? ""
+        switch type {
+        case "TODAY_TRAINING":
+            TrainingManager.shared.apply(dict)
+        case "AUTH_UPDATE", "":
+            // Tom type = backwards compat (gamle auth beskeder uden type)
+            self.applyAuthBundle(dict)
+        default:
+            // Ukendt type - ignorer
+            break
         }
     }
 }
