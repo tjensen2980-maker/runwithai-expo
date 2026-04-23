@@ -7,6 +7,7 @@ class SyncManager: ObservableObject {
     @Published var isSyncing: Bool = false
     @Published var lastSyncStatus: String = "Aldrig synket"
     @Published var lastSyncDate: Date?
+    @Published var lastTrainingSyncStatus: String = "-"
 
     private let session = URLSession.shared
     private var timer: Timer?
@@ -168,6 +169,7 @@ class SyncManager: ObservableObject {
     }
 
     func markTodayCompleted() {
+        DispatchQueue.main.async { self.lastTrainingSyncStatus = "Starter" }
         guard let token = AuthManager.shared.token, !token.isEmpty else { return }
         let serverUrl = AuthManager.shared.serverUrl
         guard let url = URL(string: "\(serverUrl)/trainingplan") else { return }
@@ -182,6 +184,7 @@ class SyncManager: ObservableObject {
             if let e = error { print("WATCH markTodayCompleted GET error: \(e)"); return }
             guard let self = self, let data = data else { print("WATCH markTodayCompleted: no data"); return }
             let status = (response as? HTTPURLResponse)?.statusCode ?? -1
+            DispatchQueue.main.async { SyncManager.shared.lastTrainingSyncStatus = "GET \(status)" }
             print("WATCH GET /trainingplan status: \(status)")
             guard (200...299).contains(status) else { if let s = String(data: data, encoding: .utf8) { print("WATCH GET body: \(s)") }; return }
 
@@ -203,7 +206,7 @@ class SyncManager: ObservableObject {
                     break
                 }
             }
-            if !changed { return }
+            if !changed { DispatchQueue.main.async { SyncManager.shared.lastTrainingSyncStatus = "Ingen match \(today)" }; return }
 
             self.saveTrainingPlan(planData)
         }.resume()
@@ -226,6 +229,7 @@ class SyncManager: ObservableObject {
 
         session.dataTask(with: request) { _, response, _ in
             let status = (response as? HTTPURLResponse)?.statusCode ?? -1
+            DispatchQueue.main.async { SyncManager.shared.lastTrainingSyncStatus = "POST \(status)" }
             print("WATCH POST /trainingplan/save status: \(status)")
             guard (200...299).contains(status) else { return }
             // Opdater ogsaa lokal TrainingManager state direkte
