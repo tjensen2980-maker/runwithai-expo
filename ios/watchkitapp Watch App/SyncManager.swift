@@ -110,7 +110,7 @@ class SyncManager: ObservableObject {
             "total_descent": 0,
             "total_steps": 0,
             "splits": [],
-            "route": routeArray,
+            "points": routeArray, "route": routeArray,
             "type": workout.type,
             "date": dateFormatter.string(from: workout.startTime),
             "source": "apple_watch",
