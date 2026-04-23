@@ -189,8 +189,8 @@ class SyncManager: ObservableObject {
             guard (200...299).contains(status) else { if let s = String(data: data, encoding: .utf8) { print("WATCH GET body: \(s)") }; return }
 
             // Parse { data: [...], generated_at: ... }
-            guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return }
-            guard var planData = json["data"] as? [[String: Any]] else { return }
+            guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { DispatchQueue.main.async { SyncManager.shared.lastTrainingSyncStatus = "JSON parse fail" }; return }
+            guard var planData = json["data"] as? [[String: Any]] else { DispatchQueue.main.async { SyncManager.shared.lastTrainingSyncStatus = "Keys: \(json.keys.joined(separator: ","))" }; return }
 
             let today = self.todayShortDa()
             let dateFormatter = ISO8601DateFormatter()
