@@ -46,6 +46,10 @@ class SyncManager: ObservableObject {
                 self.lastSyncDate = Date()
                 self.lastSyncStatus = "Synket \(successes)/\(workouts.count)"
             }
+            // Marker dagens traening som completed hvis mindst et run blev synket
+            if successes > 0 {
+                self.markTodayCompleted()
+            }
             return
         }
 
@@ -151,4 +155,88 @@ class SyncManager: ObservableObject {
             }
         }.resume()
     }
+
+    // MARK: - Training plan completion
+
+    // Danske 3-bogstavsnavne for ugedage (matcher weekPlan i App.js)
+    private func todayShortDa() -> String {
+        let days = ["Søn", "Man", "Tir", "Ons", "Tor", "Fre", "Lør"]
+        let weekday = Calendar.current.component(.weekday, from: Date())
+        // Calendar.weekday: 1=Sunday..7=Saturday
+        return days[weekday - 1]
+    }
+
+    func markTodayCompleted() {
+        guard let token = AuthManager.shared.token, !token.isEmpty else { return }
+        let serverUrl = AuthManager.shared.serverUrl
+        guard let url = URL(string: "\(serverUrl)/trainingplan") else { return }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.timeoutInterval = 30
+
+        session.dataTask(with: request) { [weak self] data, response, error in
+            guard let self = self, let data = data, error == nil else { return }
+            guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else { return }
+
+            // Parse { data: [...], generated_at: ... }
+            guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return }
+            guard var planData = json["data"] as? [[String: Any]] else { return }
+
+            let today = self.todayShortDa()
+            let dateFormatter = ISO8601DateFormatter()
+            var changed = false
+            for i in 0..<planData.count {
+                if let day = planData[i]["day"] as? String, day == today {
+                    let wasCompleted = (planData[i]["completed"] as? Bool) ?? false
+                    if !wasCompleted {
+                        planData[i]["completed"] = true
+                        planData[i]["completedAt"] = dateFormatter.string(from: Date())
+                        changed = true
+                    }
+                    break
+                }
+            }
+            if !changed { return }
+
+            self.saveTrainingPlan(planData)
+        }.resume()
+    }
+
+    private func saveTrainingPlan(_ planData: [[String: Any]]) {
+        guard let token = AuthManager.shared.token, !token.isEmpty else { return }
+        let serverUrl = AuthManager.shared.serverUrl
+        guard let url = URL(string: "\(serverUrl)/trainingplan/save") else { return }
+
+        let body: [String: Any] = ["data": planData]
+        guard let bodyData = try? JSONSerialization.data(withJSONObject: body) else { return }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.httpBody = bodyData
+        request.timeoutInterval = 30
+
+        session.dataTask(with: request) { _, response, _ in
+            guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else { return }
+            // Opdater ogsaa lokal TrainingManager state direkte
+            DispatchQueue.main.async {
+                if var t = TrainingManager.shared.todayTraining {
+                    let updated = TrainingDay(
+                        name: t.name,
+                        km: t.km,
+                        description: t.description,
+                        pace: t.pace,
+                        timestamp: t.timestamp,
+                        completed: true,
+                        completedAt: ISO8601DateFormatter().string(from: Date())
+                    )
+                    TrainingManager.shared.todayTraining = updated
+                }
+            }
+        }.resume()
+    }
+
 }

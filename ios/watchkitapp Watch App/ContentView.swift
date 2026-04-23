@@ -1,5 +1,12 @@
 import SwiftUI
 
+
+func todayLongDa() -> String {
+    let days = ["Søndag","Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag"]
+    let idx = Calendar.current.component(.weekday, from: Date()) - 1
+    return days[(idx + 7) % 7]
+}
+
 struct ContentView: View {
     @StateObject private var workout = WorkoutManager()
     @StateObject private var store = WorkoutStore.shared
@@ -92,6 +99,9 @@ struct ContentView: View {
                                     .font(.system(size: 11, weight: .semibold))
                                     .foregroundColor(today.completed ? .green : .cyan)
                             }
+                            Text(todayLongDa())
+                                .font(.system(size: 10))
+                                .foregroundColor(.gray)
                             Text(today.name)
                                 .font(.system(size: 13, weight: .bold))
                                 .multilineTextAlignment(.center)
