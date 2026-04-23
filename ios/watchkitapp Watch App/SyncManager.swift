@@ -23,6 +23,7 @@ class SyncManager: ObservableObject {
     }
 
     func syncPending() {
+        self.markTodayCompleted()
         let pending = WorkoutStore.shared.pendingSync
         guard !pending.isEmpty else { return }
         guard let token = AuthManager.shared.token, !token.isEmpty else {
@@ -177,8 +178,11 @@ class SyncManager: ObservableObject {
         request.timeoutInterval = 30
 
         session.dataTask(with: request) { [weak self] data, response, error in
-            guard let self = self, let data = data, error == nil else { return }
-            guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else { return }
+            if let e = error { print("WATCH markTodayCompleted GET error: \(e)"); return }
+            guard let self = self, let data = data else { print("WATCH markTodayCompleted: no data"); return }
+            let status = (response as? HTTPURLResponse)?.statusCode ?? -1
+            print("WATCH GET /trainingplan status: \(status)")
+            guard (200...299).contains(status) else { if let s = String(data: data, encoding: .utf8) { print("WATCH GET body: \(s)") }; return }
 
             // Parse { data: [...], generated_at: ... }
             guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return }
@@ -220,7 +224,9 @@ class SyncManager: ObservableObject {
         request.timeoutInterval = 30
 
         session.dataTask(with: request) { _, response, _ in
-            guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else { return }
+            let status = (response as? HTTPURLResponse)?.statusCode ?? -1
+            print("WATCH POST /trainingplan/save status: \(status)")
+            guard (200...299).contains(status) else { return }
             // Opdater ogsaa lokal TrainingManager state direkte
             DispatchQueue.main.async {
                 if var t = TrainingManager.shared.todayTraining {
