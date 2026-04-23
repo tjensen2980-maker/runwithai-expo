@@ -18,7 +18,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private var pendingStart: Bool = false
 
     // Konstanter for præcision
-    private let maxAcceptableAccuracy: Double = 20.0   // Kun GPS bedre end 20m
+    private let maxAcceptableAccuracy: Double = 15.0   // Kun GPS bedre end 20m
     private let minimumDistanceBetweenPoints: Double = 3.0  // Min 3m mellem punkter
     private let maximumJumpDistance: Double = 100.0    // Smid teleporter > 100m/sek
     private let warmupSeconds: TimeInterval = 5.0      // Smid første 5 sek af GPS
@@ -140,7 +140,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
                 // 5. Smid teleporter (urealistiske spring)
                 if timeDelta > 0 {
                     let speedMps = delta / timeDelta
-                    if speedMps > 15.0 {  // > 54 km/t = sandsynligvis fejl
+                    if speedMps > 8.0 {  // > 54 km/t = sandsynligvis fejl
                         debugMessage = "Skip jump: \(Int(speedMps))m/s"
                         continue
                     }
