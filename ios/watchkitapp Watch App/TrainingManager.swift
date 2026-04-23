@@ -44,13 +44,17 @@ class TrainingManager: NSObject, ObservableObject {
         let description = (dict["description"] as? String) ?? ""
         let pace = (dict["pace"] as? String) ?? ""
         let ts = (dict["timestamp"] as? Double) ?? Date().timeIntervalSince1970 * 1000
+        let completed = (dict["completed"] as? Bool) ?? false
+        let completedAt = (dict["completedAt"] as? String) ?? ""
 
         let training = TrainingDay(
             name: name,
             km: km,
             description: description,
             pace: pace,
-            timestamp: ts
+            timestamp: ts,
+            completed: completed,
+            completedAt: completedAt
         )
 
         DispatchQueue.main.async {

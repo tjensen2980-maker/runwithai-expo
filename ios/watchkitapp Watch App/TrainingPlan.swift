@@ -16,4 +16,6 @@ struct TrainingDay: Codable {
     let description: String
     let pace: String
     let timestamp: Double
+    let completed: Bool
+    let completedAt: String
 }

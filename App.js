@@ -296,20 +296,49 @@ export default function App() {
   const [loading, setLoading]               = useState(true);
   const [activityType, setActivityType]     = useState('run');
   const [showPricing, setShowPricing]       = useState(false);
-// Watch sync - step 1: import only, no listeners yet
+// Watch sync - modtager run fra ur og marker dagens traening som completed
+  const trainingPlanRef = React.useRef(null);
   const { sendTodayTraining } = useWatch({
     onCommand: () => {},
-    onWorkoutComplete: () => {},
+    onWorkoutComplete: (run, saved) => {
+      const days = ['Søn','Man','Tir','Ons','Tor','Fre','Lør'];
+      const todayShort = days[new Date().getDay()];
+      const plan = trainingPlanRef.current;
+      if (!plan || !plan.data) return;
+      const planData = Array.isArray(plan.data) ? plan.data : [];
+      let changed = false;
+      const updated = planData.map(d => {
+        if (d.day === todayShort && !d.completed) {
+          changed = true;
+          return { ...d, completed: true, completedAt: new Date().toISOString() };
+        }
+        return d;
+      });
+      if (!changed) return;
+      setWeekPlan(updated);
+      setTrainingPlan({ data: updated, generated_at: new Date().toISOString() });
+      const tok = getAuthToken();
+      if (tok) {
+        fetch('https://runwithai-server-production.up.railway.app/trainingplan/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok },
+          body: JSON.stringify({ data: updated }),
+        }).catch(() => {});
+      }
+    },
   });
 
   const token = getAuthToken();
   const { subscription, isPro, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
 
+  useEffect(() => { trainingPlanRef.current = trainingPlan; }, [trainingPlan]);
+
   // Watch auto-sync: send today's training when weekPlan loads
   useEffect(() => {
     if (weekPlan && weekPlan.length > 0 && sendTodayTraining) {
-      const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-      const todayPlan = weekPlan.find(p => p.day && p.day.toLowerCase() === today) || weekPlan[0];
+      const daysDa = ['Søn','Man','Tir','Ons','Tor','Fre','Lør'];
+      const todayShortDa = daysDa[new Date().getDay()];
+      const todayPlan = weekPlan.find(p => p.day === todayShortDa) || weekPlan[0];
       if (todayPlan) {
         sendTodayTraining(todayPlan, weekPlan).catch(err => console.warn('[App] auto send:', err));
       }

@@ -45,11 +45,13 @@ export function useWatch({
                                             // Byg payload med de keys Watch-appen forventer
                                             const watchPayload = {
                                                       type: 'TODAY_TRAINING',
-                                                      name: todayPlan?.title || todayPlan?.name || todayPlan?.type || 'Dagens træning',
+                                                      name: todayPlan?.title || todayPlan?.name || todayPlan?.workout || todayPlan?.type || 'Dagens træning',
                                                       km: todayPlan?.distance_km || todayPlan?.km || todayPlan?.distance || 0,
                                                       description: todayPlan?.description || todayPlan?.notes || '',
                                                       // Pace kan være "5:30" eller "5:30-6:00"
                                                       pace: todayPlan?.target_pace || todayPlan?.pace || '',
+                                                      completed: !!todayPlan?.completed,
+                                                      completedAt: todayPlan?.completedAt || '',
                                                       trainingPlan: fullPlan || [],
                                                       timestamp: Date.now(),
                                             };

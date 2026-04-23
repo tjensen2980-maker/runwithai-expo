@@ -85,12 +85,12 @@ struct ContentView: View {
                     if let today = training.todayTraining {
                         VStack(spacing: 4) {
                             HStack(spacing: 4) {
-                                Image(systemName: "calendar")
+                                Image(systemName: today.completed ? "checkmark.circle.fill" : "calendar")
                                     .font(.system(size: 11))
-                                    .foregroundColor(.cyan)
-                                Text("Dagens træning")
+                                    .foregroundColor(today.completed ? .green : .cyan)
+                                Text(today.completed ? "Gennemført i dag" : "Dagens træning")
                                     .font(.system(size: 11, weight: .semibold))
-                                    .foregroundColor(.cyan)
+                                    .foregroundColor(today.completed ? .green : .cyan)
                             }
                             Text(today.name)
                                 .font(.system(size: 13, weight: .bold))
@@ -115,7 +115,7 @@ struct ContentView: View {
                         }
                         .padding(.vertical, 6)
                         .padding(.horizontal, 8)
-                        .background(Color.cyan.opacity(0.15))
+                        .background((today.completed ? Color.green : Color.cyan).opacity(0.15))
                         .cornerRadius(8)
                     }
 
