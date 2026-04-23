@@ -1,6 +1,7 @@
 import Foundation
 import CoreLocation
 import Combine
+import HealthKit
 
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let manager = CLLocationManager()
@@ -17,8 +18,12 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private var startTime: Date?
     private var pendingStart: Bool = false
 
+    // HealthKit workout session - holder app aktiv i baggrunden
+    private let healthStore = HKHealthStore()
+    private var workoutSession: HKWorkoutSession?
+
     // Konstanter for præcision
-    private let maxAcceptableAccuracy: Double = 15.0   // Kun GPS bedre end 20m
+    private let maxAcceptableAccuracy: Double = 20.0   // Kun GPS bedre end 20m
     private let minimumDistanceBetweenPoints: Double = 3.0  // Min 3m mellem punkter
     private let maximumJumpDistance: Double = 100.0    // Smid teleporter > 100m/sek
     private let warmupSeconds: TimeInterval = 5.0      // Smid første 5 sek af GPS
@@ -58,6 +63,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         case .authorizedWhenInUse, .authorizedAlways:
             debugMessage = "GPS warming up..."
             manager.startUpdatingLocation()
+            startWorkoutSession()
         case .denied, .restricted:
             debugMessage = "Permission denied"
             isTracking = false
@@ -69,11 +75,13 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     func pauseTracking() {
         manager.stopUpdatingLocation()
+        pauseWorkoutSession()
         debugMessage = "Paused"
     }
 
     func resumeTracking() {
         manager.startUpdatingLocation()
+        resumeWorkoutSession()
         debugMessage = "Resumed"
         // Reset lastLocation så vi ikke får stort distance-jump
         lastLocation = nil
@@ -81,6 +89,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     func stopTracking() {
         manager.stopUpdatingLocation()
+        stopWorkoutSession()
         isTracking = false
         pendingStart = false
         debugMessage = "Stopped"
@@ -177,4 +186,34 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         let secs = Int((currentPace - Double(mins)) * 60)
         return String(format: "%d:%02d /km", mins, secs)
     }
+
+    // MARK: - Workout Session (holder app aktiv i baggrunden)
+
+    private func startWorkoutSession() {
+        guard workoutSession == nil else { return }
+        let config = HKWorkoutConfiguration()
+        config.activityType = .walking
+        config.locationType = .outdoor
+        do {
+            let session = try HKWorkoutSession(healthStore: healthStore, configuration: config)
+            workoutSession = session
+            session.startActivity(with: Date())
+        } catch {
+            debugMessage = "WS err"
+        }
+    }
+
+    private func pauseWorkoutSession() {
+        workoutSession?.pause()
+    }
+
+    private func resumeWorkoutSession() {
+        workoutSession?.resume()
+    }
+
+    private func stopWorkoutSession() {
+        workoutSession?.end()
+        workoutSession = nil
+    }
+
 }
