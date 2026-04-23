@@ -10,17 +10,25 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var isTracking: Bool = false
     @Published var authStatus: CLAuthorizationStatus = .notDetermined
     @Published var debugMessage: String = "Init"
+    @Published var currentAccuracy: Double = 0.0
 
     private var lastLocation: CLLocation?
     private(set) var route: [CLLocation] = []
     private var startTime: Date?
     private var pendingStart: Bool = false
 
+    // Konstanter for præcision
+    private let maxAcceptableAccuracy: Double = 20.0   // Kun GPS bedre end 20m
+    private let minimumDistanceBetweenPoints: Double = 3.0  // Min 3m mellem punkter
+    private let maximumJumpDistance: Double = 100.0    // Smid teleporter > 100m/sek
+    private let warmupSeconds: TimeInterval = 5.0      // Smid første 5 sek af GPS
+
     override init() {
         super.init()
         manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyBest
-        manager.distanceFilter = 5.0
+        manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        manager.distanceFilter = 1.0   // Få alle bevægelser
+        manager.activityType = .fitness
         authStatus = manager.authorizationStatus
         debugMessage = "Auth: \(authStatus.rawValue)"
     }
@@ -33,6 +41,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     func startTracking() {
         distance = 0.0
         currentPace = 0.0
+        currentAccuracy = 0.0
         lastLocation = nil
         route.removeAll()
         startTime = Date()
@@ -47,7 +56,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             debugMessage = "Asking permission..."
             manager.requestWhenInUseAuthorization()
         case .authorizedWhenInUse, .authorizedAlways:
-            debugMessage = "GPS started"
+            debugMessage = "GPS warming up..."
             manager.startUpdatingLocation()
         case .denied, .restricted:
             debugMessage = "Permission denied"
@@ -66,6 +75,8 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     func resumeTracking() {
         manager.startUpdatingLocation()
         debugMessage = "Resumed"
+        // Reset lastLocation så vi ikke får stort distance-jump
+        lastLocation = nil
     }
 
     func stopTracking() {
@@ -85,7 +96,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
             if self.pendingStart && (status == .authorizedWhenInUse || status == .authorizedAlways) {
                 self.pendingStart = false
-                self.debugMessage = "GPS started after auth"
+                self.debugMessage = "GPS warming up..."
                 self.manager.startUpdatingLocation()
             }
         }
@@ -93,24 +104,60 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard isTracking else { return }
+        guard let workoutStart = startTime else { return }
+
         for newLocation in locations {
-            guard newLocation.horizontalAccuracy > 0 && newLocation.horizontalAccuracy < 50 else { continue }
+            // 1. Smid dårlig accuracy
+            guard newLocation.horizontalAccuracy > 0 && newLocation.horizontalAccuracy < maxAcceptableAccuracy else {
+                debugMessage = "Skip: \(Int(newLocation.horizontalAccuracy))m"
+                continue
+            }
+
+            // 2. Smid for gamle locations (cached)
+            let age = Date().timeIntervalSince(newLocation.timestamp)
+            guard age < 5.0 else {
+                continue
+            }
+
+            // 3. Smid warm-up periode (første 5 sek)
+            let elapsed = Date().timeIntervalSince(workoutStart)
+            if elapsed < warmupSeconds {
+                debugMessage = "Warmup: \(Int(elapsed))s"
+                continue
+            }
+
+            currentAccuracy = newLocation.horizontalAccuracy
 
             if let last = lastLocation {
                 let delta = newLocation.distance(from: last)
-                if delta > 1.0 {
-                    distance += delta
+                let timeDelta = newLocation.timestamp.timeIntervalSince(last.timestamp)
+
+                // 4. Smid mikro-bevægelser (GPS drift mens stille)
+                guard delta >= minimumDistanceBetweenPoints else {
+                    continue
                 }
+
+                // 5. Smid teleporter (urealistiske spring)
+                if timeDelta > 0 {
+                    let speedMps = delta / timeDelta
+                    if speedMps > 15.0 {  // > 54 km/t = sandsynligvis fejl
+                        debugMessage = "Skip jump: \(Int(speedMps))m/s"
+                        continue
+                    }
+                }
+
+                distance += delta
             }
+
             lastLocation = newLocation
             route.append(newLocation)
-            debugMessage = "GPS: \(Int(newLocation.horizontalAccuracy))m"
+            debugMessage = "GPS: \(Int(newLocation.horizontalAccuracy))m, \(route.count) pkt"
 
-            if let start = startTime, distance > 0 {
-                let elapsed = Date().timeIntervalSince(start)
+            if distance > 0 {
+                let elapsedSecs = Date().timeIntervalSince(workoutStart)
                 let km = distance / 1000.0
                 if km > 0.01 {
-                    currentPace = (elapsed / 60.0) / km
+                    currentPace = (elapsedSecs / 60.0) / km
                 }
             }
         }
