@@ -15,7 +15,6 @@ class SyncManager: ObservableObject {
         startPeriodicSync()
     }
 
-    /// Start automatisk sync hver 60 sekunder
     func startPeriodicSync() {
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 60.0, repeats: true) { [weak self] _ in
@@ -23,7 +22,6 @@ class SyncManager: ObservableObject {
         }
     }
 
-    /// Synk alle pending workouts til Railway
     func syncPending() {
         let pending = WorkoutStore.shared.pendingSync
         guard !pending.isEmpty else { return }
@@ -60,7 +58,6 @@ class SyncManager: ObservableObject {
                 }
                 self.syncNext(workouts: workouts, index: index + 1, successes: successes + 1)
             } else {
-                // Stop ved fejl, prøv igen senere
                 DispatchQueue.main.async {
                     self.isSyncing = false
                     self.lastSyncStatus = "Fejl v. \(index+1). Prøver igen"
@@ -69,7 +66,6 @@ class SyncManager: ObservableObject {
         }
     }
 
-    /// POST en workout til Railway /runs
     private func postWorkout(_ workout: Workout, completion: @escaping (Bool) -> Void) {
         let serverUrl = AuthManager.shared.serverUrl
         guard let url = URL(string: "\(serverUrl)/runs") else {
@@ -81,18 +77,24 @@ class SyncManager: ObservableObject {
             return
         }
 
-        // Byg run-objekt der matcher Railway format
         let km = workout.distanceMeters / 1000.0
         let durationSecs = workout.durationSeconds
         let paceSecsPerKm = km > 0 ? Double(durationSecs) / km : 0
 
+        // Byg route som array af {lat, lng} - matcher Activity.js mini-map
         let routeArray: [[String: Any]] = workout.route.map { point in
             return [
                 "lat": point.lat,
-                "lon": point.lon,
-                "timestamp": ISO8601DateFormatter().string(from: point.timestamp),
-                "altitude": point.altitude
+                "lng": point.lon,
+                "lon": point.lon
             ]
+        }
+
+        // Konverter til JSON-string (DB kolonne er 'text')
+        var routeString = "[]"
+        if let routeData = try? JSONSerialization.data(withJSONObject: routeArray),
+           let str = String(data: routeData, encoding: .utf8) {
+            routeString = str
         }
 
         let dateFormatter = ISO8601DateFormatter()
@@ -109,8 +111,8 @@ class SyncManager: ObservableObject {
             "total_ascent": 0,
             "total_descent": 0,
             "total_steps": 0,
-            "splits": [],
-            "points": routeArray, "route": routeArray,
+            "splits": "[]",
+            "route": routeString,
             "type": workout.type,
             "date": dateFormatter.string(from: workout.startTime),
             "source": "apple_watch",
