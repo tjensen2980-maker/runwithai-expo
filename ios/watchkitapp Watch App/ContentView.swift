@@ -83,11 +83,6 @@ struct ContentView: View {
                         }
                     }
 
-                    if !store.workouts.isEmpty {
-                        Text("\(store.workouts.count) gemte løb")
-                            .font(.system(size: 11))
-                            .foregroundColor(.blue)
-                    }
 
                     if let today = training.todayTraining {
                         VStack(spacing: 4) {
