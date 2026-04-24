@@ -201,6 +201,7 @@ class SyncManager: ObservableObject {
             }
 
             let today = self.todayShortDa()
+            self.buildTodayTrainingFromPlan(planData, today: today)
             let dateFormatter = ISO8601DateFormatter()
             var changed = false
             for i in 0..<planData.count {
@@ -218,6 +219,29 @@ class SyncManager: ObservableObject {
 
             self.saveTrainingPlan(planData)
         }.resume()
+    }
+
+    
+    private func buildTodayTrainingFromPlan(_ planData: [[String: Any]], today: String) {
+        for entry in planData {
+            guard let day = entry["day"] as? String, day == today else { continue }
+            let name = (entry["workout"] as? String) ?? (entry["name"] as? String) ?? "Daglig traening"
+            var km: Double = 0
+            if let v = entry["km"] as? Double { km = v }
+            else if let v = entry["km"] as? Int { km = Double(v) }
+            else if let v = entry["km"] as? NSNumber { km = v.doubleValue }
+            let desc = (entry["description"] as? String) ?? ""
+            let pace = (entry["pace"] as? String) ?? ""
+            let completed = (entry["completed"] as? Bool) ?? false
+            let completedAt = (entry["completedAt"] as? String) ?? ""
+            let ts = Date().timeIntervalSince1970 * 1000
+            let training = TrainingDay(name: name, km: km, description: desc, pace: pace, timestamp: ts, completed: completed, completedAt: completedAt)
+            DispatchQueue.main.async {
+                TrainingManager.shared.todayTraining = training
+                TrainingManager.shared.hasTraining = true
+            }
+            break
+        }
     }
 
     private func saveTrainingPlan(_ planData: [[String: Any]]) {
