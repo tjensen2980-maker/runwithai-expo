@@ -190,7 +190,15 @@ class SyncManager: ObservableObject {
 
             // Parse { data: [...], generated_at: ... }
             guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { DispatchQueue.main.async { SyncManager.shared.lastTrainingSyncStatus = "JSON parse fail" }; return }
-            guard var planData = json["data"] as? [[String: Any]] else { DispatchQueue.main.async { SyncManager.shared.lastTrainingSyncStatus = "Keys: \(json.keys.joined(separator: ","))" }; return }
+            var planData: [[String: Any]] = []
+            if let arr = json["data"] as? [[String: Any]] {
+                planData = arr
+            } else if let str = json["data"] as? String, let strData = str.data(using: .utf8), let arr2 = try? JSONSerialization.jsonObject(with: strData) as? [[String: Any]] {
+                planData = arr2
+            } else {
+                DispatchQueue.main.async { SyncManager.shared.lastTrainingSyncStatus = "data type fail" }
+                return
+            }
 
             let today = self.todayShortDa()
             let dateFormatter = ISO8601DateFormatter()
