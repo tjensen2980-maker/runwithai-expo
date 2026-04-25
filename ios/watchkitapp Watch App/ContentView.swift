@@ -244,7 +244,9 @@ struct WorkoutGoalView: View {
                     .foregroundColor(.gray)
                 Button(action: {
                     workout.start(type: selected.name, targetKm: targetKm, targetMinutes: targetMin)
-                    navPath = NavigationPath()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                        navPath = NavigationPath()
+                    }
                 }) {
                     Label("Start", systemImage: "play.fill")
                         .frame(maxWidth: .infinity)
