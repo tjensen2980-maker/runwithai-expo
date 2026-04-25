@@ -9,12 +9,12 @@ struct StandardWorkout: Identifiable, Hashable {
 }
 
 let standardWorkouts: [StandardWorkout] = [
-    StandardWorkout(name: "Loeb", icon: "figure.run", description: "Frit loeb", color: "green"),
-    StandardWorkout(name: "Interval", icon: "bolt.fill", description: "Hoej intensitet", color: "red"),
-    StandardWorkout(name: "Langt loeb", icon: "map", description: "Lav intensitet", color: "blue"),
-    StandardWorkout(name: "Restitution", icon: "leaf.fill", description: "Let loeb", color: "mint"),
-    StandardWorkout(name: "Gaa/Loeb", icon: "figure.walk", description: "Vekslende", color: "cyan"),
-    StandardWorkout(name: "Tempo", icon: "speedometer", description: "Fart traening", color: "orange"),
+    StandardWorkout(name: "Løb", icon: "figure.run", description: "Frit løb", color: "green"),
+    StandardWorkout(name: "Interval", icon: "bolt.fill", description: "Høj intensitet", color: "red"),
+    StandardWorkout(name: "Langt løb", icon: "map", description: "Lav intensitet", color: "blue"),
+    StandardWorkout(name: "Restitution", icon: "leaf.fill", description: "Let løb", color: "mint"),
+    StandardWorkout(name: "Gå/Løb", icon: "figure.walk", description: "Vekslende", color: "cyan"),
+    StandardWorkout(name: "Tempo", icon: "speedometer", description: "Fart træning", color: "orange"),
 ]
 
 func colorFromName(_ n: String) -> Color {
@@ -42,9 +42,10 @@ struct ContentView: View {
     @StateObject private var auth = AuthManager.shared
     @StateObject private var sync = SyncManager.shared
     @StateObject private var training = TrainingManager.shared
+    @State private var navPath = NavigationPath()
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navPath) {
             ScrollView {
             VStack(spacing: 8) {
                 if workout.isRunning {
@@ -161,9 +162,9 @@ struct ContentView: View {
                     .tint(.green)
                     .controlSize(.large)
                     NavigationLink {
-                        WorkoutPickerView(workout: workout)
+                        WorkoutPickerView(workout: workout, navPath: $navPath)
                     } label: {
-                        Label("Vaelg anden traening", systemImage: "list.bullet")
+                        Label("Vælg anden træning", systemImage: "list.bullet")
                             .font(.system(size: 11))
                             .frame(maxWidth: .infinity)
                     }
@@ -181,12 +182,13 @@ struct ContentView: View {
 
 struct WorkoutPickerView: View {
     @ObservedObject var workout: WorkoutManager
+    @Binding var navPath: NavigationPath
     var body: some View {
         ScrollView {
             VStack(spacing: 6) {
                 ForEach(standardWorkouts) { w in
                     NavigationLink {
-                        WorkoutGoalView(workout: workout, selected: w)
+                        WorkoutGoalView(workout: workout, selected: w, navPath: $navPath)
                     } label: {
                         HStack {
                             Image(systemName: w.icon)
@@ -206,13 +208,14 @@ struct WorkoutPickerView: View {
             }
             .padding(6)
         }
-        .navigationTitle("Vaelg")
+        .navigationTitle("Vælg")
     }
 }
 
 struct WorkoutGoalView: View {
     @ObservedObject var workout: WorkoutManager
     let selected: StandardWorkout
+    @Binding var navPath: NavigationPath
     @State private var targetKm: Double = 0
     @State private var targetMin: Int = 0
     @Environment(\.dismiss) private var dismiss
@@ -236,12 +239,12 @@ struct WorkoutGoalView: View {
                     Stepper("", value: $targetMin, in: 0...180, step: 5)
                         .labelsHidden()
                 }
-                Text(targetKm == 0 && targetMin == 0 ? "Frit (intet maal)" : "")
+                Text(targetKm == 0 && targetMin == 0 ? "Frit (intet mål)" : "")
                     .font(.system(size: 9))
                     .foregroundColor(.gray)
                 Button(action: {
                     workout.start(type: selected.name, targetKm: targetKm, targetMinutes: targetMin)
-                    dismiss()
+                    navPath = NavigationPath()
                 }) {
                     Label("Start", systemImage: "play.fill")
                         .frame(maxWidth: .infinity)
@@ -251,7 +254,7 @@ struct WorkoutGoalView: View {
             }
             .padding(8)
         }
-        .navigationTitle("Maal")
+        .navigationTitle("Mål")
     }
 }
 
