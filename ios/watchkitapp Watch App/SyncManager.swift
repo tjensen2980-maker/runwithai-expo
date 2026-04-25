@@ -3,6 +3,8 @@ import Combine
 
 class SyncManager: ObservableObject {
     static let shared = SyncManager()
+    @Published var aiSuggestion: [String: Any]? = nil
+    @Published var aiLoading: Bool = false
 
     @Published var isSyncing: Bool = false
     @Published var lastSyncStatus: String = "Aldrig synket"
@@ -279,6 +281,51 @@ class SyncManager: ObservableObject {
                     TrainingManager.shared.todayTraining = updated
                 }
             }
+        }.resume()
+    }
+
+
+    func fetchWorkoutSuggestion(type: String) {
+        // Check cache (24 timer)
+        let cacheKey = "ai_sugg_\(type)"
+        let cacheTimeKey = "ai_sugg_time_\(type)"
+        if let cachedTime = UserDefaults.standard.object(forKey: cacheTimeKey) as? Date,
+           Date().timeIntervalSince(cachedTime) < 86400,
+           let cachedData = UserDefaults.standard.data(forKey: cacheKey),
+           let dict = try? JSONSerialization.jsonObject(with: cachedData) as? [String: Any] {
+            DispatchQueue.main.async { self.aiSuggestion = dict }
+            return
+        }
+        guard let token = AuthManager.shared.token, !token.isEmpty else { return }
+        let serverUrl = AuthManager.shared.serverUrl
+        guard let url = URL(string: "\(serverUrl)/chat") else { return }
+        DispatchQueue.main.async { self.aiLoading = true }
+        let systemPrompt = "Du er en ekspert loebecoach. Generer et konkret traeningsforslag paa dansk. Svar KUN i dette JSON-format uden markdown: {"intro":"kort beskrivelse 1-2 saetninger","steps":["trin 1","trin 2"],"total_km":5.0,"total_min":30,"intensity":"Z3-Z4"}"
+        let userMsg = "Foreslaa en \(type)-traening for mig. Giv konkrete distancer, tid og intensitetszoner."
+        let body: [String: Any] = [
+            "model": "claude-sonnet-4-20250514",
+            "max_tokens": 400,
+            "system": systemPrompt,
+            "messages": [["role": "user", "content": userMsg]]
+        ]
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        URLSession.shared.dataTask(with: request) { data, _, _ in
+            DispatchQueue.main.async { self.aiLoading = false }
+            guard let data = data,
+                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let content = json["content"] as? [[String: Any]],
+                  let first = content.first,
+                  let text = first["text"] as? String else { return }
+            let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard let tData = trimmed.data(using: .utf8),
+                  let dict = try? JSONSerialization.jsonObject(with: tData) as? [String: Any] else { return }
+            UserDefaults.standard.set(tData, forKey: cacheKey)
+            UserDefaults.standard.set(Date(), forKey: cacheTimeKey)
+            DispatchQueue.main.async { self.aiSuggestion = dict }
         }.resume()
     }
 

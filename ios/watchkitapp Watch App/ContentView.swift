@@ -218,6 +218,7 @@ struct WorkoutGoalView: View {
     @ObservedObject var workout: WorkoutManager
     let selected: StandardWorkout
     @Binding var isPresented: Bool
+    @ObservedObject private var sync = SyncManager.shared
     @State private var targetKm: Double = 0
     @State private var targetMin: Int = 0
     @Environment(\.dismiss) private var dismiss
@@ -229,6 +230,27 @@ struct WorkoutGoalView: View {
                     .foregroundColor(colorFromName(selected.color))
                 Text(selected.name)
                     .font(.headline)
+                if sync.aiLoading {
+                    ProgressView().scaleEffect(0.7)
+                    Text("AI taenker...").font(.system(size: 9)).foregroundColor(.gray)
+                } else if let sugg = sync.aiSuggestion {
+                    VStack(alignment: .leading, spacing: 4) {
+                        if let intro = sugg["intro"] as? String {
+                            Text(intro).font(.system(size: 10)).foregroundColor(.cyan)
+                        }
+                        if let steps = sugg["steps"] as? [String] {
+                            ForEach(steps, id: \.self) { step in
+                                Text("• \(step)").font(.system(size: 9)).foregroundColor(.white)
+                            }
+                        }
+                        if let intensity = sugg["intensity"] as? String {
+                            Text("Intensitet: \(intensity)").font(.system(size: 9, weight: .bold)).foregroundColor(.orange)
+                        }
+                    }
+                    .padding(6)
+                    .background(Color.gray.opacity(0.15))
+                    .cornerRadius(6)
+                }
                 VStack(spacing: 2) {
                     Text("Distance: \(String(format: "%.1f", targetKm)) km")
                         .font(.system(size: 11))
@@ -257,6 +279,7 @@ struct WorkoutGoalView: View {
             .padding(8)
         }
         .navigationTitle("Mål")
+        .onAppear { sync.fetchWorkoutSuggestion(type: selected.name) }
     }
 }
 
