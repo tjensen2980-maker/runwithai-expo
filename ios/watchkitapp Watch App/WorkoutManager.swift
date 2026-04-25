@@ -5,6 +5,9 @@ class WorkoutManager: ObservableObject {
     @Published var isRunning: Bool = false
     @Published var isPaused: Bool = false
     @Published var elapsedSeconds: Int = 0
+    @Published var targetKm: Double = 0
+    @Published var targetMinutes: Int = 0
+    @Published var workoutType: String = "Regulaer"
 
     let locationManager = LocationManager()
     let store = WorkoutStore.shared
@@ -14,7 +17,10 @@ class WorkoutManager: ObservableObject {
     private var timerStartDate: Date?
     private var accumulatedSeconds: Int = 0
 
-    func start() {
+    func start(type: String = "Regulaer", targetKm: Double = 0, targetMinutes: Int = 0) {
+        self.workoutType = type
+        self.targetKm = targetKm
+        self.targetMinutes = targetMinutes
         locationManager.requestPermission()
         elapsedSeconds = 0
         accumulatedSeconds = 0

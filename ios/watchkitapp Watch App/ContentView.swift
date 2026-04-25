@@ -1,5 +1,34 @@
 import SwiftUI
 
+struct StandardWorkout: Identifiable, Hashable {
+    let id = UUID()
+    let name: String
+    let icon: String
+    let description: String
+    let color: String
+}
+
+let standardWorkouts: [StandardWorkout] = [
+    StandardWorkout(name: "Loeb", icon: "figure.run", description: "Frit loeb", color: "green"),
+    StandardWorkout(name: "Interval", icon: "bolt.fill", description: "Hoej intensitet", color: "red"),
+    StandardWorkout(name: "Langt loeb", icon: "map", description: "Lav intensitet", color: "blue"),
+    StandardWorkout(name: "Restitution", icon: "leaf.fill", description: "Let loeb", color: "mint"),
+    StandardWorkout(name: "Gaa/Loeb", icon: "figure.walk", description: "Vekslende", color: "cyan"),
+    StandardWorkout(name: "Tempo", icon: "speedometer", description: "Fart traening", color: "orange"),
+]
+
+func colorFromName(_ n: String) -> Color {
+    switch n {
+    case "red": return .red
+    case "blue": return .blue
+    case "mint": return .mint
+    case "cyan": return .cyan
+    case "orange": return .orange
+    default: return .green
+    }
+}
+
+
 
 func todayLongDa() -> String {
     let days = ["Søndag","Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag"]
@@ -15,7 +44,8 @@ struct ContentView: View {
     @StateObject private var training = TrainingManager.shared
 
     var body: some View {
-        ScrollView {
+        NavigationStack {
+            ScrollView {
             VStack(spacing: 8) {
                 if workout.isRunning {
                     Text(workout.formattedTime)
@@ -130,10 +160,98 @@ struct ContentView: View {
                     }
                     .tint(.green)
                     .controlSize(.large)
+                    NavigationLink {
+                        WorkoutPickerView(workout: workout)
+                    } label: {
+                        Label("Vaelg anden traening", systemImage: "list.bullet")
+                            .font(.system(size: 11))
+                            .frame(maxWidth: .infinity)
+                    }
+                    .tint(.blue)
                 }
             }
             .padding(.horizontal, 4)
         }
+    }
+}
+
+}
+
+
+
+struct WorkoutPickerView: View {
+    @ObservedObject var workout: WorkoutManager
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 6) {
+                ForEach(standardWorkouts) { w in
+                    NavigationLink {
+                        WorkoutGoalView(workout: workout, selected: w)
+                    } label: {
+                        HStack {
+                            Image(systemName: w.icon)
+                                .foregroundColor(colorFromName(w.color))
+                                .frame(width: 24)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(w.name)
+                                    .font(.system(size: 13, weight: .semibold))
+                                Text(w.description)
+                                    .font(.system(size: 9))
+                                    .foregroundColor(.gray)
+                            }
+                            Spacer()
+                        }
+                    }
+                }
+            }
+            .padding(6)
+        }
+        .navigationTitle("Vaelg")
+    }
+}
+
+struct WorkoutGoalView: View {
+    @ObservedObject var workout: WorkoutManager
+    let selected: StandardWorkout
+    @State private var targetKm: Double = 0
+    @State private var targetMin: Int = 0
+    @Environment(\.dismiss) private var dismiss
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 8) {
+                Image(systemName: selected.icon)
+                    .font(.system(size: 30))
+                    .foregroundColor(colorFromName(selected.color))
+                Text(selected.name)
+                    .font(.headline)
+                VStack(spacing: 2) {
+                    Text("Distance: \(String(format: "%.1f", targetKm)) km")
+                        .font(.system(size: 11))
+                    Stepper("", value: $targetKm, in: 0...50, step: 0.5)
+                        .labelsHidden()
+                }
+                VStack(spacing: 2) {
+                    Text("Tid: \(targetMin) min")
+                        .font(.system(size: 11))
+                    Stepper("", value: $targetMin, in: 0...180, step: 5)
+                        .labelsHidden()
+                }
+                Text(targetKm == 0 && targetMin == 0 ? "Frit (intet maal)" : "")
+                    .font(.system(size: 9))
+                    .foregroundColor(.gray)
+                Button(action: {
+                    workout.start(type: selected.name, targetKm: targetKm, targetMinutes: targetMin)
+                    dismiss()
+                }) {
+                    Label("Start", systemImage: "play.fill")
+                        .frame(maxWidth: .infinity)
+                }
+                .tint(.green)
+                .controlSize(.large)
+            }
+            .padding(8)
+        }
+        .navigationTitle("Maal")
     }
 }
 
