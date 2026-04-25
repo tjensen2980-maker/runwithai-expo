@@ -42,11 +42,10 @@ struct ContentView: View {
     @StateObject private var auth = AuthManager.shared
     @StateObject private var sync = SyncManager.shared
     @StateObject private var training = TrainingManager.shared
-    @State private var navPath = NavigationPath()
-
+    @State private var showPicker: Bool = false
+    
     var body: some View {
-        NavigationStack(path: $navPath) {
-            ScrollView {
+        ScrollView {
             VStack(spacing: 8) {
                 if workout.isRunning {
                     Text(workout.formattedTime)
@@ -161,9 +160,7 @@ struct ContentView: View {
                     }
                     .tint(.green)
                     .controlSize(.large)
-                    NavigationLink {
-                        WorkoutPickerView(workout: workout, navPath: $navPath)
-                    } label: {
+                    Button(action: { showPicker = true }) {
                         Label("Vælg anden træning", systemImage: "list.bullet")
                             .font(.system(size: 11))
                             .frame(maxWidth: .infinity)
@@ -172,10 +169,9 @@ struct ContentView: View {
                 }
             }
             .padding(.horizontal, 4)
-        }
     }
-    .onChange(of: workout.popToRootCounter) { _ in
-        navPath = NavigationPath()
+    .sheet(isPresented: $showPicker) {
+        WorkoutPickerView(workout: workout, isPresented: $showPicker)
     }
 }
 
@@ -185,13 +181,15 @@ struct ContentView: View {
 
 struct WorkoutPickerView: View {
     @ObservedObject var workout: WorkoutManager
-    @Binding var navPath: NavigationPath
+    @Binding var isPresented: Bool
+    @State private var selectedWorkout: StandardWorkout? = nil
     var body: some View {
+        NavigationStack {
         ScrollView {
             VStack(spacing: 6) {
                 ForEach(standardWorkouts) { w in
                     NavigationLink {
-                        WorkoutGoalView(workout: workout, selected: w, navPath: $navPath)
+                        WorkoutGoalView(workout: workout, selected: w, isPresented: $isPresented)
                     } label: {
                         HStack {
                             Image(systemName: w.icon)
@@ -212,13 +210,14 @@ struct WorkoutPickerView: View {
             .padding(6)
         }
         .navigationTitle("Vælg")
+        }
     }
 }
 
 struct WorkoutGoalView: View {
     @ObservedObject var workout: WorkoutManager
     let selected: StandardWorkout
-    @Binding var navPath: NavigationPath
+    @Binding var isPresented: Bool
     @State private var targetKm: Double = 0
     @State private var targetMin: Int = 0
     @Environment(\.dismiss) private var dismiss
@@ -247,9 +246,7 @@ struct WorkoutGoalView: View {
                     .foregroundColor(.gray)
                 Button(action: {
                     workout.start(type: selected.name, targetKm: targetKm, targetMinutes: targetMin)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                        navPath = NavigationPath()
-                    }
+                    isPresented = false
                 }) {
                     Label("Start", systemImage: "play.fill")
                         .frame(maxWidth: .infinity)
