@@ -417,7 +417,7 @@ function FullRouteMapModal({ route, run, visible, onClose }) {
   const km = run?.km?.toFixed(2) || '–';
   const pace = fmtPace(getRunPace(run));
   const time = fmtTime(getRunDuration(run));
-  const runType = run?.type === 'walk' ? 'Gåtur' : 'Løb';
+  const runType = (run?.type && !["run","walk"].includes(run.type)) ? run.type : (run?.type === "walk" ? "Gåtur" : "Løb");
 
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
@@ -668,7 +668,7 @@ function RunCard({ run, level, allRuns, onDelete }) {
   const time = fmtTime(getRunDuration(run));
   const hr = getRunHR(run) ? `${getRunHR(run)} bpm` : '–';
   const route = getRunRoute(run);
-  const runType = run.type === 'walk' ? 'Gåtur' : 'Løb';
+  const runType = (run.type && !["run","walk"].includes(run.type)) ? run.type : (run.type === "walk" ? "Gåtur" : "Løb");
   const splits = (() => { try { return run.splits ? JSON.parse(run.splits) : []; } catch { return []; } })();
   
   // Run/walk breakdown

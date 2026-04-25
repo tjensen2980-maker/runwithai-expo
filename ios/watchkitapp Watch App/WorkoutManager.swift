@@ -66,7 +66,7 @@ class WorkoutManager: ObservableObject {
             let routePoints = locationManager.route.map { Workout.RoutePoint(from: $0) }
             let distanceM = locationManager.distance
             let pace = Workout.calculatePace(durationSec: elapsedSeconds, distanceMeters: distanceM)
-            let activityType = pace > 8.0 ? "walk" : "run"
+            let activityType = self.workoutType == "Regulaer" ? (pace > 8.0 ? "walk" : "run") : self.workoutType
 
             let workout = Workout(
                 id: UUID().uuidString,
