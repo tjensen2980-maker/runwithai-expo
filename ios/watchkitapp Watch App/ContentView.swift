@@ -37,7 +37,7 @@ func todayLongDa() -> String {
 }
 
 struct ContentView: View {
-    @StateObject private var workout = WorkoutManager()
+    @StateObject private var workout = WorkoutManager.shared
     @StateObject private var store = WorkoutStore.shared
     @StateObject private var auth = AuthManager.shared
     @StateObject private var sync = SyncManager.shared

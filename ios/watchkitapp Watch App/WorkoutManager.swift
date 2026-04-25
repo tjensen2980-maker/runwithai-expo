@@ -2,6 +2,7 @@ import Foundation
 import Combine
 
 class WorkoutManager: ObservableObject {
+    static let shared = WorkoutManager()
     @Published var isRunning: Bool = false
     @Published var isPaused: Bool = false
     @Published var elapsedSeconds: Int = 0
