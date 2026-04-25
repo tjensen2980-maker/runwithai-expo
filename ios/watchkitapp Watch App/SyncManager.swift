@@ -300,7 +300,7 @@ class SyncManager: ObservableObject {
         let serverUrl = AuthManager.shared.serverUrl
         guard let url = URL(string: "\(serverUrl)/chat") else { return }
         DispatchQueue.main.async { self.aiLoading = true }
-        let systemPrompt = "Du er en ekspert loebecoach. Generer et konkret traeningsforslag paa dansk. Svar KUN i dette JSON-format uden markdown: {"intro":"kort beskrivelse 1-2 saetninger","steps":["trin 1","trin 2"],"total_km":5.0,"total_min":30,"intensity":"Z3-Z4"}"
+        let systemPrompt = "Du er en ekspert loebecoach. Generer et konkret traeningsforslag paa dansk. Svar KUN i dette JSON-format uden markdown: {\"intro\":\"kort beskrivelse 1-2 saetninger\",\"steps\":[\"trin 1\",\"trin 2\"],\"total_km\":5.0,\"total_min\":30,\"intensity\":\"Z3-Z4\"}"
         let userMsg = "Foreslaa en \(type)-traening for mig. Giv konkrete distancer, tid og intensitetszoner."
         let body: [String: Any] = [
             "model": "claude-sonnet-4-20250514",
