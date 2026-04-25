@@ -9,6 +9,7 @@ class WorkoutManager: ObservableObject {
     @Published var targetKm: Double = 0
     @Published var targetMinutes: Int = 0
     @Published var workoutType: String = "Regulaer"
+    @Published var popToRootCounter: Int = 0
 
     let locationManager = LocationManager()
     let store = WorkoutStore.shared
@@ -22,6 +23,7 @@ class WorkoutManager: ObservableObject {
         self.workoutType = type
         self.targetKm = targetKm
         self.targetMinutes = targetMinutes
+        self.popToRootCounter += 1
         locationManager.requestPermission()
         elapsedSeconds = 0
         accumulatedSeconds = 0

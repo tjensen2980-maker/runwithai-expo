@@ -174,6 +174,9 @@ struct ContentView: View {
             .padding(.horizontal, 4)
         }
     }
+    .onChange(of: workout.popToRootCounter) { _ in
+        navPath = NavigationPath()
+    }
 }
 
 }
