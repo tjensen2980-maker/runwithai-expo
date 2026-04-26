@@ -106,22 +106,9 @@ struct WorkoutPagesView: View {
         .padding(.horizontal, 8)
     }
 
-    // MARK: Side 4 - Map med rute + tilbage-knap
+    // MARK: Side 4 - Map med rute + tilbage-knap som overlay
     private var page4: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Button(action: { selectedTab = 0 }) {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 11, weight: .bold))
-                        .foregroundColor(.white)
-                        .padding(5)
-                        .background(Circle().fill(Color.green.opacity(0.85)))
-                }
-                .buttonStyle(.plain)
-                Spacer()
-            }
-            .padding(.leading, 4)
-            .padding(.top, 2)
+        Group {
             if workout.locationManager.route.isEmpty {
                 VStack {
                     Image(systemName: "map")
@@ -138,6 +125,17 @@ struct WorkoutPagesView: View {
                         .stroke(.green, lineWidth: 3)
                 }
             }
+        }
+        .overlay(alignment: .topLeading) {
+            Button(action: { selectedTab = 0 }) {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundColor(.white)
+                    .padding(5)
+                    .background(Circle().fill(Color.green.opacity(0.85)))
+            }
+            .buttonStyle(.plain)
+            .padding(6)
         }
     }
 
