@@ -1133,6 +1133,7 @@ INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "RunWithAI bruger GPS til at
 INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "RunWithAI bruger GPS i baggrunden til at tracke hele dit lob";
 INFOPLIST_KEY_NSHealthShareUsageDescription = "RunWithAI laeser puls under traening";
 INFOPLIST_KEY_NSHealthUpdateUsageDescription = "RunWithAI gemmer din traening i Health";
+INFOPLIST_KEY_WKBackgroundModes = "workout-processing";
 INFOPLIST_KEY_NSMotionUsageDescription = "RunWithAI bruger bevaegelsesdata til at tracke din aktivitet";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1186,6 +1187,7 @@ INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "RunWithAI bruger GPS til at
 INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "RunWithAI bruger GPS i baggrunden til at tracke hele dit lob";
 INFOPLIST_KEY_NSHealthShareUsageDescription = "RunWithAI laeser puls under traening";
 INFOPLIST_KEY_NSHealthUpdateUsageDescription = "RunWithAI gemmer din traening i Health";
+INFOPLIST_KEY_WKBackgroundModes = "workout-processing";
 INFOPLIST_KEY_NSMotionUsageDescription = "RunWithAI bruger bevaegelsesdata til at tracke din aktivitet";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
