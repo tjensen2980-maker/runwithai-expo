@@ -343,12 +343,14 @@ class SyncManager: ObservableObject {
             DispatchQueue.main.async { self.aiSuggestion = dict }
             return
         }
+        fetchRecentRuns(limit: 5) { runs in
         guard let token = AuthManager.shared.token, !token.isEmpty else { return }
         let serverUrl = AuthManager.shared.serverUrl
         guard let url = URL(string: "\(serverUrl)/chat") else { return }
         DispatchQueue.main.async { self.aiLoading = true }
-        let systemPrompt = "Du er en ekspert loebecoach. Generer et konkret traeningsforslag paa dansk. Svar KUN i dette JSON-format uden markdown: {\"intro\":\"kort beskrivelse 1-2 saetninger\",\"steps\":[\"trin 1\",\"trin 2\"],\"total_km\":5.0,\"total_min\":30,\"intensity\":\"Z3-Z4\"}"
-        let userMsg = "Foreslaa en \(type)-traening for mig. Giv konkrete distancer, tid og intensitetszoner."
+        let history = self.formatRunsForAI(runs)
+        let systemPrompt = "Du er en ekspert loebecoach. Generer et personaliseret traeningsforslag paa dansk baseret paa brugerens historik. Tag hoejde for niveau og restitution. Svar KUN i dette JSON-format uden markdown: {\"intro\":\"kort beskrivelse 1-2 saetninger\",\"steps\":[\"trin 1\",\"trin 2\"],\"total_km\":5.0,\"total_min\":30,\"intensity\":\"Z3-Z4\"}"
+        let userMsg = "Foreslaa en \(type)-traening for mig. \(history) Giv konkrete distancer, tid og intensitetszoner tilpasset mit niveau."
         let body: [String: Any] = [
             "model": "claude-sonnet-4-20250514",
             "max_tokens": 400,
@@ -374,6 +376,7 @@ class SyncManager: ObservableObject {
             UserDefaults.standard.set(Date(), forKey: cacheTimeKey)
             DispatchQueue.main.async { self.aiSuggestion = dict }
         }.resume()
+        }
     }
 
 }
