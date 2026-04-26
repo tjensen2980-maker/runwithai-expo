@@ -280,11 +280,19 @@ struct WorkoutGoalView: View {
         }
         .navigationTitle("Mål")
         .onAppear { sync.fetchWorkoutSuggestion(type: selected.name) }
-        .onChange(of: sync.aiSuggestion?["total_km"] as? Double) { newValue in
-            if let v = newValue, targetKm == 0 { targetKm = v }
-        }
-        .onChange(of: sync.aiSuggestion?["total_min"] as? Int) { newValue in
-            if let v = newValue, targetMin == 0 { targetMin = v }
+        .onChange(of: sync.aiLoading) { _ in
+            if let sugg = sync.aiSuggestion {
+                if targetKm == 0 {
+                    if let v = sugg["total_km"] as? Double { targetKm = v }
+                    else if let v = sugg["total_km"] as? Int { targetKm = Double(v) }
+                    else if let v = sugg["total_km"] as? NSNumber { targetKm = v.doubleValue }
+                }
+                if targetMin == 0 {
+                    if let v = sugg["total_min"] as? Int { targetMin = v }
+                    else if let v = sugg["total_min"] as? Double { targetMin = Int(v) }
+                    else if let v = sugg["total_min"] as? NSNumber { targetMin = v.intValue }
+                }
+            }
         }
     }
 }
