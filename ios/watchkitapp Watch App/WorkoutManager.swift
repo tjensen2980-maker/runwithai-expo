@@ -65,7 +65,7 @@ class WorkoutManager: NSObject, ObservableObject {
             self.session = s
             self.builder = b
             let startDate = Date()
-            s.startActivity(date: startDate)
+            s.startActivity(with: startDate)
             b.beginCollection(withStart: startDate) { success, error in
                 print("[HK] beginCollection: SUCC")
             }
