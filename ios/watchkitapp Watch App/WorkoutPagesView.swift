@@ -14,7 +14,7 @@ struct WorkoutPagesView: View {
             page3.tag(2)
             page4.tag(3)
         }
-        .tabViewStyle(.page(indexDisplayMode: .always))
+        .tabViewStyle(.page(indexDisplayMode: .automatic))
         .alert("Stop traening?", isPresented: $showStopConfirm) {
             Button("Stop", role: .destructive) { workout.stop() }
             Button("Fortsaet", role: .cancel) {}
@@ -106,9 +106,9 @@ struct WorkoutPagesView: View {
         .padding(.horizontal, 8)
     }
 
-    // MARK: Side 4 - Map med rute + lille tilbage-knap nederst
+    // MARK: Side 4 - Map (ingen knap, kun zoom-interaktion)
     private var page4: some View {
-        VStack(spacing: 0) {
+        Group {
             if workout.locationManager.route.isEmpty {
                 VStack {
                     Image(systemName: "map")
@@ -120,19 +120,11 @@ struct WorkoutPagesView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
-                Map {
+                Map(interactionModes: [.zoom]) {
                     MapPolyline(coordinates: workout.locationManager.route.map { $0.coordinate })
                         .stroke(.green, lineWidth: 3)
                 }
             }
-            Color.green
-                .frame(height: 16)
-                .overlay(
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 10, weight: .bold))
-                        .foregroundColor(.white)
-                )
-                .onTapGesture { selectedTab = 0 }
         }
     }
 
