@@ -125,21 +125,15 @@ struct WorkoutPagesView: View {
                         .stroke(.green, lineWidth: 3)
                 }
             }
-            HStack {
-                Spacer()
-                Button(action: { selectedTab = 0 }) {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 12, weight: .bold))
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 4)
-                        .background(Capsule().fill(Color.green))
-                }
-                .buttonStyle(.plain)
-                Spacer()
+            Button(action: { selectedTab = 0 }) {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 2)
+                    .background(Color.green)
             }
-            .padding(.top, 2)
-            .padding(.bottom, 2)
+            .buttonStyle(.plain)
         }
     }
 
