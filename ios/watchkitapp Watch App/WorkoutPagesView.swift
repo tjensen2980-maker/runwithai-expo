@@ -108,7 +108,20 @@ struct WorkoutPagesView: View {
 
     // MARK: Side 4 - Map med rute + tilbage-knap
     private var page4: some View {
-        ZStack(alignment: .topLeading) {
+        VStack(spacing: 0) {
+            Button(action: { selectedTab = 0 }) {
+                HStack(spacing: 4) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 12, weight: .bold))
+                    Text("Tilbage")
+                        .font(.system(size: 12, weight: .semibold))
+                }
+                .foregroundColor(.white)
+                .padding(.vertical, 4)
+                .frame(maxWidth: .infinity)
+                .background(Color.green.opacity(0.8))
+            }
+            .buttonStyle(.plain)
             if workout.locationManager.route.isEmpty {
                 VStack {
                     Image(systemName: "map")
@@ -125,15 +138,6 @@ struct WorkoutPagesView: View {
                         .stroke(.green, lineWidth: 3)
                 }
             }
-            Button(action: { selectedTab = 0 }) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(.white)
-                    .padding(6)
-                    .background(Circle().fill(Color.black.opacity(0.6)))
-            }
-            .buttonStyle(.plain)
-            .padding(6)
         }
     }
 
