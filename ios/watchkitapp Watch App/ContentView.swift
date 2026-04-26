@@ -70,6 +70,40 @@ struct ContentView: View {
                         }
                     }
 
+                    HStack(spacing: 12) {
+                        VStack(spacing: 2) {
+                            Text("Puls")
+                                .font(.caption2)
+                                .foregroundColor(.gray)
+                            Text("\(workout.currentBpm)")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(.red)
+                        }
+                        VStack(spacing: 2) {
+                            Text("Kadence")
+                                .font(.caption2)
+                                .foregroundColor(.gray)
+                            Text("\(workout.currentSpm)")
+                                .font(.system(size: 14, weight: .semibold))
+                        }
+                    }
+                    HStack(spacing: 12) {
+                        VStack(spacing: 2) {
+                            Text("Kalorier")
+                                .font(.caption2)
+                                .foregroundColor(.gray)
+                            Text("\(Int(workout.activeKcal))")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(.orange)
+                        }
+                        VStack(spacing: 2) {
+                            Text("Højde")
+                                .font(.caption2)
+                                .foregroundColor(.gray)
+                            Text("+\(Int(workout.totalAscent))m")
+                                .font(.system(size: 14, weight: .semibold))
+                        }
+                    }
                     if workout.isPaused {
                         Button(action: { workout.resume() }) {
                             Label("Fortsæt", systemImage: "play.fill")
