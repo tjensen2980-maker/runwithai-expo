@@ -280,6 +280,12 @@ struct WorkoutGoalView: View {
         }
         .navigationTitle("Mål")
         .onAppear { sync.fetchWorkoutSuggestion(type: selected.name) }
+        .onChange(of: sync.aiSuggestion?["total_km"] as? Double) { newValue in
+            if let v = newValue, targetKm == 0 { targetKm = v }
+        }
+        .onChange(of: sync.aiSuggestion?["total_min"] as? Int) { newValue in
+            if let v = newValue, targetMin == 0 { targetMin = v }
+        }
     }
 }
 
