@@ -106,9 +106,9 @@ struct WorkoutPagesView: View {
         .padding(.horizontal, 8)
     }
 
-    // MARK: Side 4 - Map med rute + tilbage-knap som overlay
+    // MARK: Side 4 - Map med rute + tilbage-knap (zIndex sikrer tap)
     private var page4: some View {
-        Group {
+        ZStack(alignment: .topLeading) {
             if workout.locationManager.route.isEmpty {
                 VStack {
                     Image(systemName: "map")
@@ -125,17 +125,18 @@ struct WorkoutPagesView: View {
                         .stroke(.green, lineWidth: 3)
                 }
             }
-        }
-        .overlay(alignment: .topLeading) {
             Button(action: { selectedTab = 0 }) {
                 Image(systemName: "chevron.left")
                     .font(.system(size: 11, weight: .bold))
                     .foregroundColor(.white)
-                    .padding(5)
-                    .background(Circle().fill(Color.green.opacity(0.85)))
+                    .padding(6)
+                    .background(Circle().fill(Color.green))
+                    .shadow(radius: 2)
             }
             .buttonStyle(.plain)
+            .contentShape(Circle())
             .padding(6)
+            .zIndex(100)
         }
     }
 
@@ -151,7 +152,7 @@ struct WorkoutPagesView: View {
         .frame(maxWidth: .infinity)
     }
 
-    private var maxHr: Double { 190.0 }
+    private var maxHr: Double { workout.userMaxHr > 0 ? workout.userMaxHr : 190.0 }
 
     private func zoneLabel(for bpm: Int) -> String {
         if bpm <= 0 { return "..." }

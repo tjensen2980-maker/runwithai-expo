@@ -12,6 +12,7 @@ class WorkoutManager: NSObject, ObservableObject {
     @Published var targetKm: Double = 0
     @Published var targetMinutes: Int = 0
     @Published var workoutType: String = "Regulaer"
+    @Published var userMaxHr: Double = 190.0
     @Published var popToRootCounter: Int = 0
 
     // NYE: Live HealthKit metrics

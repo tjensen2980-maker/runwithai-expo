@@ -20,6 +20,8 @@ class SyncManager: ObservableObject {
 
     func startPeriodicSync() {
         timer?.invalidate()
+        // Hent profil ved start (max_hr / age) saa pulszoner er korrekte
+        fetchProfile()
         timer = Timer.scheduledTimer(withTimeInterval: 60.0, repeats: true) { [weak self] _ in
             self?.syncPending()
         }
@@ -328,6 +330,46 @@ class SyncManager: ObservableObject {
                 completion(Array(arr.prefix(limit)))
             } else {
                 completion([])
+            }
+        }.resume()
+    }
+
+    func fetchProfile() {
+        guard let token = AuthManager.shared.token, !token.isEmpty else { return }
+        let serverUrl = AuthManager.shared.serverUrl
+        guard let url = URL(string: "\(serverUrl)/profile") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        URLSession.shared.dataTask(with: request) { data, _, _ in
+            guard let data = data,
+                  let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                print("[Sync] fetchProfile: ingen profil")
+                return
+            }
+            // Profile data fra server
+            var maxHrValue: Double = 190.0
+            // Manuel maxHr har prioritet
+            if let mhr = dict["maxHr"] as? String, let v = Double(mhr), v > 0 {
+                maxHrValue = v
+            } else if let mhr = dict["maxHr"] as? Double, mhr > 0 {
+                maxHrValue = mhr
+            } else if let mhr = dict["maxHr"] as? Int, mhr > 0 {
+                maxHrValue = Double(mhr)
+            } else {
+                // Fallback: 220 - alder
+                var age: Int = 0
+                if let ageStr = dict["age"] as? String, let a = Int(ageStr) { age = a }
+                else if let a = dict["age"] as? Int { age = a }
+                else if let a = dict["age"] as? Double { age = Int(a) }
+                if age > 0 && age < 120 {
+                    maxHrValue = Double(220 - age)
+                }
+            }
+            DispatchQueue.main.async {
+                WorkoutManager.shared.userMaxHr = maxHrValue
+                print("[Sync] userMaxHr sat til \(maxHrValue)")
             }
         }.resume()
     }
