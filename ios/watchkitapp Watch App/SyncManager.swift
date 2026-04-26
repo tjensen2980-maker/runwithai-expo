@@ -285,6 +285,53 @@ class SyncManager: ObservableObject {
     }
 
 
+    
+    
+    private func formatRunsForAI(_ runs: [[String: Any]]) -> String {
+        if runs.isEmpty { return "Ingen tidligere loeb registreret." }
+        var sumKm: Double = 0
+        var lines: [String] = []
+        for r in runs {
+            let km = (r["km"] as? Double) ?? (r["km"] as? NSNumber).map { $0.doubleValue } ?? 0
+            sumKm += km
+            let pace = (r["pace_secs_per_km"] as? Double) ?? 0
+            let date = (r["date"] as? String) ?? (r["created_at"] as? String) ?? ""
+            let type = (r["type"] as? String) ?? "run"
+            let paceMin = Int(pace) / 60
+            let paceSec = Int(pace) % 60
+            let paceStr = pace > 0 ? "\(paceMin):\(String(format: "%02d", paceSec))/km" : "?"
+            lines.append("\(String(format: "%.1f", km))km @ \(paceStr) (\(type)) \(date)")
+        }
+        return "Seneste \(runs.count) loeb (total \(String(format: "%.1f", sumKm))km): " + lines.joined(separator: "; ")
+    }
+
+    private func fetchRecentRuns(limit: Int = 5, completion: @escaping ([[String: Any]]) -> Void) {
+        guard let token = AuthManager.shared.token, !token.isEmpty else {
+            completion([])
+            return
+        }
+        let serverUrl = AuthManager.shared.serverUrl
+        guard let url = URL(string: "\(serverUrl)/runs") else {
+            completion([])
+            return
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        URLSession.shared.dataTask(with: request) { data, _, _ in
+            guard let data = data else { completion([]); return }
+            if let arr = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
+                completion(Array(arr.prefix(limit)))
+            } else if let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                      let arr = dict["runs"] as? [[String: Any]] {
+                completion(Array(arr.prefix(limit)))
+            } else {
+                completion([])
+            }
+        }.resume()
+    }
+
     func fetchWorkoutSuggestion(type: String) {
         // Check cache (24 timer)
         let cacheKey = "ai_sugg_\(type)"
