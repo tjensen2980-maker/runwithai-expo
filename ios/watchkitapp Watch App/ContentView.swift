@@ -279,20 +279,22 @@ struct WorkoutGoalView: View {
             .padding(8)
         }
         .navigationTitle("Mål")
-        .onAppear { sync.fetchWorkoutSuggestion(type: selected.name) }
-        .onChange(of: sync.aiLoading) { _ in
-            if let sugg = sync.aiSuggestion {
-                if targetKm == 0 {
-                    if let v = sugg["total_km"] as? Double { targetKm = v }
-                    else if let v = sugg["total_km"] as? Int { targetKm = Double(v) }
-                    else if let v = sugg["total_km"] as? NSNumber { targetKm = v.doubleValue }
-                }
-                if targetMin == 0 {
-                    if let v = sugg["total_min"] as? Int { targetMin = v }
-                    else if let v = sugg["total_min"] as? Double { targetMin = Int(v) }
-                    else if let v = sugg["total_min"] as? NSNumber { targetMin = v.intValue }
-                }
-            }
+        .onAppear { sync.fetchWorkoutSuggestion(type: selected.name); prefillFromAI() }
+        .onChange(of: sync.aiLoading) { _ in prefillFromAI() }
+        .onChange(of: sync.aiSuggestion != nil) { _ in prefillFromAI() }
+    }
+
+    private func prefillFromAI() {
+        guard let sugg = sync.aiSuggestion else { return }
+        if targetKm == 0 {
+            if let v = sugg["total_km"] as? Double { targetKm = v }
+            else if let v = sugg["total_km"] as? Int { targetKm = Double(v) }
+            else if let v = sugg["total_km"] as? NSNumber { targetKm = v.doubleValue }
+        }
+        if targetMin == 0 {
+            if let v = sugg["total_min"] as? Int { targetMin = v }
+            else if let v = sugg["total_min"] as? Double { targetMin = Int(v) }
+            else if let v = sugg["total_min"] as? NSNumber { targetMin = v.intValue }
         }
     }
 }
