@@ -292,7 +292,7 @@ class SyncManager: ObservableObject {
         var sumKm: Double = 0
         var lines: [String] = []
         for r in runs {
-            let km = (r["km"] as? Double) ?? (r["km"] as? NSNumber).map { $0.doubleValue } ?? 0
+            let km = (r["km"] as? Double) ?? ((r["km"] as? NSNumber)?.doubleValue) ?? 0
             sumKm += km
             let pace = (r["pace_secs_per_km"] as? Double) ?? 0
             let date = (r["date"] as? String) ?? (r["created_at"] as? String) ?? ""
