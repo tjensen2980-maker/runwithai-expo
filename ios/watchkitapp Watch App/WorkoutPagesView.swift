@@ -5,13 +5,14 @@ import CoreLocation
 struct WorkoutPagesView: View {
     @ObservedObject var workout: WorkoutManager
     @State private var showStopConfirm = false
+    @State private var selectedTab = 0
 
     var body: some View {
-        TabView {
-            page1
-            page2
-            page3
-            page4
+        TabView(selection: $selectedTab) {
+            page1.tag(0)
+            page2.tag(1)
+            page3.tag(2)
+            page4.tag(3)
         }
         .tabViewStyle(.page(indexDisplayMode: .always))
         .alert("Stop traening?", isPresented: $showStopConfirm) {
@@ -20,7 +21,7 @@ struct WorkoutPagesView: View {
         }
     }
 
-    // MARK: Side 1 - Tid, Distance, Tempo
+    // MARK: Side 1 - Tid, Distance, Tempo + Pause/Stop
     private var page1: some View {
         VStack(spacing: 4) {
             Text(workout.formattedTime)
@@ -39,55 +40,75 @@ struct WorkoutPagesView: View {
             Text("min/km")
                 .font(.caption2)
                 .foregroundColor(.gray)
-            controlButtons
+            HStack(spacing: 6) {
+                if workout.isPaused {
+                    Button(action: { workout.resume() }) {
+                        Image(systemName: "play.fill")
+                            .font(.system(size: 14))
+                            .frame(maxWidth: .infinity)
+                    }
+                    .tint(.green)
+                } else {
+                    Button(action: { workout.pause() }) {
+                        Image(systemName: "pause.fill")
+                            .font(.system(size: 14))
+                            .frame(maxWidth: .infinity)
+                    }
+                    .tint(.orange)
+                }
+                Button(action: { showStopConfirm = true }) {
+                    Image(systemName: "stop.fill")
+                        .font(.system(size: 14))
+                        .frame(maxWidth: .infinity)
+                }
+                .tint(.red)
+            }
         }
         .padding(.horizontal, 8)
     }
 
     // MARK: Side 2 - Puls + Zone
     private var page2: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 6) {
             Text("BPM")
                 .font(.caption2)
                 .foregroundColor(.gray)
             Text("\(workout.currentBpm)")
-                .font(.system(size: 48, weight: .heavy, design: .rounded))
+                .font(.system(size: 56, weight: .heavy, design: .rounded))
                 .monospacedDigit()
                 .foregroundColor(zoneColor(for: workout.currentBpm))
             Text(zoneLabel(for: workout.currentBpm))
-                .font(.system(size: 14, weight: .semibold))
+                .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(zoneColor(for: workout.currentBpm))
-            controlButtons
         }
         .padding(.horizontal, 8)
     }
 
     // MARK: Side 3 - Kadence, Kalorier, Hoejde
     private var page3: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: 10) {
             HStack {
                 metricBox(label: "SPM", value: "\(workout.currentSpm)", color: .blue)
                 metricBox(label: "kcal", value: "\(Int(workout.activeKcal))", color: .orange)
             }
-            VStack(spacing: 0) {
+            VStack(spacing: 2) {
                 Text("Hoejde")
                     .font(.caption2)
                     .foregroundColor(.gray)
                 Text("+\(Int(workout.totalAscent))m")
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(.green)
                 Text("-\(Int(workout.totalDescent))m")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(.red)
             }
-            controlButtons
         }
         .padding(.horizontal, 8)
     }
 
-    // MARK: Side 4 - Map med rute
+    // MARK: Side 4 - Map med rute + tilbage-knap
     private var page4: some View {
-        ZStack(alignment: .bottom) {
+        ZStack(alignment: .topLeading) {
             if workout.locationManager.route.isEmpty {
                 VStack {
                     Image(systemName: "map")
@@ -104,34 +125,15 @@ struct WorkoutPagesView: View {
                         .stroke(.green, lineWidth: 3)
                 }
             }
-            controlButtons
-                .padding(.bottom, 4)
-        }
-    }
-
-    private var controlButtons: some View {
-        HStack(spacing: 6) {
-            if workout.isPaused {
-                Button(action: { workout.resume() }) {
-                    Image(systemName: "play.fill")
-                        .font(.system(size: 14))
-                        .frame(maxWidth: .infinity)
-                }
-                .tint(.green)
-            } else {
-                Button(action: { workout.pause() }) {
-                    Image(systemName: "pause.fill")
-                        .font(.system(size: 14))
-                        .frame(maxWidth: .infinity)
-                }
-                .tint(.orange)
+            Button(action: { selectedTab = 0 }) {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(.white)
+                    .padding(6)
+                    .background(Circle().fill(Color.black.opacity(0.6)))
             }
-            Button(action: { showStopConfirm = true }) {
-                Image(systemName: "stop.fill")
-                    .font(.system(size: 14))
-                    .frame(maxWidth: .infinity)
-            }
-            .tint(.red)
+            .buttonStyle(.plain)
+            .padding(6)
         }
     }
 
@@ -141,7 +143,7 @@ struct WorkoutPagesView: View {
                 .font(.caption2)
                 .foregroundColor(.gray)
             Text(value)
-                .font(.system(size: 20, weight: .bold))
+                .font(.system(size: 22, weight: .bold))
                 .foregroundColor(color)
         }
         .frame(maxWidth: .infinity)
