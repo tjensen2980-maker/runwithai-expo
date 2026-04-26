@@ -13,10 +13,7 @@ struct WorkoutPagesView: View {
             page3
             page4
         }
-        .tabViewStyle(.page)
-        .onLongPressGesture(minimumDuration: 2.0) {
-            showStopConfirm = true
-        }
+        .tabViewStyle(.page(indexDisplayMode: .always))
         .alert("Stop traening?", isPresented: $showStopConfirm) {
             Button("Stop", role: .destructive) { workout.stop() }
             Button("Fortsaet", role: .cancel) {}
@@ -25,89 +22,116 @@ struct WorkoutPagesView: View {
 
     // MARK: Side 1 - Tid, Distance, Tempo
     private var page1: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: 4) {
             Text(workout.formattedTime)
-                .font(.system(size: 30, weight: .bold, design: .rounded))
+                .font(.system(size: 26, weight: .bold, design: .rounded))
                 .monospacedDigit()
                 .foregroundColor(.green)
             Text(workout.locationManager.formattedDistance)
-                .font(.system(size: 36, weight: .heavy, design: .rounded))
+                .font(.system(size: 30, weight: .heavy, design: .rounded))
                 .monospacedDigit()
             Text("km")
                 .font(.caption2)
                 .foregroundColor(.gray)
             Text(workout.locationManager.formattedPace)
-                .font(.system(size: 18, weight: .semibold))
+                .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(.cyan)
             Text("min/km")
                 .font(.caption2)
                 .foregroundColor(.gray)
-            if workout.isPaused {
-                Text("PAUSE")
-                    .font(.caption)
-                    .foregroundColor(.orange)
-            }
+            controlButtons
         }
-        .padding()
+        .padding(.horizontal, 8)
     }
 
     // MARK: Side 2 - Puls + Zone
     private var page2: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 4) {
             Text("BPM")
                 .font(.caption2)
                 .foregroundColor(.gray)
             Text("\(workout.currentBpm)")
-                .font(.system(size: 56, weight: .heavy, design: .rounded))
+                .font(.system(size: 48, weight: .heavy, design: .rounded))
                 .monospacedDigit()
                 .foregroundColor(zoneColor(for: workout.currentBpm))
             Text(zoneLabel(for: workout.currentBpm))
-                .font(.system(size: 16, weight: .semibold))
+                .font(.system(size: 14, weight: .semibold))
                 .foregroundColor(zoneColor(for: workout.currentBpm))
+            controlButtons
         }
-        .padding()
+        .padding(.horizontal, 8)
     }
 
     // MARK: Side 3 - Kadence, Kalorier, Hoejde
     private var page3: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: 6) {
             HStack {
                 metricBox(label: "SPM", value: "\(workout.currentSpm)", color: .blue)
                 metricBox(label: "kcal", value: "\(Int(workout.activeKcal))", color: .orange)
             }
-            VStack(spacing: 2) {
+            VStack(spacing: 0) {
                 Text("Hoejde")
                     .font(.caption2)
                     .foregroundColor(.gray)
                 Text("+\(Int(workout.totalAscent))m")
-                    .font(.system(size: 18, weight: .semibold))
+                    .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(.green)
                 Text("-\(Int(workout.totalDescent))m")
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(.system(size: 13, weight: .semibold))
                     .foregroundColor(.red)
             }
+            controlButtons
         }
-        .padding()
+        .padding(.horizontal, 8)
     }
 
     // MARK: Side 4 - Map med rute
     private var page4: some View {
-        Group {
+        ZStack(alignment: .bottom) {
             if workout.locationManager.route.isEmpty {
                 VStack {
                     Image(systemName: "map")
-                        .font(.system(size: 40))
+                        .font(.system(size: 36))
                         .foregroundColor(.gray)
                     Text("Venter paa GPS")
                         .font(.caption)
                         .foregroundColor(.gray)
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 Map {
                     MapPolyline(coordinates: workout.locationManager.route.map { $0.coordinate })
                         .stroke(.green, lineWidth: 3)
                 }
             }
+            controlButtons
+                .padding(.bottom, 4)
+        }
+    }
+
+    private var controlButtons: some View {
+        HStack(spacing: 6) {
+            if workout.isPaused {
+                Button(action: { workout.resume() }) {
+                    Image(systemName: "play.fill")
+                        .font(.system(size: 14))
+                        .frame(maxWidth: .infinity)
+                }
+                .tint(.green)
+            } else {
+                Button(action: { workout.pause() }) {
+                    Image(systemName: "pause.fill")
+                        .font(.system(size: 14))
+                        .frame(maxWidth: .infinity)
+                }
+                .tint(.orange)
+            }
+            Button(action: { showStopConfirm = true }) {
+                Image(systemName: "stop.fill")
+                    .font(.system(size: 14))
+                    .frame(maxWidth: .infinity)
+            }
+            .tint(.red)
         }
     }
 
@@ -117,13 +141,12 @@ struct WorkoutPagesView: View {
                 .font(.caption2)
                 .foregroundColor(.gray)
             Text(value)
-                .font(.system(size: 22, weight: .bold))
+                .font(.system(size: 20, weight: .bold))
                 .foregroundColor(color)
         }
         .frame(maxWidth: .infinity)
     }
 
-    // MARK: Pulszoner (default 220 - 30 = 190 max indtil vi har user-input)
     private var maxHr: Double { 190.0 }
 
     private func zoneLabel(for bpm: Int) -> String {

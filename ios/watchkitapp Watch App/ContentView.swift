@@ -45,11 +45,12 @@ struct ContentView: View {
     @State private var showPicker: Bool = false
     
     var body: some View {
+        Group {
+        if workout.isRunning {
+            WorkoutPagesView(workout: workout)
+        } else {
         ScrollView {
             VStack(spacing: 8) {
-                if workout.isRunning {
-                    WorkoutPagesView(workout: workout)
-                } else {
                     Image(systemName: "figure.run")
                         .font(.system(size: 40))
                         .foregroundColor(.green)
@@ -129,6 +130,7 @@ struct ContentView: View {
             }
             .padding(.horizontal, 4)
     }
+        }
     .sheet(isPresented: $showPicker) {
         WorkoutPickerView(workout: workout, isPresented: $showPicker)
     }
