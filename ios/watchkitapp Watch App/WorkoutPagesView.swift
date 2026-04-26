@@ -106,9 +106,9 @@ struct WorkoutPagesView: View {
         .padding(.horizontal, 8)
     }
 
-    // MARK: Side 4 - Map med rute + tilbage-knap (zIndex sikrer tap)
+    // MARK: Side 4 - Map med rute + lille tilbage-knap nederst
     private var page4: some View {
-        ZStack(alignment: .topLeading) {
+        VStack(spacing: 0) {
             if workout.locationManager.route.isEmpty {
                 VStack {
                     Image(systemName: "map")
@@ -125,18 +125,21 @@ struct WorkoutPagesView: View {
                         .stroke(.green, lineWidth: 3)
                 }
             }
-            Button(action: { selectedTab = 0 }) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 11, weight: .bold))
-                    .foregroundColor(.white)
-                    .padding(6)
-                    .background(Circle().fill(Color.green))
-                    .shadow(radius: 2)
+            HStack {
+                Spacer()
+                Button(action: { selectedTab = 0 }) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 4)
+                        .background(Capsule().fill(Color.green))
+                }
+                .buttonStyle(.plain)
+                Spacer()
             }
-            .buttonStyle(.plain)
-            .contentShape(Circle())
-            .padding(6)
-            .zIndex(100)
+            .padding(.top, 2)
+            .padding(.bottom, 2)
         }
     }
 
