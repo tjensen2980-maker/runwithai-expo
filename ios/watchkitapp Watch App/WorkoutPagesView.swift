@@ -125,15 +125,14 @@ struct WorkoutPagesView: View {
                         .stroke(.green, lineWidth: 3)
                 }
             }
-            Button(action: { selectedTab = 0 }) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 11, weight: .bold))
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 2)
-                    .background(Color.green)
-            }
-            .buttonStyle(.plain)
+            Color.green
+                .frame(height: 16)
+                .overlay(
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundColor(.white)
+                )
+                .onTapGesture { selectedTab = 0 }
         }
     }
 
