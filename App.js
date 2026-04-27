@@ -21,6 +21,7 @@ import Activity, { RunCalendar } from './src/screens/Activity';
 import Settings from './src/screens/Settings';
 import RunTracker from './src/screens/RunTracker';
 import Stats from './src/screens/Stats';
+import RunDetail from './src/screens/RunDetail';
 import { RoutesTab as RoutesTabComponent } from './src/screens/RoutesTab';
 import Privacy from './src/screens/Privacy';
 import * as WebBrowser from 'expo-web-browser';
@@ -296,6 +297,7 @@ export default function App() {
   const [loading, setLoading]               = useState(true);
   const [activityType, setActivityType]     = useState('run');
   const [showPricing, setShowPricing]       = useState(false);
+  const [selectedRun, setSelectedRun]       = useState(null);
 // Watch sync - modtager run fra ur og marker dagens traening som completed
   const trainingPlanRef = React.useRef(null);
   const { sendTodayTraining } = useWatch({
@@ -534,7 +536,7 @@ export default function App() {
       case 'dashboard':
         return <PlanTab level={level} nextWorkout={nextWorkout} weekPlan={weekPlan} planChanges={planChanges} profile={profile} runs={runs} onNavigate={setTab} onStartActivity={handleStartActivity} trainingPlan={trainingPlan} onPlanUpdate={handlePlanUpdate} isPro={isPro} onShowPricing={() => setShowPricing(true)} />;
       case 'activity':
-        return <Activity level={level} profile={profile} weekPlan={weekPlan} onSetWeekPlan={(plan) => setWeekPlan(plan)} trainingPlan={trainingPlan} onTrainingPlanChange={setTrainingPlan} runs={runs} />;
+        return <Activity level={level} profile={profile} weekPlan={weekPlan} onSetWeekPlan={(plan) => setWeekPlan(plan)} trainingPlan={trainingPlan} onTrainingPlanChange={setTrainingPlan} runs={runs} onSelectRun={setSelectedRun} />;
       case 'run':
         return <RunTab nextWorkout={nextWorkout} onStartActivity={handleStartActivity} runs={runs} profile={profile} isPro={isPro} onShowPricing={() => setShowPricing(true)} />;
       case 'stats':
@@ -551,6 +553,17 @@ export default function App() {
         return null;
     }
   };
+
+  if (selectedRun) {
+    return (
+      <ErrorBoundary>
+        <SafeAreaProvider>
+          <StatusBar barStyle="dark-content" backgroundColor={colors.card} />
+          <RunDetail run={selectedRun} onBack={() => setSelectedRun(null)} />
+        </SafeAreaProvider>
+      </ErrorBoundary>
+    );
+  }
 
   return (
 <ErrorBoundary>

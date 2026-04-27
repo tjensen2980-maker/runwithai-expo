@@ -658,7 +658,7 @@ function RunWalkBreakdown({ runningKm, walkingKm, totalKm }) {
 }
 
 // ─── RUN CARD ─────────────────────────────────────────────────────────────────
-function RunCard({ run, level, allRuns, onDelete }) {
+function RunCard({ run, level, allRuns, onDelete, onSelectRun }) {
   const [showShare, setShowShare] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -694,7 +694,11 @@ function RunCard({ run, level, allRuns, onDelete }) {
   };
   return (
     <>
-      <View style={[getActivityStyles().card, { borderLeftColor: run.type === 'walk' ? colors.blue : colors.accent, borderLeftWidth: 3 }]}>
+      <TouchableOpacity
+        activeOpacity={0.85}
+        onPress={() => onSelectRun && onSelectRun(run)}
+        style={[getActivityStyles().card, { borderLeftColor: run.type === 'walk' ? colors.blue : colors.accent, borderLeftWidth: 3 }]}
+      >
         <View style={getActivityStyles().cardHeader}>
           <View>
             <Text style={getActivityStyles().runType}>{runType}</Text>
@@ -747,7 +751,7 @@ function RunCard({ run, level, allRuns, onDelete }) {
             <Text style={getActivityStyles().splitsMore}>→</Text>
           </View>
         )}
-      </View>
+      </TouchableOpacity>
       {confirmDelete && (
         <View style={{ backgroundColor: colors.card, borderRadius: 14, padding: 16, marginTop: -8, marginBottom: 8, borderWidth: 1, borderColor: colors.red + '40' }}>
           <Text style={{ color: colors.text, fontSize: 14, fontWeight: '700', marginBottom: 4 }}>Slet dette løb?</Text>
@@ -787,7 +791,7 @@ function WeekPlanCard({ plan }) {
   );
 }
 // ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
-export default function Activity({ level, profile, weekPlan, onSetWeekPlan, trainingPlan: propTrainingPlan, onTrainingPlanChange, runs: propRuns }) {
+export default function Activity({ level, profile, weekPlan, onSetWeekPlan, trainingPlan: propTrainingPlan, onTrainingPlanChange, runs: propRuns, onSelectRun }) {
   const [runs, setRuns] = useState(propRuns || []);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('runs');
@@ -884,7 +888,7 @@ export default function Activity({ level, profile, weekPlan, onSetWeekPlan, trai
         loading ? <ActivityIndicator color={colors.accent} style={{ marginTop: 30 }} />
         : runs.length === 0
           ? <View style={getActivityStyles().emptyWrap}><Icon name='run' size={48} color={colors.border2}/><Text style={getActivityStyles().emptyTitle}>Ingen løb endnu</Text><Text style={getActivityStyles().emptyDesc}>Gå til dashboard og start dit første løb.</Text></View>
-          : <><ProgressSection runs={runs} />{runs.map(r => <RunCard key={r.id} run={r} level={level} allRuns={runs} onDelete={deleteRun} />)}</>
+          : <><ProgressSection runs={runs} />{runs.map(r => <RunCard key={r.id} run={r} level={level} allRuns={runs} onDelete={deleteRun} onSelectRun={onSelectRun} />)}</>
       )}
       {activeTab === 'plan' && (
         <>
