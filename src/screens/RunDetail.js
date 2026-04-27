@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { colors } from '../data';
+import { ZoneBar } from './components/PulseZone';
 
 let MapView, Marker, Polyline, PROVIDER_GOOGLE;
 if (Platform.OS !== 'web') {
@@ -155,7 +156,7 @@ function PlaceholderTab({ label }) {
   );
 }
 
-export default function RunDetail({ run, onBack }) {
+export default function RunDetail({ run, profile, onBack }) {
   const [activeTab, setActiveTab] = useState('oversigt');
 
   if (!run) {
@@ -188,7 +189,7 @@ export default function RunDetail({ run, onBack }) {
 
       {/* Content */}
       {activeTab === 'oversigt' && <OversigtTab run={run} />}
-      {activeTab === 'statistik' && <PlaceholderTab label='Statistik' />}
+      {activeTab === 'statistik' && <StatistikTab run={run} profile={profile} />}
       {activeTab === 'omgange' && <PlaceholderTab label='Omgange' />}
       {activeTab === 'grafik' && <PlaceholderTab label='Grafik' />}
       {activeTab === 'udstyr' && <PlaceholderTab label='Udstyr' />}
@@ -197,6 +198,10 @@ export default function RunDetail({ run, onBack }) {
 }
 
 const s = StyleSheet.create({
+  statSection: { color: colors.text, fontSize: 16, fontWeight: '700', marginTop: 18, marginBottom: 8 },
+  statRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: colors.border || '#222' },
+  statLabel: { color: colors.muted, fontSize: 14 },
+  statValue: { color: colors.text, fontSize: 14, fontWeight: '600' },
   container: { flex: 1, backgroundColor: colors.bg },
   header: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
@@ -228,3 +233,85 @@ const s = StyleSheet.create({
   metricUnit: { color: colors.text, fontSize: 13 },
   metricLabel: { color: colors.muted, fontSize: 12, marginTop: 2 },
 });
+
+
+function StatistikTab({ run, profile }) {
+  const km = parseFloat(run.km) || 0;
+  const duration = parseInt(run.duration) || 0;
+  const avgHr = run.heart_rate != null ? parseInt(run.heart_rate) : 0;
+  const calories = run.calories != null ? parseInt(run.calories) : 0;
+  const runningKm = parseFloat(run.running_km) || 0;
+  const walkingKm = parseFloat(run.walking_km) || 0;
+  const hasMixed = runningKm > 0 && walkingKm > 0;
+
+  const fmtTime = (sec) => {
+    const h = Math.floor(sec / 3600);
+    const m = Math.floor((sec % 3600) / 60);
+    const ss = sec % 60;
+    return h > 0 ? h + 't ' + m + 'm ' + ss + 's' : m + 'm ' + ss + 's';
+  };
+
+  const fmtPace = (p) => {
+    if (p == null) return '-';
+    if (typeof p === 'string' && p.includes(':')) return p;
+    const totalSec = typeof p === 'number' ? p : parseFloat(p);
+    if (!totalSec || isNaN(totalSec)) return '-';
+    let secPerKm = totalSec;
+    if (totalSec < 30) secPerKm = totalSec * 60;
+    const m = Math.floor(secPerKm / 60);
+    const ss = Math.round(secPerKm % 60);
+    return m + ':' + (ss < 10 ? '0' + ss : ss);
+  };
+
+  const pace = fmtPace(run.pace);
+  const calPerKm = km > 0 && calories > 0 ? Math.round(calories / km) : 0;
+  const startDate = run.date ? new Date(run.date) : null;
+  const dayName = startDate ? startDate.toLocaleDateString('da-DK', { weekday: 'long' }) : '-';
+  const startTime = startDate ? startDate.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }) : '-';
+  const typeLabel = run.type === 'walk' ? 'Gang' : run.type === 'run' ? 'Løb' : run.type === 'mixed' ? 'Blandet' : (run.type || '-');
+
+  return (
+    <View style={{ padding: 16 }}>
+      <Text style={s.statSection}>Tempo & distance</Text>
+      <View style={s.statRow}><Text style={s.statLabel}>Type</Text><Text style={s.statValue}>{typeLabel}</Text></View>
+      <View style={s.statRow}><Text style={s.statLabel}>Distance</Text><Text style={s.statValue}>{km.toFixed(2)} km</Text></View>
+      <View style={s.statRow}><Text style={s.statLabel}>Samlet tid</Text><Text style={s.statValue}>{fmtTime(duration)}</Text></View>
+      <View style={s.statRow}><Text style={s.statLabel}>Gennemsnitstempo</Text><Text style={s.statValue}>{pace} /km</Text></View>
+      {hasMixed && (
+        <>
+          <View style={s.statRow}><Text style={s.statLabel}>Løbet</Text><Text style={s.statValue}>{runningKm.toFixed(2)} km</Text></View>
+          <View style={s.statRow}><Text style={s.statLabel}>Gået</Text><Text style={s.statValue}>{walkingKm.toFixed(2)} km</Text></View>
+        </>
+      )}
+
+      <Text style={s.statSection}>Puls</Text>
+      {avgHr > 0 ? (
+        <>
+          <View style={s.statRow}><Text style={s.statLabel}>Gennemsnitlig puls</Text><Text style={s.statValue}>{avgHr} bpm</Text></View>
+          {profile && (
+            <View style={{ marginTop: 8, marginBottom: 8 }}>
+              <ZoneBar hr={avgHr} profile={profile} />
+            </View>
+          )}
+        </>
+      ) : (
+        <View style={s.statRow}><Text style={s.statLabel}>Puls</Text><Text style={s.statValue}>Ingen data</Text></View>
+      )}
+
+      <Text style={s.statSection}>Energi</Text>
+      {calories > 0 ? (
+        <>
+          <View style={s.statRow}><Text style={s.statLabel}>Kalorier i alt</Text><Text style={s.statValue}>{calories} kcal</Text></View>
+          <View style={s.statRow}><Text style={s.statLabel}>Kalorier pr. km</Text><Text style={s.statValue}>{calPerKm} kcal/km</Text></View>
+        </>
+      ) : (
+        <View style={s.statRow}><Text style={s.statLabel}>Kalorier</Text><Text style={s.statValue}>Ingen data</Text></View>
+      )}
+
+      <Text style={s.statSection}>Tidspunkt</Text>
+      <View style={s.statRow}><Text style={s.statLabel}>Dag</Text><Text style={s.statValue}>{dayName}</Text></View>
+      <View style={s.statRow}><Text style={s.statLabel}>Starttid</Text><Text style={s.statValue}>{startTime}</Text></View>
+    </View>
+  );
+}
+

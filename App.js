@@ -559,7 +559,7 @@ export default function App() {
       <ErrorBoundary>
         <SafeAreaProvider>
           <StatusBar barStyle="dark-content" backgroundColor={colors.card} />
-          <RunDetail run={selectedRun} onBack={() => setSelectedRun(null)} />
+          <RunDetail run={selectedRun} profile={profile} onBack={() => setSelectedRun(null)} />
         </SafeAreaProvider>
       </ErrorBoundary>
     );
