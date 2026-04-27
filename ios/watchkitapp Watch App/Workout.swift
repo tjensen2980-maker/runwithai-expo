@@ -1,5 +1,10 @@
-import Foundation
+﻿import Foundation
 import CoreLocation
+
+struct HrSample: Codable {
+    let t: Date
+    let bpm: Int
+}
 
 struct Workout: Codable, Identifiable {
     let id: String
@@ -8,9 +13,18 @@ struct Workout: Codable, Identifiable {
     let durationSeconds: Int
     let distanceMeters: Double
     let averagePaceMinPerKm: Double
-    let type: String          // "run" eller "walk"
+    let type: String
     let route: [RoutePoint]
     var synced: Bool
+
+    var hrSamples: [HrSample] = []
+    var avgHr: Int = 0
+    var maxHr: Int = 0
+    var totalAscent: Double = 0
+    var totalDescent: Double = 0
+    var activeKcal: Double = 0
+    var totalSteps: Int = 0
+    var cadence: Int = 0
 
     struct RoutePoint: Codable {
         let lat: Double
@@ -26,7 +40,6 @@ struct Workout: Codable, Identifiable {
         }
     }
 
-    // Beregn pace hvis distance > 0
     static func calculatePace(durationSec: Int, distanceMeters: Double) -> Double {
         guard distanceMeters > 0 else { return 0 }
         let minutes = Double(durationSec) / 60.0

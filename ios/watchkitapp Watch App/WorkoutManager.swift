@@ -1,11 +1,11 @@
-import Foundation
+﻿import Foundation
 import Combine
 import HealthKit
 
 class WorkoutManager: NSObject, ObservableObject {
     static let shared = WorkoutManager()
-
     override init() { super.init() }
+
     @Published var isRunning: Bool = false
     @Published var isPaused: Bool = false
     @Published var elapsedSeconds: Int = 0
@@ -15,7 +15,6 @@ class WorkoutManager: NSObject, ObservableObject {
     @Published var userMaxHr: Double = 190.0
     @Published var popToRootCounter: Int = 0
 
-    // NYE: Live HealthKit metrics
     @Published var currentBpm: Int = 0
     @Published var currentSpm: Int = 0
     @Published var activeKcal: Double = 0
@@ -29,8 +28,9 @@ class WorkoutManager: NSObject, ObservableObject {
     private var workoutStartDate: Date?
     private var timerStartDate: Date?
     private var accumulatedSeconds: Int = 0
+    private var hrSamples: [HrSample] = []
+    private var totalStepsCount: Int = 0
 
-    // NYE: HealthKit
     private let healthStore = HKHealthStore()
     private var session: HKWorkoutSession?
     private var builder: HKLiveWorkoutBuilder?
@@ -98,6 +98,8 @@ class WorkoutManager: NSObject, ObservableObject {
         activeKcal = 0
         totalAscent = 0
         totalDescent = 0
+        hrSamples = []
+        totalStepsCount = 0
         workoutStartDate = Date()
         timerStartDate = Date()
         isRunning = true
@@ -142,7 +144,22 @@ class WorkoutManager: NSObject, ObservableObject {
             let pace = Workout.calculatePace(durationSec: elapsedSeconds, distanceMeters: distanceM)
             let activityType = self.workoutType == "Regulaer" ? (pace > 8.0 ? "walk" : "run") : self.workoutType
 
-            let workout = Workout(
+            let avgHrVal = hrSamples.isEmpty ? 0 : hrSamples.map { $0.bpm }.reduce(0, +) / hrSamples.count
+            let maxHrVal = hrSamples.map { $0.bpm }.max() ?? 0
+
+            var ascent: Double = 0
+            var descent: Double = 0
+            let alts = routePoints.map { $0.altitude }
+            if alts.count > 1 {
+                for i in 1..<alts.count {
+                    let d = alts[i] - alts[i-1]
+                    if d > 0.5 { ascent += d } else if d < -0.5 { descent += -d }
+                }
+            }
+
+            let avgCadence = elapsedSeconds > 0 ? Int(Double(totalStepsCount) / (Double(elapsedSeconds) / 60.0)) : 0
+
+            var workout = Workout(
                 id: UUID().uuidString,
                 startTime: start,
                 endTime: Date(),
@@ -153,9 +170,17 @@ class WorkoutManager: NSObject, ObservableObject {
                 route: routePoints,
                 synced: false
             )
+            workout.hrSamples = hrSamples
+            workout.avgHr = avgHrVal
+            workout.maxHr = maxHrVal
+            workout.totalAscent = ascent
+            workout.totalDescent = descent
+            workout.activeKcal = activeKcal
+            workout.totalSteps = totalStepsCount
+            workout.cadence = avgCadence
+
             store.save(workout)
 
-            // Trigger sync til Railway
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 SyncManager.shared.syncPending()
             }
@@ -199,6 +224,7 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
 
 extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
     func workoutBuilderDidCollectEvent(_ workoutBuilder: HKLiveWorkoutBuilder) {}
+
     func workoutBuilder(_ workoutBuilder: HKLiveWorkoutBuilder, didCollectDataOf collectedTypes: Set<HKSampleType>) {
         for type in collectedTypes {
             guard let qtyType = type as? HKQuantityType, let stats = workoutBuilder.statistics(for: qtyType) else { continue }
@@ -206,7 +232,11 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
                 if qtyType == HKQuantityType.quantityType(forIdentifier: .heartRate)! {
                     if let q = stats.mostRecentQuantity() {
                         let unit = HKUnit(from: "count/min")
-                        self.currentBpm = Int(q.doubleValue(for: unit))
+                        let bpmVal = Int(q.doubleValue(for: unit))
+                        self.currentBpm = bpmVal
+                        if bpmVal > 0 {
+                            self.hrSamples.append(HrSample(t: Date(), bpm: bpmVal))
+                        }
                     }
                 } else if qtyType == HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)! {
                     if let q = stats.sumQuantity() {
@@ -216,6 +246,9 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
                     if let q = stats.mostRecentQuantity() {
                         let stepsPerMin = q.doubleValue(for: HKUnit.count()) * 60.0
                         self.currentSpm = Int(stepsPerMin)
+                    }
+                    if let sum = stats.sumQuantity() {
+                        self.totalStepsCount = Int(sum.doubleValue(for: HKUnit.count()))
                     }
                 } else if qtyType == HKQuantityType.quantityType(forIdentifier: .flightsClimbed)! {
                     if let q = stats.sumQuantity() {
