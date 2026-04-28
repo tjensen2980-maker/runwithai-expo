@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Platform, Dimensions } from 'react-native';
 import { colors, getZoneForHR } from '../data';
 import Svg, { Path, Line, Text as SvgText, Rect, Circle } from 'react-native-svg';
 import { ZoneBar } from './components/PulseZone';
@@ -82,9 +82,9 @@ function OversigtTab({ run }) {
   const route = getRoute(run);
   const km = run.km ? run.km.toFixed(2).replace('.', ',') : '0,00';
   const duration = fmtTime(run.duration_secs || run.duration || 0);
-  const pace = fmtPace(run.pace_secs_per_km || run.pace || 0);
+  const pace = (run.km && run.km >= 0.1) ? fmtPace(run.pace_secs_per_km || run.pace || 0) : '--:--';
   const avgHr = run.avg_hr || run.heart_rate || 0;
-  const calories = run.calories || 0;
+  const calories = run.calories ? Math.round(run.calories) : 0;
 
   return (
     <ScrollView style={{ flex: 1 }}>
@@ -109,17 +109,13 @@ function OversigtTab({ run }) {
             <Marker coordinate={route[route.length - 1]} pinColor='red' />
           </MapView>
         </View>
-      ) : (
-        <View style={[s.mapContainer, s.mapPlaceholder]}>
-          <Text style={{ color: colors.muted }}>Ingen rute tilgængelig</Text>
-        </View>
-      )}
+      ) : null}
 
       <View style={s.section}>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}>
           <Text style={{ color: colors.muted, fontSize: 13 }}>{fmtDate(run.date)}</Text>
         </View>
-        <Text style={s.title}>{run.type ? run.type.charAt(0).toUpperCase() + run.type.slice(1) : 'Løb'}</Text>
+        <Text style={s.title}>{run.type === 'walk' ? 'Gang' : run.type === 'run' ? 'Løb' : run.type === 'mixed' ? 'Blandet' : 'Løb'}</Text>
         {run.notes ? (
           <Text style={s.notes}>{run.notes}</Text>
         ) : (
@@ -269,10 +265,10 @@ function StatistikTab({ run, profile }) {
   const startDate = run.date ? new Date(run.date) : null;
   const dayName = startDate ? startDate.toLocaleDateString('da-DK', { weekday: 'long' }) : '-';
   const startTime = startDate ? startDate.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }) : '-';
-  const typeLabel = run.type === 'walk' ? 'Gang' : run.type === 'run' ? 'LÃ¸b' : run.type === 'mixed' ? 'Blandet' : (run.type || '-');
+  const typeLabel = run.type === 'walk' ? 'Gang' : run.type === 'run' ? 'Løb' : run.type === 'mixed' ? 'Blandet' : 'Løb';
 
   return (
-    <View style={{ padding: 16 }}>
+    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16, paddingBottom: 80 }}>
       <Text style={s.statSection}>Tempo & distance</Text>
       <View style={s.statRow}><Text style={s.statLabel}>Type</Text><Text style={s.statValue}>{typeLabel}</Text></View>
       <View style={s.statRow}><Text style={s.statLabel}>Distance</Text><Text style={s.statValue}>{km.toFixed(2)} km</Text></View>
@@ -312,13 +308,13 @@ function StatistikTab({ run, profile }) {
       <Text style={s.statSection}>Tidspunkt</Text>
       <View style={s.statRow}><Text style={s.statLabel}>Dag</Text><Text style={s.statValue}>{dayName}</Text></View>
       <View style={s.statRow}><Text style={s.statLabel}>Starttid</Text><Text style={s.statValue}>{startTime}</Text></View>
-    </View>
+    </ScrollView>
   );
 }
 
 
 function GrafikTab({ run, profile }) {
-  const screenWidth = 360;
+  const screenWidth = Dimensions.get('window').width - 32;
   const chartHeight = 220;
   const padding = { top: 20, right: 20, bottom: 30, left: 40 };
 
@@ -400,7 +396,7 @@ const zoneColor = (bpm) => {
   }
 
   return (
-    <ScrollView style={{ padding: 16 }}>
+    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16, paddingBottom: 80 }}>
       <Text style={{ color: colors.text, fontSize: 16, fontWeight: '600', marginBottom: 8 }}>
         Pulskurve
       </Text>
@@ -495,7 +491,7 @@ const zoneColor = (bpm) => {
 }
 
 function TempoGraph({ run }) {
-  const screenWidth = 360;
+  const screenWidth = Dimensions.get('window').width - 32;
   const chartHeight = 220;
   const padding = { top: 20, right: 20, bottom: 30, left: 50 };
 
@@ -714,7 +710,7 @@ function TempoGraph({ run }) {
 }
 
 function AltitudeGraph({ run }) {
-  const screenWidth = 360;
+  const screenWidth = Dimensions.get('window').width - 32;
   const chartHeight = 200;
   const padding = { top: 20, right: 20, bottom: 30, left: 50 };
 
