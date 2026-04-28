@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { colors, getZoneForHR } from '../data';
 import Svg, { Path, Line, Text as SvgText, Rect, Circle } from 'react-native-svg';
@@ -111,7 +111,7 @@ function OversigtTab({ run }) {
         </View>
       ) : (
         <View style={[s.mapContainer, s.mapPlaceholder]}>
-          <Text style={{ color: colors.muted }}>Ingen rute tilgaengelig</Text>
+          <Text style={{ color: colors.muted }}>Ingen rute tilgængelig</Text>
         </View>
       )}
 
@@ -119,7 +119,7 @@ function OversigtTab({ run }) {
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}>
           <Text style={{ color: colors.muted, fontSize: 13 }}>{fmtDate(run.date)}</Text>
         </View>
-        <Text style={s.title}>{run.type ? run.type.charAt(0).toUpperCase() + run.type.slice(1) : 'Lob'}</Text>
+        <Text style={s.title}>{run.type ? run.type.charAt(0).toUpperCase() + run.type.slice(1) : 'Løb'}</Text>
         {run.notes ? (
           <Text style={s.notes}>{run.notes}</Text>
         ) : (
@@ -175,7 +175,7 @@ export default function RunDetail({ run, profile, onBack }) {
         <TouchableOpacity onPress={onBack} style={s.backBtn}>
           <Text style={s.backText}>{String.fromCharCode(60)}</Text>
         </TouchableOpacity>
-        <Text style={s.headerTitle}>Lob</Text>
+        <Text style={s.headerTitle}>Løb</Text>
         <View style={{ width: 40 }} />
       </View>
 
@@ -191,7 +191,7 @@ export default function RunDetail({ run, profile, onBack }) {
       {/* Content */}
       {activeTab === 'oversigt' && <OversigtTab run={run} />}
       {activeTab === 'statistik' && <StatistikTab run={run} profile={profile} />}
-      {activeTab === 'omgange' && <PlaceholderTab label='Omgange' />}
+      {activeTab === 'omgange' && <OmgangeTab run={run} />}
       {activeTab === 'grafik' && <GrafikTab run={run} profile={profile} />}
       {activeTab === 'udstyr' && <PlaceholderTab label='Udstyr' />}
     </View>
@@ -336,8 +336,8 @@ function GrafikTab({ run, profile }) {
     return (
       <View style={{ padding: 20 }}>
         <Text style={{ color: colors.muted, textAlign: 'center', marginTop: 40 }}>
-          Ingen pulsdata tilgaengelig for dette loeb.{'\n'}
-          Lav et nyt loeb med uret for at se grafer.
+          Ingen pulsdata tilgængelig for dette løb.{'\n'}
+          Lav et nyt løb med uret for at se grafer.
         </Text>
       </View>
     );
@@ -405,7 +405,7 @@ const zoneColor = (bpm) => {
         Pulskurve
       </Text>
       <Text style={{ color: colors.muted, fontSize: 12, marginBottom: 12 }}>
-        {hrSamples.length} maalinger over {fmtMin(totalSecs)} min
+        {hrSamples.length} målinger over {fmtMin(totalSecs)} min
       </Text>
 
       <Svg width={screenWidth} height={chartHeight}>
@@ -487,6 +487,9 @@ const zoneColor = (bpm) => {
 
       {/* Tempo-graf */}
       <TempoGraph run={run} />
+
+      {/* Højde-graf */}
+      <AltitudeGraph run={run} />
     </ScrollView>
   );
 }
@@ -591,7 +594,7 @@ function TempoGraph({ run }) {
           Tempo
         </Text>
         <Text style={{ color: colors.muted, fontSize: 12 }}>
-          Ikke nok bevaegelse til tempo-graf.
+          Ikke nok bevægelse til tempo-graf.
         </Text>
       </View>
     );
@@ -605,7 +608,7 @@ function TempoGraph({ run }) {
     return { secs: p.secs, pace: (a + b + c) / 3 };
   });
 
-  // Filtrer urealistiske pace-vaerdier (over 30 min/km eller under 2 min/km)
+  // Filtrer urealistiske pace-værdier (over 30 min/km eller under 2 min/km)
   const valid = smoothed.filter(p => p.pace > 120 && p.pace < 1800);
   if (valid.length < 2) {
     return (
@@ -628,7 +631,7 @@ function TempoGraph({ run }) {
   const plotW = screenWidth - padding.left - padding.right;
   const plotH = chartHeight - padding.top - padding.bottom;
 
-  // Vendt y-akse: lav pace (hurtig) oeverst
+  // Vendt y-akse: lav pace (hurtig) øverst
   const xScale = (s) => padding.left + (s / totalSecs) * plotW;
   const yScale = (p) => padding.top + ((p - yMin) / (yMax - yMin)) * plotH;
 
@@ -701,7 +704,7 @@ function TempoGraph({ run }) {
           <Text style={{ color: colors.muted, fontSize: 11 }}>Gennemsnit</Text>
           <Text style={{ color: colors.text, fontSize: 18, fontWeight: '600' }}>{fmtPace(avgPace)}</Text>
         </View>
-        <View style={{ alignItems: 'center' }}>
+       <View style={{ alignItems: 'center' }}>
           <Text style={{ color: colors.muted, fontSize: 11 }}>Langsomst</Text>
           <Text style={{ color: colors.text, fontSize: 18, fontWeight: '600' }}>{fmtPace(maxPace)}</Text>
         </View>
@@ -710,3 +713,337 @@ function TempoGraph({ run }) {
   );
 }
 
+function AltitudeGraph({ run }) {
+  const screenWidth = 360;
+  const chartHeight = 200;
+  const padding = { top: 20, right: 20, bottom: 30, left: 50 };
+
+  let route = [];
+  try {
+    if (typeof run.route === 'string' && run.route.length > 2) {
+      const parsed = JSON.parse(run.route);
+      if (Array.isArray(parsed)) route = parsed;
+    } else if (Array.isArray(run.route)) {
+      route = run.route;
+    }
+  } catch (e) {}
+  if (!Array.isArray(route)) route = [];
+
+  // Filtrer punkter med altitude
+  const pts = route
+    .map(p => ({
+      lat: parseFloat(p.lat || p.latitude),
+      lng: parseFloat(p.lng || p.lon || p.longitude),
+      alt: parseFloat(p.alt || p.altitude)
+    }))
+    .filter(p => !isNaN(p.lat) && !isNaN(p.lng) && !isNaN(p.alt));
+
+  if (pts.length < 4) {
+    return (
+      <View style={{ marginTop: 30 }}>
+        <Text style={{ color: colors.text, fontSize: 16, fontWeight: '600', marginBottom: 8 }}>
+          Højde
+        </Text>
+        <Text style={{ color: colors.muted, fontSize: 12 }}>
+          Ingen højdedata for dette løb.
+        </Text>
+      </View>
+    );
+  }
+
+  // Haversine
+  const dist = (a, b) => {
+    const R = 6371000;
+    const toRad = (d) => d * Math.PI / 180;
+    const dLat = toRad(b.lat - a.lat);
+    const dLng = toRad(b.lng - a.lng);
+    const lat1 = toRad(a.lat);
+    const lat2 = toRad(b.lat);
+    const x = Math.sin(dLat/2)**2 + Math.sin(dLng/2)**2 * Math.cos(lat1) * Math.cos(lat2);
+    return 2 * R * Math.asin(Math.sqrt(x));
+  };
+
+  // Beregn kumulativ distance per punkt
+  let cum = 0;
+  const enriched = pts.map((p, i) => {
+    if (i > 0) cum += dist(pts[i-1], p);
+    return { km: cum / 1000, alt: p.alt };
+  });
+
+  // Glat altitude med 5-punkts glidende gennemsnit
+  const smoothed = enriched.map((p, i) => {
+    let sum = 0, n = 0;
+    for (let k = -2; k <= 2; k++) {
+      const idx = i + k;
+      if (idx >= 0 && idx < enriched.length) {
+        sum += enriched[idx].alt;
+        n++;
+      }
+    }
+    return { km: p.km, alt: sum / n };
+  });
+
+  const totalKm = smoothed[smoothed.length - 1].km;
+  if (totalKm < 0.05) {
+    return (
+      <View style={{ marginTop: 30 }}>
+        <Text style={{ color: colors.text, fontSize: 16, fontWeight: '600', marginBottom: 8 }}>
+          Højde
+        </Text>
+        <Text style={{ color: colors.muted, fontSize: 12 }}>
+          For kort distance til højdeprofil.
+        </Text>
+      </View>
+    );
+  }
+
+  const minAlt = Math.min(...smoothed.map(p => p.alt));
+  const maxAlt = Math.max(...smoothed.map(p => p.alt));
+  const altRange = Math.max(5, maxAlt - minAlt);
+  const yMin = Math.floor((minAlt - altRange * 0.1) / 5) * 5;
+  const yMax = Math.ceil((maxAlt + altRange * 0.1) / 5) * 5;
+
+  // Beregn samlet stigning
+  let totalGain = 0;
+  for (let i = 1; i < smoothed.length; i++) {
+    const d = smoothed[i].alt - smoothed[i-1].alt;
+    if (d > 0) totalGain += d;
+  }
+
+  const plotW = screenWidth - padding.left - padding.right;
+  const plotH = chartHeight - padding.top - padding.bottom;
+  const xScale = (k) => padding.left + (k / totalKm) * plotW;
+  const yScale = (a) => padding.top + plotH - ((a - yMin) / (yMax - yMin)) * plotH;
+
+  // Path til linje
+  const pathD = smoothed.map((p, i) => {
+    const x = xScale(p.km);
+    const y = yScale(p.alt);
+    return (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
+  }).join(' ');
+
+  // Path til fyld (tilbage til bunden)
+  const fillD = pathD +
+    ' L' + xScale(totalKm).toFixed(1) + ',' + (padding.top + plotH).toFixed(1) +
+    ' L' + xScale(0).toFixed(1) + ',' + (padding.top + plotH).toFixed(1) + ' Z';
+
+  // Y-akse labels
+  const yLabels = [];
+  for (let k = 0; k <= 4; k++) {
+    const v = yMin + ((yMax - yMin) * k / 4);
+    yLabels.push({ v: Math.round(v), y: yScale(v) });
+  }
+
+  // X-akse labels
+  const xLabels = [];
+  for (let k = 0; k <= 4; k++) {
+    const kx = (totalKm * k / 4);
+    xLabels.push({ label: kx.toFixed(1), x: xScale(kx) });
+  }
+
+  return (
+    <View style={{ marginTop: 30 }}>
+      <Text style={{ color: colors.text, fontSize: 16, fontWeight: '600', marginBottom: 8 }}>
+        Højde
+      </Text>
+      <Text style={{ color: colors.muted, fontSize: 12, marginBottom: 12 }}>
+        meter over havet, per km
+      </Text>
+
+      <Svg width={screenWidth} height={chartHeight}>
+        {yLabels.map((l, i) => (
+          <Line key={'agy' + i} x1={padding.left} y1={l.y} x2={padding.left + plotW} y2={l.y} stroke="#333" strokeWidth="0.5" />
+        ))}
+        {yLabels.map((l, i) => (
+          <SvgText key={'ayl' + i} x={padding.left - 6} y={l.y + 4} fill={colors.muted} fontSize="10" textAnchor="end">
+            {l.v}
+          </SvgText>
+        ))}
+        {xLabels.map((l, i) => (
+          <SvgText key={'axl' + i} x={l.x} y={chartHeight - padding.bottom + 14} fill={colors.muted} fontSize="10" textAnchor="middle">
+            {l.label}
+          </SvgText>
+        ))}
+        <Path d={fillD} fill="rgba(46, 204, 113, 0.2)" stroke="none" />
+        <Path d={pathD} stroke="#2ecc71" strokeWidth="2" fill="none" />
+      </Svg>
+
+      <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 16 }}>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ color: colors.muted, fontSize: 11 }}>Min</Text>
+          <Text style={{ color: colors.text, fontSize: 18, fontWeight: '600' }}>{Math.round(minAlt)} m</Text>
+        </View>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ color: colors.muted, fontSize: 11 }}>Max</Text>
+          <Text style={{ color: colors.text, fontSize: 18, fontWeight: '600' }}>{Math.round(maxAlt)} m</Text>
+        </View>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ color: colors.muted, fontSize: 11 }}>Stigning</Text>
+          <Text style={{ color: colors.text, fontSize: 18, fontWeight: '600' }}>+{Math.round(totalGain)} m</Text>
+        </View>
+      </View>
+    </View>
+  );
+}
+
+
+function OmgangeTab({ run }) {
+  let route = [];
+  try {
+    if (typeof run.route === 'string' && run.route.length > 2) {
+      const parsed = JSON.parse(run.route);
+      if (Array.isArray(parsed)) route = parsed;
+    } else if (Array.isArray(run.route)) {
+      route = run.route;
+    }
+  } catch (e) {}
+  if (!Array.isArray(route)) route = [];
+
+  let hrSamples = [];
+  try {
+    if (typeof run.hr_samples === 'string' && run.hr_samples.length > 2) {
+      const parsed = JSON.parse(run.hr_samples);
+      if (Array.isArray(parsed)) hrSamples = parsed;
+    } else if (Array.isArray(run.hr_samples)) {
+      hrSamples = run.hr_samples;
+    }
+  } catch (e) {}
+
+  const pts = route.map(p => ({
+    lat: parseFloat(p.lat || p.latitude),
+    lng: parseFloat(p.lng || p.lon || p.longitude),
+    alt: parseFloat(p.alt || p.altitude),
+    t: p.t || p.timestamp || p.time
+  })).filter(p => !isNaN(p.lat) && !isNaN(p.lng) && p.t);
+
+  if (pts.length < 4) {
+    return (
+      <View style={{ padding: 20 }}>
+        <Text style={{ color: colors.muted, textAlign: 'center', marginTop: 40 }}>
+          Ingen omgangsdata. Lav et nyt løb med uret.
+        </Text>
+      </View>
+    );
+  }
+
+  const dist = (a, b) => {
+    const R = 6371000;
+    const toRad = (d) => d * Math.PI / 180;
+    const dLat = toRad(b.lat - a.lat);
+    const dLng = toRad(b.lng - a.lng);
+    const lat1 = toRad(a.lat);
+    const lat2 = toRad(b.lat);
+    const x = Math.sin(dLat/2)**2 + Math.sin(dLng/2)**2 * Math.cos(lat1) * Math.cos(lat2);
+    return 2 * R * Math.asin(Math.sqrt(x));
+  };
+
+  const enriched = pts.map(p => ({ ...p, secs: (new Date(p.t).getTime() - new Date(pts[0].t).getTime()) / 1000, ms: new Date(p.t).getTime() }));
+  let totalM = 0; const cum = [0];
+  for (let i = 1; i < enriched.length; i++) { totalM += dist(enriched[i-1], enriched[i]); cum.push(totalM); }
+  const totalKm = totalM / 1000;
+  if (totalKm < 0.1) return (<View style={{ padding: 20 }}><Text style={{ color: colors.muted, textAlign: 'center', marginTop: 40 }}>For kort distance.</Text></View>);
+
+  const hrEnriched = hrSamples.map(s => ({ ms: new Date(s.t).getTime(), bpm: s.bpm })).filter(h => !isNaN(h.ms) && h.bpm);
+  const hrInRange = (msStart, msEnd) => {
+    const inR = hrEnriched.filter(h => h.ms >= msStart && h.ms <= msEnd);
+    if (inR.length === 0) return { avg: null, max: null };
+    return { avg: Math.round(inR.reduce((a, h) => a + h.bpm, 0) / inR.length), max: Math.max(...inR.map(h => h.bpm)) };
+  };
+
+  const splitDistM = totalKm >= 1 ? 1000 : 500;
+  const numSplits = Math.floor(totalM / splitDistM);
+  const laps = [];
+  for (let sp = 0; sp < numSplits; sp++) {
+    const startD = sp * splitDistM; const endD = (sp + 1) * splitDistM;
+    let startT = null, endT = null, startMs = null, endMs = null, gain = 0, lastAlt = null;
+    for (let i = 1; i < cum.length; i++) {
+      if (startT === null && cum[i] >= startD) {
+        const r = (startD - cum[i-1]) / (cum[i] - cum[i-1]);
+        startT = enriched[i-1].secs + r * (enriched[i].secs - enriched[i-1].secs);
+        startMs = enriched[i-1].ms + r * (enriched[i].ms - enriched[i-1].ms);
+        if (!isNaN(enriched[i-1].alt)) lastAlt = enriched[i-1].alt;
+      }
+      if (startT !== null && cum[i] <= endD && !isNaN(enriched[i].alt)) {
+        if (lastAlt !== null) { const d = enriched[i].alt - lastAlt; if (d > 0) gain += d; }
+        lastAlt = enriched[i].alt;
+      }
+      if (endT === null && cum[i] >= endD) {
+        const r = (endD - cum[i-1]) / (cum[i] - cum[i-1]);
+        endT = enriched[i-1].secs + r * (enriched[i].secs - enriched[i-1].secs);
+        endMs = enriched[i-1].ms + r * (enriched[i].ms - enriched[i-1].ms);
+        break;
+      }
+    }
+    if (startT !== null && endT !== null && endT > startT) {
+      const dt = endT - startT;
+      const pacePerKm = (dt / splitDistM) * 1000;
+      const hr = hrInRange(startMs, endMs);
+      laps.push({ num: sp + 1, distKm: splitDistM / 1000, durationSec: dt, pace: pacePerKm, avgHr: hr.avg, maxHr: hr.max, gain: Math.round(gain), partial: false });
+    }
+  }
+
+  const remaining = totalM - numSplits * splitDistM;
+  if (remaining > splitDistM * 0.05) {
+    const startD = numSplits * splitDistM;
+    let startT = null, startMs = null, gain = 0, lastAlt = null;
+    for (let i = 1; i < cum.length; i++) {
+      if (startT === null && cum[i] >= startD) {
+        const r = (startD - cum[i-1]) / (cum[i] - cum[i-1]);
+        startT = enriched[i-1].secs + r * (enriched[i].secs - enriched[i-1].secs);
+        startMs = enriched[i-1].ms + r * (enriched[i].ms - enriched[i-1].ms);
+        lastAlt = enriched[i-1].alt;
+      }
+      if (startT !== null && !isNaN(enriched[i].alt) && !isNaN(lastAlt)) {
+        const d = enriched[i].alt - lastAlt; if (d > 0) gain += d; lastAlt = enriched[i].alt;
+      }
+    }
+    const endT = enriched[enriched.length - 1].secs;
+    const endMs = enriched[enriched.length - 1].ms;
+    if (startT !== null && endT > startT) {
+      const dt = endT - startT;
+      const pacePerKm = (dt / remaining) * 1000;
+      const hr = hrInRange(startMs, endMs);
+      laps.push({ num: numSplits + 1, distKm: remaining / 1000, durationSec: dt, pace: pacePerKm, avgHr: hr.avg, maxHr: hr.max, gain: Math.round(gain), partial: true });
+    }
+  }
+
+  if (laps.length === 0) return (<View style={{ padding: 20 }}><Text style={{ color: colors.muted, textAlign: 'center', marginTop: 40 }}>Kunne ikke beregne omgange.</Text></View>);
+
+  const fmtTime = (sec) => { const m = Math.floor(sec / 60); const ss = Math.round(sec % 60); return m + ':' + (ss < 10 ? '0' + ss : ss); };
+  const fmtPace = (sec) => { const m = Math.floor(sec / 60); const ss = Math.round(sec % 60); return m + ':' + (ss < 10 ? '0' + ss : ss); };
+  const hasHr = laps.some(l => l.avgHr !== null);
+  const hasAlt = laps.some(l => l.gain > 0);
+
+  return (
+    <ScrollView style={{ flex: 1 }}>
+      <View style={{ padding: 16 }}>
+        <Text style={{ color: colors.text, fontSize: 16, fontWeight: '600', marginBottom: 12 }}>
+          Omgange ({(splitDistM / 1000).toFixed(splitDistM === 500 ? 1 : 0)} km)
+        </Text>
+        <View style={{ flexDirection: 'row', paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+          <Text style={[so.head, { flex: 0.6 }]}>#</Text>
+          <Text style={[so.head, { flex: 1.2 }]}>Distance</Text>
+          <Text style={[so.head, { flex: 1 }]}>Tid</Text>
+          <Text style={[so.head, { flex: 1.2 }]}>Tempo</Text>
+          {hasHr && <Text style={[so.head, { flex: 1 }]}>Puls</Text>}
+          {hasAlt && <Text style={[so.head, { flex: 1, textAlign: 'right' }]}>Stign.</Text>}
+        </View>
+        {laps.map((l, i) => (
+          <View key={'lap' + i} style={{ flexDirection: 'row', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: colors.border, opacity: l.partial ? 0.7 : 1 }}>
+            <Text style={[so.cell, { flex: 0.6 }]}>{l.num}</Text>
+            <Text style={[so.cell, { flex: 1.2 }]}>{l.distKm.toFixed(2)} km</Text>
+            <Text style={[so.cell, { flex: 1 }]}>{fmtTime(l.durationSec)}</Text>
+            <Text style={[so.cell, { flex: 1.2 }]}>{fmtPace(l.pace)} /km</Text>
+            {hasHr && <Text style={[so.cell, { flex: 1 }]}>{l.avgHr ? l.avgHr : '-'}</Text>}
+            {hasAlt && <Text style={[so.cell, { flex: 1, textAlign: 'right' }]}>{l.gain > 0 ? '+' + l.gain + 'm' : '-'}</Text>}
+          </View>
+        ))}
+      </View>
+    </ScrollView>
+  );
+}
+
+const so = StyleSheet.create({
+  head: { color: colors.muted, fontSize: 11, fontWeight: '600' },
+  cell: { color: colors.text, fontSize: 13 }
+});
