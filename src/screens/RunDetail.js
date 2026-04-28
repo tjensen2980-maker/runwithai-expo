@@ -479,12 +479,234 @@ const zoneColor = (bpm) => {
             {Math.round(points.reduce((a, p) => a + p.bpm, 0) / points.length)}
           </Text>
         </View>
-        <View style={{ alignItems: 'center' }}>
+<View style={{ alignItems: 'center' }}>
           <Text style={{ color: colors.muted, fontSize: 11 }}>Max</Text>
           <Text style={{ color: colors.text, fontSize: 18, fontWeight: '600' }}>{maxBpm}</Text>
         </View>
       </View>
+
+      {/* Tempo-graf */}
+      <TempoGraph run={run} />
     </ScrollView>
+  );
+}
+
+function TempoGraph({ run }) {
+  const screenWidth = 360;
+  const chartHeight = 220;
+  const padding = { top: 20, right: 20, bottom: 30, left: 50 };
+
+  // Parse route
+  let route = [];
+  try {
+    if (typeof run.route === 'string' && run.route.length > 2) {
+      const parsed = JSON.parse(run.route);
+      if (Array.isArray(parsed)) route = parsed;
+    } else if (Array.isArray(run.route)) {
+      route = run.route;
+    }
+  } catch (e) {}
+
+  if (!Array.isArray(route)) route = [];
+
+  // Filtrer kun punkter med timestamp
+  const pts = route
+    .map(p => ({
+      lat: parseFloat(p.lat || p.latitude),
+      lng: parseFloat(p.lng || p.lon || p.longitude),
+      t: p.t || p.timestamp || p.time
+    }))
+    .filter(p => !isNaN(p.lat) && !isNaN(p.lng) && p.t);
+
+  if (pts.length < 4) {
+    return (
+      <View style={{ marginTop: 30 }}>
+        <Text style={{ color: colors.text, fontSize: 16, fontWeight: '600', marginBottom: 8 }}>
+          Tempo
+        </Text>
+        <Text style={{ color: colors.muted, fontSize: 12 }}>
+          Ikke nok GPS-data til tempo-graf.
+        </Text>
+      </View>
+    );
+  }
+
+  // Haversine afstand i meter
+  const dist = (a, b) => {
+    const R = 6371000;
+    const toRad = (d) => d * Math.PI / 180;
+    const dLat = toRad(b.lat - a.lat);
+    const dLng = toRad(b.lng - a.lng);
+    const lat1 = toRad(a.lat);
+    const lat2 = toRad(b.lat);
+    const x = Math.sin(dLat/2)**2 + Math.sin(dLng/2)**2 * Math.cos(lat1) * Math.cos(lat2);
+    return 2 * R * Math.asin(Math.sqrt(x));
+  };
+
+  // Konverter timestamps til sekunder fra start
+  const startMs = new Date(pts[0].t).getTime();
+  const enriched = pts.map(p => ({
+    ...p,
+    secs: (new Date(p.t).getTime() - startMs) / 1000
+  }));
+
+  // Beregn pace i ~30 sek vinduer
+  const windowSec = 30;
+  const totalSecs = enriched[enriched.length - 1].secs;
+  const paces = [];
+  let i = 0;
+  while (i < enriched.length - 1) {
+    const startIdx = i;
+    const startTime = enriched[i].secs;
+    let j = i + 1;
+    let d = 0;
+    while (j < enriched.length && enriched[j].secs - startTime < windowSec) {
+      d += dist(enriched[j-1], enriched[j]);
+      j++;
+    }
+    if (j >= enriched.length) {
+      d += enriched[j-1] && enriched[startIdx] ? 0 : 0;
+      // tag sidste segment med
+      if (j - 1 > startIdx) {
+        const dt = enriched[j-1].secs - startTime;
+        if (d > 5 && dt > 5) {
+          const pacePerKm = (dt / d) * 1000;
+          paces.push({ secs: (startTime + enriched[j-1].secs) / 2, pace: pacePerKm });
+        }
+      }
+      break;
+    }
+    const dt = enriched[j].secs - startTime;
+    if (d > 5 && dt > 0) {
+      const pacePerKm = (dt / d) * 1000;
+      paces.push({ secs: (startTime + enriched[j].secs) / 2, pace: pacePerKm });
+    }
+    i = j;
+  }
+
+  if (paces.length < 2) {
+    return (
+      <View style={{ marginTop: 30 }}>
+        <Text style={{ color: colors.text, fontSize: 16, fontWeight: '600', marginBottom: 8 }}>
+          Tempo
+        </Text>
+        <Text style={{ color: colors.muted, fontSize: 12 }}>
+          Ikke nok bevaegelse til tempo-graf.
+        </Text>
+      </View>
+    );
+  }
+
+  // 3-punkts glidende gennemsnit
+  const smoothed = paces.map((p, idx) => {
+    const a = paces[Math.max(0, idx-1)].pace;
+    const b = p.pace;
+    const c = paces[Math.min(paces.length-1, idx+1)].pace;
+    return { secs: p.secs, pace: (a + b + c) / 3 };
+  });
+
+  // Filtrer urealistiske pace-vaerdier (over 30 min/km eller under 2 min/km)
+  const valid = smoothed.filter(p => p.pace > 120 && p.pace < 1800);
+  if (valid.length < 2) {
+    return (
+      <View style={{ marginTop: 30 }}>
+        <Text style={{ color: colors.text, fontSize: 16, fontWeight: '600', marginBottom: 8 }}>
+          Tempo
+        </Text>
+        <Text style={{ color: colors.muted, fontSize: 12 }}>
+          Tempo-data uden for normalt interval.
+        </Text>
+      </View>
+    );
+  }
+
+  const minPace = Math.min(...valid.map(p => p.pace));
+  const maxPace = Math.max(...valid.map(p => p.pace));
+  const yMin = Math.floor(minPace / 30) * 30;
+  const yMax = Math.ceil(maxPace / 30) * 30;
+
+  const plotW = screenWidth - padding.left - padding.right;
+  const plotH = chartHeight - padding.top - padding.bottom;
+
+  // Vendt y-akse: lav pace (hurtig) oeverst
+  const xScale = (s) => padding.left + (s / totalSecs) * plotW;
+  const yScale = (p) => padding.top + ((p - yMin) / (yMax - yMin)) * plotH;
+
+  const pathD = valid.map((p, i) => {
+    const x = xScale(p.secs);
+    const y = yScale(p.pace);
+    return (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
+  }).join(' ');
+
+  const fmtMin = (s) => {
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+  };
+
+  const fmtPace = (sec) => {
+    const m = Math.floor(sec / 60);
+    const ss = Math.round(sec % 60);
+    return m + ':' + (ss < 10 ? '0' + ss : ss);
+  };
+
+  // Y-akse labels (4 punkter)
+  const yLabels = [];
+  for (let k = 0; k <= 4; k++) {
+    const v = yMin + ((yMax - yMin) * k / 4);
+    yLabels.push({ v: fmtPace(v), y: yScale(v) });
+  }
+
+  // X-akse labels
+  const xLabels = [];
+  for (let k = 0; k <= 4; k++) {
+    const sx = (totalSecs * k / 4);
+    xLabels.push({ label: fmtMin(sx), x: xScale(sx) });
+  }
+
+  const avgPace = valid.reduce((a, p) => a + p.pace, 0) / valid.length;
+
+  return (
+    <View style={{ marginTop: 30 }}>
+      <Text style={{ color: colors.text, fontSize: 16, fontWeight: '600', marginBottom: 8 }}>
+        Tempo
+      </Text>
+      <Text style={{ color: colors.muted, fontSize: 12, marginBottom: 12 }}>
+        min/km over tid
+      </Text>
+
+      <Svg width={screenWidth} height={chartHeight}>
+        {yLabels.map((l, i) => (
+          <Line key={'tgy' + i} x1={padding.left} y1={l.y} x2={padding.left + plotW} y2={l.y} stroke="#333" strokeWidth="0.5" />
+        ))}
+        {yLabels.map((l, i) => (
+          <SvgText key={'tyl' + i} x={padding.left - 6} y={l.y + 4} fill={colors.muted} fontSize="10" textAnchor="end">
+            {l.v}
+          </SvgText>
+        ))}
+        {xLabels.map((l, i) => (
+          <SvgText key={'txl' + i} x={l.x} y={chartHeight - padding.bottom + 14} fill={colors.muted} fontSize="10" textAnchor="middle">
+            {l.label}
+          </SvgText>
+        ))}
+        <Path d={pathD} stroke={colors.accent} strokeWidth="2" fill="none" />
+      </Svg>
+
+      <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 16 }}>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ color: colors.muted, fontSize: 11 }}>Hurtigst</Text>
+          <Text style={{ color: colors.text, fontSize: 18, fontWeight: '600' }}>{fmtPace(minPace)}</Text>
+        </View>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ color: colors.muted, fontSize: 11 }}>Gennemsnit</Text>
+          <Text style={{ color: colors.text, fontSize: 18, fontWeight: '600' }}>{fmtPace(avgPace)}</Text>
+        </View>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ color: colors.muted, fontSize: 11 }}>Langsomst</Text>
+          <Text style={{ color: colors.text, fontSize: 18, fontWeight: '600' }}>{fmtPace(maxPace)}</Text>
+        </View>
+      </View>
+    </View>
   );
 }
 
