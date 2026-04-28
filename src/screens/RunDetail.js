@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Platform } from 'react-native';
-import { colors } from '../data';
+import { colors, getZoneForHR } from '../data';
+import Svg, { Path, Line, Text as SvgText, Rect, Circle } from 'react-native-svg';
 import { ZoneBar } from './components/PulseZone';
 
 let MapView, Marker, Polyline, PROVIDER_GOOGLE;
@@ -191,7 +192,7 @@ export default function RunDetail({ run, profile, onBack }) {
       {activeTab === 'oversigt' && <OversigtTab run={run} />}
       {activeTab === 'statistik' && <StatistikTab run={run} profile={profile} />}
       {activeTab === 'omgange' && <PlaceholderTab label='Omgange' />}
-      {activeTab === 'grafik' && <PlaceholderTab label='Grafik' />}
+      {activeTab === 'grafik' && <GrafikTab run={run} profile={profile} />}
       {activeTab === 'udstyr' && <PlaceholderTab label='Udstyr' />}
     </View>
   );
@@ -268,7 +269,7 @@ function StatistikTab({ run, profile }) {
   const startDate = run.date ? new Date(run.date) : null;
   const dayName = startDate ? startDate.toLocaleDateString('da-DK', { weekday: 'long' }) : '-';
   const startTime = startDate ? startDate.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }) : '-';
-  const typeLabel = run.type === 'walk' ? 'Gang' : run.type === 'run' ? 'Løb' : run.type === 'mixed' ? 'Blandet' : (run.type || '-');
+  const typeLabel = run.type === 'walk' ? 'Gang' : run.type === 'run' ? 'LÃ¸b' : run.type === 'mixed' ? 'Blandet' : (run.type || '-');
 
   return (
     <View style={{ padding: 16 }}>
@@ -279,8 +280,8 @@ function StatistikTab({ run, profile }) {
       <View style={s.statRow}><Text style={s.statLabel}>Gennemsnitstempo</Text><Text style={s.statValue}>{pace} /km</Text></View>
       {hasMixed && (
         <>
-          <View style={s.statRow}><Text style={s.statLabel}>Løbet</Text><Text style={s.statValue}>{runningKm.toFixed(2)} km</Text></View>
-          <View style={s.statRow}><Text style={s.statLabel}>Gået</Text><Text style={s.statValue}>{walkingKm.toFixed(2)} km</Text></View>
+          <View style={s.statRow}><Text style={s.statLabel}>LÃ¸bet</Text><Text style={s.statValue}>{runningKm.toFixed(2)} km</Text></View>
+          <View style={s.statRow}><Text style={s.statLabel}>GÃ¥et</Text><Text style={s.statValue}>{walkingKm.toFixed(2)} km</Text></View>
         </>
       )}
 
@@ -312,6 +313,178 @@ function StatistikTab({ run, profile }) {
       <View style={s.statRow}><Text style={s.statLabel}>Dag</Text><Text style={s.statValue}>{dayName}</Text></View>
       <View style={s.statRow}><Text style={s.statLabel}>Starttid</Text><Text style={s.statValue}>{startTime}</Text></View>
     </View>
+  );
+}
+
+
+function GrafikTab({ run, profile }) {
+  const screenWidth = 360;
+  const chartHeight = 220;
+  const padding = { top: 20, right: 20, bottom: 30, left: 40 };
+
+  // Parse hr_samples
+  let hrSamples = [];
+  try {
+    if (typeof run.hr_samples === 'string' && run.hr_samples.length > 2) {
+      hrSamples = JSON.parse(run.hr_samples);
+    } else if (Array.isArray(run.hr_samples)) {
+      hrSamples = run.hr_samples;
+    }
+  } catch (e) {}
+
+  if (!hrSamples || hrSamples.length < 2) {
+    return (
+      <View style={{ padding: 20 }}>
+        <Text style={{ color: colors.muted, textAlign: 'center', marginTop: 40 }}>
+          Ingen pulsdata tilgaengelig for dette loeb.{'\n'}
+          Lav et nyt loeb med uret for at se grafer.
+        </Text>
+      </View>
+    );
+  }
+
+  // Konverter tidsstempler til sekunder fra start
+  const startMs = new Date(hrSamples[0].t).getTime();
+  const points = hrSamples.map(s => ({
+    secs: (new Date(s.t).getTime() - startMs) / 1000,
+    bpm: s.bpm
+  }));
+
+  const totalSecs = points[points.length - 1].secs;
+  const minBpm = Math.min(...points.map(p => p.bpm));
+  const maxBpm = Math.max(...points.map(p => p.bpm));
+  const yMin = Math.max(40, Math.floor(minBpm / 10) * 10 - 10);
+  const yMax = Math.ceil(maxBpm / 10) * 10 + 10;
+
+  const plotW = screenWidth - padding.left - padding.right;
+  const plotH = chartHeight - padding.top - padding.bottom;
+
+  const xScale = (s) => padding.left + (s / totalSecs) * plotW;
+  const yScale = (b) => padding.top + plotH - ((b - yMin) / (yMax - yMin)) * plotH;
+
+  // Pulszone-farver
+  
+const zoneColor = (bpm) => {
+    const z = getZoneForHR(Math.round(bpm), profile);
+    if (!z || z.zone === 0) return colors.zone1 || '#3498db';
+    return z.color;
+  };
+
+  // Byg path
+  const pathD = points.map((p, i) => {
+    const x = xScale(p.secs);
+    const y = yScale(p.bpm);
+    return (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
+  }).join(' ');
+
+  // Format tid
+  const fmtMin = (s) => {
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+  };
+
+  // Y-akse labels
+  const yLabels = [];
+  const ySteps = 4;
+  for (let i = 0; i <= ySteps; i++) {
+    const v = yMin + ((yMax - yMin) * i / ySteps);
+    yLabels.push({ v: Math.round(v), y: yScale(v) });
+  }
+
+  // X-akse labels (5 punkter)
+  const xLabels = [];
+  for (let i = 0; i <= 4; i++) {
+    const s = (totalSecs * i / 4);
+    xLabels.push({ label: fmtMin(s), x: xScale(s) });
+  }
+
+  return (
+    <ScrollView style={{ padding: 16 }}>
+      <Text style={{ color: colors.text, fontSize: 16, fontWeight: '600', marginBottom: 8 }}>
+        Pulskurve
+      </Text>
+      <Text style={{ color: colors.muted, fontSize: 12, marginBottom: 12 }}>
+        {hrSamples.length} maalinger over {fmtMin(totalSecs)} min
+      </Text>
+
+      <Svg width={screenWidth} height={chartHeight}>
+        {/* Grid lines */}
+        {yLabels.map((l, i) => (
+          <Line
+            key={'gy' + i}
+            x1={padding.left}
+            y1={l.y}
+            x2={padding.left + plotW}
+            y2={l.y}
+            stroke="#333"
+            strokeWidth="0.5"
+          />
+        ))}
+
+        {/* Y-akse labels */}
+        {yLabels.map((l, i) => (
+          <SvgText
+            key={'yl' + i}
+            x={padding.left - 6}
+            y={l.y + 4}
+            fill={colors.muted}
+            fontSize="10"
+            textAnchor="end"
+          >
+            {l.v}
+          </SvgText>
+        ))}
+
+        {/* X-akse labels */}
+        {xLabels.map((l, i) => (
+          <SvgText
+            key={'xl' + i}
+            x={l.x}
+            y={chartHeight - padding.bottom + 14}
+            fill={colors.muted}
+            fontSize="10"
+            textAnchor="middle"
+          >
+            {l.label}
+          </SvgText>
+        ))}
+
+        {/* Pulslinje - segmenter med farver per zone */}
+        {points.slice(1).map((p, i) => {
+          const prev = points[i];
+          return (
+            <Line
+              key={'seg' + i}
+              x1={xScale(prev.secs)}
+              y1={yScale(prev.bpm)}
+              x2={xScale(p.secs)}
+              y2={yScale(p.bpm)}
+              stroke={zoneColor((prev.bpm + p.bpm) / 2)}
+              strokeWidth="2"
+            />
+          );
+        })}
+      </Svg>
+
+      {/* Statistik under grafen */}
+      <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 16 }}>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ color: colors.muted, fontSize: 11 }}>Min</Text>
+          <Text style={{ color: colors.text, fontSize: 18, fontWeight: '600' }}>{minBpm}</Text>
+        </View>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ color: colors.muted, fontSize: 11 }}>Gennemsnit</Text>
+          <Text style={{ color: colors.text, fontSize: 18, fontWeight: '600' }}>
+            {Math.round(points.reduce((a, p) => a + p.bpm, 0) / points.length)}
+          </Text>
+        </View>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ color: colors.muted, fontSize: 11 }}>Max</Text>
+          <Text style={{ color: colors.text, fontSize: 18, fontWeight: '600' }}>{maxBpm}</Text>
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 
