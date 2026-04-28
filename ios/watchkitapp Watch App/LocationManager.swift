@@ -1,4 +1,4 @@
-import Foundation
+﻿import Foundation
 import CoreLocation
 import Combine
 import HealthKit
@@ -22,17 +22,17 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let healthStore = HKHealthStore()
     private var workoutSession: HKWorkoutSession?
 
-    // Konstanter for præcision
+    // Konstanter for prÃ¦cision
     private let maxAcceptableAccuracy: Double = 20.0   // Kun GPS bedre end 20m
     private let minimumDistanceBetweenPoints: Double = 3.0  // Min 3m mellem punkter
     private let maximumJumpDistance: Double = 100.0    // Smid teleporter > 100m/sek
-    private let warmupSeconds: TimeInterval = 5.0      // Smid første 5 sek af GPS
+    private let warmupSeconds: TimeInterval = 5.0      // Smid fÃ¸rste 5 sek af GPS
 
     override init() {
         super.init()
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-        manager.distanceFilter = 1.0   // Få alle bevægelser
+        manager.distanceFilter = 1.0   // FÃ¥ alle bevÃ¦gelser
         manager.activityType = .fitness
         authStatus = manager.authorizationStatus
         debugMessage = "Auth: \(authStatus.rawValue)"
@@ -63,7 +63,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         case .authorizedWhenInUse, .authorizedAlways:
             debugMessage = "GPS warming up..."
             manager.startUpdatingLocation()
-            startWorkoutSession()
+            // HKWorkoutSession nu styret af WorkoutManager
         case .denied, .restricted:
             debugMessage = "Permission denied"
             isTracking = false
@@ -75,21 +75,18 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     func pauseTracking() {
         manager.stopUpdatingLocation()
-        pauseWorkoutSession()
         debugMessage = "Paused"
     }
 
     func resumeTracking() {
         manager.startUpdatingLocation()
-        resumeWorkoutSession()
         debugMessage = "Resumed"
-        // Reset lastLocation så vi ikke får stort distance-jump
+        // Reset lastLocation sÃ¥ vi ikke fÃ¥r stort distance-jump
         lastLocation = nil
     }
 
     func stopTracking() {
         manager.stopUpdatingLocation()
-        stopWorkoutSession()
         isTracking = false
         pendingStart = false
         debugMessage = "Stopped"
@@ -116,7 +113,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         guard let workoutStart = startTime else { return }
 
         for newLocation in locations {
-            // 1. Smid dårlig accuracy
+            // 1. Smid dÃ¥rlig accuracy
             guard newLocation.horizontalAccuracy > 0 && newLocation.horizontalAccuracy < maxAcceptableAccuracy else {
                 debugMessage = "Skip: \(Int(newLocation.horizontalAccuracy))m"
                 continue
@@ -128,7 +125,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
                 continue
             }
 
-            // 3. Smid warm-up periode (første 5 sek)
+            // 3. Smid warm-up periode (fÃ¸rste 5 sek)
             let elapsed = Date().timeIntervalSince(workoutStart)
             if elapsed < warmupSeconds {
                 debugMessage = "Warmup: \(Int(elapsed))s"
@@ -141,7 +138,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
                 let delta = newLocation.distance(from: last)
                 let timeDelta = newLocation.timestamp.timeIntervalSince(last.timestamp)
 
-                // 4. Smid mikro-bevægelser (GPS drift mens stille)
+                // 4. Smid mikro-bevÃ¦gelser (GPS drift mens stille)
                 guard delta >= minimumDistanceBetweenPoints else {
                     continue
                 }
@@ -217,3 +214,4 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
 
 }
+
