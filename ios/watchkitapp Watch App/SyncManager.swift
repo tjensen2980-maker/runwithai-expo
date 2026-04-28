@@ -1,5 +1,4 @@
-===
-import Foundation
+﻿import Foundation
 import Combine
 
 class SyncManager: ObservableObject {
@@ -436,4 +435,3 @@ class SyncManager: ObservableObject {
         }
     }
 }
-===
