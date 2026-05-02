@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 
 const isWeb = Platform.OS === 'web';
-const SERVER = 'https://runwithai-server-production.up.railway.app';
+import { SERVER } from '../../config';
 
 let getAuthToken;
 try { getAuthToken = require('../../data').getAuthToken; } catch { getAuthToken = () => null; }
