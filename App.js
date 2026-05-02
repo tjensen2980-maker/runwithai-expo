@@ -70,6 +70,16 @@ const IconCalendar = ({ active }) => {
     </Svg>
   );
 };
+const IconNutrition = ({ active }) => {
+  const color = active ? '#0a0a0a' : '#b0b0b0';
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <Path d="M12 6c-1.5-2-4-3-6-2-2 1-3 3.5-3 6 0 5 4 12 9 12s9-7 9-12c0-2.5-1-5-3-6-2-1-4.5 0-6 2z" />
+      <Path d="M12 6c0-2 1-3.5 2.5-4" />
+    </Svg>
+  );
+};
+
 const IconZap = ({ color = '#ffffff' }) => (
   <Svg width={22} height={22} viewBox="0 0 24 24" fill={color}>
     <Polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
@@ -227,7 +237,7 @@ function TabBar({ tab, setTab }) {
     { id: 'activity',  label: t('tabs.progress'), Icon: IconProgress },
     { id: 'run',       label: '',                 Icon: null         },
     { id: 'stats',     label: t('tabs.stats'),    Icon: IconStats    },
-    { id: 'calendar',  label: t('tabs.calendar'), Icon: IconCalendar },
+    { id: 'nutrition', label: 'Mad',              Icon: IconNutrition },
   ];
   return (
     <View style={s.tabBar}>
