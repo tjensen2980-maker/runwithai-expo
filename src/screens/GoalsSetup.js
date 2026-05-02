@@ -37,12 +37,12 @@ function GoalPicker({ value, onChange }) {
     { id: 'lose_fat', label: 'Tab fedt' },
     { id: 'maintain', label: 'Vedligehold' },
     { id: 'gain_muscle', label: 'Byg muskler' },
-    { id: 'run_faster', label: 'Lob hurtigere' },
-    { id: 'run_longer', label: 'Lob laengere' }
+    { id: 'run_faster', label: 'Løb hurtigere' },
+    { id: 'run_longer', label: 'Løb længere' }
   ];
   return (
     <View style={s.fieldWrap}>
-      <Text style={s.label}>Primaert mal</Text>
+      <Text style={s.label}>Primært mål</Text>
       <View style={s.pickerRow}>
         {options.map(opt => {
           const active = value === opt.id;
@@ -132,18 +132,18 @@ export default function GoalsSetup({ onBack }) {
         <TouchableOpacity onPress={onBack} style={s.backBtn}>
           <Text style={s.backTxt}>Tilbage</Text>
         </TouchableOpacity>
-        <Text style={s.title}>Mine mal</Text>
+        <Text style={s.title}>Mine mål</Text>
         <View style={{ width: 70 }} />
       </View>
 
       <ScrollView contentContainerStyle={s.content} keyboardShouldPersistTaps="handled">
         <Text style={s.intro}>
-          Saet dine daglige mal for kalorier og makros. App'en bruger dem til at vise dagens balance og guide dig.
+          Sæt dine daglige mål for kalorier og makros. App'en bruger dem til at vise dagens balance og guide dig.
         </Text>
 
         <GoalPicker value={primaryGoal} onChange={setPrimaryGoal} />
 
-        <Text style={s.section}>Daglige mal</Text>
+        <Text style={s.section}>Daglige mål</Text>
 
         <Field label="Kalorier" value={targetKcal} onChange={setTargetKcal} suffix="kcal" placeholder="2200" />
         <Field label="Protein" value={targetProtein} onChange={setTargetProtein} suffix="g" placeholder="150" />
@@ -156,7 +156,7 @@ export default function GoalsSetup({ onBack }) {
           disabled={saving}>
           {saving
             ? <ActivityIndicator color={colors.card} />
-            : <Text style={s.saveTxt}>Gem mal</Text>}
+            : <Text style={s.saveTxt}>Gem mål</Text>}
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

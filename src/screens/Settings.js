@@ -513,7 +513,7 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
             style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 14 }}>
             <View style={{ flex: 1 }}>
               <Text style={{ fontSize: 16, fontWeight: '700', color: colors.text }}>Dagens kalorier</Text>
-              <Text style={{ fontSize: 12, color: colors.muted, marginTop: 2 }}>Se balance, makros og logger maltider</Text>
+              <Text style={{ fontSize: 12, color: colors.muted, marginTop: 2 }}>Se balance, makros og logger måltider</Text>
             </View>
             <Text style={{ fontSize: 22, color: colors.muted, marginLeft: 8 }}>></Text>
           </TouchableOpacity>
@@ -729,7 +729,7 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
                     const tid = r.duration_secs ? `${Math.floor(r.duration_secs/60)}min` : '';
                     return `${r.date || ''},${r.km || ''},${pace},${tid},${r.avg_hr || ''}`;
                   })).join('\n');
-                const blob = new Blob([csv], { type: 'text/csv' });
+                const bløb = new Blob([csv], { type: 'text/csv' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url; a.download = 'runwithai-runs.csv'; a.click();

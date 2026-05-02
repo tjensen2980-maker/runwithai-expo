@@ -1,5 +1,5 @@
 // src/screens/NutritionDashboard.js
-// Dagens kalorie- og makro-balance med liste af maltider.
+// Dagens kalorie- og makro-balance med liste af måltider.
 
 import React, { useState, useEffect, useCallback } from 'react';
 import {
@@ -73,7 +73,7 @@ function CalorieRing({ kcalIn, kcalOut, target }) {
           {Math.max(0, Math.round(remaining))}
         </Text>
         <Text style={{ fontSize: 13, color: colors.muted, marginTop: 4, fontWeight: '600' }}>
-          {remaining < 0 ? 'OVER MALET' : 'KCAL TILBAGE'}
+          {remaining < 0 ? 'OVER MÅLET' : 'KCAL TILBAGE'}
         </Text>
         {kcalOut > 0 ? (
           <Text style={{ fontSize: 11, color: colors.green, marginTop: 6, fontWeight: '700' }}>
@@ -140,8 +140,8 @@ export default function NutritionDashboard({ onBack, onLogMeal }) {
 
   const handleDelete = (mealId) => {
     Alert.alert(
-      'Slet maltid',
-      'Er du sikker pa at du vil slette dette maltid?',
+      'Slet måltid',
+      'Er du sikker pa at du vil slette dette måltid?',
       [
         { text: 'Annuller', style: 'cancel' },
         {
@@ -198,7 +198,7 @@ export default function NutritionDashboard({ onBack, onLogMeal }) {
         {!target ? (
           <View style={s.warnBox}>
             <Text style={s.warnTxt}>
-              Sat dine kalorie-mal under "Mine kalorie-mal" for at se dagens balance.
+              Sæt dine kalorie-mål under "Mine kalorie-mål" for at se dagens balance.
             </Text>
           </View>
         ) : null}
@@ -212,12 +212,12 @@ export default function NutritionDashboard({ onBack, onLogMeal }) {
             <Text style={s.statUnit}>kcal</Text>
           </View>
           <View style={s.statBox}>
-            <Text style={s.statLabel}>BRAENDT</Text>
+            <Text style={s.statLabel}>BRÆNDT</Text>
             <Text style={[s.statValue, { color: colors.green }]}>{Math.round(kcalOut)}</Text>
             <Text style={s.statUnit}>kcal</Text>
           </View>
           <View style={s.statBox}>
-            <Text style={s.statLabel}>MAL</Text>
+            <Text style={s.statLabel}>MÅL</Text>
             <Text style={s.statValue}>{Math.round(target)}</Text>
             <Text style={s.statUnit}>kcal</Text>
           </View>
@@ -232,21 +232,21 @@ export default function NutritionDashboard({ onBack, onLogMeal }) {
 
         <TouchableOpacity
           style={s.logBtn}
-          onPress={() => onLogMeal ? onLogMeal() : Alert.alert('Kommer snart', 'Log maltid bygges i naeste fase.')}>
-          <Text style={s.logBtnTxt}>+  Log maltid</Text>
+          onPress={() => onLogMeal ? onLogMeal() : Alert.alert('Kommer snart', 'Log måltid bygges i næste fase.')}>
+          <Text style={s.logBtnTxt}>+  Log måltid</Text>
         </TouchableOpacity>
 
-        <Text style={s.sectionTitle}>DAGENS MALTIDER</Text>
+        <Text style={s.sectionTitle}>DAGENS MÅLTIDER</Text>
         {meals.length === 0 ? (
           <View style={s.emptyBox}>
-            <Text style={s.emptyTxt}>Ingen maltider logget i dag</Text>
+            <Text style={s.emptyTxt}>Ingen måltider logget i dag</Text>
           </View>
         ) : (
           meals.map(m => (
             <View key={m.id} style={s.mealCard}>
               <View style={{ flex: 1 }}>
                 <Text style={s.mealType}>
-                  {MEAL_TYPE_LABELS[m.meal_type] || 'Maltid'} {m.eaten_at ? '- ' + formatTime(m.eaten_at) : ''}
+                  {MEAL_TYPE_LABELS[m.meal_type] || 'Måltid'} {m.eaten_at ? '- ' + formatTime(m.eaten_at) : ''}
                 </Text>
                 {(m.items || []).map((it, idx) => (
                   <Text key={idx} style={s.mealItem}>

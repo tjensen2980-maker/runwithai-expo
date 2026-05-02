@@ -26,6 +26,7 @@ import { RoutesTab as RoutesTabComponent } from './src/screens/RoutesTab';
 import Privacy from './src/screens/Privacy';
 import GoalsSetup from './src/screens/GoalsSetup';
 import NutritionDashboard from './src/screens/NutritionDashboard';
+import LogMeal from './src/screens/LogMeal';
 import * as WebBrowser from 'expo-web-browser';
 WebBrowser.maybeCompleteAuthSession();
 
@@ -554,7 +555,9 @@ export default function App() {
       case 'goals':
         return <GoalsSetup onBack={() => setTab('settings')} />;
       case 'nutrition':
-        return <NutritionDashboard onBack={() => setTab('settings')} />;
+        return <NutritionDashboard onBack={() => setTab('settings')} onLogMeal={() => setTab('logMeal')} />;
+      case 'logMeal':
+        return <LogMeal onBack={() => setTab('nutrition')} onDone={() => setTab('nutrition')} />;
       default:
         return null;
     }
