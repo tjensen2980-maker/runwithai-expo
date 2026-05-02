@@ -1,4 +1,4 @@
-﻿// src/services/NutritionAPI.js
+// src/services/NutritionAPI.js
 // Centralt API-lag for nutrition + activity endpoints.
 // Bruger automatisk staging eller production via src/config.js.
 
@@ -120,6 +120,26 @@ export async function logActivity(activity) {
     body: JSON.stringify(activity)
   });
   return handle(res, 'logActivity');
+}
+
+export async function getActivities(opts) {
+  const headers = await authHeaders();
+  const params = new URLSearchParams();
+  if (opts && opts.type) params.set('type', opts.type);
+  if (opts && opts.limit) params.set('limit', String(opts.limit));
+  const qs = params.toString() ? ('?' + params.toString()) : '';
+  const res = await fetch(SERVER + '/activities' + qs, { headers });
+  return handle(res, 'getActivities');
+}
+
+export async function getExercises(opts) {
+  const headers = await authHeaders();
+  const params = new URLSearchParams();
+  if (opts && opts.category) params.set('category', opts.category);
+  if (opts && opts.muscle_group) params.set('muscle_group', opts.muscle_group);
+  const qs = params.toString() ? ('?' + params.toString()) : '';
+  const res = await fetch(SERVER + '/exercises' + qs, { headers });
+  return handle(res, 'getExercises');
 }
 
 // ---- Utility: build meal payload from food + grams --------------------------

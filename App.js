@@ -29,6 +29,8 @@ import NutritionDashboard from './src/screens/NutritionDashboard';
 import LogMeal from './src/screens/LogMeal';
 import BarcodeScanner from './src/screens/BarcodeScanner';
 import PhotoAnalyze from './src/screens/PhotoAnalyze';
+import LogActivity from './src/screens/LogActivity';
+import ActivityTypePicker from './src/screens/ActivityTypePicker';
 import * as WebBrowser from 'expo-web-browser';
 WebBrowser.maybeCompleteAuthSession();
 
@@ -151,6 +153,12 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, onShowPric
             <Text style={{ fontSize: 40, marginBottom: 8 }}>🚶</Text>
             <Text style={{ fontSize: 22, fontWeight: '900', color: colors.black, letterSpacing: -0.5 }}>{t('run.walk')}</Text>
             <Text style={{ fontSize: 13, color: colors.muted, marginTop: 4 }}>{t('run.walkTracking')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => onStartActivity('pick')}
+            style={{ backgroundColor: '#f59e0b', borderRadius: 20, padding: 28, marginBottom: 20, alignItems: 'center' }}>
+            <Text style={{ fontSize: 40, marginBottom: 8 }}>💪</Text>
+            <Text style={{ fontSize: 22, fontWeight: '900', color: '#fff', letterSpacing: -0.5 }}>Traening</Text>
+            <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', marginTop: 4 }}>Styrke, mobility, cykel m.m.</Text>
           </TouchableOpacity>
           {lastRun && (
             <View style={{ backgroundColor: colors.card, borderRadius: 16, padding: 18, borderWidth: 1, borderColor: colors.border }}>
@@ -501,8 +509,16 @@ export default function App() {
       ]);
       return;
     }
+    if (type === 'pick') {
+      setTab('activityPicker');
+      return;
+    }
     setActivityType(type);
-    setTab('tracker');
+    if (type === 'strength' || type === 'mobility' || type === 'bike' || type === 'other') {
+      setTab('logActivity');
+    } else {
+      setTab('tracker');
+    }
   };
 
   if (!user) return (
@@ -581,6 +597,10 @@ export default function App() {
         return isPro ? <BarcodeScanner onBack={() => setTab('logMeal')} onScanned={(food, barcode) => { setScannedFood({ food, barcode }); setTab('logMeal'); }} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
       case 'photoAnalyze':
         return isPro ? <PhotoAnalyze onBack={() => setTab('logMeal')} onDone={() => setTab('nutrition')} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
+      case 'activityPicker':
+        return <ActivityTypePicker onBack={() => setTab('dashboard')} onPick={(type) => handleStartActivity(type)} />;
+      case 'logActivity':
+        return <LogActivity activityType={activityType} onBack={() => setTab('dashboard')} onDone={() => { setActivityType(null); setTab('dashboard'); loadData(); }} />;
       default:
         return null;
     }
