@@ -3,6 +3,7 @@ import { Icon } from '../components/Icons';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator, TextInput } from 'react-native';
 import { colors, LEVELS, DEFAULT_WEEK_PLAN, SERVER, getAuthToken } from '../data';
 import { useTranslation } from 'react-i18next';
+import RecentActivities from '../components/RecentActivities';
 
 // ─── VEJR + TRÆTHED ANBEFALING ────────────────────────────────────────────────
 function WeatherAdvice({ runs, nextWorkout, level, profile }) {
@@ -898,6 +899,7 @@ export default function Dashboard({ level, nextWorkout, weekPlan, planChanges, p
       <WeekPlan weekPlan={weekPlan} />
 
       <RunDiary runs={runs} />
+      <RecentActivities />
 
       <InjuryRisk runs={runs} profile={profile} level={level} />
 
