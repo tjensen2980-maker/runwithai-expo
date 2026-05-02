@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Icon } from '../components/Icons';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Switch, Platform, Modal, Alert, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -498,31 +498,7 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
         </View>
 
         {/* ── LØB & MÅL ── */}
-        <Text style={s.sectionTitle}>NUTRITION</Text>
-                <View style={s.card}>
-                  <TouchableOpacity
-                    onPress={() => onNavigate && onNavigate('goals')}
-                    style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 14 }}>
-                    <View style={{ flex: 1 }}>
-                      <Text style={{ fontSize: 16, fontWeight: '700', color: colors.text }}>Mine kalorie-mål</Text>
-                      <Text style={{ fontSize: 12, color: colors.muted, marginTop: 2 }}>Sæt daglige mål for kalorier og makros</Text>
-                    </View>
-        <View style={s.card}>
-          <TouchableOpacity
-            onPress={() => onNavigate && onNavigate('nutrition')}
-            style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 14 }}>
-            <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 16, fontWeight: '700', color: colors.text }}>Dagens kalorier</Text>
-              <Text style={{ fontSize: 12, color: colors.muted, marginTop: 2 }}>Se balance, makros og logger måltider</Text>
-            </View>
-            <Text style={{ fontSize: 22, color: colors.muted, marginLeft: 8 }}>></Text>
-          </TouchableOpacity>
-        </View>
-                    <Text style={{ fontSize: 22, color: colors.muted, marginLeft: 8 }}>›</Text>
-                  </TouchableOpacity>
-                </View>
-        
-                <Text style={s.sectionTitle}>{t('settings.sections.runningGoals')}</Text>
+        <Text style={s.sectionTitle}>{t('settings.sections.runningGoals')}</Text>
         <View style={s.card}>
           <Field label={t('settings.fields.yearsRunning')} {...field('yearsRunning')} keyboard="numeric" placeholder="3" />
           <Text style={[s.label, { marginBottom: 8 }]}>{t('settings.fields.primaryGoal')}</Text>

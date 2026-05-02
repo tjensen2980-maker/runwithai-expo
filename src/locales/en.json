@@ -35,7 +35,7 @@
     "upgradeToPro": "Upgrade to Pro",
     "feature": "Pro feature",
     "unlockFeatures": "Unlock all features",
-    "fromOnly": "From only",
+    "fromOnly": "From only 99 kr/month",
     "limit": {
       "title": "Pro feature",
       "message": "This feature requires a Pro subscription",
@@ -54,6 +54,10 @@
     "calendar": {
       "title": "Training Calendar",
       "description": "See your full training plan"
+    },
+    "nutrition": {
+      "title": "Calorie tracker",
+      "description": "Count calories, log meals and scan barcodes"
     },
     "aiRoutes": {
       "title": "AI Routes",
