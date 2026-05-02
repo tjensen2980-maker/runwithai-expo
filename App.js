@@ -1,4 +1,4 @@
-import './src/i18n';
+﻿import './src/i18n';
 import { useTranslation } from 'react-i18next';
 import PricingPage, { useSubscription, Paywall } from './components/Pricing';
 import React, { useState, useEffect } from 'react';
@@ -27,10 +27,11 @@ import Privacy from './src/screens/Privacy';
 import GoalsSetup from './src/screens/GoalsSetup';
 import NutritionDashboard from './src/screens/NutritionDashboard';
 import LogMeal from './src/screens/LogMeal';
+import BarcodeScanner from './src/screens/BarcodeScanner';
 import * as WebBrowser from 'expo-web-browser';
 WebBrowser.maybeCompleteAuthSession();
 
-// ─── TAB IKONER (React Native SVG) ───────────────────────────────────────────
+// â”€â”€â”€ TAB IKONER (React Native SVG) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const IconPlan = ({ active }) => {
   const color = active ? '#0a0a0a' : '#b0b0b0';
   return (
@@ -87,11 +88,11 @@ function ProFeatureLock({ feature, description, onUpgrade }) {
   return (
     <View style={proLockStyles.container}>
       <View style={proLockStyles.card}>
-        <Text style={proLockStyles.icon}>🔒</Text>
+        <Text style={proLockStyles.icon}>ðŸ”’</Text>
         <Text style={proLockStyles.title}>{feature}</Text>
         <Text style={proLockStyles.description}>{description}</Text>
         <TouchableOpacity style={proLockStyles.button} onPress={onUpgrade}>
-          <Text style={proLockStyles.buttonText}>{t('pro.upgradeToPro')} →</Text>
+          <Text style={proLockStyles.buttonText}>{t('pro.upgradeToPro')} â†’</Text>
         </TouchableOpacity>
         <Text style={proLockStyles.price}>{t('pro.fromOnly')}</Text>
       </View>
@@ -121,7 +122,7 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, onShowPric
             style={{ flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center', backgroundColor: activeTab === id ? colors.black : colors.surface, borderWidth: 2, borderColor: activeTab === id ? colors.black : colors.border2 }}
             onPress={() => setActiveTab(id)}>
             <Text style={{ fontSize: 14, fontWeight: '800', color: activeTab === id ? colors.card : colors.muted }}>
-              {label}{id === 'routes' && !isPro && ' 🔒'}
+              {label}{id === 'routes' && !isPro && ' ðŸ”’'}
             </Text>
           </TouchableOpacity>
         ))}
@@ -130,13 +131,13 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, onShowPric
         <ScrollView contentContainerStyle={{ padding: 16 }}>
           <TouchableOpacity onPress={() => onStartActivity('run')}
             style={{ backgroundColor: colors.black, borderRadius: 20, padding: 28, marginBottom: 12, alignItems: 'center' }}>
-            <Text style={{ fontSize: 40, marginBottom: 8 }}>🏃</Text>
+            <Text style={{ fontSize: 40, marginBottom: 8 }}>ðŸƒ</Text>
             <Text style={{ fontSize: 22, fontWeight: '900', color: colors.card, letterSpacing: -0.5 }}>{t('run.title')}</Text>
             <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>{t('run.gpsTracking')}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => onStartActivity('walk')}
             style={{ backgroundColor: colors.surface, borderRadius: 20, padding: 28, marginBottom: 20, alignItems: 'center', borderWidth: 2, borderColor: colors.border2 }}>
-            <Text style={{ fontSize: 40, marginBottom: 8 }}>🚶</Text>
+            <Text style={{ fontSize: 40, marginBottom: 8 }}>ðŸš¶</Text>
             <Text style={{ fontSize: 22, fontWeight: '900', color: colors.black, letterSpacing: -0.5 }}>{t('run.walk')}</Text>
             <Text style={{ fontSize: 13, color: colors.muted, marginTop: 4 }}>{t('run.walkTracking')}</Text>
           </TouchableOpacity>
@@ -144,9 +145,9 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, onShowPric
             <View style={{ backgroundColor: colors.card, borderRadius: 16, padding: 18, borderWidth: 1, borderColor: colors.border }}>
               <Text style={{ fontSize: 10, color: colors.muted, letterSpacing: 2, fontWeight: '700', marginBottom: 8 }}>{t('run.lastActivity')}</Text>
               <View style={{ flexDirection: 'row', gap: 20 }}>
-                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.accent }}>{lastRun.km || '–'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.km')}</Text></View>
-                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.text }}>{lastRun.duration || '–'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.time')}</Text></View>
-                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.text }}>{lastRun.pace || '–'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.pace')}</Text></View>
+                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.accent }}>{lastRun.km || 'â€“'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.km')}</Text></View>
+                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.text }}>{lastRun.duration || 'â€“'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.time')}</Text></View>
+                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.text }}>{lastRun.pace || 'â€“'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.pace')}</Text></View>
               </View>
             </View>
           )}
@@ -198,7 +199,7 @@ function PlanTab({ level, nextWorkout, weekPlan, planChanges, profile, runs, onN
             style={{ flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center', backgroundColor: activeTab === id ? colors.black : colors.surface, borderWidth: 2, borderColor: activeTab === id ? colors.black : colors.border2 }}
             onPress={() => setActiveTab(id)}>
             <Text style={{ fontSize: 14, fontWeight: '800', color: activeTab === id ? colors.card : colors.muted }}>
-              {label}{id === 'coach' && !isPro && ' 🔒'}
+              {label}{id === 'coach' && !isPro && ' ðŸ”’'}
             </Text>
           </TouchableOpacity>
         ))}
@@ -291,6 +292,7 @@ export default function App() {
   const [showOnboarding, setShowOnboarding] = useState(true);
   const [level, setLevel]                   = useState(null);
   const [tab, setTab]                       = useState('dashboard');
+  const [scannedFood, setScannedFood]       = useState(null);
   const [profile, setProfileState]          = useState(DEFAULT_PROFILE);
   const [weekPlan, setWeekPlanState]        = useState(DEFAULT_WEEK_PLAN);
   const [nextWorkout, setNextWorkout]       = useState(DEFAULT_NEXT_WORKOUT);
@@ -306,7 +308,7 @@ export default function App() {
   const { sendTodayTraining } = useWatch({
     onCommand: () => {},
     onWorkoutComplete: (run, saved) => {
-      const days = ['Søn','Man','Tir','Ons','Tor','Fre','Lør'];
+      const days = ['SÃ¸n','Man','Tir','Ons','Tor','Fre','LÃ¸r'];
       const todayShort = days[new Date().getDay()];
       const plan = trainingPlanRef.current;
       if (!plan || !plan.data) return;
@@ -341,7 +343,7 @@ export default function App() {
   // Watch auto-sync: send today's training when weekPlan loads
   useEffect(() => {
     if (weekPlan && weekPlan.length > 0 && sendTodayTraining) {
-      const daysDa = ['Søn','Man','Tir','Ons','Tor','Fre','Lør'];
+      const daysDa = ['SÃ¸n','Man','Tir','Ons','Tor','Fre','LÃ¸r'];
       const todayShortDa = daysDa[new Date().getDay()];
       const todayPlan = weekPlan.find(p => p.day === todayShortDa) || weekPlan[0];
       if (todayPlan) {
@@ -383,7 +385,7 @@ export default function App() {
       }
       setTrainingPlan(savedTrainingPlan);
       if (Array.isArray(savedTrainingPlan.data) && savedTrainingPlan.data.length > 0) {
-        const todayShort = ['Søn','Man','Tir','Ons','Tor','Fre','Lør'][new Date().getDay()];
+        const todayShort = ['SÃ¸n','Man','Tir','Ons','Tor','Fre','LÃ¸r'][new Date().getDay()];
         const synced = savedTrainingPlan.data.map(d => ({ ...d, today: d.day === todayShort }));
         setWeekPlanState(synced);
       }
@@ -450,9 +452,9 @@ export default function App() {
       }));
     }
     if (update.weekPlan) {
-      const todayShort = ['Søn','Man','Tir','Ons','Tor','Fre','Lør'][new Date().getDay()];
+      const todayShort = ['SÃ¸n','Man','Tir','Ons','Tor','Fre','LÃ¸r'][new Date().getDay()];
       const planData = update.weekPlan.map(d => ({
-        day: d.day, workout: d.workout || d.name || 'Træning', km: d.km || 0,
+        day: d.day, workout: d.workout || d.name || 'TrÃ¦ning', km: d.km || 0,
         color: d.color || '#c8ff00', type: d.type || 'run',
         description: d.description || d.desc || '',
         rest: d.type === 'rest' || (d.km === 0 && !d.type), today: d.day === todayShort,
@@ -557,7 +559,9 @@ export default function App() {
       case 'nutrition':
         return <NutritionDashboard onBack={() => setTab('settings')} onLogMeal={() => setTab('logMeal')} />;
       case 'logMeal':
-        return <LogMeal onBack={() => setTab('nutrition')} onDone={() => setTab('nutrition')} />;
+        return <LogMeal onBack={() => { setScannedFood(null); setTab('nutrition'); }} onDone={() => { setScannedFood(null); setTab('nutrition'); }} onScanBarcode={() => setTab('barcodeScanner')} scannedFood={scannedFood} onScanConsumed={() => setScannedFood(null)} />;
+      case 'barcodeScanner':
+        return <BarcodeScanner onBack={() => setTab('logMeal')} onScanned={(food, barcode) => { setScannedFood({ food, barcode }); setTab('logMeal'); }} />;
       default:
         return null;
     }
