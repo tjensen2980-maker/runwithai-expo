@@ -21,3 +21,4 @@ android/.gradle/
 .metro-health-check*
 .env
 runwithai-server/.env
+*.bak

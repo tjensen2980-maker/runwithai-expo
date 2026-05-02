@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import PricingPage, { useSubscription, Paywall } from './components/Pricing';
 import React, { useState, useEffect } from 'react';
 import { Icon } from './src/components/Icons';
+import { SERVER } from './src/config';
 import { View, Text, TouchableOpacity, StyleSheet, StatusBar, ActivityIndicator, ScrollView, Modal, Alert, Platform, Image } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -351,7 +352,7 @@ export default function App() {
       setTrainingPlan({ data: updated, generated_at: new Date().toISOString() });
       const tok = getAuthToken();
       if (tok) {
-        fetch('https://runwithai-server-production.up.railway.app/trainingplan/save', {
+        fetch(`${SERVER}/trainingplan/save`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok },
           body: JSON.stringify({ data: updated }),
@@ -430,7 +431,7 @@ export default function App() {
   useEffect(() => {
     const savedToken = getAuthToken();
     if (savedToken) {
-      fetch('https://runwithai-server-production.up.railway.app/profile', {
+      fetch(`${SERVER}/profile`, {
         headers: { Authorization: `Bearer ${savedToken}`, 'Content-Type': 'application/json' }
       }).then(r => {
         if (r.ok) { setAuthToken(savedToken); setUser({ token: savedToken }); syncAuthToWatch(savedToken, 'user'); }
@@ -488,7 +489,7 @@ export default function App() {
       setTrainingPlan({ data: planData, generated_at: new Date().toISOString() });
       const token = getAuthToken();
       if (token) {
-        fetch('https://runwithai-server-production.up.railway.app/trainingplan/save', {
+        fetch(`${SERVER}/trainingplan/save`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
           body: JSON.stringify({ data: planData }),

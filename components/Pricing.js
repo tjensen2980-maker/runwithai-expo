@@ -18,7 +18,8 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-const API_URL = 'https://runwithai-server-production.up.railway.app';
+import { SERVER } from '../src/config';
+const API_URL = SERVER;
 
 // Legal URLs
 const PRIVACY_POLICY_URL = 'https://www.runwithai.app/privacy';

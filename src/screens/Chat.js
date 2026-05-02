@@ -96,7 +96,8 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
       const aiMsg = { role: 'ai', text: aiText, hasPlanUpdate: !!planUpdate };
       setMessages(prev => [...prev, aiMsg]);
       if (planUpdate) onPlanUpdate(planUpdate);
-    } catch {
+    } catch (err) {
+      console.log('[Chat.js] sendToAI ERROR:', err?.message, err?.stack, err);
       setMessages(prev => [...prev, { role: 'ai', text: t('chat.connectionError') }]);
     }
     setLoading(false);

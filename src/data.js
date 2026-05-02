@@ -28,7 +28,8 @@ export const colors = {
 };
 
 // ─── SERVER URL ───────────────────────────────────────────────────────────────
-export { SERVER } from './config';
+import { SERVER } from './config';
+export { SERVER };
 
 // ─── AUTH TOKEN ───────────────────────────────────────────────────────────────
 const TOKEN_KEY = 'runwithai_token';
@@ -523,7 +524,16 @@ export function getZoneColor(zone) {
 
 // ─── AI CHAT (OPDATERET MED AVANCEREDE STATISTIKKER) ──────────────────────────
 export async function sendToAI({ messages, profile, level, weekPlan, nextWorkout, runs }) {
-  const a = assessProfile(profile);
+let activities = [], goals = null, meals = [], dailySummary = null;
+  try {
+    const _today = new Date().toISOString().split('T')[0];
+    [activities, goals, meals, dailySummary] = await Promise.all([
+      loadActivities().catch(() => []),
+      loadGoals().catch(() => null),
+      loadMeals(_today).catch(() => []),
+      loadDailySummary(_today).catch(() => null),
+    ]);
+  } catch (e) { console.log('[sendToAI] context fetch failed:', e); }  const a = assessProfile(profile);
   const lv = LEVELS[level] || LEVELS['intermediate'];
   const name = (profile?.name || 'Løber').split(' ')[0];
   const physique = [profile?.age && `${profile.age} år`, profile?.sex, profile?.weight && `${profile.weight} kg`].filter(Boolean).join(', ');
@@ -621,6 +631,15 @@ ${levelLimits}
 Eksisterende ugeplan: ${planCtx}
 Næste planlagte træning: ${nextName} (${nextKm}km)
 ${runsCtx}${caloriesCtx}
+=== FITNESS-TRAENING (seneste) ===
+${(activities && activities.length > 0) ? activities.slice(0,7).map(x => `- ${x.activity_type || x.type || 'Traening'}: ${x.duration_min || '?'} min, ${x.calories_kcal || 0} kcal${x.notes ? ' ('+x.notes+')' : ''}`).join('\n') : 'Ingen fitness-aktiviteter logget endnu.'}
+
+=== KOST I DAG ===
+${dailySummary ? `Indtaget: ${Math.round(dailySummary.total_kcal || 0)} kcal (P: ${Math.round(dailySummary.total_protein_g || 0)}g, K: ${Math.round(dailySummary.total_carbs_g || 0)}g, F: ${Math.round(dailySummary.total_fat_g || 0)}g)` : 'Ingen mad logget i dag endnu.'}
+${(meals && meals.length > 0) ? '\nDagens maaltider:\n' + meals.slice(0,10).map(m => `- ${m.meal_type || 'maaltid'}: ${m.food_name || (m.items && m.items[0]?.food_name) || 'mad'} (${Math.round(m.kcal || m.total_kcal || 0)} kcal)`).join('\n') : ''}
+
+=== BRUGERENS MAAL ===
+${goals ? `Daglig kalorier: ${goals.daily_kcal_goal || 'ikke sat'} kcal, Protein: ${goals.daily_protein_g_goal || 'ikke sat'}g, Vaegtmaal: ${goals.weight_goal_kg ? goals.weight_goal_kg + ' kg' : 'ikke sat'}` : 'Ingen specifikke maal sat endnu.'}
 ${advancedStats}
 
 ═══ I DAG ═══
@@ -1071,4 +1090,36 @@ export function clearCache() {
       .filter(k => k.startsWith(CACHE_PREFIX))
       .forEach(k => localStorage.removeItem(k));
   } catch {}
+}
+
+// ─── FITNESS / NUTRITION / GOALS API (til AI Coach context) ──────────────────
+
+export async function loadActivities() {
+  try {
+    const res = await fetch(`${SERVER}/activities`, { headers: authHeaders() });
+    return await res.json();
+  } catch { return []; }
+}
+
+export async function loadGoals() {
+  try {
+    const res = await fetch(`${SERVER}/goals`, { headers: authHeaders() });
+    return await res.json();
+  } catch { return null; }
+}
+
+export async function loadMeals(date) {
+  try {
+    const url = date ? `${SERVER}/meals?date=${date}` : `${SERVER}/meals`;
+    const res = await fetch(url, { headers: authHeaders() });
+    return await res.json();
+  } catch { return []; }
+}
+
+export async function loadDailySummary(date) {
+  try {
+    const url = date ? `${SERVER}/daily-summary?date=${date}` : `${SERVER}/daily-summary`;
+    const res = await fetch(url, { headers: authHeaders() });
+    return await res.json();
+  } catch { return null; }
 }
