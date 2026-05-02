@@ -1,4 +1,4 @@
-﻿import './src/i18n';
+import './src/i18n';
 import { useTranslation } from 'react-i18next';
 import PricingPage, { useSubscription, Paywall } from './components/Pricing';
 import React, { useState, useEffect } from 'react';
@@ -28,6 +28,7 @@ import GoalsSetup from './src/screens/GoalsSetup';
 import NutritionDashboard from './src/screens/NutritionDashboard';
 import LogMeal from './src/screens/LogMeal';
 import BarcodeScanner from './src/screens/BarcodeScanner';
+import PhotoAnalyze from './src/screens/PhotoAnalyze';
 import * as WebBrowser from 'expo-web-browser';
 WebBrowser.maybeCompleteAuthSession();
 
@@ -571,17 +572,15 @@ export default function App() {
       case 'privacy':
         return <Privacy onBack={() => setTab('settings')} />;
       case 'goals':
-        if (!isPro) return <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
-        return <GoalsSetup onBack={() => setTab('settings')} />;
+        return isPro ? <GoalsSetup onBack={() => setTab('settings')} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
       case 'nutrition':
-        if (!isPro) return <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
-        return <NutritionDashboard onBack={() => setTab('settings')} onLogMeal={() => setTab('logMeal')} />;
+        return isPro ? <NutritionDashboard onBack={() => setTab('settings')} onLogMeal={() => setTab('logMeal')} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
       case 'logMeal':
-        if (!isPro) return <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
-        return <LogMeal onBack={() => { setScannedFood(null); setTab('nutrition'); }} onDone={() => { setScannedFood(null); setTab('nutrition'); }} onScanBarcode={() => setTab('barcodeScanner')} scannedFood={scannedFood} onScanConsumed={() => setScannedFood(null)} />;
+        return isPro ? <LogMeal onBack={() => { setScannedFood(null); setTab('nutrition'); }} onDone={() => { setScannedFood(null); setTab('nutrition'); }} onScanBarcode={() => setTab('barcodeScanner')} onPhotoAnalyze={() => setTab('photoAnalyze')} scannedFood={scannedFood} onScanConsumed={() => setScannedFood(null)} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
       case 'barcodeScanner':
-        if (!isPro) return <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
-        return <BarcodeScanner onBack={() => setTab('logMeal')} onScanned={(food, barcode) => { setScannedFood({ food, barcode }); setTab('logMeal'); }} />;
+        return isPro ? <BarcodeScanner onBack={() => setTab('logMeal')} onScanned={(food, barcode) => { setScannedFood({ food, barcode }); setTab('logMeal'); }} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
+      case 'photoAnalyze':
+        return isPro ? <PhotoAnalyze onBack={() => setTab('logMeal')} onDone={() => setTab('nutrition')} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
       default:
         return null;
     }

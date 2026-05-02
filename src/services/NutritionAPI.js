@@ -1,4 +1,4 @@
-// src/services/NutritionAPI.js
+﻿// src/services/NutritionAPI.js
 // Centralt API-lag for nutrition + activity endpoints.
 // Bruger automatisk staging eller production via src/config.js.
 
@@ -141,4 +141,14 @@ export function buildMealPayload({ food, grams, mealType, eatenAt, notes }) {
       fat_g: round1(food.fat_g)
     }]
   };
+}
+
+export async function analyzePhoto(imageBase64, mediaType) {
+  const headers = await authHeaders();
+  const res = await fetch(SERVER + '/foods/analyze-photo', {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ image_base64: imageBase64, image_media_type: mediaType || 'image/jpeg' }),
+  });
+  return handle(res, 'analyzePhoto');
 }

@@ -33,7 +33,7 @@ function defaultMealType() {
 // Step 1: Search & pick food
 // ============================================================================
 
-function SearchStep({ onPickFood, onCreateCustom, onScanBarcode }) {
+function SearchStep({ onPickFood, onCreateCustom, onScanBarcode, onPhotoAnalyze }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [searching, setSearching] = useState(false);
@@ -69,7 +69,12 @@ function SearchStep({ onPickFood, onCreateCustom, onScanBarcode }) {
         <TouchableOpacity style={[s.customBtn, { backgroundColor: '#4CAF50', margin: 12 }]} onPress={onScanBarcode}>
           <Text style={[s.customBtnTxt, { color: '#fff' }]}>Scan stregkode</Text>
         </TouchableOpacity>
-      ) : null}      
+      ) : null}
+{onPhotoAnalyze ? (
+            <TouchableOpacity style={[s.customBtn, { backgroundColor: '#9C27B0', margin: 12, marginTop: 0 }]} onPress={onPhotoAnalyze}>
+              <Text style={[s.customBtnTxt, { color: '#fff' }]}>Tag billede af mad (AI)</Text>
+            </TouchableOpacity>
+          ) : null}      
 <View style={s.searchWrap}>
         <TextInput
           style={s.searchInput}
@@ -342,7 +347,7 @@ function CustomFoodStep({ onBack, onCreated }) {
 // Main
 // ============================================================================
 
-export default function LogMeal({ onBack, onDone, onScanBarcode, scannedFood, onScanConsumed }) {
+export default function LogMeal({ onBack, onDone, onScanBarcode, onPhotoAnalyze, scannedFood, onScanConsumed }) {
   const [step, setStep] = useState('search');  // 'search' | 'log' | 'custom'
 
   useEffect(() => {
@@ -384,7 +389,7 @@ export default function LogMeal({ onBack, onDone, onScanBarcode, scannedFood, on
         </View>
 
         {step === 'search' ? (
-          <SearchStep onPickFood={handlePickFood} onCreateCustom={handleCreateCustom} onScanBarcode={onScanBarcode} />
+          <SearchStep onPickFood={handlePickFood} onCreateCustom={handleCreateCustom} onScanBarcode={onScanBarcode} onPhotoAnalyze={onPhotoAnalyze} />
         ) : step === 'log' && food ? (
           <LogStep food={food} onBack={() => setStep('search')} onLogged={handleLogged} />
         ) : step === 'custom' ? (
