@@ -24,6 +24,8 @@ import Stats from './src/screens/Stats';
 import RunDetail from './src/screens/RunDetail';
 import { RoutesTab as RoutesTabComponent } from './src/screens/RoutesTab';
 import Privacy from './src/screens/Privacy';
+import GoalsSetup from './src/screens/GoalsSetup';
+import NutritionDashboard from './src/screens/NutritionDashboard';
 import * as WebBrowser from 'expo-web-browser';
 WebBrowser.maybeCompleteAuthSession();
 
@@ -546,9 +548,13 @@ export default function App() {
       case 'chat':
         return <Chat level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} onPlanUpdate={handlePlanUpdate} runs={runs} />;
       case 'settings':
-        return <Settings level={level || 'intermediate'} onLevelChange={(lv) => { setLevel(lv); setProfile(p => ({ ...p, level: lv })); }} profile={profile} onProfileChange={setProfile} onLogout={handleLogout} onBack={() => setTab('dashboard')} subscription={subscription} onShowPricing={() => setShowPricing(true)} />;
+        return <Settings onNavigate={setTab} level={level || 'intermediate'} onLevelChange={(lv) => { setLevel(lv); setProfile(p => ({ ...p, level: lv })); }} profile={profile} onProfileChange={setProfile} onLogout={handleLogout} onBack={() => setTab('dashboard')} subscription={subscription} onShowPricing={() => setShowPricing(true)} />;
       case 'privacy':
         return <Privacy onBack={() => setTab('settings')} />;
+      case 'goals':
+        return <GoalsSetup onBack={() => setTab('settings')} />;
+      case 'nutrition':
+        return <NutritionDashboard onBack={() => setTab('settings')} />;
       default:
         return null;
     }
