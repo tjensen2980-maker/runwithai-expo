@@ -28,8 +28,7 @@ export const colors = {
 };
 
 // ─── SERVER URL ───────────────────────────────────────────────────────────────
-import { SERVER } from './config';
-export { SERVER };
+export const SERVER = 'https://runwithai-server-staging.up.railway.app';
 
 // ─── AUTH TOKEN ───────────────────────────────────────────────────────────────
 const TOKEN_KEY = 'runwithai_token';
@@ -53,52 +52,24 @@ function authHeaders() {
   return { 'Content-Type': 'application/json', ...(_token ? { Authorization: `Bearer ${_token}` } : {}) };
 }
 
-// ─── LEVELS (med niveau-begrænsninger) ────────────────────────────────────────
+// ─── LEVELS ───────────────────────────────────────────────────────────────────
 export const LEVELS = {
   beginner: {
     id: 'beginner', label: 'Begynder', emoji: '🌱', color: '#2ecc71',
     desc: 'Ny til løb — enkle ord, ingen jargon',
     aiStyle: 'Forklar som til en nybegynder. Brug simple ord. Ingen forkortelser. Fokusér på: er det godt eller dårligt, og hvad skal jeg gøre.',
-    maxKmPerRun: 5,
-    maxKmPerWeek: 20,
-    minRestDays: 3,
-    paceRange: '7:00-8:00',
   },
   intermediate: {
     id: 'intermediate', label: 'Øvet', emoji: '🏃', color: '#ff6b35',
     desc: 'Løber regelmæssigt, kender grundlæggende begreber',
     aiStyle: 'Brug løbebegreber som tempo, zone 2, HRV. Forklar kort hvad tallene betyder. Giv konkrete anbefalinger.',
-    maxKmPerRun: 15,
-    maxKmPerWeek: 50,
-    minRestDays: 2,
-    paceRange: '5:30-6:30',
   },
   advanced: {
     id: 'advanced', label: 'Avanceret', emoji: '⚡', color: '#c8ff00',
     desc: 'Erfaren løber, forstår alle træningsdata',
     aiStyle: 'Brug fuld terminologi: ACWR, GCT, VO2max, HRV, asymmetri. Vær præcis og teknisk.',
-    maxKmPerRun: 30,
-    maxKmPerWeek: 100,
-    minRestDays: 1,
-    paceRange: '4:00-5:30',
   },
 };
-
-// ─── DAY MAPPING ──────────────────────────────────────────────────────────────
-const DAY_NAMES = {
-  'monday': 'Man', 'tuesday': 'Tir', 'wednesday': 'Ons', 'thursday': 'Tor',
-  'friday': 'Fre', 'saturday': 'Lør', 'sunday': 'Søn',
-  'mon': 'Man', 'tue': 'Tir', 'wed': 'Ons', 'thu': 'Tor',
-  'fri': 'Fre', 'sat': 'Lør', 'sun': 'Søn',
-  'Mandag': 'Man', 'Tirsdag': 'Tir', 'Onsdag': 'Ons', 'Torsdag': 'Tor',
-  'Fredag': 'Fre', 'Lørdag': 'Lør', 'Søndag': 'Søn',
-};
-
-function normalizeDay(day) {
-  if (!day) return day;
-  const lower = day.toLowerCase();
-  return DAY_NAMES[lower] || DAY_NAMES[day] || day;
-}
 
 // ─── BADGES DEFINITION ───────────────────────────────────────────────────────
 export const BADGES = {
@@ -179,223 +150,6 @@ export const DEFAULT_PROFILE = {
   garminConnected: false, appleHealthConnected: false,
 };
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// AVANCEREDE STATISTIK BEREGNINGER (NY!)
-// ═══════════════════════════════════════════════════════════════════════════════
-
-/**
- * Beregn kalorier forbrændt under løb
- * Baseret på MET (Metabolic Equivalent of Task) metoden
- */
-export function calculateCalories(weightKg, distanceKm, durationMins, paceMinPerKm) {
-  if (!weightKg || !distanceKm || !durationMins || durationMins <= 0) return null;
-  
-  // MET værdier baseret på pace (min/km)
-  let met;
-  if (paceMinPerKm >= 9.0) met = 6.0;
-  else if (paceMinPerKm >= 7.5) met = 8.3;
-  else if (paceMinPerKm >= 6.5) met = 9.8;
-  else if (paceMinPerKm >= 5.5) met = 11.0;
-  else if (paceMinPerKm >= 5.0) met = 11.8;
-  else if (paceMinPerKm >= 4.5) met = 12.8;
-  else if (paceMinPerKm >= 4.0) met = 14.5;
-  else met = 16.0;
-  
-  const calories = met * weightKg * (durationMins / 60);
-  return Math.round(calories);
-}
-
-/**
- * Beregn ACWR (Acute:Chronic Workload Ratio)
- * Optimal zone: 0.8-1.3, over 1.5 = høj skadesrisiko
- */
-export function calculateACWR(runs) {
-  if (!runs || runs.length === 0) return null;
-  
-  const now = Date.now();
-  const day = 86400000;
-  
-  const acute7Days = runs.filter(r => {
-    const d = new Date(r.date || r.created_at);
-    return (now - d) <= 7 * day;
-  });
-  const acuteLoad = acute7Days.reduce((sum, r) => sum + (r.km || 0), 0);
-  
-  const chronic28Days = runs.filter(r => {
-    const d = new Date(r.date || r.created_at);
-    return (now - d) <= 28 * day;
-  });
-  const chronicTotalKm = chronic28Days.reduce((sum, r) => sum + (r.km || 0), 0);
-  const chronicLoad = chronicTotalKm / 4;
-  
-  const acwr = chronicLoad > 0 ? acuteLoad / chronicLoad : 0;
-  
-  let riskLevel, riskColor, riskText;
-  if (acwr < 0.5) {
-    riskLevel = 'undertrained'; riskColor = '#3498db'; riskText = 'Undertrænet - øg gradvist';
-  } else if (acwr < 0.8) {
-    riskLevel = 'low'; riskColor = '#2ecc71'; riskText = 'Lav belastning - kan øges';
-  } else if (acwr <= 1.3) {
-    riskLevel = 'optimal'; riskColor = '#27ae60'; riskText = 'Optimal zone - perfekt!';
-  } else if (acwr <= 1.5) {
-    riskLevel = 'elevated'; riskColor = '#f39c12'; riskText = 'Forhøjet - vær forsigtig';
-  } else {
-    riskLevel = 'high'; riskColor = '#e74c3c'; riskText = 'Høj risiko - reducer!';
-  }
-  
-  return {
-    acwr: Math.round(acwr * 100) / 100,
-    acuteLoad: Math.round(acuteLoad * 10) / 10,
-    chronicLoad: Math.round(chronicLoad * 10) / 10,
-    riskLevel, riskColor, riskText,
-  };
-}
-
-/**
- * Estimér VO2max fra løbedata
- */
-export function estimateVO2max(runs, profile) {
-  if (!runs || runs.length === 0) return null;
-  
-  const validRuns = runs.filter(r => r.km >= 1 && r.pace > 0);
-  if (validRuns.length === 0) return null;
-  
-  const bestPace = Math.min(...validRuns.map(r => r.pace));
-  const speedKmH = 60 / bestPace;
-  const vo2max = Math.round(speedKmH * 3.5);
-  
-  const age = profile?.age ? parseInt(profile.age) : 30;
-  const sex = profile?.sex?.toLowerCase();
-  
-  let fitnessLevel, percentile;
-  if (sex === 'kvinde' || sex === 'female' || sex === 'f') {
-    if (vo2max >= 50) { fitnessLevel = 'Eliteløber'; percentile = 99; }
-    else if (vo2max >= 45) { fitnessLevel = 'Fremragende'; percentile = 95; }
-    else if (vo2max >= 40) { fitnessLevel = 'Meget god'; percentile = 85; }
-    else if (vo2max >= 35) { fitnessLevel = 'God'; percentile = 70; }
-    else if (vo2max >= 30) { fitnessLevel = 'Gennemsnitlig'; percentile = 50; }
-    else if (vo2max >= 25) { fitnessLevel = 'Under gennemsnit'; percentile = 30; }
-    else { fitnessLevel = 'Brug for forbedring'; percentile = 15; }
-  } else {
-    if (vo2max >= 60) { fitnessLevel = 'Eliteløber'; percentile = 99; }
-    else if (vo2max >= 52) { fitnessLevel = 'Fremragende'; percentile = 95; }
-    else if (vo2max >= 46) { fitnessLevel = 'Meget god'; percentile = 85; }
-    else if (vo2max >= 42) { fitnessLevel = 'God'; percentile = 70; }
-    else if (vo2max >= 36) { fitnessLevel = 'Gennemsnitlig'; percentile = 50; }
-    else if (vo2max >= 30) { fitnessLevel = 'Under gennemsnit'; percentile = 30; }
-    else { fitnessLevel = 'Brug for forbedring'; percentile = 15; }
-  }
-  
-  const ageAdjustedVo2max = vo2max + Math.max(0, (age - 30) * 0.5);
-  
-  return {
-    vo2max, ageAdjustedVo2max: Math.round(ageAdjustedVo2max),
-    fitnessLevel, percentile,
-    bestPace: Math.round(bestPace * 100) / 100,
-  };
-}
-
-/**
- * Beregn træningsbelastning (TSS-lignende)
- */
-export function calculateTrainingLoad(runs) {
-  if (!runs || runs.length === 0) return null;
-  
-  const now = Date.now();
-  const day = 86400000;
-  
-  const thisWeek = runs.filter(r => {
-    const d = new Date(r.date || r.created_at);
-    return (now - d) <= 7 * day;
-  });
-  
-  const lastWeek = runs.filter(r => {
-    const d = new Date(r.date || r.created_at);
-    return (now - d) > 7 * day && (now - d) <= 14 * day;
-  });
-  
-  const calcLoad = (runList) => {
-    return runList.reduce((sum, r) => {
-      const km = r.km || 0;
-      const pace = r.pace || 7;
-      const intensityFactor = Math.max(0.5, Math.min(2.0, 1 + (7 - pace) * 0.25));
-      return sum + (km * intensityFactor);
-    }, 0);
-  };
-  
-  const thisWeekLoad = calcLoad(thisWeek);
-  const lastWeekLoad = calcLoad(lastWeek);
-  
-  let trend, trendColor;
-  const pctChange = lastWeekLoad > 0 ? ((thisWeekLoad - lastWeekLoad) / lastWeekLoad) * 100 : 0;
-  
-  if (pctChange > 15) { trend = '↑↑ Stor stigning'; trendColor = '#e74c3c'; }
-  else if (pctChange > 5) { trend = '↑ Øget'; trendColor = '#f39c12'; }
-  else if (pctChange >= -5) { trend = '→ Stabil'; trendColor = '#27ae60'; }
-  else if (pctChange >= -15) { trend = '↓ Reduceret'; trendColor = '#3498db'; }
-  else { trend = '↓↓ Stor reduktion'; trendColor = '#9b59b6'; }
-  
-  return {
-    weeklyLoad: Math.round(thisWeekLoad * 10) / 10,
-    lastWeekLoad: Math.round(lastWeekLoad * 10) / 10,
-    weeklyRuns: thisWeek.length,
-    weeklyKm: Math.round(thisWeek.reduce((s, r) => s + (r.km || 0), 0) * 10) / 10,
-    trend, trendColor,
-    pctChange: Math.round(pctChange),
-  };
-}
-
-/**
- * Beregn løbe:gang ratio
- */
-export function calculateRunWalkRatio(runningKm, walkingKm) {
-  const total = (runningKm || 0) + (walkingKm || 0);
-  if (total === 0) return null;
-  
-  const runPct = Math.round((runningKm / total) * 100);
-  return {
-    runPct, walkPct: 100 - runPct,
-    runningKm: Math.round(runningKm * 100) / 100,
-    walkingKm: Math.round(walkingKm * 100) / 100,
-    ratio: walkingKm > 0 ? `${Math.round(runningKm / walkingKm * 10) / 10}:1` : 'Kun løb',
-  };
-}
-
-/**
- * Generer avanceret statistik-sammenfatning til AI coach
- */
-export function generateAdvancedStats(runs, profile, level) {
-  if (level !== 'advanced' || !runs || runs.length < 3) return '';
-  
-  const acwr = calculateACWR(runs);
-  const vo2max = estimateVO2max(runs, profile);
-  const load = calculateTrainingLoad(runs);
-  
-  if (!acwr && !vo2max && !load) return '';
-  
-  let stats = '\n═══ AVANCEREDE STATISTIKKER ═══\n';
-  
-  if (acwr) {
-    stats += `ACWR: ${acwr.acwr} (${acwr.riskText})\n`;
-    stats += `  - Akut belastning (7d): ${acwr.acuteLoad} km\n`;
-    stats += `  - Kronisk gns. (28d/uge): ${acwr.chronicLoad} km\n`;
-  }
-  
-  if (vo2max) {
-    stats += `VO2max estimat: ${vo2max.vo2max} ml/kg/min (${vo2max.fitnessLevel})\n`;
-    stats += `  - Baseret på bedste pace: ${vo2max.bestPace} min/km\n`;
-    stats += `  - Percentil for alder/køn: top ${100 - vo2max.percentile}%\n`;
-  }
-  
-  if (load) {
-    stats += `Træningsbelastning denne uge: ${load.weeklyLoad} (${load.trend})\n`;
-    stats += `  - Km denne uge: ${load.weeklyKm} km over ${load.weeklyRuns} løb\n`;
-    stats += `  - Ændring vs. sidste uge: ${load.pctChange > 0 ? '+' : ''}${load.pctChange}%\n`;
-  }
-  
-  return stats;
-}
-
 // ─── DATABASE API ─────────────────────────────────────────────────────────────
 
 // FIX 1: loadProfile — håndter dobbelt-JSON-encoded string fra serveren
@@ -420,6 +174,34 @@ export async function saveProfile(profile) {
       body: JSON.stringify(profile),
     });
   } catch (e) { console.error('saveProfile fejl:', e); }
+}
+
+export async function logMealPlan(meals) {
+  try {
+    const results = [];
+    for (const meal of meals) {
+      const res = await fetch(SERVER + '/meal-plan/log', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ meal: meal, eaten_at: new Date().toISOString() }),
+      });
+      const rawText = await res.text();
+      let parsed;
+      try {
+        parsed = JSON.parse(rawText);
+      } catch (parseErr) {
+        throw new Error('Server returnerede ikke JSON. Status ' + res.status + ': ' + rawText.substring(0, 100));
+      }
+      if (!res.ok) {
+        throw new Error(parsed.error || 'Server fejl');
+      }
+      results.push(parsed);
+    }
+    return { success: true, logged: results.length, results };
+  } catch (e) {
+    console.error('logMealPlan error:', e);
+    throw e;
+  }
 }
 
 export async function loadMessages() {
@@ -522,191 +304,62 @@ export function getZoneColor(zone) {
   return zoneColors[zone] || colors.muted;
 }
 
-// ─── AI CHAT (OPDATERET MED AVANCEREDE STATISTIKKER) ──────────────────────────
+// ─── AI CHAT ──────────────────────────────────────────────────────────────────
 export async function sendToAI({ messages, profile, level, weekPlan, nextWorkout, runs }) {
-let activities = [], goals = null, meals = [], dailySummary = null;
-  try {
-    const _today = new Date().toISOString().split('T')[0];
-    [activities, goals, meals, dailySummary] = await Promise.all([
-      loadActivities().catch(() => []),
-      loadGoals().catch(() => null),
-      loadMeals(_today).catch(() => []),
-      loadDailySummary(_today).catch(() => null),
-    ]);
-  } catch (e) { console.log('[sendToAI] context fetch failed:', e); }  const a = assessProfile(profile);
+  console.log('=== SENDTOAI KALDES ===', new Date().toISOString());
+  const a = assessProfile(profile);
   const lv = LEVELS[level] || LEVELS['intermediate'];
-  const name = (profile?.name || 'Løber').split(' ')[0];
-  const physique = [profile?.age && `${profile.age} år`, profile?.sex, profile?.weight && `${profile.weight} kg`].filter(Boolean).join(', ');
+  const name = (profile.name || 'Løber').split(' ')[0];
+  const physique = [profile.age && `${profile.age} år`, profile.sex, profile.weight && `${profile.weight} kg`].filter(Boolean).join(', ');
   const zones = a ? `Zone 2: ${a.zones.z2.low}–${a.zones.z2.high} bpm, Zone 4: ${a.zones.z4.low}–${a.zones.z4.high} bpm` : '';
-  
-  // Bruger præferencer
-  const runDays = profile?.preferredDays || profile?.runDays || [];
-  const normalizedRunDays = runDays.map(d => normalizeDay(d));
-  const runDaysStr = normalizedRunDays.length > 0 ? normalizedRunDays.join(', ') : 'ikke valgt (brug Man, Ons, Fre som default)';
-  const runsPerWeek = profile?.weeklyRunsGoal ? parseInt(profile.weeklyRunsGoal) : (runDays.length || 3);
-  
-  // Niveau-begrænsninger
-  const levelLimits = `
-VIGTIGE BEGRÆNSNINGER FOR ${level.toUpperCase()}:
-- Max km per løb: ${lv.maxKmPerRun} km
-- Max km per uge: ${lv.maxKmPerWeek} km
-- Minimum hviledage: ${lv.minRestDays} per uge
-- Forventet pace: ${lv.paceRange} min/km
-${level === 'beginner' ? `
-BEGYNDER-REGLER (SKAL FØLGES):
-- ALDRIG over 5 km per løb!
-- Start med gå/løb intervaller (fx løb 2 min, gå 1 min)
-- Fokus på tid, ikke distance
-- Langsom opbygning: max 10% stigning per uge
-` : ''}`;
+  const planCtx = weekPlan.map(d => `${d.day}: ${d.workout}${d.km > 0 ? ' ('+d.km+'km)' : ''}`).join(', ');
 
-  // Plan kontekst
-  const planCtx = weekPlan && weekPlan.length > 0
-    ? weekPlan.map(d => `${d.day}: ${d.workout}${d.km > 0 ? ' ('+d.km+'km)' : ''}`).join(', ')
-    : 'Ingen plan endnu';
-
-  // Løb historik
-  const recentRuns = (runs || []).slice(0, 10);
+  const recentRuns = (runs || []).slice(0, 5);
   const totalKmWeek = recentRuns
     .filter(r => { const d = new Date(r.date||r.created_at); return Date.now() - d < 7*86400000; })
     .reduce((s, r) => s + (r.km||0), 0);
-  const avgKmPerRun = recentRuns.length > 0
-    ? (recentRuns.reduce((s, r) => s + (r.km||0), 0) / recentRuns.length).toFixed(1)
-    : 0;
   const lastRunDaysAgo = recentRuns.length > 0
     ? Math.floor((Date.now() - new Date(recentRuns[0].date||recentRuns[0].created_at)) / 86400000)
     : null;
-  
   const runsCtx = recentRuns.length > 0
-    ? `Seneste løb: ${recentRuns.slice(0,3).map(r => `${r.km}km`).join(', ')}. Gns. per løb: ${avgKmPerRun}km. Km denne uge: ${Math.round(totalKmWeek*10)/10}km. Sidst løbet: ${lastRunDaysAgo === 0 ? 'i dag' : lastRunDaysAgo === 1 ? 'i går' : `${lastRunDaysAgo} dage siden`}.`
-    : 'Ingen løb endnu — ny løber!';
+    ? `Seneste løb: ${recentRuns.slice(0,3).map(r => `${r.km}km`).join(', ')}. Km denne uge: ${Math.round(totalKmWeek*10)/10}km. Sidst løbet: ${lastRunDaysAgo === 0 ? 'i dag' : lastRunDaysAgo === 1 ? 'i går' : `${lastRunDaysAgo} dage siden`}.`
+    : 'Ingen løb endnu.';
 
-  // Kalorieberegning for seneste løb
-  let caloriesCtx = '';
-  if (profile?.weight && recentRuns.length > 0) {
-    const lastRun = recentRuns[0];
-    const durationMins = (lastRun.duration || 0) / 60;
-    if (durationMins > 0) {
-      const cals = calculateCalories(
-        parseFloat(profile.weight),
-        lastRun.km || 0,
-        durationMins,
-        lastRun.pace || 7
-      );
-      if (cals) {
-        caloriesCtx = `\nSeneste løb forbrændte ca. ${cals} kalorier.`;
-      }
-    }
-  }
-
-  // Avancerede statistikker (kun for advanced niveau)
-  const advancedStats = generateAdvancedStats(runs, profile, level);
-
-  // Dato kontekst
   const today = new Date();
   const todayStr = today.toISOString().split('T')[0];
-  const dayNames = ['Søn', 'Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør'];
-  const todayDayName = dayNames[today.getDay()];
-  
-  // Næste træning (niveau-tilpasset)
-  const nextKm = typeof nextWorkout.km === 'object' ? nextWorkout.km[level] : nextWorkout.km;
-  const nextName = typeof nextWorkout.name === 'object' ? nextWorkout.name[level] : nextWorkout.name;
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const tomorrowStr = tomorrow.toISOString().split('T')[0];
 
-  const systemPrompt = `Du er RunWithAI — en empatisk, proaktiv AI løbecoach.
+  const systemPrompt = `Du er RunWithAI — en empatisk, proaktiv AI sundheds-, fitness- og løbecoach. Du hjælper med løbetræning, styrketræning, kost og madplaner. Når brugeren beder om mad eller kostvejledning, er det din primære opgave at hjælpe der — uden at nævne løb medmindre brugeren spørger. Bruger: ${name}. ${physique}. ${zones}. Niveau: ${level}. ${lv.aiStyle}
+Nuværende plan: ${planCtx}. Næste træning: ${nextWorkout.name[level]} (${nextWorkout.km}km).
+${runsCtx}
+I dag er: ${todayStr}. I morgen er: ${tomorrowStr}.
 
-═══ BRUGER INFO ═══
-Navn: ${name}
-Fysik: ${physique || 'ikke oplyst'}
-Pulszoner: ${zones || 'ikke beregnet'}
-Niveau: ${level} (${lv.label})
-Kommunikationsstil: ${lv.aiStyle}
+VIGTIG REGEL: Når brugeren nævner træthed, smerter, tidsmangel, vejr eller ønsker ændring — lav ALTID konkret planændring med <plan_update>. Spørg ikke om lov, bare gør det og forklar kort.
+Trigger-ord: "træt", "ondt", "kort", "flyt", "skift", "reducer", "øg", "frisk", "tid", "i morgen", "hvile", "tilføj", "gå", "gang", "gåtur".
 
-═══ BRUGERENS PRÆFERENCER ═══
-Ønskede løbedage: ${runDaysStr}
-Antal løb per uge: ${runsPerWeek}
+MADPLAN: Når brugeren beder om en madplan, kostplan, mad-forslag, vægttab-plan, muskelopbygning-plan, måltidsforslag — lav ALTID en konkret madplan med <meal_plan>. Brugeren kan så logge måltiderne med ét tryk.
+Trigger-ord: "madplan", "kostplan", "mad", "spise", "måltid", "opskrift", "morgenmad", "frokost", "aftensmad", "snack", "tabe sig", "muskler", "vægttab", "muskelopbygning", "kalorier".
 
-${levelLimits}
+Format til madplan (inkludér kun ved madplan-anmodning):
+<meal_plan>{"goal":"lose_fat|maintain|gain_muscle","totalKcal":2000,"meals":[{"meal_type":"breakfast","name":"Havregrød med bær","kcal":350,"protein_g":15,"carbs_g":55,"fat_g":8,"description":"60g havregryn, 200ml mælk, håndfuld bær"},{"meal_type":"lunch","name":"...","kcal":...,"protein_g":...,"carbs_g":...,"fat_g":...,"description":"..."}]}</meal_plan>
+Lav 4-5 måltider. meal_type skal være: breakfast, lunch, dinner eller snack.
 
-═══ NUVÆRENDE STATUS ═══
-Eksisterende ugeplan: ${planCtx}
-Næste planlagte træning: ${nextName} (${nextKm}km)
-${runsCtx}${caloriesCtx}
-=== FITNESS-TRAENING (seneste) ===
-${(activities && activities.length > 0) ? activities.slice(0,7).map(x => `- ${x.activity_type || x.type || 'Traening'}: ${x.duration_min || '?'} min, ${x.calories_kcal || 0} kcal${x.notes ? ' ('+x.notes+')' : ''}`).join('\n') : 'Ingen fitness-aktiviteter logget endnu.'}
+Format til planændring (inkludér kun ved ændring):
+<plan_update>{"changeNote":"kort forklaring","nextWorkout":{"name":"navn","desc":"beskrivelse","km":9.0,"duration":"~50","targetPace":"5:00","targetHr":155},"weekPlan":[{"day":"Man","workout":"navn","km":9,"color":"#c8ff00","type":"run","description":"konkret beskrivelse"}]}</plan_update>
+Svar på dansk, max 2-3 sætninger. Vær direkte og konkret.`;
 
-=== KOST I DAG ===
-${dailySummary ? `Indtaget: ${Math.round(dailySummary.total_kcal || 0)} kcal (P: ${Math.round(dailySummary.total_protein_g || 0)}g, K: ${Math.round(dailySummary.total_carbs_g || 0)}g, F: ${Math.round(dailySummary.total_fat_g || 0)}g)` : 'Ingen mad logget i dag endnu.'}
-${(meals && meals.length > 0) ? '\nDagens maaltider:\n' + meals.slice(0,10).map(m => `- ${m.meal_type || 'maaltid'}: ${m.food_name || (m.items && m.items[0]?.food_name) || 'mad'} (${Math.round(m.kcal || m.total_kcal || 0)} kcal)`).join('\n') : ''}
-
-=== BRUGERENS MAAL ===
-${goals ? `Daglig kalorier: ${goals.daily_kcal_goal || 'ikke sat'} kcal, Protein: ${goals.daily_protein_g_goal || 'ikke sat'}g, Vaegtmaal: ${goals.weight_goal_kg ? goals.weight_goal_kg + ' kg' : 'ikke sat'}` : 'Ingen specifikke maal sat endnu.'}
-${advancedStats}
-
-═══ I DAG ═══
-Dato: ${todayStr} (${todayDayName})
-
-═══ REGLER FOR PLANLÆGNING ═══
-1. RESPEKTER ALTID brugerens valgte løbedage (${runDaysStr})
-2. Læg KUN løb på de dage brugeren har valgt
-3. Andre dage skal være "Hvile" eller "Styrke/Mobilitet"
-4. Hold dig ALTID inden for niveau-begrænsningerne
-
-═══ FARVE-KODER TIL PLAN ═══
-- Roligt løb: #2ecc71 (grøn)
-- Interval/Fartleg: #c8ff00 (lime)
-- Tempo: #ff6b35 (orange)
-- Langtur: #3a7bd5 (blå)
-- Hvile: #2a2a2f (mørk)
-- Styrke/Cross: #a855f7 (lilla)
-
-═══ TRIGGER-ORD FOR PLANÆNDRING ═══
-Når brugeren nævner: "træt", "ondt", "kort", "flyt", "skift", "reducer", "øg", "frisk", "tid", "i morgen", "hvile", "tilføj", "lav en plan", "ny plan", "opdater plan", "ændr plan"
-→ Lav ALTID konkret planændring med <plan_update>. Spørg IKKE om lov.
-
-═══ FORMAT TIL PLANÆNDRING ═══
-<plan_update>
-{
-  "changeNote": "kort forklaring af ændringen",
-  "nextWorkout": {
-    "name": "Træningsnavn",
-    "desc": "Beskrivelse tilpasset niveau",
-    "km": 4.0,
-    "duration": "~30",
-    "targetPace": "7:00",
-    "targetHr": 140
-  },
-  "weekPlan": [
-    {"day": "Man", "workout": "Roligt løb", "km": 3, "color": "#2ecc71", "type": "run", "description": "Let løb i samtaletempo"},
-    {"day": "Tir", "workout": "Hvile", "km": 0, "color": "#2a2a2f", "type": "rest", "rest": true},
-    {"day": "Ons", "workout": "Interval", "km": 4, "color": "#c8ff00", "type": "run", "description": "5x2 min hurtigt med 1 min pause"},
-    {"day": "Tor", "workout": "Hvile", "km": 0, "color": "#2a2a2f", "type": "rest", "rest": true},
-    {"day": "Fre", "workout": "Roligt løb", "km": 3, "color": "#2ecc71", "type": "run", "description": "Afslappet løb"},
-    {"day": "Lør", "workout": "Hvile", "km": 0, "color": "#2a2a2f", "type": "rest", "rest": true},
-    {"day": "Søn", "workout": "Langtur", "km": 5, "color": "#3a7bd5", "type": "run", "description": "Ugens længste løb, roligt tempo"}
-  ]
-}
-</plan_update>
-
-VIGTIGT: weekPlan SKAL have alle 7 dage (Man-Søn)!
-Brug KORTE dagnavne: Man, Tir, Ons, Tor, Fre, Lør, Søn
-
-═══ KOMMUNIKATION ═══
-- Svar på dansk
-- Max 2-3 sætninger (brugeren vil have action, ikke lange forklaringer)
-- Vær direkte og konkret
-${level === 'advanced' ? `
-═══ AVANCERET NIVEAU KOMMUNIKATION ═══
-- Brug teknisk terminologi frit: ACWR, VO2max, TSS, HRV, GCT
-- Kommenter på ACWR hvis det er uden for optimal zone (0.8-1.3)
-- Referer til VO2max og fitnessniveau når relevant
-` : ''}`;
+console.log('[DEBUG] System prompt length:', systemPrompt.length);
+  console.log('[DEBUG] Contains meal_plan:', systemPrompt.includes('<meal_plan>'));
+  console.log('[DEBUG] Contains MADPLAN:', systemPrompt.includes('MADPLAN'));
 
   const res = await fetch(`${SERVER}/chat`, {
     method: 'POST',
     headers: authHeaders(),
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: 3000,
+      max_tokens: 2000,
       system: systemPrompt,
       messages: messages.map(m => ({ role: m.role === 'ai' ? 'assistant' : 'user', content: m.text })),
     }),
@@ -719,19 +372,25 @@ ${level === 'advanced' ? `
   if (match) {
     try {
       planUpdate = JSON.parse(match[1].trim());
+      const dayMap = { 'Mandag':'Man','Tirsdag':'Tir','Onsdag':'Ons','Torsdag':'Tor','Fredag':'Fre','Lørdag':'Lør','Søndag':'Søn' };
       if (planUpdate?.weekPlan) {
         planUpdate.weekPlan = planUpdate.weekPlan.map(d => ({
-          ...d,
-          day: normalizeDay(d.day),
-          rest: d.rest || d.type === 'rest' || d.workout === 'Hvile',
+          ...d, day: dayMap[d.day] || d.day
         }));
       }
-    } catch (e) {
-      console.error('Kunne ikke parse plan_update:', e);
-    }
+    } catch {}
     text = text.replace(/<plan_update>[\s\S]*?<\/plan_update>/, '').trim();
   }
-
+let mealPlan = null;
+  const mpMatch = text.match(/<meal_plan>([\s\S]*?)<\/meal_plan>/);
+  if (mpMatch) {
+    try {
+      mealPlan = JSON.parse(mpMatch[1].trim());
+    } catch (e) {
+      console.log('meal_plan parse error:', e.message);
+    }
+    text = text.replace(/<meal_plan>[\s\S]*?<\/meal_plan>/, '').trim();
+  }
   const aiMsg = { role: 'assistant', text };
   const allMessages = [...messages, aiMsg].map(m => ({
     role: m.role === 'ai' ? 'assistant' : m.role,
@@ -739,7 +398,7 @@ ${level === 'advanced' ? `
   }));
   saveMessages(allMessages).catch(e => console.error('Kunne ikke gemme beskeder:', e));
 
-  return { text, planUpdate };
+  return { text, planUpdate, mealPlan };
 }
 
 // ─── RUNS API ─────────────────────────────────────────────────────────────────
@@ -1090,36 +749,4 @@ export function clearCache() {
       .filter(k => k.startsWith(CACHE_PREFIX))
       .forEach(k => localStorage.removeItem(k));
   } catch {}
-}
-
-// ─── FITNESS / NUTRITION / GOALS API (til AI Coach context) ──────────────────
-
-export async function loadActivities() {
-  try {
-    const res = await fetch(`${SERVER}/activities`, { headers: authHeaders() });
-    return await res.json();
-  } catch { return []; }
-}
-
-export async function loadGoals() {
-  try {
-    const res = await fetch(`${SERVER}/goals`, { headers: authHeaders() });
-    return await res.json();
-  } catch { return null; }
-}
-
-export async function loadMeals(date) {
-  try {
-    const url = date ? `${SERVER}/meals?date=${date}` : `${SERVER}/meals`;
-    const res = await fetch(url, { headers: authHeaders() });
-    return await res.json();
-  } catch { return []; }
-}
-
-export async function loadDailySummary(date) {
-  try {
-    const url = date ? `${SERVER}/daily-summary?date=${date}` : `${SERVER}/daily-summary`;
-    const res = await fetch(url, { headers: authHeaders() });
-    return await res.json();
-  } catch { return null; }
 }

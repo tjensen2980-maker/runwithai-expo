@@ -1,4 +1,4 @@
-{
+﻿{
   "tabs": {
     "plan": "Plāns",
     "run": "Skriešana",
@@ -470,7 +470,7 @@
     "loadingHistory": "Ielādē sarunu...",
     "planUpdated": "Plāns atjaunināts",
     "defaultRunner": "Skrējējs",
-    "greeting": "Sveiki {{name}}! Es esmu jūsu AI skriešanas treneris. Kā es varu jums šodien palīdzēt?",
+    "greeting": "Sveiki {{name}}! Esmu tavs AI treneris. Kā varu palīdzēt šodien?",
     "clearedGreeting": "Saruna notīrīta! Kā es varu jums palīdzēt, {{name}}?",
     "connectionError": "Atvainojiet, nevarēju izveidot savienojumu. Lūdzu, mēģiniet vēlreiz."
   },

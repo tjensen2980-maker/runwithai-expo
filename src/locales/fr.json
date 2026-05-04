@@ -1,4 +1,4 @@
-{
+﻿{
   "tabs": {
     "plan": "Plan",
     "run": "Course",
@@ -470,7 +470,7 @@
     "loadingHistory": "Chargement de la conversation...",
     "planUpdated": "Plan mis à jour",
     "defaultRunner": "coureur",
-    "greeting": "Bonjour {{name}} ! Je suis votre coach de course IA. Comment puis-je vous aider aujourd'hui ?",
+    "greeting": "Salut {{name}}! Je suis ton coach IA. Comment puis-je t'aider aujourd'hui?",
     "clearedGreeting": "Conversation effacée ! Comment puis-je vous aider, {{name}} ?",
     "connectionError": "Désolé, je n'ai pas pu me connecter. Veuillez réessayer."
   },

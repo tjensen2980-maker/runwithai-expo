@@ -1,4 +1,4 @@
-{
+﻿{
   "tabs": {
     "plan": "Planas",
     "run": "Bėgimas",
@@ -470,7 +470,7 @@
     "loadingHistory": "Kraunamas pokalbis...",
     "planUpdated": "Planas atnaujintas",
     "defaultRunner": "Bėgikas",
-    "greeting": "Sveiki {{name}}! Aš esu jūsų AI bėgimo treneris. Kaip galiu jums šiandien padėti?",
+    "greeting": "Sveiki {{name}}! Esu jūsų AI treneris. Kaip galiu padėti šiandien?",
     "clearedGreeting": "Pokalbis išvalytas! Kaip galiu jums padėti, {{name}}?",
     "connectionError": "Atsiprašau, nepavyko prisijungti. Prašome bandyti dar kartą."
   },

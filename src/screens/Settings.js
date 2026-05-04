@@ -309,6 +309,14 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
   const [runs, setRuns] = useState([]);
   const [subscription, setSubscription] = useState(null);
   const [deletingAccount, setDeletingAccount] = useState(false);
+  // ─── ERNÆRINGSPLAN STATE ────────────────────────────────────────────────
+const [primaryGoal, setPrimaryGoal] = useState('maintain');
+const [goalPace, setGoalPace] = useState('normal');
+const [activityLevel, setActivityLevel] = useState('moderate');
+const [planType, setPlanType] = useState('balanced');
+const [targetWeight, setTargetWeight] = useState('');
+const [calculating, setCalculating] = useState(false);
+const [calcResult, setCalcResult] = useState(null);
   
   useEffect(() => {
     const fetchSub = async () => {
@@ -325,6 +333,28 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
   }, []);
 
   useEffect(() => { loadRuns().then(r => setRuns(r || [])); }, []);
+
+  // Hent eksisterende mål så UI'et viser nuværende valg
+useEffect(() => {
+  const fetchGoals = async () => {
+    try {
+      const token = await getAuthToken();
+      const res = await fetch(`${SERVER}/goals`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (data) {
+        if (data.primary_goal)    setPrimaryGoal(data.primary_goal);
+        if (data.goal_pace)       setGoalPace(data.goal_pace);
+        if (data.activity_level)  setActivityLevel(data.activity_level);
+        if (data.plan_type)       setPlanType(data.plan_type);
+        if (data.target_weight_kg) setTargetWeight(String(data.target_weight_kg));
+        setCalcResult(data);
+      }
+    } catch (e) { console.log('Load goals:', e); }
+  };
+  fetchGoals();
+}, []);
   
   const [notifEnabled, setNotifEnabled] = useState(false);
   const [notifTime, setNotifTime] = useState(profile?.notifTime || '07:00');
@@ -348,9 +378,41 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
     onChange: (v) => setForm(f => ({ ...f, [key]: v })),
   });
 
-  const save = () => {
+const save = async () => {
     const fullForm = { ...form, notifTime, notifDays };
     onProfileChange(fullForm);
+    try {
+      const token = await getAuthToken();
+      if (token && fullForm.weight && fullForm.height && fullForm.age) {
+        const sexMap = { 'Mand': 'male', 'Kvinde': 'female' };
+        const goalMap = { weight: 'lose_fat', fitness: 'maintain', '5k': 'maintain', '10k': 'maintain', half: 'maintain', full: 'maintain' };
+        const body = {
+          weight_kg: parseFloat(fullForm.weight),
+          height_cm: parseFloat(fullForm.height),
+          age: parseInt(fullForm.age),
+          gender: sexMap[fullForm.sex] || 'male',
+          activity_level: 'moderate',
+          primary_goal: goalMap[fullForm.goal] || 'maintain',
+          goal_pace: 'normal',
+          plan_type: 'balanced'
+        };
+        const url = SERVER + '/goals/auto';
+        const auth = 'Bearer ' + token;
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': auth },
+          body: JSON.stringify(body)
+        });
+        if (res.ok) {
+          const data = await res.json();
+          console.log('[Settings] Auto-calc OK:', data.target_kcal, 'kcal');
+        } else {
+          console.warn('[Settings] Auto-calc failed:', res.status);
+        }
+      }
+    } catch (err) {
+      console.warn('[Settings] Auto-calc error:', err);
+    }
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };
@@ -388,6 +450,36 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
   const toggleDay = (day) => {
     setNotifDays(prev => prev.includes(day) ? prev.filter(d => d !== day) : [...prev, day]);
   };
+
+  // ─── BEREGN KALORIEMÅL ──────────────────────────────────────────────────
+const calculateGoals = async () => {
+  setCalculating(true);
+  try {
+    const token = await getAuthToken();
+    const body = {
+      primary_goal: primaryGoal,
+      goal_pace: goalPace,
+      activity_level: activityLevel,
+      plan_type: planType,
+    };
+    if (targetWeight) body.target_weight_kg = parseFloat(targetWeight);
+
+    const res = await fetch(`${SERVER}/goals/auto`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      setCalcResult(data);
+    } else {
+      Alert.alert('Fejl', data.error || 'Kunne ikke beregne');
+    }
+  } catch (err) {
+    Alert.alert('Fejl', 'Server-forbindelse fejlede');
+  }
+  setCalculating(false);
+};
 
   // ─── SLET KONTO (APPLE KRAV) ────────────────────────────────────────────────
   const handleDeleteAccount = () => {
@@ -636,6 +728,185 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
               );
             })}
           </View>
+        </View>
+
+{/* ── ERNÆRINGSPLAN ── */}
+<Text style={s.sectionTitle}>🍎 ERNÆRINGSPLAN</Text>
+<View style={s.card}>
+  {/* Hovedmål */}
+  <Text style={[s.label, { marginBottom: 8 }]}>HOVEDMÅL</Text>
+  <View style={s.goalGrid}>
+    {[
+      { id: 'lose_fat',    label: '🔥 Tabe fedt' },
+      { id: 'maintain',    label: '⚖️ Vedligeholde' },
+      { id: 'gain_muscle', label: '💪 Bygge muskler' },
+    ].map(g => (
+      <TouchableOpacity
+        key={g.id}
+        style={[s.goalBtn, primaryGoal === g.id && { borderColor: colors.accent, backgroundColor: colors.accent + '15' }]}
+        onPress={() => setPrimaryGoal(g.id)}>
+        <Text style={[s.goalBtnText, primaryGoal === g.id && { color: colors.accent }]}>{g.label}</Text>
+      </TouchableOpacity>
+    ))}
+  </View>
+
+  {/* Takt */}
+  <Text style={[s.label, { marginBottom: 8, marginTop: 8 }]}>TAKT</Text>
+  <View style={s.sexRow}>
+    {[
+      { id: 'slow',   label: 'Langsom' },
+      { id: 'normal', label: 'Normal' },
+      { id: 'fast',   label: 'Hurtig' },
+    ].map(p => (
+      <TouchableOpacity
+        key={p.id}
+        style={[s.sexBtn, goalPace === p.id && { backgroundColor: colors.accent + '20', borderColor: colors.accent }]}
+        onPress={() => setGoalPace(p.id)}>
+        <Text style={[s.sexBtnText, goalPace === p.id && { color: colors.accent }]}>{p.label}</Text>
+      </TouchableOpacity>
+    ))}
+  </View>
+
+  {/* Aktivitetsniveau */}
+  <Text style={[s.label, { marginBottom: 8, marginTop: 14 }]}>AKTIVITETSNIVEAU</Text>
+  <View style={s.goalGrid}>
+    {[
+      { id: 'sedentary',   label: '🪑 Stillesiddende' },
+      { id: 'light',       label: '🚶 Let' },
+      { id: 'moderate',    label: '🏃 Moderat' },
+      { id: 'active',      label: '💨 Aktiv' },
+      { id: 'very_active', label: '🔥 Meget aktiv' },
+    ].map(a => (
+      <TouchableOpacity
+        key={a.id}
+        style={[s.goalBtn, activityLevel === a.id && { borderColor: colors.accent, backgroundColor: colors.accent + '15' }]}
+        onPress={() => setActivityLevel(a.id)}>
+        <Text style={[s.goalBtnText, activityLevel === a.id && { color: colors.accent }]}>{a.label}</Text>
+      </TouchableOpacity>
+    ))}
+  </View>
+
+  {/* Plan-type */}
+  <Text style={[s.label, { marginBottom: 8, marginTop: 14 }]}>MAKRO-FORDELING</Text>
+  <View style={s.goalGrid}>
+    {[
+      { id: 'balanced',     label: 'Balanceret (25/50/25)' },
+      { id: 'high_protein', label: 'Højt protein (35/40/25)' },
+      { id: 'low_carb',     label: 'Lav-kulhydrat (30/25/45)' },
+      { id: 'keto',         label: 'Keto (25/5/70)' },
+    ].map(p => (
+      <TouchableOpacity
+        key={p.id}
+        style={[s.goalBtn, planType === p.id && { borderColor: colors.accent, backgroundColor: colors.accent + '15' }]}
+        onPress={() => setPlanType(p.id)}>
+        <Text style={[s.goalBtnText, planType === p.id && { color: colors.accent }]}>{p.label}</Text>
+      </TouchableOpacity>
+    ))}
+  </View>
+
+  {/* Mål-vægt (valgfri) */}
+  {(primaryGoal === 'lose_fat' || primaryGoal === 'gain_muscle') && (
+    <View style={{ marginTop: 14 }}>
+      <Field
+        label="MÅL-VÆGT (KG, VALGFRI)"
+        value={targetWeight}
+        onChange={setTargetWeight}
+        keyboard="numeric"
+        placeholder="70"
+      />
+    </View>
+  )}
+
+  {/* Beregn-knap */}
+  <TouchableOpacity
+    style={[s.saveBtn, { marginTop: 8 }]}
+    onPress={calculateGoals}
+    disabled={calculating}>
+    {calculating
+      ? <ActivityIndicator color={colors.black} />
+      : <Text style={s.saveBtnText}>✨ Beregn mit kaloriemål</Text>}
+  </TouchableOpacity>
+
+  {/* Resultat */}
+  {calcResult && calcResult.target_kcal && (
+    <View style={{ marginTop: 16, paddingTop: 16, borderTopWidth: 1, borderTopColor: colors.border }}>
+      <Text style={[s.label, { marginBottom: 10 }]}>DIT MÅL</Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
+        <Text style={{ color: colors.muted, fontSize: 13 }}>Dagligt kaloriemål</Text>
+        <Text style={{ color: colors.accent, fontSize: 18, fontWeight: '900' }}>{calcResult.target_kcal} kcal</Text>
+      </View>
+      {calcResult.bmr_kcal && (
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 }}>
+          <Text style={{ color: colors.muted, fontSize: 12 }}>BMR (hvile-forbrug)</Text>
+          <Text style={{ color: colors.text, fontSize: 13 }}>{calcResult.bmr_kcal} kcal</Text>
+        </View>
+      )}
+      {calcResult.tdee_kcal && (
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 }}>
+          <Text style={{ color: colors.muted, fontSize: 12 }}>TDEE (totalt forbrug)</Text>
+          <Text style={{ color: colors.text, fontSize: 13 }}>{calcResult.tdee_kcal} kcal</Text>
+        </View>
+      )}
+      <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingTop: 10, borderTopWidth: 1, borderTopColor: colors.border }}>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ color: colors.muted, fontSize: 10, fontWeight: '600' }}>PROTEIN</Text>
+          <Text style={{ color: colors.text, fontSize: 16, fontWeight: '800', marginTop: 4 }}>{calcResult.target_protein_g}g</Text>
+        </View>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ color: colors.muted, fontSize: 10, fontWeight: '600' }}>KULHYDRAT</Text>
+          <Text style={{ color: colors.text, fontSize: 16, fontWeight: '800', marginTop: 4 }}>{calcResult.target_carbs_g}g</Text>
+        </View>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ color: colors.muted, fontSize: 10, fontWeight: '600' }}>FEDT</Text>
+          <Text style={{ color: colors.text, fontSize: 16, fontWeight: '800', marginTop: 4 }}>{calcResult.target_fat_g}g</Text>
+        </View>
+      </View>
+    </View>
+  )}
+</View>
+
+{/* ── KOSTPRÆFERENCER ── */}
+        <Text style={s.sectionTitle}>🥗 KOSTPRÆFERENCER</Text>
+        <View style={s.card}>
+          {/* Kosttype */}
+          <Text style={[s.label, { marginBottom: 8 }]}>KOSTTYPE</Text>
+          <View style={s.goalGrid}>
+            {[
+              { id: 'none',         label: 'Ingen' },
+              { id: 'vegetarian',   label: '🥬 Vegetar' },
+              { id: 'vegan',        label: '🌱 Vegansk' },
+              { id: 'pescatarian',  label: '🐟 Pescetar' },
+              { id: 'gluten_free',  label: '🌾 Glutenfri' },
+              { id: 'lactose_free', label: '🥛 Laktosefri' },
+              { id: 'keto',         label: '🥑 Keto' },
+              { id: 'paleo',        label: '🍖 Paleo' },
+            ].map(d => (
+              <TouchableOpacity
+                key={d.id}
+                style={[s.goalBtn, (form.dietType || 'none') === d.id && { borderColor: colors.accent, backgroundColor: colors.accent + '15' }]}
+                onPress={() => setForm(f => ({ ...f, dietType: d.id }))}>
+                <Text style={[s.goalBtnText, (form.dietType || 'none') === d.id && { color: colors.accent }]}>{d.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          {/* Allergier */}
+          <View style={{ marginTop: 8 }}>
+            <Field
+              label="ALLERGIER (komma-separeret)"
+              value={form.allergies || ''}
+              onChange={v => setForm(f => ({ ...f, allergies: v }))}
+              placeholder="nødder, skaldyr, æg"
+            />
+          </View>
+
+          {/* Fravalg */}
+          <Field
+            label="FØDEVARER JEG IKKE KAN LIDE"
+            value={form.dislikes || ''}
+            onChange={v => setForm(f => ({ ...f, dislikes: v }))}
+            placeholder="broccoli, svampe, koriander"
+          />
         </View>
 
         {/* ── LØBETYPE PRÆFERENCER ── */}

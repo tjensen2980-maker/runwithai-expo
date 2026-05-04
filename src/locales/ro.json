@@ -1,4 +1,4 @@
-{
+﻿{
   "tabs": {
     "plan": "Plan",
     "run": "Alergare",
@@ -470,7 +470,7 @@
     "loadingHistory": "Se încarcă conversația...",
     "planUpdated": "Plan actualizat",
     "defaultRunner": "Alergător",
-    "greeting": "Salut {{name}}! Sunt antrenorul tău AI de alergare. Cum te pot ajuta azi?",
+    "greeting": "Salut {{name}}! Sunt coach-ul tău AI. Cum te pot ajuta azi?",
     "clearedGreeting": "Conversație ștearsă! Cum te pot ajuta, {{name}}?",
     "connectionError": "Îmi pare rău, nu m-am putut conecta. Te rog încearcă din nou."
   },

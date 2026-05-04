@@ -1,4 +1,4 @@
-{
+﻿{
   "tabs": {
     "plan": "Pjan",
     "run": "Ġirja",
@@ -470,7 +470,7 @@
     "loadingHistory": "Qed jillowdja l-konverżazzjoni...",
     "planUpdated": "Pjan aġġornat",
     "defaultRunner": "Ġerrej",
-    "greeting": "Bonġu {{name}}! Jien il-kowċ tal-ġirja AI tiegħek. Kif nista' ngħinek illum?",
+    "greeting": "Hi {{name}}! Jien il-coach AI tiegħek. Kif nista' ngħinek illum?",
     "clearedGreeting": "Konverżazzjoni mħassra! Kif nista' ngħinek, {{name}}?",
     "connectionError": "Skużani, ma stajtx nikkonnettja. Jekk jogħġbok erġa' pprova."
   },

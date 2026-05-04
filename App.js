@@ -32,7 +32,11 @@ import BarcodeScanner from './src/screens/BarcodeScanner';
 import PhotoAnalyze from './src/screens/PhotoAnalyze';
 import LogActivity from './src/screens/LogActivity';
 import ActivityTypePicker from './src/screens/ActivityTypePicker';
+import StrengthWorkout from './src/screens/StrengthWorkout';
+import MotionPicker from './src/screens/MotionPicker';
+import TreadmillTracker from './src/screens/TreadmillTracker';
 import * as WebBrowser from 'expo-web-browser';
+import MealPlan from './src/screens/MealPlan';
 WebBrowser.maybeCompleteAuthSession();
 
 // â”€â”€â”€ TAB IKONER (React Native SVG) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -143,23 +147,17 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, onShowPric
       </View>
       {activeTab === 'start' ? (
         <ScrollView contentContainerStyle={{ padding: 16 }}>
-          <TouchableOpacity onPress={() => onStartActivity('run')}
+          <TouchableOpacity onPress={() => onStartActivity('motion')}
             style={{ backgroundColor: colors.black, borderRadius: 20, padding: 28, marginBottom: 12, alignItems: 'center' }}>
             <Text style={{ fontSize: 40, marginBottom: 8 }}>🏃</Text>
-            <Text style={{ fontSize: 22, fontWeight: '900', color: colors.card, letterSpacing: -0.5 }}>{t('run.title')}</Text>
-            <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>{t('run.gpsTracking')}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => onStartActivity('walk')}
-            style={{ backgroundColor: colors.surface, borderRadius: 20, padding: 28, marginBottom: 20, alignItems: 'center', borderWidth: 2, borderColor: colors.border2 }}>
-            <Text style={{ fontSize: 40, marginBottom: 8 }}>🚶</Text>
-            <Text style={{ fontSize: 22, fontWeight: '900', color: colors.black, letterSpacing: -0.5 }}>{t('run.walk')}</Text>
-            <Text style={{ fontSize: 13, color: colors.muted, marginTop: 4 }}>{t('run.walkTracking')}</Text>
+            <Text style={{ fontSize: 22, fontWeight: '900', color: colors.card, letterSpacing: -0.5 }}>Motion</Text>
+            <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>Løb · Gå · Cykling</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => onStartActivity('pick')}
             style={{ backgroundColor: '#f59e0b', borderRadius: 20, padding: 28, marginBottom: 20, alignItems: 'center' }}>
             <Text style={{ fontSize: 40, marginBottom: 8 }}>💪</Text>
-            <Text style={{ fontSize: 22, fontWeight: '900', color: '#fff', letterSpacing: -0.5 }}>Traening</Text>
-            <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', marginTop: 4 }}>Styrke, mobility, cykel m.m.</Text>
+            <Text style={{ fontSize: 22, fontWeight: '900', color: '#fff', letterSpacing: -0.5 }}>Træning</Text>
+            <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', marginTop: 4 }}>Styrke, mobility m.m.</Text>
           </TouchableOpacity>
           {lastRun && (
             <View style={{ backgroundColor: colors.card, borderRadius: 16, padding: 18, borderWidth: 1, borderColor: colors.border }}>
@@ -329,7 +327,7 @@ export default function App() {
   const [activityType, setActivityType]     = useState('run');
   const [showPricing, setShowPricing]       = useState(false);
   const [selectedRun, setSelectedRun]       = useState(null);
-// Watch sync - modtager run fra ur og marker dagens traening som completed
+// Watch sync - modtager run fra ur og marker dagens træning som completed
   const trainingPlanRef = React.useRef(null);
   const { sendTodayTraining } = useWatch({
     onCommand: () => {},
@@ -510,12 +508,18 @@ export default function App() {
       ]);
       return;
     }
-    if (type === 'pick') {
+if (type === 'pick') {
       setTab('activityPicker');
       return;
     }
+    if (type === 'motion') {
+      setTab('motionPicker');
+      return;
+    }
     setActivityType(type);
-    if (type === 'strength' || type === 'mobility' || type === 'bike' || type === 'other') {
+    if (type === 'strength') {
+      setTab('strengthWorkout');
+    } else if (type === 'mobility' || type === 'bike' || type === 'other') {
       setTab('logActivity');
     } else {
       setTab('tracker');
@@ -546,6 +550,21 @@ export default function App() {
       <SafeAreaProvider>
         <RunTracker profile={profile} level={level} weekPlan={weekPlan} nextWorkout={nextWorkout}
           runs={runs} activityType={activityType} onBack={() => setTab('dashboard')} />
+      </SafeAreaProvider>
+    );
+  }
+
+  if (tab === 'treadmillTracker') {
+    return (
+      <SafeAreaProvider>
+        <StatusBar barStyle="light-content" backgroundColor="#0a0a0a" />
+        <TreadmillTracker
+          token={getAuthToken()}
+          profile={profile}
+          mode={activityType}
+          onClose={() => { setActivityType(null); setTab('dashboard'); }}
+          onSaved={() => { loadData(); }}
+        />
       </SafeAreaProvider>
     );
   }
@@ -590,8 +609,17 @@ export default function App() {
         return <Privacy onBack={() => setTab('settings')} />;
       case 'goals':
         return isPro ? <GoalsSetup onBack={() => setTab('settings')} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
-      case 'nutrition':
-        return isPro ? <NutritionDashboard onBack={() => setTab('settings')} onLogMeal={() => setTab('logMeal')} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
+      case 'mealPlan':
+      return (
+        <MealPlan
+          token={getAuthToken()}
+          onBack={() => setTab('nutrition')}
+          onLogged={() => { if (loadData) loadData(); setTab('nutrition'); }}
+          profile={profile}
+        />
+      );
+        case 'nutrition':
+        return isPro ? <NutritionDashboard onBack={() => setTab('settings')} onLogMeal={() => setTab('logMeal')} onMealPlan={() => setTab('mealPlan')} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
       case 'logMeal':
         return isPro ? <LogMeal onBack={() => { setScannedFood(null); setTab('nutrition'); }} onDone={() => { setScannedFood(null); setTab('nutrition'); }} onScanBarcode={() => setTab('barcodeScanner')} onPhotoAnalyze={() => setTab('photoAnalyze')} scannedFood={scannedFood} onScanConsumed={() => setScannedFood(null)} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
       case 'barcodeScanner':
@@ -600,7 +628,19 @@ export default function App() {
         return isPro ? <PhotoAnalyze onBack={() => setTab('logMeal')} onDone={() => setTab('nutrition')} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
       case 'activityPicker':
         return <ActivityTypePicker onBack={() => setTab('dashboard')} onPick={(type) => handleStartActivity(type)} />;
-      case 'logActivity':
+     case 'strengthWorkout':
+        return <StrengthWorkout token={getAuthToken()} onClose={() => { setActivityType(null); setTab('dashboard'); }} onSaved={() => { loadData(); }} />;
+      case 'motionPicker':
+        return <MotionPicker onBack={() => setTab('dashboard')} onPick={(type, location) => {
+          setActivityType(type);
+          if (location === 'treadmill') {
+            setTab('treadmillTracker');
+          } else {
+            setTab('tracker');
+          }
+        }} />;
+        
+        case 'logActivity':
         return <LogActivity activityType={activityType} onBack={() => setTab('dashboard')} onDone={() => { setActivityType(null); setTab('dashboard'); loadData(); }} />;
       default:
         return null;

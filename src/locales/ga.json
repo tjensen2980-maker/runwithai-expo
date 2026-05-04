@@ -1,4 +1,4 @@
-{
+﻿{
   "tabs": {
     "plan": "Plean",
     "run": "Rith",
@@ -470,7 +470,7 @@
     "loadingHistory": "Ag lódáil comhrá...",
     "planUpdated": "Plean nuashonraithe",
     "defaultRunner": "Ritheoir",
-    "greeting": "Dia duit {{name}}! Is mise do thraenálaí rith AI. Conas is féidir liom cabhrú leat inniu?",
+    "greeting": "Dia duit {{name}}! Is mise do chóitseálaí AI. Conas is féidir liom cabhrú leat inniu?",
     "clearedGreeting": "Comhrá glanta! Conas is féidir liom cabhrú leat, {{name}}?",
     "connectionError": "Gabh mo leithscéal, níorbh fhéidir ceangal. Bain triail eile as."
   },

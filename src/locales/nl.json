@@ -1,4 +1,4 @@
-{
+﻿{
   "tabs": {
     "plan": "Plan",
     "run": "Hardlopen",
@@ -470,7 +470,7 @@
     "loadingHistory": "Gesprek laden...",
     "planUpdated": "Plan bijgewerkt",
     "defaultRunner": "hardloper",
-    "greeting": "Hoi {{name}}! Ik ben je AI hardloopcoach. Hoe kan ik je vandaag helpen?",
+    "greeting": "Hallo {{name}}! Ik ben je AI-coach. Hoe kan ik je vandaag helpen?",
     "clearedGreeting": "Gesprek gewist! Hoe kan ik je helpen, {{name}}?",
     "connectionError": "Sorry, ik kon geen verbinding maken. Probeer het opnieuw."
   },

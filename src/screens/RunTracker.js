@@ -772,8 +772,25 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     
     setIsTracking(false);
 
-    const km = parseFloat((distance / 1000).toFixed(2));
-    const paceMinPerKm = km > 0 ? (duration / 60) / km : 0;
+const km = parseFloat((distance / 1000).toFixed(2));
+const paceMinPerKm = km > 0 ? (duration / 60) / km : 0;
+
+// ─── BEREGN KALORIER (kcal = MET × kg × timer) ─────────────────────────
+const weightKg = parseFloat(profile?.weight_kg || profile?.weight) || 70; // fallback 70 kg
+const hours = duration / 3600;
+// MET-værdier: gå ~3.5, jog ~7, løb ~9.8, hurtigt løb ~11.5
+let met;
+if (activityType === 'walk') {
+  met = 3.5;
+} else {
+  // Brug pace til at vurdere intensitet (min/km)
+  if (paceMinPerKm > 0 && paceMinPerKm < 5) met = 11.5;       // <5 min/km = hurtigt
+  else if (paceMinPerKm > 0 && paceMinPerKm < 6) met = 9.8;   // 5-6 min/km
+  else if (paceMinPerKm > 0 && paceMinPerKm < 7) met = 8.3;   // 6-7 min/km
+  else met = 7.0;                                              // langsomt jog
+}
+const calories = Math.round(met * weightKg * hours);
+console.log(`🔥 Calories: ${calories} kcal (MET=${met}, weight=${weightKg}kg, hours=${hours.toFixed(2)})`);
 
     if (voiceCoachRef.current) {
       voiceCoachRef.current.finish({ km, durationSecs: duration, paceMinPerKm });
@@ -798,19 +815,19 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
 
     console.log(`Final: ${km}km (run:${runningKm}, walk:${walkingKm}), ${gpsPoints} GPS pts, ${filteredPoints} filtered`);
 
-    const runData = {
-      km,
-      duration,
-      pace: paceMinPerKm,
-      heart_rate: null,
-      calories: null,
-      route,
-      notes: null,
-      type: activityType === 'run' ? 'run' : 'walk',
-      date: new Date().toISOString(),
-      running_km: runningKm,
-      walking_km: walkingKm,
-    };
+const runData = {
+  km,
+  duration,
+  pace: paceMinPerKm,
+  heart_rate: null,
+  calories,           // ← NU sendes kalorier med
+  route,
+  notes: null,
+  type: activityType === 'run' ? 'run' : 'walk',
+  date: new Date().toISOString(),
+  running_km: runningKm,
+  walking_km: walkingKm,
+};
 
     try {
       const token = getAuthToken();

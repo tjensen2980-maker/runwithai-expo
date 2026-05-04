@@ -1,4 +1,4 @@
-{
+﻿{
   "tabs": {
     "plan": "Plan",
     "run": "Run",
@@ -505,7 +505,7 @@
     "loadingHistory": "Loading conversation...",
     "planUpdated": "Plan updated",
     "defaultRunner": "runner",
-    "greeting": "Hi {{name}}! I'm your AI running coach. How can I help you today?",
+    "greeting": "Hi {{name}}! I am your AI coach. How can I help you today?",
     "clearedGreeting": "Conversation cleared! How can I help you, {{name}}?",
     "connectionError": "Sorry, I couldn't connect. Please try again."
   },

@@ -1,4 +1,4 @@
-{
+﻿{
   "tabs": {
     "plan": "Plan",
     "run": "Løb",
@@ -505,7 +505,7 @@
     "loadingHistory": "Henter samtale...",
     "planUpdated": "Plan opdateret",
     "defaultRunner": "løber",
-    "greeting": "Hej {{name}}! Jeg er din AI løbecoach. Hvad kan jeg hjælpe dig med i dag?",
+    "greeting": "Hej {{name}}! Jeg er din AI coach. Hvad kan jeg hjælpe med i dag?",
     "clearedGreeting": "Samtale ryddet! Hvad kan jeg hjælpe dig med, {{name}}?",
     "connectionError": "Beklager, jeg kunne ikke forbinde. Prøv igen."
   },

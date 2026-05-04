@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Circle } from 'react-native-svg';
-import { colors } from '../data';
+import { colors, loadProfile, getAuthToken, SERVER } from '../data';
 import { getDailySummary, getMeals, deleteMeal } from '../services/NutritionAPI';
 
 // ---- Helpers ----------------------------------------------------------------
@@ -106,16 +106,42 @@ function MacroBar({ label, value, target, color }) {
 
 // ---- Main screen ------------------------------------------------------------
 
-export default function NutritionDashboard({ onBack, onLogMeal }) {
+export default function NutritionDashboard({ onBack, onLogMeal, onMealPlan }) {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [summary, setSummary] = useState(null);
   const [meals, setMeals] = useState([]);
   const [error, setError] = useState(null);
 
-  const load = useCallback(async () => {
+const load = useCallback(async () => {
     setError(null);
     try {
+      try {
+        const profile = await loadProfile();
+        const token = await getAuthToken();
+        if (profile && token && profile.weight && profile.height && profile.age) {
+          const sexMap = { 'Mand': 'male', 'Kvinde': 'female' };
+          const goalMap = { weight: 'lose_fat', fitness: 'maintain', '5k': 'maintain', '10k': 'maintain', half: 'maintain', full: 'maintain' };
+          const body = {
+            weight_kg: parseFloat(profile.weight),
+            height_cm: parseFloat(profile.height),
+            age: parseInt(profile.age),
+            gender: sexMap[profile.sex] || 'male',
+            activity_level: 'moderate',
+            primary_goal: goalMap[profile.goal] || 'maintain',
+            goal_pace: 'normal',
+            plan_type: 'balanced'
+          };
+          await fetch(SERVER + '/goals/auto', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify(body)
+          });
+        }
+      } catch (calcErr) {
+        console.warn('[Nutrition] Auto-calc skipped:', calcErr);
+      }
+
       const date = todayISO();
       const [s, m] = await Promise.all([
         getDailySummary(date),
@@ -232,8 +258,14 @@ export default function NutritionDashboard({ onBack, onLogMeal }) {
 
         <TouchableOpacity
           style={s.logBtn}
-          onPress={() => onLogMeal ? onLogMeal() : Alert.alert('Kommer snart', 'Log måltid bygges i næste fase.')}>
+          onPress={() => onLogMeal ? onLogMeal() : Alert.alert('Kommer snart', 'Log maltid bygges i naeste fase.')}>
           <Text style={s.logBtnTxt}>+  Log måltid</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={s.mealPlanBtn}
+          onPress={() => onMealPlan ? onMealPlan() : Alert.alert('Kommer snart', 'Madplan bygges snart.')}>
+          <Text style={s.mealPlanBtnTxt}>AI madplan</Text>
         </TouchableOpacity>
 
         <Text style={s.sectionTitle}>DAGENS MÅLTIDER</Text>
@@ -248,11 +280,11 @@ export default function NutritionDashboard({ onBack, onLogMeal }) {
                 <Text style={s.mealType}>
                   {MEAL_TYPE_LABELS[m.meal_type] || 'Måltid'} {m.eaten_at ? '- ' + formatTime(m.eaten_at) : ''}
                 </Text>
-                {(m.items || []).map((it, idx) => (
-                  <Text key={idx} style={s.mealItem}>
-                    {it.food_name || 'Item'} - {Math.round(it.amount_g)}g - {Math.round(it.kcal)} kcal
-                  </Text>
-                ))}
+{(m.items || []).map((it, idx) => (
+  <Text key={idx} style={s.mealItem}>
+    {it.food_name || m.notes || 'Item'} - {Math.round(it.kcal)} kcal
+  </Text>
+))}
               </View>
               <TouchableOpacity onPress={() => handleDelete(m.id)} style={s.deleteBtn}>
                 <Text style={s.deleteTxt}>X</Text>
@@ -301,6 +333,19 @@ const s = StyleSheet.create({
   logBtn: {
     backgroundColor: colors.black, borderRadius: 14, paddingVertical: 16,
     alignItems: 'center', marginTop: 12
+  },
+  mealPlanBtn: {
+    backgroundColor: '#4a9eff',
+    padding: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 10,
+    marginBottom: 8
+  },
+  mealPlanBtnTxt: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '700'
   },
   logBtnTxt: { color: colors.card, fontSize: 16, fontWeight: '800', letterSpacing: 0.5 },
   mealCard: {

@@ -357,7 +357,7 @@ function WorkoutCard({ workout, level, onNavigate, onStartActivity }) {
           <Text style={s.walkBtnText}>{t('run.walk')}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={s.trainBtn} onPress={() => onStartActivity ? onStartActivity('pick') : onNavigate && onNavigate('activityPicker')}>
-          <Text style={s.trainBtnText}>💪 Traening</Text>
+          <Text style={s.trainBtnText}>💪 Træning</Text>
         </TouchableOpacity>
       </View>
     </View>

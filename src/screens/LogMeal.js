@@ -1,5 +1,5 @@
-﻿// src/screens/LogMeal.js
-// SÃ¸g efter mad, vaelg, indtast graemmer, vaelg meal_type og log.
+// src/screens/LogMeal.js
+// Søg efter mad, vælg, indtast graemmer, vælg meal_type og log.
 
 import React, { useState, useEffect, useRef } from 'react';
 import {
@@ -80,7 +80,7 @@ function SearchStep({ onPickFood, onCreateCustom, onScanBarcode, onPhotoAnalyze 
           style={s.searchInput}
           value={query}
           onChangeText={setQuery}
-          placeholder="SÃ¸g efter mad (fx havregryn, banan, kylling)"
+          placeholder="Søg efter mad (fx havregryn, banan, kylling)"
           placeholderTextColor={colors.muted}
           autoCorrect={false}
           autoCapitalize="none"
@@ -91,20 +91,20 @@ function SearchStep({ onPickFood, onCreateCustom, onScanBarcode, onPhotoAnalyze 
 
       {query.length === 0 ? (
         <View style={s.tipBox}>
-          <Text style={s.tipTitle}>SÃ¸g i fÃ¸devaredatabasen</Text>
+          <Text style={s.tipTitle}>Søg i fødevaredatabasen</Text>
           <Text style={s.tipTxt}>
-            Skriv navnet pa en fÃ¸devare eller en del af det. Resultater vises automatisk.
-            {'\n\n'}Tip: Du kan ogsa oprette dine egne fÃ¸devarer.
+            Skriv navnet pa en fødevare eller en del af det. Resultater vises automatisk.
+            {'\n\n'}Tip: Du kan ogsa oprette dine egne fødevarer.
           </Text>
           <TouchableOpacity style={s.customBtn} onPress={onCreateCustom}>
-            <Text style={s.customBtnTxt}>+ Opret egen fÃ¸devare</Text>
+            <Text style={s.customBtnTxt}>+ Opret egen fødevare</Text>
           </TouchableOpacity>
         </View>
       ) : results.length === 0 && !searching && query.length >= 2 ? (
         <View style={s.emptyBox}>
           <Text style={s.emptyTxt}>Ingen resultater for "{query}"</Text>
           <TouchableOpacity style={s.customBtn} onPress={onCreateCustom}>
-            <Text style={s.customBtnTxt}>+ Opret som egen fÃ¸devare</Text>
+            <Text style={s.customBtnTxt}>+ Opret som egen fødevare</Text>
           </TouchableOpacity>
         </View>
       ) : (
@@ -152,7 +152,7 @@ function LogStep({ food, onBack, onLogged }) {
   const onSave = async () => {
     const g = Number(String(grams).replace(',', '.'));
     if (!g || g <= 0) {
-      Alert.alert('Ugyldig vÃ¦gt', 'Indtast antal gram (stÃ¸rre end 0).');
+      Alert.alert('Ugyldig vÃ¦gt', 'Indtast antal gram (større end 0).');
       return;
     }
     setSaving(true);
@@ -166,7 +166,7 @@ function LogStep({ food, onBack, onLogged }) {
       await logMeal(payload);
       if (onLogged) onLogged();
     } catch (e) {
-      Alert.alert('Fejl', 'Kunne ikke logge mÃ¥ltid: ' + e.message);
+      Alert.alert('Fejl', 'Kunne ikke logge måltid: ' + e.message);
       setSaving(false);
     }
   };
@@ -174,7 +174,7 @@ function LogStep({ food, onBack, onLogged }) {
   return (
     <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
       <TouchableOpacity onPress={onBack} style={{ marginBottom: 12 }}>
-        <Text style={{ color: colors.accent, fontSize: 14, fontWeight: '600' }}>â€¹ Tilbage til sÃ¸gning</Text>
+        <Text style={{ color: colors.accent, fontSize: 14, fontWeight: '600' }}>â€¹ Tilbage til søgning</Text>
       </TouchableOpacity>
 
       <View style={s.card}>
@@ -185,7 +185,7 @@ function LogStep({ food, onBack, onLogged }) {
         </Text>
       </View>
 
-      <Text style={s.label}>MÃ¥ltidstype</Text>
+      <Text style={s.label}>MÅltidstype</Text>
       <View style={s.mealTypeRow}>
         {MEAL_TYPES.map(mt => {
           const active = mealType === mt.id;
@@ -241,7 +241,7 @@ function LogStep({ food, onBack, onLogged }) {
         disabled={saving}>
         {saving
           ? <ActivityIndicator color={colors.card} />
-          : <Text style={s.saveTxt}>Log mÃ¥ltid</Text>}
+          : <Text style={s.saveTxt}>Log måltid</Text>}
       </TouchableOpacity>
     </ScrollView>
   );
@@ -268,7 +268,7 @@ function CustomFoodStep({ onBack, onCreated }) {
 
   const onSave = async () => {
     if (!name.trim()) {
-      Alert.alert('Mangler navn', 'Indtast et navn pa fÃ¸devaren.');
+      Alert.alert('Mangler navn', 'Indtast et navn pa fÅ¸devaren.');
       return;
     }
     if (!kcal) {
@@ -287,7 +287,7 @@ function CustomFoodStep({ onBack, onCreated }) {
       });
       if (onCreated) onCreated(food);
     } catch (e) {
-      Alert.alert('Fejl', 'Kunne ikke oprette fÃ¸devare: ' + e.message);
+      Alert.alert('Fejl', 'Kunne ikke oprette fa¸devare: ' + e.message);
       setSaving(false);
     }
   };
@@ -298,8 +298,8 @@ function CustomFoodStep({ onBack, onCreated }) {
         <Text style={{ color: colors.accent, fontSize: 14, fontWeight: '600' }}>â€¹ Tilbage</Text>
       </TouchableOpacity>
 
-      <Text style={s.title}>Ny fÃ¸devare</Text>
-      <Text style={[s.foodMacros, { marginBottom: 16 }]}>Indtast nÃ¦rings-info per 100g</Text>
+      <Text style={s.title}>Ny fa¸devare</Text>
+      <Text style={[s.foodMacros, { marginBottom: 16 }]}>Indtast nærings-info per 100g</Text>
 
       <Text style={s.label}>Navn *</Text>
       <TextInput style={s.input} value={name} onChangeText={setName} placeholder="fx Ã†ble" placeholderTextColor={colors.muted} />
@@ -383,7 +383,7 @@ export default function LogMeal({ onBack, onDone, onScanBarcode, onPhotoAnalyze,
             <Text style={s.backTxt}>{step === 'search' ? 'Annuller' : 'Tilbage'}</Text>
           </TouchableOpacity>
           <Text style={s.title}>
-            {step === 'search' ? 'Log mÃ¥ltid' : step === 'log' ? 'MÃ¦ngde' : 'Ny fÃ¸devare'}
+            {step === 'search' ? 'Log måltid' : step === 'log' ? 'MÃ¦ngde' : 'Ny fødevare'}
           </Text>
           <View style={{ width: 70 }} />
         </View>

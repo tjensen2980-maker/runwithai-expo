@@ -6,8 +6,8 @@ const TYPE_META = {
   strength: { emoji: '\uD83D\uDCAA', label: 'Styrke',     color: '#f59e0b' },
   mobility: { emoji: '\uD83E\uDDD8', label: 'Mobility',   color: '#8b5cf6' },
   bike:     { emoji: '\uD83D\uDEB4', label: 'Cykel',      color: '#3b82f6' },
-  walk:     { emoji: '\uD83D\uDEB6', label: 'Gaatur',     color: '#10b981' },
-  run:      { emoji: '\uD83C\uDFC3', label: 'Loeb',       color: '#ef4444' },
+  walk:     { emoji: '\uD83D\uDEB6', label: 'Gåtur',     color: '#10b981' },
+  run:      { emoji: '\uD83C\uDFC3', label: 'Løb',       color: '#ef4444' },
   other:    { emoji: '\u26A1',       label: 'Anden',      color: '#6b7280' },
 };
 
@@ -27,7 +27,7 @@ function fmtDate(iso) {
   const yest = new Date(); yest.setDate(yest.getDate() - 1);
   const sameDay = (a, b) => a.toDateString() === b.toDateString();
   if (sameDay(d, today)) return 'I dag';
-  if (sameDay(d, yest)) return 'I gaar';
+  if (sameDay(d, yest)) return 'I går';
   return d.toLocaleDateString('da-DK', { day: 'numeric', month: 'short' });
 }
 
@@ -40,7 +40,7 @@ export default function RecentActivities({ refreshKey }) {
     setLoading(true);
     try {
       const list = await getActivities({ limit: 10 });
-      // Filtrer kun manuelle (ikke GPS-loeb der ligger i 'runs')
+      // Filtrer kun manuelle (ikke GPS-løb der ligger i 'runs')
       const manual = (list || []).filter(a => a.type !== 'run' || a.source === 'manual');
       setItems(manual);
     } catch (e) {
@@ -55,7 +55,7 @@ export default function RecentActivities({ refreshKey }) {
   if (loading) {
     return (
       <View style={s.card}>
-        <Text style={s.title}>Seneste traeninger</Text>
+        <Text style={s.title}>Seneste træninger</Text>
         <ActivityIndicator color="#60a5fa" style={{ marginVertical: 16 }} />
       </View>
     );
@@ -68,7 +68,7 @@ export default function RecentActivities({ refreshKey }) {
   return (
     <View style={s.card}>
       <View style={s.header}>
-        <Text style={s.title}>Seneste traeninger</Text>
+        <Text style={s.title}>Seneste træninger</Text>
         <Text style={s.count}>{items.length}</Text>
       </View>
       {visible.map((a) => {
@@ -92,7 +92,7 @@ export default function RecentActivities({ refreshKey }) {
       })}
       {items.length > 3 ? (
         <TouchableOpacity onPress={() => setExpanded(e => !e)} style={s.expandBtn}>
-          <Text style={s.expandTxt}>{expanded ? 'Vis faerre' : ('Vis alle (' + items.length + ')')}</Text>
+          <Text style={s.expandTxt}>{expanded ? 'Vis færre' : ('Vis alle (' + items.length + ')')}</Text>
         </TouchableOpacity>
       ) : null}
     </View>

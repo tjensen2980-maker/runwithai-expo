@@ -1,4 +1,4 @@
-{
+﻿{
   "tabs": {
     "plan": "Suunnitelma",
     "run": "Juoksu",
@@ -470,7 +470,7 @@
     "loadingHistory": "Ladataan keskustelua...",
     "planUpdated": "Suunnitelma päivitetty",
     "defaultRunner": "Juoksija",
-    "greeting": "Hei {{name}}! Olen AI-juoksuvalmentajasi. Kuinka voin auttaa sinua tänään?",
+    "greeting": "Hei {{name}}! Olen AI-valmentajasi. Miten voin auttaa tänään?",
     "clearedGreeting": "Keskustelu tyhjennetty! Kuinka voin auttaa sinua, {{name}}?",
     "connectionError": "Valitan, yhteys epäonnistui. Yritä uudelleen."
   },

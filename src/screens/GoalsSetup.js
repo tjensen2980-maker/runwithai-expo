@@ -1,5 +1,5 @@
 // src/screens/GoalsSetup.js
-// Skaerm til at saette daglige kalorie- og makro-mal.
+// Skærm til at sætte daglige kalorie- og makro-mål.
 // Kalder GET /goals ved load og PUT /goals ved save.
 
 import React, { useState, useEffect } from 'react';
@@ -107,7 +107,7 @@ export default function GoalsSetup({ onBack }) {
         target_carbs_g: parseNum(targetCarbs),
         target_fat_g: parseNum(targetFat)
       });
-      Alert.alert('Gemt', 'Dine mal er gemt.');
+      Alert.alert('Gemt', 'Dine mål er gemt.');
       if (onBack) onBack();
     } catch (e) {
       Alert.alert('Fejl', 'Kunne ikke gemme: ' + e.message);
@@ -125,82 +125,101 @@ export default function GoalsSetup({ onBack }) {
       </SafeAreaView>
     );
   }
-
-  return (
-    <SafeAreaView style={s.safe}>
-      <View style={s.header}>
-        <TouchableOpacity onPress={onBack} style={s.backBtn}>
-          <Text style={s.backTxt}>Tilbage</Text>
-        </TouchableOpacity>
+return (
+    <SafeAreaView style={s.safe} edges={['top','left','right']}>
+      <ScrollView contentContainerStyle={s.scroll}>
         <Text style={s.title}>Mine mål</Text>
-        <View style={{ width: 70 }} />
-      </View>
-
-      <ScrollView contentContainerStyle={s.content} keyboardShouldPersistTaps="handled">
-        <Text style={s.intro}>
-          Sæt dine daglige mål for kalorier og makros. App'en bruger dem til at vise dagens balance og guide dig.
-        </Text>
 
         <GoalPicker value={primaryGoal} onChange={setPrimaryGoal} />
 
-        <Text style={s.section}>Daglige mål</Text>
-
-        <Field label="Kalorier" value={targetKcal} onChange={setTargetKcal} suffix="kcal" placeholder="2200" />
-        <Field label="Protein" value={targetProtein} onChange={setTargetProtein} suffix="g" placeholder="150" />
-        <Field label="Kulhydrater" value={targetCarbs} onChange={setTargetCarbs} suffix="g" placeholder="250" />
-        <Field label="Fedt" value={targetFat} onChange={setTargetFat} suffix="g" placeholder="70" />
+        <Field
+          label="Kalorier per dag"
+          value={targetKcal}
+          onChange={setTargetKcal}
+          suffix="kcal"
+          placeholder="2200"
+        />
+        <Field
+          label="Protein per dag"
+          value={targetProtein}
+          onChange={setTargetProtein}
+          suffix="g"
+          placeholder="150"
+        />
+        <Field
+          label="Kulhydrater per dag"
+          value={targetCarbs}
+          onChange={setTargetCarbs}
+          suffix="g"
+          placeholder="220"
+        />
+        <Field
+          label="Fedt per dag"
+          value={targetFat}
+          onChange={setTargetFat}
+          suffix="g"
+          placeholder="70"
+        />
 
         <TouchableOpacity
-          style={[s.saveBtn, saving && { opacity: 0.5 }]}
+          style={[s.saveBtn, saving && s.saveBtnDisabled]}
           onPress={onSave}
           disabled={saving}>
-          {saving
-            ? <ActivityIndicator color={colors.card} />
-            : <Text style={s.saveTxt}>Gem mål</Text>}
+          <Text style={s.saveBtnText}>{saving ? 'Gemmer...' : 'Gem mål'}</Text>
         </TouchableOpacity>
+
+        {onBack ? (
+          <TouchableOpacity style={s.backBtn} onPress={onBack}>
+            <Text style={s.backBtnText}>Tilbage</Text>
+          </TouchableOpacity>
+        ) : null}
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const s = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.surface },
+  safe: { flex: 1, backgroundColor: colors.bg },
+  scroll: { padding: 20, paddingBottom: 40 },
   loaderWrap: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  header: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1,
-    borderBottomColor: colors.border, backgroundColor: colors.card
-  },
-  backBtn: { paddingVertical: 6, paddingHorizontal: 8 },
-  backTxt: { color: colors.accent, fontSize: 16, fontWeight: '600' },
-  title: { fontSize: 18, fontWeight: '800', color: colors.text },
-  content: { padding: 16, paddingBottom: 40 },
-  intro: { fontSize: 14, color: colors.dim, marginBottom: 16, lineHeight: 20 },
-  section: {
-    fontSize: 12, fontWeight: '800', color: colors.muted, letterSpacing: 1,
-    marginTop: 16, marginBottom: 8, textTransform: 'uppercase'
-  },
-  fieldWrap: { marginBottom: 14 },
-  label: { fontSize: 13, color: colors.muted, marginBottom: 6, fontWeight: '600' },
+  title: { fontSize: 24, fontWeight: '700', color: colors.text, marginBottom: 20 },
+  fieldWrap: { marginBottom: 16 },
+  label: { fontSize: 14, color: colors.muted, marginBottom: 6 },
   inputRow: {
-    flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card,
-    borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingHorizontal: 14
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.card,
+    borderRadius: 10,
+    paddingHorizontal: 12
   },
   input: {
-    flex: 1, fontSize: 16, color: colors.text, paddingVertical: Platform.OS === 'ios' ? 14 : 10
+    flex: 1,
+    color: colors.text,
+    fontSize: 16,
+    paddingVertical: Platform.OS === 'ios' ? 14 : 10
   },
-  suffix: { fontSize: 14, color: colors.muted, marginLeft: 8, fontWeight: '600' },
+  suffix: { color: colors.muted, fontSize: 14, marginLeft: 8 },
   pickerRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   pickerBtn: {
-    paddingHorizontal: 14, paddingVertical: 10, borderRadius: 20,
-    backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    backgroundColor: colors.card,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: colors.card
   },
-  pickerBtnActive: { backgroundColor: colors.accent + '20', borderColor: colors.accent },
-  pickerText: { fontSize: 14, color: colors.dim, fontWeight: '600' },
-  pickerTextActive: { color: colors.accent, fontWeight: '700' },
+  pickerBtnActive: { backgroundColor: colors.accent, borderColor: colors.accent },
+  pickerText: { color: colors.muted, fontSize: 14 },
+  pickerTextActive: { color: '#000', fontWeight: '700' },
   saveBtn: {
-    marginTop: 24, backgroundColor: colors.black, borderRadius: 14,
-    paddingVertical: 16, alignItems: 'center'
+    backgroundColor: colors.accent,
+    padding: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 20
   },
-  saveTxt: { color: colors.card, fontSize: 16, fontWeight: '800', letterSpacing: 0.5 }
+  saveBtnDisabled: { opacity: 0.5 },
+  saveBtnText: { color: '#000', fontSize: 16, fontWeight: '700' },
+  backBtn: { padding: 14, alignItems: 'center', marginTop: 8 },
+  backBtnText: { color: colors.muted, fontSize: 14 }
 });

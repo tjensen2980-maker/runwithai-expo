@@ -1,4 +1,4 @@
-{
+﻿{
   "tabs": {
     "plan": "Načrt",
     "run": "Tek",
@@ -470,7 +470,7 @@
     "loadingHistory": "Nalaganje pogovora...",
     "planUpdated": "Načrt posodobljen",
     "defaultRunner": "Tekač",
-    "greeting": "Živjo {{name}}! Sem tvoj AI tekaški trener. Kako ti lahko danes pomagam?",
+    "greeting": "Pozdravljen {{name}}! Sem tvoj AI trener. Kako ti lahko danes pomagam?",
     "clearedGreeting": "Pogovor počiščen! Kako ti lahko pomagam, {{name}}?",
     "connectionError": "Oprostite, nisem se mogel povezati. Prosimo, poskusite znova."
   },

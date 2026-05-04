@@ -1,4 +1,4 @@
-{
+﻿{
   "tabs": {
     "plan": "Plan",
     "run": "Laufen",
@@ -470,7 +470,7 @@
     "loadingHistory": "Lade Unterhaltung...",
     "planUpdated": "Plan aktualisiert",
     "defaultRunner": "Läufer",
-    "greeting": "Hallo {{name}}! Ich bin dein KI-Laufcoach. Wie kann ich dir heute helfen?",
+    "greeting": "Hallo {{name}}! Ich bin dein AI-Coach. Wie kann ich dir heute helfen?",
     "clearedGreeting": "Unterhaltung gelöscht! Wie kann ich dir helfen, {{name}}?",
     "connectionError": "Entschuldigung, ich konnte keine Verbindung herstellen. Bitte versuche es erneut."
   },
