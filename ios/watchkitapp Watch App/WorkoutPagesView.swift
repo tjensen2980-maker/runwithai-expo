@@ -22,12 +22,27 @@ struct WorkoutPagesView: View {
     }
 
     // MARK: Side 1 - Tid, Distance, Tempo + Pause/Stop
-    private var page1: some View {
-        VStack(spacing: 4) {
-            Text(workout.formattedTime)
-                .font(.system(size: 26, weight: .bold, design: .rounded))
+private var page1: some View {
+    VStack(spacing: 4) {
+        Text(workout.formattedTime)
+            .font(.system(size: 26, weight: .bold, design: .rounded))
+            .monospacedDigit()
+            .foregroundColor(.green)
+        if workout.isIndoor {
+            Text("\(Int(workout.activeKcal))")
+                .font(.system(size: 30, weight: .heavy, design: .rounded))
                 .monospacedDigit()
-                .foregroundColor(.green)
+                .foregroundColor(.orange)
+            Text("kcal")
+                .font(.caption2)
+                .foregroundColor(.gray)
+            Text("\(workout.totalStepsCount)")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(.cyan)
+            Text("skridt")
+                .font(.caption2)
+                .foregroundColor(.gray)
+        } else {
             Text(workout.locationManager.formattedDistance)
                 .font(.system(size: 30, weight: .heavy, design: .rounded))
                 .monospacedDigit()
@@ -40,6 +55,7 @@ struct WorkoutPagesView: View {
             Text("min/km")
                 .font(.caption2)
                 .foregroundColor(.gray)
+        }
             HStack(spacing: 6) {
                 if workout.isPaused {
                     Button(action: { workout.resume() }) {
@@ -106,10 +122,23 @@ struct WorkoutPagesView: View {
         .padding(.horizontal, 8)
     }
 
-    // MARK: Side 4 - Map (ingen knap, kun zoom-interaktion)
+  // MARK: Side 4 - Map (ingen knap, kun zoom-interaktion)
     private var page4: some View {
         Group {
-            if workout.locationManager.route.isEmpty {
+            if workout.isIndoor {
+                VStack(spacing: 6) {
+                    Image(systemName: "figure.run.treadmill")
+                        .font(.system(size: 36))
+                        .foregroundColor(.purple)
+                    Text("Loebebaand")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                    Text("Ingen GPS")
+                        .font(.caption2)
+                        .foregroundColor(.gray)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if workout.locationManager.route.isEmpty {
                 VStack {
                     Image(systemName: "map")
                         .font(.system(size: 36))
