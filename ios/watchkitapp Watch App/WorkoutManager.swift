@@ -30,7 +30,7 @@ class WorkoutManager: NSObject, ObservableObject {
     private var timerStartDate: Date?
     private var accumulatedSeconds: Int = 0
     private var hrSamples: [HrSample] = []
-    private var totalStepsCount: Int = 0
+    @Published var totalStepsCount: Int = 0
 
     private let healthStore = HKHealthStore()
     private var session: HKWorkoutSession?
