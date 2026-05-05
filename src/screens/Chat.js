@@ -3,24 +3,61 @@ import { Icon } from '../components/Icons';
 import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
   StyleSheet, KeyboardAvoidingView, Platform, ActivityIndicator,
-  Keyboard, Dimensions
+  Keyboard, Dimensions, Alert
 } from 'react-native';
-import { colors, LEVELS, sendToAI, loadMessages, clearMessages } from '../data';
+import { colors, LEVELS, sendToAI, loadMessages, clearMessages, logMealPlan } from '../data';
 import { useTranslation } from 'react-i18next';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-function Message({ msg, t }) {
+function Message({ msg, t, onLogMealPlan }) {
   const isAI = msg.role === 'ai' || msg.role === 'assistant';
+  const cleanText = (msg.text || '')
+    .replace(/<plan_update>[\s\S]*?<\/plan_update>/g, '')
+    .replace(/<meal_plan>[\s\S]*?<\/meal_plan>/g, '')
+    .trim();
+
   return (
     <View style={[s.msgWrap, isAI ? s.msgAI : s.msgUser]}>
       {isAI && <Text style={s.msgSender}>RUNWITHAI</Text>}
-      <View style={[s.bubble, isAI ? s.bubbleAI : s.bubbleUser]}>
-        <Text style={[s.bubbleText, isAI ? s.bubbleTextAI : s.bubbleTextUser]}>{(msg.text || '').replace(/<plan_update>[\s\S]*?<\/plan_update>/g, '').trim()}</Text>
-      </View>
+      {cleanText ? (
+        <View style={[s.bubble, isAI ? s.bubbleAI : s.bubbleUser]}>
+          <Text style={[s.bubbleText, isAI ? s.bubbleTextAI : s.bubbleTextUser]}>{cleanText}</Text>
+        </View>
+      ) : null}
+
       {msg.hasPlanUpdate && (
         <View style={s.planUpdateBadge}>
-          <Text style={s.planUpdateBadgeText}>✓ {t('chat.planUpdated')}</Text>
+          <Text style={s.planUpdateBadgeText}>{'OK ' + t('chat.planUpdated')}</Text>
+        </View>
+      )}
+
+      {msg.mealPlan && (
+        <View style={s.mealPlanCard}>
+          <Text style={s.mealPlanTitle}>Madplan</Text>
+          <Text style={s.mealPlanSubtitle}>
+            {msg.mealPlan.totalKcal ? msg.mealPlan.totalKcal + ' kcal i alt' : ''}
+          </Text>
+          {(msg.mealPlan.meals || []).map((m, i) => (
+            <View key={i} style={s.mealItem}>
+              <Text style={s.mealName}>{m.name}</Text>
+              <Text style={s.mealMacros}>
+                {m.kcal} kcal  -  P{m.protein_g}g  K{m.carbs_g}g  F{m.fat_g}g
+              </Text>
+              {m.description ? <Text style={s.mealDesc}>{m.description}</Text> : null}
+            </View>
+          ))}
+          {!msg.mealPlanLogged ? (
+            <TouchableOpacity
+              style={s.logAllBtn}
+              onPress={() => onLogMealPlan(msg)}>
+              <Text style={s.logAllBtnText}>Log alle maaltider</Text>
+            </TouchableOpacity>
+          ) : (
+            <View style={s.loggedBadge}>
+              <Text style={s.loggedBadgeText}>Logget</Text>
+            </View>
+          )}
         </View>
       )}
     </View>
@@ -89,14 +126,21 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
     setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
 
     try {
-      const { text: aiText, planUpdate } = await sendToAI({
+      const { text: aiText, planUpdate, mealPlan } = await sendToAI({
         messages: newMessages,
         profile, level, weekPlan, nextWorkout, runs,
       });
-      const aiMsg = { role: 'ai', text: aiText, hasPlanUpdate: !!planUpdate };
+      const aiMsg = {
+        role: 'ai',
+        text: aiText,
+        hasPlanUpdate: !!planUpdate,
+        mealPlan: mealPlan || null,
+        mealPlanLogged: false,
+      };
       setMessages(prev => [...prev, aiMsg]);
       if (planUpdate) onPlanUpdate(planUpdate);
-    } catch {
+    } catch (err) {
+      console.log('[Chat.js] sendToAI ERROR:', err?.message, err?.stack, err);
       setMessages(prev => [...prev, { role: 'ai', text: t('chat.connectionError') }]);
     }
     setLoading(false);
@@ -107,6 +151,17 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
     await clearMessages();
     const name = (profile?.name || t('chat.defaultRunner')).split(' ')[0];
     setMessages([{ role: 'ai', text: t('chat.clearedGreeting', { name }) }]);
+  };
+
+  const handleLogMealPlan = async (msg) => {
+    if (!msg.mealPlan || !msg.mealPlan.meals) return;
+    try {
+      await logMealPlan(msg.mealPlan.meals);
+      setMessages(prev => prev.map(m => m === msg ? { ...m, mealPlanLogged: true } : m));
+      Alert.alert('Logget', 'Madplanen er logget i dag.');
+    } catch (e) {
+      Alert.alert('Fejl', 'Kunne ikke logge madplan: ' + e.message);
+    }
   };
 
   if (loadingHistory) return (
@@ -139,7 +194,7 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive"
       >
-        {messages.map((m, i) => <Message key={i} msg={m} t={t} />)}
+        {messages.map((m, i) => <Message key={i} msg={m} t={t} onLogMealPlan={handleLogMealPlan} />)}
         {loading && (
           <View style={[s.msgWrap, s.msgAI]}>
             <Text style={s.msgSender}>RUNWITHAI</Text>
@@ -194,4 +249,15 @@ const s = StyleSheet.create({
   sendBtnText:         { fontSize: 20, fontWeight: '700', color: colors.card },
   planUpdateBadge:     { flexDirection: 'row', alignItems: 'center', marginTop: 6, backgroundColor: colors.surface, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 5, alignSelf: 'flex-start' },
   planUpdateBadgeText: { fontSize: 11, color: colors.accent, fontWeight: '700' },
+  mealPlanCard:        { marginTop: 8, backgroundColor: colors.card, borderRadius: 14, padding: 14, borderWidth: 1, borderColor: colors.border, alignSelf: 'stretch' },
+  mealPlanTitle:       { fontSize: 16, fontWeight: '700', color: colors.text, marginBottom: 2 },
+  mealPlanSubtitle:    { fontSize: 12, color: colors.muted, marginBottom: 10 },
+  mealItem:            { paddingVertical: 8, borderTopWidth: 1, borderTopColor: colors.border },
+  mealName:            { fontSize: 14, fontWeight: '600', color: colors.text },
+  mealMacros:          { fontSize: 11, color: colors.muted, marginTop: 2 },
+  mealDesc:            { fontSize: 12, color: colors.text, marginTop: 4, lineHeight: 17 },
+  logAllBtn:           { backgroundColor: '#4a9eff', padding: 12, borderRadius: 10, alignItems: 'center', marginTop: 12 },
+  logAllBtnText:       { color: '#ffffff', fontSize: 14, fontWeight: '700' },
+  loggedBadge:         { backgroundColor: colors.surface, padding: 10, borderRadius: 10, alignItems: 'center', marginTop: 12 },
+  loggedBadgeText:     { color: colors.accent, fontSize: 13, fontWeight: '700' },
 });

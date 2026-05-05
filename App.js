@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import PricingPage, { useSubscription, Paywall } from './components/Pricing';
 import React, { useState, useEffect } from 'react';
 import { Icon } from './src/components/Icons';
+import { SERVER } from './src/config';
 import { View, Text, TouchableOpacity, StyleSheet, StatusBar, ActivityIndicator, ScrollView, Modal, Alert, Platform, Image } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,10 +25,21 @@ import Stats from './src/screens/Stats';
 import RunDetail from './src/screens/RunDetail';
 import { RoutesTab as RoutesTabComponent } from './src/screens/RoutesTab';
 import Privacy from './src/screens/Privacy';
+import GoalsSetup from './src/screens/GoalsSetup';
+import NutritionDashboard from './src/screens/NutritionDashboard';
+import LogMeal from './src/screens/LogMeal';
+import BarcodeScanner from './src/screens/BarcodeScanner';
+import PhotoAnalyze from './src/screens/PhotoAnalyze';
+import LogActivity from './src/screens/LogActivity';
+import ActivityTypePicker from './src/screens/ActivityTypePicker';
+import StrengthWorkout from './src/screens/StrengthWorkout';
+import MotionPicker from './src/screens/MotionPicker';
+import TreadmillTracker from './src/screens/TreadmillTracker';
 import * as WebBrowser from 'expo-web-browser';
+import MealPlan from './src/screens/MealPlan';
 WebBrowser.maybeCompleteAuthSession();
 
-// ─── TAB IKONER (React Native SVG) ───────────────────────────────────────────
+// â”€â”€â”€ TAB IKONER (React Native SVG) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const IconPlan = ({ active }) => {
   const color = active ? '#0a0a0a' : '#b0b0b0';
   return (
@@ -66,6 +78,16 @@ const IconCalendar = ({ active }) => {
     </Svg>
   );
 };
+const IconNutrition = ({ active }) => {
+  const color = active ? '#0a0a0a' : '#b0b0b0';
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <Path d="M12 6c-1.5-2-4-3-6-2-2 1-3 3.5-3 6 0 5 4 12 9 12s9-7 9-12c0-2.5-1-5-3-6-2-1-4.5 0-6 2z" />
+      <Path d="M12 6c0-2 1-3.5 2.5-4" />
+    </Svg>
+  );
+};
+
 const IconZap = ({ color = '#ffffff' }) => (
   <Svg width={22} height={22} viewBox="0 0 24 24" fill={color}>
     <Polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
@@ -125,17 +147,17 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, onShowPric
       </View>
       {activeTab === 'start' ? (
         <ScrollView contentContainerStyle={{ padding: 16 }}>
-          <TouchableOpacity onPress={() => onStartActivity('run')}
+          <TouchableOpacity onPress={() => onStartActivity('motion')}
             style={{ backgroundColor: colors.black, borderRadius: 20, padding: 28, marginBottom: 12, alignItems: 'center' }}>
             <Text style={{ fontSize: 40, marginBottom: 8 }}>🏃</Text>
-            <Text style={{ fontSize: 22, fontWeight: '900', color: colors.card, letterSpacing: -0.5 }}>{t('run.title')}</Text>
-            <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>{t('run.gpsTracking')}</Text>
+            <Text style={{ fontSize: 22, fontWeight: '900', color: colors.card, letterSpacing: -0.5 }}>Motion</Text>
+            <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>Løb · Gå · Cykling</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => onStartActivity('walk')}
-            style={{ backgroundColor: colors.surface, borderRadius: 20, padding: 28, marginBottom: 20, alignItems: 'center', borderWidth: 2, borderColor: colors.border2 }}>
-            <Text style={{ fontSize: 40, marginBottom: 8 }}>🚶</Text>
-            <Text style={{ fontSize: 22, fontWeight: '900', color: colors.black, letterSpacing: -0.5 }}>{t('run.walk')}</Text>
-            <Text style={{ fontSize: 13, color: colors.muted, marginTop: 4 }}>{t('run.walkTracking')}</Text>
+          <TouchableOpacity onPress={() => onStartActivity('pick')}
+            style={{ backgroundColor: '#f59e0b', borderRadius: 20, padding: 28, marginBottom: 20, alignItems: 'center' }}>
+            <Text style={{ fontSize: 40, marginBottom: 8 }}>💪</Text>
+            <Text style={{ fontSize: 22, fontWeight: '900', color: '#fff', letterSpacing: -0.5 }}>Træning</Text>
+            <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', marginTop: 4 }}>Styrke, mobility m.m.</Text>
           </TouchableOpacity>
           {lastRun && (
             <View style={{ backgroundColor: colors.card, borderRadius: 16, padding: 18, borderWidth: 1, borderColor: colors.border }}>
@@ -190,7 +212,7 @@ function PlanTab({ level, nextWorkout, weekPlan, planChanges, profile, runs, onN
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingTop: 16, gap: 10, backgroundColor: colors.bg }}>
-        {[['plan', t('tabs.plan')],['coach','AI Coach']].map(([id, label]) => (
+        {[['plan', t('tabs.plan')],['kalender','Kalender'],['coach','AI Coach']].map(([id, label]) => (
           <TouchableOpacity key={id}
             style={{ flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center', backgroundColor: activeTab === id ? colors.black : colors.surface, borderWidth: 2, borderColor: activeTab === id ? colors.black : colors.border2 }}
             onPress={() => setActiveTab(id)}>
@@ -201,11 +223,17 @@ function PlanTab({ level, nextWorkout, weekPlan, planChanges, profile, runs, onN
         ))}
       </View>
       <View style={{ flex: 1 }}>
-        {activeTab === 'plan'
-          ? <Dashboard level={level} nextWorkout={nextWorkout} weekPlan={weekPlan} planChanges={planChanges} profile={profile} runs={runs} onNavigate={onNavigate} onStartActivity={onStartActivity} />
-          : isPro
+        {activeTab === 'plan' ? (
+          <Dashboard level={level} nextWorkout={nextWorkout} weekPlan={weekPlan} planChanges={planChanges} profile={profile} runs={runs} onNavigate={onNavigate} onStartActivity={onStartActivity} />
+        ) : activeTab === 'kalender' ? (
+          isPro
+            ? <CalendarTab runs={runs} weekPlan={weekPlan} trainingPlan={trainingPlan} isPro={isPro} onShowPricing={onShowPricing} />
+            : <ProFeatureLock feature={t('pro.calendar.title')} description={t('pro.calendar.description')} onUpgrade={onShowPricing} />
+        ) : (
+          isPro
             ? <Chat level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} onPlanUpdate={onPlanUpdate} runs={runs} />
             : <ProFeatureLock feature={t('pro.coach.title')} description={t('pro.coach.description')} onUpgrade={onShowPricing} />
+        )
         }
       </View>
     </View>
@@ -216,14 +244,14 @@ function RoutesTabWrapper({ profile, runs }) {
   return <RoutesTabComponent profile={profile} runs={runs} />;
 }
 
-function TabBar({ tab, setTab }) {
+function TabBar({ tab, setTab, isPro }) {
   const { t } = useTranslation();
   const TABS = [
     { id: 'dashboard', label: t('tabs.plan'),     Icon: IconPlan     },
     { id: 'activity',  label: t('tabs.progress'), Icon: IconProgress },
     { id: 'run',       label: '',                 Icon: null         },
     { id: 'stats',     label: t('tabs.stats'),    Icon: IconStats    },
-    { id: 'calendar',  label: t('tabs.calendar'), Icon: IconCalendar },
+    { id: 'nutrition', label: 'Mad', Icon: IconNutrition },
   ];
   return (
     <View style={s.tabBar}>
@@ -288,6 +316,7 @@ export default function App() {
   const [showOnboarding, setShowOnboarding] = useState(true);
   const [level, setLevel]                   = useState(null);
   const [tab, setTab]                       = useState('dashboard');
+  const [scannedFood, setScannedFood]       = useState(null);
   const [profile, setProfileState]          = useState(DEFAULT_PROFILE);
   const [weekPlan, setWeekPlanState]        = useState(DEFAULT_WEEK_PLAN);
   const [nextWorkout, setNextWorkout]       = useState(DEFAULT_NEXT_WORKOUT);
@@ -298,7 +327,7 @@ export default function App() {
   const [activityType, setActivityType]     = useState('run');
   const [showPricing, setShowPricing]       = useState(false);
   const [selectedRun, setSelectedRun]       = useState(null);
-// Watch sync - modtager run fra ur og marker dagens traening som completed
+// Watch sync - modtager run fra ur og marker dagens træning som completed
   const trainingPlanRef = React.useRef(null);
   const { sendTodayTraining } = useWatch({
     onCommand: () => {},
@@ -321,7 +350,7 @@ export default function App() {
       setTrainingPlan({ data: updated, generated_at: new Date().toISOString() });
       const tok = getAuthToken();
       if (tok) {
-        fetch('https://runwithai-server-production.up.railway.app/trainingplan/save', {
+        fetch(`${SERVER}/trainingplan/save`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok },
           body: JSON.stringify({ data: updated }),
@@ -400,7 +429,7 @@ export default function App() {
   useEffect(() => {
     const savedToken = getAuthToken();
     if (savedToken) {
-      fetch('https://runwithai-server-production.up.railway.app/profile', {
+      fetch(`${SERVER}/profile`, {
         headers: { Authorization: `Bearer ${savedToken}`, 'Content-Type': 'application/json' }
       }).then(r => {
         if (r.ok) { setAuthToken(savedToken); setUser({ token: savedToken }); syncAuthToWatch(savedToken, 'user'); }
@@ -458,7 +487,7 @@ export default function App() {
       setTrainingPlan({ data: planData, generated_at: new Date().toISOString() });
       const token = getAuthToken();
       if (token) {
-        fetch('https://runwithai-server-production.up.railway.app/trainingplan/save', {
+        fetch(`${SERVER}/trainingplan/save`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
           body: JSON.stringify({ data: planData }),
@@ -479,8 +508,22 @@ export default function App() {
       ]);
       return;
     }
+if (type === 'pick') {
+      setTab('activityPicker');
+      return;
+    }
+    if (type === 'motion') {
+      setTab('motionPicker');
+      return;
+    }
     setActivityType(type);
-    setTab('tracker');
+    if (type === 'strength') {
+      setTab('strengthWorkout');
+    } else if (type === 'mobility' || type === 'bike' || type === 'other') {
+      setTab('logActivity');
+    } else {
+      setTab('tracker');
+    }
   };
 
   if (!user) return (
@@ -507,6 +550,21 @@ export default function App() {
       <SafeAreaProvider>
         <RunTracker profile={profile} level={level} weekPlan={weekPlan} nextWorkout={nextWorkout}
           runs={runs} activityType={activityType} onBack={() => setTab('dashboard')} />
+      </SafeAreaProvider>
+    );
+  }
+
+  if (tab === 'treadmillTracker') {
+    return (
+      <SafeAreaProvider>
+        <StatusBar barStyle="light-content" backgroundColor="#0a0a0a" />
+        <TreadmillTracker
+          token={getAuthToken()}
+          profile={profile}
+          mode={activityType}
+          onClose={() => { setActivityType(null); setTab('dashboard'); }}
+          onSaved={() => { loadData(); }}
+        />
       </SafeAreaProvider>
     );
   }
@@ -546,9 +604,44 @@ export default function App() {
       case 'chat':
         return <Chat level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} onPlanUpdate={handlePlanUpdate} runs={runs} />;
       case 'settings':
-        return <Settings level={level || 'intermediate'} onLevelChange={(lv) => { setLevel(lv); setProfile(p => ({ ...p, level: lv })); }} profile={profile} onProfileChange={setProfile} onLogout={handleLogout} onBack={() => setTab('dashboard')} subscription={subscription} onShowPricing={() => setShowPricing(true)} />;
+        return <Settings onNavigate={setTab} level={level || 'intermediate'} onLevelChange={(lv) => { setLevel(lv); setProfile(p => ({ ...p, level: lv })); }} profile={profile} onProfileChange={setProfile} onLogout={handleLogout} onBack={() => setTab('dashboard')} subscription={subscription} onShowPricing={() => setShowPricing(true)} />;
       case 'privacy':
         return <Privacy onBack={() => setTab('settings')} />;
+      case 'goals':
+        return isPro ? <GoalsSetup onBack={() => setTab('settings')} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
+      case 'mealPlan':
+      return (
+        <MealPlan
+          token={getAuthToken()}
+          onBack={() => setTab('nutrition')}
+          onLogged={() => { if (loadData) loadData(); setTab('nutrition'); }}
+          profile={profile}
+        />
+      );
+        case 'nutrition':
+        return isPro ? <NutritionDashboard onBack={() => setTab('settings')} onLogMeal={() => setTab('logMeal')} onMealPlan={() => setTab('mealPlan')} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
+      case 'logMeal':
+        return isPro ? <LogMeal onBack={() => { setScannedFood(null); setTab('nutrition'); }} onDone={() => { setScannedFood(null); setTab('nutrition'); }} onScanBarcode={() => setTab('barcodeScanner')} onPhotoAnalyze={() => setTab('photoAnalyze')} scannedFood={scannedFood} onScanConsumed={() => setScannedFood(null)} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
+      case 'barcodeScanner':
+        return isPro ? <BarcodeScanner onBack={() => setTab('logMeal')} onScanned={(food, barcode) => { setScannedFood({ food, barcode }); setTab('logMeal'); }} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
+      case 'photoAnalyze':
+        return isPro ? <PhotoAnalyze onBack={() => setTab('logMeal')} onDone={() => setTab('nutrition')} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
+      case 'activityPicker':
+        return <ActivityTypePicker onBack={() => setTab('dashboard')} onPick={(type) => handleStartActivity(type)} />;
+     case 'strengthWorkout':
+        return <StrengthWorkout token={getAuthToken()} onClose={() => { setActivityType(null); setTab('dashboard'); }} onSaved={() => { loadData(); }} />;
+      case 'motionPicker':
+        return <MotionPicker onBack={() => setTab('dashboard')} onPick={(type, location) => {
+          setActivityType(type);
+          if (location === 'treadmill') {
+            setTab('treadmillTracker');
+          } else {
+            setTab('tracker');
+          }
+        }} />;
+        
+        case 'logActivity':
+        return <LogActivity activityType={activityType} onBack={() => setTab('dashboard')} onDone={() => { setActivityType(null); setTab('dashboard'); loadData(); }} />;
       default:
         return null;
     }
@@ -594,7 +687,7 @@ export default function App() {
         </View>
         <View style={{ flex: 1 }}>{renderScreen()}</View>
         <SafeAreaView edges={['bottom']} style={{ backgroundColor: colors.card }}>
-          <TabBar tab={tab} setTab={setTab} />
+          <TabBar tab={tab} setTab={setTab} isPro={isPro} />
         </SafeAreaView>
         <Modal visible={showPricing} animationType="slide" presentationStyle="pageSheet">
           <PricingPage

@@ -14,6 +14,7 @@ class WorkoutManager: NSObject, ObservableObject {
     @Published var workoutType: String = "Regulaer"
     @Published var userMaxHr: Double = 190.0
     @Published var popToRootCounter: Int = 0
+    @Published var isIndoor: Bool = false
 
     @Published var currentBpm: Int = 0
     @Published var currentSpm: Int = 0
@@ -53,10 +54,9 @@ class WorkoutManager: NSObject, ObservableObject {
     }
 
     private func startHealthKitWorkout() {
-        guard session == nil else { return }
         let config = HKWorkoutConfiguration()
         config.activityType = .running
-        config.locationType = .outdoor
+        config.locationType = isIndoor ? .indoor : .outdoor
         do {
             let s = try HKWorkoutSession(healthStore: healthStore, configuration: config)
             let b = s.associatedWorkoutBuilder()
@@ -85,12 +85,13 @@ class WorkoutManager: NSObject, ObservableObject {
         self.builder = nil
     }
 
-    func start(type: String = "Regulaer", targetKm: Double = 0, targetMinutes: Int = 0) {
-        self.workoutType = type
-        self.targetKm = targetKm
-        self.targetMinutes = targetMinutes
-        self.popToRootCounter += 1
-        locationManager.requestPermission()
+    func start(type: String = "Regulaer", targetKm: Double = 0, targetMinutes: Int = 0, isIndoor: Bool = false) {
+    self.workoutType = type
+    self.targetKm = targetKm
+    self.targetMinutes = targetMinutes
+    self.isIndoor = isIndoor
+    self.popToRootCounter += 1
+    if !isIndoor { locationManager.requestPermission() }
         elapsedSeconds = 0
         accumulatedSeconds = 0
         currentBpm = 0
@@ -104,7 +105,7 @@ class WorkoutManager: NSObject, ObservableObject {
         timerStartDate = Date()
         isRunning = true
         isPaused = false
-        locationManager.startTracking()
+    if !isIndoor { locationManager.startTracking() }
         requestHealthAuth { [weak self] _ in self?.startHealthKitWorkout() }
         startTimer()
     }
@@ -142,7 +143,14 @@ class WorkoutManager: NSObject, ObservableObject {
             let routePoints = locationManager.route.map { Workout.RoutePoint(from: $0) }
             let distanceM = locationManager.distance
             let pace = Workout.calculatePace(durationSec: elapsedSeconds, distanceMeters: distanceM)
-            let activityType = self.workoutType == "Regulaer" ? (pace > 8.0 ? "walk" : "run") : self.workoutType
+            let activityType: String
+if self.isIndoor {
+    activityType = "treadmill"
+} else if self.workoutType == "Regulaer" {
+    activityType = pace > 8.0 ? "walk" : "run"
+} else {
+    activityType = self.workoutType
+}
 
             let avgHrVal = hrSamples.isEmpty ? 0 : hrSamples.map { $0.bpm }.reduce(0, +) / hrSamples.count
             let maxHrVal = hrSamples.map { $0.bpm }.max() ?? 0

@@ -23,7 +23,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import { colors } from '../data';
 
-const API_URL = 'https://runwithai-server-production.up.railway.app';
+import { SERVER as API_URL } from '../config';
 
 // ─── REVENUECAT SETUP ─────────────────────────────────────────────────────────
 let Purchases = null;

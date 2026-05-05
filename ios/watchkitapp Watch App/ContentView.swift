@@ -15,6 +15,7 @@ let standardWorkouts: [StandardWorkout] = [
     StandardWorkout(name: "Restitution", icon: "leaf.fill", description: "Let løb", color: "mint"),
     StandardWorkout(name: "Gå/Løb", icon: "figure.walk", description: "Vekslende", color: "cyan"),
     StandardWorkout(name: "Tempo", icon: "speedometer", description: "Fart træning", color: "orange"),
+    StandardWorkout(name: "Løbebånd", icon: "figure.run.treadmill", description: "Indendørs løb", color: "purple"),
 ]
 
 func colorFromName(_ n: String) -> Color {
@@ -24,6 +25,7 @@ func colorFromName(_ n: String) -> Color {
     case "mint": return .mint
     case "cyan": return .cyan
     case "orange": return .orange
+    case "purple": return .purple
     default: return .green
     }
 }
@@ -228,8 +230,10 @@ struct WorkoutGoalView: View {
                     .font(.system(size: 9))
                     .foregroundColor(.gray)
                 Button(action: {
-                    workout.start(type: selected.name, targetKm: targetKm, targetMinutes: targetMin)
-                    isPresented = false
+    let indoor = (selected.name == "Løbebånd")
+    workout.start(type: selected.name, targetKm: targetKm, targetMinutes: targetMin, isIndoor: indoor)
+    isPresented = false
+}) {
                 }) {
                     Label("Start", systemImage: "play.fill")
                         .frame(maxWidth: .infinity)

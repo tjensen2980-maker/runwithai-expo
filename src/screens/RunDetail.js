@@ -80,7 +80,7 @@ function MetricBox({ value, unit, label }) {
 
 function OversigtTab({ run }) {
   const route = getRoute(run);
-  const km = run.km ? run.km.toFixed(2).replace('.', ',') : '0,00';
+  const km = run.km ? parseFloat(run.km).toFixed(2).replace('.', ',') : '0,00';
   const duration = fmtTime(run.duration_secs || run.duration || 0);
   const pace = (run.km && run.km >= 0.1) ? fmtPace(run.pace_secs_per_km || run.pace || 0) : '--:--';
   const avgHr = run.avg_hr || run.heart_rate || 0;

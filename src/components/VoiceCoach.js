@@ -8,7 +8,7 @@ import { Platform } from 'react-native';
 const isWeb = Platform.OS === 'web';
 
 // Server URL for TTS
-const SERVER = 'https://runwithai-server-production.up.railway.app';
+import { SERVER } from '../config';
 let authToken = null;
 export function setVoiceAuthToken(token) { authToken = token; }
 

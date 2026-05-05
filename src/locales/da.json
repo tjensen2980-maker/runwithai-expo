@@ -1,4 +1,4 @@
-{
+﻿{
   "tabs": {
     "plan": "Plan",
     "run": "Løb",
@@ -35,7 +35,7 @@
     "upgradeToPro": "Opgrader til Pro",
     "feature": "Pro-funktion",
     "unlockFeatures": "Lås op for alle funktioner",
-    "fromOnly": "Fra kun",
+    "fromOnly": "Fra kun 99 kr/md",
     "limit": {
       "title": "Pro-funktion",
       "message": "Denne funktion kræver Pro-abonnement",
@@ -54,6 +54,10 @@
     "calendar": {
       "title": "Træningskalender",
       "description": "Se din fulde træningsplan"
+    },
+    "nutrition": {
+      "title": "Kalorie-tracker",
+      "description": "Tæl kalorier, log mad og scan stregkoder"
     },
     "aiRoutes": {
       "title": "AI Ruter",
@@ -501,7 +505,7 @@
     "loadingHistory": "Henter samtale...",
     "planUpdated": "Plan opdateret",
     "defaultRunner": "løber",
-    "greeting": "Hej {{name}}! Jeg er din AI løbecoach. Hvad kan jeg hjælpe dig med i dag?",
+    "greeting": "Hej {{name}}! Jeg er din AI coach. Hvad kan jeg hjælpe med i dag?",
     "clearedGreeting": "Samtale ryddet! Hvad kan jeg hjælpe dig med, {{name}}?",
     "connectionError": "Beklager, jeg kunne ikke forbinde. Prøv igen."
   },

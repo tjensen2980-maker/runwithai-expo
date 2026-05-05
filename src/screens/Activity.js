@@ -186,7 +186,7 @@ function computeEffortScore(run, allRuns) {
   if (!run.km || !runPace) return null;
   const recent = allRuns.filter(r => r.km > 0 && getRunPace(r) > 0).slice(0, 20);
   if (recent.length < 3) return null;
-  const avgKm = recent.reduce((s, r) => s + r.km, 0) / recent.length;
+  const avgKm = recent.reduce((s, r) => s + (parseFloat(r.km) || 0), 0) / recent.length;
   const avgPace = recent.reduce((s, r) => s + getRunPace(r), 0) / recent.length;
   const kmScore = (run.km / avgKm) * 5;
   const paceScore = (avgPace / runPace) * 5;
@@ -414,7 +414,7 @@ function FullRouteMapModal({ route, run, visible, onClose }) {
   if (!visible || route.length < 2) return null;
 
   // Calculate total distance from route
-  const km = run?.km?.toFixed(2) || '–';
+  const km = run?.km ? parseFloat(run.km).toFixed(2) : '–';
   const pace = fmtPace(getRunPace(run));
   const time = fmtTime(getRunDuration(run));
   const runType = (run?.type && !["run","walk"].includes(run.type)) ? run.type : (run?.type === "walk" ? "Gåtur" : "Løb");
@@ -475,8 +475,8 @@ function ProgressSection({ runs }) {
   const [metric, setMetric] = useState('km');
   const recent = runs.filter(r => r.km > 0).slice(0, 10);
   const older = runs.filter(r => r.km > 0).slice(10, 20);
-  const recentAvgKm = recent.length ? recent.reduce((s, r) => s + r.km, 0) / recent.length : 0;
-  const olderAvgKm = older.length ? older.reduce((s, r) => s + r.km, 0) / older.length : 0;
+  const recentAvgKm = recent.length ? recent.reduce((s, r) => s + (parseFloat(r.km) || 0), 0) / recent.length : 0;
+  const olderAvgKm = older.length ? older.reduce((s, r) => s + (parseFloat(r.km) || 0), 0) / older.length : 0;
   const recentAvgPace = recent.filter(r => getRunPace(r)).length ? recent.filter(r => getRunPace(r)).reduce((s, r) => s + getRunPace(r), 0) / recent.filter(r => getRunPace(r)).length : 0;
   const olderAvgPace = older.filter(r => getRunPace(r)).length ? older.filter(r => getRunPace(r)).reduce((s, r) => s + getRunPace(r), 0) / older.filter(r => getRunPace(r)).length : 0;
   const kmTrend = olderAvgKm > 0 ? ((recentAvgKm - olderAvgKm) / olderAvgKm * 100).toFixed(0) : null;
@@ -567,7 +567,7 @@ function ShareModal({ run, visible, onClose }) {
   };
   const nativeShare = () => {
     if (Platform.OS === 'web' && navigator.share) {
-      navigator.share({ title: 'Mit løb', text: `Jeg løb ${run.km?.toFixed(1)} km!`, url: shareUrl });
+      navigator.share({ title: 'Mit løb', text: `Jeg løb ${run.km ? parseFloat(run.km).toFixed(1) : '0'} km!`, url: shareUrl });
     } else { copy(); }
   };
   useEffect(() => { if (visible && !shareUrl) share(); }, [visible]);
@@ -577,7 +577,7 @@ function ShareModal({ run, visible, onClose }) {
         <View style={sm.sheet}>
           <Text style={sm.title}>Del dit løb</Text>
           <View style={sm.runPreview}>
-            <Text style={sm.previewKm}>{run?.km?.toFixed(2)} km</Text>
+            <Text style={sm.previewKm}>{run?.km ? parseFloat(run.km).toFixed(2) : '–'} km</Text>
             <View style={sm.previewRow}>
               <Text style={sm.previewStat}>{fmtPace(getRunPace(run))}/km</Text>
               <Text style={sm.previewDot}>·</Text>
@@ -663,7 +663,7 @@ function RunCard({ run, level, allRuns, onDelete, onSelectRun }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showMap, setShowMap] = useState(false);
-  const km = run.km?.toFixed(2) || '–';
+  const km = run.km ? parseFloat(run.km).toFixed(2) : '–';
   const pace = fmtPace(getRunPace(run));
   const time = fmtTime(getRunDuration(run));
   const hr = getRunHR(run) ? `${getRunHR(run)} bpm` : '–';
@@ -846,7 +846,7 @@ export default function Activity({ level, profile, weekPlan, onSetWeekPlan, trai
   const deleteRun = (id) => {
     setRuns(prev => prev.filter(r => r.id !== id));
   };
-  const totalKm = runs.reduce((a, r) => a + (r.km || 0), 0).toFixed(1);
+  const totalKm = runs.reduce((a, r) => a + (parseFloat(r.km) || 0), 0).toFixed(1);
   const bestPace = runs.reduce((b, r) => { const p = getRunPace(r); return p && (!b || p < b) ? p : b; }, null);
   const validRuns = runs.filter(r => r.km > 0);
   const tabs = [

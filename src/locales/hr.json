@@ -1,4 +1,4 @@
-{
+﻿{
   "tabs": {
     "plan": "Plan",
     "run": "Trčanje",
@@ -470,7 +470,7 @@
     "loadingHistory": "Učitavanje razgovora...",
     "planUpdated": "Plan ažuriran",
     "defaultRunner": "Trkač",
-    "greeting": "Bok {{name}}! Ja sam tvoj AI trener za trčanje. Kako ti mogu pomoći danas?",
+    "greeting": "Bok {{name}}! Ja sam tvoj AI trener. Kako ti mogu pomoći danas?",
     "clearedGreeting": "Razgovor očišćen! Kako ti mogu pomoći, {{name}}?",
     "connectionError": "Žao mi je, nisam se mogao spojiti. Molim pokušajte ponovno."
   },

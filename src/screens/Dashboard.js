@@ -3,6 +3,7 @@ import { Icon } from '../components/Icons';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator, TextInput } from 'react-native';
 import { colors, LEVELS, DEFAULT_WEEK_PLAN, SERVER, getAuthToken } from '../data';
 import { useTranslation } from 'react-i18next';
+import RecentActivities from '../components/RecentActivities';
 
 // ─── VEJR + TRÆTHED ANBEFALING ────────────────────────────────────────────────
 function WeatherAdvice({ runs, nextWorkout, level, profile }) {
@@ -354,6 +355,9 @@ function WorkoutCard({ workout, level, onNavigate, onStartActivity }) {
         </TouchableOpacity>
         <TouchableOpacity style={s.walkBtn} onPress={() => onStartActivity ? onStartActivity('walk') : onNavigate && onNavigate('tracker')}>
           <Text style={s.walkBtnText}>{t('run.walk')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={s.trainBtn} onPress={() => onStartActivity ? onStartActivity('pick') : onNavigate && onNavigate('activityPicker')}>
+          <Text style={s.trainBtnText}>💪 Træning</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -895,6 +899,7 @@ export default function Dashboard({ level, nextWorkout, weekPlan, planChanges, p
       <WeekPlan weekPlan={weekPlan} />
 
       <RunDiary runs={runs} />
+      <RecentActivities />
 
       <InjuryRisk runs={runs} profile={profile} level={level} />
 
@@ -1021,6 +1026,8 @@ const s = StyleSheet.create({
   startBtnText:     { fontSize: 14, fontWeight: '900', color: colors.card, letterSpacing: 0.5 },
   walkBtn:          { flex: 1, backgroundColor: colors.black, borderRadius: 14, paddingVertical: 16, alignItems: 'center', opacity: 0.75 },
   walkBtnText:      { fontSize: 14, fontWeight: '700', color: colors.card, letterSpacing: 0.5 },
+  trainBtn:         { flex: 1, backgroundColor: '#f59e0b', borderRadius: 14, paddingVertical: 16, alignItems: 'center' },
+  trainBtnText:     { fontSize: 14, fontWeight: '700', color: '#fff', letterSpacing: 0.5 },
   coachBtn:         { flex: 1, backgroundColor: colors.surface, borderRadius: 14, paddingVertical: 16, alignItems: 'center' },
   coachBtnText:     { fontSize: 13, fontWeight: '600', color: colors.dim },
 

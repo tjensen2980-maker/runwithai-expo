@@ -1,4 +1,4 @@
-{
+﻿{
   "tabs": {
     "plan": "Plán",
     "run": "Běh",
@@ -470,7 +470,7 @@
     "loadingHistory": "Načítání konverzace...",
     "planUpdated": "Plán aktualizován",
     "defaultRunner": "Běžec",
-    "greeting": "Ahoj {{name}}! Jsem tvůj AI běžecký trenér. Jak ti mohu dnes pomoci?",
+    "greeting": "Ahoj {{name}}! Jsem tvůj AI kouč. Jak ti dnes mohu pomoci?",
     "clearedGreeting": "Konverzace vymazána! Jak ti mohu pomoci, {{name}}?",
     "connectionError": "Omlouvám se, nepodařilo se připojit. Zkus to prosím znovu."
   },

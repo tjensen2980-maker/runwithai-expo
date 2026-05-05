@@ -1,4 +1,4 @@
-{
+﻿{
   "tabs": {
     "plan": "Plaan",
     "run": "Jooks",
@@ -470,7 +470,7 @@
     "loadingHistory": "Vestluse laadimine...",
     "planUpdated": "Plaan uuendatud",
     "defaultRunner": "Jooksja",
-    "greeting": "Tere {{name}}! Olen sinu AI jooksutreener. Kuidas saan sind täna aidata?",
+    "greeting": "Tere {{name}}! Olen sinu AI treener. Kuidas saan täna aidata?",
     "clearedGreeting": "Vestlus tühjendatud! Kuidas saan sind aidata, {{name}}?",
     "connectionError": "Vabandust, ei saanud ühendust. Palun proovige uuesti."
   },

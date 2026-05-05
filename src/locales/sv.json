@@ -1,4 +1,4 @@
-{
+﻿{
   "tabs": {
     "plan": "Plan",
     "run": "Löpning",
@@ -470,7 +470,7 @@
     "loadingHistory": "Laddar konversation...",
     "planUpdated": "Plan uppdaterad",
     "defaultRunner": "Löpare",
-    "greeting": "Hej {{name}}! Jag är din AI-löptränare. Hur kan jag hjälpa dig idag?",
+    "greeting": "Hej {{name}}! Jag är din AI-coach. Hur kan jag hjälpa dig idag?",
     "clearedGreeting": "Konversation rensad! Hur kan jag hjälpa dig, {{name}}?",
     "connectionError": "Tyvärr kunde jag inte ansluta. Vänligen försök igen."
   },

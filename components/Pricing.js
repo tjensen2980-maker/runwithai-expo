@@ -1,4 +1,4 @@
-// ═══════════════════════════════════════════════════════════════════════════
+﻿// ═══════════════════════════════════════════════════════════════════════════
 // PRICING.JS - RunWithAI Pro Subscription Component (RevenueCat + i18n)
 // Sort/rød/hvid tema + Terms & Privacy links for App Store compliance
 // ═══════════════════════════════════════════════════════════════════════════
@@ -18,7 +18,8 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-const API_URL = 'https://runwithai-server-production.up.railway.app';
+import { SERVER } from '../src/config';
+const API_URL = SERVER;
 
 // Legal URLs
 const PRIVACY_POLICY_URL = 'https://www.runwithai.app/privacy';
@@ -291,7 +292,7 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
   };
 
   // Get price from offerings or use fallback
-  const productPrice = offerings?.availablePackages?.[0]?.product?.priceString || '49 kr';
+  const productPrice = offerings?.availablePackages?.[0]?.product?.priceString || '99 kr';
 
   // Build features array from the nested object structure in da.json
   const featuresObj = t('pricing.features', { returnObjects: true });

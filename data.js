@@ -176,6 +176,20 @@ export async function saveProfile(profile) {
   } catch (e) { console.error('saveProfile fejl:', e); }
 }
 
+export async function logMealPlan(meals) {
+  try {
+    const res = await fetch(SERVER + '/meal-plan/log', {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ meals }),
+    });
+    return await res.json();
+  } catch (e) {
+    console.error('logMealPlan error:', e);
+    throw e;
+  }
+}
+
 export async function loadMessages() {
   try {
     const res = await fetch(`${SERVER}/messages`, { headers: authHeaders() });
@@ -278,6 +292,7 @@ export function getZoneColor(zone) {
 
 // ─── AI CHAT ──────────────────────────────────────────────────────────────────
 export async function sendToAI({ messages, profile, level, weekPlan, nextWorkout, runs }) {
+  console.log('=== SENDTOAI KALDES ===', new Date().toISOString());
   const a = assessProfile(profile);
   const lv = LEVELS[level] || LEVELS['intermediate'];
   const name = (profile.name || 'Løber').split(' ')[0];
@@ -302,7 +317,7 @@ export async function sendToAI({ messages, profile, level, weekPlan, nextWorkout
   tomorrow.setDate(tomorrow.getDate() + 1);
   const tomorrowStr = tomorrow.toISOString().split('T')[0];
 
-  const systemPrompt = `Du er RunWithAI — en empatisk, proaktiv AI løbecoach. Bruger: ${name}. ${physique}. ${zones}. Niveau: ${level}. ${lv.aiStyle}
+  const systemPrompt = `Du er RunWithAI — en empatisk, proaktiv AI fitness- og løbecoach. Du hjælper både med løbetræning, kost og madplaner. Bruger: ${name}. ${physique}. ${zones}. Niveau: ${level}. ${lv.aiStyle}
 Nuværende plan: ${planCtx}. Næste træning: ${nextWorkout.name[level]} (${nextWorkout.km}km).
 ${runsCtx}
 I dag er: ${todayStr}. I morgen er: ${tomorrowStr}.
@@ -310,9 +325,20 @@ I dag er: ${todayStr}. I morgen er: ${tomorrowStr}.
 VIGTIG REGEL: Når brugeren nævner træthed, smerter, tidsmangel, vejr eller ønsker ændring — lav ALTID konkret planændring med <plan_update>. Spørg ikke om lov, bare gør det og forklar kort.
 Trigger-ord: "træt", "ondt", "kort", "flyt", "skift", "reducer", "øg", "frisk", "tid", "i morgen", "hvile", "tilføj", "gå", "gang", "gåtur".
 
+MADPLAN: Når brugeren beder om en madplan, kostplan, mad-forslag, vægttab-plan, muskelopbygning-plan, måltidsforslag — lav ALTID en konkret madplan med <meal_plan>. Brugeren kan så logge måltiderne med ét tryk.
+Trigger-ord: "madplan", "kostplan", "mad", "spise", "måltid", "opskrift", "morgenmad", "frokost", "aftensmad", "snack", "tabe sig", "muskler", "vægttab", "muskelopbygning", "kalorier".
+
+Format til madplan (inkludér kun ved madplan-anmodning):
+<meal_plan>{"goal":"lose_fat|maintain|gain_muscle","totalKcal":2000,"meals":[{"meal_type":"breakfast","name":"Havregrød med bær","kcal":350,"protein_g":15,"carbs_g":55,"fat_g":8,"description":"60g havregryn, 200ml mælk, håndfuld bær"},{"meal_type":"lunch","name":"...","kcal":...,"protein_g":...,"carbs_g":...,"fat_g":...,"description":"..."}]}</meal_plan>
+Lav 4-5 måltider. meal_type skal være: breakfast, lunch, dinner eller snack.
+
 Format til planændring (inkludér kun ved ændring):
 <plan_update>{"changeNote":"kort forklaring","nextWorkout":{"name":"navn","desc":"beskrivelse","km":9.0,"duration":"~50","targetPace":"5:00","targetHr":155},"weekPlan":[{"day":"Man","workout":"navn","km":9,"color":"#c8ff00","type":"run","description":"konkret beskrivelse"}]}</plan_update>
 Svar på dansk, max 2-3 sætninger. Vær direkte og konkret.`;
+
+console.log('[DEBUG] System prompt length:', systemPrompt.length);
+  console.log('[DEBUG] Contains meal_plan:', systemPrompt.includes('<meal_plan>'));
+  console.log('[DEBUG] Contains MADPLAN:', systemPrompt.includes('MADPLAN'));
 
   const res = await fetch(`${SERVER}/chat`, {
     method: 'POST',
@@ -341,7 +367,16 @@ Svar på dansk, max 2-3 sætninger. Vær direkte og konkret.`;
     } catch {}
     text = text.replace(/<plan_update>[\s\S]*?<\/plan_update>/, '').trim();
   }
-
+let mealPlan = null;
+  const mpMatch = text.match(/<meal_plan>([\s\S]*?)<\/meal_plan>/);
+  if (mpMatch) {
+    try {
+      mealPlan = JSON.parse(mpMatch[1].trim());
+    } catch (e) {
+      console.log('meal_plan parse error:', e.message);
+    }
+    text = text.replace(/<meal_plan>[\s\S]*?<\/meal_plan>/, '').trim();
+  }
   const aiMsg = { role: 'assistant', text };
   const allMessages = [...messages, aiMsg].map(m => ({
     role: m.role === 'ai' ? 'assistant' : m.role,
@@ -349,7 +384,7 @@ Svar på dansk, max 2-3 sætninger. Vær direkte og konkret.`;
   }));
   saveMessages(allMessages).catch(e => console.error('Kunne ikke gemme beskeder:', e));
 
-  return { text, planUpdate };
+  return { text, planUpdate, mealPlan };
 }
 
 // ─── RUNS API ─────────────────────────────────────────────────────────────────

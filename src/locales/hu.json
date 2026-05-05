@@ -1,4 +1,4 @@
-{
+﻿{
   "tabs": {
     "plan": "Terv",
     "run": "Futás",
@@ -470,7 +470,7 @@
     "loadingHistory": "Beszélgetés betöltése...",
     "planUpdated": "Terv frissítve",
     "defaultRunner": "Futó",
-    "greeting": "Szia {{name}}! Én vagyok az AI futóedződ. Miben segíthetek ma?",
+    "greeting": "Szia {{name}}! Én vagyok az AI coachod. Miben segíthetek ma?",
     "clearedGreeting": "Beszélgetés törölve! Miben segíthetek, {{name}}?",
     "connectionError": "Sajnálom, nem tudtam csatlakozni. Kérlek próbáld újra."
   },

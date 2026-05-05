@@ -2,7 +2,7 @@
 import { NativeModules, Platform } from 'react-native';
 
 const { RCTWatchConnectivity } = NativeModules;
-const SERVER_URL = 'https://runwithai-server-production.up.railway.app';
+import { SERVER as SERVER_URL } from '../config';
 
 export async function syncAuthToWatch(token, userId) {
   if (Platform.OS !== 'ios') return { skipped: 'not_ios' };
