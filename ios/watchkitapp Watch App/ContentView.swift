@@ -229,11 +229,10 @@ struct WorkoutGoalView: View {
                 Text(targetKm == 0 && targetMin == 0 ? "Frit (intet mål)" : "")
                     .font(.system(size: 9))
                     .foregroundColor(.gray)
-                Button(action: {
-    let indoor = (selected.name == "Løbebånd")
-    workout.start(type: selected.name, targetKm: targetKm, targetMinutes: targetMin, isIndoor: indoor)
-    isPresented = false
-}) {
+Button(action: {
+                    let indoor = (selected.name == "Løbebånd")
+                    workout.start(type: selected.name, targetKm: targetKm, targetMinutes: targetMin, isIndoor: indoor)
+                    isPresented = false
                 }) {
                     Label("Start", systemImage: "play.fill")
                         .frame(maxWidth: .infinity)
