@@ -23,9 +23,7 @@ import {
   Platform,
 } from 'react-native';
 
-const API_URL =
-  (typeof process !== 'undefined' && process.env && process.env.EXPO_PUBLIC_API_URL) ||
-  'https://runwithai-server-staging.up.railway.app';
+import { SERVER as API_URL } from '../config';
 
 const MEAL_TYPE_LABELS = {
   breakfast: 'Morgenmad',
