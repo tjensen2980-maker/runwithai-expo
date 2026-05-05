@@ -23,10 +23,7 @@ import {
   Platform,
   SafeAreaView,
 } from 'react-native';
-
-const API_URL =
-  (typeof process !== 'undefined' && process.env && process.env.EXPO_PUBLIC_API_URL) ||
-  'https://runwithai-server-staging.up.railway.app';
+import { SERVER as API_URL } from '../config';
 
 export default function StrengthWorkout({ token, onClose, onSaved }) {
   const [exercises, setExercises] = useState([]); // selected exercises with sets

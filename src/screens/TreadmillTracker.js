@@ -21,10 +21,7 @@ import {
 } from 'react-native';
 import { Pedometer } from 'expo-sensors';
 import { useSafeAreaInsets, SafeAreaView as SafeAreaViewCtx } from 'react-native-safe-area-context';
-
-const API_URL =
-  (typeof process !== 'undefined' && process.env && process.env.EXPO_PUBLIC_API_URL) ||
-  'https://runwithai-server-staging.up.railway.app';
+import { SERVER as API_URL } from '../config';
 
 // Step length estimate from height (cm)
 // Running: roughly height_cm * 0.413 / 100 = step length in meters
