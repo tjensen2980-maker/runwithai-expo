@@ -28,7 +28,7 @@ export const colors = {
 };
 
 // ─── SERVER URL ───────────────────────────────────────────────────────────────
-export const SERVER = 'https://runwithai-server-staging.up.railway.app';
+export const SERVER = 'https://runwithai-server-production.up.railway.app';
 
 // ─── AUTH TOKEN ───────────────────────────────────────────────────────────────
 const TOKEN_KEY = 'runwithai_token';
