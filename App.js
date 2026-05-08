@@ -21,6 +21,7 @@ import Chat from './src/screens/Chat';
 import Activity, { RunCalendar } from './src/screens/Activity';
 import Settings from './src/screens/Settings';
 import RunTracker from './src/screens/RunTracker';
+import CycleTracker from './src/screens/CycleTracker';
 import Stats from './src/screens/Stats';
 import RunDetail from './src/screens/RunDetail';
 import { RoutesTab as RoutesTabComponent } from './src/screens/RoutesTab';
@@ -519,7 +520,9 @@ if (type === 'pick') {
     setActivityType(type);
     if (type === 'strength') {
       setTab('strengthWorkout');
-    } else if (type === 'mobility' || type === 'bike' || type === 'other') {
+    } else if (type === 'bike') {
+      setTab('cycleTracker');
+    } else if (type === 'mobility' || type === 'other') {
       setTab('logActivity');
     } else {
       setTab('tracker');
@@ -550,6 +553,16 @@ if (type === 'pick') {
       <SafeAreaProvider>
         <RunTracker profile={profile} level={level} weekPlan={weekPlan} nextWorkout={nextWorkout}
           runs={runs} activityType={activityType} onBack={() => setTab('dashboard')} />
+      </SafeAreaProvider>
+    );
+  }
+
+if (tab === 'cycleTracker') {
+    if (!CycleTracker) return <SafeAreaProvider><View style={{flex:1,alignItems:'center',justifyContent:'center'}}><Text>CycleTracker mangler</Text></View></SafeAreaProvider>;
+    return (
+      <SafeAreaProvider>
+        <CycleTracker profile={profile} level={level} weekPlan={weekPlan} nextWorkout={nextWorkout}
+          runs={runs} onBack={() => { setActivityType(null); setTab('dashboard'); loadData(); }} />
       </SafeAreaProvider>
     );
   }
@@ -635,6 +648,16 @@ if (type === 'pick') {
           setActivityType(type);
           if (location === 'treadmill') {
             setTab('treadmillTracker');
+          } else {
+            setTab('tracker');
+          }
+        }} />;
+        return <MotionPicker onBack={() => setTab('dashboard')} onPick={(type, location) => {
+          setActivityType(type);
+          if (location === 'treadmill') {
+            setTab('treadmillTracker');
+          } else if (type === 'bike') {
+            setTab('cycleTracker');
           } else {
             setTab('tracker');
           }

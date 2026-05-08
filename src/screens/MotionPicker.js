@@ -20,10 +20,6 @@ export default function MotionPicker({ onBack, onPick }) {
   const [selectedType, setSelectedType] = useState(null);
 
   function pickType(type) {
-    if (type === 'bike') {
-      // bike not implemented yet
-      return;
-    }
     setSelectedType(type);
     setStep(2);
   }
@@ -49,7 +45,7 @@ export default function MotionPicker({ onBack, onPick }) {
         </TouchableOpacity>
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Text style={styles.headerTitle}>
-            {step === 1 ? 'Motion' : selectedType === 'walk' ? 'Gå' : 'Løb'}
+            {step === 1 ? 'Motion' : selectedType === 'walk' ? 'Gaa' : selectedType === 'bike' ? 'Cykling' : 'Loeb'}
           </Text>
           <Text style={styles.headerSub}>
             {step === 1 ? 'Hvad vil du lave?' : 'Hvor?'}
@@ -80,16 +76,12 @@ export default function MotionPicker({ onBack, onPick }) {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.bigCard, styles.cardDisabled]}
+              style={styles.bigCard}
               onPress={function () { pickType('bike'); }}
-              disabled={true}
             >
               <Text style={styles.cardEmoji}>🚴</Text>
-              <View style={styles.soonBadge}>
-                <Text style={styles.soonBadgeText}>SNART</Text>
-              </View>
-              <Text style={[styles.cardTitle, styles.cardTitleDisabled]}>Cykling</Text>
-              <Text style={[styles.cardSub, styles.cardSubDisabled]}>Kommer snart</Text>
+              <Text style={styles.cardTitle}>Cykling</Text>
+              <Text style={styles.cardSub}>Udendoers eller indendoers</Text>
             </TouchableOpacity>
           </View>
         ) : (

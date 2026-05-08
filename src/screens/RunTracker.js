@@ -780,17 +780,27 @@ const weightKg = parseFloat(profile?.weight_kg || profile?.weight) || 70; // fal
 const hours = duration / 3600;
 // MET-værdier: gå ~3.5, jog ~7, løb ~9.8, hurtigt løb ~11.5
 let met;
+const speedKmh = (duration > 0 && km > 0) ? (km / (duration / 3600)) : 0;
+
 if (activityType === 'walk') {
   met = 3.5;
+} else if (activityType === 'bike') {
+  // Cykling MET baseret paa hastighed (km/t)
+  if (speedKmh < 16) met = 4.0;        // afslappet
+  else if (speedKmh < 19) met = 6.8;   // moderat
+  else if (speedKmh < 22) met = 8.0;   // raskt
+  else if (speedKmh < 25) met = 10.0;  // hurtigt
+  else if (speedKmh < 30) met = 12.0;  // racer-tempo
+  else met = 15.8;                      // race
 } else {
-  // Brug pace til at vurdere intensitet (min/km)
-  if (paceMinPerKm > 0 && paceMinPerKm < 5) met = 11.5;       // <5 min/km = hurtigt
-  else if (paceMinPerKm > 0 && paceMinPerKm < 6) met = 9.8;   // 5-6 min/km
-  else if (paceMinPerKm > 0 && paceMinPerKm < 7) met = 8.3;   // 6-7 min/km
-  else met = 7.0;                                              // langsomt jog
+  // Loeb: brug pace til at vurdere intensitet
+  if (paceMinPerKm > 0 && paceMinPerKm < 5) met = 11.5;
+  else if (paceMinPerKm > 0 && paceMinPerKm < 6) met = 9.8;
+  else if (paceMinPerKm > 0 && paceMinPerKm < 7) met = 8.3;
+  else met = 7.0;
 }
 const calories = Math.round(met * weightKg * hours);
-console.log(`🔥 Calories: ${calories} kcal (MET=${met}, weight=${weightKg}kg, hours=${hours.toFixed(2)})`);
+console.log('Calories: ' + calories + ' kcal (MET=' + met + ', weight=' + weightKg + 'kg, hours=' + hours.toFixed(2) + ')');
 
     if (voiceCoachRef.current) {
       voiceCoachRef.current.finish({ km, durationSecs: duration, paceMinPerKm });
@@ -820,7 +830,7 @@ const runData = {
   duration,
   pace: paceMinPerKm,
   heart_rate: null,
-  calories,           // ← NU sendes kalorier med
+  calories,
   route,
   notes: null,
   type: activityType === 'run' ? 'run' : 'walk',
@@ -829,13 +839,29 @@ const runData = {
   walking_km: walkingKm,
 };
 
+// Bike-payload til /activities endpoint
+const bikePayload = {
+  type: 'bike',
+  started_at: new Date(Date.now() - duration * 1000).toISOString(),
+  duration_sec: duration,
+  calories_kcal: calories,
+  distance_m: Math.round(km * 1000),
+  avg_speed_kmh: speedKmh > 0 ? parseFloat(speedKmh.toFixed(2)) : null,
+  max_speed_kmh: null,
+  gps_polyline: route.length > 0 ? JSON.stringify(route) : null,
+  source: 'app',
+};
+
     try {
       const token = getAuthToken();
       if (token) {
-        const res = await fetch(`${SERVER}/runs`, {
+        const isBike = activityType === 'bike';
+        const url = isBike ? (SERVER + '/activities') : (SERVER + '/runs');
+        const body = isBike ? bikePayload : runData;
+        const res = await fetch(url, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-          body: JSON.stringify(runData),
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify(body),
         });
         const result = await res.json();
         console.log('Server response:', JSON.stringify(result));
@@ -879,12 +905,18 @@ const runData = {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
   
-  const formatPace = () => {
+const formatPace = () => {
     if (distance < 10) return '--:--';
     const paceInSeconds = duration / (distance / 1000);
     const mins = Math.floor(paceInSeconds / 60);
     const secs = Math.floor(paceInSeconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return mins + ':' + secs.toString().padStart(2, '0');
+  };
+
+  const formatSpeed = () => {
+    if (distance < 10 || duration < 1) return '--';
+    const kmh = (distance / 1000) / (duration / 3600);
+    return kmh.toFixed(1);
   };
 
   useEffect(() => {
@@ -902,7 +934,7 @@ const runData = {
         <Text style={s.backText}>← {t('common.back')}</Text>
       </TouchableOpacity>
       <View style={s.header}>
-        <Text style={s.title}>{activityType === 'run' ? `🏃 ${t('run.title')}` : `🚶 ${t('run.walk')}`}</Text>
+        <Text style={s.title}>{activityType === 'bike' ? '🚴 Cykling' : activityType === 'run' ? ('🏃 ' + t('run.title')) : ('🚶 ' + t('run.walk'))}</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <TouchableOpacity
             style={[s.voiceToggle, voiceEnabled && s.voiceToggleActive]}
@@ -923,7 +955,7 @@ const runData = {
         {!isTracking ? t('tracker.status.ready') : isPaused ? t('tracker.status.paused') : t('tracker.status.tracking')}
       </Text>
 
-      {!isTracking && runs && runs.length > 0 && (
+      {!isTracking && runs && runs.length > 0 && activityType !== 'bike' && (
         <PersonalStats runs={runs} activityType={activityType} t={t} />
       )}
       
@@ -950,8 +982,8 @@ const runData = {
           <Text style={s.statLabel}>{t('run.time')}</Text>
         </View>
         <View style={s.statBox}>
-          <Text style={s.statValue}>{formatPace()}</Text>
-          <Text style={s.statLabel}>MIN/KM</Text>
+          <Text style={s.statValue}>{activityType === 'bike' ? formatSpeed() : formatPace()}</Text>
+          <Text style={s.statLabel}>{activityType === 'bike' ? 'KM/T' : 'MIN/KM'}</Text>
         </View>
       </View>
       
