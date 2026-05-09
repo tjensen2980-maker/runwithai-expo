@@ -125,7 +125,7 @@ function SearchStep({ onPickFood, onCreateCustom, onScanBarcode, onPhotoAnalyze 
                   {item.fat_g ? ' - F ' + Number(item.fat_g).toFixed(1) + 'g' : ''}
                 </Text>
               </View>
-              <Text style={{ fontSize: 22, color: colors.muted, marginLeft: 8 }}>â€º</Text>
+              <Text style={{ fontSize: 22, color: colors.muted, marginLeft: 8 }}>›</Text>
             </TouchableOpacity>
           )}
         />
@@ -152,7 +152,7 @@ function LogStep({ food, onBack, onLogged }) {
   const onSave = async () => {
     const g = Number(String(grams).replace(',', '.'));
     if (!g || g <= 0) {
-      Alert.alert('Ugyldig vÃ¦gt', 'Indtast antal gram (større end 0).');
+      Alert.alert('Ugyldig vægt', 'Indtast antal gram (større end 0).');
       return;
     }
     setSaving(true);
@@ -174,7 +174,7 @@ function LogStep({ food, onBack, onLogged }) {
   return (
     <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
       <TouchableOpacity onPress={onBack} style={{ marginBottom: 12 }}>
-        <Text style={{ color: colors.accent, fontSize: 14, fontWeight: '600' }}>â€¹ Tilbage til søgning</Text>
+        <Text style={{ color: colors.accent, fontSize: 14, fontWeight: '600' }}>‹ Tilbage til Søgning</Text>
       </TouchableOpacity>
 
       <View style={s.card}>
@@ -185,7 +185,7 @@ function LogStep({ food, onBack, onLogged }) {
         </Text>
       </View>
 
-      <Text style={s.label}>MÅltidstype</Text>
+      <Text style={s.label}>måltidstype</Text>
       <View style={s.mealTypeRow}>
         {MEAL_TYPES.map(mt => {
           const active = mealType === mt.id;
@@ -268,7 +268,7 @@ function CustomFoodStep({ onBack, onCreated }) {
 
   const onSave = async () => {
     if (!name.trim()) {
-      Alert.alert('Mangler navn', 'Indtast et navn pa fÅ¸devaren.');
+      Alert.alert('Mangler navn', 'Indtast et navn pa f>devaren.');
       return;
     }
     if (!kcal) {
@@ -287,7 +287,7 @@ function CustomFoodStep({ onBack, onCreated }) {
       });
       if (onCreated) onCreated(food);
     } catch (e) {
-      Alert.alert('Fejl', 'Kunne ikke oprette fa¸devare: ' + e.message);
+      Alert.alert('Fejl', 'Kunne ikke oprette fødevare: ' + e.message);
       setSaving(false);
     }
   };
@@ -295,16 +295,16 @@ function CustomFoodStep({ onBack, onCreated }) {
   return (
     <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
       <TouchableOpacity onPress={onBack} style={{ marginBottom: 12 }}>
-        <Text style={{ color: colors.accent, fontSize: 14, fontWeight: '600' }}>â€¹ Tilbage</Text>
+        <Text style={{ color: colors.accent, fontSize: 14, fontWeight: '600' }}>‹ Tilbage</Text>
       </TouchableOpacity>
 
-      <Text style={s.title}>Ny fa¸devare</Text>
+      <Text style={s.title}>Ny fødevare</Text>
       <Text style={[s.foodMacros, { marginBottom: 16 }]}>Indtast nærings-info per 100g</Text>
 
       <Text style={s.label}>Navn *</Text>
-      <TextInput style={s.input} value={name} onChangeText={setName} placeholder="fx Ã†ble" placeholderTextColor={colors.muted} />
+      <TextInput style={s.input} value={name} onChangeText={setName} placeholder="fx >ble" placeholderTextColor={colors.muted} />
 
-      <Text style={s.label}>MÃ¦rke (valgfri)</Text>
+      <Text style={s.label}>M>rke (valgfri)</Text>
       <TextInput style={s.input} value={brand} onChangeText={setBrand} placeholder="fx Naturen" placeholderTextColor={colors.muted} />
 
       <Text style={s.label}>Kalorier per 100g *</Text>
@@ -383,7 +383,7 @@ export default function LogMeal({ onBack, onDone, onScanBarcode, onPhotoAnalyze,
             <Text style={s.backTxt}>{step === 'search' ? 'Annuller' : 'Tilbage'}</Text>
           </TouchableOpacity>
           <Text style={s.title}>
-            {step === 'search' ? 'Log måltid' : step === 'log' ? 'MÃ¦ngde' : 'Ny fødevare'}
+            {step === 'search' ? 'Log måltid' : step === 'log' ? 'Mængde' : 'Ny fødevare'}
           </Text>
           <View style={{ width: 70 }} />
         </View>
