@@ -76,24 +76,29 @@ async function initRevenueCat(userId) {
 // ─── USE SUBSCRIPTION HOOK ──────────────────────────────────────────────────
 export function useSubscription(token) {
   const [subscription, setSubscription] = useState(null);
+  const [tierInfo, setTierInfo] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const refresh = async () => {
     if (!token) {
       setSubscription(null);
+      setTierInfo(null);
       setLoading(false);
       return;
     }
 
     try {
-      const res = await fetch(`${API_URL}/subscription`, {
-        headers: { Authorization: `Bearer ${token}` },
+      // Fetch tier info from new endpoint
+      const tierRes = await fetch(API_URL + '/users/me/tier', {
+        headers: { Authorization: 'Bearer ' + token },
       });
-      const data = await res.json();
-      setSubscription(data);
+      const tierData = await tierRes.json();
+      setTierInfo(tierData);
+      setSubscription({ tier: tierData.tier });
     } catch (err) {
-      console.error('Error fetching subscription:', err);
+      console.error('Error fetching tier:', err);
       setSubscription(null);
+      setTierInfo(null);
     } finally {
       setLoading(false);
     }
@@ -103,10 +108,37 @@ export function useSubscription(token) {
     refresh();
   }, [token]);
 
-  const isPro = subscription?.tier === 'pro';
+  // Tier flags
+  const tier = tierInfo?.tier || 'free';
+  const isPro = tierInfo?.isPro || false;
+  const isBasic = tierInfo?.isBasic || false;
+  const isFree = tierInfo?.isFree !== false; // default to free if unknown
+
+  // Feature flags
+  const canUseMealTracking = tierInfo?.canUseMealTracking || false;
+  const canUseMealPlan = tierInfo?.canUseMealPlan || false;
+  const canUseAICoach = tierInfo?.canUseAICoach || false;
+  const canUseAllActivities = tierInfo?.canUseAllActivities || false;
+  const weeklyActivityLimit = tierInfo?.weeklyActivityLimit || null;
+
+  // Backwards compat
   const canTrackRun = true;
 
-  return { subscription, isPro, canTrackRun, loading, refresh };
+  return {
+    subscription,
+    tier,
+    isPro,
+    isBasic,
+    isFree,
+    canTrackRun,
+    canUseMealTracking,
+    canUseMealPlan,
+    canUseAICoach,
+    canUseAllActivities,
+    weeklyActivityLimit,
+    loading,
+    refresh,
+  };
 }
 
 // ─── PAYWALL COMPONENT ──────────────────────────────────────────────────────

@@ -361,7 +361,7 @@ export default function App() {
   });
 
   const token = getAuthToken();
-  const { subscription, isPro, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
+  const { subscription, tier, isPro, isBasic, isFree, canUseMealTracking, canUseMealPlan, canUseAICoach, canUseAllActivities, weeklyActivityLimit, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
 
   useEffect(() => { trainingPlanRef.current = trainingPlan; }, [trainingPlan]);
 
@@ -552,7 +552,7 @@ if (type === 'pick') {
     return (
       <SafeAreaProvider>
         <RunTracker profile={profile} level={level} weekPlan={weekPlan} nextWorkout={nextWorkout}
-          runs={runs} activityType={activityType} onBack={() => setTab('dashboard')} />
+          runs={runs} activityType={activityType} onBack={() => setTab('dashboard')} onShowPricing={() => setShowPricing(true)} />
       </SafeAreaProvider>
     );
   }
@@ -562,7 +562,7 @@ if (tab === 'cycleTracker') {
     return (
       <SafeAreaProvider>
         <CycleTracker profile={profile} level={level} weekPlan={weekPlan} nextWorkout={nextWorkout}
-          runs={runs} onBack={() => { setActivityType(null); setTab('dashboard'); loadData(); }} />
+          runs={runs} onBack={() => { setActivityType(null); setTab('dashboard'); loadData(); }} onShowPricing={() => setShowPricing(true)} />
       </SafeAreaProvider>
     );
   }
@@ -662,7 +662,7 @@ if (tab === 'cycleTracker') {
             setTab('tracker');
           }
         }} />;
-        
+
         case 'logActivity':
         return <LogActivity activityType={activityType} onBack={() => setTab('dashboard')} onDone={() => { setActivityType(null); setTab('dashboard'); loadData(); }} />;
       default:

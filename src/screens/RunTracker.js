@@ -362,7 +362,7 @@ const ps = StyleSheet.create({
 });
 
 // ─── RUNTRACKER COMPONENT ───────────────────────────────────────────────────
-export default function RunTracker({ activityType = 'run', onBack, profile, level, weekPlan, nextWorkout, runs }) {
+export default function RunTracker({ activityType = 'run', onBack, profile, level, weekPlan, nextWorkout, runs, onShowPricing }) {
   const { t } = useTranslation();
   const [isTracking, setIsTracking] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
@@ -863,6 +863,22 @@ const bikePayload = {
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
           body: JSON.stringify(body),
         });
+
+// Check for limit_exceeded (Free tier)
+        if (res.status === 403) {
+          const errData = await res.json().catch(() => ({}));
+          if (errData.error === 'limit_exceeded') {
+            Alert.alert(
+              'Aktivitetsgraense naaet',
+              'Du har naaet graensen paa ' + (errData.limit || 3) + ' aktiviteter/uge paa Free. Opgrader til Basic eller Pro for ubegraenset adgang.',
+              [
+                { text: 'Senere', style: 'cancel' },
+                { text: 'Opgrader', onPress: () => { if (onShowPricing) onShowPricing(); } },
+              ]
+            );
+            return;
+          }
+        }
         const result = await res.json();
         console.log('Server response:', JSON.stringify(result));
 
