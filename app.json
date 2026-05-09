@@ -2,7 +2,7 @@
   "expo": {
     "name": "RunWithAI",
     "slug": "runwithai",
-    "version": "1.8.6",
+    "version": "1.8.7",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -17,7 +17,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "app.runwithai",
-      "buildNumber": "82",
+      "buildNumber": "83",
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
         "CFBundleLocalizations": [
@@ -74,7 +74,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "app.runwithai",
-      "versionCode": 51,
+      "versionCode": 52,
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
