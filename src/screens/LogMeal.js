@@ -93,8 +93,8 @@ function SearchStep({ onPickFood, onCreateCustom, onScanBarcode, onPhotoAnalyze 
         <View style={s.tipBox}>
           <Text style={s.tipTitle}>Søg i fødevaredatabasen</Text>
           <Text style={s.tipTxt}>
-            Skriv navnet pa en fødevare eller en del af det. Resultater vises automatisk.
-            {'\n\n'}Tip: Du kan ogsa oprette dine egne fødevarer.
+            Skriv navnet på en fødevare eller en del af det. Resultater vises automatisk.
+            {'\n\n'}Tip: Du kan også oprette dine egne fødevarer.
           </Text>
           <TouchableOpacity style={s.customBtn} onPress={onCreateCustom}>
             <Text style={s.customBtnTxt}>+ Opret egen fødevare</Text>
@@ -139,9 +139,33 @@ function SearchStep({ onPickFood, onCreateCustom, onScanBarcode, onPhotoAnalyze 
 // ============================================================================
 
 function LogStep({ food, onBack, onLogged }) {
-  const [grams, setGrams] = useState(food.serving_size_g ? String(food.serving_size_g) : '100');
+  const hasServing = food.serving_size_g && Number(food.serving_size_g) > 0;
+  const servingG = hasServing ? Number(food.serving_size_g) : 100;
+  const [count, setCount] = useState(hasServing ? '1' : '');
+  const [grams, setGrams] = useState(String(servingG));
   const [mealType, setMealType] = useState(defaultMealType());
   const [saving, setSaving] = useState(false);
+
+  const updateCount = (v) => {
+    setCount(v);
+    if (hasServing) {
+      const n = Number(String(v).replace(',', '.'));
+      if (!isNaN(n) && n > 0) {
+        setGrams(String(Math.round(n * servingG)));
+      }
+    }
+  };
+
+  const updateGrams = (v) => {
+    setGrams(v);
+    if (hasServing) {
+      const g = Number(String(v).replace(',', '.'));
+      if (!isNaN(g) && g > 0) {
+        const n = g / servingG;
+        setCount(n % 1 === 0 ? String(n) : n.toFixed(2));
+      }
+    }
+  };
 
   const factor = (Number(grams) || 0) / 100;
   const kcal = (Number(food.kcal_per_100g) || 0) * factor;
@@ -185,7 +209,7 @@ function LogStep({ food, onBack, onLogged }) {
         </Text>
       </View>
 
-      <Text style={s.label}>måltidstype</Text>
+      <Text style={s.label}>Måltidstype</Text>
       <View style={s.mealTypeRow}>
         {MEAL_TYPES.map(mt => {
           const active = mealType === mt.id;
@@ -200,12 +224,29 @@ function LogStep({ food, onBack, onLogged }) {
         })}
       </View>
 
+      {hasServing ? (
+        <View>
+          <Text style={s.label}>Antal stk</Text>
+          <View style={s.gramsRow}>
+            <TextInput
+              style={s.gramsInput}
+              value={count}
+              onChangeText={updateCount}
+              keyboardType="numeric"
+              placeholder="1"
+              placeholderTextColor={colors.muted}
+            />
+            <Text style={s.suffix}>{'stk x ' + servingG + 'g'}</Text>
+          </View>
+        </View>
+      ) : null}
+
       <Text style={s.label}>Antal gram</Text>
       <View style={s.gramsRow}>
         <TextInput
           style={s.gramsInput}
           value={grams}
-          onChangeText={setGrams}
+          onChangeText={updateGrams}
           keyboardType="numeric"
           placeholder="100"
           placeholderTextColor={colors.muted}
@@ -268,7 +309,7 @@ function CustomFoodStep({ onBack, onCreated }) {
 
   const onSave = async () => {
     if (!name.trim()) {
-      Alert.alert('Mangler navn', 'Indtast et navn pa f>devaren.');
+      Alert.alert('Mangler navn', 'Indtast et navn på fødevaren.');
       return;
     }
     if (!kcal) {
@@ -302,9 +343,9 @@ function CustomFoodStep({ onBack, onCreated }) {
       <Text style={[s.foodMacros, { marginBottom: 16 }]}>Indtast nærings-info per 100g</Text>
 
       <Text style={s.label}>Navn *</Text>
-      <TextInput style={s.input} value={name} onChangeText={setName} placeholder="fx >ble" placeholderTextColor={colors.muted} />
+      <TextInput style={s.input} value={name} onChangeText={setName} placeholder="fx Æble" placeholderTextColor={colors.muted} />
 
-      <Text style={s.label}>M>rke (valgfri)</Text>
+      <Text style={s.label}>Mærke (valgfri)</Text>
       <TextInput style={s.input} value={brand} onChangeText={setBrand} placeholder="fx Naturen" placeholderTextColor={colors.muted} />
 
       <Text style={s.label}>Kalorier per 100g *</Text>
