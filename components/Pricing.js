@@ -1,4 +1,4 @@
-﻿// ═══════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════
 // PRICING.JS - RunWithAI Pro Subscription Component (RevenueCat + i18n)
 // Sort/rød/hvid tema + Terms & Privacy links for App Store compliance
 // ═══════════════════════════════════════════════════════════════════════════
@@ -94,7 +94,7 @@ export function useSubscription(token) {
       });
       const tierData = await tierRes.json();
       setTierInfo(tierData);
-      setSubscription({ tier: tierData.tier });
+      setSubscription({ tier: tierData.tier, status: tierData.status, isPro: tierData.isPro, isBasic: tierData.isBasic, isFree: tierData.isFree });
     } catch (err) {
       console.error('Error fetching tier:', err);
       setSubscription(null);

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icon } from '../components/Icons';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Switch, Platform, Modal, Alert, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -7,7 +7,6 @@ import { Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
-import WatchModule from '../modules/WatchModule';
 
 function Field({ label, value, onChange, keyboard, placeholder }) {
   return (
@@ -223,86 +222,8 @@ function LanguageSelector() {
 }
 
 
-// Apple Watch sync sektion
-function WatchSyncSection() {
-  const [watchStatus, setWatchStatus] = React.useState({ isPaired: false, isReachable: false });
-  const [syncing, setSyncing] = React.useState(false);
-  const [lastSync, setLastSync] = React.useState(null);
 
-  React.useEffect(() => {
-    WatchModule.getWatchStatus().then(setWatchStatus).catch(() => {});
-  }, []);
-
-  const handleSync = async () => {
-    setSyncing(true);
-    try {
-      const { loadWeekPlan } = require('../../data');
-      const plan = await loadWeekPlan();
-      if (plan && plan.length > 0) {
-        const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-        const todayPlan = plan.find(p => p.day && p.day.toLowerCase() === today) || plan[0];
-        await WatchModule.sendTodayTraining(todayPlan, plan);
-        setLastSync(new Date().toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }));
-      }
-    } catch (err) {
-      console.warn('[Settings] Watch sync error:', err);
-    }
-    setSyncing(false);
-  };
-
-  return (
-    <View style={{ marginTop: 18, marginBottom: 4 }}>
-      <Text style={{ color: '#888', fontSize: 11, fontWeight: '700', letterSpacing: 1.5, marginBottom: 8, marginLeft: 2 }}>
-        APPLE WATCH
-      </Text>
-      <View style={{ backgroundColor: '#1a1a1a', borderRadius: 14, padding: 14 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-            <Text style={{ fontSize: 20 }}>\u231A</Text>
-            <View>
-              <Text style={{ color: '#fff', fontSize: 14, fontWeight: '600' }}>
-                {watchStatus.isPaired ? 'Watch tilsluttet' : 'Watch ikke tilsluttet'}
-              </Text>
-              <Text style={{ color: watchStatus.isReachable ? '#4ade80' : '#888', fontSize: 12 }}>
-                {watchStatus.isReachable ? '\u25CF Tilg\u00E6ngelig' : '\u25CB Ikke tilg\u00E6ngelig'}
-              </Text>
-            </View>
-          </View>
-        </View>
-        <TouchableOpacity
-          onPress={handleSync}
-          disabled={syncing || !watchStatus.isReachable}
-          style={{
-            backgroundColor: watchStatus.isReachable ? '#4ade80' : '#333',
-            borderRadius: 10,
-            paddingVertical: 10,
-            paddingHorizontal: 16,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 8,
-          }}
-        >
-          <Text style={{ color: watchStatus.isReachable ? '#000' : '#666', fontWeight: '700', fontSize: 14 }}>
-            {syncing ? 'Synkroniserer...' : '\u21BB  Synk tr\u00E6ningsplan til Watch'}
-          </Text>
-        </TouchableOpacity>
-        {lastSync && (
-          <Text style={{ color: '#666', fontSize: 11, marginTop: 6, textAlign: 'center' }}>
-            Sidst synkroniseret: {lastSync}
-          </Text>
-        )}
-        {!watchStatus.isReachable && (
-          <Text style={{ color: '#555', fontSize: 11, marginTop: 6, textAlign: 'center' }}>
-            \u00C5bn Watch-appen for at synkronisere
-          </Text>
-        )}
-      </View>
-    </View>
-  );
-}
-
-export default function Settings({ profile, level, onProfileChange, onLevelChange, onLogout, onBack, onNavigate }) {
+export default function Settings({ profile, level, onProfileChange, onLevelChange, onLogout, onBack, onNavigate, subscription: subscriptionProp, onShowPricing }) {
   const { t } = useTranslation();
   const [form, setForm] = useState(profile || {});
   const [saved, setSaved] = useState(false);
@@ -310,6 +231,12 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
   const [subscription, setSubscription] = useState(null);
   const [deletingAccount, setDeletingAccount] = useState(false);
   // ─── ERNÆRINGSPLAN STATE ────────────────────────────────────────────────
+  // Email change state
+  const [userEmail, setUserEmail] = useState('');
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [newEmail, setNewEmail] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [changingEmail, setChangingEmail] = useState(false);
 const [primaryGoal, setPrimaryGoal] = useState('maintain');
 const [goalPace, setGoalPace] = useState('normal');
 const [activityLevel, setActivityLevel] = useState('moderate');
@@ -330,6 +257,21 @@ const [calcResult, setCalcResult] = useState(null);
       } catch (e) { console.log(e); }
     };
     fetchSub();
+  }, []);
+
+  // Hent brugerens email
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = await getAuthToken();
+        const res = await fetch(`${SERVER}/users/me`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data && data.email) setUserEmail(data.email);
+      } catch (e) { console.log('fetchUser error:', e); }
+    };
+    fetchUser();
   }, []);
 
   useEffect(() => { loadRuns().then(r => setRuns(r || [])); }, []);
@@ -482,6 +424,41 @@ const calculateGoals = async () => {
 };
 
   // ─── SLET KONTO (APPLE KRAV) ────────────────────────────────────────────────
+
+  // Skift email handler
+  const handleChangeEmail = async () => {
+    if (!newEmail || !currentPassword) {
+      Alert.alert('Fejl', 'Udfyld baade ny email og adgangskode');
+      return;
+    }
+    setChangingEmail(true);
+    try {
+      const token = await getAuthToken();
+      const res = await fetch(`${SERVER}/users/me/email`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ newEmail: newEmail.trim(), password: currentPassword })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        Alert.alert('Fejl', data.error || 'Kunne ikke skifte email');
+        return;
+      }
+      setUserEmail(data.email);
+      setShowEmailModal(false);
+      setNewEmail('');
+      setCurrentPassword('');
+      Alert.alert('Succes', 'Din email er nu opdateret');
+    } catch (e) {
+      Alert.alert('Fejl', 'Netvaerksfejl');
+    } finally {
+      setChangingEmail(false);
+    }
+  };
+
   const handleDeleteAccount = () => {
     const confirmDelete = async () => {
       setDeletingAccount(true);
@@ -550,7 +527,6 @@ const calculateGoals = async () => {
   return (
     <SafeAreaView style={s.safe} edges={['top']}>
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-        <WatchSyncSection />
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
           {onBack && (
             <TouchableOpacity onPress={onBack} style={{ marginRight: 12, padding: 4 }}>
@@ -995,6 +971,72 @@ const calculateGoals = async () => {
           <Text style={s.saveBtnText}>{saved ? t('settings.saved') : t('settings.saveChanges')}</Text>
         </TouchableOpacity>
 
+        {/* === ABONNEMENT === */}
+        <Text style={s.sectionTitle}>Abonnement</Text>
+        <View style={s.subCard}>
+          <View style={s.subRow}>
+            <Text style={s.subLabel}>Type</Text>
+            <Text style={s.subValue}>{(subscriptionProp && subscriptionProp.tier) ? (subscriptionProp.tier === 'pro' ? 'Pro' : subscriptionProp.tier === 'basic' ? 'Basic' : 'Free') : 'Free'}</Text>
+          </View>
+          <View style={s.subRow}>
+            <Text style={s.subLabel}>Status</Text>
+            <Text style={s.subValue}>{(subscriptionProp && subscriptionProp.status) || 'Inaktiv'}</Text>
+          </View>
+          {(!subscriptionProp || !subscriptionProp.tier || subscriptionProp.tier === 'free') ? (
+            <TouchableOpacity style={s.upgradeBtn} onPress={onShowPricing}>
+              <Text style={s.upgradeBtnText}>Opgrader</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={() => Linking.openURL('https://apps.apple.com/account/subscriptions')}>
+              <Text style={s.linkText}>Administrer i App Store</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {/* === EMAIL === */}
+        <Text style={s.sectionTitle}>Email</Text>
+        <View style={s.subCard}>
+          <Text style={s.emailValue}>{userEmail || '-'}</Text>
+          <TouchableOpacity onPress={() => setShowEmailModal(true)}>
+            <Text style={s.linkText}>Skift email</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* === EMAIL CHANGE MODAL === */}
+        <Modal visible={showEmailModal} animationType='slide' transparent>
+          <View style={s.modalOverlay}>
+            <View style={s.modalCard}>
+              <Text style={s.modalTitle}>Skift email</Text>
+              <TextInput
+                style={s.modalInput}
+                placeholder='Ny email'
+                placeholderTextColor={colors.muted}
+                value={newEmail}
+                onChangeText={setNewEmail}
+                keyboardType='email-address'
+                autoCapitalize='none'
+              />
+              <TextInput
+                style={s.modalInput}
+                placeholder='Nuvaerende adgangskode'
+                placeholderTextColor={colors.muted}
+                value={currentPassword}
+                onChangeText={setCurrentPassword}
+                secureTextEntry
+              />
+              <View style={s.modalBtnRow}>
+                <TouchableOpacity style={s.modalCancelBtn} onPress={() => { setShowEmailModal(false); setNewEmail(''); setCurrentPassword(''); }} disabled={changingEmail}>
+                  <Text style={s.modalCancelText}>Annuller</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={s.modalConfirmBtn} onPress={handleChangeEmail} disabled={changingEmail}>
+                  {changingEmail ? <ActivityIndicator color='#fff' /> : <Text style={s.modalConfirmText}>Gem</Text>}
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+
+
         {/* ── LOG UD ── */}
         <TouchableOpacity style={s.logoutBtn} onPress={onLogout}>
           <Text style={s.logoutText}>{t('settings.logout')}</Text>
@@ -1069,6 +1111,25 @@ const s = StyleSheet.create({
   dayBtnText:   { color: colors.dim, fontSize: 12, fontWeight: '600' },
   saveBtn:      { backgroundColor: colors.accent, borderRadius: 16, padding: 16, alignItems: 'center', marginTop: 24 },
   saveBtnText:  { color: colors.black, fontWeight: '800', fontSize: 16 },
+  // Subscription / Email styles
+  subCard:        { backgroundColor: colors.card, borderRadius: 12, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: colors.border },
+  subRow:         { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
+  subLabel:       { color: colors.muted, fontSize: 13 },
+  subValue:       { color: colors.text, fontSize: 14, fontWeight: '700' },
+  emailValue:     { color: colors.text, fontSize: 15, marginBottom: 12 },
+  upgradeBtn:     { backgroundColor: colors.accent, borderRadius: 10, padding: 12, alignItems: 'center', marginTop: 8 },
+  upgradeBtnText: { color: '#fff', fontWeight: '800', fontSize: 14 },
+  linkText:       { color: colors.accent, fontSize: 14, fontWeight: '600', marginTop: 8 },
+  // Modal styles
+  modalOverlay:   { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', padding: 20 },
+  modalCard:      { backgroundColor: colors.card, borderRadius: 16, padding: 20 },
+  modalTitle:     { color: colors.text, fontSize: 18, fontWeight: '800', marginBottom: 16 },
+  modalInput:     { backgroundColor: colors.bg, borderWidth: 1, borderColor: colors.border, borderRadius: 10, padding: 12, color: colors.text, fontSize: 15, marginBottom: 12 },
+  modalBtnRow:    { flexDirection: 'row', gap: 10, marginTop: 8 },
+  modalCancelBtn: { flex: 1, padding: 12, borderRadius: 10, borderWidth: 1, borderColor: colors.border, alignItems: 'center' },
+  modalCancelText:{ color: colors.muted, fontWeight: '600' },
+  modalConfirmBtn:{ flex: 1, padding: 12, borderRadius: 10, backgroundColor: colors.accent, alignItems: 'center' },
+  modalConfirmText:{ color: '#fff', fontWeight: '800' },
   logoutBtn:    { alignItems: 'center', marginTop: 16, padding: 12 },
   logoutText:   { color: '#ef4444', fontSize: 14, fontWeight: '600' },
   exportBtn:    { backgroundColor: colors.surface, borderRadius: 12, paddingVertical: 13, paddingHorizontal: 16, alignItems: 'center', borderWidth: 1, borderColor: colors.border2, marginBottom: 8 },

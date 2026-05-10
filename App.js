@@ -16,6 +16,7 @@ import { useWatch } from './src/hooks/useWatch'
 import { syncAuthToWatch } from './src/services/WatchSync';
 import Auth from './src/screens/Auth';
 import Onboarding from './src/screens/Onboarding';
+import OnboardingCarousel from './src/components/OnboardingCarousel';
 import Dashboard from './src/screens/Dashboard';
 import Chat from './src/screens/Chat';
 import Activity, { RunCalendar } from './src/screens/Activity';
@@ -129,7 +130,7 @@ const proLockStyles = StyleSheet.create({
   price: { color: colors.muted, fontSize: 13 },
 });
 
-function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, onShowPricing }) {
+function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, isFree, onShowPricing }) {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('start');
   const lastRun = runs && runs.length > 0 ? [...runs].sort((a,b) => new Date(b.date||0) - new Date(a.date||0))[0] : null;
@@ -141,7 +142,7 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, onShowPric
             style={{ flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center', backgroundColor: activeTab === id ? colors.black : colors.surface, borderWidth: 2, borderColor: activeTab === id ? colors.black : colors.border2 }}
             onPress={() => setActiveTab(id)}>
             <Text style={{ fontSize: 14, fontWeight: '800', color: activeTab === id ? colors.card : colors.muted }}>
-              {label}{id === 'routes' && !isPro && ' 🔒'}
+              {label}{id === 'routes' && isFree && ' 🔒'}
             </Text>
           </TouchableOpacity>
         ))}
@@ -172,14 +173,14 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, onShowPric
           )}
         </ScrollView>
       ) : (
-        isPro ? <RoutesTabWrapper profile={profile} runs={runs} /> : <ProFeatureLock feature={t('pro.aiRoutes.title')} description={t('pro.aiRoutes.description')} onUpgrade={onShowPricing} />
+        !isFree ? <RoutesTabWrapper profile={profile} runs={runs} /> : <ProFeatureLock feature={t('pro.aiRoutes.title')} description={t('pro.aiRoutes.description')} onUpgrade={onShowPricing} />
       )}
     </View>
   );
 }
 function CalendarTab({ runs, weekPlan, trainingPlan, isPro, onShowPricing }) {
   const { t } = useTranslation();
-  if (!isPro) return <ProFeatureLock feature={t('pro.calendar.title')} description={t('pro.calendar.description')} onUpgrade={onShowPricing} />;
+  if (isFree) return <ProFeatureLock feature={t('pro.calendar.title')} description={t('pro.calendar.description')} onUpgrade={onShowPricing} />;
   return (
     <ScrollView style={{ flex: 1, backgroundColor: colors.bg }} contentContainerStyle={{ padding: 16, paddingBottom: 100 }}>
       <Text style={{ fontSize: 11, color: colors.muted, letterSpacing: 2, fontWeight: '700', marginBottom: 16 }}>{t('tabs.calendar').toUpperCase()}</Text>
@@ -207,7 +208,7 @@ function StatsTab({ runs, profile, level, isPro, onShowPricing }) {
   }
   return <Stats runs={runs} profile={profile} level={level} />;
 }
-function PlanTab({ level, nextWorkout, weekPlan, planChanges, profile, runs, onNavigate, onStartActivity, trainingPlan, onPlanUpdate, isPro, onShowPricing }) {
+function PlanTab({ level, nextWorkout, weekPlan, planChanges, profile, runs, onNavigate, onStartActivity, trainingPlan, onPlanUpdate, isPro, isFree, onShowPricing }) {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('plan');
   return (
@@ -218,7 +219,7 @@ function PlanTab({ level, nextWorkout, weekPlan, planChanges, profile, runs, onN
             style={{ flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center', backgroundColor: activeTab === id ? colors.black : colors.surface, borderWidth: 2, borderColor: activeTab === id ? colors.black : colors.border2 }}
             onPress={() => setActiveTab(id)}>
             <Text style={{ fontSize: 14, fontWeight: '800', color: activeTab === id ? colors.card : colors.muted }}>
-              {label}{id === 'coach' && !isPro && ' 🔒'}
+              {label}{id === 'coach' && isFree && ' 🔒'}
             </Text>
           </TouchableOpacity>
         ))}
@@ -227,11 +228,11 @@ function PlanTab({ level, nextWorkout, weekPlan, planChanges, profile, runs, onN
         {activeTab === 'plan' ? (
           <Dashboard level={level} nextWorkout={nextWorkout} weekPlan={weekPlan} planChanges={planChanges} profile={profile} runs={runs} onNavigate={onNavigate} onStartActivity={onStartActivity} />
         ) : activeTab === 'kalender' ? (
-          isPro
+          !isFree
             ? <CalendarTab runs={runs} weekPlan={weekPlan} trainingPlan={trainingPlan} isPro={isPro} onShowPricing={onShowPricing} />
             : <ProFeatureLock feature={t('pro.calendar.title')} description={t('pro.calendar.description')} onUpgrade={onShowPricing} />
         ) : (
-          isPro
+          !isFree
             ? <Chat level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} onPlanUpdate={onPlanUpdate} runs={runs} />
             : <ProFeatureLock feature={t('pro.coach.title')} description={t('pro.coach.description')} onUpgrade={onShowPricing} />
         )
@@ -327,6 +328,7 @@ export default function App() {
   const [loading, setLoading]               = useState(true);
   const [activityType, setActivityType]     = useState('run');
   const [showPricing, setShowPricing]       = useState(false);
+  const [showTierCarousel, setShowTierCarousel] = useState(false);
   const [selectedRun, setSelectedRun]       = useState(null);
 // Watch sync - modtager run fra ur og marker dagens træning som completed
   const trainingPlanRef = React.useRef(null);
@@ -502,10 +504,10 @@ export default function App() {
   };
 
   const handleStartActivity = (type) => {
-    if (!canTrackRun && !isPro) {
+    if (!canTrackRun && isFree) {
       Alert.alert(t('pro.limit.title'), t('pro.limit.message'), [
         { text: t('pro.limit.cancel'), style: 'cancel' },
-        { text: t('pro.limit.seePlans'), onPress: () => setShowPricing(true) }
+        { text: t('pro.limit.seePlans'), onPress: () => setShowTierCarousel(true) }
       ]);
       return;
     }
@@ -552,7 +554,7 @@ if (type === 'pick') {
     return (
       <SafeAreaProvider>
         <RunTracker profile={profile} level={level} weekPlan={weekPlan} nextWorkout={nextWorkout}
-          runs={runs} activityType={activityType} onBack={() => setTab('dashboard')} onShowPricing={() => setShowPricing(true)} />
+          runs={runs} activityType={activityType} onBack={() => setTab('dashboard')} onShowPricing={() => setShowTierCarousel(true)} />
       </SafeAreaProvider>
     );
   }
@@ -562,7 +564,7 @@ if (tab === 'cycleTracker') {
     return (
       <SafeAreaProvider>
         <CycleTracker profile={profile} level={level} weekPlan={weekPlan} nextWorkout={nextWorkout}
-          runs={runs} onBack={() => { setActivityType(null); setTab('dashboard'); loadData(); }} onShowPricing={() => setShowPricing(true)} />
+          runs={runs} onBack={() => { setActivityType(null); setTab('dashboard'); loadData(); }} onShowPricing={() => setShowTierCarousel(true)} />
       </SafeAreaProvider>
     );
   }
@@ -605,23 +607,23 @@ if (tab === 'cycleTracker') {
   const renderScreen = () => {
     switch (tab) {
       case 'dashboard':
-        return <PlanTab level={level} nextWorkout={nextWorkout} weekPlan={weekPlan} planChanges={planChanges} profile={profile} runs={runs} onNavigate={setTab} onStartActivity={handleStartActivity} trainingPlan={trainingPlan} onPlanUpdate={handlePlanUpdate} isPro={isPro} onShowPricing={() => setShowPricing(true)} />;
+        return <PlanTab level={level} nextWorkout={nextWorkout} weekPlan={weekPlan} planChanges={planChanges} profile={profile} runs={runs} onNavigate={setTab} onStartActivity={handleStartActivity} trainingPlan={trainingPlan} onPlanUpdate={handlePlanUpdate} isPro={isPro} isFree={isFree} onShowPricing={() => setShowTierCarousel(true)} />;
       case 'activity':
         return <Activity level={level} profile={profile} weekPlan={weekPlan} onSetWeekPlan={(plan) => setWeekPlan(plan)} trainingPlan={trainingPlan} onTrainingPlanChange={setTrainingPlan} runs={runs} onSelectRun={setSelectedRun} />;
       case 'run':
-        return <RunTab nextWorkout={nextWorkout} onStartActivity={handleStartActivity} runs={runs} profile={profile} isPro={isPro} onShowPricing={() => setShowPricing(true)} />;
+        return <RunTab nextWorkout={nextWorkout} onStartActivity={handleStartActivity} runs={runs} profile={profile} isPro={isPro} isFree={isFree} onShowPricing={() => setShowTierCarousel(true)} />;
       case 'stats':
-        return <StatsTab runs={runs} profile={profile} level={level} isPro={isPro} onShowPricing={() => setShowPricing(true)} />;
+        return <StatsTab runs={runs} profile={profile} level={level} isPro={isPro} onShowPricing={() => setShowTierCarousel(true)} />;
       case 'calendar':
-        return <CalendarTab runs={runs} weekPlan={weekPlan} trainingPlan={trainingPlan} isPro={isPro} onShowPricing={() => setShowPricing(true)} />;
+        return <CalendarTab runs={runs} weekPlan={weekPlan} trainingPlan={trainingPlan} isPro={isPro} onShowPricing={() => setShowTierCarousel(true)} />;
       case 'chat':
-        return <Chat level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} onPlanUpdate={handlePlanUpdate} runs={runs} />;
+        return !isFree ? <Chat level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} onPlanUpdate={handlePlanUpdate} runs={runs} /> : <ProFeatureLock feature={t('pro.coach.title')} description={t('pro.coach.description')} onUpgrade={() => setShowTierCarousel(true)} />;
       case 'settings':
-        return <Settings onNavigate={setTab} level={level || 'intermediate'} onLevelChange={(lv) => { setLevel(lv); setProfile(p => ({ ...p, level: lv })); }} profile={profile} onProfileChange={setProfile} onLogout={handleLogout} onBack={() => setTab('dashboard')} subscription={subscription} onShowPricing={() => setShowPricing(true)} />;
+        return <Settings onNavigate={setTab} level={level || 'intermediate'} onLevelChange={(lv) => { setLevel(lv); setProfile(p => ({ ...p, level: lv })); }} profile={profile} onProfileChange={setProfile} onLogout={handleLogout} onBack={() => setTab('dashboard')} subscription={subscription} onShowPricing={() => setShowTierCarousel(true)} />;
       case 'privacy':
         return <Privacy onBack={() => setTab('settings')} />;
       case 'goals':
-        return isPro ? <GoalsSetup onBack={() => setTab('settings')} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
+        return <GoalsSetup onBack={() => setTab('settings')} />;
       case 'mealPlan':
       return (
         <MealPlan
@@ -632,13 +634,13 @@ if (tab === 'cycleTracker') {
         />
       );
         case 'nutrition':
-        return isPro ? <NutritionDashboard onBack={() => setTab('settings')} onLogMeal={() => setTab('logMeal')} onMealPlan={() => setTab('mealPlan')} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
+        return isPro ? <NutritionDashboard onBack={() => setTab('settings')} onLogMeal={() => setTab('logMeal')} onMealPlan={() => setTab('mealPlan')} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowTierCarousel(true)} />;
       case 'logMeal':
-        return isPro ? <LogMeal onBack={() => { setScannedFood(null); setTab('nutrition'); }} onDone={() => { setScannedFood(null); setTab('nutrition'); }} onScanBarcode={() => setTab('barcodeScanner')} onPhotoAnalyze={() => setTab('photoAnalyze')} scannedFood={scannedFood} onScanConsumed={() => setScannedFood(null)} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
+        return isPro ? <LogMeal onBack={() => { setScannedFood(null); setTab('nutrition'); }} onDone={() => { setScannedFood(null); setTab('nutrition'); }} onScanBarcode={() => setTab('barcodeScanner')} onPhotoAnalyze={() => setTab('photoAnalyze')} scannedFood={scannedFood} onScanConsumed={() => setScannedFood(null)} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowTierCarousel(true)} />;
       case 'barcodeScanner':
-        return isPro ? <BarcodeScanner onBack={() => setTab('logMeal')} onScanned={(food, barcode) => { setScannedFood({ food, barcode }); setTab('logMeal'); }} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
+        return isPro ? <BarcodeScanner onBack={() => setTab('logMeal')} onScanned={(food, barcode) => { setScannedFood({ food, barcode }); setTab('logMeal'); }} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowTierCarousel(true)} />;
       case 'photoAnalyze':
-        return isPro ? <PhotoAnalyze onBack={() => setTab('logMeal')} onDone={() => setTab('nutrition')} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowPricing(true)} />;
+        return isPro ? <PhotoAnalyze onBack={() => setTab('logMeal')} onDone={() => setTab('nutrition')} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowTierCarousel(true)} />;
       case 'activityPicker':
         return <ActivityTypePicker onBack={() => setTab('dashboard')} onPick={(type) => handleStartActivity(type)} />;
      case 'strengthWorkout':
@@ -694,7 +696,7 @@ if (tab === 'cycleTracker') {
                 <Text style={s.proBadgeText}>{t('pro.badge')}</Text>
               </View>
             ) : (
-              <TouchableOpacity style={s.upgradeButton} onPress={() => setShowPricing(true)}>
+              <TouchableOpacity style={s.upgradeButton} onPress={() => setShowTierCarousel(true)}>
                 <Text style={s.upgradeButtonText}>{t('pro.upgrade')}</Text>
               </TouchableOpacity>
             )}
@@ -719,6 +721,12 @@ if (tab === 'cycleTracker') {
             currentTier={subscription?.tier || 'free'}
           />
         </Modal>
+        <OnboardingCarousel
+          visible={showTierCarousel}
+          isOnboarding={false}
+          onClose={() => setShowTierCarousel(false)}
+          onComplete={(tier) => { setShowTierCarousel(false); refreshSubscription && refreshSubscription(); }}
+        />
       </SafeAreaView>
     </SafeAreaProvider>
     </ErrorBoundary>

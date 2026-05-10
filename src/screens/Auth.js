@@ -1,4 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════
+import OnboardingCarousel from '../components/OnboardingCarousel';
 // AUTH.JS - RunWithAI Login & Registration (med PRO Upsell + Glemt Password + i18n)
 // OPDATERET: Bruger RevenueCat + Terms/Privacy links for App Store compliance
 // ═══════════════════════════════════════════════════════════════════════════
@@ -868,78 +869,12 @@ export default function Auth({ onAuth }) {
   // ─── REGISTER STEP 3 - PRO UPSELL (with Terms/Privacy/Restore) ────────────
   if (mode === 'register_upsell') {
     return (
-      <SafeAreaView style={styles.upsellContainer}>
-        <ScrollView contentContainerStyle={styles.upsellContent} showsVerticalScrollIndicator={false}>
-          <View style={styles.upsellHeader}>
-            <AppLogo size={200} />
-            <View style={styles.proBadge}>
-              <Text style={styles.proBadgeText}>⭐ PRO</Text>
-            </View>
-            <Text style={styles.upsellTitle}>Lås op for fuld adgang</Text>
-            <Text style={styles.upsellSubtitle}>Få adgang til alle funktioner og nå dine mål hurtigere</Text>
-          </View>
-
-          <View style={styles.featuresGrid}>
-            {PRO_FEATURES.map((f, i) => (
-              <View key={i} style={styles.featureCard}>
-                <Text style={styles.featureEmoji}>{f.emoji}</Text>
-                <Text style={styles.featureTitle}>{f.title}</Text>
-                <Text style={styles.featureDesc}>{f.desc}</Text>
-              </View>
-            ))}
-          </View>
-
-          {/* Subscription Info */}
-          <View style={styles.subscriptionInfo}>
-            <Text style={styles.subscriptionTitle}>RunWithAI Pro</Text>
-            <Text style={styles.subscriptionDetail}>Månedligt abonnement</Text>
-          </View>
-
-          <View style={styles.priceSection}>
-            <Text style={styles.priceAmount}>49 kr</Text>
-            <Text style={styles.priceUnit}>/måned</Text>
-          </View>
-
-          <Text style={styles.guarantee}>✓ Annuller når som helst • ✓ 7 dages gratis prøveperiode</Text>
-
-          <TouchableOpacity
-            style={[styles.upsellButton, loading && styles.buttonDisabled]}
-            onPress={handleStartTrial}
-            disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.upsellButtonText}>🚀 Start gratis prøveperiode</Text>
-            )}
-          </TouchableOpacity>
-
-          {/* Restore Purchases - Required by Apple */}
-          <TouchableOpacity style={styles.restoreButton} onPress={handleRestorePurchases} disabled={loading}>
-            <Text style={styles.restoreButtonText}>Gendan tidligere køb</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.skipButton} onPress={handleSkipTrial}>
-            <Text style={styles.skipButtonText}>Fortsæt med gratis version</Text>
-          </TouchableOpacity>
-
-          {/* Legal Text */}
-          <Text style={styles.legalText}>
-            Betaling opkræves via din App Store konto. Abonnement fornyes automatisk medmindre det annulleres mindst 24 timer før periodens udløb. Du kan administrere dit abonnement i dine App Store-indstillinger.
-          </Text>
-
-          {/* Terms & Privacy Links - REQUIRED by Apple */}
-          <View style={styles.legalLinks}>
-            <TouchableOpacity onPress={() => Linking.openURL(TERMS_OF_USE_URL)}>
-              <Text style={styles.legalLink}>Vilkår for brug</Text>
-            </TouchableOpacity>
-            <Text style={styles.legalSeparator}>•</Text>
-            <TouchableOpacity onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}>
-              <Text style={styles.legalLink}>Privatlivspolitik</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+      <OnboardingCarousel
+        visible={true}
+        isOnboarding={true}
+        onComplete={handleSkipTrial}
+        onClose={handleSkipTrial}
+      />
     );
   }
 
