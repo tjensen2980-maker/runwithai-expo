@@ -14,7 +14,7 @@ import {
 } from './src/data';
 import { useWatch } from './src/hooks/useWatch'
 import { syncAuthToWatch } from './src/services/WatchSync';
-// import useHealthKit from './src/hooks/useHealthKit';
+import useHealthKit from './src/hooks/useHealthKit';
 import { syncHealthKitWorkouts } from './src/services/NutritionAPI';
 import Auth from './src/screens/Auth';
 import Onboarding from './src/screens/Onboarding';
@@ -43,7 +43,7 @@ import * as WebBrowser from 'expo-web-browser';
 import MealPlan from './src/screens/MealPlan';
 WebBrowser.maybeCompleteAuthSession();
 
-// â”€â”€â”€ TAB IKONER (React Native SVG) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ TAB IKONER (React Native SVG) ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬
 const IconPlan = ({ active }) => {
   const color = active ? '#0a0a0a' : '#b0b0b0';
   return (
@@ -110,11 +110,11 @@ function ProFeatureLock({ feature, description, onUpgrade }) {
   return (
     <View style={proLockStyles.container}>
       <View style={proLockStyles.card}>
-        <Text style={proLockStyles.icon}>🔒</Text>
+        <Text style={proLockStyles.icon}>ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ¢â‚¬â„¢</Text>
         <Text style={proLockStyles.title}>{feature}</Text>
         <Text style={proLockStyles.description}>{description}</Text>
         <TouchableOpacity style={proLockStyles.button} onPress={onUpgrade}>
-          <Text style={proLockStyles.buttonText}>{t('pro.upgradeToPro')} →</Text>
+          <Text style={proLockStyles.buttonText}>{t('pro.upgradeToPro')} ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢</Text>
         </TouchableOpacity>
         <Text style={proLockStyles.price}>{t('pro.fromOnly')}</Text>
       </View>
@@ -144,7 +144,7 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, isFree, on
             style={{ flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center', backgroundColor: activeTab === id ? colors.black : colors.surface, borderWidth: 2, borderColor: activeTab === id ? colors.black : colors.border2 }}
             onPress={() => setActiveTab(id)}>
             <Text style={{ fontSize: 14, fontWeight: '800', color: activeTab === id ? colors.card : colors.muted }}>
-              {label}{id === 'routes' && isFree && ' 🔒'}
+              {label}{id === 'routes' && isFree && ' ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ¢â‚¬â„¢'}
             </Text>
           </TouchableOpacity>
         ))}
@@ -153,23 +153,23 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, isFree, on
         <ScrollView contentContainerStyle={{ padding: 16 }}>
           <TouchableOpacity onPress={() => onStartActivity('motion')}
             style={{ backgroundColor: colors.black, borderRadius: 20, padding: 28, marginBottom: 12, alignItems: 'center' }}>
-            <Text style={{ fontSize: 40, marginBottom: 8 }}>🏃</Text>
+            <Text style={{ fontSize: 40, marginBottom: 8 }}>ÃƒÂ°Ã…Â¸Ã‚ÂÃ†â€™</Text>
             <Text style={{ fontSize: 22, fontWeight: '900', color: colors.card, letterSpacing: -0.5 }}>Motion</Text>
-            <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>Løb · Gå · Cykling</Text>
+            <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>LÃƒÆ’Ã‚Â¸b Ãƒâ€šÃ‚Â· GÃƒÆ’Ã‚Â¥ Ãƒâ€šÃ‚Â· Cykling</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => onStartActivity('pick')}
             style={{ backgroundColor: '#f59e0b', borderRadius: 20, padding: 28, marginBottom: 20, alignItems: 'center' }}>
-            <Text style={{ fontSize: 40, marginBottom: 8 }}>💪</Text>
-            <Text style={{ fontSize: 22, fontWeight: '900', color: '#fff', letterSpacing: -0.5 }}>Træning</Text>
+            <Text style={{ fontSize: 40, marginBottom: 8 }}>ÃƒÂ°Ã…Â¸Ã¢â‚¬â„¢Ã‚Âª</Text>
+            <Text style={{ fontSize: 22, fontWeight: '900', color: '#fff', letterSpacing: -0.5 }}>TrÃƒÆ’Ã‚Â¦ning</Text>
             <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', marginTop: 4 }}>Styrke, mobility m.m.</Text>
           </TouchableOpacity>
           {lastRun && (
             <View style={{ backgroundColor: colors.card, borderRadius: 16, padding: 18, borderWidth: 1, borderColor: colors.border }}>
               <Text style={{ fontSize: 10, color: colors.muted, letterSpacing: 2, fontWeight: '700', marginBottom: 8 }}>{t('run.lastActivity')}</Text>
               <View style={{ flexDirection: 'row', gap: 20 }}>
-                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.accent }}>{lastRun.km || '–'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.km')}</Text></View>
-                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.text }}>{lastRun.duration || '–'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.time')}</Text></View>
-                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.text }}>{lastRun.pace || '–'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.pace')}</Text></View>
+                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.accent }}>{lastRun.km || 'ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.km')}</Text></View>
+                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.text }}>{lastRun.duration || 'ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.time')}</Text></View>
+                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.text }}>{lastRun.pace || 'ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.pace')}</Text></View>
               </View>
             </View>
           )}
@@ -221,7 +221,7 @@ function PlanTab({ level, nextWorkout, weekPlan, planChanges, profile, runs, onN
             style={{ flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center', backgroundColor: activeTab === id ? colors.black : colors.surface, borderWidth: 2, borderColor: activeTab === id ? colors.black : colors.border2 }}
             onPress={() => setActiveTab(id)}>
             <Text style={{ fontSize: 14, fontWeight: '800', color: activeTab === id ? colors.card : colors.muted }}>
-              {label}{id === 'coach' && isFree && ' 🔒'}
+              {label}{id === 'coach' && isFree && ' ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ¢â‚¬â„¢'}
             </Text>
           </TouchableOpacity>
         ))}
@@ -332,12 +332,12 @@ export default function App() {
   const [showPricing, setShowPricing]       = useState(false);
   const [showTierCarousel, setShowTierCarousel] = useState(false);
   const [selectedRun, setSelectedRun]       = useState(null);
-// Watch sync - modtager run fra ur og marker dagens træning som completed
+// Watch sync - modtager run fra ur og marker dagens trÃƒÆ’Ã‚Â¦ning som completed
   const trainingPlanRef = React.useRef(null);
   const { sendTodayTraining } = useWatch({
     onCommand: () => {},
     onWorkoutComplete: (run, saved) => {
-      const days = ['Søn','Man','Tir','Ons','Tor','Fre','Lør'];
+      const days = ['SÃƒÆ’Ã‚Â¸n','Man','Tir','Ons','Tor','Fre','LÃƒÆ’Ã‚Â¸r'];
       const todayShort = days[new Date().getDay()];
       const plan = trainingPlanRef.current;
       if (!plan || !plan.data) return;
@@ -369,31 +369,31 @@ export default function App() {
 
   useEffect(() => { trainingPlanRef.current = trainingPlan; }, [trainingPlan]);
 
-  // // Apple HealthKit auto-sync (kun for Basic+Pro)
-  // const { isAuthorized: hkAuthorized, fetchWorkouts } = useHealthKit({ enabled: !!user && !isFree });
-  // 
-  // useEffect(() => {
-  // if (!hkAuthorized || isFree || !user) return;
-  // let cancelled = false;
-  // const doSync = async () => {
-  // try {
-  // const workouts = await fetchWorkouts(7);
-  // if (cancelled || !workouts || workouts.length === 0) return;
-  // const result = await syncHealthKitWorkouts(workouts);
-  // console.log('[HealthKit Sync]', result);
-  // } catch (e) {
-  // console.warn('[HealthKit Sync] error:', e.message);
-  // }
-  // };
-  // doSync();
-  // const interval = setInterval(doSync, 15 * 60 * 1000); // hver 15 min
-  // return () => { cancelled = true; clearInterval(interval); };
-  // }, [hkAuthorized, isFree, user, fetchWorkouts]);
+  // Apple HealthKit auto-sync (kun for Basic+Pro)
+  const { isAuthorized: hkAuthorized, fetchWorkouts } = useHealthKit({ enabled: !!user && !isFree });
+
+  useEffect(() => {
+    if (!hkAuthorized || isFree || !user) return;
+    let cancelled = false;
+    const doSync = async () => {
+      try {
+        const workouts = await fetchWorkouts(7);
+        if (cancelled || !workouts || workouts.length === 0) return;
+        const result = await syncHealthKitWorkouts(workouts);
+        console.log('[HealthKit Sync]', result);
+      } catch (e) {
+        console.warn('[HealthKit Sync] error:', e.message);
+      }
+    };
+    doSync();
+    const interval = setInterval(doSync, 900000); // hver 15 min (900000 ms)
+    return () => { cancelled = true; clearInterval(interval); };
+  }, [hkAuthorized, isFree, user, fetchWorkouts]);
 
   // Watch auto-sync: send today's training when weekPlan loads
   useEffect(() => {
     if (weekPlan && weekPlan.length > 0 && sendTodayTraining) {
-      const daysDa = ['Søn','Man','Tir','Ons','Tor','Fre','Lør'];
+      const daysDa = ['SÃƒÆ’Ã‚Â¸n','Man','Tir','Ons','Tor','Fre','LÃƒÆ’Ã‚Â¸r'];
       const todayShortDa = daysDa[new Date().getDay()];
       const todayPlan = weekPlan.find(p => p.day === todayShortDa) || weekPlan[0];
       if (todayPlan) {
@@ -435,7 +435,7 @@ export default function App() {
       }
       setTrainingPlan(savedTrainingPlan);
       if (Array.isArray(savedTrainingPlan.data) && savedTrainingPlan.data.length > 0) {
-        const todayShort = ['Søn','Man','Tir','Ons','Tor','Fre','Lør'][new Date().getDay()];
+        const todayShort = ['SÃƒÆ’Ã‚Â¸n','Man','Tir','Ons','Tor','Fre','LÃƒÆ’Ã‚Â¸r'][new Date().getDay()];
         const synced = savedTrainingPlan.data.map(d => ({ ...d, today: d.day === todayShort }));
         setWeekPlanState(synced);
       }
@@ -502,9 +502,9 @@ export default function App() {
       }));
     }
     if (update.weekPlan) {
-      const todayShort = ['Søn','Man','Tir','Ons','Tor','Fre','Lør'][new Date().getDay()];
+      const todayShort = ['SÃƒÆ’Ã‚Â¸n','Man','Tir','Ons','Tor','Fre','LÃƒÆ’Ã‚Â¸r'][new Date().getDay()];
       const planData = update.weekPlan.map(d => ({
-        day: d.day, workout: d.workout || d.name || 'Træning', km: d.km || 0,
+        day: d.day, workout: d.workout || d.name || 'TrÃƒÆ’Ã‚Â¦ning', km: d.km || 0,
         color: d.color || '#c8ff00', type: d.type || 'run',
         description: d.description || d.desc || '',
         rest: d.type === 'rest' || (d.km === 0 && !d.type), today: d.day === todayShort,

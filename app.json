@@ -2,7 +2,7 @@
   "expo": {
     "name": "RunWithAI",
     "slug": "runwithai",
-    "version": "1.8.8",
+    "version": "1.8.9",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -17,7 +17,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "app.runwithai",
-      "buildNumber": "85",
+      "buildNumber": "87",
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
         "CFBundleLocalizations": [
@@ -47,13 +47,13 @@
           "mt"
         ],
         "CFBundleDevelopmentRegion": "da",
-        "NSLocationWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter i realtid.",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter, også når appen kører i baggrunden under dit løb.",
-        "NSMotionUsageDescription": "RunWithAI bruger bevægelsessensorer til at forbedre distance-beregning og skridttælling under dine løbeture.",
-        "NSHealthShareUsageDescription": "RunWithAI bruger dine sundhedsdata til at vise puls og kalorier under løb.",
-        "NSHealthUpdateUsageDescription": "RunWithAI gemmer dine løbeture i Apple Health.",
-        "NSCameraUsageDescription": "RunWithAI bruger kameraet til at tage billeder til din profil og dele løbeoplevelser med venner.",
-        "NSMicrophoneUsageDescription": "RunWithAI bruger mikrofonen til stemmekommandoer under løb, så du kan styre appen håndfrit mens du løber.",
+        "NSLocationWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine lÃƒÆ’Ã‚Â¸beruter i realtid.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine lÃƒÆ’Ã‚Â¸beruter, ogsÃƒÆ’Ã‚Â¥ nÃƒÆ’Ã‚Â¥r appen kÃƒÆ’Ã‚Â¸rer i baggrunden under dit lÃƒÆ’Ã‚Â¸b.",
+        "NSMotionUsageDescription": "RunWithAI bruger bevÃƒÆ’Ã‚Â¦gelsessensorer til at forbedre distance-beregning og skridttÃƒÆ’Ã‚Â¦lling under dine lÃƒÆ’Ã‚Â¸beture.",
+        "NSHealthShareUsageDescription": "RunWithAI bruger dine sundhedsdata til at vise puls og kalorier under lÃƒÆ’Ã‚Â¸b.",
+        "NSHealthUpdateUsageDescription": "RunWithAI gemmer dine lÃƒÆ’Ã‚Â¸beture i Apple Health.",
+        "NSCameraUsageDescription": "RunWithAI bruger kameraet til at tage billeder til din profil og dele lÃƒÆ’Ã‚Â¸beoplevelser med venner.",
+        "NSMicrophoneUsageDescription": "RunWithAI bruger mikrofonen til stemmekommandoer under lÃƒÆ’Ã‚Â¸b, sÃƒÆ’Ã‚Â¥ du kan styre appen hÃƒÆ’Ã‚Â¥ndfrit mens du lÃƒÆ’Ã‚Â¸ber.",
         "UIBackgroundModes": [
           "location",
           "audio"
@@ -74,7 +74,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "app.runwithai",
-      "versionCode": 53,
+      "versionCode": 54,
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
@@ -96,7 +96,7 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "RunWithAI bruger din placering til at tracke dine løberuter, også når appen kører i baggrunden under dit løb.",
+          "locationAlwaysAndWhenInUsePermission": "RunWithAI bruger din placering til at tracke dine lÃƒÆ’Ã‚Â¸beruter, ogsÃƒÆ’Ã‚Â¥ nÃƒÆ’Ã‚Â¥r appen kÃƒÆ’Ã‚Â¸rer i baggrunden under dit lÃƒÆ’Ã‚Â¸b.",
           "isIosBackgroundLocationEnabled": true,
           "isAndroidBackgroundLocationEnabled": true
         }
@@ -132,7 +132,15 @@
           ]
         }
       ],
-      "./plugins/withLocales"
+        "./plugins/withLocales",
+        [
+          "react-native-health",
+          {
+            "isClinicalDataEnabled": false,
+            "healthSharePermission": "RunWithAI bruger dine sundhedsdata til at vise puls og kalorier under loeb.",
+            "healthUpdatePermission": "RunWithAI gemmer dine loebeture i Apple Health."
+          }
+        ]
     ],
     "owner": "tj2970",
     "extra": {
