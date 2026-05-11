@@ -1,8 +1,8 @@
 /**
  * useHealthKit.js
  * 
- * Custom hook til at læse sundhedsdata fra Apple HealthKit.
- * Bruges til at hente puls, skridt, distance og andre metrics under løb.
+ * Custom hook til at lÃ¦se sundhedsdata fra Apple HealthKit.
+ * Bruges til at hente puls, skridt, distance og andre metrics under lÃ¸b.
  * 
  * Installation:
  * npm install react-native-health
@@ -12,7 +12,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Platform } from 'react-native';
 
-// Kun import på iOS - Android bruger Health Connect
+// Kun import pÃ¥ iOS - Android bruger Health Connect
 let AppleHealthKit = null;
 if (Platform.OS === 'ios') {
   try { AppleHealthKit = require('react-native-health').default; } catch (e) { AppleHealthKit = null; }
@@ -40,7 +40,7 @@ const HEALTHKIT_PERMISSIONS = {
  * Hook til HealthKit integration
  * 
  * @param {Object} options
- * @param {boolean} options.enabled - Om HealthKit skal være aktiv
+ * @param {boolean} options.enabled - Om HealthKit skal vÃ¦re aktiv
  * @param {number} options.heartRateInterval - Interval for puls-polling i ms (default: 5000)
  * @returns {Object} HealthKit state og funktioner
  */
@@ -67,12 +67,12 @@ export function useHealthKit({ enabled = true, heartRateInterval = 5000 } = {}) 
     }
 
     const initHealthKit = () => {
-      // Tjek om HealthKit er tilgængelig
+      // Tjek om HealthKit er tilgÃ¦ngelig
       if (!AppleHealthKit) { setIsInitializing(false); return; }
       AppleHealthKit.isAvailable((err, available) => {
         if (err) {
           console.error('[HealthKit] Availability check error:', err);
-          setError('Kunne ikke tjekke HealthKit tilgængelighed');
+          setError('Kunne ikke tjekke HealthKit tilgÃ¦ngelighed');
           setIsInitializing(false);
           return;
         }
@@ -88,7 +88,7 @@ export function useHealthKit({ enabled = true, heartRateInterval = 5000 } = {}) 
         AppleHealthKit.initHealthKit(HEALTHKIT_PERMISSIONS, (initErr) => {
           if (initErr) {
             console.error('[HealthKit] Init error:', initErr);
-            setError('Kunne ikke få adgang til HealthKit');
+            setError('Kunne ikke fÃ¥ adgang til HealthKit');
             setIsAuthorized(false);
           } else {
             console.log('[HealthKit] Successfully initialized');
@@ -206,7 +206,7 @@ export function useHealthKit({ enabled = true, heartRateInterval = 5000 } = {}) 
   }, [isAuthorized]);
 
   /**
-   * Start tracking af sundhedsdata (bruges under løb)
+   * Start tracking af sundhedsdata (bruges under lÃ¸b)
    */
   const startTracking = useCallback((runStartTime = new Date()) => {
     if (!isAuthorized || Platform.OS !== 'ios' || isTrackingRef.current) return;
@@ -219,7 +219,7 @@ export function useHealthKit({ enabled = true, heartRateInterval = 5000 } = {}) 
     fetchDistance(runStartTime);
     fetchCalories(runStartTime);
 
-    // Start interval for løbende opdateringer
+    // Start interval for lÃ¸bende opdateringer
     heartRateIntervalRef.current = setInterval(() => {
       fetchHeartRate();
       fetchDistance(runStartTime);
@@ -268,6 +268,41 @@ export function useHealthKit({ enabled = true, heartRateInterval = 5000 } = {}) 
     });
   }, [isAuthorized]);
 
+/**
+   * Hent workouts fra Apple Health (sidste N dage)
+   * Bruges til auto-sync af aktiviteter
+   */
+  const fetchWorkouts = useCallback(async (daysBack = 7) => {
+    if (!isAuthorized || Platform.OS !== 'ios' || !AppleHealthKit) return [];
+    return new Promise((resolve) => {
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - daysBack);
+      const options = {
+        startDate: startDate.toISOString(),
+        endDate: new Date().toISOString(),
+        type: 'Workout',
+      };
+      AppleHealthKit.getSamples(options, (err, results) => {
+        if (err) {
+          console.warn('[HealthKit] fetchWorkouts error:', err);
+          resolve([]);
+          return;
+        }
+        const workouts = (results || []).map(w => ({
+          external_id: w.id || w.uuid || (w.startDate + '_' + w.activityName),
+          type: w.activityName || 'workout',
+          start_time: w.startDate,
+          end_time: w.endDate,
+          duration_seconds: w.duration || 0,
+          distance_meters: w.distance || 0,
+          calories: w.calories || 0,
+          source: 'apple_health',
+        }));
+        resolve(workouts);
+      });
+    });
+  }, [isAuthorized]);
+
   // Cleanup ved unmount
   useEffect(() => {
     return () => {
@@ -299,6 +334,7 @@ export function useHealthKit({ enabled = true, heartRateInterval = 5000 } = {}) 
     fetchStepCount,
     fetchDistance,
     fetchCalories,
+    fetchWorkouts,
   };
 }
 
