@@ -14,7 +14,7 @@ import {
 } from './src/data';
 import { useWatch } from './src/hooks/useWatch'
 import { syncAuthToWatch } from './src/services/WatchSync';
-import useHealthKit from './src/hooks/useHealthKit';
+// import useHealthKit from './src/hooks/useHealthKit';
 import { syncHealthKitWorkouts } from './src/services/NutritionAPI';
 import Auth from './src/screens/Auth';
 import Onboarding from './src/screens/Onboarding';
@@ -369,26 +369,26 @@ export default function App() {
 
   useEffect(() => { trainingPlanRef.current = trainingPlan; }, [trainingPlan]);
 
-  // Apple HealthKit auto-sync (kun for Basic+Pro)
-  const { isAuthorized: hkAuthorized, fetchWorkouts } = useHealthKit({ enabled: !!user && !isFree });
-
-  useEffect(() => {
-    if (!hkAuthorized || isFree || !user) return;
-    let cancelled = false;
-    const doSync = async () => {
-      try {
-        const workouts = await fetchWorkouts(7);
-        if (cancelled || !workouts || workouts.length === 0) return;
-        const result = await syncHealthKitWorkouts(workouts);
-        console.log('[HealthKit Sync]', result);
-      } catch (e) {
-        console.warn('[HealthKit Sync] error:', e.message);
-      }
-    };
-    doSync();
-    const interval = setInterval(doSync, 15 * 60 * 1000); // hver 15 min
-    return () => { cancelled = true; clearInterval(interval); };
-  }, [hkAuthorized, isFree, user, fetchWorkouts]);
+  // // Apple HealthKit auto-sync (kun for Basic+Pro)
+  // const { isAuthorized: hkAuthorized, fetchWorkouts } = useHealthKit({ enabled: !!user && !isFree });
+  // 
+  // useEffect(() => {
+  // if (!hkAuthorized || isFree || !user) return;
+  // let cancelled = false;
+  // const doSync = async () => {
+  // try {
+  // const workouts = await fetchWorkouts(7);
+  // if (cancelled || !workouts || workouts.length === 0) return;
+  // const result = await syncHealthKitWorkouts(workouts);
+  // console.log('[HealthKit Sync]', result);
+  // } catch (e) {
+  // console.warn('[HealthKit Sync] error:', e.message);
+  // }
+  // };
+  // doSync();
+  // const interval = setInterval(doSync, 15 * 60 * 1000); // hver 15 min
+  // return () => { cancelled = true; clearInterval(interval); };
+  // }, [hkAuthorized, isFree, user, fetchWorkouts]);
 
   // Watch auto-sync: send today's training when weekPlan loads
   useEffect(() => {
