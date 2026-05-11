@@ -17,7 +17,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "app.runwithai",
-      "buildNumber": "84",
+      "buildNumber": "85",
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
         "CFBundleLocalizations": [
@@ -99,14 +99,6 @@
           "locationAlwaysAndWhenInUsePermission": "RunWithAI bruger din placering til at tracke dine løberuter, også når appen kører i baggrunden under dit løb.",
           "isIosBackgroundLocationEnabled": true,
           "isAndroidBackgroundLocationEnabled": true
-        }
-      ],
-      [
-        "react-native-health",
-        {
-          "isClinicalDataEnabled": false,
-          "healthSharePermission": "RunWithAI bruger dine sundhedsdata til at vise puls og kalorier under løb.",
-          "healthUpdatePermission": "RunWithAI gemmer dine løbeture i Apple Health."
         }
       ],
       [
