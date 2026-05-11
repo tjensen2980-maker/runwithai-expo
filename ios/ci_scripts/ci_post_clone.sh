@@ -12,9 +12,11 @@ echo "=== Installing npm packages ==="
 cd "$CI_PRIMARY_REPOSITORY_PATH"
 npm install --no-audit --no-fund
 
-echo "=== Installing newer CocoaPods via gem ==="
-sudo gem install xcodeproj
-sudo gem install cocoapods
+echo "=== Installing newer CocoaPods via gem (user-install) ==="
+export GEM_HOME="$HOME/.gem"
+export PATH="$GEM_HOME/bin:$PATH"
+gem install --user-install xcodeproj
+gem install --user-install cocoapods
 
 echo "CocoaPods version:"
 pod --version
