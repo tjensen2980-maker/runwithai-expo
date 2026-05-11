@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,6 +11,7 @@
 		1363AE01E2C54DDCBBFD515B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = ED070680E6954067BB184248 /* InfoPlist.strings */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		1578E56244BC47B0B3BA2B7B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43E8103DF9CA43F184C19530 /* InfoPlist.strings */; };
+		161EF095FBE98BCA7359C5FC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 39DC517A0659FBAFB6C44FDE /* PrivacyInfo.xcprivacy */; };
 		257FB4E927C341E7850D74FD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8CED72D37BDC47278F49941A /* InfoPlist.strings */; };
 		2ACC311F4DCC4EE3811216F2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 728634AA73ED4E01947AA986 /* InfoPlist.strings */; };
 		2CF92C1F4C364856838CF831 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0BCE7CCA64EC40699D765100 /* InfoPlist.strings */; };
@@ -34,6 +35,7 @@
 		C826C8F71476429C969FB056 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4AFDDC1DE20D4DB0B04F832C /* InfoPlist.strings */; };
 		CC800E0B308E05980FF07CF8 /* libPods-RunWithAI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FFD0584B492186D81F75E2B /* libPods-RunWithAI.a */; };
 		D1E25EA25F874B5883490AAF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 807C4D56DF3C421E92058E08 /* InfoPlist.strings */; };
+		DC01BB5E2FB25BA50091368E /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC01BB5D2FB25BA50091368E /* HealthKit.framework */; };
 		DC9D98A32F980466006AA004 /* watchkitapp Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = DCCFA0BC2F97F3BB0043FC45 /* watchkitapp Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E729E15794BC46678CDBFD49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BEA55E973C7641D2A51D5CF3 /* InfoPlist.strings */; };
 		EA9C0B3BE173443BAC6C20CC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 54B5621D31CE4C07ACE71C65 /* InfoPlist.strings */; };
@@ -124,6 +126,7 @@
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		BEA55E973C7641D2A51D5CF3 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D8D038CB892B4B67AEAE5151 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = el.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DC01BB5D2FB25BA50091368E /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		DCCFA0BC2F97F3BB0043FC45 /* watchkitapp Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "watchkitapp Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCCFA0CB2F97F3BE0043FC45 /* watchkitapp Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "watchkitapp Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCCFA0D52F97F3BE0043FC45 /* watchkitapp Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "watchkitapp Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -150,6 +153,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC01BB5E2FB25BA50091368E /* HealthKit.framework in Frameworks */,
 				CC800E0B308E05980FF07CF8 /* libPods-RunWithAI.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -221,6 +225,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DC01BB5D2FB25BA50091368E /* HealthKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				2FFD0584B492186D81F75E2B /* libPods-RunWithAI.a */,
 			);
@@ -534,8 +539,6 @@
 				DCCFA0BD2F97F3BB0043FC45 /* watchkitapp Watch App */,
 			);
 			name = "watchkitapp Watch App";
-			packageProductDependencies = (
-			);
 			productName = "watchkitapp Watch App";
 			productReference = DCCFA0BC2F97F3BB0043FC45 /* watchkitapp Watch App.app */;
 			productType = "com.apple.product-type.application";
@@ -557,8 +560,6 @@
 				DCCFA0CE2F97F3BE0043FC45 /* watchkitapp Watch AppTests */,
 			);
 			name = "watchkitapp Watch AppTests";
-			packageProductDependencies = (
-			);
 			productName = "watchkitapp Watch AppTests";
 			productReference = DCCFA0CB2F97F3BE0043FC45 /* watchkitapp Watch AppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -580,8 +581,6 @@
 				DCCFA0D82F97F3BE0043FC45 /* watchkitapp Watch AppUITests */,
 			);
 			name = "watchkitapp Watch AppUITests";
-			packageProductDependencies = (
-			);
 			productName = "watchkitapp Watch AppUITests";
 			productReference = DCCFA0D52F97F3BE0043FC45 /* watchkitapp Watch AppUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -695,6 +694,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				161EF095FBE98BCA7359C5FC /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1116,8 +1116,8 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Automatic;
 				CODE_SIGN_ENTITLEMENTS = "watchkitapp Watch App/watchkitapp Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 83;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_ASSET_PATHS = "\"watchkitapp Watch App/Preview Content\"";
@@ -1127,14 +1127,14 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = watchkitapp;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "RunWithAI laeser puls under traening";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "RunWithAI gemmer din traening i Health";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "RunWithAI bruger GPS i baggrunden til at tracke hele dit lob";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "RunWithAI bruger GPS til at tracke din rute under løb";
+				INFOPLIST_KEY_NSMotionUsageDescription = "RunWithAI bruger bevaegelsesdata til at tracke din aktivitet";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKBackgroundModes = "workout-processing";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = app.runwithai;
-INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "RunWithAI bruger GPS til at tracke din rute under løb";
-INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "RunWithAI bruger GPS i baggrunden til at tracke hele dit lob";
-INFOPLIST_KEY_NSHealthShareUsageDescription = "RunWithAI laeser puls under traening";
-INFOPLIST_KEY_NSHealthUpdateUsageDescription = "RunWithAI gemmer din traening i Health";
-INFOPLIST_KEY_WKBackgroundModes = "workout-processing";
-INFOPLIST_KEY_NSMotionUsageDescription = "RunWithAI bruger bevaegelsesdata til at tracke din aktivitet";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1143,6 +1143,7 @@ INFOPLIST_KEY_NSMotionUsageDescription = "RunWithAI bruger bevaegelsesdata til a
 				MARKETING_VERSION = 1.8.7;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = app.runwithai.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -1169,8 +1170,8 @@ INFOPLIST_KEY_NSMotionUsageDescription = "RunWithAI bruger bevaegelsesdata til a
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Automatic;
 				CODE_SIGN_ENTITLEMENTS = "watchkitapp Watch App/watchkitapp Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 83;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1181,14 +1182,14 @@ INFOPLIST_KEY_NSMotionUsageDescription = "RunWithAI bruger bevaegelsesdata til a
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = watchkitapp;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "RunWithAI laeser puls under traening";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "RunWithAI gemmer din traening i Health";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "RunWithAI bruger GPS i baggrunden til at tracke hele dit lob";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "RunWithAI bruger GPS til at tracke din rute under løb";
+				INFOPLIST_KEY_NSMotionUsageDescription = "RunWithAI bruger bevaegelsesdata til at tracke din aktivitet";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKBackgroundModes = "workout-processing";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = app.runwithai;
-INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "RunWithAI bruger GPS til at tracke din rute under løb";
-INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "RunWithAI bruger GPS i baggrunden til at tracke hele dit lob";
-INFOPLIST_KEY_NSHealthShareUsageDescription = "RunWithAI laeser puls under traening";
-INFOPLIST_KEY_NSHealthUpdateUsageDescription = "RunWithAI gemmer din traening i Health";
-INFOPLIST_KEY_WKBackgroundModes = "workout-processing";
-INFOPLIST_KEY_NSMotionUsageDescription = "RunWithAI bruger bevaegelsesdata til at tracke din aktivitet";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1196,6 +1197,7 @@ INFOPLIST_KEY_NSMotionUsageDescription = "RunWithAI bruger bevaegelsesdata til a
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.8.7;
 				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = app.runwithai.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -1231,6 +1233,7 @@ INFOPLIST_KEY_NSMotionUsageDescription = "RunWithAI bruger bevaegelsesdata til a
 				MARKETING_VERSION = 1.8.7;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "app.runwithai.watchkitapp-Watch-AppTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -1267,6 +1270,7 @@ INFOPLIST_KEY_NSMotionUsageDescription = "RunWithAI bruger bevaegelsesdata til a
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.8.7;
 				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "app.runwithai.watchkitapp-Watch-AppTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -1301,6 +1305,7 @@ INFOPLIST_KEY_NSMotionUsageDescription = "RunWithAI bruger bevaegelsesdata til a
 				MARKETING_VERSION = 1.8.7;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "app.runwithai.watchkitapp-Watch-AppUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -1336,6 +1341,7 @@ INFOPLIST_KEY_NSMotionUsageDescription = "RunWithAI bruger bevaegelsesdata til a
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.8.7;
 				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "app.runwithai.watchkitapp-Watch-AppUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
