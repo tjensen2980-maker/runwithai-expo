@@ -110,6 +110,26 @@ export async function createCustomFood(food) {
   return handle(res, 'createCustomFood');
 }
 
+export async function parseTextToFoods(text) {
+  const headers = await authHeaders();
+  const res = await fetch(SERVER + '/foods/parse-text', {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ text: text })
+  });
+  return handle(res, 'parseTextToFoods');
+}
+
+export async function syncHealthKitWorkouts(workouts) {
+  const headers = await authHeaders();
+  const res = await fetch(SERVER + '/activities/sync-healthkit', {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ workouts: workouts })
+  });
+  return handle(res, 'syncHealthKitWorkouts');
+}
+
 // ---- Activities -------------------------------------------------------------
 
 export async function logActivity(activity) {

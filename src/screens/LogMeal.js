@@ -10,7 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from '../data';
 import {
-  searchFoods, logMeal, createCustomFood, buildMealPayload
+  searchFoods, logMeal, createCustomFood, buildMealPayload, parseTextToFoods
 } from '../services/NutritionAPI';
 
 const MEAL_TYPES = [
@@ -33,7 +33,7 @@ function defaultMealType() {
 // Step 1: Search & pick food
 // ============================================================================
 
-function SearchStep({ onPickFood, onCreateCustom, onScanBarcode, onPhotoAnalyze }) {
+function SearchStep({ onPickFood, onCreateCustom, onScanBarcode, onPhotoAnalyze, onAiParse }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [searching, setSearching] = useState(false);
@@ -74,7 +74,12 @@ function SearchStep({ onPickFood, onCreateCustom, onScanBarcode, onPhotoAnalyze 
             <TouchableOpacity style={[s.customBtn, { backgroundColor: '#9C27B0', margin: 12, marginTop: 0 }]} onPress={onPhotoAnalyze}>
               <Text style={[s.customBtnTxt, { color: '#fff' }]}>Tag billede af mad (AI)</Text>
             </TouchableOpacity>
-          ) : null}      
+          ) : null}
+          {onAiParse ? (
+            <TouchableOpacity style={[s.customBtn, { backgroundColor: '#FF9800', margin: 12, marginTop: 0 }]} onPress={onAiParse}>
+              <Text style={[s.customBtnTxt, { color: '#fff' }]}>✨ AI tolk: "krydderbolle med smør"</Text>
+            </TouchableOpacity>
+          ) : null}   
 <View style={s.searchWrap}>
         <TextInput
           style={s.searchInput}
@@ -388,8 +393,216 @@ function CustomFoodStep({ onBack, onCreated }) {
 // Main
 // ============================================================================
 
+// ============================================================================
+// Step: AI Parse Text - skriv hele måltidet i én sætning, AI tolker
+// ============================================================================
+function AiParseStep({ onBack, onLogged }) {
+  const [text, setText] = useState('');
+  const [parsing, setParsing] = useState(false);
+  const [items, setItems] = useState([]);
+  const [hasParsed, setHasParsed] = useState(false);
+  const [logging, setLogging] = useState(false);
+  const [mealType, setMealType] = useState(defaultMealType());
+
+  const doParse = async () => {
+    if (!text.trim() || text.trim().length < 2) {
+      Alert.alert('Skriv noget', 'Skriv hvad du har spist, fx "krydderbolle med smør"');
+      return;
+    }
+    setParsing(true);
+    try {
+      const result = await parseTextToFoods(text.trim());
+      const parsedItems = (result.items || []).map(it => ({
+        ...it,
+        grams: Number(it.estimated_grams) || 100,
+        selected: true,
+      }));
+      setItems(parsedItems);
+      setHasParsed(true);
+    } catch (e) {
+      Alert.alert('AI fejl', e.message || 'Kunne ikke tolke teksten');
+    } finally {
+      setParsing(false);
+    }
+  };
+
+  const updateGrams = (idx, newGrams) => {
+    const n = Number(newGrams);
+    setItems(items.map((it, i) => i === idx ? { ...it, grams: isNaN(n) ? 0 : n } : it));
+  };
+
+  const toggleSelected = (idx) => {
+    setItems(items.map((it, i) => i === idx ? { ...it, selected: !it.selected } : it));
+  };
+
+  const removeItem = (idx) => {
+    setItems(items.filter((_, i) => i !== idx));
+  };
+
+  const totalKcal = items
+    .filter(it => it.selected)
+    .reduce((sum, it) => sum + (it.kcal_per_100g * it.grams / 100), 0);
+
+  const doLogAll = async () => {
+    const selected = items.filter(it => it.selected && it.grams > 0);
+    if (selected.length === 0) {
+      Alert.alert('Vælg mindst én', 'Vælg mindst én madvare at logge');
+      return;
+    }
+    setLogging(true);
+    try {
+      for (const it of selected) {
+        let foodId = it.food_id;
+        // Hvis AI estimat uden DB-match, opret som custom food foerst
+        if (!foodId) {
+          const created = await createCustomFood({
+            name: it.name,
+            brand: it.brand || null,
+            kcal_per_100g: Number(it.kcal_per_100g) || 0,
+            protein_g: Number(it.protein_g) || 0,
+            carbs_g: Number(it.carbs_g) || 0,
+            fat_g: Number(it.fat_g) || 0,
+            serving_size_g: 100,
+          });
+          foodId = created.id || created.food_id;
+        }
+        const food = {
+          id: foodId,
+          name: it.name,
+          brand: it.brand || null,
+          kcal_per_100g: Number(it.kcal_per_100g) || 0,
+          protein_g: Number(it.protein_g) || 0,
+          carbs_g: Number(it.carbs_g) || 0,
+          fat_g: Number(it.fat_g) || 0,
+        };
+        const payload = buildMealPayload({ food, grams: it.grams, mealType });
+        await logMeal(payload);
+      }
+      Alert.alert('Logget', selected.length + ' madvare(r) logget som ' + (MEAL_TYPES.find(m => m.id === mealType)?.label || ''));
+      if (onLogged) onLogged();
+    } catch (e) {
+      Alert.alert('Fejl', e.message || 'Kunne ikke logge');
+    } finally {
+      setLogging(false);
+    }
+  };
+
+  return (
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <ScrollView contentContainerStyle={{ padding: 16 }}>
+        <Text style={{ color: '#fff', fontSize: 16, fontWeight: '600', marginBottom: 8 }}>
+          Skriv hvad du har spist
+        </Text>
+        <Text style={{ color: colors.muted, fontSize: 13, marginBottom: 12 }}>
+          Fx "krydderbolle med smør og pålægschokolade" eller "2 skiver rugbrød med ost"
+        </Text>
+        <TextInput
+          style={[s.searchInput, { minHeight: 80, textAlignVertical: 'top', paddingTop: 12 }]}
+          value={text}
+          onChangeText={setText}
+          placeholder="Skriv her..."
+          placeholderTextColor={colors.muted}
+          multiline
+          autoCorrect
+        />
+
+        <TouchableOpacity
+          style={[s.customBtn, { backgroundColor: '#FF9800', marginTop: 12 }]}
+          onPress={doParse}
+          disabled={parsing}
+        >
+          <Text style={[s.customBtnTxt, { color: '#fff' }]}>
+            {parsing ? 'Tolker...' : '✨ Tolk med AI'}
+          </Text>
+        </TouchableOpacity>
+
+        {hasParsed && items.length === 0 ? (
+          <Text style={{ color: colors.muted, textAlign: 'center', marginTop: 20 }}>
+            AI fandt ingen madvarer. Prøv at omformulere.
+          </Text>
+        ) : null}
+
+        {items.length > 0 ? (
+          <View style={{ marginTop: 20 }}>
+            <Text style={{ color: '#fff', fontSize: 14, fontWeight: '600', marginBottom: 10 }}>
+              Fundne madvarer ({items.filter(it => it.selected).length} valgt):
+            </Text>
+
+            {items.map((it, idx) => (
+              <View key={idx} style={{ backgroundColor: '#1a1a1a', borderRadius: 10, padding: 12, marginBottom: 10, opacity: it.selected ? 1 : 0.5 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <TouchableOpacity onPress={() => toggleSelected(idx)} style={{ flex: 1 }}>
+                    <Text style={{ color: '#fff', fontSize: 15, fontWeight: '600' }}>
+                      {it.selected ? '✓ ' : '○ '}{it.name}
+                    </Text>
+                    {it.from_db ? (
+                      <Text style={{ color: '#4ade80', fontSize: 11, marginTop: 2 }}>● Fra database</Text>
+                    ) : (
+                      <Text style={{ color: '#FF9800', fontSize: 11, marginTop: 2 }}>● AI estimat</Text>
+                    )}
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => removeItem(idx)} style={{ padding: 4 }}>
+                    <Text style={{ color: '#f87171', fontSize: 18 }}>✕</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8 }}>
+                  <Text style={{ color: colors.muted, fontSize: 13, marginRight: 8 }}>Mængde:</Text>
+                  <TextInput
+                    style={{ backgroundColor: '#0a0a0a', color: '#fff', borderRadius: 6, paddingHorizontal: 10, paddingVertical: 6, width: 70, fontSize: 14 }}
+                    value={String(it.grams)}
+                    onChangeText={(v) => updateGrams(idx, v)}
+                    keyboardType="numeric"
+                  />
+                  <Text style={{ color: colors.muted, fontSize: 13, marginLeft: 4 }}>g</Text>
+                  <Text style={{ color: '#fff', fontSize: 13, marginLeft: 'auto' }}>
+                    {Math.round(it.kcal_per_100g * it.grams / 100)} kcal
+                  </Text>
+                </View>
+              </View>
+            ))}
+
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 8, marginBottom: 12 }}>
+              {MEAL_TYPES.map(mt => (
+                <TouchableOpacity
+                  key={mt.id}
+                  onPress={() => setMealType(mt.id)}
+                  style={{
+                    paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, marginRight: 8, marginBottom: 8,
+                    backgroundColor: mealType === mt.id ? colors.accent : '#1a1a1a'
+                  }}
+                >
+                  <Text style={{ color: mealType === mt.id ? '#fff' : '#ddd', fontSize: 13, fontWeight: '600' }}>
+                    {mt.label}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            <View style={{ backgroundColor: '#0a0a0a', borderRadius: 10, padding: 12, marginBottom: 12 }}>
+              <Text style={{ color: '#fff', fontSize: 16, fontWeight: '700', textAlign: 'center' }}>
+                Total: {Math.round(totalKcal)} kcal
+              </Text>
+            </View>
+
+            <TouchableOpacity
+              style={[s.customBtn, { backgroundColor: colors.accent }]}
+              onPress={doLogAll}
+              disabled={logging}
+            >
+              <Text style={[s.customBtnTxt, { color: '#fff', fontWeight: '700', fontSize: 16, textAlign: 'center' }]}>
+                {logging ? 'Logger...' : 'Log ' + items.filter(it => it.selected).length + ' madvare(r)'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : null}
+      </ScrollView>
+    </KeyboardAvoidingView>
+  );
+}
+
 export default function LogMeal({ onBack, onDone, onScanBarcode, onPhotoAnalyze, scannedFood, onScanConsumed }) {
-  const [step, setStep] = useState('search');  // 'search' | 'log' | 'custom'
+  const [step, setStep] = useState('search');  // 'search' | 'log' | 'custom' | 'aiparse'
 
   useEffect(() => {
     if (scannedFood && scannedFood.food) {
@@ -424,17 +637,19 @@ export default function LogMeal({ onBack, onDone, onScanBarcode, onPhotoAnalyze,
             <Text style={s.backTxt}>{step === 'search' ? 'Annuller' : 'Tilbage'}</Text>
           </TouchableOpacity>
           <Text style={s.title}>
-            {step === 'search' ? 'Log måltid' : step === 'log' ? 'Mængde' : 'Ny fødevare'}
+            {step === 'search' ? 'Log måltid' : step === 'log' ? 'Mængde' : step === 'aiparse' ? '✨ AI tolk' : 'Ny fødevare'}
           </Text>
           <View style={{ width: 70 }} />
         </View>
 
         {step === 'search' ? (
-          <SearchStep onPickFood={handlePickFood} onCreateCustom={handleCreateCustom} onScanBarcode={onScanBarcode} onPhotoAnalyze={onPhotoAnalyze} />
+          <SearchStep onPickFood={handlePickFood} onCreateCustom={handleCreateCustom} onScanBarcode={onScanBarcode} onPhotoAnalyze={onPhotoAnalyze} onAiParse={() => setStep('aiparse')} />
         ) : step === 'log' && food ? (
           <LogStep food={food} onBack={() => setStep('search')} onLogged={handleLogged} />
         ) : step === 'custom' ? (
           <CustomFoodStep onBack={() => setStep('search')} onCreated={handleCustomCreated} />
+        ) : step === 'aiparse' ? (
+          <AiParseStep onBack={() => setStep('search')} onLogged={handleLogged} />
         ) : null}
       </KeyboardAvoidingView>
     </SafeAreaView>

@@ -15,7 +15,7 @@ import { Platform } from 'react-native';
 // Kun import på iOS - Android bruger Health Connect
 let AppleHealthKit = null;
 if (Platform.OS === 'ios') {
-  AppleHealthKit = require('react-native-health').default;
+  try { AppleHealthKit = require('react-native-health').default; } catch (e) { AppleHealthKit = null; }
 }
 
 // HealthKit permissions vi anmoder om
@@ -68,6 +68,7 @@ export function useHealthKit({ enabled = true, heartRateInterval = 5000 } = {}) 
 
     const initHealthKit = () => {
       // Tjek om HealthKit er tilgængelig
+      if (!AppleHealthKit) { setIsInitializing(false); return; }
       AppleHealthKit.isAvailable((err, available) => {
         if (err) {
           console.error('[HealthKit] Availability check error:', err);
