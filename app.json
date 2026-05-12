@@ -134,14 +134,7 @@
         }
       ],
         "./plugins/withLocales",
-        [
-          "react-native-health",
-          {
-            "isClinicalDataEnabled": false,
-            "healthSharePermission": "RunWithAI bruger dine sundhedsdata til at vise puls og kalorier under loeb.",
-            "healthUpdatePermission": "RunWithAI gemmer dine loebeture i Apple Health."
-          }
-        ]
+      "@kingstinct/react-native-healthkit"
     ],
     "owner": "tj2970",
     "extra": {
