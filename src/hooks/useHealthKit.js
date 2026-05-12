@@ -272,36 +272,7 @@ export function useHealthKit({ enabled = true, heartRateInterval = 5000 } = {}) 
    * Hent workouts fra Apple Health (sidste N dage)
    * Bruges til auto-sync af aktiviteter
    */
-  const fetchWorkouts = useCallback(async (daysBack = 7) => {
-    if (!isAuthorized || Platform.OS !== 'ios' || !AppleHealthKit) return [];
-    return new Promise((resolve) => {
-      const startDate = new Date();
-      startDate.setDate(startDate.getDate() - daysBack);
-      const options = {
-        startDate: startDate.toISOString(),
-        endDate: new Date().toISOString(),
-        type: 'Workout',
-      };
-      AppleHealthKit.getSamples(options, (err, results) => {
-        if (err) {
-          console.warn('[HealthKit] fetchWorkouts error:', err);
-          resolve([]);
-          return;
-        }
-        const workouts = (results || []).map(w => ({
-          external_id: w.id || w.uuid || (w.startDate + '_' + w.activityName),
-          type: w.activityName || 'workout',
-          start_time: w.startDate,
-          end_time: w.endDate,
-          duration_seconds: w.duration || 0,
-          distance_meters: w.distance || 0,
-          calories: w.calories || 0,
-          source: 'apple_health',
-        }));
-        resolve(workouts);
-      });
-    });
-  }, [isAuthorized]);
+const fetchWorkouts = useCallback(async (daysBack = 7) => {    console.log('[HealthKit] fetchWorkouts called, isAuthorized=', isAuthorized);    if (Platform.OS !== 'ios' || !AppleHealthKit) {      console.log('[HealthKit] fetchWorkouts: not iOS or AppleHealthKit unavailable');      return [];    }    if (!isAuthorized) {      console.log('[HealthKit] fetchWorkouts: not authorized yet');      return [];    }    return new Promise((resolve) => {      const startDate = new Date();      startDate.setDate(startDate.getDate() - daysBack);      const options = {        startDate: startDate.toISOString(),        endDate: new Date().toISOString(),      };      AppleHealthKit.getAnchoredWorkouts(options, (err, results) => {        if (err) {          console.warn('[HealthKit] getAnchoredWorkouts error:', err);          resolve([]);          return;        }        const rawList = (results && results.data) ? results.data : [];        console.log('[HealthKit] getAnchoredWorkouts returned', rawList.length, 'workouts');        const workouts = rawList.map(w => ({          external_id: w.id || w.uuid || (w.start + '_' + (w.activityName || 'workout')),          type: w.activityName || 'workout',          start_time: w.start || w.startDate,          end_time: w.end || w.endDate,          duration_seconds: w.duration || 0,          distance_meters: w.distance || 0,          calories: w.calories || 0,          source: 'apple_health',        }));        resolve(workouts);      });    });  }, [isAuthorized]);
 
   // Cleanup ved unmount
   useEffect(() => {

@@ -370,26 +370,7 @@ export default function App() {
   useEffect(() => { trainingPlanRef.current = trainingPlan; }, [trainingPlan]);
 
   // Apple HealthKit auto-sync (kun for Basic+Pro)
-  const { isAuthorized: hkAuthorized, fetchWorkouts } = useHealthKit({ enabled: true });
-
-  useEffect(() => {
-    if (!hkAuthorized || !user) return;
-    let cancelled = false;
-    const doSync = async () => {
-      try {
-        const workouts = await fetchWorkouts(7);
-        if (cancelled || !workouts || workouts.length === 0) return;
-        const result = await syncHealthKitWorkouts(workouts);
-        console.log('[HealthKit Sync]', result);
-      } catch (e) {
-        console.warn('[HealthKit Sync] error:', e.message);
-      }
-    };
-    doSync();
-    const interval = setInterval(doSync, 900000); // hver 15 min (900000 ms)
-    return () => { cancelled = true; clearInterval(interval); };
-  }, [hkAuthorized, isFree, user, fetchWorkouts]);
-
+  // Apple HealthKit auto-sync (kun for Basic+Pro)  const { isAuthorized: hkAuthorized, fetchWorkouts } = useHealthKit({ enabled: true });  useEffect(() => {    if (!user) {      console.log('[HealthKit Sync] skipped: no user');      return;    }    if (!hkAuthorized) {      console.log('[HealthKit Sync] skipped: not authorized yet');      return;    }    let cancelled = false;    const doSync = async () => {      try {        console.log('[HealthKit Sync] starting fetchWorkouts(7)...');        const workouts = await fetchWorkouts(7);        console.log('[HealthKit Sync] fetched', workouts?.length || 0, 'workouts');        if (cancelled) return;        if (!workouts || workouts.length === 0) {          console.log('[HealthKit Sync] no workouts to sync');          return;        }        const result = await syncHealthKitWorkouts(workouts);        console.log('[HealthKit Sync] result:', result);      } catch (e) {        console.warn('[HealthKit Sync] error:', e.message);      }    };    doSync();    return () => { cancelled = true; };  }, [hkAuthorized, user, fetchWorkouts]);
   // Watch auto-sync: send today's training when weekPlan loads
   useEffect(() => {
     if (weekPlan && weekPlan.length > 0 && sendTodayTraining) {
