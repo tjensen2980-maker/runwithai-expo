@@ -133,8 +133,15 @@
           ]
         }
       ],
-        "./plugins/withLocales",
-      "@kingstinct/react-native-healthkit"
+      "./plugins/withLocales",
+      [
+        "react-native-health",
+        {
+          "isClinicalDataEnabled": false,
+          "healthSharePermission": "RunWithAI bruger dine sundhedsdata til at vise puls og kalorier.",
+          "healthUpdatePermission": "RunWithAI gemmer dine lobeture i Apple Health."
+        }
+      ]
     ],
     "owner": "tj2970",
     "extra": {
