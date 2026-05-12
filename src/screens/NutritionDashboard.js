@@ -10,7 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Circle } from 'react-native-svg';
 import { colors, loadProfile, getAuthToken, SERVER } from '../data';
 import { getDailySummary, getMeals, deleteMeal } from '../services/NutritionAPI';
-import { useHealthCalories } from '../hooks/useHealthCalories';
+import useHealthKit from '../hooks/useHealthKit';
 // ---- Helpers ----------------------------------------------------------------
 
 function todayISO() {
@@ -108,7 +108,7 @@ function MacroBar({ label, value, target, color }) {
 
 export default function NutritionDashboard({ onBack, onLogMeal, onMealPlan }) {
   // HealthKit - læs dagens forbrændte kalorier direkte (ingen Railway-sync)
-    const { calories: hkCalories } = useHealthCalories();
+    const { calories: hkCalories } = useHealthKit();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [summary, setSummary] = useState(null);
