@@ -14,8 +14,6 @@ import {
 } from './src/data';
 import { useWatch } from './src/hooks/useWatch'
 import { syncAuthToWatch } from './src/services/WatchSync';
-import useHealthKit from './src/hooks/useHealthKit';
-import { syncHealthKitWorkouts } from './src/services/NutritionAPI';
 import Auth from './src/screens/Auth';
 import Onboarding from './src/screens/Onboarding';
 import OnboardingCarousel from './src/components/OnboardingCarousel';
@@ -369,39 +367,7 @@ export default function App() {
 
   useEffect(() => { trainingPlanRef.current = trainingPlan; }, [trainingPlan]);
 
-  // Apple HealthKit auto-sync (kun for Basic+Pro)
-  // Apple HealthKit auto-sync (kun for Basic+Pro)
-  const { isAuthorized: hkAuthorized, fetchWorkouts } = useHealthKit({ enabled: true });
-
-  useEffect(() => {
-    if (!user) {
-      Alert.alert('HK','skipped: no user');
-      return;
-    }
-    if (!hkAuthorized) {
-      Alert.alert('HK','skipped: not authorized');
-      return;
-    }
-    let cancelled = false;
-    const doSync = async () => {
-      try {
-        Alert.alert('HK','starting fetchWorkouts');
-        const workouts = await fetchWorkouts(7);
-        Alert.alert('HK','fetched ' + (workouts ? workouts.length : 0) + ' workouts');
-        if (cancelled) return;
-        if (!workouts || workouts.length === 0) {
-          Alert.alert('HK','no workouts to sync');
-          return;
-        }
-        const result = await syncHealthKitWorkouts(workouts);
-        Alert.alert('HK SYNC OK', JSON.stringify(result).slice(0,300));
-      } catch (e) {
-        Alert.alert('HK ERR', String(e && e.message || e));
-      }
-    };
-    doSync();
-    return () => { cancelled = true; };
-  }, [hkAuthorized, user, fetchWorkouts]);
+  // HealthKit auto-sync til Railway fjernet - vi læser direkte i NutritionDashboard
   // Watch auto-sync: send today's training when weekPlan loads
   useEffect(() => {
     if (weekPlan && weekPlan.length > 0 && sendTodayTraining) {
