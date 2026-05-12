@@ -15,7 +15,7 @@ import { Platform, Alert } from 'react-native';
 // Kun import pÃ¥ iOS - Android bruger Health Connect
 let AppleHealthKit = null;
 if (Platform.OS === 'ios') {
-  try { AppleHealthKit = require('react-native-health').default; } catch (e) { AppleHealthKit = null; }
+  try { AppleHealthKit = require('react-native-health'); } catch (e) { AppleHealthKit = null; }
 }
 
 // HealthKit permissions vi anmoder om
