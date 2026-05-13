@@ -365,7 +365,7 @@ export default function App() {
 
   const token = getAuthToken();
   const { subscription, tier, isPro, isBasic, isFree, canUseMealTracking, canUseMealPlan, canUseAICoach, canUseAllActivities, weeklyActivityLimit, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
-  const { calories: hkCalories, fetchDailyCalories } = useHealthKit();
+  const { calories: hkCalories, fetchDailyCalories, isSupported: hkSupported, isAvailable: hkAvail, isAuthorized: hkAuth, isInitializing: hkInit, error: hkError } = useHealthKit();
 
   useEffect(() => { trainingPlanRef.current = trainingPlan; }, [trainingPlan]);
 
@@ -637,7 +637,7 @@ if (tab === 'cycleTracker') {
         />
       );
         case 'nutrition':
-        return isPro ? <NutritionDashboard onBack={() => setTab('settings')} onLogMeal={() => setTab('logMeal')} onMealPlan={() => setTab('mealPlan')} hkCalories={hkCalories} fetchDailyCalories={fetchDailyCalories} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowTierCarousel(true)} />;
+        return isPro ? <NutritionDashboard onBack={() => setTab('settings')} onLogMeal={() => setTab('logMeal')} onMealPlan={() => setTab('mealPlan')} hkCalories={hkCalories} fetchDailyCalories={fetchDailyCalories} hkSupported={hkSupported} hkAvail={hkAvail} hkAuth={hkAuth} hkInit={hkInit} hkError={hkError} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowTierCarousel(true)} />;
       case 'logMeal':
         return isPro ? <LogMeal onBack={() => { setScannedFood(null); setTab('nutrition'); }} onDone={() => { setScannedFood(null); setTab('nutrition'); }} onScanBarcode={() => setTab('barcodeScanner')} onPhotoAnalyze={() => setTab('photoAnalyze')} scannedFood={scannedFood} onScanConsumed={() => setScannedFood(null)} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowTierCarousel(true)} />;
       case 'barcodeScanner':
