@@ -13,6 +13,7 @@ import {
   loadProfile, saveProfile, loadWeekPlan, saveWeekPlan, setAuthToken, generateTrainingPlan, getAuthToken, loadTrainingPlan, loadRuns,
 } from './src/data';
 import { useWatch } from './src/hooks/useWatch'
+import useHealthKit from './src/hooks/useHealthKit'
 import { syncAuthToWatch } from './src/services/WatchSync';
 import Auth from './src/screens/Auth';
 import Onboarding from './src/screens/Onboarding';
@@ -165,7 +166,10 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, isFree, on
             <View style={{ backgroundColor: colors.card, borderRadius: 16, padding: 18, borderWidth: 1, borderColor: colors.border }}>
               <Text style={{ fontSize: 10, color: colors.muted, letterSpacing: 2, fontWeight: '700', marginBottom: 8 }}>{t('run.lastActivity')}</Text>
               <View style={{ flexDirection: 'row', gap: 20 }}>
-                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.accent }}>{lastRun.km || 'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.km')}</Text></View>
+                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.accent }}>{lastRun.km || '–'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.km')}</Text></View>
+                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.text }}>{lastRun.duration || '–'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.time')}</Text></View>
+                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.text }}>{lastRun.pace || '–'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.pace')}</Text></View>
+              </View>
                 <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.text }}>{lastRun.duration || 'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.time')}</Text></View>
                 <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.text }}>{lastRun.pace || 'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.pace')}</Text></View>
               </View>
@@ -364,6 +368,7 @@ export default function App() {
 
   const token = getAuthToken();
   const { subscription, tier, isPro, isBasic, isFree, canUseMealTracking, canUseMealPlan, canUseAICoach, canUseAllActivities, weeklyActivityLimit, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
+  const { calories: hkCalories } = useHealthKit();
 
   useEffect(() => { trainingPlanRef.current = trainingPlan; }, [trainingPlan]);
 
@@ -635,7 +640,7 @@ if (tab === 'cycleTracker') {
         />
       );
         case 'nutrition':
-        return isPro ? <NutritionDashboard onBack={() => setTab('settings')} onLogMeal={() => setTab('logMeal')} onMealPlan={() => setTab('mealPlan')} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowTierCarousel(true)} />;
+        return isPro ? <NutritionDashboard onBack={() => setTab('settings')} onLogMeal={() => setTab('logMeal')} onMealPlan={() => setTab('mealPlan')} hkCalories={hkCalories} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowTierCarousel(true)} />;
       case 'logMeal':
         return isPro ? <LogMeal onBack={() => { setScannedFood(null); setTab('nutrition'); }} onDone={() => { setScannedFood(null); setTab('nutrition'); }} onScanBarcode={() => setTab('barcodeScanner')} onPhotoAnalyze={() => setTab('photoAnalyze')} scannedFood={scannedFood} onScanConsumed={() => setScannedFood(null)} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowTierCarousel(true)} />;
       case 'barcodeScanner':
