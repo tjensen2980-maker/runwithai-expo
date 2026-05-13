@@ -11,6 +11,7 @@ def ccache_enabled?(podfile_properties)
   # Fall back to Podfile properties
   podfile_properties['apple.ccacheEnabled'] == 'true'
 end
+ENV['RCT_NEW_ARCH_ENABLED'] = '0'
 ENV['RCT_USE_PREBUILT_RNCORE'] = '1'
 ENV['RCT_USE_RN_DEP'] = '1'
 
