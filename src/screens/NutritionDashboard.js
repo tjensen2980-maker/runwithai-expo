@@ -107,7 +107,7 @@ function MacroBar({ label, value, target, color }) {
 // ---- Main screen ------------------------------------------------------------
 // hkCalories sendes ned som prop fra App.js (HealthKit initialiseres ét sted)
 
-export default function NutritionDashboard({ onBack, onLogMeal, onMealPlan, hkCalories = 0, fetchDailyCalories }) {
+export default function NutritionDashboard({ onBack, onLogMeal, onMealPlan, hkCalories = 0, fetchDailyCalories, hkSupported, hkAvail, hkAuth, hkInit, hkError }) {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [summary, setSummary] = useState(null);
@@ -236,7 +236,7 @@ export default function NutritionDashboard({ onBack, onLogMeal, onMealPlan, hkCa
         {/* DEBUG: HealthKit status - fjernes senere */}
         <View style={{ backgroundColor: '#222', padding: 10, borderRadius: 8, marginVertical: 8 }}>
           <Text style={{ color: '#0f0', fontSize: 12, fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace' }}>
-            HK debug | hkCalories prop: {String(hkCalories)} | kcal_out_activity: {String(sum.kcal_out_activity || 0)} | combined kcalOut: {String(kcalOut)}
+            HK debug{'\n'}supported={String(hkSupported)} avail={String(hkAvail)} auth={String(hkAuth)} init={String(hkInit)}{'\n'}err={String(hkError || 'none')}{'\n'}hkCalories={String(hkCalories)} server={String(sum.kcal_out_activity || 0)} combined={String(kcalOut)}
           </Text>
         </View>
 
