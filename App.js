@@ -170,8 +170,6 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, isFree, on
                 <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.text }}>{lastRun.duration || '–'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.time')}</Text></View>
                 <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.text }}>{lastRun.pace || '–'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.pace')}</Text></View>
               </View>
-                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.text }}>{lastRun.duration || 'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.time')}</Text></View>
-                <View><Text style={{ fontSize: 22, fontWeight: '900', color: colors.text }}>{lastRun.pace || 'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“'}</Text><Text style={{ fontSize: 10, color: colors.muted, fontWeight: '600' }}>{t('run.pace')}</Text></View>
               </View>
             </View>
           )}
@@ -652,14 +650,6 @@ if (tab === 'cycleTracker') {
      case 'strengthWorkout':
         return <StrengthWorkout token={getAuthToken()} onClose={() => { setActivityType(null); setTab('dashboard'); }} onSaved={() => { loadData(); }} />;
       case 'motionPicker':
-        return <MotionPicker onBack={() => setTab('dashboard')} onPick={(type, location) => {
-          setActivityType(type);
-          if (location === 'treadmill') {
-            setTab('treadmillTracker');
-          } else {
-            setTab('tracker');
-          }
-        }} />;
         return <MotionPicker onBack={() => setTab('dashboard')} onPick={(type, location) => {
           setActivityType(type);
           if (location === 'treadmill') {
