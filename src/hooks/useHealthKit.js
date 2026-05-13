@@ -68,7 +68,7 @@ export function useHealthKit({ enabled = true, heartRateInterval = 5000 } = {}) 
 
     const initHealthKit = () => {
       // Tjek om HealthKit er tilgÃ¦ngelig
-      if (!AppleHealthKit) {
+      if (!AppleHealthKit || typeof AppleHealthKit.isAvailable !== 'function') {
           Alert.alert('HK INIT','AppleHealthKit module is NULL'); setIsInitializing(false); return; }
       AppleHealthKit.isAvailable((err, available) => {
         if (err) {
