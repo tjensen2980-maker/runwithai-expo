@@ -3,63 +3,64 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  View, Text, ScrollView, TouchableOpacity, StyleSheet,
-  ActivityIndicator, Alert, RefreshControl, Platform
+    View, Text, ScrollView, TouchableOpacity, StyleSheet,
+    ActivityIndicator, Alert, RefreshControl, Platform
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Circle } from 'react-native-svg';
 import { colors, loadProfile, getAuthToken, SERVER } from '../data';
 import { getDailySummary, getMeals, deleteMeal } from '../services/NutritionAPI';
 import useHealthKit from '../hooks/useHealthKit';
+
 // ---- Helpers ----------------------------------------------------------------
 
 function todayISO() {
-  const d = new Date();
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  const dd = String(d.getDate()).padStart(2, '0');
-  return yyyy + '-' + mm + '-' + dd;
+    const d = new Date();
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return yyyy + '-' + mm + '-' + dd;
 }
 
 function formatTime(iso) {
-  try {
-    const d = new Date(iso);
-    return d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
-  } catch (e) { return ''; }
+    try {
+          const d = new Date(iso);
+          return d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
+    } catch (e) { return ''; }
 }
 
 const MEAL_TYPE_LABELS = {
-  breakfast: 'Morgenmad',
-  lunch: 'Frokost',
-  dinner: 'Aftensmad',
-  snack: 'Snack'
+    breakfast: 'Morgenmad',
+    lunch: 'Frokost',
+    dinner: 'Aftensmad',
+    snack: 'Snack'
 };
 
 // ---- Calorie ring (SVG) -----------------------------------------------------
 
 function CalorieRing({ kcalIn, kcalOut, target }) {
-  const size = 220;
-  const stroke = 16;
-  const r = (size - stroke) / 2;
-  const c = 2 * Math.PI * r;
+    const size = 220;
+    const stroke = 16;
+    const r = (size - stroke) / 2;
+    const c = 2 * Math.PI * r;
 
   const effectiveTarget = (target || 0) + (kcalOut || 0);
-  const consumed = kcalIn || 0;
-  const remaining = effectiveTarget - consumed;
-  const pct = effectiveTarget > 0 ? Math.min(consumed / effectiveTarget, 1) : 0;
-  const dashOffset = c * (1 - pct);
+    const consumed = kcalIn || 0;
+    const remaining = effectiveTarget - consumed;
+    const pct = effectiveTarget > 0 ? Math.min(consumed / effectiveTarget, 1) : 0;
+    const dashOffset = c * (1 - pct);
 
   const overshoot = consumed > effectiveTarget && effectiveTarget > 0;
-  const ringColor = overshoot ? colors.red : colors.accent;
+    const ringColor = overshoot ? colors.red : colors.accent;
 
   return (
-    <View style={{ alignItems: 'center', marginVertical: 8 }}>
+        <View style={{ alignItems: 'center', marginVertical: 8 }}>
       <Svg width={size} height={size}>
-        <Circle
+          <Circle
           cx={size / 2} cy={size / 2} r={r}
           stroke={colors.border} strokeWidth={stroke} fill="none"
         />
-        <Circle
+                    <Circle
           cx={size / 2} cy={size / 2} r={r}
           stroke={ringColor} strokeWidth={stroke} fill="none"
           strokeDasharray={c}
@@ -67,173 +68,185 @@ function CalorieRing({ kcalIn, kcalOut, target }) {
           strokeLinecap="round"
           transform={'rotate(-90 ' + (size / 2) + ' ' + (size / 2) + ')'}
         />
-      </Svg>
+          </Svg>
       <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
         <Text style={{ fontSize: 42, fontWeight: '900', color: colors.text }}>
-          {Math.max(0, Math.round(remaining))}
-        </Text>
+{Math.max(0, Math.round(remaining))}
+</Text>
         <Text style={{ fontSize: 13, color: colors.muted, marginTop: 4, fontWeight: '600' }}>
-          {remaining < 0 ? 'OVER MÅLET' : 'KCAL TILBAGE'}
-        </Text>
-        {kcalOut > 0 ? (
-          <Text style={{ fontSize: 11, color: colors.green, marginTop: 6, fontWeight: '700' }}>
+{remaining < 0 ? 'OVER MÅLET' : 'KCAL TILBAGE'}
+</Text>
+{kcalOut > 0 ? (
+            <Text style={{ fontSize: 11, color: colors.green, marginTop: 6, fontWeight: '700' }}>
             +{Math.round(kcalOut)} kcal aktivitet
-          </Text>
+  </Text>
         ) : null}
-      </View>
-    </View>
+          </View>
+          </View>
   );
 }
 
 // ---- Macro bar --------------------------------------------------------------
 
 function MacroBar({ label, value, target, color }) {
-  const pct = target > 0 ? Math.min(value / target, 1) : 0;
-  return (
-    <View style={{ marginBottom: 14 }}>
+    const pct = target > 0 ? Math.min(value / target, 1) : 0;
+    return (
+          <View style={{ marginBottom: 14 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 }}>
         <Text style={{ fontSize: 13, fontWeight: '700', color: colors.text }}>{label}</Text>
         <Text style={{ fontSize: 13, color: colors.muted, fontWeight: '600' }}>
-          {Math.round(value || 0)} / {target ? Math.round(target) : '-'} g
-        </Text>
-      </View>
+{Math.round(value || 0)} / {target ? Math.round(target) : '-'} g
+  </Text>
+  </View>
       <View style={{ height: 8, backgroundColor: colors.border, borderRadius: 4, overflow: 'hidden' }}>
         <View style={{ width: (pct * 100) + '%', height: '100%', backgroundColor: color, borderRadius: 4 }} />
-      </View>
-    </View>
+  </View>
+  </View>
   );
 }
 
 // ---- Main screen ------------------------------------------------------------
 
 export default function NutritionDashboard({ onBack, onLogMeal, onMealPlan }) {
-  // HealthKit - læs dagens forbrændte kalorier direkte (ingen Railway-sync)
-    const { calories: hkCalories } = useHealthKit();
+    // HealthKit - læs dagens forbrændte kalorier direkte fra Sundhed-appen
+  const { calories: hkCalories, fetchDailyCalories } = useHealthKit();
+
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [summary, setSummary] = useState(null);
-  const [meals, setMeals] = useState([]);
-  const [error, setError] = useState(null);
+    const [refreshing, setRefreshing] = useState(false);
+    const [summary, setSummary] = useState(null);
+    const [meals, setMeals] = useState([]);
+    const [error, setError] = useState(null);
 
-const load = useCallback(async () => {
-    setError(null);
-    try {
-      try {
-        const profile = await loadProfile();
-        const token = await getAuthToken();
-        if (profile && token && profile.weight && profile.height && profile.age) {
-          const sexMap = { 'Mand': 'male', 'Kvinde': 'female' };
-          const goalMap = { weight: 'lose_fat', fitness: 'maintain', '5k': 'maintain', '10k': 'maintain', half: 'maintain', full: 'maintain' };
-          const body = {
-            weight_kg: parseFloat(profile.weight),
-            height_cm: parseFloat(profile.height),
-            age: parseInt(profile.age),
-            gender: sexMap[profile.sex] || 'male',
-            activity_level: 'moderate',
-            primary_goal: goalMap[profile.goal] || 'maintain',
-            goal_pace: 'normal',
-            plan_type: 'balanced'
-          };
-          await fetch(SERVER + '/goals/auto', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-            body: JSON.stringify(body)
-          });
+  // Hent daglige kalorier fra HealthKit ved mount
+  useEffect(() => {
+        if (fetchDailyCalories) {
+                fetchDailyCalories();
         }
-      } catch (calcErr) {
-        console.warn('[Nutrition] Auto-calc skipped:', calcErr);
-      }
+  }, [fetchDailyCalories]);
 
-      const date = todayISO();
-      const [s, m] = await Promise.all([
-        getDailySummary(date),
-        getMeals(date)
-      ]);
-      setSummary(s);
-      setMeals(Array.isArray(m) ? m : []);
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
+  const load = useCallback(async () => {
+        setError(null);
+        try {
+                try {
+                          const profile = await loadProfile();
+                          const token = await getAuthToken();
+                          if (profile && token && profile.weight && profile.height && profile.age) {
+                                      const sexMap = { 'Mand': 'male', 'Kvinde': 'female' };
+                                      const goalMap = { weight: 'lose_fat', fitness: 'maintain', '5k': 'maintain', '10k': 'maintain', half: 'maintain', full: 'maintain' };
+                                      const body = {
+                                                    weight_kg: parseFloat(profile.weight),
+                                                    height_cm: parseFloat(profile.height),
+                                                    age: parseInt(profile.age),
+                                                    gender: sexMap[profile.sex] || 'male',
+                                                    activity_level: 'moderate',
+                                                    primary_goal: goalMap[profile.goal] || 'maintain',
+                                                    goal_pace: 'normal',
+                                                    plan_type: 'balanced'
+                                      };
+                                      await fetch(SERVER + '/goals/auto', {
+                                                    method: 'POST',
+                                                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                                                    body: JSON.stringify(body)
+                                      });
+                          }
+                } catch (calcErr) {
+                          console.warn('[Nutrition] Auto-calc skipped:', calcErr);
+                }
+
+          const date = todayISO();
+                const [s, m] = await Promise.all([
+                          getDailySummary(date),
+                          getMeals(date)
+                        ]);
+                setSummary(s);
+                setMeals(Array.isArray(m) ? m : []);
+        } catch (e) {
+                setError(e.message);
+        } finally {
+                setLoading(false);
+                setRefreshing(false);
+        }
   }, []);
 
   useEffect(() => { load(); }, [load]);
 
   const onRefresh = () => {
-    setRefreshing(true);
-    load();
+        setRefreshing(true);
+        load();
+        // Opdater HealthKit kalorier ved pull-to-refresh
+        if (fetchDailyCalories) {
+                fetchDailyCalories();
+        }
   };
 
   const handleDelete = (mealId) => {
-    Alert.alert(
-      'Slet måltid',
-      'Er du sikker pa at du vil slette dette måltid?',
-      [
-        { text: 'Annuller', style: 'cancel' },
-        {
-          text: 'Slet',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await deleteMeal(mealId);
-              load();
-            } catch (e) {
-              Alert.alert('Fejl', e.message);
-            }
-          }
-        }
-      ]
-    );
+        Alert.alert(
+                'Slet måltid',
+                'Er du sikker pa at du vil slette dette måltid?',
+                [
+                  { text: 'Annuller', style: 'cancel' },
+                  {
+                              text: 'Slet',
+                              style: 'destructive',
+                              onPress: async () => {
+                                            try {
+                                                            await deleteMeal(mealId);
+                                                            load();
+                                            } catch (e) {
+                                                            Alert.alert('Fejl', e.message);
+                                            }
+                              }
+                  }
+                        ]
+              );
   };
 
   if (loading) {
-    return (
-      <SafeAreaView style={s.safe}>
-        <View style={s.loaderWrap}>
-          <ActivityIndicator color={colors.accent} size="large" />
-        </View>
-      </SafeAreaView>
-    );
+        return (
+                <SafeAreaView style={s.safe}>
+                  <View style={s.loaderWrap}>
+                    <ActivityIndicator color={colors.accent} size="large" />
+          </View>
+          </SafeAreaView>
+        );
   }
 
   const sum = summary || {};
-  const target = sum.target_kcal || 0;
-  const kcalIn = sum.kcal_in || 0;
-  const kcalOut = Math.max(sum.kcal_out_activity || 0, hkCalories || 0);
+    const target = sum.target_kcal || 0;
+    const kcalIn = sum.kcal_in || 0;
+    const kcalOut = Math.max(sum.kcal_out_activity || 0, hkCalories || 0);
 
   return (
-    <SafeAreaView style={s.safe}>
+        <SafeAreaView style={s.safe}>
       <View style={s.header}>
         <TouchableOpacity onPress={onBack} style={s.backBtn}>
           <Text style={s.backTxt}>Tilbage</Text>
-        </TouchableOpacity>
-        <Text style={s.title}>Dagens kalorier</Text>
-        <View style={{ width: 70 }} />
-      </View>
+    </TouchableOpacity>
+          <Text style={s.title}>Dagens kalorier</Text>
+          <View style={{ width: 70 }} />
+  </View>
 
       <ScrollView
         contentContainerStyle={s.content}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.accent} />}>
 
         {error ? (
-          <View style={s.errorBox}>
+                    <View style={s.errorBox}>
             <Text style={s.errorTxt}>Kunne ikke hente data: {error}</Text>
           </View>
-        ) : null}
+                 ) : null}
 
-        {!target ? (
-          <View style={s.warnBox}>
+{!target ? (
+            <View style={s.warnBox}>
             <Text style={s.warnTxt}>
-              Sæt dine kalorie-mål under "Mine kalorie-mål" for at se dagens balance.
-            </Text>
-          </View>
-        ) : null}
+                Sæt dine kalorie-mål under "Mine kalorie-mål" for at se dagens balance.
+  </Text>
+  </View>
+         ) : null}
 
         <CalorieRing kcalIn={kcalIn} kcalOut={kcalOut} target={target} />
 
-        <View style={s.statsRow}>
+                  <View style={s.statsRow}>
           <View style={s.statBox}>
             <Text style={s.statLabel}>SPIST</Text>
             <Text style={s.statValue}>{Math.round(kcalIn)}</Text>
@@ -249,132 +262,132 @@ const load = useCallback(async () => {
             <Text style={s.statValue}>{Math.round(target)}</Text>
             <Text style={s.statUnit}>kcal</Text>
           </View>
-        </View>
+          </View>
 
         <View style={s.card}>
           <Text style={s.sectionTitle}>MAKROS</Text>
           <MacroBar label="Protein" value={sum.protein_g} target={sum.target_protein_g} color={colors.blue} />
           <MacroBar label="Kulhydrater" value={sum.carbs_g} target={sum.target_carbs_g} color={colors.yellow} />
           <MacroBar label="Fedt" value={sum.fat_g} target={sum.target_fat_g} color={colors.purple} />
-        </View>
+          </View>
 
         <TouchableOpacity
           style={s.logBtn}
           onPress={() => onLogMeal ? onLogMeal() : Alert.alert('Kommer snart', 'Log maltid bygges i naeste fase.')}>
-          <Text style={s.logBtnTxt}>+  Log måltid</Text>
-        </TouchableOpacity>
+                      <Text style={s.logBtnTxt}>+ Log måltid</Text>
+            </TouchableOpacity>
 
         <TouchableOpacity
           style={s.mealPlanBtn}
           onPress={() => onMealPlan ? onMealPlan() : Alert.alert('Kommer snart', 'Madplan bygges snart.')}>
-          <Text style={s.mealPlanBtnTxt}>AI madplan</Text>
-        </TouchableOpacity>
+                      <Text style={s.mealPlanBtnTxt}>AI madplan</Text>
+            </TouchableOpacity>
 
         <Text style={s.sectionTitle}>DAGENS MÅLTIDER</Text>
-        {meals.length === 0 ? (
-          <View style={s.emptyBox}>
+{meals.length === 0 ? (
+            <View style={s.emptyBox}>
             <Text style={s.emptyTxt}>Ingen måltider logget i dag</Text>
-          </View>
-        ) : (
-          meals.map(m => (
-            <View key={m.id} style={s.mealCard}>
+  </View>
+         ) : (
+                     meals.map(m => (
+                       <View key={m.id} style={s.mealCard}>
               <View style={{ flex: 1 }}>
                 <Text style={s.mealType}>
-                  {MEAL_TYPE_LABELS[m.meal_type] || 'Måltid'} {m.eaten_at ? '- ' + formatTime(m.eaten_at) : ''}
-                </Text>
+                               {MEAL_TYPE_LABELS[m.meal_type] || 'Måltid'} {m.eaten_at ? '- ' + formatTime(m.eaten_at) : ''}
+</Text>
 {(m.items || []).map((it, idx) => (
-  <Text key={idx} style={s.mealItem}>
-    {it.food_name || m.notes || 'Item'} - {Math.round(it.kcal)} kcal
+                    <Text key={idx} style={s.mealItem}>
+  {it.food_name || m.notes || 'Item'} - {Math.round(it.kcal)} kcal
   </Text>
-))}
-              </View>
+                ))}
+                  </View>
               <TouchableOpacity onPress={() => handleDelete(m.id)} style={s.deleteBtn}>
                 <Text style={s.deleteTxt}>X</Text>
-              </TouchableOpacity>
-            </View>
+                  </TouchableOpacity>
+                  </View>
           ))
         )}
 
         <View style={{ height: 40 }} />
-      </ScrollView>
-    </SafeAreaView>
+          </ScrollView>
+          </SafeAreaView>
   );
 }
 
 const s = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.surface },
-  loaderWrap: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  header: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1,
-    borderBottomColor: colors.border, backgroundColor: colors.card
-  },
-  backBtn: { paddingVertical: 6, paddingHorizontal: 8 },
-  backTxt: { color: colors.accent, fontSize: 16, fontWeight: '600' },
-  title: { fontSize: 18, fontWeight: '800', color: colors.text },
-  content: { padding: 16, paddingBottom: 40 },
-  statsRow: {
-    flexDirection: 'row', justifyContent: 'space-between',
-    marginVertical: 12, gap: 8
-  },
-  statBox: {
-    flex: 1, backgroundColor: colors.card, borderRadius: 12,
-    padding: 12, alignItems: 'center', borderWidth: 1, borderColor: colors.border
-  },
-  statLabel: { fontSize: 10, color: colors.muted, fontWeight: '800', letterSpacing: 1 },
-  statValue: { fontSize: 22, color: colors.text, fontWeight: '900', marginTop: 4 },
-  statUnit: { fontSize: 11, color: colors.muted, fontWeight: '600' },
-  card: {
-    backgroundColor: colors.card, borderRadius: 14, padding: 16,
-    borderWidth: 1, borderColor: colors.border, marginVertical: 8
-  },
-  sectionTitle: {
-    fontSize: 11, fontWeight: '800', color: colors.muted, letterSpacing: 1,
-    marginTop: 16, marginBottom: 8, textTransform: 'uppercase'
-  },
-  logBtn: {
-    backgroundColor: colors.black, borderRadius: 14, paddingVertical: 16,
-    alignItems: 'center', marginTop: 12
-  },
-  mealPlanBtn: {
-    backgroundColor: '#4a9eff',
-    padding: 14,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 8
-  },
-  mealPlanBtnTxt: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '700'
-  },
-  logBtnTxt: { color: colors.card, fontSize: 16, fontWeight: '800', letterSpacing: 0.5 },
-  mealCard: {
-    flexDirection: 'row', alignItems: 'center',
-    backgroundColor: colors.card, borderRadius: 12, padding: 14,
-    borderWidth: 1, borderColor: colors.border, marginBottom: 8
-  },
-  mealType: { fontSize: 13, fontWeight: '800', color: colors.text, marginBottom: 4, textTransform: 'uppercase' },
-  mealItem: { fontSize: 13, color: colors.dim, marginTop: 2 },
-  deleteBtn: {
-    width: 32, height: 32, borderRadius: 16, backgroundColor: colors.surface,
-    alignItems: 'center', justifyContent: 'center'
-  },
-  deleteTxt: { fontSize: 14, color: colors.muted, fontWeight: '700' },
-  emptyBox: {
-    backgroundColor: colors.card, borderRadius: 12, padding: 24,
-    alignItems: 'center', borderWidth: 1, borderColor: colors.border, borderStyle: 'dashed'
-  },
-  emptyTxt: { color: colors.muted, fontSize: 14 },
-  errorBox: {
-    backgroundColor: colors.red + '15', borderRadius: 10, padding: 12,
-    borderWidth: 1, borderColor: colors.red, marginBottom: 12
-  },
-  errorTxt: { color: colors.red, fontSize: 13 },
-  warnBox: {
-    backgroundColor: colors.yellow + '20', borderRadius: 10, padding: 12,
-    borderWidth: 1, borderColor: colors.yellow, marginBottom: 12
-  },
-  warnTxt: { color: colors.text, fontSize: 13, lineHeight: 18 }
+    safe: { flex: 1, backgroundColor: colors.surface },
+    loaderWrap: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+    header: {
+          flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+          paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1,
+          borderBottomColor: colors.border, backgroundColor: colors.card
+    },
+    backBtn: { paddingVertical: 6, paddingHorizontal: 8 },
+    backTxt: { color: colors.accent, fontSize: 16, fontWeight: '600' },
+    title: { fontSize: 18, fontWeight: '800', color: colors.text },
+    content: { padding: 16, paddingBottom: 40 },
+    statsRow: {
+          flexDirection: 'row', justifyContent: 'space-between',
+          marginVertical: 12, gap: 8
+    },
+    statBox: {
+          flex: 1, backgroundColor: colors.card, borderRadius: 12,
+          padding: 12, alignItems: 'center', borderWidth: 1, borderColor: colors.border
+    },
+    statLabel: { fontSize: 10, color: colors.muted, fontWeight: '800', letterSpacing: 1 },
+    statValue: { fontSize: 22, color: colors.text, fontWeight: '900', marginTop: 4 },
+    statUnit: { fontSize: 11, color: colors.muted, fontWeight: '600' },
+    card: {
+          backgroundColor: colors.card, borderRadius: 14, padding: 16,
+          borderWidth: 1, borderColor: colors.border, marginVertical: 8
+    },
+    sectionTitle: {
+          fontSize: 11, fontWeight: '800', color: colors.muted, letterSpacing: 1,
+          marginTop: 16, marginBottom: 8, textTransform: 'uppercase'
+    },
+    logBtn: {
+          backgroundColor: colors.black, borderRadius: 14, paddingVertical: 16,
+          alignItems: 'center', marginTop: 12
+    },
+    mealPlanBtn: {
+          backgroundColor: '#4a9eff',
+          padding: 14,
+          borderRadius: 12,
+          alignItems: 'center',
+          marginTop: 10,
+          marginBottom: 8
+    },
+    mealPlanBtnTxt: {
+          color: '#ffffff',
+          fontSize: 16,
+          fontWeight: '700'
+    },
+    logBtnTxt: { color: colors.card, fontSize: 16, fontWeight: '800', letterSpacing: 0.5 },
+    mealCard: {
+          flexDirection: 'row', alignItems: 'center',
+          backgroundColor: colors.card, borderRadius: 12, padding: 14,
+          borderWidth: 1, borderColor: colors.border, marginBottom: 8
+    },
+    mealType: { fontSize: 13, fontWeight: '800', color: colors.text, marginBottom: 4, textTransform: 'uppercase' },
+    mealItem: { fontSize: 13, color: colors.dim, marginTop: 2 },
+    deleteBtn: {
+          width: 32, height: 32, borderRadius: 16, backgroundColor: colors.surface,
+          alignItems: 'center', justifyContent: 'center'
+    },
+    deleteTxt: { fontSize: 14, color: colors.muted, fontWeight: '700' },
+    emptyBox: {
+          backgroundColor: colors.card, borderRadius: 12, padding: 24,
+          alignItems: 'center', borderWidth: 1, borderColor: colors.border, borderStyle: 'dashed'
+    },
+    emptyTxt: { color: colors.muted, fontSize: 14 },
+    errorBox: {
+          backgroundColor: colors.red + '15', borderRadius: 10, padding: 12,
+          borderWidth: 1, borderColor: colors.red, marginBottom: 12
+    },
+    errorTxt: { color: colors.red, fontSize: 13 },
+    warnBox: {
+          backgroundColor: colors.yellow + '20', borderRadius: 10, padding: 12,
+          borderWidth: 1, borderColor: colors.yellow, marginBottom: 12
+    },
+    warnTxt: { color: colors.text, fontSize: 13, lineHeight: 18 }
 });
