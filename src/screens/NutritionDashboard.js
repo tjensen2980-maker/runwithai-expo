@@ -107,7 +107,7 @@ function MacroBar({ label, value, target, color }) {
 // ---- Main screen ------------------------------------------------------------
 // hkCalories sendes ned som prop fra App.js (HealthKit initialiseres ét sted)
 
-export default function NutritionDashboard({ onBack, onLogMeal, onMealPlan, hkCalories = 0 }) {
+export default function NutritionDashboard({ onBack, onLogMeal, onMealPlan, hkCalories = 0, fetchDailyCalories }) {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [summary, setSummary] = useState(null);
@@ -158,11 +158,12 @@ export default function NutritionDashboard({ onBack, onLogMeal, onMealPlan, hkCa
     }
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { load(); if (fetchDailyCalories) fetchDailyCalories(); }, [load]);
 
   const onRefresh = () => {
     setRefreshing(true);
     load();
+    if (fetchDailyCalories) fetchDailyCalories();
   };
 
   const handleDelete = (mealId) => {
