@@ -2,7 +2,7 @@
  * useHealthKit.js
  *
  * Custom hook til at læse sundhedsdata fra Apple HealthKit.
- * Bruger @kingstinct/react-native-healthkit (Nitro Modules).
+ * Bruger @kingstinct/react-native-healthkit v9 (Nitro Modules).
  */
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Platform } from 'react-native';
@@ -14,7 +14,8 @@ let loadError = null;
 if (Platform.OS === 'ios') {
     try {
         HK = require('@kingstinct/react-native-healthkit');
-        console.log('[HealthKit] Kingstinct module loaded. Keys:', Object.keys(HK).slice(0, 20));
+        const exportedKeys = Object.keys(HK || {}).slice(0, 40);
+        console.log('[HealthKit] Kingstinct module loaded. Keys:', exportedKeys);
     } catch (e) {
         loadError = 'require failed: ' + (e && e.message ? e.message : String(e));
         console.warn('[HealthKit]', loadError);
@@ -22,7 +23,7 @@ if (Platform.OS === 'ios') {
     }
 }
 
-// HealthKit permissions vi anmoder om
+// HealthKit permissions. v9 accepts both with and without HK prefix.
 const READ_PERMISSIONS = [
     'HKQuantityTypeIdentifierHeartRate',
     'HKQuantityTypeIdentifierStepCount',
@@ -53,59 +54,90 @@ async function safeIsAvailable() {
     return await fn();
 }
 
+// v9 API: requestAuthorization({ toRead, toShare })
 async function safeRequestAuth() {
     const fn = pick('requestAuthorization');
     if (!fn) throw new Error('requestAuthorization not a function');
-    return await fn(READ_PERMISSIONS, WRITE_PERMISSIONS);
+    // Try v9 object-style first
+    try {
+        return await fn({ toRead: READ_PERMISSIONS, toShare: WRITE_PERMISSIONS });
+    } catch (e1) {
+        console.warn('[HealthKit] requestAuth object-style failed, trying array-style:', e1 && e1.message);
+        try {
+            return await fn(READ_PERMISSIONS, WRITE_PERMISSIONS);
+        } catch (e2) {
+            console.warn('[HealthKit] requestAuth array-style also failed:', e2 && e2.message);
+            throw e2;
+        }
+    }
 }
 
+// Sum kcal samples for a window. Handles v9 ({ samples: [...] }) and older (array) returns.
 async function querySum(typeId, startDate, endDate, unit) {
-    // Primary path: sum raw samples to include ALL sources (iPhone + Apple Watch).
-    // queryStatisticsForQuantity can be limited to a single default source in some versions.
     const qFn = pick('queryQuantitySamples');
-    if (qFn) {
+    if (!qFn) {
+        console.warn('[HealthKit] queryQuantitySamples not available');
+        return 0;
+    }
+    let raw;
+    // Try multiple call signatures used across versions
+    const attempts = [
+        () => qFn(typeId, { from: startDate, to: endDate, unit }),
+        () => qFn(typeId, { from: startDate, to: endDate }),
+        () => qFn(typeId, { startDate, endDate, unit }),
+        () => qFn(typeId, { startDate, endDate }),
+        () => qFn(typeId),
+    ];
+    let lastErr = null;
+    for (let i = 0; i < attempts.length; i++) {
         try {
-            const samples = await qFn(typeId, { from: startDate, to: endDate, unit });
-            if (Array.isArray(samples)) {
-                console.log('[HealthKit] querySum samples for', typeId, 'count=', samples.length);
-                if (samples.length > 0) {
-                    // Deduplicate Apple Watch <-> iPhone overlap: HealthKit already deduplicates
-                    // active energy across the same time window when reading samples, but Watch
-                    // is the preferred source. Sum all samples; iOS marks dupes as different UUIDs
-                    // so we trust HealthKit's per-sample data.
-                    const total = samples.reduce((s, x) => s + (x.quantity || x.value || 0), 0);
-                    console.log('[HealthKit] querySum raw total=', total, 'first sample=', JSON.stringify(samples[0]).slice(0, 200));
-                    return total;
-                }
-            }
+            raw = await attempts[i]();
+            console.log('[HealthKit] querySum signature', i, 'succeeded for', typeId);
+            break;
         } catch (e) {
-            console.warn('[HealthKit] queryQuantitySamples err:', e && e.message);
+            lastErr = e;
         }
     }
-    // Fallback: statistics aggregation
-    const fn = pick('queryStatisticsForQuantity');
-    if (fn) {
-        try {
-            const res = await fn(typeId, ['cumulativeSum'], startDate, endDate, unit);
-            console.log('[HealthKit] querySum statistics res=', JSON.stringify(res).slice(0, 200));
-            if (res && res.sumQuantity) {
-                const v = (typeof res.sumQuantity === 'number') ? res.sumQuantity
-                    : (res.sumQuantity.quantity || res.sumQuantity.value);
-                if (typeof v === 'number') return v;
-            }
-        } catch (e) {
-            console.warn('[HealthKit] queryStatistics err:', e && e.message);
-        }
+    if (!raw && lastErr) {
+        console.warn('[HealthKit] querySum all signatures failed for', typeId, lastErr && lastErr.message);
+        return 0;
     }
-    return 0;
+    // Normalize result: v9 returns { samples, newAnchor, deletedSamples }, older returns array
+    const samples = Array.isArray(raw) ? raw : (raw && Array.isArray(raw.samples) ? raw.samples : []);
+    console.log('[HealthKit] querySum', typeId, 'sampleCount=', samples.length);
+    if (samples.length > 0) {
+        console.log('[HealthKit] querySum first sample:', JSON.stringify(samples[0]).slice(0, 300));
+    }
+    let total = 0;
+    for (const s of samples) {
+        const v = (typeof s.quantity === 'number') ? s.quantity
+            : (s.quantity && typeof s.quantity.doubleValue === 'number') ? s.quantity.doubleValue
+            : (typeof s.value === 'number') ? s.value
+            : 0;
+        // Filter to requested window if provided
+        if (startDate && endDate) {
+            const sDate = new Date(s.startDate || s.start || endDate);
+            if (sDate < startDate || sDate > endDate) continue;
+        }
+        total += v;
+    }
+    return total;
 }
 
 async function queryLatest(typeId, startDate, endDate, unit) {
-    const qFn = pick('queryQuantitySamples');
+    const qFn = pick('queryQuantitySamples', 'getMostRecentQuantitySample');
     if (!qFn) return null;
-    const samples = await qFn(typeId, { from: startDate, to: endDate, unit, limit: 1, ascending: false });
-    if (Array.isArray(samples) && samples.length > 0) {
-        return samples[0].quantity || samples[0].value || null;
+    try {
+        const raw = await qFn(typeId, { from: startDate, to: endDate, unit, limit: 1, ascending: false });
+        const samples = Array.isArray(raw) ? raw : (raw && Array.isArray(raw.samples) ? raw.samples : (raw ? [raw] : []));
+        if (samples.length > 0) {
+            const s = samples[0];
+            return (typeof s.quantity === 'number') ? s.quantity
+                : (s.quantity && s.quantity.doubleValue) ? s.quantity.doubleValue
+                : s.value || null;
+        }
+    } catch (e) {
+        console.warn('[HealthKit] queryLatest err:', e && e.message);
     }
     return null;
 }
@@ -127,7 +159,7 @@ export function useHealthKit({ enabled = true, heartRateInterval = 5000 } = {}) 
 
     useEffect(() => {
         let cancelled = false;
-        console.log('[HealthKit] init effect run. iOS=', Platform.OS === 'ios', 'enabled=', enabled, 'moduleLoaded=', !!HK);
+        console.log('[HealthKit] init effect. iOS=', Platform.OS === 'ios', 'enabled=', enabled, 'moduleLoaded=', !!HK);
         setDebugStatus('init-start');
 
         if (Platform.OS !== 'ios' || !enabled) {
@@ -263,7 +295,7 @@ export function useHealthKit({ enabled = true, heartRateInterval = 5000 } = {}) 
             if (!qFn) return [];
             const startDate = new Date(); startDate.setDate(startDate.getDate() - daysBack);
             const results = await qFn({ from: startDate, to: new Date() });
-            const list = Array.isArray(results) ? results : (results && results.data) ? results.data : [];
+            const list = Array.isArray(results) ? results : (results && Array.isArray(results.samples) ? results.samples : (results && results.data) ? results.data : []);
             return list.map(w => ({
                 external_id: w.uuid || w.id || (w.startDate + '_' + (w.workoutActivityType || 'workout')),
                 type: w.workoutActivityType || w.activityName || 'workout',
