@@ -134,11 +134,10 @@
       ],
       "./plugins/withLocales",
       [
-        "react-native-health",
+        "@kingstinct/react-native-healthkit",
         {
-          "isClinicalDataEnabled": false,
-          "healthSharePermission": "RunWithAI bruger dine sundhedsdata til at vise puls og kalorier.",
-          "healthUpdatePermission": "RunWithAI gemmer dine lobeture i Apple Health."
+          "NSHealthShareUsageDescription": "RunWithAI bruger dine sundhedsdata til at vise puls og kalorier.",
+          "NSHealthUpdateUsageDescription": "RunWithAI gemmer dine lobeture i Apple Health."
         }
       ]
     ],
