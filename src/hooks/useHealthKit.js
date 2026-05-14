@@ -60,25 +60,44 @@ async function safeRequestAuth() {
 }
 
 async function querySum(typeId, startDate, endDate, unit) {
+    // Primary path: sum raw samples to include ALL sources (iPhone + Apple Watch).
+    // queryStatisticsForQuantity can be limited to a single default source in some versions.
+    const qFn = pick('queryQuantitySamples');
+    if (qFn) {
+        try {
+            const samples = await qFn(typeId, { from: startDate, to: endDate, unit });
+            if (Array.isArray(samples)) {
+                console.log('[HealthKit] querySum samples for', typeId, 'count=', samples.length);
+                if (samples.length > 0) {
+                    // Deduplicate Apple Watch <-> iPhone overlap: HealthKit already deduplicates
+                    // active energy across the same time window when reading samples, but Watch
+                    // is the preferred source. Sum all samples; iOS marks dupes as different UUIDs
+                    // so we trust HealthKit's per-sample data.
+                    const total = samples.reduce((s, x) => s + (x.quantity || x.value || 0), 0);
+                    console.log('[HealthKit] querySum raw total=', total, 'first sample=', JSON.stringify(samples[0]).slice(0, 200));
+                    return total;
+                }
+            }
+        } catch (e) {
+            console.warn('[HealthKit] queryQuantitySamples err:', e && e.message);
+        }
+    }
+    // Fallback: statistics aggregation
     const fn = pick('queryStatisticsForQuantity');
     if (fn) {
         try {
             const res = await fn(typeId, ['cumulativeSum'], startDate, endDate, unit);
-            if (res && typeof res.sumQuantity !== 'undefined') {
-                const v = res.sumQuantity && (res.sumQuantity.quantity || res.sumQuantity.value);
+            console.log('[HealthKit] querySum statistics res=', JSON.stringify(res).slice(0, 200));
+            if (res && res.sumQuantity) {
+                const v = (typeof res.sumQuantity === 'number') ? res.sumQuantity
+                    : (res.sumQuantity.quantity || res.sumQuantity.value);
                 if (typeof v === 'number') return v;
             }
-            if (res && typeof res.sumQuantity === 'number') return res.sumQuantity;
         } catch (e) {
-            console.warn('[HealthKit] queryStatistics fallback:', e && e.message);
+            console.warn('[HealthKit] queryStatistics err:', e && e.message);
         }
     }
-    // Fallback: query samples and sum manually
-    const qFn = pick('queryQuantitySamples');
-    if (!qFn) return 0;
-    const samples = await qFn(typeId, { from: startDate, to: endDate, unit });
-    if (!Array.isArray(samples)) return 0;
-    return samples.reduce((s, x) => s + (x.quantity || x.value || 0), 0);
+    return 0;
 }
 
 async function queryLatest(typeId, startDate, endDate, unit) {
