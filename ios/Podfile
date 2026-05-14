@@ -41,9 +41,6 @@ target 'RunWithAI' do
   pod 'react-native-google-maps', path: File.dirname(`node --print "require.resolve('react-native-maps/package.json')"`)
   # @generated end react-native-maps
 
-  # Explicit pod for react-native-health (autolinking workaround for committed ios/ folder)
-  pod 'RNAppleHealthKit', :path => '../node_modules/react-native-health'
-
   config = use_native_modules!(config_command)
 
   use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
@@ -64,21 +61,5 @@ target 'RunWithAI' do
       :mac_catalyst_enabled => false,
       :ccache_enabled => ccache_enabled?(podfile_properties),
     )
-
-    # Fix for react-native-health: force linker to include all Objective-C categories
-    # Without -ObjC flag, category methods (isAvailable, initHealthKit, etc.) get stripped
-    installer.aggregate_targets.each do |aggregate_target|
-      aggregate_target.user_project.native_targets.each do |target|
-        if target.name == 'RunWithAI'
-          target.build_configurations.each do |build_config|
-            ldflags = build_config.build_settings['OTHER_LDFLAGS'] || ['$(inherited)']
-            ldflags = [ldflags] unless ldflags.is_a?(Array)
-            ldflags << '-ObjC' unless ldflags.include?('-ObjC')
-            build_config.build_settings['OTHER_LDFLAGS'] = ldflags
-          end
-        end
-      end
-      aggregate_target.user_project.save
-    end
   end
 end
