@@ -102,8 +102,8 @@
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Allow $(PRODUCT_NAME) to access your photos</string>
     <key>RCTNewArchEnabled</key>
-    <true/>
-    <key>UIBackgroundModes</key>
+  <false/>
+  <key>UIBackgroundModes</key>
     <array>
       <string>location</string>
       <string>audio</string>
