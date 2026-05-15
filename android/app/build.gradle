@@ -90,7 +90,7 @@ android {
     namespace 'app.runwithai'
     defaultConfig {
         applicationId 'app.runwithai'
-        minSdkVersion rootProject.ext.minSdkVersion
+        minSdkVersion Math.max(26, rootProject.ext.minSdkVersion as int) // Health Connect requires minSdk 26
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 54
         versionName "1.8.9"
