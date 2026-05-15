@@ -14,8 +14,6 @@ let loadError = null;
 if (Platform.OS === 'ios') {
     try {
         HK = require('@kingstinct/react-native-healthkit');
-        const exportedKeys = Object.keys(HK || {}).slice(0, 40);
-        console.log('[HealthKit] Kingstinct module loaded. Keys:', exportedKeys);
     } catch (e) {
         loadError = 'require failed: ' + (e && e.message ? e.message : String(e));
         console.warn('[HealthKit]', loadError);
@@ -72,10 +70,6 @@ async function safeRequestAuth() {
     }
 }
 
-// Diagnostic store - last query result for surfacing in UI
-let lastDiagnostic = '';
-export function getHKDiagnostic() { return lastDiagnostic; }
-
 // Parse a sample timestamp into a Date, handling ms epoch, seconds epoch, and ISO strings
 function parseSampleDate(raw) {
     if (raw == null) return null;
@@ -94,10 +88,8 @@ function parseSampleDate(raw) {
 // Sum a quantity for a window. The Kingstinct API ignores from/to in this version,
 // so we request a large batch and filter dates manually in JS.
 async function querySum(typeId, startDate, endDate, unit) {
-    console.log('[HealthKit] querySum start. typeId=', typeId, 'from=', startDate.toISOString(), 'to=', endDate.toISOString(), 'unit=', unit);
     const qFn = pick('queryQuantitySamples');
     if (!qFn) {
-        lastDiagnostic = 'no queryQuantitySamples fn';
         return 0;
     }
     // Use a very large limit so we get all of today's samples.
@@ -108,31 +100,25 @@ async function querySum(typeId, startDate, endDate, unit) {
         { sig: 'limit:100000', fn: () => qFn(typeId, { unit, limit: 100000 }) },
     ];
     let raw = null;
-    let workingSig = '';
     let lastErr = null;
     for (const attempt of sampleAttempts) {
         try {
             raw = await attempt.fn();
-            workingSig = attempt.sig;
             break;
         } catch (e) {
             lastErr = e;
         }
     }
     if (raw === null) {
-        lastDiagnostic = 'all sigs failed: ' + (lastErr && lastErr.message ? lastErr.message : 'unknown');
         return 0;
     }
     const samples = Array.isArray(raw) ? raw : (raw && Array.isArray(raw.samples) ? raw.samples : []);
-    console.log('[HealthKit] querySum count=', samples.length);
 
     // Manual JS filter - the API ignored from/to.
     const startMs = startDate.getTime();
     const endMs = endDate.getTime();
     const sourceTotals = {};
     let kept = 0;
-    let firstKeptDate = null;
-    let lastKeptDate = null;
     for (const s of samples) {
         const dateRaw = s.startDate || s.start || s.endDate || s.end;
         const d = parseSampleDate(dateRaw);
@@ -140,8 +126,6 @@ async function querySum(typeId, startDate, endDate, unit) {
         const t = d.getTime();
         if (t < startMs || t > endMs) continue;
         kept++;
-        if (!firstKeptDate || t < firstKeptDate) firstKeptDate = t;
-        if (!lastKeptDate || t > lastKeptDate) lastKeptDate = t;
         const src = s.sourceName
             || (s.source && (s.source.name || s.source.bundleIdentifier))
             || (s.sourceRevision && s.sourceRevision.source && s.sourceRevision.source.name)
@@ -153,10 +137,7 @@ async function querySum(typeId, startDate, endDate, unit) {
     }
     let total = 0;
     for (const v of Object.values(sourceTotals)) total += v;
-    console.log('[HealthKit] querySum TOTAL=', total, 'kept=', kept);
 
-    const sourceList = Object.entries(sourceTotals).map(function(e) { return e[0] + '=' + Math.round(e[1]); }).join('|');
-    lastDiagnostic = 'sig=' + workingSig + ' n=' + samples.length + ' kept=' + kept + ' tot=' + Math.round(total) + ' src:[' + sourceList + ']';
     return total;
 }
 
@@ -195,7 +176,6 @@ export function useHealthKit({ enabled = true, heartRateInterval = 5000 } = {}) 
 
     useEffect(() => {
         let cancelled = false;
-        console.log('[HealthKit] init effect. iOS=', Platform.OS === 'ios', 'enabled=', enabled, 'moduleLoaded=', !!HK);
         setDebugStatus('init-start');
 
         if (Platform.OS !== 'ios' || !enabled) {
@@ -214,7 +194,6 @@ export function useHealthKit({ enabled = true, heartRateInterval = 5000 } = {}) 
             try {
                 const available = await safeIsAvailable();
                 if (cancelled) return;
-                console.log('[HealthKit] isAvailable=', available);
                 setIsAvailable(!!available);
                 if (!available) {
                     setDebugStatus('not-available');
@@ -242,16 +221,12 @@ export function useHealthKit({ enabled = true, heartRateInterval = 5000 } = {}) 
     }, [enabled]);
 
     const fetchDailyCalories = useCallback(async () => {
-        console.log('[HealthKit] fetchDailyCalories called. authorized=', isAuthorized);
         if (!isAuthorized || Platform.OS !== 'ios' || !HK) return;
         try {
             const startOfDay = new Date(); startOfDay.setHours(0, 0, 0, 0);
             const total = await querySum('HKQuantityTypeIdentifierActiveEnergyBurned', startOfDay, new Date(), 'kcal');
             const rounded = Math.round(total || 0);
             setCalories(rounded);
-            // Surface diagnostic info in the error field so we can see it on the debug overlay
-            setError('DBG: ' + lastDiagnostic);
-            console.log('[HealthKit] Daily active calories:', rounded);
         } catch (e) {
             console.warn('[HealthKit] daily cal err:', e);
             setError('cal err: ' + (e && e.message ? e.message : String(e)));
