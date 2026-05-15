@@ -76,24 +76,39 @@ async function safeRequestAuth() {
 let lastDiagnostic = '';
 export function getHKDiagnostic() { return lastDiagnostic; }
 
-// Sum a quantity for a window using raw samples with verbose logging.
-// We deliberately avoid queryStatisticsForQuantity because its return shape
-// varies wildly between versions and caused incorrect totals.
+// Parse a sample timestamp into a Date, handling ms epoch, seconds epoch, and ISO strings
+function parseSampleDate(raw) {
+    if (raw == null) return null;
+    if (raw instanceof Date) return raw;
+    if (typeof raw === 'number') {
+        // If number looks like seconds-since-epoch (10 digits), convert to ms
+        if (raw < 1e12) return new Date(raw * 1000);
+        return new Date(raw);
+    }
+    if (typeof raw === 'string') {
+        const d = new Date(raw);
+        if (!isNaN(d.getTime())) return d;
+        const n = Number(raw);
+        if (!isNaN(n)) return parseSampleDate(n);
+    }
+    return null;
+}
+
+// Sum a quantity for a window using raw samples with explicit high limit.
 async function querySum(typeId, startDate, endDate, unit) {
     console.log('[HealthKit] querySum start. typeId=', typeId, 'from=', startDate.toISOString(), 'to=', endDate.toISOString(), 'unit=', unit);
     const qFn = pick('queryQuantitySamples');
     if (!qFn) {
-        console.warn('[HealthKit] queryQuantitySamples not available');
         lastDiagnostic = 'no queryQuantitySamples fn';
         return 0;
     }
+    // Try with explicit high limit FIRST so we don't get default 20-sample cap.
+    // Use a sane number (10k) - one day rarely has more samples than that.
     const sampleAttempts = [
-        // IMPORTANT: do NOT use limit:0 - in Kingstinct it returns ALL samples ever,
-        // ignoring from/to. Use no limit first, then sensible high limit.
-        { sig: 'v9 from/to/unit', fn: () => qFn(typeId, { from: startDate, to: endDate, unit }) },
-        { sig: 'v9 from/to/unit/limit:10000', fn: () => qFn(typeId, { from: startDate, to: endDate, unit, limit: 10000 }) },
-        { sig: 'v9 from/to', fn: () => qFn(typeId, { from: startDate, to: endDate }) },
-        { sig: 'startDate/endDate', fn: () => qFn(typeId, { startDate, endDate }) },
+        { sig: 'from/to/unit/limit:10000', fn: () => qFn(typeId, { from: startDate, to: endDate, unit, limit: 10000 }) },
+        { sig: 'from/to/limit:10000', fn: () => qFn(typeId, { from: startDate, to: endDate, limit: 10000 }) },
+        { sig: 'from/to/unit', fn: () => qFn(typeId, { from: startDate, to: endDate, unit }) },
+        { sig: 'from/to', fn: () => qFn(typeId, { from: startDate, to: endDate }) },
     ];
     let raw = null;
     let workingSig = '';
@@ -109,45 +124,43 @@ async function querySum(typeId, startDate, endDate, unit) {
         }
     }
     if (raw === null) {
-        console.warn('[HealthKit] all signatures failed:', lastErr && lastErr.message);
         lastDiagnostic = 'all sigs failed: ' + (lastErr && lastErr.message ? lastErr.message : 'unknown');
         return 0;
     }
     const samples = Array.isArray(raw) ? raw : (raw && Array.isArray(raw.samples) ? raw.samples : []);
     console.log('[HealthKit] querySum count=', samples.length);
-    // Source breakdown
+
+    // Capture first sample's date raw format for diagnostic
+    let firstDateRaw = 'none';
+    let firstDateParsed = 'none';
+    if (samples.length > 0) {
+        const s0 = samples[0];
+        firstDateRaw = JSON.stringify(s0.startDate || s0.start || s0.endDate || s0.end || 'no-date-field');
+        const d = parseSampleDate(s0.startDate || s0.start || s0.endDate || s0.end);
+        firstDateParsed = d ? d.toISOString() : 'unparseable';
+        console.log('[HealthKit] sample[0] keys=', Object.keys(s0).join(','));
+        console.log('[HealthKit] sample[0] full=', JSON.stringify(s0).slice(0, 500));
+    }
+
+    // Sum WITHOUT date filtering (trust the API's from/to). If we got n=86k,
+    // we'll see that in the diagnostic and add filtering back.
     const sourceTotals = {};
-    let filteredOutByDate = 0;
     for (const s of samples) {
-        // Safety net: filter by date in JS in case the query ignored from/to
-        const sDateRaw = s.startDate || s.start || s.endDate || s.end;
-        if (sDateRaw) {
-            const sDate = new Date(sDateRaw);
-            if (!isNaN(sDate.getTime())) {
-                if (sDate < startDate || sDate > endDate) {
-                    filteredOutByDate++;
-                    continue;
-                }
-            }
-        }
-        const src = s.sourceName || (s.source && (s.source.name || s.source.bundleIdentifier)) || (s.sourceRevision && s.sourceRevision.source && s.sourceRevision.source.name) || 'unknown';
+        const src = s.sourceName
+            || (s.source && (s.source.name || s.source.bundleIdentifier))
+            || (s.sourceRevision && s.sourceRevision.source && s.sourceRevision.source.name)
+            || 'unknown';
         const v = (typeof s.quantity === 'number') ? s.quantity
             : (s.quantity && typeof s.quantity.doubleValue === 'number') ? s.quantity.doubleValue
             : (typeof s.value === 'number') ? s.value : 0;
         sourceTotals[src] = (sourceTotals[src] || 0) + v;
     }
-    console.log('[HealthKit] querySum filteredOutByDate=', filteredOutByDate);
-    console.log('[HealthKit] querySum sourceTotals=', JSON.stringify(sourceTotals));
-    if (samples.length > 0) {
-        console.log('[HealthKit] querySum sample[0] keys:', Object.keys(samples[0]).join(','));
-        console.log('[HealthKit] querySum sample[0] full:', JSON.stringify(samples[0]).slice(0, 500));
-    }
     let total = 0;
     for (const v of Object.values(sourceTotals)) total += v;
     console.log('[HealthKit] querySum TOTAL=', total);
-    // Store diagnostic for UI display
+
     const sourceList = Object.entries(sourceTotals).map(function(e) { return e[0] + '=' + Math.round(e[1]); }).join('|');
-    lastDiagnostic = 'sig=' + workingSig + ' n=' + samples.length + ' kept=' + (samples.length - filteredOutByDate) + ' tot=' + Math.round(total) + ' src:[' + sourceList + ']';
+    lastDiagnostic = 'sig=' + workingSig + ' n=' + samples.length + ' tot=' + Math.round(total) + ' d0=' + firstDateRaw + ' src:[' + sourceList + ']';
     return total;
 }
 
