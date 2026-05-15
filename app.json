@@ -74,7 +74,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "app.runwithai",
-      "versionCode": 54,
+      "versionCode": 60,
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
