@@ -92,13 +92,8 @@ android {
         applicationId 'app.runwithai'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-<<<<<<< Updated upstream
-        versionCode 50
-        versionName "1.7.2"
-=======
-        versionCode 22
-        versionName "1.7.1"
->>>>>>> Stashed changes
+        versionCode 54
+        versionName "1.8.9"
 
         buildConfigField "String", "REACT_NATIVE_RELEASE_LEVEL", "\"${findProperty('reactNativeReleaseLevel') ?: 'stable'}\""
     }
