@@ -6,7 +6,7 @@
           "start": "expo start",
           "android": "expo run:android",
           "ios": "expo run:ios",
-          "eas-build-pre-install": "gem install xcodeproj --user-install"
+          "eas-build-pre-install": "npm install --package-lock-only --no-audit --no-fund && (gem install xcodeproj --user-install || true)"
     },
     "dependencies": {
           "@expo/vector-icons": "^15.0.3",
