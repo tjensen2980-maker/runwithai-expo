@@ -81,20 +81,18 @@ function parseSampleDate(raw) {
     if (raw == null) return null;
     if (raw instanceof Date) return raw;
     if (typeof raw === 'number') {
-        // If number looks like seconds-since-epoch (10 digits), convert to ms
         if (raw < 1e12) return new Date(raw * 1000);
         return new Date(raw);
     }
     if (typeof raw === 'string') {
         const d = new Date(raw);
         if (!isNaN(d.getTime())) return d;
-        const n = Number(raw);
-        if (!isNaN(n)) return parseSampleDate(n);
     }
     return null;
 }
 
-// Sum a quantity for a window using raw samples with explicit high limit.
+// Sum a quantity for a window. The Kingstinct API ignores from/to in this version,
+// so we request a large batch and filter dates manually in JS.
 async function querySum(typeId, startDate, endDate, unit) {
     console.log('[HealthKit] querySum start. typeId=', typeId, 'from=', startDate.toISOString(), 'to=', endDate.toISOString(), 'unit=', unit);
     const qFn = pick('queryQuantitySamples');
@@ -102,13 +100,12 @@ async function querySum(typeId, startDate, endDate, unit) {
         lastDiagnostic = 'no queryQuantitySamples fn';
         return 0;
     }
-    // Try with explicit high limit FIRST so we don't get default 20-sample cap.
-    // Use a sane number (10k) - one day rarely has more samples than that.
+    // Use a very large limit so we get all of today's samples.
+    // We pass from/to as a hint but don't rely on the API honoring them.
     const sampleAttempts = [
-        { sig: 'from/to/unit/limit:10000', fn: () => qFn(typeId, { from: startDate, to: endDate, unit, limit: 10000 }) },
-        { sig: 'from/to/limit:10000', fn: () => qFn(typeId, { from: startDate, to: endDate, limit: 10000 }) },
-        { sig: 'from/to/unit', fn: () => qFn(typeId, { from: startDate, to: endDate, unit }) },
-        { sig: 'from/to', fn: () => qFn(typeId, { from: startDate, to: endDate }) },
+        { sig: 'from/to/unit/limit:100000', fn: () => qFn(typeId, { from: startDate, to: endDate, unit, limit: 100000 }) },
+        { sig: 'from/to/limit:100000', fn: () => qFn(typeId, { from: startDate, to: endDate, limit: 100000 }) },
+        { sig: 'limit:100000', fn: () => qFn(typeId, { unit, limit: 100000 }) },
     ];
     let raw = null;
     let workingSig = '';
@@ -117,7 +114,6 @@ async function querySum(typeId, startDate, endDate, unit) {
         try {
             raw = await attempt.fn();
             workingSig = attempt.sig;
-            console.log('[HealthKit] querySum sig "' + attempt.sig + '" succeeded');
             break;
         } catch (e) {
             lastErr = e;
@@ -130,22 +126,22 @@ async function querySum(typeId, startDate, endDate, unit) {
     const samples = Array.isArray(raw) ? raw : (raw && Array.isArray(raw.samples) ? raw.samples : []);
     console.log('[HealthKit] querySum count=', samples.length);
 
-    // Capture first sample's date raw format for diagnostic
-    let firstDateRaw = 'none';
-    let firstDateParsed = 'none';
-    if (samples.length > 0) {
-        const s0 = samples[0];
-        firstDateRaw = JSON.stringify(s0.startDate || s0.start || s0.endDate || s0.end || 'no-date-field');
-        const d = parseSampleDate(s0.startDate || s0.start || s0.endDate || s0.end);
-        firstDateParsed = d ? d.toISOString() : 'unparseable';
-        console.log('[HealthKit] sample[0] keys=', Object.keys(s0).join(','));
-        console.log('[HealthKit] sample[0] full=', JSON.stringify(s0).slice(0, 500));
-    }
-
-    // Sum WITHOUT date filtering (trust the API's from/to). If we got n=86k,
-    // we'll see that in the diagnostic and add filtering back.
+    // Manual JS filter - the API ignored from/to.
+    const startMs = startDate.getTime();
+    const endMs = endDate.getTime();
     const sourceTotals = {};
+    let kept = 0;
+    let firstKeptDate = null;
+    let lastKeptDate = null;
     for (const s of samples) {
+        const dateRaw = s.startDate || s.start || s.endDate || s.end;
+        const d = parseSampleDate(dateRaw);
+        if (!d) continue;
+        const t = d.getTime();
+        if (t < startMs || t > endMs) continue;
+        kept++;
+        if (!firstKeptDate || t < firstKeptDate) firstKeptDate = t;
+        if (!lastKeptDate || t > lastKeptDate) lastKeptDate = t;
         const src = s.sourceName
             || (s.source && (s.source.name || s.source.bundleIdentifier))
             || (s.sourceRevision && s.sourceRevision.source && s.sourceRevision.source.name)
@@ -157,10 +153,10 @@ async function querySum(typeId, startDate, endDate, unit) {
     }
     let total = 0;
     for (const v of Object.values(sourceTotals)) total += v;
-    console.log('[HealthKit] querySum TOTAL=', total);
+    console.log('[HealthKit] querySum TOTAL=', total, 'kept=', kept);
 
     const sourceList = Object.entries(sourceTotals).map(function(e) { return e[0] + '=' + Math.round(e[1]); }).join('|');
-    lastDiagnostic = 'sig=' + workingSig + ' n=' + samples.length + ' tot=' + Math.round(total) + ' d0=' + firstDateRaw + ' src:[' + sourceList + ']';
+    lastDiagnostic = 'sig=' + workingSig + ' n=' + samples.length + ' kept=' + kept + ' tot=' + Math.round(total) + ' src:[' + sourceList + ']';
     return total;
 }
 
