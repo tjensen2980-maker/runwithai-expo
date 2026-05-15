@@ -453,10 +453,21 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   }, []);
 
   // ─── PERIODIC CHECK FOR BACKGROUND LOCATIONS ────────────────────────────
+  // Only flush background buffer when we KNOW we are in the background.
+  // Otherwise the foreground watchPositionAsync already gives us live points,
+  // and the background task duplicates them which inflates distance.
   useEffect(() => {
     if (!isTracking || isPaused || isWeb) return;
 
     const bgInterval = setInterval(() => {
+      // Skip if app is active - foreground watcher is the source of truth.
+      if (appStateRef.current === 'active') {
+        // Drop any buffered points so they don't get processed when we come back.
+        if (global._backgroundLocations && global._backgroundLocations.length > 0) {
+          global._backgroundLocations = [];
+        }
+        return;
+      }
       if (global._backgroundLocations && global._backgroundLocations.length > 0) {
         const bgLocations = [...global._backgroundLocations].sort((a, b) => a.timestamp - b.timestamp);
         global._backgroundLocations = [];
@@ -485,18 +496,19 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       const speedKmh = speedMs * 3.6;
       const accuracy = newPos.accuracy || 15;
       
-      // ── GPS FILTERING ──────────────────────────────────────────────────
-      const MIN_DISTANCE = 2;
-      const MAX_SINGLE_JUMP = 200;  // iOS kan have større GPS-spring   // ← øget fra 80
-      const MAX_SPEED_KMH = 40;      // ← øget fra 35
-      const MAX_ACCURACY = 150;  // iOS starter ofte med 100-200m accuracy       // ← øget fra 50 (iOS er ofte 30-65m)
-      
+            // ── GPS FILTERING (tighter & uniform - no FREE-pass for background) ──
+      const MIN_DISTANCE = 3;         // ignore tiny GPS jitter when standing still
+      const MAX_SINGLE_JUMP = 100;    // any segment > 100 m is almost certainly a GPS jump
+      const MAX_SPEED_KMH = 35;       // sanity check - filter speed spikes
+      const MAX_ACCURACY = 30;        // Apple recommends <= 30 m for fitness apps
+
       const isMinDistance = dist >= MIN_DISTANCE;
-    const isNotTeleport = dist <= (fromBackground ? MAX_SINGLE_JUMP * 5 : MAX_SINGLE_JUMP);
+      const isNotTeleport = dist <= MAX_SINGLE_JUMP;
       const isReasonableSpeed = speedKmh <= MAX_SPEED_KMH;
-    const isAccurate = accuracy <= (fromBackground ? 500 : MAX_ACCURACY);
-      
-    const isValidPoint = (fromBackground || isMinDistance) && isNotTeleport && (fromBackground || isReasonableSpeed) && isAccurate;
+      const isAccurate = accuracy <= MAX_ACCURACY;
+
+      // Apply ALL filters uniformly, even for background points - prevents bogus distance.
+      const isValidPoint = isMinDistance && isNotTeleport && isReasonableSpeed && isAccurate;
       
       if (isValidPoint) {
         const newDistance = distanceRef.current + dist;
@@ -525,17 +537,17 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         console.log(`✗ GPS filtered: ${dist.toFixed(1)}m, ${speedKmh.toFixed(1)}km/h, acc:${accuracy.toFixed(0)}m [${reasons.join(', ')}]`);
       }
     } else {
-      // Første position
-      const accuracy = newPos.accuracy || 15;
-      if (accuracy <= 200) {  // ← øget fra 50
-        const firstPos = { ...newPos, speed: 0, segmentDistance: 0, isRunning: false };
-        positionsRef.current = [firstPos];
-        setPositions([firstPos]);
-        lastValidPositionRef.current = newPos;
-        console.log(`✓ GPS: First position recorded, acc:${accuracy.toFixed(0)}m`);
-      } else {
-        console.log(`✗ GPS: First position rejected, acc:${accuracy.toFixed(0)}m too poor`);
-      }
+              // Første position - kraev god accuracy fra start (ellers springer GPS rundt senere)
+        const accuracy = newPos.accuracy || 15;
+        if (accuracy <= 30) {
+          const firstPos = { ...newPos, speed: 0, segmentDistance: 0, isRunning: false };
+          positionsRef.current = [firstPos];
+          setPositions([firstPos]);
+          lastValidPositionRef.current = newPos;
+          console.log(`✓ GPS: First position recorded, acc:${accuracy.toFixed(0)}m`);
+        } else {
+          console.log(`✗ GPS: First position rejected, acc:${accuracy.toFixed(0)}m too poor (need <= 30m)`);
+        }
     }
   };
 
