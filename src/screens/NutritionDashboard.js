@@ -233,12 +233,6 @@ export default function NutritionDashboard({ onBack, onLogMeal, onMealPlan, hkCa
 
         <CalorieRing kcalIn={kcalIn} kcalOut={kcalOut} target={target} />
 
-        {/* DEBUG: HealthKit status - fjernes senere */}
-        <View style={{ backgroundColor: '#222', padding: 10, borderRadius: 8, marginVertical: 8 }}>
-          <Text style={{ color: '#0f0', fontSize: 12, fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace' }}>
-            HK debug{'\n'}supported={String(hkSupported)} avail={String(hkAvail)} auth={String(hkAuth)} init={String(hkInit)}{'\n'}err={String(hkError || 'none')}{'\n'}hkCalories={String(hkCalories)} server={String(sum.kcal_out_activity || 0)} combined={String(kcalOut)}
-          </Text>
-        </View>
 
         <View style={s.statsRow}>
           <View style={s.statBox}>
