@@ -88,11 +88,12 @@ async function querySum(typeId, startDate, endDate, unit) {
         return 0;
     }
     const sampleAttempts = [
-        { sig: 'v9 from/to/unit/limit:0', fn: () => qFn(typeId, { from: startDate, to: endDate, unit, limit: 0 }) },
+        // IMPORTANT: do NOT use limit:0 - in Kingstinct it returns ALL samples ever,
+        // ignoring from/to. Use no limit first, then sensible high limit.
         { sig: 'v9 from/to/unit', fn: () => qFn(typeId, { from: startDate, to: endDate, unit }) },
+        { sig: 'v9 from/to/unit/limit:10000', fn: () => qFn(typeId, { from: startDate, to: endDate, unit, limit: 10000 }) },
         { sig: 'v9 from/to', fn: () => qFn(typeId, { from: startDate, to: endDate }) },
         { sig: 'startDate/endDate', fn: () => qFn(typeId, { startDate, endDate }) },
-        { sig: 'just type', fn: () => qFn(typeId) },
     ];
     let raw = null;
     let workingSig = '';
@@ -116,13 +117,26 @@ async function querySum(typeId, startDate, endDate, unit) {
     console.log('[HealthKit] querySum count=', samples.length);
     // Source breakdown
     const sourceTotals = {};
+    let filteredOutByDate = 0;
     for (const s of samples) {
+        // Safety net: filter by date in JS in case the query ignored from/to
+        const sDateRaw = s.startDate || s.start || s.endDate || s.end;
+        if (sDateRaw) {
+            const sDate = new Date(sDateRaw);
+            if (!isNaN(sDate.getTime())) {
+                if (sDate < startDate || sDate > endDate) {
+                    filteredOutByDate++;
+                    continue;
+                }
+            }
+        }
         const src = s.sourceName || (s.source && (s.source.name || s.source.bundleIdentifier)) || (s.sourceRevision && s.sourceRevision.source && s.sourceRevision.source.name) || 'unknown';
         const v = (typeof s.quantity === 'number') ? s.quantity
             : (s.quantity && typeof s.quantity.doubleValue === 'number') ? s.quantity.doubleValue
             : (typeof s.value === 'number') ? s.value : 0;
         sourceTotals[src] = (sourceTotals[src] || 0) + v;
     }
+    console.log('[HealthKit] querySum filteredOutByDate=', filteredOutByDate);
     console.log('[HealthKit] querySum sourceTotals=', JSON.stringify(sourceTotals));
     if (samples.length > 0) {
         console.log('[HealthKit] querySum sample[0] keys:', Object.keys(samples[0]).join(','));
@@ -133,7 +147,7 @@ async function querySum(typeId, startDate, endDate, unit) {
     console.log('[HealthKit] querySum TOTAL=', total);
     // Store diagnostic for UI display
     const sourceList = Object.entries(sourceTotals).map(function(e) { return e[0] + '=' + Math.round(e[1]); }).join('|');
-    lastDiagnostic = 'sig=' + workingSig + ' n=' + samples.length + ' tot=' + Math.round(total) + ' src:[' + sourceList + ']';
+    lastDiagnostic = 'sig=' + workingSig + ' n=' + samples.length + ' kept=' + (samples.length - filteredOutByDate) + ' tot=' + Math.round(total) + ' src:[' + sourceList + ']';
     return total;
 }
 
