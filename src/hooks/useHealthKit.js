@@ -72,91 +72,68 @@ async function safeRequestAuth() {
     }
 }
 
-// Sum a quantity for a window. Prefers statistics API (covers ALL sources incl. Watch),
-// falls back to summing raw samples. Logs every step for debugging.
+// Diagnostic store - last query result for surfacing in UI
+let lastDiagnostic = '';
+export function getHKDiagnostic() { return lastDiagnostic; }
+
+// Sum a quantity for a window using raw samples with verbose logging.
+// We deliberately avoid queryStatisticsForQuantity because its return shape
+// varies wildly between versions and caused incorrect totals.
 async function querySum(typeId, startDate, endDate, unit) {
     console.log('[HealthKit] querySum start. typeId=', typeId, 'from=', startDate.toISOString(), 'to=', endDate.toISOString(), 'unit=', unit);
-
-    // Approach 1: queryStatisticsForQuantity with cumulativeSum (preferred for totals)
-    const statsFn = pick('queryStatisticsForQuantity');
-    if (statsFn) {
-        const statsAttempts = [
-            // v9 signature variants
-            () => statsFn(typeId, { from: startDate, to: endDate, options: ['cumulativeSum'], unit }),
-            () => statsFn(typeId, ['cumulativeSum'], { from: startDate, to: endDate, unit }),
-            () => statsFn(typeId, ['cumulativeSum'], startDate, endDate, unit),
-            () => statsFn(typeId, 'cumulativeSum', startDate, endDate, unit),
-            () => statsFn(typeId, { from: startDate, to: endDate }),
-        ];
-        for (let i = 0; i < statsAttempts.length; i++) {
-            try {
-                const res = await statsAttempts[i]();
-                console.log('[HealthKit] querySum stats sig', i, 'res=', JSON.stringify(res).slice(0, 400));
-                if (res) {
-                    // Try multiple shapes of sumQuantity
-                    const sq = res.sumQuantity;
-                    let v = null;
-                    if (typeof sq === 'number') v = sq;
-                    else if (sq && typeof sq.quantity === 'number') v = sq.quantity;
-                    else if (sq && typeof sq.doubleValue === 'number') v = sq.doubleValue;
-                    else if (sq && typeof sq.value === 'number') v = sq.value;
-                    else if (typeof res.sum === 'number') v = res.sum;
-                    if (typeof v === 'number' && v > 0) {
-                        console.log('[HealthKit] querySum statistics SUM=', v, 'for', typeId);
-                        return v;
-                    }
-                }
-            } catch (e) {
-                // try next signature
-            }
-        }
-        console.log('[HealthKit] querySum statistics did not yield value, falling back to samples');
-    }
-
-    // Approach 2: Sum raw samples (may be limited to single source depending on iOS)
     const qFn = pick('queryQuantitySamples');
     if (!qFn) {
-        console.warn('[HealthKit] no query function available');
+        console.warn('[HealthKit] queryQuantitySamples not available');
+        lastDiagnostic = 'no queryQuantitySamples fn';
         return 0;
     }
     const sampleAttempts = [
-        () => qFn(typeId, { from: startDate, to: endDate, unit, limit: 0 }),
-        () => qFn(typeId, { from: startDate, to: endDate, unit }),
-        () => qFn(typeId, { from: startDate, to: endDate }),
-        () => qFn(typeId, { startDate, endDate, unit }),
-        () => qFn(typeId),
+        { sig: 'v9 from/to/unit/limit:0', fn: () => qFn(typeId, { from: startDate, to: endDate, unit, limit: 0 }) },
+        { sig: 'v9 from/to/unit', fn: () => qFn(typeId, { from: startDate, to: endDate, unit }) },
+        { sig: 'v9 from/to', fn: () => qFn(typeId, { from: startDate, to: endDate }) },
+        { sig: 'startDate/endDate', fn: () => qFn(typeId, { startDate, endDate }) },
+        { sig: 'just type', fn: () => qFn(typeId) },
     ];
     let raw = null;
-    for (let i = 0; i < sampleAttempts.length; i++) {
+    let workingSig = '';
+    let lastErr = null;
+    for (const attempt of sampleAttempts) {
         try {
-            raw = await sampleAttempts[i]();
-            console.log('[HealthKit] querySum samples sig', i, 'succeeded');
+            raw = await attempt.fn();
+            workingSig = attempt.sig;
+            console.log('[HealthKit] querySum sig "' + attempt.sig + '" succeeded');
             break;
         } catch (e) {
-            // try next
+            lastErr = e;
         }
+    }
+    if (raw === null) {
+        console.warn('[HealthKit] all signatures failed:', lastErr && lastErr.message);
+        lastDiagnostic = 'all sigs failed: ' + (lastErr && lastErr.message ? lastErr.message : 'unknown');
+        return 0;
     }
     const samples = Array.isArray(raw) ? raw : (raw && Array.isArray(raw.samples) ? raw.samples : []);
-    console.log('[HealthKit] querySum sampleCount=', samples.length, 'for', typeId);
-    if (samples.length > 0) {
-        console.log('[HealthKit] querySum sample[0]=', JSON.stringify(samples[0]).slice(0, 300));
-        // Log unique source names to see if we are missing Apple Watch data
-        const sources = new Set();
-        for (const s of samples) {
-            const src = s.sourceName || (s.source && s.source.name) || 'unknown';
-            sources.add(src);
-        }
-        console.log('[HealthKit] querySum unique sources:', Array.from(sources));
-    }
-    let total = 0;
+    console.log('[HealthKit] querySum count=', samples.length);
+    // Source breakdown
+    const sourceTotals = {};
     for (const s of samples) {
+        const src = s.sourceName || (s.source && (s.source.name || s.source.bundleIdentifier)) || (s.sourceRevision && s.sourceRevision.source && s.sourceRevision.source.name) || 'unknown';
         const v = (typeof s.quantity === 'number') ? s.quantity
             : (s.quantity && typeof s.quantity.doubleValue === 'number') ? s.quantity.doubleValue
-            : (typeof s.value === 'number') ? s.value
-            : 0;
-        total += v;
+            : (typeof s.value === 'number') ? s.value : 0;
+        sourceTotals[src] = (sourceTotals[src] || 0) + v;
     }
-    console.log('[HealthKit] querySum sample TOTAL=', total, 'for', typeId);
+    console.log('[HealthKit] querySum sourceTotals=', JSON.stringify(sourceTotals));
+    if (samples.length > 0) {
+        console.log('[HealthKit] querySum sample[0] keys:', Object.keys(samples[0]).join(','));
+        console.log('[HealthKit] querySum sample[0] full:', JSON.stringify(samples[0]).slice(0, 500));
+    }
+    let total = 0;
+    for (const v of Object.values(sourceTotals)) total += v;
+    console.log('[HealthKit] querySum TOTAL=', total);
+    // Store diagnostic for UI display
+    const sourceList = Object.entries(sourceTotals).map(function(e) { return e[0] + '=' + Math.round(e[1]); }).join('|');
+    lastDiagnostic = 'sig=' + workingSig + ' n=' + samples.length + ' tot=' + Math.round(total) + ' src:[' + sourceList + ']';
     return total;
 }
 
@@ -249,9 +226,12 @@ export function useHealthKit({ enabled = true, heartRateInterval = 5000 } = {}) 
             const total = await querySum('HKQuantityTypeIdentifierActiveEnergyBurned', startOfDay, new Date(), 'kcal');
             const rounded = Math.round(total || 0);
             setCalories(rounded);
+            // Surface diagnostic info in the error field so we can see it on the debug overlay
+            setError('DBG: ' + lastDiagnostic);
             console.log('[HealthKit] Daily active calories:', rounded);
         } catch (e) {
             console.warn('[HealthKit] daily cal err:', e);
+            setError('cal err: ' + (e && e.message ? e.message : String(e)));
         }
     }, [isAuthorized]);
 
