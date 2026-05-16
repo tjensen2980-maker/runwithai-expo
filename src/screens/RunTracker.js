@@ -497,10 +497,10 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       const accuracy = newPos.accuracy || 15;
       
             // ── GPS FILTERING (tighter & uniform - no FREE-pass for background) ──
-      const MIN_DISTANCE = 3;         // ignore tiny GPS jitter when standing still
+      const MIN_DISTANCE = 2;         // ignore tiny GPS jitter when standing still
       const MAX_SINGLE_JUMP = 100;    // any segment > 100 m is almost certainly a GPS jump
       const MAX_SPEED_KMH = 35;       // sanity check - filter speed spikes
-      const MAX_ACCURACY = 30;        // Apple recommends <= 30 m for fitness apps
+      const MAX_ACCURACY = 50;        // Apple recommends <= 30 m for fitness apps
 
       const isMinDistance = dist >= MIN_DISTANCE;
       const isNotTeleport = dist <= MAX_SINGLE_JUMP;
