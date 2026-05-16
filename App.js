@@ -14,6 +14,7 @@ import {
 } from './src/data';
 import { useWatch } from './src/hooks/useWatch'
 import useHealthKit from './src/hooks/useHealthKit'
+import { useHealthConnect } from './src/hooks/useHealthConnect'
 import { syncAuthToWatch } from './src/services/WatchSync';
 import Auth from './src/screens/Auth';
 import Onboarding from './src/screens/Onboarding';
@@ -366,6 +367,15 @@ export default function App() {
   const token = getAuthToken();
   const { subscription, tier, isPro, isBasic, isFree, canUseMealTracking, canUseMealPlan, canUseAICoach, canUseAllActivities, weeklyActivityLimit, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
   const { calories: hkCalories, fetchDailyCalories, isSupported: hkSupported, isAvailable: hkAvail, isAuthorized: hkAuth, isInitializing: hkInit, error: hkError } = useHealthKit();
+  // Android: Health Connect parallel til iOS HealthKit. På modsat platform returnerer hooken bare 0.
+  const { calories: hcCalories, fetchDailyCalories: hcFetchDailyCalories, isAuthorized: hcAuth } = useHealthConnect();
+  // Kombineret kalorie-værdi: kun én af dem er > 0 på en given platform.
+  const combinedHealthCalories = (hkCalories || 0) + (hcCalories || 0);
+  const combinedFetchDailyCalories = async () => {
+    if (fetchDailyCalories) await fetchDailyCalories();
+    if (hcFetchDailyCalories) await hcFetchDailyCalories();
+  };
+  const combinedAuth = hkAuth || hcAuth;
 
   useEffect(() => { trainingPlanRef.current = trainingPlan; }, [trainingPlan]);
 
@@ -637,7 +647,7 @@ if (tab === 'cycleTracker') {
         />
       );
         case 'nutrition':
-        return isPro ? <NutritionDashboard onBack={() => setTab('settings')} onLogMeal={() => setTab('logMeal')} onMealPlan={() => setTab('mealPlan')} hkCalories={hkCalories} fetchDailyCalories={fetchDailyCalories} hkSupported={hkSupported} hkAvail={hkAvail} hkAuth={hkAuth} hkInit={hkInit} hkError={hkError} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowTierCarousel(true)} />;
+        return isPro ? <NutritionDashboard onBack={() => setTab('settings')} onLogMeal={() => setTab('logMeal')} onMealPlan={() => setTab('mealPlan')} hkCalories={combinedHealthCalories} fetchDailyCalories={combinedFetchDailyCalories} hkSupported={hkSupported} hkAvail={hkAvail} hkAuth={combinedAuth} hkInit={hkInit} hkError={hkError} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowTierCarousel(true)} />;
       case 'logMeal':
         return isPro ? <LogMeal onBack={() => { setScannedFood(null); setTab('nutrition'); }} onDone={() => { setScannedFood(null); setTab('nutrition'); }} onScanBarcode={() => setTab('barcodeScanner')} onPhotoAnalyze={() => setTab('photoAnalyze')} scannedFood={scannedFood} onScanConsumed={() => setScannedFood(null)} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowTierCarousel(true)} />;
       case 'barcodeScanner':
