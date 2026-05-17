@@ -784,5 +784,14 @@
       },
       "disclaimer": "Recommendations are guidelines only. Always follow your own clinic's instructions."
     }
+  },
+  "healthScore": {
+    "title": "Health score",
+    "todayLabel": "Today's score",
+    "A": "Very healthy",
+    "B": "Healthy",
+    "C": "Moderate",
+    "D": "Less healthy",
+    "E": "Unhealthy"
   }
 }
