@@ -643,6 +643,79 @@
       "reset": "Nulstil",
       "goalReached": "Du har nået dit væskemål 💧",
       "warning": "Husk små slurke - ikke store mængder på én gang"
+    },
+    "meals": {
+      "title": "Forslag til dig nu",
+      "subtitle": "Tilpasset din fase",
+      "kcal": "kcal",
+      "protein": "g protein",
+      "prep": "min",
+      "logIt": "Log",
+      "types": {
+        "fluid": "Væske",
+        "puree": "Purée",
+        "soft": "Blød mad",
+        "normal": "Normal mad"
+      },
+      "items": {
+        "water": "Vand",
+        "brothClear": "Klar bouillon",
+        "sugarFreeJuice": "Sukkerfri saft (udvandet)",
+        "herbalTea": "Urtete",
+        "proteinShake": "Protein-shake",
+        "skimmedMilk": "Skummetmælk",
+        "thinSoup": "Tynd suppe (siet)",
+        "skyrThin": "Tyndt skyr",
+        "mashedFish": "Mosfisk",
+        "cottageCheese": "Hytteost",
+        "eggPuree": "Æggepurée",
+        "pureedChicken": "Hakket kylling (purée)",
+        "mashedTofu": "Most tofu",
+        "softFish": "Blød fisk",
+        "scrambledEgg": "Røræg",
+        "softChicken": "Mør kylling",
+        "wellCookedVeggies": "Gennemkogte grøntsager",
+        "greekYogurt": "Græsk yoghurt",
+        "grilledChicken": "Grillet kyllingebryst",
+        "salmonFillet": "Laksefilet",
+        "eggOmelette": "Omelet",
+        "lentilSoup": "Linsesuppe",
+        "leanBeef": "Magert oksekød"
+      },
+      "reminders": {
+        "title": "Husk ved måltidet",
+        "proteinFirst": "Spis protein først",
+        "chew": "Tygg 20-30 gange",
+        "noDrinking": "Drik ikke 30 min før/efter måltid",
+        "stopWhenFull": "Stop ved fyldethed",
+        "smallSips": "Tag små slurke",
+        "noStraw": "Brug ikke sugerør (luft i maven)",
+        "slowly": "Drik langsomt",
+        "mashWell": "Mos grundigt",
+        "newFoodOneAtATime": "Indfør én ny mad ad gangen",
+        "chewExtra": "Tygg ekstra grundigt",
+        "mindfulEating": "Spis langsomt og opmærksomt",
+        "avoidEmptyCalories": "Undgå tomme kalorier"
+      }
+    },
+    "dumping": {
+      "title": "Dumping syndrom-risiko",
+      "subtitle": "Baseret på dagens måltider",
+      "low": "Lav risiko",
+      "medium": "Vær opmærksom",
+      "high": "Høj risiko",
+      "lowDesc": "Dagens måltider ser fint ud",
+      "mediumDesc": "Et eller flere måltider kan udløse dumping. Hold øje med dine symptomer.",
+      "highDesc": "Flere måltider med høj risiko i dag. Kontakt din læge ved kvalme, hjertebanken, svimmelhed eller diarré.",
+      "flaggedCount": "{{count}} måltid markeret",
+      "flaggedCount_plural": "{{count}} måltider markeret",
+      "reasons": {
+        "sugarHigh": "For meget sukker",
+        "sugarMedium": "Moderat sukkerindhold",
+        "fatHigh": "Højt fedtindhold",
+        "carbsNoProtein": "Kulhydrater uden protein"
+      },
+      "info": "Dumping er hyppigst ved gastric bypass og udløses af sukker, fedt eller hurtigt-optagne kulhydrater. Symptomer: kvalme, hjertebanken, svimmelhed, diarré 15-30 min efter måltid."
     }
   }
 }
