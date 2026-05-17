@@ -713,7 +713,10 @@
         "sugarHigh": "For meget sukker",
         "sugarMedium": "Moderat sukkerindhold",
         "fatHigh": "Højt fedtindhold",
-        "carbsNoProtein": "Kulhydrater uden protein"
+        "carbsNoProtein": "Kulhydrater uden protein",
+        "carbsHigh": "Højt kulhydratindhold",
+        "carbsMedium": "Moderat kulhydratindhold",
+        "proteinLow": "For lavt proteinindtag"
       },
       "info": "Dumping er hyppigst ved gastric bypass og udløses af sukker, fedt eller hurtigt-optagne kulhydrater. Symptomer: kvalme, hjertebanken, svimmelhed, diarré 15-30 min efter måltid."
     }
