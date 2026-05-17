@@ -218,3 +218,83 @@ export function getDailyTargets(bariatricProfile) {
     medicalCheck: getMedicalCheckReminder(days),
   };
 }
+
+// ============================================================
+// Vitamins (ASMBS-baseret anbefaling)
+// ============================================================
+export const VITAMINS = [
+  { key: 'multivitamin', frequency: 'daily', icon: '💊' },
+  { key: 'calciumD', frequency: 'daily', icon: '🦴' },
+  { key: 'iron', frequency: 'daily', icon: '🩸' },
+  { key: 'b12', frequency: 'daily', icon: '⚡' },
+  { key: 'omega3', frequency: 'daily', icon: '🐟', optional: true },
+];
+
+// For bypass: B12 often given as injection every 4 weeks
+export function getVitaminsForProfile(profile) {
+  if (!profile) return VITAMINS;
+  // Bypass patients often need extra iron and B12
+  return VITAMINS;
+}
+
+// ============================================================
+// Daily log (vitamins + fluid intake per day)
+// ============================================================
+const LOG_KEY_PREFIX = '@bariatric_log_';
+
+function todayKey() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return y + '-' + m + '-' + day;
+}
+
+export async function loadDailyLog(dateKey) {
+  try {
+    const key = LOG_KEY_PREFIX + (dateKey || todayKey());
+    const raw = await AsyncStorage.getItem(key);
+    if (!raw) return { vitamins: {}, fluidMl: 0 };
+    const parsed = JSON.parse(raw);
+    return {
+      vitamins: parsed.vitamins || {},
+      fluidMl: parsed.fluidMl || 0,
+    };
+  } catch (e) {
+    return { vitamins: {}, fluidMl: 0 };
+  }
+}
+
+export async function saveDailyLog(dateKey, data) {
+  try {
+    const key = LOG_KEY_PREFIX + (dateKey || todayKey());
+    await AsyncStorage.setItem(key, JSON.stringify(data));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+export async function toggleVitamin(vitaminKey, dateKey) {
+  const log = await loadDailyLog(dateKey);
+  log.vitamins[vitaminKey] = !log.vitamins[vitaminKey];
+  await saveDailyLog(dateKey, log);
+  return log;
+}
+
+export async function addFluid(ml, dateKey) {
+  const log = await loadDailyLog(dateKey);
+  log.fluidMl = Math.max(0, (log.fluidMl || 0) + ml);
+  await saveDailyLog(dateKey, log);
+  return log;
+}
+
+export async function resetDailyLog(dateKey) {
+  const log = { vitamins: {}, fluidMl: 0 };
+  await saveDailyLog(dateKey, log);
+  return log;
+}
+
+export function getTodayKey() {
+  return todayKey();
+}
