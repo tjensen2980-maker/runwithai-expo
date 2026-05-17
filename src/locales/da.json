@@ -614,6 +614,35 @@
       "chew": "Tygg hver bid 20-30 gange",
       "stopWhenFull": "Stop ved fyldethed - selv ved lille portion",
       "vitamins": "Husk dine daglige vitaminer"
+    },
+    "vitamins": {
+      "title": "Vitaminer i dag",
+      "subtitle": "Husk dine daglige tilskud",
+      "names": {
+        "multivitamin": "Multivitamin",
+        "calciumD": "Kalk + D-vitamin",
+        "iron": "Jern",
+        "b12": "B12",
+        "omega3": "Omega-3 (valgfri)"
+      },
+      "taken": "Taget",
+      "notTaken": "Ikke taget",
+      "allDone": "Alle vitaminer taget i dag 🎉",
+      "reset": "Nulstil",
+      "optional": "valgfri"
+    },
+    "fluid": {
+      "title": "Væske i dag",
+      "subtitle": "Drik mellem måltider, ikke til",
+      "goal": "Mål",
+      "current": "I dag",
+      "remaining": "Mangler",
+      "add250": "+ 250 ml",
+      "add500": "+ 500 ml",
+      "addCustom": "Tilføj",
+      "reset": "Nulstil",
+      "goalReached": "Du har nået dit væskemål 💧",
+      "warning": "Husk små slurke - ikke store mængder på én gang"
     }
   }
 }
