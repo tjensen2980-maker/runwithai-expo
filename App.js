@@ -650,7 +650,7 @@ if (tab === 'cycleTracker') {
         />
       );
         case 'nutrition':
-        return isPro ? <NutritionDashboard onBack={() => setTab('settings')} onLogMeal={() => setTab('logMeal')} onMealPlan={() => setTab('mealPlan')} hkCalories={combinedHealthCalories} fetchDailyCalories={combinedFetchDailyCalories} hkSupported={hkSupported} hkAvail={hkAvail} hkAuth={combinedAuth} hkInit={hkInit} hkError={hkError} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowTierCarousel(true)} />;
+        return isPro ? <NutritionDashboard onBack={() => setTab('settings')} onLogMeal={() => setTab('logMeal')} onMealPlan={() => setTab('mealPlan')} onBariatricSetup={() => setTab('bariatricSetup')} hkCalories={combinedHealthCalories} fetchDailyCalories={combinedFetchDailyCalories} hkSupported={hkSupported} hkAvail={hkAvail} hkAuth={combinedAuth} hkInit={hkInit} hkError={hkError} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowTierCarousel(true)} />;
       case 'logMeal':
         return isPro ? <LogMeal onBack={() => { setScannedFood(null); setTab('nutrition'); }} onDone={() => { setScannedFood(null); setTab('nutrition'); }} onScanBarcode={() => setTab('barcodeScanner')} onPhotoAnalyze={() => setTab('photoAnalyze')} scannedFood={scannedFood} onScanConsumed={() => setScannedFood(null)} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowTierCarousel(true)} />;
       case 'barcodeScanner':
