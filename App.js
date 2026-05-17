@@ -30,6 +30,7 @@ import RunDetail from './src/screens/RunDetail';
 import { RoutesTab as RoutesTabComponent } from './src/screens/RoutesTab';
 import Privacy from './src/screens/Privacy';
 import GoalsSetup from './src/screens/GoalsSetup';
+import BariatricSetup from './src/screens/BariatricSetup';
 import NutritionDashboard from './src/screens/NutritionDashboard';
 import LogMeal from './src/screens/LogMeal';
 import BarcodeScanner from './src/screens/BarcodeScanner';
@@ -637,6 +638,8 @@ if (tab === 'cycleTracker') {
         return <Privacy onBack={() => setTab('settings')} />;
       case 'goals':
         return <GoalsSetup onBack={() => setTab('settings')} />;
+      case 'bariatricSetup':
+        return <BariatricSetup onBack={() => setTab('settings')} />;
       case 'mealPlan':
       return (
         <MealPlan
