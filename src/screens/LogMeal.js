@@ -2,6 +2,7 @@
 // Søg efter mad, vælg, indtast graemmer, vælg meal_type og log.
 
 import React, { useState, useEffect, useRef } from 'react';
+import { computeHealthScore } from '../utils/healthScore';
 import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
   StyleSheet, ActivityIndicator, Alert, Platform, FlatList,
@@ -528,12 +529,12 @@ function AiParseStep({ onBack, onLogged }) {
               Fundne madvarer ({items.filter(it => it.selected).length} valgt):
             </Text>
 
-            {items.map((it, idx) => (
-              <View key={idx} style={{ backgroundColor: '#1a1a1a', borderRadius: 10, padding: 12, marginBottom: 10, opacity: it.selected ? 1 : 0.5 }}>
+            {items.map((it, idx) => { const hs = computeHealthScore(it); return (
+              <View key={idx} style={{ borderLeftWidth: 4, borderLeftColor: hs.color, backgroundColor: '#1a1a1a', borderRadius: 10, padding: 12, marginBottom: 10, opacity: it.selected ? 1 : 0.5 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                   <TouchableOpacity onPress={() => toggleSelected(idx)} style={{ flex: 1 }}>
                     <Text style={{ color: '#fff', fontSize: 15, fontWeight: '600' }}>
-                      {it.selected ? '✓ ' : '○ '}{it.name}
+                      {hs.emoji} {it.selected ? '✓ ' : '○ '}{it.name}
                     </Text>
                     {it.from_db ? (
                       <Text style={{ color: '#4ade80', fontSize: 11, marginTop: 2 }}>● Fra database</Text>
@@ -560,7 +561,7 @@ function AiParseStep({ onBack, onLogged }) {
                   </Text>
                 </View>
               </View>
-            ))}
+            ); })}
 
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 8, marginBottom: 12 }}>
               {MEAL_TYPES.map(mt => (
