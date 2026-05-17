@@ -298,3 +298,126 @@ export async function resetDailyLog(dateKey) {
 export function getTodayKey() {
   return todayKey();
 }
+
+// ============================================================
+// Meal suggestions (per phase) - struktureret info
+// ============================================================
+export const MEAL_SUGGESTIONS = {
+  1: [
+    { key: 'water', kcal: 0, protein: 0, prep: 0, type: 'fluid' },
+    { key: 'brothClear', kcal: 15, protein: 2, prep: 5, type: 'fluid' },
+    { key: 'sugarFreeJuice', kcal: 5, protein: 0, prep: 1, type: 'fluid' },
+    { key: 'herbalTea', kcal: 0, protein: 0, prep: 3, type: 'fluid' },
+  ],
+  2: [
+    { key: 'proteinShake', kcal: 120, protein: 25, prep: 2, type: 'fluid' },
+    { key: 'skimmedMilk', kcal: 80, protein: 8, prep: 1, type: 'fluid' },
+    { key: 'thinSoup', kcal: 90, protein: 6, prep: 10, type: 'fluid' },
+    { key: 'skyrThin', kcal: 100, protein: 18, prep: 2, type: 'fluid' },
+  ],
+  3: [
+    { key: 'mashedFish', kcal: 130, protein: 22, prep: 15, type: 'puree' },
+    { key: 'cottageCheese', kcal: 90, protein: 12, prep: 1, type: 'puree' },
+    { key: 'eggPuree', kcal: 80, protein: 7, prep: 5, type: 'puree' },
+    { key: 'pureedChicken', kcal: 140, protein: 25, prep: 20, type: 'puree' },
+    { key: 'mashedTofu', kcal: 100, protein: 11, prep: 5, type: 'puree' },
+  ],
+  4: [
+    { key: 'softFish', kcal: 150, protein: 24, prep: 15, type: 'soft' },
+    { key: 'scrambledEgg', kcal: 90, protein: 7, prep: 5, type: 'soft' },
+    { key: 'softChicken', kcal: 160, protein: 28, prep: 20, type: 'soft' },
+    { key: 'cottageCheese', kcal: 90, protein: 12, prep: 1, type: 'soft' },
+    { key: 'wellCookedVeggies', kcal: 60, protein: 3, prep: 15, type: 'soft' },
+    { key: 'greekYogurt', kcal: 100, protein: 17, prep: 1, type: 'soft' },
+  ],
+  5: [
+    { key: 'grilledChicken', kcal: 180, protein: 30, prep: 20, type: 'normal' },
+    { key: 'salmonFillet', kcal: 200, protein: 25, prep: 15, type: 'normal' },
+    { key: 'eggOmelette', kcal: 150, protein: 14, prep: 8, type: 'normal' },
+    { key: 'lentilSoup', kcal: 180, protein: 12, prep: 25, type: 'normal' },
+    { key: 'leanBeef', kcal: 200, protein: 28, prep: 20, type: 'normal' },
+    { key: 'cottageCheese', kcal: 90, protein: 12, prep: 1, type: 'normal' },
+  ],
+};
+
+export function getMealSuggestions(profile) {
+  if (!profile || !profile.enabled) return [];
+  const days = getDaysSinceSurgery(profile.surgeryDate);
+  const phase = getPhaseFromDays(days);
+  return MEAL_SUGGESTIONS[phase] || [];
+}
+
+// ============================================================
+// Dumping syndrome risk (mainly for gastric bypass)
+// ============================================================
+export const DUMPING_THRESHOLDS = {
+  sugarMediumG: 10,
+  sugarHighG: 15,
+  fatHighG: 20,
+};
+
+export function checkDumpingRisk(meal, profile) {
+  // meal: { sugar?: number, fat?: number, kcal?: number, carbs?: number }
+  if (!meal) return { risk: 'low', reasons: [] };
+  const reasons = [];
+  let level = 0; // 0=low 1=medium 2=high
+  
+  const isBypass = profile && profile.surgeryType === 'bypass';
+  // Bypass patients are 3x more sensitive
+  const sugarMedium = isBypass ? 7 : DUMPING_THRESHOLDS.sugarMediumG;
+  const sugarHigh = isBypass ? 10 : DUMPING_THRESHOLDS.sugarHighG;
+  
+  if (typeof meal.sugar === 'number') {
+    if (meal.sugar >= sugarHigh) {
+      reasons.push('sugarHigh');
+      level = Math.max(level, 2);
+    } else if (meal.sugar >= sugarMedium) {
+      reasons.push('sugarMedium');
+      level = Math.max(level, 1);
+    }
+  }
+  
+  if (typeof meal.fat === 'number' && meal.fat >= DUMPING_THRESHOLDS.fatHighG) {
+    reasons.push('fatHigh');
+    level = Math.max(level, 1);
+  }
+  
+  // High refined carbs without protein
+  if (typeof meal.carbs === 'number' && meal.carbs >= 30 && (!meal.protein || meal.protein < 5)) {
+    reasons.push('carbsNoProtein');
+    level = Math.max(level, 1);
+  }
+  
+  const risk = level === 2 ? 'high' : (level === 1 ? 'medium' : 'low');
+  return { risk, reasons };
+}
+
+// Check entire day's meals for dumping risk
+export function checkDailyDumpingRisk(meals, profile) {
+  if (!meals || meals.length === 0) return { risk: 'low', reasons: [], flaggedCount: 0 };
+  let highest = 'low';
+  let flaggedCount = 0;
+  const allReasons = new Set();
+  for (const m of meals) {
+    const r = checkDumpingRisk(m, profile);
+    if (r.risk === 'high') { highest = 'high'; flaggedCount++; }
+    else if (r.risk === 'medium' && highest !== 'high') { highest = 'medium'; flaggedCount++; }
+    r.reasons.forEach(reason => allReasons.add(reason));
+  }
+  return { risk: highest, reasons: Array.from(allReasons), flaggedCount };
+}
+
+// ============================================================
+// Meal reminders (per phase)
+// ============================================================
+export function getMealReminders(phase) {
+  const common = ['proteinFirst', 'chew', 'noDrinking', 'stopWhenFull'];
+  const phaseSpecific = {
+    1: ['smallSips', 'noStraw'],
+    2: ['smallSips', 'noStraw', 'slowly'],
+    3: ['mashWell', 'newFoodOneAtATime'],
+    4: ['chewExtra', 'newFoodOneAtATime'],
+    5: ['mindfulEating', 'avoidEmptyCalories'],
+  };
+  return [...(phaseSpecific[phase] || []), ...common];
+}
