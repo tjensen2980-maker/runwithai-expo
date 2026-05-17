@@ -543,5 +543,77 @@
         "desc": "Weekly and monthly summaries"
       }
     }
+  },
+  "bariatric": {
+    "title": "Bariatric profile",
+    "subtitle": "Gastric sleeve / bypass support",
+    "settingsButton": "Bariatric profile",
+    "settingsDescription": "Gastric sleeve or bypass support",
+    "setup": {
+      "title": "Bariatric profile",
+      "intro": "Enable bariatric support to get tailored targets for protein, fluids, and calories based on your surgery and phase.",
+      "surgeryType": "Surgery type",
+      "surgeryTypeNone": "None",
+      "surgeryTypeSleeve": "Gastric Sleeve",
+      "surgeryTypeBypass": "Gastric Bypass",
+      "surgeryDate": "Surgery date",
+      "surgeryDatePlaceholder": "YYYY-MM-DD",
+      "startWeight": "Starting weight (kg)",
+      "goalWeight": "Goal weight (kg)",
+      "height": "Height (cm)",
+      "enable": "Enable bariatric support",
+      "save": "Save profile",
+      "delete": "Delete bariatric profile",
+      "deleteConfirm": "Are you sure you want to delete your bariatric profile?",
+      "disclaimer": "Important: This app does NOT replace your bariatric nutritionist, doctor, or clinic. Recommendations are general guidelines based on public ASMBS guidance. Always follow your own clinic's instructions. Contact your doctor immediately for dumping syndrome, persistent nausea, or any concerns.",
+      "acceptDisclaimer": "I understand this app does not replace my bariatric care team",
+      "disclaimerRequired": "You must accept the disclaimer",
+      "invalidDate": "Enter a valid date",
+      "missingType": "Select surgery type",
+      "saved": "Profile saved",
+      "deleted": "Profile deleted"
+    },
+    "dashboard": {
+      "title": "Bariatric support",
+      "phaseLabel": "Current phase",
+      "daysSinceLabel": "Days since surgery",
+      "daysUntilNext": "{{days}} days until next phase",
+      "lastPhase": "You are in the final phase",
+      "proteinToday": "Protein today",
+      "fluidToday": "Fluids today",
+      "kcalRange": "Calories (target)",
+      "portionSize": "Recommended portion size",
+      "medicalCheckReminder": "Remember your {{day}}-day checkup",
+      "preSurgery": "Surgery date not yet reached"
+    },
+    "phases": {
+      "clearLiquid": {
+        "name": "Week 1: Clear liquids",
+        "description": "Clear liquids only: water, broth, sugar-free juice, tea. Small sips throughout the day."
+      },
+      "fullLiquid": {
+        "name": "Week 2: Full liquids",
+        "description": "All liquids incl. protein shakes, soup, yogurt. Do NOT drink 30 min before/after meals."
+      },
+      "pureed": {
+        "name": "Week 3-4: Pureed food",
+        "description": "Blended/pureed food: cottage cheese, fish puree, blended chicken. Chew thoroughly."
+      },
+      "soft": {
+        "name": "Week 5-6: Soft food",
+        "description": "Soft food: scrambled eggs, fish, cooked vegetables, soft fruit. Protein first, small bites."
+      },
+      "regular": {
+        "name": "Week 7+: Regular food",
+        "description": "Regular food in small portions. Protein first, then vegetables, then carbs. Chew thoroughly."
+      }
+    },
+    "tips": {
+      "noDrinking": "Do NOT drink 30 min before or after meals",
+      "proteinFirst": "Always eat protein first",
+      "chew": "Chew each bite 20-30 times",
+      "stopWhenFull": "Stop when full - even with small portions",
+      "vitamins": "Remember your daily vitamins"
+    }
   }
 }
