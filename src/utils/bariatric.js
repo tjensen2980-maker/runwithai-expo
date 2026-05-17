@@ -421,3 +421,57 @@ export function getMealReminders(phase) {
   };
   return [...(phaseSpecific[phase] || []), ...common];
 }
+
+// ============================================================
+// Dumping risk from daily summary (more practical since meals
+// don't track sugar directly - we use carbs/protein ratio)
+// ============================================================
+export function checkDumpingFromSummary(summary, profile) {
+  if (!summary) return { risk: 'low', reasons: [], flaggedCount: 0 };
+  
+  const isBypass = profile && profile.surgeryType === 'bypass';
+  // Bypass patients are more sensitive - lower thresholds
+  const carbsHigh = isBypass ? 80 : 130;     // grams of carbs flagged as high
+  const carbsMedium = isBypass ? 50 : 80;    // moderate carbs concern
+  const proteinMin = isBypass ? 50 : 60;     // minimum protein for the day (g)
+  const fatHigh = isBypass ? 40 : 60;        // high fat per day (g)
+  
+  const carbs = Number(summary.carbs_g) || 0;
+  const protein = Number(summary.protein_g) || 0;
+  const fat = Number(summary.fat_g) || 0;
+  const kcal = Number(summary.kcal_in) || 0;
+  
+  const reasons = [];
+  let level = 0;
+  
+  // High carbs
+  if (carbs >= carbsHigh) {
+    reasons.push('carbsHigh');
+    level = Math.max(level, 2);
+  } else if (carbs >= carbsMedium) {
+    reasons.push('carbsMedium');
+    level = Math.max(level, 1);
+  }
+  
+  // High carbs with low protein ratio
+  if (carbs >= carbsMedium && protein < proteinMin) {
+    reasons.push('carbsNoProtein');
+    level = Math.max(level, 1);
+  }
+  
+  // High fat
+  if (fat >= fatHigh) {
+    reasons.push('fatHigh');
+    level = Math.max(level, 1);
+  }
+  
+  // Very low protein for the day (only flag if any meals logged)
+  if (kcal > 200 && protein < proteinMin * 0.5) {
+    reasons.push('proteinLow');
+    level = Math.max(level, 1);
+  }
+  
+  const risk = level === 2 ? 'high' : (level === 1 ? 'medium' : 'low');
+  const flaggedCount = reasons.length;
+  return { risk, reasons, flaggedCount };
+}
