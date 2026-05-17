@@ -719,6 +719,70 @@
         "proteinLow": "For lavt proteinindtag"
       },
       "info": "Dumping er hyppigst ved gastric bypass og udløses af sukker, fedt eller hurtigt-optagne kulhydrater. Symptomer: kvalme, hjertebanken, svimmelhed, diarré 15-30 min efter måltid."
+    },
+    "training": {
+      "title": "Tilpasset træning",
+      "subtitle": "Anbefalet aktivitet i din fase",
+      "currentPhase": "Din træningsfase",
+      "daysUntilNext": "{{days}} dage til næste træningsfase",
+      "maxDuration": "Maks varighed",
+      "maxHeartRate": "Maks puls",
+      "min": "min",
+      "ofMax": "af maks-puls",
+      "intensityLabel": {
+        "veryLight": "Meget let",
+        "light": "Let",
+        "moderate": "Moderat",
+        "normal": "Normal"
+      },
+      "phaseNames": {
+        "1": "Restitution (uge 0-2)",
+        "2": "Forsigtig opstart (uge 2-4)",
+        "3": "Let aktivitet (uge 4-6)",
+        "4": "Opbygning (uge 6-8)",
+        "5": "Normal træning (uge 8+)"
+      },
+      "phaseDesc": {
+        "1": "Hold dig til korte gåture og dybe vejrtrækningsøvelser. Lyt til kroppen og hvil rigeligt.",
+        "2": "Du kan øge gåturen lidt. Stadig ingen styrketræning eller intens motion.",
+        "3": "Du kan begynde med cykling og svømning (når sår er helet). Stadig ingen løb eller tunge vægte.",
+        "4": "Tid til at introducere let styrketræning og længere kondition. Start med små vægte.",
+        "5": "Du kan vende tilbage til normal træning - men byg stadig gradvist op og hold øje med energi."
+      },
+      "allowed": "Anbefalet",
+      "notRecommended": "Undgå nu",
+      "activities": {
+        "walkShort": "Kort gåtur (5-10 min)",
+        "walkMedium": "Medium gåtur (15-20 min)",
+        "walkLong": "Lang gåtur (30+ min)",
+        "breathing": "Vejrtrækningsøvelser",
+        "gentleStretch": "Let udstrækning",
+        "cycling": "Cykling",
+        "swimming": "Svømning",
+        "lightStrength": "Let styrketræning",
+        "strength": "Styrketræning",
+        "jog": "Letløb",
+        "running": "Løb",
+        "highIntensity": "Høj-intens træning",
+        "heavyLifting": "Tunge løft",
+        "extremeIntensity": "Ekstrem intensitet"
+      },
+      "warnings": {
+        "title": "Vigtigt at huske",
+        "noLifting": "Ingen tunge løft (over 5 kg)",
+        "staySoftMovements": "Hold dig til bløde, langsomme bevægelser",
+        "avoidSwimmingUntilHealed": "Undgå svømning indtil dine sår er helet (typisk 3-4 uger)",
+        "lightWeightsOk": "Lette vægte (2-5 kg) er OK efter aftale med din læge",
+        "startStrengthGradually": "Start styrketræning med lave vægte og høje gentagelser",
+        "stillBuildGradually": "Byg stadig gradvist op - undgå pludselige store stigninger",
+        "hydration": "Husk væske før, under og efter træning"
+      },
+      "safety": {
+        "activityNotRecommended": "{{activity}} er ikke anbefalet i din fase. Konsulter din læge.",
+        "durationTooLong": "Anbefalet varighed er højst {{max}} min. Du planlagde {{actual}} min.",
+        "checkWithDoctor": "Kontakt din læge hvis du oplever smerter, kvalme eller udmattelse"
+      },
+      "disclaimer": "Anbefalingerne er vejledende. Følg altid din egen kliniks anvisninger."
     }
   }
 }
