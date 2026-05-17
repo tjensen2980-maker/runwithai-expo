@@ -297,6 +297,7 @@ onBack, onLogMeal, onMealPlan, onBariatricSetup, hkCalories = 0, fetchDailyCalor
 
 {(() => {
           const dhs = computeDailyHealthScore(meals);
+          if (!dhs) return null;
           return (
             <View style={{ backgroundColor: colors.card, borderRadius: 14, padding: 16, borderWidth: 1, borderColor: colors.border, borderLeftWidth: 6, borderLeftColor: dhs.color, marginVertical: 8, flexDirection: 'row', alignItems: 'center' }}>
               <Text style={{ fontSize: 40, marginRight: 14 }}>{dhs.emoji}</Text>
