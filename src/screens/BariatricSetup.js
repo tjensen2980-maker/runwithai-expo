@@ -50,7 +50,6 @@ export default function BariatricSetup({ onBack }) {
 
   const handleSave = async () => {
     if (!enabled) {
-      // Save with disabled flag, no validation needed
       await saveBariatricProfile({ enabled: false });
       Alert.alert(t('bariatric.setup.saved', 'Profil gemt'));
       if (onBack) onBack();
@@ -128,8 +127,8 @@ export default function BariatricSetup({ onBack }) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scroll}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+      <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
         <View style={styles.header}>
           <TouchableOpacity onPress={onBack} style={styles.backBtn}>
             <Text style={styles.backText}>←</Text>
@@ -143,16 +142,20 @@ export default function BariatricSetup({ onBack }) {
           <Text style={styles.disclaimerText}>{t('bariatric.setup.disclaimer', '')}</Text>
         </View>
 
-        <View style={styles.row}>
-          <Text style={styles.label}>{t('bariatric.setup.enable', 'Aktivér bariatrisk støtte')}</Text>
-          <Switch value={enabled} onValueChange={setEnabled} />
+        <View style={styles.card}>
+          <View style={styles.row}>
+            <Text style={styles.label}>{t('bariatric.setup.enable', 'Aktivér bariatrisk støtte')}</Text>
+            <Switch value={enabled} onValueChange={setEnabled} />
+          </View>
         </View>
 
         {enabled && (
           <>
-            <View style={styles.row}>
-              <Text style={styles.label}>{t('bariatric.setup.acceptDisclaimer', '')}</Text>
-              <Switch value={disclaimerAccepted} onValueChange={setDisclaimerAccepted} />
+            <View style={styles.card}>
+              <View style={styles.row}>
+                <Text style={styles.label}>{t('bariatric.setup.acceptDisclaimer', '')}</Text>
+                <Switch value={disclaimerAccepted} onValueChange={setDisclaimerAccepted} />
+              </View>
             </View>
 
             <Text style={styles.sectionLabel}>{t('bariatric.setup.surgeryType', 'Type operation')}</Text>
@@ -181,7 +184,7 @@ export default function BariatricSetup({ onBack }) {
               value={surgeryDate}
               onChangeText={setSurgeryDate}
               placeholder={t('bariatric.setup.surgeryDatePlaceholder', 'ÅÅÅÅ-MM-DD')}
-              placeholderTextColor="#888"
+              placeholderTextColor={colors.muted}
               autoCapitalize="none"
             />
 
@@ -191,7 +194,7 @@ export default function BariatricSetup({ onBack }) {
               value={startWeight}
               onChangeText={setStartWeight}
               placeholder="0"
-              placeholderTextColor="#888"
+              placeholderTextColor={colors.muted}
               keyboardType="decimal-pad"
             />
 
@@ -201,7 +204,7 @@ export default function BariatricSetup({ onBack }) {
               value={goalWeight}
               onChangeText={setGoalWeight}
               placeholder="0"
-              placeholderTextColor="#888"
+              placeholderTextColor={colors.muted}
               keyboardType="decimal-pad"
             />
 
@@ -211,7 +214,7 @@ export default function BariatricSetup({ onBack }) {
               value={height}
               onChangeText={setHeight}
               placeholder="0"
-              placeholderTextColor="#888"
+              placeholderTextColor={colors.muted}
               keyboardType="decimal-pad"
             />
           </>
@@ -227,21 +230,21 @@ export default function BariatricSetup({ onBack }) {
           </TouchableOpacity>
         )}
 
-        <View style={{ height: 40 }} />
+        <View style={{ height: 80 }} />
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors && colors.bg ? colors.bg : '#000' },
-  scroll: { padding: 16 },
-  loading: { color: '#fff', textAlign: 'center', marginTop: 40 },
+  container: { flex: 1, backgroundColor: colors.bg },
+  scroll: { padding: 16, paddingBottom: 60 },
+  loading: { color: colors.text, textAlign: 'center', marginTop: 40 },
   header: { flexDirection: 'row', alignItems: 'center', marginBottom: 16 },
   backBtn: { padding: 8, marginRight: 8 },
-  backText: { color: '#fff', fontSize: 24 },
-  title: { color: '#fff', fontSize: 22, fontWeight: '700' },
-  intro: { color: '#ccc', fontSize: 14, marginBottom: 16, lineHeight: 20 },
+  backText: { color: colors.text, fontSize: 24, fontWeight: '600' },
+  title: { color: colors.text, fontSize: 22, fontWeight: '700' },
+  intro: { color: colors.muted, fontSize: 14, marginBottom: 16, lineHeight: 20 },
   disclaimerBox: {
     backgroundColor: '#3a2a00',
     borderColor: '#ffaa00',
@@ -251,45 +254,50 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   disclaimerText: { color: '#ffd680', fontSize: 12, lineHeight: 18 },
+  card: {
+    backgroundColor: colors.card,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    marginBottom: 12,
+  },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
-    borderBottomColor: '#222',
-    borderBottomWidth: 1,
+    paddingVertical: 14,
   },
-  label: { color: '#fff', fontSize: 15, flex: 1, marginRight: 12 },
-  sectionLabel: { color: '#fff', fontSize: 14, fontWeight: '600', marginTop: 16, marginBottom: 6 },
+  label: { color: colors.text, fontSize: 15, flex: 1, marginRight: 12 },
+  sectionLabel: { color: colors.text, fontSize: 14, fontWeight: '600', marginTop: 16, marginBottom: 6 },
   input: {
-    backgroundColor: '#1a1a1a',
-    color: '#fff',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: Platform.OS === 'ios' ? 12 : 8,
+    backgroundColor: colors.card,
+    color: colors.text,
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: Platform.OS === 'ios' ? 14 : 10,
     fontSize: 15,
+    marginBottom: 4,
   },
   typeRow: { flexDirection: 'row', gap: 8 },
   typeBtn: {
     flex: 1,
-    backgroundColor: '#1a1a1a',
-    borderRadius: 8,
+    backgroundColor: colors.card,
+    borderRadius: 10,
     paddingVertical: 14,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#333',
+    borderColor: colors.card,
   },
-  typeBtnActive: { backgroundColor: '#c8ff00', borderColor: '#c8ff00' },
-  typeBtnText: { color: '#fff', fontSize: 14, fontWeight: '600' },
-  typeBtnTextActive: { color: '#000' },
+  typeBtnActive: { backgroundColor: colors.accent, borderColor: colors.accent },
+  typeBtnText: { color: colors.text, fontSize: 14, fontWeight: '600' },
+  typeBtnTextActive: { color: colors.bg },
   saveBtn: {
-    backgroundColor: '#c8ff00',
+    backgroundColor: colors.accent,
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
     marginTop: 24,
   },
-  saveBtnText: { color: '#000', fontSize: 16, fontWeight: '700' },
+  saveBtnText: { color: colors.bg, fontSize: 16, fontWeight: '700' },
   deleteBtn: {
     backgroundColor: 'transparent',
     borderRadius: 12,
