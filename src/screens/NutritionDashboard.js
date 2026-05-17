@@ -110,6 +110,7 @@ function MacroBar({ label, value, target, color }) {
 // hkCalories sendes ned som prop fra App.js (HealthKit initialiseres ét sted)
 
 export default function NutritionDashboard({
+onBack, onLogMeal, onMealPlan, hkCalories = 0, fetchDailyCalories, hkSupported, hkAvail, hkAuth, hkInit, hkError }) {
   const { t } = useTranslation();
   const [bariatricTargets, setBariatricTargets] = useState(null);
   useEffect(() => {
@@ -124,7 +125,7 @@ export default function NutritionDashboard({
         }
       } catch (e) { /* ignore */ }
     })();
-  }, []); onBack, onLogMeal, onMealPlan, hkCalories = 0, fetchDailyCalories, hkSupported, hkAvail, hkAuth, hkInit, hkError }) {
+  }, []);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [summary, setSummary] = useState(null);
