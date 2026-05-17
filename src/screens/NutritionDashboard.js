@@ -10,6 +10,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Circle } from 'react-native-svg';
 import { colors, loadProfile, getAuthToken, SERVER } from '../data';
 import { getDailySummary, getMeals, deleteMeal } from '../services/NutritionAPI';
+import { useTranslation } from 'react-i18next';
+import { loadBariatricProfile, getDailyTargets } from '../utils/bariatric';
 
 // ---- Helpers ----------------------------------------------------------------
 
@@ -107,7 +109,22 @@ function MacroBar({ label, value, target, color }) {
 // ---- Main screen ------------------------------------------------------------
 // hkCalories sendes ned som prop fra App.js (HealthKit initialiseres ét sted)
 
-export default function NutritionDashboard({ onBack, onLogMeal, onMealPlan, hkCalories = 0, fetchDailyCalories, hkSupported, hkAvail, hkAuth, hkInit, hkError }) {
+export default function NutritionDashboard({
+  const { t } = useTranslation();
+  const [bariatricTargets, setBariatricTargets] = useState(null);
+  useEffect(() => {
+    (async () => {
+      try {
+        const p = await loadBariatricProfile();
+        if (p && p.enabled) {
+          const targets = getDailyTargets(p);
+          setBariatricTargets(targets);
+        } else {
+          setBariatricTargets(null);
+        }
+      } catch (e) { /* ignore */ }
+    })();
+  }, []); onBack, onLogMeal, onMealPlan, hkCalories = 0, fetchDailyCalories, hkSupported, hkAvail, hkAuth, hkInit, hkError }) {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [summary, setSummary] = useState(null);
@@ -251,6 +268,55 @@ export default function NutritionDashboard({ onBack, onLogMeal, onMealPlan, hkCa
             <Text style={s.statUnit}>kcal</Text>
           </View>
         </View>
+
+        {bariatricTargets && bariatricTargets.phaseInfo ? (
+          <View style={s.card}>
+            <Text style={s.sectionTitle}>{t('bariatric.dashboard.title', 'Bariatrisk støtte')}</Text>
+            <View style={{ paddingVertical: 8 }}>
+              <Text style={{ color: colors.accent, fontSize: 16, fontWeight: '700' }}>
+                {t('bariatric.phases.' + (bariatricTargets.phase === 1 ? 'clearLiquid' : bariatricTargets.phase === 2 ? 'fullLiquid' : bariatricTargets.phase === 3 ? 'pureed' : bariatricTargets.phase === 4 ? 'soft' : 'regular') + '.name', bariatricTargets.phaseInfo.nameDa || '')}
+              </Text>
+              <Text style={{ color: colors.muted, fontSize: 12, marginTop: 2 }}>
+                {bariatricTargets.daysSinceSurgery != null ? (t('bariatric.dashboard.daysSinceLabel', 'Dage siden operation') + ': ' + bariatricTargets.daysSinceSurgery) : ''}
+              </Text>
+              <Text style={{ color: colors.text, fontSize: 13, marginTop: 8, lineHeight: 18 }}>
+                {t('bariatric.phases.' + (bariatricTargets.phase === 1 ? 'clearLiquid' : bariatricTargets.phase === 2 ? 'fullLiquid' : bariatricTargets.phase === 3 ? 'pureed' : bariatricTargets.phase === 4 ? 'soft' : 'regular') + '.description', bariatricTargets.phaseInfo.descriptionDa || '')}
+              </Text>
+            </View>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 10 }}>
+              <View style={{ width: '50%', paddingVertical: 6 }}>
+                <Text style={{ color: colors.muted, fontSize: 11 }}>{t('bariatric.dashboard.proteinToday', 'Protein i dag')}</Text>
+                <Text style={{ color: colors.text, fontSize: 15, fontWeight: '600' }}>{bariatricTargets.proteinTargetG}g</Text>
+              </View>
+              <View style={{ width: '50%', paddingVertical: 6 }}>
+                <Text style={{ color: colors.muted, fontSize: 11 }}>{t('bariatric.dashboard.fluidToday', 'Væske i dag')}</Text>
+                <Text style={{ color: colors.text, fontSize: 15, fontWeight: '600' }}>{bariatricTargets.fluidTargetMl}ml</Text>
+              </View>
+              <View style={{ width: '50%', paddingVertical: 6 }}>
+                <Text style={{ color: colors.muted, fontSize: 11 }}>{t('bariatric.dashboard.kcalRange', 'Kalorier (mål)')}</Text>
+                <Text style={{ color: colors.text, fontSize: 15, fontWeight: '600' }}>{bariatricTargets.kcalTargetMin}-{bariatricTargets.kcalTargetMax}</Text>
+              </View>
+              <View style={{ width: '50%', paddingVertical: 6 }}>
+                <Text style={{ color: colors.muted, fontSize: 11 }}>{t('bariatric.dashboard.portionSize', 'Portion')}</Text>
+                <Text style={{ color: colors.text, fontSize: 15, fontWeight: '600' }}>{bariatricTargets.portionSizeMl}ml</Text>
+              </View>
+            </View>
+            {bariatricTargets.daysUntilNext != null ? (
+              <View style={{ marginTop: 10, paddingTop: 10, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.08)' }}>
+                <Text style={{ color: colors.accent, fontSize: 12 }}>
+                  {t('bariatric.dashboard.daysUntilNext', '{{days}} dage til næste fase').replace('{{days}}', String(bariatricTargets.daysUntilNext))}
+                </Text>
+              </View>
+            ) : null}
+            {bariatricTargets.medicalCheck ? (
+              <View style={{ marginTop: 6 }}>
+                <Text style={{ color: '#ffaa00', fontSize: 12, fontWeight: '600' }}>
+                  ⚠ {t('bariatric.dashboard.medicalCheckReminder', 'Husk din {{day}}-dages kontrol').replace('{{day}}', String(bariatricTargets.medicalCheck.dayMark))}
+                </Text>
+              </View>
+            ) : null}
+          </View>
+        ) : null}
 
         <View style={s.card}>
           <Text style={s.sectionTitle}>MAKROS</Text>
