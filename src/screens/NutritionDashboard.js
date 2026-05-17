@@ -11,7 +11,7 @@ import Svg, { Circle } from 'react-native-svg';
 import { colors, loadProfile, getAuthToken, SERVER } from '../data';
 import { getDailySummary, getMeals, deleteMeal } from '../services/NutritionAPI';
 import { useTranslation } from 'react-i18next';
-import { loadBariatricProfile, getDailyTargets, VITAMINS, loadDailyLog, toggleVitamin, addFluid, getTodayKey } from '../utils/bariatric';
+import { loadBariatricProfile, getDailyTargets, VITAMINS, loadDailyLog, toggleVitamin, addFluid, getTodayKey, getMealSuggestions, checkDailyDumpingRisk, MEAL_SUGGESTIONS } from '../utils/bariatric';
 
 // ---- Helpers ----------------------------------------------------------------
 
@@ -113,6 +113,7 @@ export default function NutritionDashboard({
 onBack, onLogMeal, onMealPlan, hkCalories = 0, fetchDailyCalories, hkSupported, hkAvail, hkAuth, hkInit, hkError }) {
   const { t } = useTranslation();
   const [bariatricTargets, setBariatricTargets] = useState(null);
+  const [bariatricProfile, setBariatricProfile] = useState(null);
   useEffect(() => {
     (async () => {
       try {
@@ -120,8 +121,10 @@ onBack, onLogMeal, onMealPlan, hkCalories = 0, fetchDailyCalories, hkSupported, 
         if (p && p.enabled) {
           const targets = getDailyTargets(p);
           setBariatricTargets(targets);
+          setBariatricProfile(p);
         } else {
           setBariatricTargets(null);
+          setBariatricProfile(null);
         }
       } catch (e) { /* ignore */ }
     })();
@@ -395,6 +398,51 @@ onBack, onLogMeal, onMealPlan, hkCalories = 0, fetchDailyCalories, hkSupported, 
             ) : null}
           </View>
         ) : null}
+
+        {bariatricProfile ? (() => {
+          const dumpingRisk = checkDailyDumpingRisk(meals, bariatricProfile);
+          if (dumpingRisk.risk === 'low' || dumpingRisk.flaggedCount === 0) return null;
+          const bgColor = dumpingRisk.risk === 'high' ? '#7f1d1d' : '#78350f';
+          const borderColor = dumpingRisk.risk === 'high' ? '#ef4444' : '#f59e0b';
+          const titleKey = 'bariatric.dumping.' + dumpingRisk.risk;
+          const descKey = 'bariatric.dumping.' + dumpingRisk.risk + 'Desc';
+          return (
+            <View style={{ backgroundColor: bgColor, borderWidth: 1, borderColor, borderRadius: 12, padding: 14, marginVertical: 8 }}>
+              <Text style={{ color: '#fbbf24', fontWeight: '700', fontSize: 15, marginBottom: 4 }}>⚠ {t(titleKey)}</Text>
+              <Text style={{ color: '#fef3c7', fontSize: 13, lineHeight: 18 }}>{t(descKey)}</Text>
+              {dumpingRisk.reasons.length > 0 ? (
+                <View style={{ marginTop: 8 }}>
+                  {dumpingRisk.reasons.map(r => (
+                    <Text key={r} style={{ color: '#fde68a', fontSize: 12 }}>• {t('bariatric.dumping.reasons.' + r)}</Text>
+                  ))}
+                </View>
+              ) : null}
+              <Text style={{ color: '#fef3c7', fontSize: 11, marginTop: 10, fontStyle: 'italic', lineHeight: 16 }}>{t('bariatric.dumping.info')}</Text>
+            </View>
+          );
+        })() : null}
+
+        {bariatricProfile ? (() => {
+          const suggestions = getMealSuggestions(bariatricProfile);
+          if (!suggestions || suggestions.length === 0) return null;
+          return (
+            <View style={s.card}>
+              <Text style={s.sectionTitle}>{t('bariatric.meals.title')}</Text>
+              <Text style={{ color: colors.muted, fontSize: 13, marginBottom: 12 }}>{t('bariatric.meals.subtitle')}</Text>
+              {suggestions.map((sug, idx) => (
+                <View key={sug.key + '_' + idx} style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10, borderBottomWidth: idx < suggestions.length - 1 ? 1 : 0, borderBottomColor: colors.border }}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ color: colors.text, fontSize: 15, fontWeight: '600' }}>{t('bariatric.meals.items.' + sug.key)}</Text>
+                    <Text style={{ color: colors.muted, fontSize: 12, marginTop: 2 }}>{sug.kcal} {t('bariatric.meals.kcal')} · {sug.protein} {t('bariatric.meals.protein')} · {sug.prep} {t('bariatric.meals.prep')}</Text>
+                  </View>
+                  <View style={{ backgroundColor: colors.bg, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6, borderWidth: 1, borderColor: colors.border }}>
+                    <Text style={{ color: colors.muted, fontSize: 11 }}>{t('bariatric.meals.types.' + sug.type)}</Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+          );
+        })() : null}
 
         <View style={s.card}>
           <Text style={s.sectionTitle}>MAKROS</Text>
