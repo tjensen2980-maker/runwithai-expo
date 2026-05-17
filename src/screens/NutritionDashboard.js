@@ -110,7 +110,7 @@ function MacroBar({ label, value, target, color }) {
 // hkCalories sendes ned som prop fra App.js (HealthKit initialiseres ét sted)
 
 export default function NutritionDashboard({
-onBack, onLogMeal, onMealPlan, hkCalories = 0, fetchDailyCalories, hkSupported, hkAvail, hkAuth, hkInit, hkError }) {
+onBack, onLogMeal, onMealPlan, onBariatricSetup, hkCalories = 0, fetchDailyCalories, hkSupported, hkAvail, hkAuth, hkInit, hkError }) {
   const { t } = useTranslation();
   const [bariatricTargets, setBariatricTargets] = useState(null);
   const [bariatricProfile, setBariatricProfile] = useState(null);
@@ -297,6 +297,11 @@ onBack, onLogMeal, onMealPlan, hkCalories = 0, fetchDailyCalories, hkSupported, 
         {bariatricTargets && bariatricTargets.phaseInfo ? (
           <View style={s.card}>
             <Text style={s.sectionTitle}>{t('bariatric.dashboard.title', 'Bariatrisk støtte')}</Text>
+            {onBariatricSetup ? (
+              <TouchableOpacity onPress={onBariatricSetup} style={{ position: 'absolute', top: 12, right: 12, backgroundColor: colors.bg, paddingHorizontal: 10, paddingVertical: 5, borderRadius: 6, borderWidth: 1, borderColor: colors.border }}>
+                <Text style={{ color: colors.accent, fontSize: 12, fontWeight: '600' }}>{t('bariatric.dashboard.edit', 'Rediger')}</Text>
+              </TouchableOpacity>
+            ) : null}
             <View style={{ paddingVertical: 8 }}>
               <Text style={{ color: colors.accent, fontSize: 16, fontWeight: '700' }}>
                 {t('bariatric.phases.' + (bariatricTargets.phase === 1 ? 'clearLiquid' : bariatricTargets.phase === 2 ? 'fullLiquid' : bariatricTargets.phase === 3 ? 'pureed' : bariatricTargets.phase === 4 ? 'soft' : 'regular') + '.name', bariatricTargets.phaseInfo.nameDa || '')}
@@ -326,6 +331,23 @@ onBack, onLogMeal, onMealPlan, hkCalories = 0, fetchDailyCalories, hkSupported, 
                 <Text style={{ color: colors.text, fontSize: 15, fontWeight: '600' }}>{bariatricTargets.portionSizeMl}ml</Text>
               </View>
             </View>
+            {bariatricTargets.proteinTargetG > 0 ? (() => {
+              const actual = Number((summary && summary.protein_g) || 0);
+              const target = bariatricTargets.proteinTargetG;
+              const pct = Math.min(100, Math.round((actual / Math.max(1, target)) * 100));
+              const reached = actual >= target;
+              return (
+                <View style={{ marginTop: 12, marginBottom: 4 }}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 }}>
+                    <Text style={{ color: colors.muted, fontSize: 12 }}>{t('bariatric.dashboard.proteinProgress', 'Protein i dag')}</Text>
+                    <Text style={{ color: reached ? colors.accent : colors.text, fontSize: 12, fontWeight: '600' }}>{Math.round(actual)}g / {target}g ({pct}%)</Text>
+                  </View>
+                  <View style={{ height: 8, backgroundColor: colors.border, borderRadius: 4, overflow: 'hidden' }}>
+                    <View style={{ width: pct + '%', height: '100%', backgroundColor: reached ? '#10b981' : colors.accent, borderRadius: 4 }} />
+                  </View>
+                </View>
+              );
+            })() : null}
             {bariatricTargets.daysUntilNext != null ? (
               <View style={{ marginTop: 10, paddingTop: 10, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.08)' }}>
                 <Text style={{ color: colors.accent, fontSize: 12 }}>
