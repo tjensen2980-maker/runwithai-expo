@@ -9,19 +9,6 @@ import { loadBariatricProfile, getTrainingRecommendation } from '../utils/bariat
 // ─── VEJR + TRÆTHED ANBEFALING ────────────────────────────────────────────────
 function WeatherAdvice({ runs, nextWorkout, level, profile }) {
   const { t } = useTranslation();
-  const [bariatricProfile, setBariatricProfile] = useState(null);
-  const [trainingRec, setTrainingRec] = useState(null);
-  useEffect(() => {
-    (async () => {
-      try {
-        const bp = await loadBariatricProfile();
-        setBariatricProfile(bp);
-        if (bp && bp.enabled) {
-          setTrainingRec(getTrainingRecommendation(bp));
-        }
-      } catch (e) {}
-    })();
-  }, []);
   const [advice, setAdvice] = useState(null);
   const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -852,6 +839,19 @@ ${profile?.age ? `Alder: ${profile.age}` : ''}` }),
 
 export default function Dashboard({ level, nextWorkout, weekPlan, planChanges, profile, runs, onNavigate, onStartActivity }) {
   const { t } = useTranslation();
+  const [bariatricProfile, setBariatricProfile] = useState(null);
+  const [trainingRec, setTrainingRec] = useState(null);
+  useEffect(() => {
+    (async () => {
+      try {
+        const bp = await loadBariatricProfile();
+        setBariatricProfile(bp);
+        if (bp && bp.enabled) {
+          setTrainingRec(getTrainingRecommendation(bp));
+        }
+      } catch (e) {}
+    })();
+  }, []);
   const name = (profile?.name || t('dashboard.defaultName')).split(' ')[0].toUpperCase();
   const hour = new Date().getHours();
   const greeting = hour < 10 ? t('dashboard.greeting.morning') : hour < 17 ? t('dashboard.greeting.day') : t('dashboard.greeting.evening');
