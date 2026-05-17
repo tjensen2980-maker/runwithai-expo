@@ -719,6 +719,70 @@
         "proteinLow": "Protein intake too low"
       },
       "info": "Dumping is most common after gastric bypass and triggered by sugar, fat or fast-absorbed carbs. Symptoms: nausea, rapid heartbeat, dizziness, diarrhea 15-30 min after meals."
+    },
+    "training": {
+      "title": "Adapted training",
+      "subtitle": "Recommended activity for your phase",
+      "currentPhase": "Your training phase",
+      "daysUntilNext": "{{days}} days until next training phase",
+      "maxDuration": "Max duration",
+      "maxHeartRate": "Max heart rate",
+      "min": "min",
+      "ofMax": "of max HR",
+      "intensityLabel": {
+        "veryLight": "Very light",
+        "light": "Light",
+        "moderate": "Moderate",
+        "normal": "Normal"
+      },
+      "phaseNames": {
+        "1": "Recovery (week 0-2)",
+        "2": "Careful start (week 2-4)",
+        "3": "Light activity (week 4-6)",
+        "4": "Build-up (week 6-8)",
+        "5": "Normal training (week 8+)"
+      },
+      "phaseDesc": {
+        "1": "Stick to short walks and deep breathing exercises. Listen to your body and rest plenty.",
+        "2": "You can increase walking a bit. Still no strength training or intense exercise.",
+        "3": "You can start cycling and swimming (once wounds are healed). Still no running or heavy weights.",
+        "4": "Time to introduce light strength training and longer cardio. Start with small weights.",
+        "5": "You can return to normal training - but still build gradually and watch your energy."
+      },
+      "allowed": "Recommended",
+      "notRecommended": "Avoid now",
+      "activities": {
+        "walkShort": "Short walk (5-10 min)",
+        "walkMedium": "Medium walk (15-20 min)",
+        "walkLong": "Long walk (30+ min)",
+        "breathing": "Breathing exercises",
+        "gentleStretch": "Gentle stretching",
+        "cycling": "Cycling",
+        "swimming": "Swimming",
+        "lightStrength": "Light strength training",
+        "strength": "Strength training",
+        "jog": "Light jogging",
+        "running": "Running",
+        "highIntensity": "High-intensity training",
+        "heavyLifting": "Heavy lifting",
+        "extremeIntensity": "Extreme intensity"
+      },
+      "warnings": {
+        "title": "Important to remember",
+        "noLifting": "No heavy lifting (over 5 kg)",
+        "staySoftMovements": "Stick to soft, slow movements",
+        "avoidSwimmingUntilHealed": "Avoid swimming until your wounds are healed (typically 3-4 weeks)",
+        "lightWeightsOk": "Light weights (2-5 kg) are OK after consulting your doctor",
+        "startStrengthGradually": "Start strength training with low weights and high reps",
+        "stillBuildGradually": "Still build gradually - avoid sudden large increases",
+        "hydration": "Remember fluids before, during and after training"
+      },
+      "safety": {
+        "activityNotRecommended": "{{activity}} is not recommended in your phase. Consult your doctor.",
+        "durationTooLong": "Recommended duration is at most {{max}} min. You planned {{actual}} min.",
+        "checkWithDoctor": "Contact your doctor if you experience pain, nausea or exhaustion"
+      },
+      "disclaimer": "Recommendations are guidelines only. Always follow your own clinic's instructions."
     }
   }
 }
