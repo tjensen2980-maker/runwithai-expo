@@ -11,7 +11,7 @@ import Svg, { Circle } from 'react-native-svg';
 import { colors, loadProfile, getAuthToken, SERVER } from '../data';
 import { getDailySummary, getMeals, deleteMeal } from '../services/NutritionAPI';
 import { useTranslation } from 'react-i18next';
-import { loadBariatricProfile, getDailyTargets } from '../utils/bariatric';
+import { loadBariatricProfile, getDailyTargets, VITAMINS, loadDailyLog, toggleVitamin, addFluid, getTodayKey } from '../utils/bariatric';
 
 // ---- Helpers ----------------------------------------------------------------
 
@@ -126,6 +126,27 @@ onBack, onLogMeal, onMealPlan, hkCalories = 0, fetchDailyCalories, hkSupported, 
       } catch (e) { /* ignore */ }
     })();
   }, []);
+  const [dailyLog, setDailyLog] = useState({ vitamins: {}, fluidMl: 0 });
+  useEffect(() => {
+    (async () => {
+      try {
+        const log = await loadDailyLog();
+        setDailyLog(log);
+      } catch (e) { /* ignore */ }
+    })();
+  }, []);
+  const handleAddFluid = async (ml) => {
+    try {
+      const updated = await addFluid(ml);
+      setDailyLog(updated);
+    } catch (e) { /* ignore */ }
+  };
+  const handleToggleVitamin = async (key) => {
+    try {
+      const updated = await toggleVitamin(key);
+      setDailyLog(updated);
+    } catch (e) { /* ignore */ }
+  };
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [summary, setSummary] = useState(null);
@@ -315,6 +336,62 @@ onBack, onLogMeal, onMealPlan, hkCalories = 0, fetchDailyCalories, hkSupported, 
                   ⚠ {t('bariatric.dashboard.medicalCheckReminder', 'Husk din {{day}}-dages kontrol').replace('{{day}}', String(bariatricTargets.medicalCheck.dayMark))}
                 </Text>
               </View>
+            ) : null}
+          </View>
+        ) : null}
+
+        {bariatricTargets ? (
+          <View style={s.card}>
+            <Text style={s.sectionTitle}>{t('bariatric.fluid.title')}</Text>
+            <Text style={{ color: colors.muted, fontSize: 13, marginBottom: 8 }}>{t('bariatric.fluid.subtitle')}</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
+              <Text style={{ color: colors.text, fontSize: 24, fontWeight: '700' }}>{dailyLog.fluidMl} ml</Text>
+              <Text style={{ color: colors.muted, fontSize: 14 }}>{t('bariatric.fluid.goal')}: {bariatricTargets.fluidTarget} ml</Text>
+            </View>
+            <View style={{ height: 10, backgroundColor: colors.border, borderRadius: 5, overflow: 'hidden', marginBottom: 10 }}>
+              <View style={{ width: Math.min(100, Math.round((dailyLog.fluidMl / Math.max(1, bariatricTargets.fluidTarget)) * 100)) + '%', height: '100%', backgroundColor: colors.accent, borderRadius: 5 }} />
+            </View>
+            {dailyLog.fluidMl >= bariatricTargets.fluidTarget ? (
+              <Text style={{ color: colors.accent, fontSize: 13, marginBottom: 8, fontWeight: '600' }}>{t('bariatric.fluid.goalReached')}</Text>
+            ) : (
+              <Text style={{ color: colors.muted, fontSize: 12, marginBottom: 8 }}>{t('bariatric.fluid.remaining')}: {Math.max(0, bariatricTargets.fluidTarget - dailyLog.fluidMl)} ml</Text>
+            )}
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+              <TouchableOpacity onPress={() => handleAddFluid(250)} style={{ flex: 1, backgroundColor: colors.accent, paddingVertical: 10, borderRadius: 8, alignItems: 'center' }}>
+                <Text style={{ color: '#fff', fontWeight: '600' }}>{t('bariatric.fluid.add250')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleAddFluid(500)} style={{ flex: 1, backgroundColor: colors.accent, paddingVertical: 10, borderRadius: 8, alignItems: 'center' }}>
+                <Text style={{ color: '#fff', fontWeight: '600' }}>{t('bariatric.fluid.add500')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleAddFluid(-250)} style={{ width: 50, backgroundColor: colors.border, paddingVertical: 10, borderRadius: 8, alignItems: 'center' }}>
+                <Text style={{ color: colors.text, fontWeight: '600' }}>-250</Text>
+              </TouchableOpacity>
+            </View>
+            <Text style={{ color: colors.muted, fontSize: 11, marginTop: 8, fontStyle: 'italic' }}>{t('bariatric.fluid.warning')}</Text>
+          </View>
+        ) : null}
+
+        {bariatricTargets ? (
+          <View style={s.card}>
+            <Text style={s.sectionTitle}>{t('bariatric.vitamins.title')}</Text>
+            <Text style={{ color: colors.muted, fontSize: 13, marginBottom: 12 }}>{t('bariatric.vitamins.subtitle')}</Text>
+            {VITAMINS.map(v => {
+              const taken = !!dailyLog.vitamins[v.key];
+              return (
+                <TouchableOpacity key={v.key} onPress={() => handleToggleVitamin(v.key)} style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+                  <Text style={{ fontSize: 22, marginRight: 12 }}>{v.icon}</Text>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ color: colors.text, fontSize: 15, fontWeight: '600' }}>{t('bariatric.vitamins.names.' + v.key)}</Text>
+                    <Text style={{ color: taken ? colors.accent : colors.muted, fontSize: 12 }}>{taken ? t('bariatric.vitamins.taken') : t('bariatric.vitamins.notTaken')}</Text>
+                  </View>
+                  <View style={{ width: 28, height: 28, borderRadius: 14, borderWidth: 2, borderColor: taken ? colors.accent : colors.border, backgroundColor: taken ? colors.accent : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
+                    {taken ? <Text style={{ color: '#fff', fontSize: 16, fontWeight: '700' }}>✓</Text> : null}
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+            {VITAMINS.every(v => dailyLog.vitamins[v.key]) ? (
+              <Text style={{ color: colors.accent, fontSize: 14, fontWeight: '600', marginTop: 12, textAlign: 'center' }}>{t('bariatric.vitamins.allDone')}</Text>
             ) : null}
           </View>
         ) : null}
