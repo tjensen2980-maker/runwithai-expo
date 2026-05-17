@@ -12,6 +12,7 @@ import { colors, loadProfile, getAuthToken, SERVER } from '../data';
 import { getDailySummary, getMeals, deleteMeal } from '../services/NutritionAPI';
 import { useTranslation } from 'react-i18next';
 import { loadBariatricProfile, getDailyTargets, VITAMINS, loadDailyLog, toggleVitamin, addFluid, getTodayKey, getMealSuggestions, checkDailyDumpingRisk, checkDumpingFromSummary, MEAL_SUGGESTIONS } from '../utils/bariatric';
+import { computeDailyHealthScore } from '../utils/healthScore';
 
 // ---- Helpers ----------------------------------------------------------------
 
@@ -294,7 +295,21 @@ onBack, onLogMeal, onMealPlan, onBariatricSetup, hkCalories = 0, fetchDailyCalor
           </View>
         </View>
 
-        {bariatricTargets && bariatricTargets.phaseInfo ? (
+{(() => {
+          const dhs = computeDailyHealthScore(meals);
+          return (
+            <View style={{ backgroundColor: colors.card, borderRadius: 14, padding: 16, borderWidth: 1, borderColor: colors.border, borderLeftWidth: 6, borderLeftColor: dhs.color, marginVertical: 8, flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ fontSize: 40, marginRight: 14 }}>{dhs.emoji}</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={{ color: colors.muted, fontSize: 11, fontWeight: '800', letterSpacing: 1, textTransform: 'uppercase' }}>{t('healthScore.todayLabel', 'Dagens sundhedsscore')}</Text>
+                <Text style={{ color: colors.text, fontSize: 22, fontWeight: '800', marginTop: 4 }}>{dhs.grade} · {dhs.score}</Text>
+                <Text style={{ color: dhs.color, fontSize: 13, fontWeight: '600', marginTop: 2 }}>{t(dhs.labelKey, dhs.grade)}</Text>
+              </View>
+            </View>
+          );
+        })()}
+
+                {bariatricTargets && bariatricTargets.phaseInfo ? (
           <View style={s.card}>
             <Text style={s.sectionTitle}>{t('bariatric.dashboard.title', 'Bariatrisk støtte')}</Text>
             {onBariatricSetup ? (
