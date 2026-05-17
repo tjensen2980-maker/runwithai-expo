@@ -713,7 +713,10 @@
         "sugarHigh": "Too much sugar",
         "sugarMedium": "Moderate sugar content",
         "fatHigh": "High fat content",
-        "carbsNoProtein": "Carbs without protein"
+        "carbsNoProtein": "Carbs without protein",
+        "carbsHigh": "High carbohydrate intake",
+        "carbsMedium": "Moderate carbohydrate intake",
+        "proteinLow": "Protein intake too low"
       },
       "info": "Dumping is most common after gastric bypass and triggered by sugar, fat or fast-absorbed carbs. Symptoms: nausea, rapid heartbeat, dizziness, diarrhea 15-30 min after meals."
     }
