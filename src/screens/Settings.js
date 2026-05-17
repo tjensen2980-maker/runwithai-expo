@@ -914,6 +914,23 @@ const calculateGoals = async () => {
           </View>
         </View>
 
+        {/* ── BARIATRISK ── */}
+        <Text style={s.sectionTitle}>{t('bariatric.title', 'Bariatrisk profil')}</Text>
+        <View style={s.card}>
+          <TouchableOpacity
+            style={s.exportBtn}
+            onPress={() => { if (onNavigate) onNavigate('bariatricSetup'); }}
+          >
+            <View style={{ flex: 1 }}>
+              <Text style={s.notifTitle}>{t('bariatric.settingsButton', 'Bariatrisk profil')}</Text>
+              <Text style={s.notifSub}>{t('bariatric.settingsDescription', 'Gastric sleeve eller bypass support')}</Text>
+            </View>
+            <View style={{flexDirection:'row',alignItems:'center',gap:6}}>
+              <Text style={s.exportBtnText}>›</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+
         {/* ── PRIVATLIV ── */}
         <Text style={s.sectionTitle}>{t('settings.sections.privacy')}</Text>
         <View style={s.card}>
