@@ -643,6 +643,79 @@
       "reset": "Reset",
       "goalReached": "You reached your fluid goal 💧",
       "warning": "Remember small sips - not large amounts at once"
+    },
+    "meals": {
+      "title": "Suggestions for you now",
+      "subtitle": "Tailored to your phase",
+      "kcal": "kcal",
+      "protein": "g protein",
+      "prep": "min",
+      "logIt": "Log",
+      "types": {
+        "fluid": "Fluid",
+        "puree": "Puree",
+        "soft": "Soft food",
+        "normal": "Normal food"
+      },
+      "items": {
+        "water": "Water",
+        "brothClear": "Clear broth",
+        "sugarFreeJuice": "Sugar-free juice (diluted)",
+        "herbalTea": "Herbal tea",
+        "proteinShake": "Protein shake",
+        "skimmedMilk": "Skimmed milk",
+        "thinSoup": "Thin soup (strained)",
+        "skyrThin": "Thin skyr",
+        "mashedFish": "Mashed fish",
+        "cottageCheese": "Cottage cheese",
+        "eggPuree": "Egg puree",
+        "pureedChicken": "Pureed chicken",
+        "mashedTofu": "Mashed tofu",
+        "softFish": "Soft fish",
+        "scrambledEgg": "Scrambled egg",
+        "softChicken": "Tender chicken",
+        "wellCookedVeggies": "Well-cooked vegetables",
+        "greekYogurt": "Greek yogurt",
+        "grilledChicken": "Grilled chicken breast",
+        "salmonFillet": "Salmon fillet",
+        "eggOmelette": "Omelette",
+        "lentilSoup": "Lentil soup",
+        "leanBeef": "Lean beef"
+      },
+      "reminders": {
+        "title": "Remember at meals",
+        "proteinFirst": "Eat protein first",
+        "chew": "Chew 20-30 times",
+        "noDrinking": "Don't drink 30 min before/after meals",
+        "stopWhenFull": "Stop when full",
+        "smallSips": "Take small sips",
+        "noStraw": "No straws (air in stomach)",
+        "slowly": "Drink slowly",
+        "mashWell": "Mash thoroughly",
+        "newFoodOneAtATime": "Introduce one new food at a time",
+        "chewExtra": "Chew extra thoroughly",
+        "mindfulEating": "Eat slowly and mindfully",
+        "avoidEmptyCalories": "Avoid empty calories"
+      }
+    },
+    "dumping": {
+      "title": "Dumping syndrome risk",
+      "subtitle": "Based on today's meals",
+      "low": "Low risk",
+      "medium": "Be aware",
+      "high": "High risk",
+      "lowDesc": "Today's meals look fine",
+      "mediumDesc": "One or more meals may trigger dumping. Watch for symptoms.",
+      "highDesc": "Multiple high-risk meals today. Contact your doctor if you experience nausea, rapid heartbeat, dizziness or diarrhea.",
+      "flaggedCount": "{{count}} meal flagged",
+      "flaggedCount_plural": "{{count}} meals flagged",
+      "reasons": {
+        "sugarHigh": "Too much sugar",
+        "sugarMedium": "Moderate sugar content",
+        "fatHigh": "High fat content",
+        "carbsNoProtein": "Carbs without protein"
+      },
+      "info": "Dumping is most common after gastric bypass and triggered by sugar, fat or fast-absorbed carbs. Symptoms: nausea, rapid heartbeat, dizziness, diarrhea 15-30 min after meals."
     }
   }
 }
