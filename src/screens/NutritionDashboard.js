@@ -11,7 +11,7 @@ import Svg, { Circle } from 'react-native-svg';
 import { colors, loadProfile, getAuthToken, SERVER } from '../data';
 import { getDailySummary, getMeals, deleteMeal } from '../services/NutritionAPI';
 import { useTranslation } from 'react-i18next';
-import { loadBariatricProfile, getDailyTargets, VITAMINS, loadDailyLog, toggleVitamin, addFluid, getTodayKey, getMealSuggestions, checkDailyDumpingRisk, MEAL_SUGGESTIONS } from '../utils/bariatric';
+import { loadBariatricProfile, getDailyTargets, VITAMINS, loadDailyLog, toggleVitamin, addFluid, getTodayKey, getMealSuggestions, checkDailyDumpingRisk, checkDumpingFromSummary, MEAL_SUGGESTIONS } from '../utils/bariatric';
 
 // ---- Helpers ----------------------------------------------------------------
 
@@ -400,7 +400,7 @@ onBack, onLogMeal, onMealPlan, hkCalories = 0, fetchDailyCalories, hkSupported, 
         ) : null}
 
         {bariatricProfile ? (() => {
-          const dumpingRisk = checkDailyDumpingRisk(meals, bariatricProfile);
+          const dumpingRisk = checkDumpingFromSummary(summary, bariatricProfile);
           if (dumpingRisk.risk === 'low' || dumpingRisk.flaggedCount === 0) return null;
           const bgColor = dumpingRisk.risk === 'high' ? '#7f1d1d' : '#78350f';
           const borderColor = dumpingRisk.risk === 'high' ? '#ef4444' : '#f59e0b';
