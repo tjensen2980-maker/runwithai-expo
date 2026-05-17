@@ -543,5 +543,77 @@
         "desc": "Ugentlige og månedlige opsummeringer"
       }
     }
+  },
+  "bariatric": {
+    "title": "Bariatrisk profil",
+    "subtitle": "Gastric sleeve / bypass support",
+    "settingsButton": "Bariatrisk profil",
+    "settingsDescription": "Gastric sleeve eller bypass support",
+    "setup": {
+      "title": "Bariatrisk profil",
+      "intro": "Aktivér bariatrisk støtte for at få tilpassede mål for protein, væske og kalorier baseret på din operation og fase.",
+      "surgeryType": "Type operation",
+      "surgeryTypeNone": "Ingen",
+      "surgeryTypeSleeve": "Gastric Sleeve",
+      "surgeryTypeBypass": "Gastric Bypass",
+      "surgeryDate": "Operationsdato",
+      "surgeryDatePlaceholder": "ÅÅÅÅ-MM-DD",
+      "startWeight": "Startvægt (kg)",
+      "goalWeight": "Målvægt (kg)",
+      "height": "Højde (cm)",
+      "enable": "Aktivér bariatrisk støtte",
+      "save": "Gem profil",
+      "delete": "Slet bariatrisk profil",
+      "deleteConfirm": "Er du sikker på at du vil slette din bariatriske profil?",
+      "disclaimer": "Vigtigt: Denne app erstatter IKKE din bariatriske ernæringsterapeut, læge eller klinik. Anbefalingerne er generelle retningslinjer baseret på offentlige guidelines (ASMBS). Følg altid din egen kliniks anvisninger. Kontakt straks din læge ved bekymringer, dumping syndrome, vedvarende kvalme eller andre symptomer.",
+      "acceptDisclaimer": "Jeg forstår at appen ikke erstatter min bariatriske terapeut",
+      "disclaimerRequired": "Du skal acceptere ansvarsfraskrivelsen",
+      "invalidDate": "Indtast en gyldig dato",
+      "missingType": "Vælg type operation",
+      "saved": "Profil gemt",
+      "deleted": "Profil slettet"
+    },
+    "dashboard": {
+      "title": "Bariatrisk støtte",
+      "phaseLabel": "Nuværende fase",
+      "daysSinceLabel": "Dage siden operation",
+      "daysUntilNext": "{{days}} dage til næste fase",
+      "lastPhase": "Du er i den sidste fase",
+      "proteinToday": "Protein i dag",
+      "fluidToday": "Væske i dag",
+      "kcalRange": "Kalorier (mål)",
+      "portionSize": "Anbefalet portionsstørrelse",
+      "medicalCheckReminder": "Husk din {{day}}-dages kontrol",
+      "preSurgery": "Operationsdato ikke nået endnu"
+    },
+    "phases": {
+      "clearLiquid": {
+        "name": "Uge 1: Klare væsker",
+        "description": "Kun klare væsker: vand, bouillon, sukkerfri saft, te. Små slurke hele dagen."
+      },
+      "fullLiquid": {
+        "name": "Uge 2: Alle væsker",
+        "description": "Alle væsker inkl. protein shakes, suppe, yoghurt. Drik IKKE 30 min før/efter måltid."
+      },
+      "pureed": {
+        "name": "Uge 3-4: Puréet mad",
+        "description": "Blendet/puréet mad: hytteost, fiskepuré, blendet kylling. Tygg grundigt."
+      },
+      "soft": {
+        "name": "Uge 5-6: Blød mad",
+        "description": "Blød mad: æggekage, fisk, kogt grønt, blød frugt. Protein først, små bidder."
+      },
+      "regular": {
+        "name": "Uge 7+: Normal mad",
+        "description": "Normal mad i små portioner. Protein først, derefter grønt, sidst kulhydrater. Tygg grundigt."
+      }
+    },
+    "tips": {
+      "noDrinking": "Drik IKKE 30 min før eller efter måltid",
+      "proteinFirst": "Spis altid protein først",
+      "chew": "Tygg hver bid 20-30 gange",
+      "stopWhenFull": "Stop ved fyldethed - selv ved lille portion",
+      "vitamins": "Husk dine daglige vitaminer"
+    }
   }
 }
