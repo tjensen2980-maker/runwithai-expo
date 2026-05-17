@@ -475,3 +475,127 @@ export function checkDumpingFromSummary(summary, profile) {
   const flaggedCount = reasons.length;
   return { risk, reasons, flaggedCount };
 }
+
+// ============================================================
+// Training recommendations per phase (ASMBS / bariatric clinics guidelines)
+// ============================================================
+export const TRAINING_PHASES = {
+  1: {
+    // Week 0-2: Recovery
+    daysFrom: 0,
+    daysTo: 14,
+    allowed: ['walkShort', 'breathing'],
+    notRecommended: ['running', 'strength', 'highIntensity', 'cycling', 'swimming'],
+    maxDurationMin: 10,
+    maxHeartRatePct: 50, // % of max
+    intensityLabel: 'veryLight',
+    warnings: ['noLifting', 'staySoftMovements', 'avoidSwimmingUntilHealed'],
+  },
+  2: {
+    // Week 2-4
+    daysFrom: 14,
+    daysTo: 28,
+    allowed: ['walkShort', 'walkMedium', 'breathing', 'gentleStretch'],
+    notRecommended: ['running', 'strength', 'highIntensity'],
+    maxDurationMin: 20,
+    maxHeartRatePct: 60,
+    intensityLabel: 'light',
+    warnings: ['noLifting', 'staySoftMovements'],
+  },
+  3: {
+    // Week 4-6
+    daysFrom: 28,
+    daysTo: 42,
+    allowed: ['walkMedium', 'walkLong', 'cycling', 'gentleStretch', 'swimming'],
+    notRecommended: ['running', 'highIntensity', 'heavyLifting'],
+    maxDurationMin: 30,
+    maxHeartRatePct: 70,
+    intensityLabel: 'moderate',
+    warnings: ['lightWeightsOk'],
+  },
+  4: {
+    // Week 6-8
+    daysFrom: 42,
+    daysTo: 56,
+    allowed: ['walkLong', 'cycling', 'swimming', 'lightStrength', 'gentleStretch'],
+    notRecommended: ['running', 'highIntensity', 'heavyLifting'],
+    maxDurationMin: 45,
+    maxHeartRatePct: 75,
+    intensityLabel: 'moderate',
+    warnings: ['startStrengthGradually'],
+  },
+  5: {
+    // 8+ weeks: Normal training (still build up gradually)
+    daysFrom: 56,
+    daysTo: null,
+    allowed: ['walkLong', 'jog', 'running', 'cycling', 'swimming', 'strength', 'lightStrength', 'gentleStretch'],
+    notRecommended: ['extremeIntensity'],
+    maxDurationMin: 60,
+    maxHeartRatePct: 85,
+    intensityLabel: 'normal',
+    warnings: ['stillBuildGradually', 'hydration'],
+  },
+};
+
+export function getTrainingPhaseFromDays(days) {
+  if (days < 14) return 1;
+  if (days < 28) return 2;
+  if (days < 42) return 3;
+  if (days < 56) return 4;
+  return 5;
+}
+
+export function getTrainingRecommendation(profile) {
+  if (!profile || !profile.enabled) return null;
+  const days = getDaysSinceSurgery(profile.surgeryDate);
+  const tphase = getTrainingPhaseFromDays(days);
+  const tdata = TRAINING_PHASES[tphase];
+  if (!tdata) return null;
+  
+  // Calculate days until next training phase
+  let daysUntilNext = null;
+  if (tdata.daysTo !== null) {
+    daysUntilNext = tdata.daysTo - days;
+  }
+  
+  return {
+    phase: tphase,
+    days,
+    allowed: tdata.allowed,
+    notRecommended: tdata.notRecommended,
+    maxDurationMin: tdata.maxDurationMin,
+    maxHeartRatePct: tdata.maxHeartRatePct,
+    intensityLabel: tdata.intensityLabel,
+    warnings: tdata.warnings,
+    daysUntilNext,
+  };
+}
+
+// Returns { safe, warning, severity } for a given activity
+export function checkActivitySafety(activityType, durationMin, profile) {
+  if (!profile || !profile.enabled) return { safe: true, warning: null, severity: 'none' };
+  const rec = getTrainingRecommendation(profile);
+  if (!rec) return { safe: true, warning: null, severity: 'none' };
+  
+  // Check if activity is in notRecommended
+  if (rec.notRecommended.includes(activityType)) {
+    return {
+      safe: false,
+      warning: 'activityNotRecommended',
+      severity: 'high',
+      details: { activityType, phase: rec.phase },
+    };
+  }
+  
+  // Check if duration exceeds recommended max
+  if (durationMin && durationMin > rec.maxDurationMin) {
+    return {
+      safe: true,
+      warning: 'durationTooLong',
+      severity: 'medium',
+      details: { durationMin, maxDurationMin: rec.maxDurationMin, phase: rec.phase },
+    };
+  }
+  
+  return { safe: true, warning: null, severity: 'none' };
+}
