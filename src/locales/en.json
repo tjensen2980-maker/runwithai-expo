@@ -614,6 +614,35 @@
       "chew": "Chew each bite 20-30 times",
       "stopWhenFull": "Stop when full - even with small portions",
       "vitamins": "Remember your daily vitamins"
+    },
+    "vitamins": {
+      "title": "Today's vitamins",
+      "subtitle": "Remember your daily supplements",
+      "names": {
+        "multivitamin": "Multivitamin",
+        "calciumD": "Calcium + Vitamin D",
+        "iron": "Iron",
+        "b12": "B12",
+        "omega3": "Omega-3 (optional)"
+      },
+      "taken": "Taken",
+      "notTaken": "Not taken",
+      "allDone": "All vitamins taken today 🎉",
+      "reset": "Reset",
+      "optional": "optional"
+    },
+    "fluid": {
+      "title": "Fluid intake today",
+      "subtitle": "Drink between meals, not with",
+      "goal": "Goal",
+      "current": "Today",
+      "remaining": "Remaining",
+      "add250": "+ 250 ml",
+      "add500": "+ 500 ml",
+      "addCustom": "Add",
+      "reset": "Reset",
+      "goalReached": "You reached your fluid goal 💧",
+      "warning": "Remember small sips - not large amounts at once"
     }
   }
 }
