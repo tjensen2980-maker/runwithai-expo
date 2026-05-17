@@ -784,5 +784,14 @@
       },
       "disclaimer": "Anbefalingerne er vejledende. Følg altid din egen kliniks anvisninger."
     }
+  },
+  "healthScore": {
+    "title": "Sundhedsscore",
+    "todayLabel": "Dagens score",
+    "A": "Meget sundt",
+    "B": "Sundt",
+    "C": "Moderat",
+    "D": "Mindre sundt",
+    "E": "Usundt"
   }
 }
