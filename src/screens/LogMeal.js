@@ -125,6 +125,9 @@ function SearchStep({ onPickFood, onCreateCustom, onScanBarcode, onPhotoAnalyze,
               <View style={{ flex: 1 }}>
                 <Text style={s.foodName} numberOfLines={2}>{item.name}</Text>
                 {item.brand ? <Text style={s.foodBrand} numberOfLines={1}>{item.brand}</Text> : null}
+              {item.source === 'frida' && <View style={s.badgeDK}><Text style={s.badgeTxt}>DK</Text></View>}
+              {item.source === 'openai' && <View style={s.badgeAI}><Text style={s.badgeTxt}>AI-estimat</Text></View>}
+              {item.source === 'off' && <View style={s.badgeOFF}><Text style={s.badgeTxt}>OFF</Text></View>}
                 <Text style={s.foodMacros}>
                   {Math.round(Number(item.kcal_per_100g) || 0)} kcal/100g
                   {item.protein_g ? ' - P ' + Number(item.protein_g).toFixed(1) + 'g' : ''}
@@ -765,4 +768,8 @@ const s = StyleSheet.create({
     paddingVertical: 16, alignItems: 'center'
   },
   saveTxt: { color: colors.card, fontSize: 16, fontWeight: '800', letterSpacing: 0.5 }
-});
+,
+  badgeDK: { alignSelf: 'flex-start', backgroundColor: '#2E7D32', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, marginTop: 2 },
+  badgeAI: { alignSelf: 'flex-start', backgroundColor: '#FF7A00', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, marginTop: 2 },
+  badgeOFF: { alignSelf: 'flex-start', backgroundColor: '#888', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, marginTop: 2 },
+  badgeTxt: { color: '#fff', fontSize: 10, fontWeight: '700', letterSpacing: 0.3 }});
