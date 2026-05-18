@@ -176,24 +176,22 @@ export default function PhotoAnalyze({ onBack, onDone }) {
                   )}
                   <View style={styles.gramsRow}>
                     <Text style={styles.label}>Maengde:</Text>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 6, marginBottom: 6 }}>
                       <TextInput
-                        style={[styles.gramInput, { flex: 0, width: 80 }]}
+                        style={[styles.gramInput, { flex: 0, width: 80, marginRight: 6 }]}
                         value={item._amount}
                         onChangeText={(v) => updateAmount(idx, v)}
                         keyboardType="numeric"
                       />
-                      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, flex: 1 }}>
-                        {getAvailableUnits({ kcal_per_100g: item.kcal_per_100g, name: item.name }).map(u => (
-                          <TouchableOpacity
-                            key={u}
-                            onPress={() => updateUnit(idx, u)}
-                            style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 6, backgroundColor: (item._unit || 'g') === u ? '#FF7A00' : '#eee' }}
-                          >
-                            <Text style={{ color: (item._unit || 'g') === u ? '#fff' : '#333', fontSize: 13, fontWeight: '600' }}>{u}</Text>
-                          </TouchableOpacity>
-                        ))}
-                      </View>
+                      {getAvailableUnits({ kcal_per_100g: item.kcal_per_100g, name: item.name }).map(u => (
+                        <TouchableOpacity
+                          key={u}
+                          onPress={() => updateUnit(idx, u)}
+                          style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 6, backgroundColor: (item._unit || 'g') === u ? '#FF7A00' : '#eee' }}
+                        >
+                          <Text style={{ color: (item._unit || 'g') === u ? '#fff' : '#333', fontSize: 13, fontWeight: '600' }}>{u}</Text>
+                        </TouchableOpacity>
+                      ))}
                     </View>
                   </View>
                   <View style={styles.macroRow}>
