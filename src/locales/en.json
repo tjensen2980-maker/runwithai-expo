@@ -794,4 +794,22 @@
     "D": "Less healthy",
     "E": "Unhealthy"
   }
+,
+  "units": {
+    "g": "g",
+    "kg": "kg",
+    "ml": "ml",
+    "dl": "dl",
+    "l": "l",
+    "tsk": "tsp",
+    "spsk": "tbsp",
+    "stk": "pcs",
+    "skive": "slice",
+    "portion": "portion"
+  },
+  "logMeal": {
+    "amount": "Amount",
+    "unit": "Unit",
+    "approxGrams": "≈ {{grams}}g"
+  }
 }
