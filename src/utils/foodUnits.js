@@ -18,9 +18,31 @@ const SKIVE_DEFAULT_G = 25;
 
 export function isLiquid(food) {
   if (!food) return false;
+
+  // 1. Tjek eksplicitte enheds-felter fra OpenFoodFacts/USDA hvis tilstede
+  const unitFields = [food.serving_size_unit, food.quantity_unit, food.product_quantity_unit, food.unit];
+  for (const u of unitFields) {
+    if (!u) continue;
+    const uLow = String(u).toLowerCase().trim();
+    if (uLow === 'ml' || uLow === 'dl' || uLow === 'l' || uLow === 'cl' || uLow === 'liter' || uLow === 'litre') return true;
+  }
+
+  // 2. Heuristik via navn + brand
   const name = String(food.name || '').toLowerCase();
-  const liquidWords = ['mælk', 'milk', 'juice', 'saft', 'vand', 'water', 'kaffe', 'coffee', 'te ', 'cola', 'sodavand', 'soda', 'øl', 'beer', 'vin', 'wine', 'smoothie', 'shake', 'yoghurt', 'yogurt', 'suppe', 'soup'];
-  return liquidWords.some(w => name.includes(w));
+  const brand = String(food.brand || '').toLowerCase();
+  const haystack = name + ' ' + brand;
+  const liquidWords = [
+    'mælk', 'milk', 'juice', 'saft', 'vand', 'water', 'kaffe', 'coffee',
+    'te ', 'tea ', 'cola', 'sodavand', 'soda', 'øl', 'beer', 'vin', 'wine',
+    'smoothie', 'shake', 'yoghurt', 'yogurt', 'suppe', 'soup',
+    'fanta', 'sprite', 'pepsi', 'lemonade', 'drink', 'drikke',
+    'fløde', 'cream', 'kakao', 'cocoa', 'latte', 'espresso', 'cappuccino',
+    'kefir', 'buttermilk', 'kaernæmælk', 'kaernemaelk',
+    'energidrik', 'energy drink', 'sport', 'redbull', 'monster',
+    'mineralvand', 'sparkling', 'tonic', 'gin', 'vodka', 'whisky', 'rom',
+    'cider', 'must', 'koncentrat',
+  ];
+  return liquidWords.some(w => haystack.includes(w));
 }
 
 export function getAvailableUnits(food) {
