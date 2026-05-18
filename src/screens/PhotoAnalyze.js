@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import { analyzePhoto, logMeal, buildMealPayload, createCustomFood } from '../services/NutritionAPI';
+import { getDefaultUnit, getAvailableUnits, convertToGrams } from '../utils/foodUnits';
 
 export default function PhotoAnalyze({ onBack, onDone }) {
   const [imageUri, setImageUri] = useState(null);
@@ -48,7 +49,12 @@ export default function PhotoAnalyze({ onBack, onDone }) {
       const result = await analyzePhoto(base64, 'image/jpeg');
       console.log('[PhotoAnalyze] Raw result:', JSON.stringify(result));
       if (result && Array.isArray(result.items)) {
-        setItems(result.items.map(it => ({ ...it, _grams: String(it.estimated_grams || 100) })));
+        setItems(result.items.map(it => {
+          const food = { kcal_per_100g: it.kcal_per_100g, name: it.name };
+          const defaultUnit = getDefaultUnit(food);
+          const grams = it.estimated_grams || 100;
+          return { ...it, _grams: String(grams), _amount: String(grams), _unit: defaultUnit };
+        }));
       } else {
         setItems([]);
         Alert.alert('Ingen mad fundet', 'AI kunne ikke identificere mad i billedet. Proev et andet billede.');
@@ -60,8 +66,21 @@ export default function PhotoAnalyze({ onBack, onDone }) {
     }
   };
 
-  const updateGrams = (idx, val) => {
-    setItems(prev => prev.map((it, i) => i === idx ? { ...it, _grams: val } : it));
+  const updateAmount = (idx, val) => {
+    setItems(prev => prev.map((it, i) => {
+      if (i !== idx) return it;
+      const food = { kcal_per_100g: it.kcal_per_100g, name: it.name };
+      const grams = convertToGrams(val, it._unit || 'g', food);
+      return { ...it, _amount: val, _grams: String(grams) };
+    }));
+  };
+  const updateUnit = (idx, unit) => {
+    setItems(prev => prev.map((it, i) => {
+      if (i !== idx) return it;
+      const food = { kcal_per_100g: it.kcal_per_100g, name: it.name };
+      const grams = convertToGrams(it._amount || it._grams, unit, food);
+      return { ...it, _unit: unit, _grams: String(grams) };
+    }));
   };
 
   const logItem = async (item) => {
@@ -79,7 +98,7 @@ export default function PhotoAnalyze({ onBack, onDone }) {
         carbs_g: item.carbs_g,
         fat_g: item.fat_g,
       });
-      const payload = buildMealPayload({ food, grams, mealType });
+      const payload = buildMealPayload({ food, grams, mealType, amount: parseFloat(item._amount) || grams, unit: item._unit || 'g' });
       await logMeal(payload);
       Alert.alert('Logget!', item.name + ' (' + grams + 'g) er tilfoejet', [
         { text: 'OK', onPress: () => { if (onDone) onDone(); } }
@@ -156,13 +175,26 @@ export default function PhotoAnalyze({ onBack, onDone }) {
                     <Text style={styles.confidence}>Sikkerhed: {Math.round((item.confidence || 0) * 100)}%</Text>
                   )}
                   <View style={styles.gramsRow}>
-                    <Text style={styles.label}>Maengde (g):</Text>
-                    <TextInput
-                      style={styles.gramInput}
-                      value={item._grams}
-                      onChangeText={(v) => updateGrams(idx, v)}
-                      keyboardType="numeric"
-                    />
+                    <Text style={styles.label}>Maengde:</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                      <TextInput
+                        style={[styles.gramInput, { flex: 0, width: 80 }]}
+                        value={item._amount}
+                        onChangeText={(v) => updateAmount(idx, v)}
+                        keyboardType="numeric"
+                      />
+                      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, flex: 1 }}>
+                        {getAvailableUnits({ kcal_per_100g: item.kcal_per_100g, name: item.name }).map(u => (
+                          <TouchableOpacity
+                            key={u}
+                            onPress={() => updateUnit(idx, u)}
+                            style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 6, backgroundColor: (item._unit || 'g') === u ? '#FF7A00' : '#eee' }}
+                          >
+                            <Text style={{ color: (item._unit || 'g') === u ? '#fff' : '#333', fontSize: 13, fontWeight: '600' }}>{u}</Text>
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+                    </View>
                   </View>
                   <View style={styles.macroRow}>
                     <Text style={styles.macro}>{kcal} kcal</Text>
