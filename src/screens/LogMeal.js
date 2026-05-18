@@ -2,6 +2,7 @@
 // Søg efter mad, vælg, indtast graemmer, vælg meal_type og log.
 
 import React, { useState, useEffect, useRef } from 'react';
+import { getAvailableUnits, getDefaultUnit, convertToGrams, convertFromGrams, formatAmount } from '../utils/foodUnits';
 import { computeHealthScore } from '../utils/healthScore';
 import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
@@ -145,32 +146,22 @@ function SearchStep({ onPickFood, onCreateCustom, onScanBarcode, onPhotoAnalyze,
 // ============================================================================
 
 function LogStep({ food, onBack, onLogged }) {
-  const hasServing = food.serving_size_g && Number(food.serving_size_g) > 0;
-  const servingG = hasServing ? Number(food.serving_size_g) : 100;
-  const [count, setCount] = useState(hasServing ? '1' : '');
-  const [grams, setGrams] = useState(String(servingG));
+  const initialUnit = getDefaultUnit(food);
+  const servingG = Number(food && food.serving_size_g) > 0 ? Number(food.serving_size_g) : 100;
+  const [unit, setUnit] = useState(initialUnit);
+  const [amount, setAmount] = useState(initialUnit === 'g' ? String(servingG) : '1');
   const [mealType, setMealType] = useState(defaultMealType());
   const [saving, setSaving] = useState(false);
 
-  const updateCount = (v) => {
-    setCount(v);
-    if (hasServing) {
-      const n = Number(String(v).replace(',', '.'));
-      if (!isNaN(n) && n > 0) {
-        setGrams(String(Math.round(n * servingG)));
-      }
-    }
-  };
+  const availableUnits = getAvailableUnits(food);
+  const grams = convertToGrams(amount, unit, food);
 
-  const updateGrams = (v) => {
-    setGrams(v);
-    if (hasServing) {
-      const g = Number(String(v).replace(',', '.'));
-      if (!isNaN(g) && g > 0) {
-        const n = g / servingG;
-        setCount(n % 1 === 0 ? String(n) : n.toFixed(2));
-      }
-    }
+  const onChangeUnit = (newUnit) => {
+    // Konverter vist mængde fra nuværende enhed til ny
+    const g = convertToGrams(amount, unit, food);
+    setUnit(newUnit);
+    const newAmount = convertFromGrams(g, newUnit, food);
+    setAmount(formatAmount(newAmount));
   };
 
   const factor = (Number(grams) || 0) / 100;
@@ -230,37 +221,41 @@ function LogStep({ food, onBack, onLogged }) {
         })}
       </View>
 
-      {hasServing ? (
-        <View>
-          <Text style={s.label}>Antal stk</Text>
-          <View style={s.gramsRow}>
-            <TextInput
-              style={s.gramsInput}
-              value={count}
-              onChangeText={updateCount}
-              keyboardType="numeric"
-              placeholder="1"
-              placeholderTextColor={colors.muted}
-            />
-            <Text style={s.suffix}>{'stk x ' + servingG + 'g'}</Text>
-          </View>
+      <Text style={s.label}>{'Mængde'}</Text>
+        <View style={s.gramsRow}>
+          <TextInput
+            style={s.gramsInput}
+            value={amount}
+            onChangeText={setAmount}
+            keyboardType="numeric"
+            placeholder="1"
+            placeholderTextColor={colors.muted}
+          />
+          <Text style={s.suffix}>{unit}</Text>
         </View>
-      ) : null}
 
-      <Text style={s.label}>Antal gram</Text>
-      <View style={s.gramsRow}>
-        <TextInput
-          style={s.gramsInput}
-          value={grams}
-          onChangeText={updateGrams}
-          keyboardType="numeric"
-          placeholder="100"
-          placeholderTextColor={colors.muted}
-        />
-        <Text style={s.suffix}>g</Text>
-      </View>
+        <Text style={s.label}>{'Enhed'}</Text>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 4 }}>
+          {availableUnits.map(u => {
+            const active = unit === u;
+            return (
+              <TouchableOpacity
+                key={u}
+                onPress={() => onChangeUnit(u)}
+                style={[s.mealTypeBtn, active && s.mealTypeBtnActive]}>
+                <Text style={[s.mealTypeTxt, active && s.mealTypeTxtActive]}>{u}</Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
 
-      <View style={s.previewBox}>
+        {unit !== 'g' ? (
+          <Text style={{ color: colors.muted, fontSize: 12, marginTop: 8, fontStyle: 'italic' }}>
+            {'≈ ' + Math.round(grams) + 'g'}
+          </Text>
+        ) : null}
+
+        <View style={s.previewBox}>
         <Text style={s.previewTitle}>Du logger</Text>
         <View style={s.previewRow}>
           <View style={s.previewItem}>
