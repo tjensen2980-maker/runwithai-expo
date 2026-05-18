@@ -164,7 +164,7 @@ export async function getExercises(opts) {
 
 // ---- Utility: build meal payload from food + grams --------------------------
 
-export function buildMealPayload({ food, grams, mealType, eatenAt, notes }) {
+export function buildMealPayload({ food, grams, mealType, eatenAt, notes, amount, unit }) {
   const factor = grams / 100;
   const round1 = (n) => Math.round((Number(n) || 0) * factor * 10) / 10;
 
@@ -178,7 +178,9 @@ export function buildMealPayload({ food, grams, mealType, eatenAt, notes }) {
       kcal: round1(food.kcal_per_100g),
       protein_g: round1(food.protein_g),
       carbs_g: round1(food.carbs_g),
-      fat_g: round1(food.fat_g)
+      fat_g: round1(food.fat_g),
+        amount: amount || null,
+        unit: unit || null
     }]
   };
 }
