@@ -410,11 +410,18 @@ function AiParseStep({ onBack, onLogged }) {
     setParsing(true);
     try {
       const result = await parseTextToFoods(text.trim());
-      const parsedItems = (result.items || []).map(it => ({
-        ...it,
-        grams: Number(it.estimated_grams) || 100,
-        selected: true,
-      }));
+      const parsedItems = (result.items || []).map(it => {
+        const grams = Number(it.estimated_grams) || 100;
+        const unit = getDefaultUnit(it);
+        const amount = convertFromGrams(grams, unit, it);
+        return {
+          ...it,
+          grams,
+          amount: formatAmount(amount),
+          unit,
+          selected: true,
+        };
+      });;
       setItems(parsedItems);
       setHasParsed(true);
     } catch (e) {
@@ -424,10 +431,25 @@ function AiParseStep({ onBack, onLogged }) {
     }
   };
 
-  const updateGrams = (idx, newGrams) => {
-    const n = Number(newGrams);
-    setItems(items.map((it, i) => i === idx ? { ...it, grams: isNaN(n) ? 0 : n } : it));
-  };
+  const updateAmount = (idx, newAmount) => {
+      setItems(items.map((it, i) => {
+        if (i !== idx) return it;
+        const amt = Number(String(newAmount).replace(',', '.'));
+        const safeAmt = isNaN(amt) ? 0 : amt;
+        const g = convertToGrams(safeAmt, it.unit || 'g', it);
+        return { ...it, amount: newAmount, grams: g };
+      }));
+    };
+  
+    const updateUnit = (idx, newUnit) => {
+      setItems(items.map((it, i) => {
+        if (i !== idx) return it;
+        const oldAmount = Number(String(it.amount != null ? it.amount : it.grams).replace(',', '.')) || 0;
+        const g = convertToGrams(oldAmount, it.unit || 'g', it);
+        const newAmount = convertFromGrams(g, newUnit, it);
+        return { ...it, unit: newUnit, amount: formatAmount(newAmount), grams: g };
+      }));
+    };
 
   const toggleSelected = (idx) => {
     setItems(items.map((it, i) => i === idx ? { ...it, selected: !it.selected } : it));
@@ -439,7 +461,10 @@ function AiParseStep({ onBack, onLogged }) {
 
   const totalKcal = items
     .filter(it => it.selected)
-    .reduce((sum, it) => sum + (it.kcal_per_100g * it.grams / 100), 0);
+    .reduce((sum, it) => {
+      const g = it.amount != null && it.unit ? convertToGrams(it.amount, it.unit, it) : (it.grams || 0);
+      return sum + (it.kcal_per_100g * g / 100);
+    }, 0);
 
   const doLogAll = async () => {
     const selected = items.filter(it => it.selected && it.grams > 0);
@@ -473,7 +498,7 @@ function AiParseStep({ onBack, onLogged }) {
           carbs_g: Number(it.carbs_g) || 0,
           fat_g: Number(it.fat_g) || 0,
         };
-        const payload = buildMealPayload({ food, grams: it.grams, mealType });
+        const payload = buildMealPayload({ food, grams: it.grams, mealType, amount: it.amount, unit: it.unit });
         await logMeal(payload);
       }
       Alert.alert('Logget', selected.length + ' madvare(r) logget som ' + (MEAL_TYPES.find(m => m.id === mealType)?.label || ''));
@@ -544,18 +569,30 @@ function AiParseStep({ onBack, onLogged }) {
                   </TouchableOpacity>
                 </View>
 
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8 }}>
-                  <Text style={{ color: colors.muted, fontSize: 13, marginRight: 8 }}>Mængde:</Text>
-                  <TextInput
-                    style={{ backgroundColor: '#0a0a0a', color: '#fff', borderRadius: 6, paddingHorizontal: 10, paddingVertical: 6, width: 70, fontSize: 14 }}
-                    value={String(it.grams)}
-                    onChangeText={(v) => updateGrams(idx, v)}
-                    keyboardType="numeric"
-                  />
-                  <Text style={{ color: colors.muted, fontSize: 13, marginLeft: 4 }}>g</Text>
-                  <Text style={{ color: '#fff', fontSize: 13, marginLeft: 'auto' }}>
-                    {Math.round(it.kcal_per_100g * it.grams / 100)} kcal
-                  </Text>
+                <View style={{ marginTop: 8 }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={{ color: colors.muted, fontSize: 13, marginRight: 8 }}>Mængde:</Text>
+                    <TextInput
+                      style={{ backgroundColor: '#0a0a0a', color: '#fff', borderRadius: 6, paddingHorizontal: 10, paddingVertical: 6, width: 70, fontSize: 14 }}
+                      value={String(it.amount != null ? it.amount : it.grams)}
+                      onChangeText={(v) => updateAmount(idx, v)}
+                      keyboardType="numeric"
+                    />
+                    <Text style={{ color: colors.muted, fontSize: 13, marginLeft: 4 }}>{it.unit || 'g'}</Text>
+                    <Text style={{ color: '#fff', fontSize: 13, marginLeft: 'auto' }}>
+                      {Math.round(it.kcal_per_100g * (convertToGrams(it.amount != null ? it.amount : it.grams, it.unit || 'g', it)) / 100)} kcal
+                    </Text>
+                  </View>
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 6 }}>
+                    {getAvailableUnits(it).map(u => {
+                      const active = (it.unit || 'g') === u;
+                      return (
+                        <TouchableOpacity key={u} onPress={() => updateUnit(idx, u)} style={{ paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12, backgroundColor: active ? colors.accent : '#0a0a0a', borderWidth: 1, borderColor: active ? colors.accent : '#333' }}>
+                          <Text style={{ color: active ? '#fff' : '#aaa', fontSize: 12, fontWeight: '600' }}>{u}</Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
                 </View>
               </View>
             ); })}
