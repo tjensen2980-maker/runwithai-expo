@@ -794,4 +794,22 @@
     "D": "Mindre sundt",
     "E": "Usundt"
   }
+,
+  "units": {
+    "g": "g",
+    "kg": "kg",
+    "ml": "ml",
+    "dl": "dl",
+    "l": "l",
+    "tsk": "tsk",
+    "spsk": "spsk",
+    "stk": "stk",
+    "skive": "skive",
+    "portion": "portion"
+  },
+  "logMeal": {
+    "amount": "Mængde",
+    "unit": "Enhed",
+    "approxGrams": "≈ {{grams}}g"
+  }
 }
