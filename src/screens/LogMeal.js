@@ -182,7 +182,9 @@ function LogStep({ food, onBack, onLogged }) {
         food,
         grams: g,
         mealType,
-        eatenAt: new Date().toISOString()
+        eatenAt: new Date().toISOString(),
+        amount: Number(String(amount).replace(',', '.')) || null,
+        unit
       });
       await logMeal(payload);
       if (onLogged) onLogged();
