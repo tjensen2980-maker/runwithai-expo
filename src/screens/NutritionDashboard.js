@@ -515,7 +515,7 @@ onBack, onLogMeal, onMealPlan, onBariatricSetup, hkCalories = 0, fetchDailyCalor
                 </Text>
                 {(m.items || []).map((it, idx) => (
                   <Text key={idx} style={s.mealItem}>
-                    {it.food_name || m.notes || 'Item'} - {Math.round(it.kcal)} kcal
+                    {it.food_name || m.notes || 'Item'}{it.amount && it.unit ? ' · ' + it.amount + ' ' + it.unit + ' (' + Math.round(Number(it.amount_g) || 0) + 'g)' : it.amount_g ? ' · ' + Math.round(Number(it.amount_g)) + 'g' : ''} · {Math.round(it.kcal)} kcal
                   </Text>
                 ))}
               </View>
