@@ -196,7 +196,7 @@ onBack, onLogMeal, onMealPlan, onBariatricSetup, hkCalories = 0, fetchDailyCalor
       ]);
       setSummary(s);
       setMeals(Array.isArray(m) ? m : []);
-      setSummaryRange(sr && Array.isArray(sr.days) ? sr.days : null);
+      setSummaryRange(Array.isArray(sr) ? sr : (sr && Array.isArray(sr.days) ? sr.days : null));
     } catch (e) {
       setError(e.message);
     } finally {
