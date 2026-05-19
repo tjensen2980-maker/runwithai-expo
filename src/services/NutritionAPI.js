@@ -194,3 +194,42 @@ export async function analyzePhoto(imageBase64, mediaType) {
   });
   return handle(res, 'analyzePhoto');
 }
+
+// ==== Favoritter & maaltidshistorik ====
+
+export async function getRecentMeals() {
+  const headers = await authHeaders();
+  const res = await fetch(SERVER + '/meals/recent', { headers });
+  return handle(res, 'getRecentMeals');
+}
+
+export async function getFrequentMeals() {
+  const headers = await authHeaders();
+  const res = await fetch(SERVER + '/meals/frequent', { headers });
+  return handle(res, 'getFrequentMeals');
+}
+
+export async function getFavorites() {
+  const headers = await authHeaders();
+  const res = await fetch(SERVER + '/favorites', { headers });
+  return handle(res, 'getFavorites');
+}
+
+export async function addFavorite(foodId, lastAmount, lastUnit) {
+  const headers = await authHeaders();
+  const res = await fetch(SERVER + '/favorites/' + foodId, {
+    method: 'POST',
+    headers: { ...headers, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ last_amount: lastAmount || null, last_unit: lastUnit || null }),
+  });
+  return handle(res, 'addFavorite');
+}
+
+export async function removeFavorite(foodId) {
+  const headers = await authHeaders();
+  const res = await fetch(SERVER + '/favorites/' + foodId, {
+    method: 'DELETE',
+    headers,
+  });
+  return handle(res, 'removeFavorite');
+}
