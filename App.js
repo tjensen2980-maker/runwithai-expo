@@ -32,6 +32,8 @@ import Privacy from './src/screens/Privacy';
 import GoalsSetup from './src/screens/GoalsSetup';
 import BariatricSetup from './src/screens/BariatricSetup';
 import NutritionDashboard from './src/screens/NutritionDashboard';
+import NotificationSettings from './src/screens/NotificationSettings';
+import { initNotifications, loadSettings as loadNotifSettings, syncFromSettings } from './src/utils/notifications';
 import LogMeal from './src/screens/LogMeal';
 import BarcodeScanner from './src/screens/BarcodeScanner';
 import PhotoAnalyze from './src/screens/PhotoAnalyze';
@@ -380,6 +382,22 @@ export default function App() {
 
   useEffect(() => { trainingPlanRef.current = trainingPlan; }, [trainingPlan]);
 
+  // Etape 10.2: Init notifications + sync naar weekPlan aendres
+  useEffect(() => {
+    initNotifications();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const ns = await loadNotifSettings();
+        if (ns.mealReminderEnabled || ns.workoutReminderEnabled) {
+          await syncFromSettings(ns, weekPlan);
+        }
+      } catch (e) { /* ignore */ }
+    })();
+  }, [weekPlan]);
+
   // HealthKit auto-sync til Railway fjernet - vi læser direkte i NutritionDashboard
   // Watch auto-sync: send today's training when weekPlan loads
   useEffect(() => {
@@ -640,6 +658,8 @@ if (tab === 'cycleTracker') {
         return <GoalsSetup onBack={() => setTab('settings')} />;
       case 'bariatricSetup':
         return <BariatricSetup onBack={() => setTab('settings')} />;
+      case 'notificationSettings':
+        return <NotificationSettings onBack={() => setTab('settings')} upcomingWorkouts={weekPlan} />;
       case 'mealPlan':
       return (
         <MealPlan
