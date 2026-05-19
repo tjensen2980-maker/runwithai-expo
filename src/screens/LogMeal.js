@@ -12,7 +12,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from '../data';
 import {
-  searchFoods, logMeal, createCustomFood, buildMealPayload, parseTextToFoods
+  searchFoods, logMeal, createCustomFood, buildMealPayload, parseTextToFoods,
+  getRecentMeals, getFrequentMeals, getFavorites, addFavorite, removeFavorite
 } from '../services/NutritionAPI';
 
 const MEAL_TYPES = [
@@ -40,6 +41,51 @@ function SearchStep({ onPickFood, onCreateCustom, onScanBarcode, onPhotoAnalyze,
   const [results, setResults] = useState([]);
   const [searching, setSearching] = useState(false);
   const debounceRef = useRef(null);
+  const [favorites, setFavorites] = useState([]);
+  const [recent, setRecent] = useState([]);
+  const [frequent, setFrequent] = useState([]);
+  const [listsLoaded, setListsLoaded] = useState(false);
+
+  const reloadLists = async () => {
+    try {
+      const [fav, rec, freq] = await Promise.all([
+        getFavorites().catch(() => []),
+        getRecentMeals().catch(() => []),
+        getFrequentMeals().catch(() => []),
+      ]);
+      setFavorites(Array.isArray(fav) ? fav : []);
+      setRecent(Array.isArray(rec) ? rec : []);
+      setFrequent(Array.isArray(freq) ? freq : []);
+    } catch (e) {
+      // silent
+    } finally {
+      setListsLoaded(true);
+    }
+  };
+
+  useEffect(() => { reloadLists(); }, []);
+
+  const isFavorite = (foodId) => favorites.some(f => f.id === foodId);
+
+  const toggleFavorite = async (item) => {
+    try {
+      if (isFavorite(item.id)) {
+        setFavorites(prev => prev.filter(f => f.id !== item.id));
+        await removeFavorite(item.id);
+      } else {
+        const newFav = { ...item, favorited_at: new Date().toISOString() };
+        setFavorites(prev => [newFav, ...prev]);
+        await addFavorite(item.id, item.last_amount || null, item.last_unit || null);
+      }
+    } catch (e) {
+      reloadLists();
+    }
+  };
+
+  const handleChipPress = (item) => {
+    onPickFood(item);
+  };
+
 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -97,23 +143,59 @@ function SearchStep({ onPickFood, onCreateCustom, onScanBarcode, onPhotoAnalyze,
       </View>
 
       {query.length === 0 ? (
-        <View style={s.tipBox}>
-          <Text style={s.tipTitle}>Søg i fødevaredatabasen</Text>
-          <Text style={s.tipTxt}>
-            Skriv navnet på en fødevare eller en del af det. Resultater vises automatisk.
-            {'\n\n'}Tip: Du kan også oprette dine egne fødevarer.
-          </Text>
-          <TouchableOpacity style={s.customBtn} onPress={onCreateCustom}>
-            <Text style={s.customBtnTxt}>+ Opret egen fødevare</Text>
-          </TouchableOpacity>
-        </View>
-      ) : results.length === 0 && !searching && query.length >= 2 ? (
-        <View style={s.emptyBox}>
-          <Text style={s.emptyTxt}>Ingen resultater for "{query}"</Text>
-          <TouchableOpacity style={s.customBtn} onPress={onCreateCustom}>
-            <Text style={s.customBtnTxt}>+ Opret som egen fødevare</Text>
-          </TouchableOpacity>
-        </View>
+        <ScrollView style={{ flex: 0 }} contentContainerStyle={{ paddingBottom: 8 }} keyboardShouldPersistTaps="handled">
+          {favorites.length > 0 && (
+            <View style={s.section}>
+              <Text style={s.sectionTitle}>{'\u2B50  Favoritter'}</Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 12, paddingVertical: 4 }}>
+                {favorites.map(item => (
+                  <TouchableOpacity key={'fav_'+item.id} style={s.foodChip} onPress={() => handleChipPress(item)}>
+                    <Text style={s.foodChipName} numberOfLines={2}>{item.name}</Text>
+                    <Text style={s.foodChipMeta}>{Math.round(Number(item.kcal_per_100g) || 0)} kcal/100g</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+          )}
+
+          {recent.length > 0 && (
+            <View style={s.section}>
+              <Text style={s.sectionTitle}>{'\u23F1  Seneste'}</Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 12, paddingVertical: 4 }}>
+                {recent.map(item => (
+                  <TouchableOpacity key={'rec_'+item.id} style={s.foodChip} onPress={() => handleChipPress(item)}>
+                    <Text style={s.foodChipName} numberOfLines={2}>{item.name}</Text>
+                    <Text style={s.foodChipMeta}>{Math.round(Number(item.kcal_per_100g) || 0)} kcal/100g</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+          )}
+
+          {frequent.length > 0 && (
+            <View style={s.section}>
+              <Text style={s.sectionTitle}>{'\uD83D\uDD25  Hyppigst'}</Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 12, paddingVertical: 4 }}>
+                {frequent.map(item => (
+                  <TouchableOpacity key={'freq_'+item.id} style={s.foodChip} onPress={() => handleChipPress(item)}>
+                    <Text style={s.foodChipName} numberOfLines={2}>{item.name}</Text>
+                    <Text style={s.foodChipMeta}>{item.log_count}x {String(Math.round(Number(item.kcal_per_100g) || 0))} kcal/100g</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+          )}
+
+          {listsLoaded && favorites.length === 0 && recent.length === 0 && frequent.length === 0 && (
+            <View style={s.tipBox}>
+              <Text style={s.tipTitle}>Soeg i foedevaredatabasen</Text>
+              <Text style={s.tipTxt}>
+                Skriv navnet paa en foedevare eller en del af det. Resultater vises automatisk.
+                {'\n\n'}Tip: Du kan oprette dine egne foedevarer eller logge med stregkode, billede eller fritekst.
+              </Text>
+            </View>
+          )}
+        </ScrollView>
       ) : (
         <FlatList
           data={results}
@@ -149,10 +231,14 @@ function SearchStep({ onPickFood, onCreateCustom, onScanBarcode, onPhotoAnalyze,
 // ============================================================================
 
 function LogStep({ food, onBack, onLogged }) {
-  const initialUnit = getDefaultUnit(food);
+  const initialUnit = (food && food.last_unit) ? food.last_unit : getDefaultUnit(food);
   const servingG = Number(food && food.serving_size_g) > 0 ? Number(food.serving_size_g) : 100;
   const [unit, setUnit] = useState(initialUnit);
-  const [amount, setAmount] = useState(initialUnit === 'g' ? String(servingG) : '1');
+  const [amount, setAmount] = useState(
+    food && food.last_amount != null && String(food.last_amount).length > 0
+      ? String(food.last_amount)
+      : (initialUnit === 'g' ? String(servingG) : '1')
+  );
   const [mealType, setMealType] = useState(defaultMealType());
   const [saving, setSaving] = useState(false);
 
@@ -772,4 +858,11 @@ const s = StyleSheet.create({
   badgeDK: { alignSelf: 'flex-start', backgroundColor: '#2E7D32', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, marginTop: 2 },
   badgeAI: { alignSelf: 'flex-start', backgroundColor: '#FF7A00', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, marginTop: 2 },
   badgeOFF: { alignSelf: 'flex-start', backgroundColor: '#888', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, marginTop: 2 },
-  badgeTxt: { color: '#fff', fontSize: 10, fontWeight: '700', letterSpacing: 0.3 }});
+  badgeTxt: { color: '#fff', fontSize: 10, fontWeight: '700', letterSpacing: 0.3 },
+  section: { marginBottom: 14 },
+  sectionTitle: { fontSize: 13, fontWeight: '700', color: colors.text, marginHorizontal: 16, marginBottom: 6, letterSpacing: 0.3 },
+  foodChip: { width: 140, marginRight: 8, padding: 10, backgroundColor: colors.card, borderRadius: 10, borderWidth: 1, borderColor: '#e0e0e0' },
+  foodChipName: { fontSize: 13, fontWeight: '600', color: colors.text, marginBottom: 4 },
+  foodChipMeta: { fontSize: 11, color: colors.muted },
+  heartBtn: { padding: 6, marginLeft: 6 },
+  heartIcon: { fontSize: 18 }});
