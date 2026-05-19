@@ -144,23 +144,32 @@ function SearchStep({ onPickFood, onCreateCustom, onScanBarcode, onPhotoAnalyze,
 
       {query.length === 0 ? (
         <ScrollView style={{ flex: 0 }} contentContainerStyle={{ paddingBottom: 8 }} keyboardShouldPersistTaps="handled">
-          {favorites.length > 0 && (
+          {listsLoaded && (
             <View style={s.section}>
-              <Text style={s.sectionTitle}>{'\u2B50  Favoritter'}</Text>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 12, paddingVertical: 4 }}>
-                {favorites.map(item => (
-                  <TouchableOpacity key={'fav_'+item.id} style={s.foodChip} onPress={() => handleChipPress(item)}>
-                    <Text style={s.foodChipName} numberOfLines={2}>{item.name}</Text>
-                    <Text style={s.foodChipMeta}>{Math.round(Number(item.kcal_per_100g) || 0)} kcal/100g</Text>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
+              <Text style={s.sectionTitle}>{'\u2B50  Favoritter' + (favorites.length > 0 ? ' (' + favorites.length + ')' : '')}</Text>
+              {favorites.length === 0 ? (
+                <Text style={s.emptyState}>Tryk paa stjernen ved et resultat for at gemme det som favorit.</Text>
+              ) : (
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 12, paddingVertical: 4 }}>
+                  {[...favorites].sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'da')).map(item => (
+                    <TouchableOpacity
+                      key={'fav_'+item.id}
+                      style={s.foodChip}
+                      onPress={() => handleChipPress(item)}
+                      onLongPress={() => Alert.alert('Fjern favorit?', 'Vil du fjerne ' + (item.name||'denne mad') + ' fra dine favoritter?', [{text:'Annuller',style:'cancel'},{text:'Fjern',style:'destructive',onPress:()=>toggleFavorite(item)}])}
+                    >
+                      <Text style={s.foodChipName} numberOfLines={2}>{item.name}</Text>
+                      <Text style={s.foodChipMeta}>{Math.round(Number(item.kcal_per_100g) || 0)} kcal/100g</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              )}
             </View>
           )}
 
           {recent.length > 0 && (
             <View style={s.section}>
-              <Text style={s.sectionTitle}>{'\u23F1  Seneste'}</Text>
+              <Text style={s.sectionTitle}>{'\u23F1  Seneste (' + recent.length + ')'}</Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 12, paddingVertical: 4 }}>
                 {recent.map(item => (
                   <TouchableOpacity key={'rec_'+item.id} style={s.foodChip} onPress={() => handleChipPress(item)}>
@@ -174,7 +183,7 @@ function SearchStep({ onPickFood, onCreateCustom, onScanBarcode, onPhotoAnalyze,
 
           {frequent.length > 0 && (
             <View style={s.section}>
-              <Text style={s.sectionTitle}>{'\uD83D\uDD25  Hyppigst'}</Text>
+              <Text style={s.sectionTitle}>{'\uD83D\uDD25  Hyppigst (' + frequent.length + ')'}</Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 12, paddingVertical: 4 }}>
                 {frequent.map(item => (
                   <TouchableOpacity key={'freq_'+item.id} style={s.foodChip} onPress={() => handleChipPress(item)}>
@@ -186,7 +195,7 @@ function SearchStep({ onPickFood, onCreateCustom, onScanBarcode, onPhotoAnalyze,
             </View>
           )}
 
-          {listsLoaded && favorites.length === 0 && recent.length === 0 && frequent.length === 0 && (
+          {!listsLoaded && (
             <View style={s.tipBox}>
               <Text style={s.tipTitle}>Soeg i foedevaredatabasen</Text>
               <Text style={s.tipTxt}>
@@ -871,4 +880,5 @@ const s = StyleSheet.create({
   foodChipName: { fontSize: 13, fontWeight: '600', color: colors.text, marginBottom: 4 },
   foodChipMeta: { fontSize: 11, color: colors.muted },
   heartBtn: { padding: 6, marginLeft: 6 },
-  heartIcon: { fontSize: 18 }});
+  heartIcon: { fontSize: 18 },
+  emptyState: { color: colors.muted, fontSize: 13, paddingHorizontal: 16, paddingVertical: 8, fontStyle: 'italic' }});
