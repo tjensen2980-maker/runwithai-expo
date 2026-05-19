@@ -931,6 +931,23 @@ const calculateGoals = async () => {
           </TouchableOpacity>
         </View>
 
+        {/* NOTIFIKATIONER */}
+        <Text style={s.sectionTitle}>Notifikationer</Text>
+        <View style={s.card}>
+          <TouchableOpacity
+            style={s.exportBtn}
+            onPress={() => { if (onNavigate) onNavigate('notificationSettings'); }}
+          >
+            <View style={{ flex: 1 }}>
+              <Text style={s.notifTitle}>Paamindelser</Text>
+              <Text style={s.notifSub}>Slaa daglige maaltids- og traeningspaamindelser til/fra</Text>
+            </View>
+            <View style={{flexDirection:'row',alignItems:'center',gap:6}}>
+              <Text style={s.exportBtnText}>{'>'}</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+
         {/* ── PRIVATLIV ── */}
         <Text style={s.sectionTitle}>{t('settings.sections.privacy')}</Text>
         <View style={s.card}>
