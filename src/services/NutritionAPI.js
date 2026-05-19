@@ -236,10 +236,12 @@ export async function removeFavorite(foodId) {
 
 export async function getSummaryRange(days, endDate) {
   const headers = await authHeaders();
-  const params = [];
-  if (days) params.push('days=' + encodeURIComponent(String(days)));
-  if (endDate) params.push('end_date=' + encodeURIComponent(endDate));
-  const qs = params.length ? ('?' + params.join('&')) : '';
+  const end = endDate || new Date().toISOString().slice(0, 10);
+  const n = Math.max(1, Number(days) || 7);
+  const d = new Date(end + 'T00:00:00');
+  d.setDate(d.getDate() - (n - 1));
+  const start = d.toISOString().slice(0, 10);
+  const qs = '?start=' + encodeURIComponent(start) + '&end=' + encodeURIComponent(end);
   const res = await fetch(SERVER + '/meals/summary-range' + qs, { headers });
   return handle(res, 'getSummaryRange');
 }
