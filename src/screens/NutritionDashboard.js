@@ -298,7 +298,7 @@ onBack, onLogMeal, onMealPlan, onBariatricSetup, hkCalories = 0, fetchDailyCalor
             <Text style={s.statUnit}>kcal</Text>
           </View>
         </View>
-        {summaryRange && summaryRange.length >= 2 ? (() => {
+        {summaryRange && summaryRange.length >= 1 ? (() => {
           // Last two days are: [...range[N-2]=yesterday, range[N-1]=today]
           const today = summaryRange[summaryRange.length - 1] || { kcal_in: 0 };
           const yesterday = summaryRange[summaryRange.length - 2] || { kcal_in: 0 };
@@ -321,10 +321,10 @@ onBack, onLogMeal, onMealPlan, onBariatricSetup, hkCalories = 0, fetchDailyCalor
                   const h = Math.max(2, Math.round((v / maxKcal) * 90));
                   const isToday = idx === summaryRange.length - 1;
                   const overTarget = target > 0 && v > target;
-                  const dt = new Date(d.date + 'T00:00:00');
+                  const dt = new Date((d.day || d.date) + 'T00:00:00');
                   const dayLabel = dayNames[dt.getDay()] || '';
                   return (
-                    <View key={d.date} style={{ flex: 1, alignItems: 'center' }}>
+                    <View key={d.day || d.date} style={{ flex: 1, alignItems: 'center' }}>
                       <Text style={{ fontSize: 9, color: colors.muted, marginBottom: 2 }}>{v > 0 ? Math.round(v) : ''}</Text>
                       <View style={{ width: '60%', height: h, backgroundColor: isToday ? colors.accent : (overTarget ? colors.red : colors.blue), borderRadius: 3, opacity: isToday ? 1 : 0.7 }} />
                       <Text style={{ fontSize: 10, color: isToday ? colors.text : colors.muted, fontWeight: isToday ? '700' : '500', marginTop: 4 }}>{dayLabel}</Text>
