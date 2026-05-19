@@ -433,9 +433,6 @@ const save = async () => {
     }
   };
 
-  const toggleDay = (day) => {
-    setNotifDays(prev => prev.includes(day) ? prev.filter(d => d !== day) : [...prev, day]);
-  };
 
   // ─── BEREGN KALORIEMÅL ──────────────────────────────────────────────────
 const calculateGoals = async () => {
