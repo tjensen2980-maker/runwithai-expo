@@ -217,6 +217,12 @@ function SearchStep({ onPickFood, onCreateCustom, onScanBarcode, onPhotoAnalyze,
                   {item.fat_g ? ' - F ' + Number(item.fat_g).toFixed(1) + 'g' : ''}
                 </Text>
               </View>
+              <TouchableOpacity
+                style={s.heartBtn}
+                onPress={(e) => { e.stopPropagation && e.stopPropagation(); toggleFavorite(item); }}
+              >
+                <Text style={s.heartIcon}>{isFavorite(item.id) ? '\u2b50' : '\u2606'}</Text>
+              </TouchableOpacity>
               <Text style={{ fontSize: 22, color: colors.muted, marginLeft: 8 }}>›</Text>
             </TouchableOpacity>
           )}
