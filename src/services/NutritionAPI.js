@@ -233,3 +233,13 @@ export async function removeFavorite(foodId) {
   });
   return handle(res, 'removeFavorite');
 }
+
+export async function getSummaryRange(days, endDate) {
+  const headers = await authHeaders();
+  const params = [];
+  if (days) params.push('days=' + encodeURIComponent(String(days)));
+  if (endDate) params.push('end_date=' + encodeURIComponent(endDate));
+  const qs = params.length ? ('?' + params.join('&')) : '';
+  const res = await fetch(SERVER + '/meals/summary-range' + qs, { headers });
+  return handle(res, 'getSummaryRange');
+}
