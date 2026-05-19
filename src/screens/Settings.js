@@ -7,6 +7,8 @@ import { Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
+import * as Notif from '../utils/notifications';
+let DTP = null; try { DTP = require('@react-native-community/datetimepicker').default; } catch(e) {}
 
 function Field({ label, value, onChange, keyboard, placeholder }) {
   return (
@@ -301,6 +303,10 @@ useEffect(() => {
   const [notifEnabled, setNotifEnabled] = useState(false);
   const [notifTime, setNotifTime] = useState(profile?.notifTime || '07:00');
   const [notifDays, setNotifDays] = useState(profile?.notifDays || ['Man', 'Ons', 'Fre']);
+  const [mealNotifEnabled, setMealNotifEnabled] = useState(false);
+  const [mealNotifTime, setMealNotifTime] = useState(profile?.mealNotifTime || '18:00');
+  const [mealNotifDays, setMealNotifDays] = useState(profile?.mealNotifDays || [0,1,2,3,4,5,6]);
+  const [showPickerFor, setShowPickerFor] = useState(null);
   const days = t('settings.days', { returnObjects: true }) || ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   useEffect(() => {
@@ -360,33 +366,71 @@ const save = async () => {
   };
 
   const toggleNotifications = async () => {
-    if (Platform.OS !== 'web') return;
-    if (typeof window === 'undefined' || !('Notification' in window)) return;
-    
-    if (Notification.permission === 'granted') {
-      setNotifEnabled(false);
-      return;
-    }
-    const perm = await Notification.requestPermission();
-    if (perm === 'granted') {
-      setNotifEnabled(true);
-      scheduleNotifications();
-      new Notification('RunWithAI', { body: t('settings.notifications.enabled'), icon: '/favicon.ico' });
+    try {
+      if (!notifEnabled) {
+        const r = await Notif.requestPermission();
+        if (!r.granted) { setNotifEnabled(false); return; }
+        setNotifEnabled(true);
+        await syncAllNotifications(true, notifTime, notifDays, mealNotifEnabled, mealNotifTime, mealNotifDays);
+      } else {
+        setNotifEnabled(false);
+        await syncAllNotifications(false, notifTime, notifDays, mealNotifEnabled, mealNotifTime, mealNotifDays);
+      }
+    } catch (e) { console.warn('toggleNotifications:', e); }
+  };
+
+  const toggleMealNotifications = async () => {
+    try {
+      if (!mealNotifEnabled) {
+        const r = await Notif.requestPermission();
+        if (!r.granted) { setMealNotifEnabled(false); return; }
+        setMealNotifEnabled(true);
+        await syncAllNotifications(notifEnabled, notifTime, notifDays, true, mealNotifTime, mealNotifDays);
+      } else {
+        setMealNotifEnabled(false);
+        await syncAllNotifications(notifEnabled, notifTime, notifDays, false, mealNotifTime, mealNotifDays);
+      }
+    } catch (e) { console.warn('toggleMealNotifications:', e); }
+  };
+
+  const syncAllNotifications = async (wEn, wTime, wDays, mEn, mTime, mDays) => {
+    try {
+      await Notif.syncFromSettings({
+        workoutEnabled: !!wEn,
+        workoutTime: wTime || '07:00',
+        workoutDays: Array.isArray(wDays) ? wDays : [1,3,5],
+        mealEnabled: !!mEn,
+        mealTime: mTime || '18:00',
+        mealDays: Array.isArray(mDays) ? mDays : [0,1,2,3,4,5,6],
+      });
+    } catch (e) { console.warn('syncAllNotifications:', e); }
+  };
+
+  const toggleDay = (which, dayIdx) => {
+    if (which === 'workout') {
+      const next = notifDays.includes(dayIdx) ? notifDays.filter(d=>d!==dayIdx) : [...notifDays, dayIdx];
+      setNotifDays(next);
+      if (notifEnabled) syncAllNotifications(true, notifTime, next, mealNotifEnabled, mealNotifTime, mealNotifDays);
+    } else {
+      const next = mealNotifDays.includes(dayIdx) ? mealNotifDays.filter(d=>d!==dayIdx) : [...mealNotifDays, dayIdx];
+      setMealNotifDays(next);
+      if (mealNotifEnabled) syncAllNotifications(notifEnabled, notifTime, notifDays, true, mealNotifTime, next);
     }
   };
 
-  const scheduleNotifications = () => {
-    const now = new Date();
-    const [h, m] = notifTime.split(':').map(Number);
-    const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0);
-    if (target < now) target.setDate(target.getDate() + 1);
-    const msUntil = target - now;
-    setTimeout(() => {
-      const todayDay = days[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1];
-      if (notifDays.includes(todayDay)) {
-        new Notification('RunWithAI', { body: t('settings.notifications.reminder'), icon: '/favicon.ico' });
-      }
-    }, msUntil);
+  const onTimePicked = (which, event, selected) => {
+    setShowPickerFor(null);
+    if (!selected) return;
+    const hh = String(selected.getHours()).padStart(2,'0');
+    const mm = String(selected.getMinutes()).padStart(2,'0');
+    const timeStr = hh + ':' + mm;
+    if (which === 'workout') {
+      setNotifTime(timeStr);
+      if (notifEnabled) syncAllNotifications(true, timeStr, notifDays, mealNotifEnabled, mealNotifTime, mealNotifDays);
+    } else {
+      setMealNotifTime(timeStr);
+      if (mealNotifEnabled) syncAllNotifications(notifEnabled, notifTime, notifDays, true, timeStr, mealNotifDays);
+    }
   };
 
   const toggleDay = (day) => {
@@ -617,36 +661,65 @@ const calculateGoals = async () => {
           <Field label={t('settings.fields.injuries')} {...field('injuries')} placeholder={t('settings.fields.injuriesPlaceholder')} />
         </View>
 
-        {/* ── NOTIFIKATIONER ── */}
-        <Text style={s.sectionTitle}>{t('settings.sections.reminders')}</Text>
+        {/* NOTIFIKATIONER */}
+        <Text style={s.sectionTitle}>{t('settings.sections.reminders') || 'Paamindelser'}</Text>
         <View style={s.card}>
-          <View style={s.notifRow}>
+          {/* Traeningspaamindelse */}
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
             <View style={{ flex: 1 }}>
-              <Text style={s.notifTitle}>{t('settings.notifications.push')}</Text>
-              <Text style={s.notifSub}>{t('settings.notifications.pushSub')}</Text>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: colors.text }}>Traeningspaamindelse</Text>
+              <Text style={{ fontSize: 12, color: colors.textMuted, marginTop: 2 }}>Faa besked paa valgte dage og tidspunkt</Text>
             </View>
-            <Switch
-              value={notifEnabled}
-              onValueChange={toggleNotifications}
-              trackColor={{ false: colors.border2, true: colors.accent + '80' }}
-              thumbColor={notifEnabled ? colors.accent : colors.muted}
-            />
+            <Switch value={notifEnabled} onValueChange={toggleNotifications} trackColor={{ false: colors.border2, true: colors.primary }} />
           </View>
           {notifEnabled && (
-            <>
-              <Field label={t('settings.notifications.time')} value={notifTime} onChange={setNotifTime} placeholder="07:00" />
-              <Text style={[s.label, { marginBottom: 8, marginTop: 4 }]}>{t('settings.notifications.days')}</Text>
-              <View style={s.daysRow}>
-                {days.map(day => (
-                  <TouchableOpacity
-                    key={day}
-                    style={[s.dayBtn, notifDays.includes(day) && { backgroundColor: colors.accent, borderColor: colors.accent }]}
-                    onPress={() => toggleDay(day)}>
-                    <Text style={[s.dayBtnText, notifDays.includes(day) && { color: colors.black }]}>{day}</Text>
+            <View>
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 8, marginBottom: 8 }}>
+                {['Soen','Man','Tir','Ons','Tor','Fre','Loer'].map((lbl, idx) => (
+                  <TouchableOpacity key={'wd'+idx} onPress={() => toggleDay('workout', idx)} style={{ paddingVertical: 6, paddingHorizontal: 10, borderRadius: 16, marginRight: 6, marginBottom: 6, backgroundColor: notifDays.includes(idx) ? colors.primary : colors.card2 || colors.border2 }}>
+                    <Text style={{ color: notifDays.includes(idx) ? '#fff' : colors.text, fontWeight: '600', fontSize: 13 }}>{lbl}</Text>
                   </TouchableOpacity>
                 ))}
               </View>
-            </>
+              <TouchableOpacity onPress={() => setShowPickerFor('workout')} style={{ paddingVertical: 10, paddingHorizontal: 14, borderRadius: 10, backgroundColor: colors.card2 || colors.border2, alignSelf: 'flex-start' }}>
+                <Text style={{ color: colors.text, fontWeight: '600' }}>{'Tidspunkt: ' + notifTime}</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          <View style={{ height: 1, backgroundColor: colors.border2, marginVertical: 14 }} />
+
+          {/* Maaltidspaamindelse */}
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+            <View style={{ flex: 1 }}>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: colors.text }}>Maaltidspaamindelse</Text>
+              <Text style={{ fontSize: 12, color: colors.textMuted, marginTop: 2 }}>Husk at logge dine maaltider</Text>
+            </View>
+            <Switch value={mealNotifEnabled} onValueChange={toggleMealNotifications} trackColor={{ false: colors.border2, true: colors.primary }} />
+          </View>
+          {mealNotifEnabled && (
+            <View>
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 8, marginBottom: 8 }}>
+                {['Soen','Man','Tir','Ons','Tor','Fre','Loer'].map((lbl, idx) => (
+                  <TouchableOpacity key={'md'+idx} onPress={() => toggleDay('meal', idx)} style={{ paddingVertical: 6, paddingHorizontal: 10, borderRadius: 16, marginRight: 6, marginBottom: 6, backgroundColor: mealNotifDays.includes(idx) ? colors.primary : colors.card2 || colors.border2 }}>
+                    <Text style={{ color: mealNotifDays.includes(idx) ? '#fff' : colors.text, fontWeight: '600', fontSize: 13 }}>{lbl}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+              <TouchableOpacity onPress={() => setShowPickerFor('meal')} style={{ paddingVertical: 10, paddingHorizontal: 14, borderRadius: 10, backgroundColor: colors.card2 || colors.border2, alignSelf: 'flex-start' }}>
+                <Text style={{ color: colors.text, fontWeight: '600' }}>{'Tidspunkt: ' + mealNotifTime}</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {showPickerFor && DTP && (
+            <DTP
+              value={(() => { const tStr = showPickerFor === 'workout' ? notifTime : mealNotifTime; const [h,m] = String(tStr||'07:00').split(':').map(Number); const d = new Date(); d.setHours(h||7, m||0, 0, 0); return d; })()}
+              mode='time'
+              is24Hour={true}
+              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+              onChange={(ev, sel) => onTimePicked(showPickerFor, ev, sel)}
+            />
           )}
         </View>
 
@@ -927,23 +1000,6 @@ const calculateGoals = async () => {
             </View>
             <View style={{flexDirection:'row',alignItems:'center',gap:6}}>
               <Text style={s.exportBtnText}>›</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        {/* NOTIFIKATIONER */}
-        <Text style={s.sectionTitle}>Notifikationer</Text>
-        <View style={s.card}>
-          <TouchableOpacity
-            style={s.exportBtn}
-            onPress={() => { if (onNavigate) onNavigate('notificationSettings'); }}
-          >
-            <View style={{ flex: 1 }}>
-              <Text style={s.notifTitle}>Paamindelser</Text>
-              <Text style={s.notifSub}>Slaa daglige maaltids- og traeningspaamindelser til/fra</Text>
-            </View>
-            <View style={{flexDirection:'row',alignItems:'center',gap:6}}>
-              <Text style={s.exportBtnText}>{'>'}</Text>
             </View>
           </TouchableOpacity>
         </View>
