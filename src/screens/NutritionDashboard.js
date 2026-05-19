@@ -9,7 +9,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Circle } from 'react-native-svg';
 import { colors, loadProfile, getAuthToken, SERVER } from '../data';
-import { getDailySummary, getMeals, deleteMeal } from '../services/NutritionAPI';
+import { getDailySummary, getMeals, deleteMeal, getSummaryRange } from '../services/NutritionAPI';
 import { useTranslation } from 'react-i18next';
 import { loadBariatricProfile, getDailyTargets, VITAMINS, loadDailyLog, toggleVitamin, addFluid, getTodayKey, getMealSuggestions, checkDailyDumpingRisk, checkDumpingFromSummary, MEAL_SUGGESTIONS } from '../utils/bariatric';
 import { computeDailyHealthScore } from '../utils/healthScore';
@@ -156,6 +156,8 @@ onBack, onLogMeal, onMealPlan, onBariatricSetup, hkCalories = 0, fetchDailyCalor
   const [summary, setSummary] = useState(null);
   const [meals, setMeals] = useState([]);
   const [error, setError] = useState(null);
+  const [summaryRange, setSummaryRange] = useState(null);
+
 
   const load = useCallback(async () => {
     setError(null);
@@ -187,12 +189,14 @@ onBack, onLogMeal, onMealPlan, onBariatricSetup, hkCalories = 0, fetchDailyCalor
       }
 
       const date = todayISO();
-      const [s, m] = await Promise.all([
+      const [s, m, sr] = await Promise.all([
         getDailySummary(date),
-        getMeals(date)
+        getMeals(date),
+        getSummaryRange(7).catch(() => null)
       ]);
       setSummary(s);
       setMeals(Array.isArray(m) ? m : []);
+      setSummaryRange(sr && Array.isArray(sr.days) ? sr.days : null);
     } catch (e) {
       setError(e.message);
     } finally {
@@ -294,6 +298,49 @@ onBack, onLogMeal, onMealPlan, onBariatricSetup, hkCalories = 0, fetchDailyCalor
             <Text style={s.statUnit}>kcal</Text>
           </View>
         </View>
+        {summaryRange && summaryRange.length >= 2 ? (() => {
+          // Last two days are: [...range[N-2]=yesterday, range[N-1]=today]
+          const today = summaryRange[summaryRange.length - 1] || { kcal_in: 0 };
+          const yesterday = summaryRange[summaryRange.length - 2] || { kcal_in: 0 };
+          const diff = (today.kcal_in || 0) - (yesterday.kcal_in || 0);
+          const maxKcal = Math.max(target || 0, ...summaryRange.map(d => Number(d.kcal_in) || 0), 1);
+          const dayNames = ['Son', 'Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lor'];
+          return (
+            <View style={s.card}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 12 }}>
+                <Text style={s.sectionTitle}>7 DAGES TREND</Text>
+                {yesterday.kcal_in > 0 ? (
+                  <Text style={{ fontSize: 12, fontWeight: '700', color: diff <= 0 ? colors.green : colors.red }}>
+                    {diff > 0 ? '+' : ''}{Math.round(diff)} kcal vs. i gar
+                  </Text>
+                ) : null}
+              </View>
+              <View style={{ flexDirection: 'row', alignItems: 'flex-end', height: 110, paddingHorizontal: 4 }}>
+                {summaryRange.map((d, idx) => {
+                  const v = Number(d.kcal_in) || 0;
+                  const h = Math.max(2, Math.round((v / maxKcal) * 90));
+                  const isToday = idx === summaryRange.length - 1;
+                  const overTarget = target > 0 && v > target;
+                  const dt = new Date(d.date + 'T00:00:00');
+                  const dayLabel = dayNames[dt.getDay()] || '';
+                  return (
+                    <View key={d.date} style={{ flex: 1, alignItems: 'center' }}>
+                      <Text style={{ fontSize: 9, color: colors.muted, marginBottom: 2 }}>{v > 0 ? Math.round(v) : ''}</Text>
+                      <View style={{ width: '60%', height: h, backgroundColor: isToday ? colors.accent : (overTarget ? colors.red : colors.blue), borderRadius: 3, opacity: isToday ? 1 : 0.7 }} />
+                      <Text style={{ fontSize: 10, color: isToday ? colors.text : colors.muted, fontWeight: isToday ? '700' : '500', marginTop: 4 }}>{dayLabel}</Text>
+                    </View>
+                  );
+                })}
+              </View>
+              {target > 0 ? (
+                <Text style={{ fontSize: 11, color: colors.muted, marginTop: 8, textAlign: 'center' }}>
+                  Mal: {Math.round(target)} kcal/dag
+                </Text>
+              ) : null}
+            </View>
+          );
+        })() : null}
+
 
 {(() => {
           const dhs = computeDailyHealthScore(meals);
