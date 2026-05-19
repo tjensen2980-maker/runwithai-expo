@@ -196,7 +196,8 @@ onBack, onLogMeal, onMealPlan, onBariatricSetup, hkCalories = 0, fetchDailyCalor
       ]);
       setSummary(s);
       setMeals(Array.isArray(m) ? m : []);
-      setSummaryRange(Array.isArray(sr) ? sr : (sr && Array.isArray(sr.days) ? sr.days : null));
+Alert.alert('DEBUG sr', 'type=' + typeof sr + ' isArray=' + Array.isArray(sr) + ' len=' + (sr ? (sr.length !== undefined ? sr.length : 'no-len') : 'null') + ' keys=' + (sr ? Object.keys(sr).slice(0,5).join(',') : '-') + ' first=' + (sr && sr[0] ? JSON.stringify(sr[0]).substring(0,200) : 'no-first'));
+            setSummaryRange(Array.isArray(sr) ? sr : (sr && Array.isArray(sr.days) ? sr.days : null));
     } catch (e) {
       setError(e.message);
     } finally {
