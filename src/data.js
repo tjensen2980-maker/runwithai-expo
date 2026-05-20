@@ -371,7 +371,7 @@ Lav 4-5 måltider. meal_type skal være: breakfast, lunch, dinner eller snack.
 
 Format til planændring (inkludér kun ved ændring):
 <plan_update>{"changeNote":"kort forklaring","nextWorkout":{"name":"navn","desc":"beskrivelse","km":9.0,"duration":"~50","targetPace":"5:00","targetHr":155},"weekPlan":[{"day":"Man","workout":"navn","km":9,"color":"#c8ff00","type":"run","description":"konkret beskrivelse"}]}</plan_update>
-Svar på dansk, max 2-3 sætninger. Vær direkte og konkret.`;
+Svar på dansk, max 2-3 sætninger. Vær direkte og konkret.
 ${medicalProfileBlock}`;
 
 console.log('[DEBUG] System prompt length:', systemPrompt.length);
