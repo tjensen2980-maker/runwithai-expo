@@ -253,7 +253,7 @@ export default function DiabetesSetup({ onBack }) {
                   {t('diabetes.setup.carbRatio', 'Insulin/kulhydrat-ratio (g/E, valgfri)')}
                 </Text>
                 <Text style={styles.helperText}>
-                  {t('diabetes.setup.carbRatioHelp', 'F.eks. 10 = 1 enhed insulin daekker 10 g kulhydrat. App'en doserer aldrig - tallet bruges kun informativt.')}
+                  {t('diabetes.setup.carbRatioHelp', 'F.eks. 10 = 1 enhed insulin daekker 10 g kulhydrat. Appen doserer aldrig - tallet bruges kun informativt.')}
                 </Text>
                 <TextInput
                   style={styles.input}
