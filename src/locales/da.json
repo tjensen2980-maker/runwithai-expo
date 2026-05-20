@@ -1,4 +1,4 @@
-﻿{
+{
   "tabs": {
     "plan": "Plan",
     "run": "Løb",
@@ -783,6 +783,48 @@
         "checkWithDoctor": "Kontakt din læge hvis du oplever smerter, kvalme eller udmattelse"
       },
       "disclaimer": "Anbefalingerne er vejledende. Følg altid din egen kliniks anvisninger."
+    }
+  },
+  "diabetes": {
+    "title": "Diabetes profil",
+    "subtitle": "Type 1, Type 2 eller praediabetes",
+    "settingsButton": "Diabetes profil",
+    "settingsDescription": "Type 1, Type 2 eller praediabetes - kost, blodsukker & motion",
+    "setup": {
+      "title": "Diabetes profil",
+      "intro": "Aktiver diabetes-stoette for at faa tilpassede maaltidsforslag, blodsukker-vejledning og motion-anbefalinger.",
+      "type": "Diabetes-type",
+      "typeT1": "Type 1",
+      "typeT2": "Type 2",
+      "typePre": "Praediabetes",
+      "typeGest": "Graviditetsdiabetes",
+      "treatment": "Behandling",
+      "txNone": "Ingen",
+      "txDiet": "Kost/livsstil",
+      "txMetformin": "Metformin",
+      "txOral": "Andre tabletter",
+      "txGLP1": "GLP-1 (Ozempic/Wegovy/Mounjaro)",
+      "txBasal": "Basal insulin",
+      "txBolus": "Basal + bolus insulin",
+      "txPump": "Insulinpumpe",
+      "diagnosisDate": "Diagnose-dato (valgfri)",
+      "datePlaceholder": "AAAA-MM-DD",
+      "hba1c": "HbA1c (mmol/mol, valgfri)",
+      "countCarbs": "Jeg taeller kulhydrater",
+      "carbRatio": "Insulin/kulhydrat-ratio (g/E, valgfri)",
+      "carbRatioHelp": "F.eks. 10 = 1 enhed insulin daekker 10 g kulhydrat. App'en doserer aldrig - tallet bruges kun informativt.",
+      "correctionFactor": "Korrektionsfaktor (mmol/L pr. E, valgfri)",
+      "preExerciseMin": "Mindste blodsukker foer motion (mmol/L)",
+      "enable": "Aktiver diabetes-stoette",
+      "acceptDisclaimer": "Jeg accepterer ansvarsfraskrivelsen ovenfor",
+      "disclaimerRequired": "Du skal acceptere ansvarsfraskrivelsen",
+      "missingType": "Vaelg diabetes-type",
+      "save": "Gem profil",
+      "saved": "Profil gemt",
+      "delete": "Slet diabetes-profil",
+      "deleted": "Profil slettet",
+      "deleteConfirm": "Er du sikker paa at du vil slette din diabetes-profil?",
+      "disclaimer": "VIGTIGT: Denne app erstatter IKKE din laege eller dit diabetesteam. Vi foreslaar ALDRIG konkrete insulin-doser eller medicin-aendringer. Juster aldrig din behandling baseret paa app-raad alene. Kontakt altid sundhedspersonalet ved tvivl."
     }
   },
   "healthScore": {
