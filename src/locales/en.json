@@ -1,4 +1,4 @@
-﻿{
+{
   "tabs": {
     "plan": "Plan",
     "run": "Run",
@@ -783,6 +783,48 @@
         "checkWithDoctor": "Contact your doctor if you experience pain, nausea or exhaustion"
       },
       "disclaimer": "Recommendations are guidelines only. Always follow your own clinic's instructions."
+    }
+  },
+  "diabetes": {
+    "title": "Diabetes profile",
+    "subtitle": "Type 1, Type 2 or prediabetes",
+    "settingsButton": "Diabetes profile",
+    "settingsDescription": "Type 1, Type 2 or prediabetes - diet, blood sugar & exercise",
+    "setup": {
+      "title": "Diabetes profile",
+      "intro": "Enable diabetes support to get tailored meal suggestions, blood sugar guidance and exercise recommendations.",
+      "type": "Diabetes type",
+      "typeT1": "Type 1",
+      "typeT2": "Type 2",
+      "typePre": "Prediabetes",
+      "typeGest": "Gestational diabetes",
+      "treatment": "Treatment",
+      "txNone": "None",
+      "txDiet": "Diet/lifestyle only",
+      "txMetformin": "Metformin",
+      "txOral": "Other oral medications",
+      "txGLP1": "GLP-1 (Ozempic/Wegovy/Mounjaro)",
+      "txBasal": "Basal insulin",
+      "txBolus": "Basal + bolus insulin",
+      "txPump": "Insulin pump",
+      "diagnosisDate": "Diagnosis date (optional)",
+      "datePlaceholder": "YYYY-MM-DD",
+      "hba1c": "HbA1c (mmol/mol, optional)",
+      "countCarbs": "I count carbohydrates",
+      "carbRatio": "Insulin/carb ratio (g/U, optional)",
+      "carbRatioHelp": "E.g. 10 = 1 unit insulin covers 10g of carbs. The app never doses - this number is informational only.",
+      "correctionFactor": "Correction factor (mmol/L per U, optional)",
+      "preExerciseMin": "Minimum blood sugar before exercise (mmol/L)",
+      "enable": "Enable diabetes support",
+      "acceptDisclaimer": "I accept the disclaimer above",
+      "disclaimerRequired": "You must accept the disclaimer",
+      "missingType": "Select diabetes type",
+      "save": "Save profile",
+      "saved": "Profile saved",
+      "delete": "Delete diabetes profile",
+      "deleted": "Profile deleted",
+      "deleteConfirm": "Are you sure you want to delete your diabetes profile?",
+      "disclaimer": "IMPORTANT: This app does NOT replace your doctor or diabetes team. We NEVER suggest specific insulin doses or medication changes. Never adjust your treatment based on app advice alone. Always contact your healthcare provider if in doubt."
     }
   },
   "healthScore": {
