@@ -1001,7 +1001,24 @@ const calculateGoals = async () => {
           </TouchableOpacity>
         </View>
 
-        {/* ── PRIVATLIV ── */}
+                {/* DIABETES */}
+        <Text style={s.sectionTitle}>{t('diabetes.title', 'Diabetes profil')}</Text>
+        <View style={s.card}>
+          <TouchableOpacity
+            style={s.exportBtn}
+            onPress={() => { if (onNavigate) onNavigate('diabetesSetup'); }}
+          >
+            <View style={{ flex: 1 }}>
+              <Text style={s.notifTitle}>{t('diabetes.settingsButton', 'Diabetes profil')}</Text>
+              <Text style={s.notifSub}>{t('diabetes.settingsDescription', 'Type 1, Type 2 eller praediabetes - kost, blodsukker & motion')}</Text>
+            </View>
+            <View style={{flexDirection:'row',alignItems:'center',gap:6}}>
+              <Text style={s.exportBtnText}>{'>'}</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+{/* ── PRIVATLIV ── */}
         <Text style={s.sectionTitle}>{t('settings.sections.privacy')}</Text>
         <View style={s.card}>
           {[
