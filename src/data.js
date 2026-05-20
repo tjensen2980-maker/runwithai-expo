@@ -331,6 +331,29 @@ export async function sendToAI({ messages, profile, level, weekPlan, nextWorkout
   tomorrow.setDate(tomorrow.getDate() + 1);
   const tomorrowStr = tomorrow.toISOString().split('T')[0];
 
+  // Byg medicinsk profil-sektion (kun hvis brugeren har en aktiv profil)
+  let medicalProfileBlock = '';
+  const bar = profile?.bariatricAIContext;
+  const dia = profile?.diabetesAIContext;
+  if (bar || dia) {
+    const parts = ['', '═══ BRUGERENS MEDICINSKE PROFIL ═══'];
+    if (bar) {
+      parts.push('GASTRIC SLEEVE/BYPASS:');
+      parts.push(bar.summary);
+      parts.push('SIKKERHEDSREGLER (skal følges i ALLE svar):');
+      bar.safetyRules.forEach(r => parts.push('- ' + r));
+    }
+    if (dia) {
+      parts.push('DIABETES:');
+      parts.push(dia.summary);
+      parts.push('SIKKERHEDSREGLER (skal følges i ALLE svar):');
+      dia.safetyRules.forEach(r => parts.push('- ' + r));
+    }
+    parts.push('VIGTIGT: Du er IKKE læge. Foreslå ALDRIG konkrete medicin-doser. Henvis til brugerens behandler ved tvivl.');
+    parts.push('═══════════════════════════════════');
+    medicalProfileBlock = parts.join('\n');
+  }
+
   const systemPrompt = `Du er RunWithAI — en empatisk, proaktiv AI sundheds-, fitness- og løbecoach. Du hjælper med løbetræning, styrketræning, kost og madplaner. Når brugeren beder om mad eller kostvejledning, er det din primære opgave at hjælpe der — uden at nævne løb medmindre brugeren spørger. Bruger: ${name}. ${physique}. ${zones}. Niveau: ${level}. ${lv.aiStyle}
 Nuværende plan: ${planCtx}. Næste træning: ${nextWorkout.name[level]} (${nextWorkout.km}km).
 ${runsCtx}
@@ -349,6 +372,7 @@ Lav 4-5 måltider. meal_type skal være: breakfast, lunch, dinner eller snack.
 Format til planændring (inkludér kun ved ændring):
 <plan_update>{"changeNote":"kort forklaring","nextWorkout":{"name":"navn","desc":"beskrivelse","km":9.0,"duration":"~50","targetPace":"5:00","targetHr":155},"weekPlan":[{"day":"Man","workout":"navn","km":9,"color":"#c8ff00","type":"run","description":"konkret beskrivelse"}]}</plan_update>
 Svar på dansk, max 2-3 sætninger. Vær direkte og konkret.`;
+${medicalProfileBlock}`;
 
 console.log('[DEBUG] System prompt length:', systemPrompt.length);
   console.log('[DEBUG] Contains meal_plan:', systemPrompt.includes('<meal_plan>'));
