@@ -31,6 +31,7 @@ import { RoutesTab as RoutesTabComponent } from './src/screens/RoutesTab';
 import Privacy from './src/screens/Privacy';
 import GoalsSetup from './src/screens/GoalsSetup';
 import BariatricSetup from './src/screens/BariatricSetup';
+import DiabetesSetup from './src/screens/DiabetesSetup';
 import NutritionDashboard from './src/screens/NutritionDashboard';
 import { initNotifications, loadSettings as loadNotifSettings, syncFromSettings } from './src/utils/notifications';
 import LogMeal from './src/screens/LogMeal';
@@ -657,6 +658,8 @@ if (tab === 'cycleTracker') {
         return <GoalsSetup onBack={() => setTab('settings')} />;
       case 'bariatricSetup':
         return <BariatricSetup onBack={() => setTab('settings')} />;
+      case 'diabetesSetup':
+        return <DiabetesSetup onBack={() => setTab('settings')} />;
 case 'mealPlan':
       return (
         <MealPlan
