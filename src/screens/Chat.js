@@ -6,6 +6,7 @@ import {
   Keyboard, Dimensions, Alert
 } from 'react-native';
 import { colors, LEVELS, sendToAI, loadMessages, clearMessages, logMealPlan } from '../data';
+import { loadDiabetesProfile, buildAIContext as buildDiabetesContext } from '../utils/diabetes';
 import { useTranslation } from 'react-i18next';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -126,9 +127,14 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
     setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
 
     try {
+      const diabetesProfile = await loadDiabetesProfile();
+      const diabetesContext = buildDiabetesContext(diabetesProfile);
+      const enrichedProfile = diabetesProfile && diabetesProfile.enabled
+        ? { ...profile, diabetes: diabetesProfile, diabetesAIContext: diabetesContext }
+        : profile;
       const { text: aiText, planUpdate, mealPlan } = await sendToAI({
         messages: newMessages,
-        profile, level, weekPlan, nextWorkout, runs,
+        profile: enrichedProfile, level, weekPlan, nextWorkout, runs,
       });
       const aiMsg = {
         role: 'ai',
