@@ -599,3 +599,58 @@ export function checkActivitySafety(activityType, durationMin, profile) {
   
   return { safe: true, warning: null, severity: 'none' };
 }
+// ============================================================
+// AI Context (til Chat.js - injiceres i AI-prompt)
+// ============================================================
+export function buildAIContext(bariatricProfile) {
+  if (!bariatricProfile || !bariatricProfile.enabled) return null;
+  const v = validateBariatricProfile(bariatricProfile);
+  if (!v.ok) return null;
+
+  const surgeryLabel = {
+    [SURGERY_TYPES.SLEEVE]: 'Gastric sleeve',
+    [SURGERY_TYPES.BYPASS]: 'Gastric bypass',
+  }[bariatricProfile.surgeryType] || 'Bariatrisk operation';
+
+  const days = getDaysSinceSurgery(bariatricProfile.surgeryDate);
+  const phase = getPhaseFromDays(days);
+  const info = getPhaseInfo(phase);
+
+  const lines = [
+    'Operation: ' + surgeryLabel,
+    'Dage siden operation: ' + (days != null ? days : 'ukendt'),
+  ];
+  if (info) {
+    lines.push('Aktuel fase: ' + info.nameDa);
+    lines.push('Portionsstoerrelse: max ' + info.portionSizeMl + ' ml/maaltid');
+    lines.push('Protein-maal: ' + info.proteinTargetG + ' g/dag');
+    lines.push('Vaeske-maal: ' + info.fluidTargetMl + ' ml/dag');
+    lines.push('Kalorie-maal: ' + info.kcalTargetMin + '-' + info.kcalTargetMax + ' kcal/dag');
+  }
+
+  const rules = [
+    'Anbefal smaa portioner (max ' + (info ? info.portionSizeMl : 120) + ' ml/maaltid for denne fase).',
+    'Protein FOERST i hvert maaltid - foer kulhydrat og fedt.',
+    'Ingen drikke 30 min foer og 30 min efter maaltider.',
+    'Undgaa sukker, hvidt brod, sodavand, juice og fed mad (dumping syndrome-risiko).',
+    'Tygg grundigt - mindst 20 gange pr. mundfuld.',
+    'Foreslaa ALDRIG konkrete medicin-aendringer eller doser.',
+    'Henvis altid til brugerens bariatriske team/ernaeringsterapeut ved tvivl.',
+  ];
+  if (phase && phase <= 2) {
+    rules.push('Brugeren er i tidlig fase (vaesker kun) - foreslaa IKKE fast foede.');
+  }
+  if (phase === 3) {
+    rules.push('Brugeren er i puree-fase - kun blendet/pureret mad.');
+  }
+
+  return {
+    summary: lines.join('\n'),
+    safetyRules: rules,
+    surgeryType: bariatricProfile.surgeryType,
+    phase: phase,
+    daysSinceSurgery: days,
+    portionSizeMl: info ? info.portionSizeMl : null,
+    proteinTargetG: info ? info.proteinTargetG : null,
+  };
+}
