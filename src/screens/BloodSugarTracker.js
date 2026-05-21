@@ -10,6 +10,9 @@ import {
   Alert,
   Platform,
   FlatList,
+  Keyboard,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
@@ -95,7 +98,13 @@ export default function BloodSugarTracker({ onBack }) {
   const windowReadings = filterByDays(readings, currentRange.days);
   const stats = computeStats(windowReadings, profile);
 
+  const closeModal = () => {
+    Keyboard.dismiss();
+    setModalVisible(false);
+  };
+
   const handleAdd = async () => {
+    Keyboard.dismiss();
     const v = parseFloat(String(valueInput).replace(',', '.'));
     if (!isFinite(v) || v <= 0 || v > 40) {
       Alert.alert(
@@ -161,7 +170,7 @@ export default function BloodSugarTracker({ onBack }) {
             </Text>
             <Text style={styles.entryMeta}>
               {t('bloodSugar.ctx.' + item.context, CONTEXT_LABELS[item.context] || item.context)}
-              {item.note ? '  -  ' + item.note : ''}
+              {item.note ? ' - ' + item.note : ''}
             </Text>
           </View>
           <Text style={styles.entryTime}>{formatTime(item.timestamp)}</Text>
@@ -220,7 +229,7 @@ export default function BloodSugarTracker({ onBack }) {
             </View>
             <Text style={styles.tirText}>
               {t('bloodSugar.stat.tir', 'Tid i maal')}: {stats.inRangePct != null ? stats.inRangePct + '%' : '-'}
-              {'  '}({stats.count} {t('bloodSugar.stat.measurements', 'maalinger')})
+              {' '}({stats.count} {t('bloodSugar.stat.measurements', 'maalinger')})
             </Text>
           </View>
           <Text style={styles.targetText}>
@@ -252,7 +261,7 @@ export default function BloodSugarTracker({ onBack }) {
         <Text style={styles.disclaimerSmall}>
           {t(
             'bloodSugar.disclaimer',
-            'Disse tal er kun til din egen reference. Diskutér altid mønstre med din læge eller dit diabetesteam.'
+            'Disse tal er kun til din egen reference. Diskuter altid moenstre med din laege eller dit diabetesteam.'
           )}
         </Text>
 
@@ -263,66 +272,83 @@ export default function BloodSugarTracker({ onBack }) {
         visible={modalVisible}
         animationType="slide"
         transparent
-        onRequestClose={() => setModalVisible(false)}
+        onRequestClose={closeModal}
       >
-        <View style={styles.modalOverlay}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={styles.modalOverlay}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View style={styles.modalBackdrop} />
+          </TouchableWithoutFeedback>
           <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>{t('bloodSugar.add', 'Tilfoej maaling')}</Text>
+            <ScrollView
+              keyboardShouldPersistTaps="handled"
+              showsVerticalScrollIndicator={false}
+            >
+              <Text style={styles.modalTitle}>{t('bloodSugar.add', 'Tilfoej maaling')}</Text>
 
-            <Text style={styles.sectionLabel}>{t('bloodSugar.valueLabel', 'Blodsukker (mmol/L)')}</Text>
-            <TextInput
-              style={styles.input}
-              value={valueInput}
-              onChangeText={setValueInput}
-              placeholder="5.6"
-              placeholderTextColor={colors.muted}
-              keyboardType="decimal-pad"
-              autoFocus
-            />
+              <Text style={styles.sectionLabel}>{t('bloodSugar.valueLabel', 'Blodsukker (mmol/L)')}</Text>
+              <TextInput
+                style={styles.input}
+                value={valueInput}
+                onChangeText={setValueInput}
+                placeholder="5.6"
+                placeholderTextColor={colors.muted}
+                keyboardType="decimal-pad"
+                returnKeyType="done"
+                blurOnSubmit
+                onSubmitEditing={Keyboard.dismiss}
+                autoFocus
+              />
 
-            <Text style={styles.sectionLabel}>{t('bloodSugar.contextLabel', 'Kontekst')}</Text>
-            <View style={styles.ctxGrid}>
-              {CONTEXT_OPTIONS.map(opt => (
+              <Text style={styles.sectionLabel}>{t('bloodSugar.contextLabel', 'Kontekst')}</Text>
+              <View style={styles.ctxGrid}>
+                {CONTEXT_OPTIONS.map(opt => (
+                  <TouchableOpacity
+                    key={opt.id}
+                    style={[styles.ctxBtn, contextChoice === opt.id && styles.ctxBtnActive]}
+                    onPress={() => { Keyboard.dismiss(); setContextChoice(opt.id); }}
+                  >
+                    <Text style={[styles.ctxBtnText, contextChoice === opt.id && styles.ctxBtnTextActive]}>
+                      {t(opt.labelKey, opt.fallback)}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+
+              <Text style={styles.sectionLabel}>{t('bloodSugar.noteLabel', 'Note (valgfri)')}</Text>
+              <TextInput
+                style={[styles.input, { minHeight: 60 }]}
+                value={noteInput}
+                onChangeText={setNoteInput}
+                placeholder={t('bloodSugar.notePlaceholder', 'F.eks. efter morgenmad')}
+                placeholderTextColor={colors.muted}
+                returnKeyType="done"
+                blurOnSubmit
+                onSubmitEditing={Keyboard.dismiss}
+                multiline
+              />
+
+              <View style={styles.modalActions}>
                 <TouchableOpacity
-                  key={opt.id}
-                  style={[styles.ctxBtn, contextChoice === opt.id && styles.ctxBtnActive]}
-                  onPress={() => setContextChoice(opt.id)}
+                  style={[styles.modalBtn, styles.modalCancel]}
+                  onPress={closeModal}
+                  disabled={saving}
                 >
-                  <Text style={[styles.ctxBtnText, contextChoice === opt.id && styles.ctxBtnTextActive]}>
-                    {t(opt.labelKey, opt.fallback)}
-                  </Text>
+                  <Text style={styles.modalCancelText}>{t('common.cancel', 'Annuller')}</Text>
                 </TouchableOpacity>
-              ))}
-            </View>
-
-            <Text style={styles.sectionLabel}>{t('bloodSugar.noteLabel', 'Note (valgfri)')}</Text>
-            <TextInput
-              style={[styles.input, { minHeight: 60 }]}
-              value={noteInput}
-              onChangeText={setNoteInput}
-              placeholder={t('bloodSugar.notePlaceholder', 'F.eks. efter morgenmad')}
-              placeholderTextColor={colors.muted}
-              multiline
-            />
-
-            <View style={styles.modalActions}>
-              <TouchableOpacity
-                style={[styles.modalBtn, styles.modalCancel]}
-                onPress={() => setModalVisible(false)}
-                disabled={saving}
-              >
-                <Text style={styles.modalCancelText}>{t('common.cancel', 'Annuller')}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.modalBtn, styles.modalSave]}
-                onPress={handleAdd}
-                disabled={saving}
-              >
-                <Text style={styles.modalSaveText}>{t('bloodSugar.save', 'Gem')}</Text>
-              </TouchableOpacity>
-            </View>
+                <TouchableOpacity
+                  style={[styles.modalBtn, styles.modalSave]}
+                  onPress={handleAdd}
+                  disabled={saving}
+                >
+                  <Text style={styles.modalSaveText}>{t('bloodSugar.save', 'Gem')}</Text>
+                </TouchableOpacity>
+              </View>
+            </ScrollView>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     </SafeAreaView>
   );
@@ -429,8 +455,11 @@ const styles = StyleSheet.create({
 
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
     justifyContent: 'flex-end',
+  },
+  modalBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.6)',
   },
   modalCard: {
     backgroundColor: colors.bg,
@@ -438,6 +467,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 16,
     padding: 16,
     paddingBottom: 32,
+    maxHeight: '85%',
   },
   modalTitle: { color: colors.text, fontSize: 18, fontWeight: '700', marginBottom: 12 },
   ctxGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
