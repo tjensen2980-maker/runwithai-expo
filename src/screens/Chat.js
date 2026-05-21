@@ -134,20 +134,29 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
       const bariatricProfile = await loadBariatricProfile();
       const bariatricContext = buildBariatricContext(bariatricProfile);
 
-      // Append blood sugar context to diabetes context so AI sees it via existing mechanism
+      // Build blood sugar summary - keep diabetes context as object with summary + safetyRules
       const bloodSugarReadings = await loadReadings();
-      const bloodSugarContext = buildAIBloodSugarContext(bloodSugarReadings, diabetesProfile, 7);
-      if (bloodSugarContext && bloodSugarContext.summary) {
-        const bsBlock = '\n\nBLODSUKKER-MAALINGER (sidste 7 dage, brugerens egne maalinger):\n' + bloodSugarContext.summary + '\nBrug disse tal til at give personlige raad om kost, motion og blodsukker. Naevn ALDRIG konkrete insulin-doser.';
-        if (diabetesContext) {
-          diabetesContext = diabetesContext + bsBlock;
+      const bsCtx = buildAIBloodSugarContext(bloodSugarReadings, diabetesProfile, 7);
+      if (bsCtx && bsCtx.summary) {
+        const bsBlock = '\n\nBLODSUKKER-MAALINGER (sidste 7 dage, brugerens egne maalinger):\n' + bsCtx.summary + '\nBrug disse tal til at give personlige raad om kost, motion og blodsukker. Naevn ALDRIG konkrete insulin-doser.';
+        if (diabetesContext && typeof diabetesContext === 'object') {
+          diabetesContext = {
+            ...diabetesContext,
+            summary: (diabetesContext.summary || '') + bsBlock,
+          };
         } else {
-          diabetesContext = bsBlock;
+          diabetesContext = {
+            summary: bsBlock,
+            safetyRules: [
+              'Naevn ALDRIG konkrete insulin-doser.',
+              'Henvis til brugerens laege eller diabetesteam ved tvivl.',
+            ],
+          };
         }
       }
 
       let enrichedProfile = profile;
-      if (diabetesProfile?.enabled || bloodSugarContext) {
+      if (diabetesContext) {
         enrichedProfile = { ...enrichedProfile, diabetes: diabetesProfile, diabetesAIContext: diabetesContext };
       }
       if (bariatricProfile?.enabled) {
