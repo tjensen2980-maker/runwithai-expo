@@ -8,6 +8,7 @@ import {
 import { colors, LEVELS, sendToAI, loadMessages, clearMessages, logMealPlan } from '../data';
 import { loadDiabetesProfile, buildAIContext as buildDiabetesContext } from '../utils/diabetes';
 import { loadBariatricProfile, buildAIContext as buildBariatricContext } from '../utils/bariatric';
+import { loadReadings, buildAIBloodSugarContext } from '../utils/bloodSugar';
 import { useTranslation } from 'react-i18next';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -44,7 +45,7 @@ function Message({ msg, t, onLogMealPlan }) {
             <View key={i} style={s.mealItem}>
               <Text style={s.mealName}>{m.name}</Text>
               <Text style={s.mealMacros}>
-                {m.kcal} kcal  -  P{m.protein_g}g  K{m.carbs_g}g  F{m.fat_g}g
+                {m.kcal} kcal - P{m.protein_g}g K{m.carbs_g}g F{m.fat_g}g
               </Text>
               {m.description ? <Text style={s.mealDesc}>{m.description}</Text> : null}
             </View>
@@ -132,13 +133,18 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
       const diabetesContext = buildDiabetesContext(diabetesProfile);
       const bariatricProfile = await loadBariatricProfile();
       const bariatricContext = buildBariatricContext(bariatricProfile);
-let enrichedProfile = profile;
-if (diabetesProfile?.enabled) {
-  enrichedProfile = { ...enrichedProfile, diabetes: diabetesProfile, diabetesAIContext: diabetesContext };
-}
-if (bariatricProfile?.enabled) {
-  enrichedProfile = { ...enrichedProfile, bariatric: bariatricProfile, bariatricAIContext: bariatricContext };
-}
+      const bloodSugarReadings = await loadReadings();
+      const bloodSugarContext = buildAIBloodSugarContext(bloodSugarReadings, diabetesProfile, 7);
+      let enrichedProfile = profile;
+      if (diabetesProfile?.enabled) {
+        enrichedProfile = { ...enrichedProfile, diabetes: diabetesProfile, diabetesAIContext: diabetesContext };
+      }
+      if (bariatricProfile?.enabled) {
+        enrichedProfile = { ...enrichedProfile, bariatric: bariatricProfile, bariatricAIContext: bariatricContext };
+      }
+      if (bloodSugarContext) {
+        enrichedProfile = { ...enrichedProfile, bloodSugarAIContext: bloodSugarContext };
+      }
       const { text: aiText, planUpdate, mealPlan } = await sendToAI({
         messages: newMessages,
         profile: enrichedProfile, level, weekPlan, nextWorkout, runs,
@@ -239,38 +245,38 @@ if (bariatricProfile?.enabled) {
 }
 
 const s = StyleSheet.create({
-  container:           { flex: 1, backgroundColor: colors.bg },
-  header:              { flexDirection: 'row', alignItems: 'center', gap: 8, padding: 16, paddingTop: 8, borderBottomWidth: 1, borderBottomColor: colors.border, backgroundColor: colors.card },
-  dot:                 { width: 8, height: 8, borderRadius: 4 },
-  headerTitle:         { flex: 1, fontSize: 12, color: colors.muted, letterSpacing: 2, fontWeight: '600' },
-  clearBtn:            { paddingHorizontal: 10, paddingVertical: 4, backgroundColor: colors.surface, borderRadius: 8 },
-  clearBtnText:        { fontSize: 11, color: colors.muted },
-  messages:            { flex: 1, backgroundColor: colors.bg },
-  msgWrap:             { marginBottom: 14 },
-  msgAI:               { alignItems: 'flex-start' },
-  msgUser:             { alignItems: 'flex-end' },
-  msgSender:           { fontSize: 9, color: colors.muted, letterSpacing: 1.5, marginBottom: 5, marginLeft: 4 },
-  bubble:              { maxWidth: '85%', borderRadius: 18, padding: 14 },
-  bubbleAI:            { backgroundColor: colors.card, borderTopLeftRadius: 4, shadowColor: '#000', shadowOffset:{width:0,height:1}, shadowOpacity:0.06, shadowRadius:6, elevation:1 },
-  bubbleUser:          { backgroundColor: colors.black, borderTopRightRadius: 4 },
-  bubbleText:          { fontSize: 14, lineHeight: 21 },
-  bubbleTextAI:        { color: colors.black },
-  bubbleTextUser:      { color: colors.card },
-  inputRow:            { flexDirection: 'row', gap: 10, padding: 12, paddingBottom: 12, borderTopWidth: 1, borderTopColor: colors.border, alignItems: 'center', backgroundColor: colors.card },
-  input:               { flex: 1, backgroundColor: colors.surface, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12, fontSize: 14, color: colors.text, height: 44 },
-  sendBtn:             { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.black, alignItems: 'center', justifyContent: 'center' },
-  sendBtnText:         { fontSize: 20, fontWeight: '700', color: colors.card },
-  planUpdateBadge:     { flexDirection: 'row', alignItems: 'center', marginTop: 6, backgroundColor: colors.surface, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 5, alignSelf: 'flex-start' },
+  container: { flex: 1, backgroundColor: colors.bg },
+  header: { flexDirection: 'row', alignItems: 'center', gap: 8, padding: 16, paddingTop: 8, borderBottomWidth: 1, borderBottomColor: colors.border, backgroundColor: colors.card },
+  dot: { width: 8, height: 8, borderRadius: 4 },
+  headerTitle: { flex: 1, fontSize: 12, color: colors.muted, letterSpacing: 2, fontWeight: '600' },
+  clearBtn: { paddingHorizontal: 10, paddingVertical: 4, backgroundColor: colors.surface, borderRadius: 8 },
+  clearBtnText: { fontSize: 11, color: colors.muted },
+  messages: { flex: 1, backgroundColor: colors.bg },
+  msgWrap: { marginBottom: 14 },
+  msgAI: { alignItems: 'flex-start' },
+  msgUser: { alignItems: 'flex-end' },
+  msgSender: { fontSize: 9, color: colors.muted, letterSpacing: 1.5, marginBottom: 5, marginLeft: 4 },
+  bubble: { maxWidth: '85%', borderRadius: 18, padding: 14 },
+  bubbleAI: { backgroundColor: colors.card, borderTopLeftRadius: 4, shadowColor: '#000', shadowOffset:{width:0,height:1}, shadowOpacity:0.06, shadowRadius:6, elevation:1 },
+  bubbleUser: { backgroundColor: colors.black, borderTopRightRadius: 4 },
+  bubbleText: { fontSize: 14, lineHeight: 21 },
+  bubbleTextAI: { color: colors.black },
+  bubbleTextUser: { color: colors.card },
+  inputRow: { flexDirection: 'row', gap: 10, padding: 12, paddingBottom: 12, borderTopWidth: 1, borderTopColor: colors.border, alignItems: 'center', backgroundColor: colors.card },
+  input: { flex: 1, backgroundColor: colors.surface, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12, fontSize: 14, color: colors.text, height: 44 },
+  sendBtn: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.black, alignItems: 'center', justifyContent: 'center' },
+  sendBtnText: { fontSize: 20, fontWeight: '700', color: colors.card },
+  planUpdateBadge: { flexDirection: 'row', alignItems: 'center', marginTop: 6, backgroundColor: colors.surface, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 5, alignSelf: 'flex-start' },
   planUpdateBadgeText: { fontSize: 11, color: colors.accent, fontWeight: '700' },
-  mealPlanCard:        { marginTop: 8, backgroundColor: colors.card, borderRadius: 14, padding: 14, borderWidth: 1, borderColor: colors.border, alignSelf: 'stretch' },
-  mealPlanTitle:       { fontSize: 16, fontWeight: '700', color: colors.text, marginBottom: 2 },
-  mealPlanSubtitle:    { fontSize: 12, color: colors.muted, marginBottom: 10 },
-  mealItem:            { paddingVertical: 8, borderTopWidth: 1, borderTopColor: colors.border },
-  mealName:            { fontSize: 14, fontWeight: '600', color: colors.text },
-  mealMacros:          { fontSize: 11, color: colors.muted, marginTop: 2 },
-  mealDesc:            { fontSize: 12, color: colors.text, marginTop: 4, lineHeight: 17 },
-  logAllBtn:           { backgroundColor: '#4a9eff', padding: 12, borderRadius: 10, alignItems: 'center', marginTop: 12 },
-  logAllBtnText:       { color: '#ffffff', fontSize: 14, fontWeight: '700' },
-  loggedBadge:         { backgroundColor: colors.surface, padding: 10, borderRadius: 10, alignItems: 'center', marginTop: 12 },
-  loggedBadgeText:     { color: colors.accent, fontSize: 13, fontWeight: '700' },
+  mealPlanCard: { marginTop: 8, backgroundColor: colors.card, borderRadius: 14, padding: 14, borderWidth: 1, borderColor: colors.border, alignSelf: 'stretch' },
+  mealPlanTitle: { fontSize: 16, fontWeight: '700', color: colors.text, marginBottom: 2 },
+  mealPlanSubtitle: { fontSize: 12, color: colors.muted, marginBottom: 10 },
+  mealItem: { paddingVertical: 8, borderTopWidth: 1, borderTopColor: colors.border },
+  mealName: { fontSize: 14, fontWeight: '600', color: colors.text },
+  mealMacros: { fontSize: 11, color: colors.muted, marginTop: 2 },
+  mealDesc: { fontSize: 12, color: colors.text, marginTop: 4, lineHeight: 17 },
+  logAllBtn: { backgroundColor: '#4a9eff', padding: 12, borderRadius: 10, alignItems: 'center', marginTop: 12 },
+  logAllBtnText: { color: '#ffffff', fontSize: 14, fontWeight: '700' },
+  loggedBadge: { backgroundColor: colors.surface, padding: 10, borderRadius: 10, alignItems: 'center', marginTop: 12 },
+  loggedBadgeText: { color: colors.accent, fontSize: 13, fontWeight: '700' },
 });
