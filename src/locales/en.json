@@ -827,6 +827,48 @@
       "disclaimer": "IMPORTANT: This app does NOT replace your doctor or diabetes team. We NEVER suggest specific insulin doses or medication changes. Never adjust your treatment based on app advice alone. Always contact your healthcare provider if in doubt."
     }
   },
+  "bloodSugar": {
+    "title": "Blood Sugar",
+    "settingsButton": "Blood sugar log",
+    "settingsDescription": "Log your measurements and see trends over time",
+    "add": "Add reading",
+    "save": "Save",
+    "history": "History",
+    "empty": "No readings yet. Tap the button above to log your first measurement.",
+    "disclaimer": "These numbers are for your own reference only. Always discuss patterns with your doctor or diabetes team.",
+    "valueLabel": "Blood sugar (mmol/L)",
+    "contextLabel": "Context",
+    "noteLabel": "Note (optional)",
+    "notePlaceholder": "E.g. after breakfast",
+    "errInvalidTitle": "Invalid value",
+    "errInvalidBody": "Enter a blood sugar value between 1.0 and 40.0 mmol/L.",
+    "errSaveTitle": "Could not save",
+    "deleteTitle": "Delete reading",
+    "deleteBody": "Are you sure? Long-press to delete.",
+    "ctx": {
+      "fasting": "Fasting",
+      "preMeal": "Before meal",
+      "postMeal": "After meal",
+      "bedtime": "Bedtime",
+      "preExercise": "Before exercise",
+      "postExercise": "After exercise",
+      "random": "Random"
+    },
+    "range": {
+      "1d": "1 day",
+      "7d": "7 days",
+      "30d": "30 days",
+      "90d": "90 days"
+    },
+    "stat": {
+      "avg": "Average",
+      "min": "Min",
+      "max": "Max",
+      "tir": "Time in range",
+      "target": "Target",
+      "measurements": "readings"
+    }
+  },
   "healthScore": {
     "title": "Health score",
     "todayLabel": "Today's score",
