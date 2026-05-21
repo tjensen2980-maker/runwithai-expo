@@ -827,6 +827,48 @@
       "disclaimer": "VIGTIGT: Denne app erstatter IKKE din laege eller dit diabetesteam. Vi foreslaar ALDRIG konkrete insulin-doser eller medicin-aendringer. Juster aldrig din behandling baseret paa app-raad alene. Kontakt altid sundhedspersonalet ved tvivl."
     }
   },
+  "bloodSugar": {
+    "title": "Blodsukker",
+    "settingsButton": "Blodsukker-log",
+    "settingsDescription": "Log dine målinger og se tendenser over tid",
+    "add": "Tilføj måling",
+    "save": "Gem",
+    "history": "Historik",
+    "empty": "Ingen målinger endnu. Tryk på knappen ovenfor for at logge din første måling.",
+    "disclaimer": "Disse tal er kun til din egen reference. Diskutér altid mønstre med din læge eller dit diabetesteam.",
+    "valueLabel": "Blodsukker (mmol/L)",
+    "contextLabel": "Kontekst",
+    "noteLabel": "Note (valgfri)",
+    "notePlaceholder": "F.eks. efter morgenmad",
+    "errInvalidTitle": "Ugyldig værdi",
+    "errInvalidBody": "Indtast en blodsukker-værdi mellem 1.0 og 40.0 mmol/L.",
+    "errSaveTitle": "Kunne ikke gemme",
+    "deleteTitle": "Slet måling",
+    "deleteBody": "Er du sikker? Hold inde for at slette.",
+    "ctx": {
+      "fasting": "Fastende",
+      "preMeal": "Før måltid",
+      "postMeal": "Efter måltid",
+      "bedtime": "Sengetid",
+      "preExercise": "Før motion",
+      "postExercise": "Efter motion",
+      "random": "Tilfældig"
+    },
+    "range": {
+      "1d": "1 dag",
+      "7d": "7 dage",
+      "30d": "30 dage",
+      "90d": "90 dage"
+    },
+    "stat": {
+      "avg": "Gennemsnit",
+      "min": "Min",
+      "max": "Max",
+      "tir": "Tid i mål",
+      "target": "Mål",
+      "measurements": "målinger"
+    }
+  },
   "healthScore": {
     "title": "Sundhedsscore",
     "todayLabel": "Dagens score",

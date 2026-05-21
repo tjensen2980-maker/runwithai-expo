@@ -32,6 +32,7 @@ import Privacy from './src/screens/Privacy';
 import GoalsSetup from './src/screens/GoalsSetup';
 import BariatricSetup from './src/screens/BariatricSetup';
 import DiabetesSetup from './src/screens/DiabetesSetup';
+import BloodSugarTracker from './src/screens/BloodSugarTracker';
 import NutritionDashboard from './src/screens/NutritionDashboard';
 import { initNotifications, loadSettings as loadNotifSettings, syncFromSettings } from './src/utils/notifications';
 import LogMeal from './src/screens/LogMeal';
@@ -660,6 +661,8 @@ if (tab === 'cycleTracker') {
         return <BariatricSetup onBack={() => setTab('settings')} />;
       case 'diabetesSetup':
         return <DiabetesSetup onBack={() => setTab('settings')} />;
+      case 'bloodSugar':
+        return <BloodSugarTracker onBack={() => setTab('settings')} />;
 case 'mealPlan':
       return (
         <MealPlan
