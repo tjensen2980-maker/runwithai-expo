@@ -130,20 +130,28 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
 
     try {
       const diabetesProfile = await loadDiabetesProfile();
-      const diabetesContext = buildDiabetesContext(diabetesProfile);
+      let diabetesContext = buildDiabetesContext(diabetesProfile);
       const bariatricProfile = await loadBariatricProfile();
       const bariatricContext = buildBariatricContext(bariatricProfile);
+
+      // Append blood sugar context to diabetes context so AI sees it via existing mechanism
       const bloodSugarReadings = await loadReadings();
       const bloodSugarContext = buildAIBloodSugarContext(bloodSugarReadings, diabetesProfile, 7);
+      if (bloodSugarContext && bloodSugarContext.summary) {
+        const bsBlock = '\n\nBLODSUKKER-MAALINGER (sidste 7 dage, brugerens egne maalinger):\n' + bloodSugarContext.summary + '\nBrug disse tal til at give personlige raad om kost, motion og blodsukker. Naevn ALDRIG konkrete insulin-doser.';
+        if (diabetesContext) {
+          diabetesContext = diabetesContext + bsBlock;
+        } else {
+          diabetesContext = bsBlock;
+        }
+      }
+
       let enrichedProfile = profile;
-      if (diabetesProfile?.enabled) {
+      if (diabetesProfile?.enabled || bloodSugarContext) {
         enrichedProfile = { ...enrichedProfile, diabetes: diabetesProfile, diabetesAIContext: diabetesContext };
       }
       if (bariatricProfile?.enabled) {
         enrichedProfile = { ...enrichedProfile, bariatric: bariatricProfile, bariatricAIContext: bariatricContext };
-      }
-      if (bloodSugarContext) {
-        enrichedProfile = { ...enrichedProfile, bloodSugarAIContext: bloodSugarContext };
       }
       const { text: aiText, planUpdate, mealPlan } = await sendToAI({
         messages: newMessages,
