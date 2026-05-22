@@ -1,4 +1,5 @@
 import './src/i18n';
+  const [chatDraft, setChatDraft] = useState('');
 import { useTranslation } from 'react-i18next';
 import PricingPage, { useSubscription, Paywall } from './components/Pricing';
 import React, { useState, useEffect } from 'react';
@@ -642,7 +643,7 @@ if (tab === 'cycleTracker') {
   const renderScreen = () => {
     switch (tab) {
       case 'home':
-      return <Home level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} runs={runs} onNavigate={setTab} onStartActivity={handleStartActivity} onOpenChat={(draft) => setTab('chat')} isPro={isPro} isFree={isFree} onShowPricing={() => setShowTierCarousel(true)} />;
+      return <Home level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} runs={runs} onNavigate={setTab} onStartActivity={handleStartActivity} onOpenChat={(draft) => { setChatDraft(draft || ''); setTab('chat'); }} isPro={isPro} isFree={isFree} onShowPricing={() => setShowTierCarousel(true)} />;
     case 'dashboard':
         return <PlanTab level={level} nextWorkout={nextWorkout} weekPlan={weekPlan} planChanges={planChanges} profile={profile} runs={runs} onNavigate={setTab} onStartActivity={handleStartActivity} trainingPlan={trainingPlan} onPlanUpdate={handlePlanUpdate} isPro={isPro} isFree={isFree} onShowPricing={() => setShowTierCarousel(true)} />;
       case 'activity':
@@ -654,7 +655,7 @@ if (tab === 'cycleTracker') {
       case 'calendar':
         return <CalendarTab runs={runs} weekPlan={weekPlan} trainingPlan={trainingPlan} isPro={isPro} onShowPricing={() => setShowTierCarousel(true)} />;
       case 'chat':
-        return !isFree ? <Chat level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} onPlanUpdate={handlePlanUpdate} runs={runs} /> : <ProFeatureLock feature={t('pro.coach.title')} description={t('pro.coach.description')} onUpgrade={() => setShowTierCarousel(true)} />;
+        return !isFree ? <Chat level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} onPlanUpdate={handlePlanUpdate} runs={runs} initialMessage={chatDraft} onInitialMessageConsumed={() => setChatDraft('')} /> : <ProFeatureLock feature={t('pro.coach.title')} description={t('pro.coach.description')} onUpgrade={() => setShowTierCarousel(true)} />;
       case 'more':
       return <More onNavigate={setTab} profile={profile} isPro={isPro} isFree={isFree} onShowPricing={() => setShowTierCarousel(true)} />;
     case 'settings':
