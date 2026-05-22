@@ -67,7 +67,7 @@ function Message({ msg, t, onLogMealPlan }) {
   );
 }
 
-export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpdate, runs }) {
+export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpdate, runs, initialMessage, onInitialMessageConsumed }) {
   const { t } = useTranslation();
   const lv = LEVELS[level] || LEVELS['intermediate'];
   const [messages, setMessages] = useState([]);
@@ -118,6 +118,15 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
     }
     fetchHistory();
   }, [t]);
+
+  // Auto-send initial message from Home chat draft
+  useEffect(() => {
+    if (initialMessage && initialMessage.trim() && !loadingHistory) {
+      send(initialMessage);
+      if (onInitialMessageConsumed) onInitialMessageConsumed();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialMessage, loadingHistory]);
 
   const send = async (text) => {
     if (!text.trim() || loading) return;
