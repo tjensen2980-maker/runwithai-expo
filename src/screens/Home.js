@@ -11,7 +11,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../data';
-import { getRecentReadings, getStats } from '../utils/bloodSugar';
+import { loadReadings, filterByDays, computeStats } from '../utils/bloodSugar';
 
 // ============================================================
 // Home.js - New AI-first home screen
@@ -107,10 +107,10 @@ export default function Home({
     let mounted = true;
     (async () => {
       try {
-        const recent = await getRecentReadings(7);
+        const allReadings = await loadReadings(); const recent = filterByDays(allReadings, 7);
         if (!mounted) return;
         setBsReadings(recent || []);
-        const stats = getStats(recent || [], profile);
+        const stats = computeStats(recent || [], profile);
         setBsStats(stats);
       } catch (e) {
         // Silent: blood sugar is optional
