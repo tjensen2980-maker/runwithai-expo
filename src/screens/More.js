@@ -29,7 +29,7 @@ function MenuRow({ icon, title, subtitle, onPress, proLocked, badge }) {
         </View>
         {subtitle ? <Text style={styles.rowSub}>{subtitle}</Text> : null}
       </View>
-      <Text style={styles.rowChev}>âº</Text>
+      <Text style={styles.rowChev}>›</Text>
     </TouchableOpacity>
   );
 }
@@ -71,9 +71,9 @@ export default function More({
 
       <Section title="KONTO">
         <MenuRow
-          icon="ð¤"
+          icon="👤"
           title="Profil"
-          subtitle="Personlig info, mÃ¥l, puls og skader"
+          subtitle="Personlig info, mål, puls og skader"
           onPress={go('profile')}
         />
         <MenuRow
@@ -86,7 +86,7 @@ export default function More({
 
       <Section title="STATISTIK">
         <MenuRow
-          icon="ð"
+          icon="📊"
           title="Statistik"
           subtitle="Total km, bedste pace, milepaele"
           onPress={goPro('stats')}
@@ -96,13 +96,13 @@ export default function More({
 
       <Section title="SUNDHED">
         <MenuRow
-          icon="ð©¸"
+          icon="🩸"
           title="Blodsukker"
           subtitle="Log og se din udvikling"
           onPress={go('bloodSugar')}
         />
         <MenuRow
-          icon="ð½"
+          icon="🍽"
           title="Madplan"
           subtitle="AI-genereret madplan til dig"
           onPress={goPro('mealPlan')}
@@ -112,19 +112,19 @@ export default function More({
 
       <Section title="SETUP">
         <MenuRow
-          icon="ð¯"
+          icon="🎯"
           title="Maal"
           subtitle="Saet dine traeningsmaal"
           onPress={go('goals')}
         />
         <MenuRow
-          icon="ð"
+          icon="💉"
           title="Diabetes"
           subtitle="Insulin, maaltal, paaminnelser"
           onPress={go('diabetesSetup')}
         />
         <MenuRow
-          icon="âï¸"
+          icon="⚕️"
           title="Gastric sleeve / bypass"
           subtitle="Tilpas appen til din operation"
           onPress={go('bariatricSetup')}
@@ -133,22 +133,22 @@ export default function More({
 
       <Section title="APP">
         <MenuRow
-          icon="âï¸"
+          icon="⚙️"
           title="Indstillinger"
           subtitle="Niveau, sprog, profil, notifikationer"
           onPress={go('settings')}
         />
         <MenuRow
-          icon="ð"
+          icon="🔒"
           title="Privatliv"
           subtitle="Data og dine rettigheder"
           onPress={go('privacy')}
         />
         {isFree && (
           <MenuRow
-            icon="â­"
+            icon="⭐"
             title="Opgrader til PRO"
-            subtitle="LÃ¥s alle funktioner op"
+            subtitle="Lås alle funktioner op"
             onPress={onShowPricing}
             badge="NY"
           />
