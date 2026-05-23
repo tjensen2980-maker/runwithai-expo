@@ -985,22 +985,6 @@ const calculateGoals = async () => {
         </View>
 
 
-        {/* BLODSUKKER */}
-        <Text style={s.sectionTitle}>{t('bloodSugar.title', 'Blodsukker')}</Text>
-        <View style={s.card}>
-          <TouchableOpacity
-            style={s.exportBtn}
-            onPress={() => { if (onNavigate) onNavigate('bloodSugar'); }}
-          >
-            <View style={{ flex: 1 }}>
-              <Text style={s.notifTitle}>{t('bloodSugar.settingsButton', 'Blodsukker-log')}</Text>
-              <Text style={s.notifSub}>{t('bloodSugar.settingsDescription', 'Log dine maalinger og se tendenser over tid')}</Text>
-            </View>
-            <View style={{flexDirection:'row',alignItems:'center',gap:6}}>
-              <Text style={s.exportBtnText}>{'>'}</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
 
 {/* ── PRIVATLIV ── */}
         <Text style={s.sectionTitle}>{t('settings.sections.privacy')}</Text>
