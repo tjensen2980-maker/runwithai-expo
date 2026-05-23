@@ -102,7 +102,7 @@ export default function Goals({ profile, onProfileChange, onBack }) {
       <ScrollView contentContainerStyle={s.scroll}>
         <Text style={s.pageTitle}>{t('more.menu.goals') || 'Mål'}</Text>
 
-        {/* ââ UGENTLIGE MÃL ââ */}
+        {/* ── UGENTLIGE MÅL ── */}
         <Text style={s.sectionTitle}>{t('settings.sections.weeklyGoals')}</Text>
         <View style={s.card}>
           <Field label={t('settings.fields.weeklyKm')} {...field('weeklyKm')} keyboard="numeric" placeholder="25" />
@@ -128,16 +128,16 @@ export default function Goals({ profile, onProfileChange, onBack }) {
         </View>
 
 
-{/* ââ ERNÃRINGSPLAN ââ */}
-<Text style={s.sectionTitle}>ð ERNÃRINGSPLAN</Text>
+{/* ── ERNÆRINGSPLAN ── */}
+<Text style={s.sectionTitle}>🍎 ERNÆRINGSPLAN</Text>
 <View style={s.card}>
-  {/* HovedmÃ¥l */}
-  <Text style={[s.label, { marginBottom: 8 }]}>HOVEDMÃL</Text>
+  {/* Hovedmål */}
+  <Text style={[s.label, { marginBottom: 8 }]}>HOVEDMÅL</Text>
   <View style={s.goalGrid}>
     {[
-      { id: 'lose_fat',    label: 'ð¥ Tabe fedt' },
-      { id: 'maintain',    label: 'âï¸ Vedligeholde' },
-      { id: 'gain_muscle', label: 'ðª Bygge muskler' },
+      { id: 'lose_fat',    label: '🔥 Tabe fedt' },
+      { id: 'maintain',    label: '⚖️ Vedligeholde' },
+      { id: 'gain_muscle', label: '💪 Bygge muskler' },
     ].map(g => (
       <TouchableOpacity
         key={g.id}
@@ -169,11 +169,11 @@ export default function Goals({ profile, onProfileChange, onBack }) {
   <Text style={[s.label, { marginBottom: 8, marginTop: 14 }]}>AKTIVITETSNIVEAU</Text>
   <View style={s.goalGrid}>
     {[
-      { id: 'sedentary',   label: 'ðª Stillesiddende' },
-      { id: 'light',       label: 'ð¶ Let' },
-      { id: 'moderate',    label: 'ð Moderat' },
-      { id: 'active',      label: 'ð¨ Aktiv' },
-      { id: 'very_active', label: 'ð¥ Meget aktiv' },
+      { id: 'sedentary',   label: '🪑 Stillesiddende' },
+      { id: 'light',       label: '🚶 Let' },
+      { id: 'moderate',    label: '🏃 Moderat' },
+      { id: 'active',      label: '💨 Aktiv' },
+      { id: 'very_active', label: '🔥 Meget aktiv' },
     ].map(a => (
       <TouchableOpacity
         key={a.id}
@@ -189,7 +189,7 @@ export default function Goals({ profile, onProfileChange, onBack }) {
   <View style={s.goalGrid}>
     {[
       { id: 'balanced',     label: 'Balanceret (25/50/25)' },
-      { id: 'high_protein', label: 'HÃ¸jt protein (35/40/25)' },
+      { id: 'high_protein', label: 'Højt protein (35/40/25)' },
       { id: 'low_carb',     label: 'Lav-kulhydrat (30/25/45)' },
       { id: 'keto',         label: 'Keto (25/5/70)' },
     ].map(p => (
@@ -202,11 +202,11 @@ export default function Goals({ profile, onProfileChange, onBack }) {
     ))}
   </View>
 
-  {/* MÃ¥l-vÃ¦gt (valgfri) */}
+  {/* Mål-vægt (valgfri) */}
   {(primaryGoal === 'lose_fat' || primaryGoal === 'gain_muscle') && (
     <View style={{ marginTop: 14 }}>
       <Field
-        label="MÃL-VÃGT (KG, VALGFRI)"
+        label="MÅL-VÆGT (KG, VALGFRI)"
         value={targetWeight}
         onChange={setTargetWeight}
         keyboard="numeric"
@@ -222,15 +222,15 @@ export default function Goals({ profile, onProfileChange, onBack }) {
     disabled={calculating}>
     {calculating
       ? <ActivityIndicator color={colors.black} />
-      : <Text style={s.saveBtnText}>â¨ Beregn mit kaloriemÃ¥l</Text>}
+      : <Text style={s.saveBtnText}>✨ Beregn mit kaloriemål</Text>}
   </TouchableOpacity>
 
   {/* Resultat */}
   {calcResult && calcResult.target_kcal && (
     <View style={{ marginTop: 16, paddingTop: 16, borderTopWidth: 1, borderTopColor: colors.border }}>
-      <Text style={[s.label, { marginBottom: 10 }]}>DIT MÃL</Text>
+      <Text style={[s.label, { marginBottom: 10 }]}>DIT MÅL</Text>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
-        <Text style={{ color: colors.muted, fontSize: 13 }}>Dagligt kaloriemÃ¥l</Text>
+        <Text style={{ color: colors.muted, fontSize: 13 }}>Dagligt kaloriemål</Text>
         <Text style={{ color: colors.accent, fontSize: 18, fontWeight: '900' }}>{calcResult.target_kcal} kcal</Text>
       </View>
       {calcResult.bmr_kcal && (
@@ -264,7 +264,7 @@ export default function Goals({ profile, onProfileChange, onBack }) {
 </View>
 
 
-        {/* ââ LÃBETYPE PRÃFERENCER ââ */}
+        {/* ── LØBETYPE PRÆFERENCER ── */}
         <Text style={s.sectionTitle}>{t('settings.sections.trainingTypes')}</Text>
         <View style={s.card}>
           <Text style={[s.label, { marginBottom: 10 }]}>{t('settings.fields.preferredTypes')}</Text>
@@ -292,8 +292,6 @@ export default function Goals({ profile, onProfileChange, onBack }) {
             })}
           </View>
         </View>
-
-
 
 
         <TouchableOpacity style={s.saveBtn} onPress={save}>
