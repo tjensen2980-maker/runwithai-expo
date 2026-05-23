@@ -188,7 +188,7 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, isFree, on
 }
 function CalendarTab({ runs, weekPlan, trainingPlan, isPro, onShowPricing }) {
   const { t } = useTranslation();
-  if (isFree) return <ProFeatureLock feature={t('pro.calendar.title')} description={t('pro.calendar.description')} onUpgrade={onShowPricing} />;
+  if (!isPro) return <ProFeatureLock feature={t('pro.calendar.title')} description={t('pro.calendar.description')} onUpgrade={onShowPricing} />;
   return (
     <ScrollView style={{ flex: 1, backgroundColor: colors.bg }} contentContainerStyle={{ padding: 16, paddingBottom: 100 }}>
       <Text style={{ fontSize: 11, color: colors.muted, letterSpacing: 2, fontWeight: '700', marginBottom: 16 }}>{t('tabs.calendar').toUpperCase()}</Text>
@@ -741,7 +741,7 @@ case 'mealPlan':
             {planChanges.length > 0 && (
               <View style={s.updateDot}><Icon name='edit' size={10} color='#ffffff'/></View>
             )}
-            <TouchableOpacity style={s.menuBtn} onPress={() => setTab('settings')}>
+            <TouchableOpacity style={s.menuBtn} onPress={() => setTab('calendar')}>
               <View style={s.menuLine} />
               <View style={s.menuLine} />
               <View style={s.menuLine} />
