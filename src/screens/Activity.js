@@ -34,8 +34,9 @@ function getActivityStyles() {
   summaryCard:        { flex: 1, backgroundColor: colors.card, borderRadius: 16, padding: 16, alignItems: 'center', shadowColor: '#000', shadowOffset:{width:0,height:1}, shadowOpacity:0.05, shadowRadius:6, elevation:1 },
   summaryVal:         { fontSize: 22, fontWeight: '900', color: colors.accent, marginBottom: 4, letterSpacing: -0.5 },
   summaryLabel:       { fontSize: 9, color: colors.muted, textAlign: 'center', letterSpacing: 1, textTransform: 'uppercase', fontWeight: '600' },
-  tabs:               { flexDirection: 'row', gap: 6, marginBottom: 18, flexWrap: 'wrap' },
-  tab:                { flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: 'center', backgroundColor: colors.card, minWidth: 70 },
+  tabs:               { flexDirection: 'row', marginBottom: 18 },
+  tabsContent:        { gap: 8, paddingRight: 16 },
+  tab:                { paddingVertical: 10, paddingHorizontal: 16, borderRadius: 999, alignItems: 'center', backgroundColor: colors.card },
   tabActive:          { backgroundColor: colors.black },
   tabText:            { color: colors.muted, fontWeight: '600', fontSize: 10, letterSpacing: 0.5 },
   tabTextActive:      { color: colors.card, fontWeight: '800' },
@@ -877,13 +878,13 @@ export default function Activity({ level, profile, weekPlan, onSetWeekPlan, trai
       <View style={getActivityStyles().streakSection}>
         <StreakCard runs={runs} />
       </View>
-      <View style={getActivityStyles().tabs}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={getActivityStyles().tabs} contentContainerStyle={getActivityStyles().tabsContent}>
         {tabs.map(t => (
           <TouchableOpacity key={t.id} style={[getActivityStyles().tab, activeTab === t.id && getActivityStyles().tabActive]} onPress={() => setActiveTab(t.id)}>
             <Text style={[getActivityStyles().tabText, activeTab === t.id && getActivityStyles().tabTextActive]}>{t.label}</Text>
           </TouchableOpacity>
         ))}
-      </View>
+      </ScrollView>
       {activeTab === 'runs' && (
         loading ? <ActivityIndicator color={colors.accent} style={{ marginTop: 30 }} />
         : runs.length === 0
