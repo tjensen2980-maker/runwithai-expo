@@ -1,5 +1,4 @@
 import './src/i18n';
-  const [chatDraft, setChatDraft] = useState('');
 import { useTranslation } from 'react-i18next';
 import PricingPage, { useSubscription, Paywall } from './components/Pricing';
 import React, { useState, useEffect } from 'react';
@@ -322,6 +321,7 @@ class ErrorBoundary extends React.Component {
 
 export default function App() {
   const { t } = useTranslation();
+  const [chatDraft, setChatDraft] = useState('');
 
   const [user, setUser] = useState(null);
   const [showOnboarding, setShowOnboarding] = useState(true);
