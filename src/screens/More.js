@@ -69,25 +69,12 @@ export default function More({
       <Text style={styles.pageTitle}>Mere</Text>
       <Text style={styles.pageSub}>Alle dine vaerktoejer paa et sted</Text>
 
-      <Section title="FREMGANG & STATISTIK">
+      <Section title="STATISTIK">
         <MenuRow
           icon="📊"
           title="Statistik"
           subtitle="Total km, bedste pace, milepaele"
           onPress={goPro('stats')}
-          proLocked={isFree}
-        />
-        <MenuRow
-          icon="📈"
-          title="Fremgang"
-          subtitle="Loebehistorik, distance og pace trend"
-          onPress={go('activity')}
-        />
-        <MenuRow
-          icon="📅"
-          title="Kalender"
-          subtitle="Ugeplan og kommende traeninger"
-          onPress={goPro('calendar')}
           proLocked={isFree}
         />
       </Section>
