@@ -23,6 +23,7 @@ import Dashboard from './src/screens/Dashboard';
 import Chat from './src/screens/Chat';
 import Activity, { RunCalendar } from './src/screens/Activity';
 import Settings from './src/screens/Settings';
+import Profile from './src/screens/Profile';
 import RunTracker from './src/screens/RunTracker';
 import CycleTracker from './src/screens/CycleTracker';
 import Stats from './src/screens/Stats';
@@ -660,6 +661,8 @@ if (tab === 'cycleTracker') {
       return <More onNavigate={setTab} profile={profile} isPro={isPro} isFree={isFree} onShowPricing={() => setShowTierCarousel(true)} />;
     case 'settings':
         return <Settings onNavigate={setTab} level={level || 'intermediate'} onLevelChange={(lv) => { setLevel(lv); setProfile(p => ({ ...p, level: lv })); }} profile={profile} onProfileChange={setProfile} onLogout={handleLogout} onBack={() => setTab('dashboard')} subscription={subscription} onShowPricing={() => setShowTierCarousel(true)} />;
+      case 'profile':
+        return <Profile profile={profile} onProfileChange={(form) => setProfile(form)} onBack={() => setTab('more')} />;
       case 'privacy':
         return <Privacy onBack={() => setTab('settings')} />;
       case 'goals':
