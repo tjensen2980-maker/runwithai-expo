@@ -596,68 +596,6 @@ const calculateGoals = async () => {
           ))}
         </View>
 
-        {/* ── PERSONLIG INFO ── */}
-        <Text style={s.sectionTitle}>{t('settings.sections.personalInfo')}</Text>
-        <View style={s.card}>
-          <Field label={t('settings.fields.name')} {...field('name')} placeholder="Thomas" />
-          <Field label={t('settings.fields.age')} {...field('age')} keyboard="numeric" placeholder="32" />
-          <SexPicker value={form.sex || 'Mand'} onChange={v => setForm(f => ({ ...f, sex: v }))} t={t} />
-          <Field label={t('settings.fields.weight')} {...field('weight')} keyboard="numeric" placeholder="75" />
-          <Field label={t('settings.fields.height')} {...field('height')} keyboard="numeric" placeholder="180" />
-        </View>
-
-        {/* ── LØB & MÅL ── */}
-        <Text style={s.sectionTitle}>{t('settings.sections.runningGoals')}</Text>
-        <View style={s.card}>
-          <Field label={t('settings.fields.yearsRunning')} {...field('yearsRunning')} keyboard="numeric" placeholder="3" />
-          <Text style={[s.label, { marginBottom: 8 }]}>{t('settings.fields.primaryGoal')}</Text>
-          <View style={s.goalGrid}>
-            {goals.map(g => (
-              <TouchableOpacity
-                key={g.id}
-                style={[s.goalBtn, form.goal === g.id && { borderColor: colors.accent, backgroundColor: colors.accent + '15' }]}
-                onPress={() => setForm(f => ({ ...f, goal: g.id }))}>
-                <Text style={[s.goalBtnText, form.goal === g.id && { color: colors.accent }]}>{g.label}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-          {['half','full','5k','10k'].includes(form.goal) && (
-            <Field label={t('settings.fields.raceDate')} {...field('raceDate')} placeholder="15. sep 2025" />
-          )}
-        </View>
-
-        {/* ── PULS ── */}
-        <Text style={s.sectionTitle}>{t('settings.sections.heartRateZones')}</Text>
-        <View style={s.card}>
-          <Field label={t('settings.fields.restingHr')} {...field('restingHr')} keyboard="numeric" placeholder="58" />
-          <Field label={t('settings.fields.maxHr')} {...field('maxHr')} keyboard="numeric" placeholder="185" />
-          <Field label={t('settings.fields.vo2max')} {...field('vo2max')} keyboard="numeric" placeholder="52" />
-          {a && (
-            <View style={s.zonesWrap}>
-              <Text style={s.zonesTitle}>{t('settings.zones.calculated')}</Text>
-              {[
-                { label: t('settings.zones.z1'), z: a.zones.z1, color: '#64b5f6' },
-                { label: t('settings.zones.z2'), z: a.zones.z2, color: '#81c784' },
-                { label: t('settings.zones.z3'), z: a.zones.z3, color: '#ffb74d' },
-                { label: t('settings.zones.z4'), z: a.zones.z4, color: '#ff8a65' },
-                { label: t('settings.zones.z5'), z: a.zones.z5, color: '#ef5350' },
-              ].map(({ label, z, color }) => (
-                <View key={label} style={s.zoneRow}>
-                  <View style={[s.zoneDot, { backgroundColor: color }]} />
-                  <Text style={s.zoneLabel}>{label}</Text>
-                  <Text style={[s.zoneRange, { color }]}>{z.low}–{z.high} bpm</Text>
-                </View>
-              ))}
-            </View>
-          )}
-        </View>
-
-        {/* ── SKADER ── */}
-        <Text style={s.sectionTitle}>{t('settings.sections.injuries')}</Text>
-        <View style={s.card}>
-          <Field label={t('settings.fields.injuries')} {...field('injuries')} placeholder={t('settings.fields.injuriesPlaceholder')} />
-        </View>
-
         {/* NOTIFIKATIONER */}
         <Text style={s.sectionTitle}>{t('settings.sections.reminders') || 'Paamindelser'}</Text>
         <View style={s.card}>
