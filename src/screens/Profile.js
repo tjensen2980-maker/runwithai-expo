@@ -53,14 +53,12 @@ export default function Profile({ profile, onProfileChange, onBack }) {
   });
 
   const goals = [
-  const goals = [
     { id: 'fitness', label: t('settings.goals.fitness') },
     { id: '5k',      label: '5 km' },
     { id: '10k',     label: '10 km' },
     { id: 'half',    label: t('settings.goals.half') },
     { id: 'full',    label: t('settings.goals.full') },
     { id: 'weight',  label: t('settings.goals.weight') },
-  ];
   ];
 
   const a = assessProfile(form);
