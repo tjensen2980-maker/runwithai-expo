@@ -48,7 +48,7 @@ function SexPicker({ value, onChange, t }) {
   );
 }
 
-// âââ SKO TRACKER ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ─── SKO TRACKER ────────────────────────────────────────────────────────────
 const SHOE_WARNING_KM = 700;
 const SHOE_MAX_KM = 800;
 
@@ -195,11 +195,11 @@ function ShoesSection({ profile, onProfileChange, runs, t }) {
   );
 }
 
-// âââ LANGUAGE SELECTOR ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ─── LANGUAGE SELECTOR ────────────────────────────────────────────────────────
 function LanguageSelector() {
   const { t } = useTranslation();
   const currentLang = i18n.language;
-  const langNames = { da: 'Dansk', en: 'English', de: 'Deutsch', fr: 'FranÃ§ais', es: 'EspaÃ±ol', it: 'Italiano', pt: 'PortuguÃªs', nl: 'Nederlands', pl: 'Polski', sv: 'Svenska', fi: 'Suomi', el: 'ÎÎ»Î»Î·Î½Î¹ÎºÎ¬', cs: 'ÄeÅ¡tina', ro: 'RomÃ¢nÄ', hu: 'Magyar', bg: 'ÐÑÐ»Ð³Ð°ÑÑÐºÐ¸', hr: 'Hrvatski', sk: 'SlovenÄina', sl: 'SlovenÅ¡Äina', lt: 'LietuviÅ³', lv: 'LatvieÅ¡u', et: 'Eesti', ga: 'Gaeilge', mt: 'Malti' };
+  const langNames = { da: 'Dansk', en: 'English', de: 'Deutsch', fr: 'Français', es: 'Español', it: 'Italiano', pt: 'Português', nl: 'Nederlands', pl: 'Polski', sv: 'Svenska', fi: 'Suomi', el: 'Ελληνικά', cs: 'Čeština', ro: 'Română', hu: 'Magyar', bg: 'Български', hr: 'Hrvatski', sk: 'Slovenčina', sl: 'Slovenščina', lt: 'Lietuvių', lv: 'Latviešu', et: 'Eesti', ga: 'Gaeilge', mt: 'Malti' };
 
   return (
     <View>
@@ -232,7 +232,7 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
   const [runs, setRuns] = useState([]);
   const [subscription, setSubscription] = useState(null);
   const [deletingAccount, setDeletingAccount] = useState(false);
-  // âââ ERNÃRINGSPLAN STATE ââââââââââââââââââââââââââââââââââââââââââââââââ
+  // ─── ERNÆRINGSPLAN STATE ────────────────────────────────────────────────
   // Email change state
   const [userEmail, setUserEmail] = useState('');
   const [showEmailModal, setShowEmailModal] = useState(false);
@@ -271,7 +271,7 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
 
   useEffect(() => { loadRuns().then(r => setRuns(r || [])); }, []);
 
-  // Hent eksisterende mÃ¥l sÃ¥ UI'et viser nuvÃ¦rende valg
+  // Hent eksisterende mål så UI'et viser nuværende valg
   
   const [notifEnabled, setNotifEnabled] = useState(false);
   const [notifTime, setNotifTime] = useState(profile?.notifTime || '07:00');
@@ -407,9 +407,9 @@ const save = async () => {
   };
 
 
-  // âââ BEREGN KALORIEMÃL ââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // ─── BEREGN KALORIEMÅL ──────────────────────────────────────────────────
 
-  // âââ SLET KONTO (APPLE KRAV) ââââââââââââââââââââââââââââââââââââââââââââââââ
+  // ─── SLET KONTO (APPLE KRAV) ────────────────────────────────────────────────
 
   // Skift email handler
   const handleChangeEmail = async () => {
@@ -516,16 +516,16 @@ const save = async () => {
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
           {onBack && (
             <TouchableOpacity onPress={onBack} style={{ marginRight: 12, padding: 4 }}>
-              <Text style={{ fontSize: 22, color: colors.text }}>â</Text>
+              <Text style={{ fontSize: 22, color: colors.text }}>←</Text>
             </TouchableOpacity>
           )}
           <Text style={s.pageTitle}>{t('settings.pageTitle')}</Text>
         </View>
 
-        {/* ââ SPROG / LANGUAGE ââ */}
+        {/* ── SPROG / LANGUAGE ── */}
         <LanguageSelector />
 
-        {/* ââ NIVEAU ââ */}
+        {/* ── NIVEAU ── */}
         <Text style={s.sectionTitle}>{t('settings.sections.level')}</Text>
         <View style={s.levelRow}>
           {Object.entries(lv).map(([id, info]) => (
@@ -603,10 +603,10 @@ const save = async () => {
           )}
         </View>
 
-        {/* ââ SKO TRACKER ââ */}
+        {/* ── SKO TRACKER ── */}
         <ShoesSection profile={form} onProfileChange={(updated) => { setForm(updated); onProfileChange(updated); }} runs={runs} t={t} />
 
-        {/* ââ ENHEDER & VISNING ââ */}
+        {/* ── ENHEDER & VISNING ── */}
         <Text style={s.sectionTitle}>{t('settings.sections.units')}</Text>
         <View style={s.card}>
           <Text style={[s.label, { marginBottom: 8 }]}>{t('settings.units.distance')}</Text>
@@ -634,21 +634,21 @@ const save = async () => {
           </View>
         </View>
 
-{/* ââ KOSTPRÃFERENCER ââ */}
-        <Text style={s.sectionTitle}>ð¥ KOSTPRÃFERENCER</Text>
+{/* ── KOSTPRÆFERENCER ── */}
+        <Text style={s.sectionTitle}>🥗 KOSTPRÆFERENCER</Text>
         <View style={s.card}>
           {/* Kosttype */}
           <Text style={[s.label, { marginBottom: 8 }]}>KOSTTYPE</Text>
           <View style={s.goalGrid}>
             {[
               { id: 'none',         label: 'Ingen' },
-              { id: 'vegetarian',   label: 'ð¥¬ Vegetar' },
-              { id: 'vegan',        label: 'ð± Vegansk' },
-              { id: 'pescatarian',  label: 'ð Pescetar' },
-              { id: 'gluten_free',  label: 'ð¾ Glutenfri' },
-              { id: 'lactose_free', label: 'ð¥ Laktosefri' },
-              { id: 'keto',         label: 'ð¥ Keto' },
-              { id: 'paleo',        label: 'ð Paleo' },
+              { id: 'vegetarian',   label: '🥬 Vegetar' },
+              { id: 'vegan',        label: '🌱 Vegansk' },
+              { id: 'pescatarian',  label: '🐟 Pescetar' },
+              { id: 'gluten_free',  label: '🌾 Glutenfri' },
+              { id: 'lactose_free', label: '🥛 Laktosefri' },
+              { id: 'keto',         label: '🥑 Keto' },
+              { id: 'paleo',        label: '🍖 Paleo' },
             ].map(d => (
               <TouchableOpacity
                 key={d.id}
@@ -665,20 +665,20 @@ const save = async () => {
               label="ALLERGIER (komma-separeret)"
               value={form.allergies || ''}
               onChange={v => setForm(f => ({ ...f, allergies: v }))}
-              placeholder="nÃ¸dder, skaldyr, Ã¦g"
+              placeholder="nødder, skaldyr, æg"
             />
           </View>
 
           {/* Fravalg */}
           <Field
-            label="FÃDEVARER JEG IKKE KAN LIDE"
+            label="FØDEVARER JEG IKKE KAN LIDE"
             value={form.dislikes || ''}
             onChange={v => setForm(f => ({ ...f, dislikes: v }))}
             placeholder="broccoli, svampe, koriander"
           />
         </View>
 
-{/* ââ PRIVATLIV ââ */}
+{/* ── PRIVATLIV ── */}
         <Text style={s.sectionTitle}>{t('settings.sections.privacy')}</Text>
         <View style={s.card}>
           {[
@@ -701,7 +701,7 @@ const save = async () => {
           ))}
         </View>
 
-        {/* ââ EKSPORT ââ */}
+        {/* ── EKSPORT ── */}
         <Text style={s.sectionTitle}>{t('settings.sections.data')}</Text>
         <View style={s.card}>
           <TouchableOpacity style={s.exportBtn} onPress={() => {
@@ -716,7 +716,7 @@ const save = async () => {
                     const tid = r.duration_secs ? `${Math.floor(r.duration_secs/60)}min` : '';
                     return `${r.date || ''},${r.km || ''},${pace},${tid},${r.avg_hr || ''}`;
                   })).join('\n');
-                const blÃ¸b = new Blob([csv], { type: 'text/csv' });
+                const bløb = new Blob([csv], { type: 'text/csv' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url; a.download = 'runwithai-runs.csv'; a.click();
@@ -730,7 +730,7 @@ const save = async () => {
           <Text style={s.exportSub}>{t('settings.data.exportSub')}</Text>
         </View>
 
-        {/* ââ GEM ââ */}
+        {/* ── GEM ── */}
         <TouchableOpacity style={s.saveBtn} onPress={save}>
           <Text style={s.saveBtnText}>{saved ? t('settings.saved') : t('settings.saveChanges')}</Text>
         </TouchableOpacity>
@@ -801,20 +801,20 @@ const save = async () => {
         </Modal>
 
 
-        {/* ââ LOG UD ââ */}
+        {/* ── LOG UD ── */}
         <TouchableOpacity style={s.logoutBtn} onPress={onLogout}>
           <Text style={s.logoutText}>{t('settings.logout')}</Text>
         </TouchableOpacity>
 
-        {/* ââ PRIVATLIVSPOLITIK ââ */}
+        {/* ── PRIVATLIVSPOLITIK ── */}
         <TouchableOpacity 
           style={s.privacyBtn}
           onPress={() => Linking.openURL('https://www.runwithai.app/privacy')}
         >
-          <Text style={s.privacyText}>ð {t('settings.privacyPolicy')}</Text>
+          <Text style={s.privacyText}>📜 {t('settings.privacyPolicy')}</Text>
         </TouchableOpacity>
 
-        {/* ââ SLET KONTO (APPLE KRAV) ââ */}
+        {/* ── SLET KONTO (APPLE KRAV) ── */}
         <View style={s.dangerZone}>
           <Text style={s.dangerZoneLabel}>{t('settings.dangerZone')}</Text>
           <TouchableOpacity 
@@ -825,13 +825,13 @@ const save = async () => {
             {deletingAccount ? (
               <ActivityIndicator size="small" color="#ff3b30" />
             ) : (
-              <Text style={s.deleteAccountBtnText}>ðï¸ {t('settings.deleteAccount.button')}</Text>
+              <Text style={s.deleteAccountBtnText}>🗑️ {t('settings.deleteAccount.button')}</Text>
             )}
           </TouchableOpacity>
           <Text style={s.deleteAccountWarning}>{t('settings.deleteAccount.warning')}</Text>
         </View>
 
-        {/* ââ APP VERSION ââ */}
+        {/* ── APP VERSION ── */}
         <View style={s.versionContainer}>
           <Text style={s.versionText}>RunWithAI v1.6.2</Text>
         </View>
