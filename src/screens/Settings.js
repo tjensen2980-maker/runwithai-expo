@@ -48,7 +48,7 @@ function SexPicker({ value, onChange, t }) {
   );
 }
 
-// ─── SKO TRACKER ────────────────────────────────────────────────────────────
+// âââ SKO TRACKER ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const SHOE_WARNING_KM = 700;
 const SHOE_MAX_KM = 800;
 
@@ -195,11 +195,11 @@ function ShoesSection({ profile, onProfileChange, runs, t }) {
   );
 }
 
-// ─── LANGUAGE SELECTOR ────────────────────────────────────────────────────────
+// âââ LANGUAGE SELECTOR ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function LanguageSelector() {
   const { t } = useTranslation();
   const currentLang = i18n.language;
-  const langNames = { da: 'Dansk', en: 'English', de: 'Deutsch', fr: 'Français', es: 'Español', it: 'Italiano', pt: 'Português', nl: 'Nederlands', pl: 'Polski', sv: 'Svenska', fi: 'Suomi', el: 'Ελληνικά', cs: 'Čeština', ro: 'Română', hu: 'Magyar', bg: 'Български', hr: 'Hrvatski', sk: 'Slovenčina', sl: 'Slovenščina', lt: 'Lietuvių', lv: 'Latviešu', et: 'Eesti', ga: 'Gaeilge', mt: 'Malti' };
+  const langNames = { da: 'Dansk', en: 'English', de: 'Deutsch', fr: 'FranÃ§ais', es: 'EspaÃ±ol', it: 'Italiano', pt: 'PortuguÃªs', nl: 'Nederlands', pl: 'Polski', sv: 'Svenska', fi: 'Suomi', el: 'ÎÎ»Î»Î·Î½Î¹ÎºÎ¬', cs: 'ÄeÅ¡tina', ro: 'RomÃ¢nÄ', hu: 'Magyar', bg: 'ÐÑÐ»Ð³Ð°ÑÑÐºÐ¸', hr: 'Hrvatski', sk: 'SlovenÄina', sl: 'SlovenÅ¡Äina', lt: 'LietuviÅ³', lv: 'LatvieÅ¡u', et: 'Eesti', ga: 'Gaeilge', mt: 'Malti' };
 
   return (
     <View>
@@ -232,20 +232,13 @@ export default function Settings({ profile, level, onProfileChange, onLevelChang
   const [runs, setRuns] = useState([]);
   const [subscription, setSubscription] = useState(null);
   const [deletingAccount, setDeletingAccount] = useState(false);
-  // ─── ERNÆRINGSPLAN STATE ────────────────────────────────────────────────
+  // âââ ERNÃRINGSPLAN STATE ââââââââââââââââââââââââââââââââââââââââââââââââ
   // Email change state
   const [userEmail, setUserEmail] = useState('');
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [newEmail, setNewEmail] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [changingEmail, setChangingEmail] = useState(false);
-const [primaryGoal, setPrimaryGoal] = useState('maintain');
-const [goalPace, setGoalPace] = useState('normal');
-const [activityLevel, setActivityLevel] = useState('moderate');
-const [planType, setPlanType] = useState('balanced');
-const [targetWeight, setTargetWeight] = useState('');
-const [calculating, setCalculating] = useState(false);
-const [calcResult, setCalcResult] = useState(null);
   
   useEffect(() => {
     const fetchSub = async () => {
@@ -278,27 +271,7 @@ const [calcResult, setCalcResult] = useState(null);
 
   useEffect(() => { loadRuns().then(r => setRuns(r || [])); }, []);
 
-  // Hent eksisterende mål så UI'et viser nuværende valg
-useEffect(() => {
-  const fetchGoals = async () => {
-    try {
-      const token = await getAuthToken();
-      const res = await fetch(`${SERVER}/goals`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await res.json();
-      if (data) {
-        if (data.primary_goal)    setPrimaryGoal(data.primary_goal);
-        if (data.goal_pace)       setGoalPace(data.goal_pace);
-        if (data.activity_level)  setActivityLevel(data.activity_level);
-        if (data.plan_type)       setPlanType(data.plan_type);
-        if (data.target_weight_kg) setTargetWeight(String(data.target_weight_kg));
-        setCalcResult(data);
-      }
-    } catch (e) { console.log('Load goals:', e); }
-  };
-  fetchGoals();
-}, []);
+  // Hent eksisterende mÃ¥l sÃ¥ UI'et viser nuvÃ¦rende valg
   
   const [notifEnabled, setNotifEnabled] = useState(false);
   const [notifTime, setNotifTime] = useState(profile?.notifTime || '07:00');
@@ -434,37 +407,9 @@ const save = async () => {
   };
 
 
-  // ─── BEREGN KALORIEMÅL ──────────────────────────────────────────────────
-const calculateGoals = async () => {
-  setCalculating(true);
-  try {
-    const token = await getAuthToken();
-    const body = {
-      primary_goal: primaryGoal,
-      goal_pace: goalPace,
-      activity_level: activityLevel,
-      plan_type: planType,
-    };
-    if (targetWeight) body.target_weight_kg = parseFloat(targetWeight);
+  // âââ BEREGN KALORIEMÃL ââââââââââââââââââââââââââââââââââââââââââââââââââ
 
-    const res = await fetch(`${SERVER}/goals/auto`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-      body: JSON.stringify(body),
-    });
-    const data = await res.json();
-    if (res.ok) {
-      setCalcResult(data);
-    } else {
-      Alert.alert('Fejl', data.error || 'Kunne ikke beregne');
-    }
-  } catch (err) {
-    Alert.alert('Fejl', 'Server-forbindelse fejlede');
-  }
-  setCalculating(false);
-};
-
-  // ─── SLET KONTO (APPLE KRAV) ────────────────────────────────────────────────
+  // âââ SLET KONTO (APPLE KRAV) ââââââââââââââââââââââââââââââââââââââââââââââââ
 
   // Skift email handler
   const handleChangeEmail = async () => {
@@ -571,16 +516,16 @@ const calculateGoals = async () => {
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
           {onBack && (
             <TouchableOpacity onPress={onBack} style={{ marginRight: 12, padding: 4 }}>
-              <Text style={{ fontSize: 22, color: colors.text }}>←</Text>
+              <Text style={{ fontSize: 22, color: colors.text }}>â</Text>
             </TouchableOpacity>
           )}
           <Text style={s.pageTitle}>{t('settings.pageTitle')}</Text>
         </View>
 
-        {/* ── SPROG / LANGUAGE ── */}
+        {/* ââ SPROG / LANGUAGE ââ */}
         <LanguageSelector />
 
-        {/* ── NIVEAU ── */}
+        {/* ââ NIVEAU ââ */}
         <Text style={s.sectionTitle}>{t('settings.sections.level')}</Text>
         <View style={s.levelRow}>
           {Object.entries(lv).map(([id, info]) => (
@@ -658,10 +603,10 @@ const calculateGoals = async () => {
           )}
         </View>
 
-        {/* ── SKO TRACKER ── */}
+        {/* ââ SKO TRACKER ââ */}
         <ShoesSection profile={form} onProfileChange={(updated) => { setForm(updated); onProfileChange(updated); }} runs={runs} t={t} />
 
-        {/* ── ENHEDER & VISNING ── */}
+        {/* ââ ENHEDER & VISNING ââ */}
         <Text style={s.sectionTitle}>{t('settings.sections.units')}</Text>
         <View style={s.card}>
           <Text style={[s.label, { marginBottom: 8 }]}>{t('settings.units.distance')}</Text>
@@ -689,181 +634,21 @@ const calculateGoals = async () => {
           </View>
         </View>
 
-        {/* ── UGENTLIGE MÅL ── */}
-        <Text style={s.sectionTitle}>{t('settings.sections.weeklyGoals')}</Text>
-        <View style={s.card}>
-          <Field label={t('settings.fields.weeklyKm')} {...field('weeklyKm')} keyboard="numeric" placeholder="25" />
-          <Field label={t('settings.fields.weeklyKmGoal')} value={form.weeklyKmGoal || ''} onChange={v => setForm(f => ({ ...f, weeklyKmGoal: v }))} keyboard="numeric" placeholder="30" />
-          <Field label={t('settings.fields.weeklyRunsGoal')} value={form.weeklyRunsGoal || ''} onChange={v => setForm(f => ({ ...f, weeklyRunsGoal: v }))} keyboard="numeric" placeholder="3" />
-          <Text style={[s.label, { marginBottom: 8 }]}>{t('settings.fields.preferredDays')}</Text>
-          <View style={s.daysRow}>
-            {days.map(day => {
-              const active = (form.preferredDays || []).includes(day);
-              return (
-                <TouchableOpacity
-                  key={day}
-                  style={[s.dayBtn, active && { backgroundColor: colors.accent, borderColor: colors.accent }]}
-                  onPress={() => setForm(f => {
-                    const days = f.preferredDays || [];
-                    return { ...f, preferredDays: active ? days.filter(d => d !== day) : [...days, day] };
-                  })}>
-                  <Text style={[s.dayBtnText, active && { color: colors.black }]}>{day}</Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </View>
-
-{/* ── ERNÆRINGSPLAN ── */}
-<Text style={s.sectionTitle}>🍎 ERNÆRINGSPLAN</Text>
-<View style={s.card}>
-  {/* Hovedmål */}
-  <Text style={[s.label, { marginBottom: 8 }]}>HOVEDMÅL</Text>
-  <View style={s.goalGrid}>
-    {[
-      { id: 'lose_fat',    label: '🔥 Tabe fedt' },
-      { id: 'maintain',    label: '⚖️ Vedligeholde' },
-      { id: 'gain_muscle', label: '💪 Bygge muskler' },
-    ].map(g => (
-      <TouchableOpacity
-        key={g.id}
-        style={[s.goalBtn, primaryGoal === g.id && { borderColor: colors.accent, backgroundColor: colors.accent + '15' }]}
-        onPress={() => setPrimaryGoal(g.id)}>
-        <Text style={[s.goalBtnText, primaryGoal === g.id && { color: colors.accent }]}>{g.label}</Text>
-      </TouchableOpacity>
-    ))}
-  </View>
-
-  {/* Takt */}
-  <Text style={[s.label, { marginBottom: 8, marginTop: 8 }]}>TAKT</Text>
-  <View style={s.sexRow}>
-    {[
-      { id: 'slow',   label: 'Langsom' },
-      { id: 'normal', label: 'Normal' },
-      { id: 'fast',   label: 'Hurtig' },
-    ].map(p => (
-      <TouchableOpacity
-        key={p.id}
-        style={[s.sexBtn, goalPace === p.id && { backgroundColor: colors.accent + '20', borderColor: colors.accent }]}
-        onPress={() => setGoalPace(p.id)}>
-        <Text style={[s.sexBtnText, goalPace === p.id && { color: colors.accent }]}>{p.label}</Text>
-      </TouchableOpacity>
-    ))}
-  </View>
-
-  {/* Aktivitetsniveau */}
-  <Text style={[s.label, { marginBottom: 8, marginTop: 14 }]}>AKTIVITETSNIVEAU</Text>
-  <View style={s.goalGrid}>
-    {[
-      { id: 'sedentary',   label: '🪑 Stillesiddende' },
-      { id: 'light',       label: '🚶 Let' },
-      { id: 'moderate',    label: '🏃 Moderat' },
-      { id: 'active',      label: '💨 Aktiv' },
-      { id: 'very_active', label: '🔥 Meget aktiv' },
-    ].map(a => (
-      <TouchableOpacity
-        key={a.id}
-        style={[s.goalBtn, activityLevel === a.id && { borderColor: colors.accent, backgroundColor: colors.accent + '15' }]}
-        onPress={() => setActivityLevel(a.id)}>
-        <Text style={[s.goalBtnText, activityLevel === a.id && { color: colors.accent }]}>{a.label}</Text>
-      </TouchableOpacity>
-    ))}
-  </View>
-
-  {/* Plan-type */}
-  <Text style={[s.label, { marginBottom: 8, marginTop: 14 }]}>MAKRO-FORDELING</Text>
-  <View style={s.goalGrid}>
-    {[
-      { id: 'balanced',     label: 'Balanceret (25/50/25)' },
-      { id: 'high_protein', label: 'Højt protein (35/40/25)' },
-      { id: 'low_carb',     label: 'Lav-kulhydrat (30/25/45)' },
-      { id: 'keto',         label: 'Keto (25/5/70)' },
-    ].map(p => (
-      <TouchableOpacity
-        key={p.id}
-        style={[s.goalBtn, planType === p.id && { borderColor: colors.accent, backgroundColor: colors.accent + '15' }]}
-        onPress={() => setPlanType(p.id)}>
-        <Text style={[s.goalBtnText, planType === p.id && { color: colors.accent }]}>{p.label}</Text>
-      </TouchableOpacity>
-    ))}
-  </View>
-
-  {/* Mål-vægt (valgfri) */}
-  {(primaryGoal === 'lose_fat' || primaryGoal === 'gain_muscle') && (
-    <View style={{ marginTop: 14 }}>
-      <Field
-        label="MÅL-VÆGT (KG, VALGFRI)"
-        value={targetWeight}
-        onChange={setTargetWeight}
-        keyboard="numeric"
-        placeholder="70"
-      />
-    </View>
-  )}
-
-  {/* Beregn-knap */}
-  <TouchableOpacity
-    style={[s.saveBtn, { marginTop: 8 }]}
-    onPress={calculateGoals}
-    disabled={calculating}>
-    {calculating
-      ? <ActivityIndicator color={colors.black} />
-      : <Text style={s.saveBtnText}>✨ Beregn mit kaloriemål</Text>}
-  </TouchableOpacity>
-
-  {/* Resultat */}
-  {calcResult && calcResult.target_kcal && (
-    <View style={{ marginTop: 16, paddingTop: 16, borderTopWidth: 1, borderTopColor: colors.border }}>
-      <Text style={[s.label, { marginBottom: 10 }]}>DIT MÅL</Text>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
-        <Text style={{ color: colors.muted, fontSize: 13 }}>Dagligt kaloriemål</Text>
-        <Text style={{ color: colors.accent, fontSize: 18, fontWeight: '900' }}>{calcResult.target_kcal} kcal</Text>
-      </View>
-      {calcResult.bmr_kcal && (
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 }}>
-          <Text style={{ color: colors.muted, fontSize: 12 }}>BMR (hvile-forbrug)</Text>
-          <Text style={{ color: colors.text, fontSize: 13 }}>{calcResult.bmr_kcal} kcal</Text>
-        </View>
-      )}
-      {calcResult.tdee_kcal && (
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 }}>
-          <Text style={{ color: colors.muted, fontSize: 12 }}>TDEE (totalt forbrug)</Text>
-          <Text style={{ color: colors.text, fontSize: 13 }}>{calcResult.tdee_kcal} kcal</Text>
-        </View>
-      )}
-      <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingTop: 10, borderTopWidth: 1, borderTopColor: colors.border }}>
-        <View style={{ alignItems: 'center' }}>
-          <Text style={{ color: colors.muted, fontSize: 10, fontWeight: '600' }}>PROTEIN</Text>
-          <Text style={{ color: colors.text, fontSize: 16, fontWeight: '800', marginTop: 4 }}>{calcResult.target_protein_g}g</Text>
-        </View>
-        <View style={{ alignItems: 'center' }}>
-          <Text style={{ color: colors.muted, fontSize: 10, fontWeight: '600' }}>KULHYDRAT</Text>
-          <Text style={{ color: colors.text, fontSize: 16, fontWeight: '800', marginTop: 4 }}>{calcResult.target_carbs_g}g</Text>
-        </View>
-        <View style={{ alignItems: 'center' }}>
-          <Text style={{ color: colors.muted, fontSize: 10, fontWeight: '600' }}>FEDT</Text>
-          <Text style={{ color: colors.text, fontSize: 16, fontWeight: '800', marginTop: 4 }}>{calcResult.target_fat_g}g</Text>
-        </View>
-      </View>
-    </View>
-  )}
-</View>
-
-{/* ── KOSTPRÆFERENCER ── */}
-        <Text style={s.sectionTitle}>🥗 KOSTPRÆFERENCER</Text>
+{/* ââ KOSTPRÃFERENCER ââ */}
+        <Text style={s.sectionTitle}>ð¥ KOSTPRÃFERENCER</Text>
         <View style={s.card}>
           {/* Kosttype */}
           <Text style={[s.label, { marginBottom: 8 }]}>KOSTTYPE</Text>
           <View style={s.goalGrid}>
             {[
               { id: 'none',         label: 'Ingen' },
-              { id: 'vegetarian',   label: '🥬 Vegetar' },
-              { id: 'vegan',        label: '🌱 Vegansk' },
-              { id: 'pescatarian',  label: '🐟 Pescetar' },
-              { id: 'gluten_free',  label: '🌾 Glutenfri' },
-              { id: 'lactose_free', label: '🥛 Laktosefri' },
-              { id: 'keto',         label: '🥑 Keto' },
-              { id: 'paleo',        label: '🍖 Paleo' },
+              { id: 'vegetarian',   label: 'ð¥¬ Vegetar' },
+              { id: 'vegan',        label: 'ð± Vegansk' },
+              { id: 'pescatarian',  label: 'ð Pescetar' },
+              { id: 'gluten_free',  label: 'ð¾ Glutenfri' },
+              { id: 'lactose_free', label: 'ð¥ Laktosefri' },
+              { id: 'keto',         label: 'ð¥ Keto' },
+              { id: 'paleo',        label: 'ð Paleo' },
             ].map(d => (
               <TouchableOpacity
                 key={d.id}
@@ -880,51 +665,20 @@ const calculateGoals = async () => {
               label="ALLERGIER (komma-separeret)"
               value={form.allergies || ''}
               onChange={v => setForm(f => ({ ...f, allergies: v }))}
-              placeholder="nødder, skaldyr, æg"
+              placeholder="nÃ¸dder, skaldyr, Ã¦g"
             />
           </View>
 
           {/* Fravalg */}
           <Field
-            label="FØDEVARER JEG IKKE KAN LIDE"
+            label="FÃDEVARER JEG IKKE KAN LIDE"
             value={form.dislikes || ''}
             onChange={v => setForm(f => ({ ...f, dislikes: v }))}
             placeholder="broccoli, svampe, koriander"
           />
         </View>
 
-        {/* ── LØBETYPE PRÆFERENCER ── */}
-        <Text style={s.sectionTitle}>{t('settings.sections.trainingTypes')}</Text>
-        <View style={s.card}>
-          <Text style={[s.label, { marginBottom: 10 }]}>{t('settings.fields.preferredTypes')}</Text>
-          <View style={s.goalGrid}>
-            {[
-              { id: 'easy',     label: t('settings.runTypes.easy') },
-              { id: 'interval', label: t('settings.runTypes.interval') },
-              { id: 'tempo',    label: t('settings.runTypes.tempo') },
-              { id: 'long',     label: t('settings.runTypes.long') },
-              { id: 'trail',    label: t('settings.runTypes.trail') },
-              { id: 'race',     label: t('settings.runTypes.race') },
-            ].map(typ => {
-              const active = (form.preferredTypes || []).includes(typ.id);
-              return (
-                <TouchableOpacity
-                  key={typ.id}
-                  style={[s.goalBtn, active && { borderColor: colors.accent, backgroundColor: colors.accent + '15' }]}
-                  onPress={() => setForm(f => {
-                    const types = f.preferredTypes || [];
-                    return { ...f, preferredTypes: active ? types.filter(x => x !== typ.id) : [...types, typ.id] };
-                  })}>
-                  <Text style={[s.goalBtnText, active && { color: colors.accent }]}>{typ.label}</Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </View>
-
-
-
-{/* ── PRIVATLIV ── */}
+{/* ââ PRIVATLIV ââ */}
         <Text style={s.sectionTitle}>{t('settings.sections.privacy')}</Text>
         <View style={s.card}>
           {[
@@ -947,7 +701,7 @@ const calculateGoals = async () => {
           ))}
         </View>
 
-        {/* ── EKSPORT ── */}
+        {/* ââ EKSPORT ââ */}
         <Text style={s.sectionTitle}>{t('settings.sections.data')}</Text>
         <View style={s.card}>
           <TouchableOpacity style={s.exportBtn} onPress={() => {
@@ -962,7 +716,7 @@ const calculateGoals = async () => {
                     const tid = r.duration_secs ? `${Math.floor(r.duration_secs/60)}min` : '';
                     return `${r.date || ''},${r.km || ''},${pace},${tid},${r.avg_hr || ''}`;
                   })).join('\n');
-                const bløb = new Blob([csv], { type: 'text/csv' });
+                const blÃ¸b = new Blob([csv], { type: 'text/csv' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url; a.download = 'runwithai-runs.csv'; a.click();
@@ -976,7 +730,7 @@ const calculateGoals = async () => {
           <Text style={s.exportSub}>{t('settings.data.exportSub')}</Text>
         </View>
 
-        {/* ── GEM ── */}
+        {/* ââ GEM ââ */}
         <TouchableOpacity style={s.saveBtn} onPress={save}>
           <Text style={s.saveBtnText}>{saved ? t('settings.saved') : t('settings.saveChanges')}</Text>
         </TouchableOpacity>
@@ -1047,20 +801,20 @@ const calculateGoals = async () => {
         </Modal>
 
 
-        {/* ── LOG UD ── */}
+        {/* ââ LOG UD ââ */}
         <TouchableOpacity style={s.logoutBtn} onPress={onLogout}>
           <Text style={s.logoutText}>{t('settings.logout')}</Text>
         </TouchableOpacity>
 
-        {/* ── PRIVATLIVSPOLITIK ── */}
+        {/* ââ PRIVATLIVSPOLITIK ââ */}
         <TouchableOpacity 
           style={s.privacyBtn}
           onPress={() => Linking.openURL('https://www.runwithai.app/privacy')}
         >
-          <Text style={s.privacyText}>📜 {t('settings.privacyPolicy')}</Text>
+          <Text style={s.privacyText}>ð {t('settings.privacyPolicy')}</Text>
         </TouchableOpacity>
 
-        {/* ── SLET KONTO (APPLE KRAV) ── */}
+        {/* ââ SLET KONTO (APPLE KRAV) ââ */}
         <View style={s.dangerZone}>
           <Text style={s.dangerZoneLabel}>{t('settings.dangerZone')}</Text>
           <TouchableOpacity 
@@ -1071,13 +825,13 @@ const calculateGoals = async () => {
             {deletingAccount ? (
               <ActivityIndicator size="small" color="#ff3b30" />
             ) : (
-              <Text style={s.deleteAccountBtnText}>🗑️ {t('settings.deleteAccount.button')}</Text>
+              <Text style={s.deleteAccountBtnText}>ðï¸ {t('settings.deleteAccount.button')}</Text>
             )}
           </TouchableOpacity>
           <Text style={s.deleteAccountWarning}>{t('settings.deleteAccount.warning')}</Text>
         </View>
 
-        {/* ── APP VERSION ── */}
+        {/* ââ APP VERSION ââ */}
         <View style={s.versionContainer}>
           <Text style={s.versionText}>RunWithAI v1.6.2</Text>
         </View>
