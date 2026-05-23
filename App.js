@@ -742,9 +742,7 @@ case 'mealPlan':
               <View style={s.updateDot}><Icon name='edit' size={10} color='#ffffff'/></View>
             )}
             <TouchableOpacity style={s.menuBtn} onPress={() => setTab('calendar')}>
-              <View style={s.menuLine} />
-              <View style={s.menuLine} />
-              <View style={s.menuLine} />
+              <IconCalendar active={true} />
             </TouchableOpacity>
           </View>
         </View>
