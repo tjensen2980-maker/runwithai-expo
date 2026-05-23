@@ -69,6 +69,15 @@ export default function More({
       <Text style={styles.pageTitle}>Mere</Text>
       <Text style={styles.pageSub}>Alle dine vaerktoejer paa et sted</Text>
 
+      <Section title="KONTO">
+        <MenuRow
+          icon="👤"
+          title="Profil"
+          subtitle="Personlig info, mål, puls og skader"
+          onPress={go('profile')}
+        />
+      </Section>
+
       <Section title="STATISTIK">
         <MenuRow
           icon="📊"
