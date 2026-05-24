@@ -290,7 +290,11 @@
       "error": "Kunne ikke slette konto"
     },
     "language": "Sprog",
-    "changeLanguageInSettings": "Skift sprog i Indstillinger"
+    "changeLanguageInSettings": "Skift sprog i Indstillinger",
+    "actions": {
+      "save": "Gem ændringer",
+      "saved": "Gemt!"
+    }
   },
   "pricing": {
     "title": "RunWithAI Pro",
@@ -877,8 +881,7 @@
     "C": "Moderat",
     "D": "Mindre sundt",
     "E": "Usundt"
-  }
-,
+  },
   "units": {
     "g": "g",
     "kg": "kg",
@@ -895,5 +898,10 @@
     "amount": "Mængde",
     "unit": "Enhed",
     "approxGrams": "≈ {{grams}}g"
+  },
+  "more": {
+    "menu": {
+      "goals": "Mål"
+    }
   }
 }
