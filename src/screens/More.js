@@ -67,7 +67,7 @@ export default function More({
   return (
     <ScrollView style={styles.root} contentContainerStyle={styles.scrollContent}>
       <Text style={styles.pageTitle}>Mere</Text>
-      <Text style={styles.pageSub}>Alle dine vaerktoejer paa et sted</Text>
+      <Text style={styles.pageSub}>Alle dine værktoejer på et sted</Text>
 
       <Section title="KONTO">
         <MenuRow
@@ -76,19 +76,13 @@ export default function More({
           subtitle="Personlig info, mål, puls og skader"
           onPress={go('profile')}
         />
-        <MenuRow
-          icon="🎯"
-          title="Mål"
-          subtitle="Ugentlige mål, ernæringsplan og træningstyper"
-          onPress={go('goalsScreen')}
-        />
       </Section>
 
       <Section title="STATISTIK">
         <MenuRow
           icon="📊"
           title="Statistik"
-          subtitle="Total km, bedste pace, milepaele"
+          subtitle="Total km, bedste pace, milepæle"
           onPress={goPro('stats')}
           proLocked={isFree}
         />
@@ -113,14 +107,14 @@ export default function More({
       <Section title="SETUP">
         <MenuRow
           icon="🎯"
-          title="Maal"
-          subtitle="Saet dine traeningsmaal"
+          title="Mål"
+          subtitle="Ugentlige mål, ernæringsplan og træningstyper"
           onPress={go('goals')}
         />
         <MenuRow
           icon="💉"
           title="Diabetes"
-          subtitle="Insulin, maaltal, paaminnelser"
+          subtitle="Insulin, måltal, påminnelser"
           onPress={go('diabetesSetup')}
         />
         <MenuRow
