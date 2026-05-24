@@ -39,7 +39,7 @@ const MEAL_TYPE_EMOJI = {
   snack: '🍎',
 };
 
-export default function MealPlan({ token, onBack, onLogged, profile }) {
+export default function MealPlan({ token, onBack, onLogged, profile, onProfileChange }) {
   // Map dietType to readable preferences string
   const dietTypeLabels = {
     vegetarian: 'vegetar',
@@ -50,15 +50,27 @@ export default function MealPlan({ token, onBack, onLogged, profile }) {
     keto: 'keto',
     paleo: 'paleo',
   };
-  const initialPreferences = profile && profile.dietType && dietTypeLabels[profile.dietType]
-    ? dietTypeLabels[profile.dietType]
-    : '';
+  // Prefer free-text preferencesText (set from this screen). Fall back to legacy dietType chip mapping.
+  const initialPreferences = (profile && profile.preferencesText)
+    ? profile.preferencesText
+    : (profile && profile.dietType && dietTypeLabels[profile.dietType])
+      ? dietTypeLabels[profile.dietType]
+      : '';
 
   const [setupVisible, setSetupVisible] = useState(true);
+  const [savedDefaults, setSavedDefaults] = useState(false);
   const [mealsPerDay, setMealsPerDay] = useState(4);
   const [preferences, setPreferences] = useState(initialPreferences);
   const [allergies, setAllergies] = useState((profile && profile.allergies) || '');
   const [dislikes, setDislikes] = useState((profile && profile.dislikes) || '');
+
+  const savePreferencesAsDefault = () => {
+    if (onProfileChange) {
+      onProfileChange({ preferencesText: preferences, allergies, dislikes });
+    }
+    setSavedDefaults(true);
+    setTimeout(() => setSavedDefaults(false), 1800);
+  };
 
   const [generating, setGenerating] = useState(false);
   const [plan, setPlan] = useState(null);
@@ -351,6 +363,15 @@ export default function MealPlan({ token, onBack, onLogged, profile }) {
                 value={dislikes}
                 onChangeText={setDislikes}
               />
+
+              <TouchableOpacity
+                style={[styles.generateBtn, { backgroundColor: 'transparent', borderWidth: 1, borderColor: '#888', marginBottom: 8 }]}
+                onPress={savePreferencesAsDefault}
+              >
+                <Text style={[styles.generateBtnText, { color: '#fff' }]}>
+                  {savedDefaults ? '\u2713 Gemt som standard' : '\ud83d\udcbe Gem som standard'}
+                </Text>
+              </TouchableOpacity>
 
               <TouchableOpacity
                 style={styles.generateBtn}
