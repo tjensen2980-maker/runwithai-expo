@@ -634,50 +634,6 @@ const save = async () => {
           </View>
         </View>
 
-{/* ── KOSTPRÆFERENCER ── */}
-        <Text style={s.sectionTitle}>🥗 KOSTPRÆFERENCER</Text>
-        <View style={s.card}>
-          {/* Kosttype */}
-          <Text style={[s.label, { marginBottom: 8 }]}>KOSTTYPE</Text>
-          <View style={s.goalGrid}>
-            {[
-              { id: 'none',         label: 'Ingen' },
-              { id: 'vegetarian',   label: '🥬 Vegetar' },
-              { id: 'vegan',        label: '🌱 Vegansk' },
-              { id: 'pescatarian',  label: '🐟 Pescetar' },
-              { id: 'gluten_free',  label: '🌾 Glutenfri' },
-              { id: 'lactose_free', label: '🥛 Laktosefri' },
-              { id: 'keto',         label: '🥑 Keto' },
-              { id: 'paleo',        label: '🍖 Paleo' },
-            ].map(d => (
-              <TouchableOpacity
-                key={d.id}
-                style={[s.goalBtn, (form.dietType || 'none') === d.id && { borderColor: colors.accent, backgroundColor: colors.accent + '15' }]}
-                onPress={() => setForm(f => ({ ...f, dietType: d.id }))}>
-                <Text style={[s.goalBtnText, (form.dietType || 'none') === d.id && { color: colors.accent }]}>{d.label}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-
-          {/* Allergier */}
-          <View style={{ marginTop: 8 }}>
-            <Field
-              label="ALLERGIER (komma-separeret)"
-              value={form.allergies || ''}
-              onChange={v => setForm(f => ({ ...f, allergies: v }))}
-              placeholder="nødder, skaldyr, æg"
-            />
-          </View>
-
-          {/* Fravalg */}
-          <Field
-            label="FØDEVARER JEG IKKE KAN LIDE"
-            value={form.dislikes || ''}
-            onChange={v => setForm(f => ({ ...f, dislikes: v }))}
-            placeholder="broccoli, svampe, koriander"
-          />
-        </View>
-
 {/* ── PRIVATLIV ── */}
         <Text style={s.sectionTitle}>{t('settings.sections.privacy')}</Text>
         <View style={s.card}>
