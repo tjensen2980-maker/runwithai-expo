@@ -683,6 +683,7 @@ case 'mealPlan':
           onBack={() => setTab('nutrition')}
           onLogged={() => { if (loadData) loadData(); setTab('nutrition'); }}
           profile={profile}
+          onProfileChange={(patch) => setProfile(prev => ({ ...prev, ...patch }))}
         />
       );
         case 'nutrition':
