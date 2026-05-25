@@ -317,7 +317,7 @@ const save = async () => {
           goal_pace: 'normal',
           plan_type: 'balanced'
         };
-        const url = SERVER + '/goals/auto';
+        const url = SERVER + '/goals/calculate';
         const auth = 'Bearer ' + token;
         const res = await fetch(url, {
           method: 'POST',
