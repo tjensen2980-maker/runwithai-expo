@@ -104,6 +104,21 @@ export default function Goals({ profile, onProfileChange, onBack }) {
                           if (data.target_protein_g != null) setTargetProtein(String(data.target_protein_g));
                           if (data.target_carbs_g != null) setTargetCarbs(String(data.target_carbs_g));
                           if (data.target_fat_g != null) setTargetFat(String(data.target_fat_g));
+          // Auto-save calculated goals so MealPlan and other screens see the new values
+          // even if the user forgets to press the manual 'Gem' button below.
+          try {
+            await updateGoals({
+              primary_goal: primaryGoal,
+              target_kcal: data.target_kcal != null ? data.target_kcal : null,
+              target_protein_g: data.target_protein_g != null ? data.target_protein_g : null,
+              target_carbs_g: data.target_carbs_g != null ? data.target_carbs_g : null,
+              target_fat_g: data.target_fat_g != null ? data.target_fat_g : null,
+            });
+            setSaved(true);
+            setTimeout(() => setSaved(false), 2000);
+          } catch (saveErr) {
+            console.log('Auto-save after calc failed:', saveErr && saveErr.message);
+          }
                 } else {
                           Alert.alert('Fejl', data.error || 'Kunne ikke beregne');
                 }
