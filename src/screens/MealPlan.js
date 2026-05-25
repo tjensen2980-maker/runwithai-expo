@@ -98,6 +98,11 @@ export default function MealPlan({ token, onBack, onLogged, profile, onProfileCh
           preferences: preferences,
           allergies: allergies,
           dislikes: dislikes,
+          // Send daily targets so the AI generates a plan that matches the user's goals
+          target_kcal: profile && profile.target_kcal != null ? profile.target_kcal : null,
+          target_protein_g: profile && profile.target_protein_g != null ? profile.target_protein_g : null,
+          target_carbs_g: profile && profile.target_carbs_g != null ? profile.target_carbs_g : null,
+          target_fat_g: profile && profile.target_fat_g != null ? profile.target_fat_g : null,
         }),
       });
       const data = await res.json();
