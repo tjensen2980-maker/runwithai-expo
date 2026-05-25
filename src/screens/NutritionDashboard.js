@@ -178,7 +178,7 @@ onBack, onLogMeal, onMealPlan, onBariatricSetup, hkCalories = 0, fetchDailyCalor
             goal_pace: 'normal',
             plan_type: 'balanced'
           };
-          await fetch(SERVER + '/goals/auto', {
+          await fetch(SERVER + '/goals/calculate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
             body: JSON.stringify(body)
