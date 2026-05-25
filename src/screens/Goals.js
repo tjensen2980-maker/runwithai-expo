@@ -5,7 +5,7 @@ import { colors, SERVER, getAuthToken } from '../data';
 import { getGoals, updateGoals } from '../services/NutritionAPI';
 
 // Ugedage brugt til "Foretrukne dage"
-const WEEK_DAYS = ['Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør', 'Søn'];
+const WEEK_DAYS = ['Man', 'Tir', 'Ons', 'Tor', 'Fre', 'LÃ¸r', 'SÃ¸n'];
 
 function Field({ label, value, onChange, keyboard, placeholder, suffix }) {
     return (
@@ -32,7 +32,7 @@ export default function Goals({ profile, onProfileChange, onBack }) {
     const [saved, setSaved] = useState(false);
     const [loadingDaily, setLoadingDaily] = useState(true);
 
-  // ERNÆRINGSPLAN local state
+  // ERNÃRINGSPLAN local state
   const [primaryGoal, setPrimaryGoal] = useState((profile && profile.primaryGoal) || 'maintain');
     const [goalPace, setGoalPace] = useState((profile && profile.goalPace) || 'normal');
     const [activityLevel, setActivityLevel] = useState((profile && profile.activityLevel) || 'moderate');
@@ -41,13 +41,13 @@ export default function Goals({ profile, onProfileChange, onBack }) {
     const [calcResult, setCalcResult] = useState(null);
     const [calculating, setCalculating] = useState(false);
 
-  // DAGLIGE MÅL (flettet ind fra tidligere GoalsSetup)
+  // DAGLIGE MÃL (flettet ind fra tidligere GoalsSetup)
   const [targetKcal, setTargetKcal] = useState('');
     const [targetProtein, setTargetProtein] = useState('');
     const [targetCarbs, setTargetCarbs] = useState('');
     const [targetFat, setTargetFat] = useState('');
 
-  // Hent daglige mål fra server ved load
+  // Hent daglige mÃ¥l fra server ved load
   useEffect(() => {
         let mounted = true;
         (async () => {
@@ -99,14 +99,30 @@ export default function Goals({ profile, onProfileChange, onBack }) {
                 const data = await res.json();
                 if (res.ok) {
                           setCalcResult(data);
-                          // Forhåndsudfyld de daglige felter med beregnet resultat
+                          // ForhÃ¥ndsudfyld de daglige felter med beregnet resultat
                   if (data.target_kcal != null) setTargetKcal(String(data.target_kcal));
                           if (data.target_protein_g != null) setTargetProtein(String(data.target_protein_g));
                           if (data.target_carbs_g != null) setTargetCarbs(String(data.target_carbs_g));
                           if (data.target_fat_g != null) setTargetFat(String(data.target_fat_g));
           // Auto-save calculated goals so MealPlan and other screens see the new values
-          // even if the user forgets to press the manual 'Gem' button below.
+          // even if the user forgets to press the manual Gem button below.
           try {
+            // 1. Update App profile-state so other screens (MealPlan) see new values immediately
+            if (onProfileChange) {
+              onProfileChange({
+                ...form,
+                primaryGoal,
+                goalPace,
+                activityLevel,
+                planType,
+                targetWeight,
+                target_kcal: data.target_kcal,
+                target_protein_g: data.target_protein_g,
+                target_carbs_g: data.target_carbs_g,
+                target_fat_g: data.target_fat_g,
+              });
+            }
+            // 2. Persist daily goals to server so getGoals() returns them on next load
             await updateGoals({
               primary_goal: primaryGoal,
               target_kcal: data.target_kcal != null ? data.target_kcal : null,
@@ -117,7 +133,7 @@ export default function Goals({ profile, onProfileChange, onBack }) {
             setSaved(true);
             setTimeout(() => setSaved(false), 2000);
           } catch (saveErr) {
-            console.log('Auto-save after calc failed:', saveErr && saveErr.message);
+            Alert.alert('Auto-save fejlede', (saveErr && saveErr.message) || 'Tryk paa Gem-knappen for at gemme manuelt');
           }
                 } else {
                           Alert.alert('Fejl', data.error || 'Kunne ikke beregne');
@@ -133,7 +149,7 @@ export default function Goals({ profile, onProfileChange, onBack }) {
         const updated = { ...form, primaryGoal, goalPace, activityLevel, planType, targetWeight };
         if (onProfileChange) onProfileChange(updated);
 
-        // Gem daglige mål via NutritionAPI
+        // Gem daglige mÃ¥l via NutritionAPI
         try {
                 await updateGoals({
                           primary_goal: primaryGoal,
@@ -143,7 +159,7 @@ export default function Goals({ profile, onProfileChange, onBack }) {
                           target_fat_g: parseNum(targetFat),
                 });
         } catch (e) {
-                Alert.alert('Fejl', 'Kunne ikke gemme daglige mål: ' + (e && e.message));
+                Alert.alert('Fejl', 'Kunne ikke gemme daglige mÃ¥l: ' + (e && e.message));
                 return;
         }
 
@@ -154,14 +170,14 @@ export default function Goals({ profile, onProfileChange, onBack }) {
   return (
         <SafeAreaView style={s.safe}>
       <ScrollView contentContainerStyle={s.scroll}>
-        <Text style={s.pageTitle}>{t('more.menu.goals') || 'Mål'}</Text>
+        <Text style={s.pageTitle}>{t('more.menu.goals') || 'MÃ¥l'}</Text>
 
-{/* ── UGENTLIGE MÅL ── */}
-        <Text style={s.sectionTitle}>{t('settings.sections.weeklyGoals') || 'Ugentlige mål'}</Text>
+{/* ââ UGENTLIGE MÃL ââ */}
+        <Text style={s.sectionTitle}>{t('settings.sections.weeklyGoals') || 'Ugentlige mÃ¥l'}</Text>
         <View style={s.card}>
           <Field label={t('settings.fields.weeklyKm') || 'Km denne uge'} {...field('weeklyKm')} keyboard="numeric" placeholder="25" />
-                    <Field label={t('settings.fields.weeklyKmGoal') || 'Mål km/uge'} value={form.weeklyKmGoal || ''} onChange={v => setForm(f => ({ ...f, weeklyKmGoal: v }))} keyboard="numeric" placeholder="30" />
-                    <Field label={t('settings.fields.weeklyRunsGoal') || 'Mål løb/uge'} value={form.weeklyRunsGoal || ''} onChange={v => setForm(f => ({ ...f, weeklyRunsGoal: v }))} keyboard="numeric" placeholder="3" />
+                    <Field label={t('settings.fields.weeklyKmGoal') || 'MÃ¥l km/uge'} value={form.weeklyKmGoal || ''} onChange={v => setForm(f => ({ ...f, weeklyKmGoal: v }))} keyboard="numeric" placeholder="30" />
+                    <Field label={t('settings.fields.weeklyRunsGoal') || 'MÃ¥l lÃ¸b/uge'} value={form.weeklyRunsGoal || ''} onChange={v => setForm(f => ({ ...f, weeklyRunsGoal: v }))} keyboard="numeric" placeholder="3" />
                     <Text style={[s.label, { marginBottom: 8 }]}>{t('settings.fields.preferredDays') || 'Foretrukne dage'}</Text>
           <View style={s.daysRow}>
         {WEEK_DAYS.map(day => {
@@ -181,18 +197,18 @@ export default function Goals({ profile, onProfileChange, onBack }) {
 </View>
   </View>
 
-{/* ── ERNÆRINGSPLAN ── */}
-        <Text style={s.sectionTitle}>🍎 ERNÆRINGSPLAN</Text>
+{/* ââ ERNÃRINGSPLAN ââ */}
+        <Text style={s.sectionTitle}>ð ERNÃRINGSPLAN</Text>
         <View style={s.card}>
-        {/* Hovedmål */}
-                    <Text style={[s.label, { marginBottom: 8 }]}>HOVEDMÅL</Text>
+        {/* HovedmÃ¥l */}
+                    <Text style={[s.label, { marginBottom: 8 }]}>HOVEDMÃL</Text>
           <View style={s.goalGrid}>
         {[
-        { id: 'lose_fat', label: '🔥 Tabe fedt' },
-        { id: 'maintain', label: '⚖️ Vedligeholde' },
-        { id: 'gain_muscle', label: '💪 Bygge muskler' },
-        { id: 'run_faster', label: '⚡ Løb hurtigere' },
-        { id: 'run_longer', label: '🏁 Løb længere' },
+        { id: 'lose_fat', label: 'ð¥ Tabe fedt' },
+        { id: 'maintain', label: 'âï¸ Vedligeholde' },
+        { id: 'gain_muscle', label: 'ðª Bygge muskler' },
+        { id: 'run_faster', label: 'â¡ LÃ¸b hurtigere' },
+        { id: 'run_longer', label: 'ð LÃ¸b lÃ¦ngere' },
                       ].map(g => (
                                       <TouchableOpacity
                                             key={g.id}
@@ -224,11 +240,11 @@ export default function Goals({ profile, onProfileChange, onBack }) {
           <Text style={[s.label, { marginBottom: 8, marginTop: 14 }]}>AKTIVITETSNIVEAU</Text>
           <View style={s.goalGrid}>
           {[
-          { id: 'sedentary', label: '🪑 Stillesiddende' },
-          { id: 'light', label: '🚶 Let' },
-          { id: 'moderate', label: '🏃 Moderat' },
-          { id: 'active', label: '💨 Aktiv' },
-          { id: 'very_active', label: '🔥 Meget aktiv' },
+          { id: 'sedentary', label: 'ðª Stillesiddende' },
+          { id: 'light', label: 'ð¶ Let' },
+          { id: 'moderate', label: 'ð Moderat' },
+          { id: 'active', label: 'ð¨ Aktiv' },
+          { id: 'very_active', label: 'ð¥ Meget aktiv' },
                         ].map(a => (
                                         <TouchableOpacity
                                               key={a.id}
@@ -244,7 +260,7 @@ export default function Goals({ profile, onProfileChange, onBack }) {
           <View style={s.goalGrid}>
           {[
           { id: 'balanced', label: 'Balanceret (25/50/25)' },
-          { id: 'high_protein', label: 'Højt protein (35/40/25)' },
+          { id: 'high_protein', label: 'HÃ¸jt protein (35/40/25)' },
           { id: 'low_carb', label: 'Lav-kulhydrat (30/25/45)' },
           { id: 'keto', label: 'Keto (25/5/70)' },
                         ].map(p => (
@@ -257,11 +273,11 @@ export default function Goals({ profile, onProfileChange, onBack }) {
             ))}
               </View>
 
-{/* Mål-vægt (valgfri) */}
+{/* MÃ¥l-vÃ¦gt (valgfri) */}
 {(primaryGoal === 'lose_fat' || primaryGoal === 'gain_muscle') && (
               <View style={{ marginTop: 14 }}>
               <Field
-                label="MÅL-VÆGT (KG, VALGFRI)"
+                label="MÃL-VÃGT (KG, VALGFRI)"
                 value={targetWeight}
                 onChange={setTargetWeight}
                 keyboard="numeric"
@@ -277,15 +293,15 @@ export default function Goals({ profile, onProfileChange, onBack }) {
             disabled={calculating}>
             {calculating
                            ? <ActivityIndicator color={colors.black || '#000'} />
-                            : <Text style={s.saveBtnText}>✨ Beregn mit kaloriemål</Text>}
+                            : <Text style={s.saveBtnText}>â¨ Beregn mit kaloriemÃ¥l</Text>}
               </TouchableOpacity>
 
             {/* Resultat */}
              {calcResult && calcResult.target_kcal && (
                           <View style={{ marginTop: 16, paddingTop: 16, borderTopWidth: 1, borderTopColor: colors.border }}>
-              <Text style={[s.label, { marginBottom: 10 }]}>BEREGNET MÅL</Text>
+              <Text style={[s.label, { marginBottom: 10 }]}>BEREGNET MÃL</Text>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
-                <Text style={{ color: colors.muted, fontSize: 13 }}>Dagligt kaloriemål</Text>
+                <Text style={{ color: colors.muted, fontSize: 13 }}>Dagligt kaloriemÃ¥l</Text>
                 <Text style={{ color: colors.accent, fontSize: 18, fontWeight: '900' }}>{calcResult.target_kcal} kcal</Text>
               </View>
 {calcResult.bmr_kcal && (
@@ -304,11 +320,11 @@ export default function Goals({ profile, onProfileChange, onBack }) {
           )}
 </View>
 
-{/* ── MINE DAGLIGE MÅL (manuelt justerbare, gemmes på serveren) ── */}
-        <Text style={s.sectionTitle}>Mine daglige mål</Text>
+{/* ââ MINE DAGLIGE MÃL (manuelt justerbare, gemmes pÃ¥ serveren) ââ */}
+        <Text style={s.sectionTitle}>Mine daglige mÃ¥l</Text>
         <View style={s.card}>
           <Text style={[s.label, { marginBottom: 6 }]}>
-                      Beregnet ovenfor — du kan finjustere her. Værdier gemmes når du trykker Gem.
+                      Beregnet ovenfor â du kan finjustere her. VÃ¦rdier gemmes nÃ¥r du trykker Gem.
           </Text>
 {loadingDaily ? (
               <ActivityIndicator color={colors.accent} />
@@ -350,8 +366,8 @@ export default function Goals({ profile, onProfileChange, onBack }) {
           )}
 </View>
 
-{/* ── LØBETYPE PRÆFERENCER ── */}
-        <Text style={s.sectionTitle}>{t('settings.sections.trainingTypes') || 'Løbetype-præferencer'}</Text>
+{/* ââ LÃBETYPE PRÃFERENCER ââ */}
+        <Text style={s.sectionTitle}>{t('settings.sections.trainingTypes') || 'LÃ¸betype-prÃ¦ferencer'}</Text>
         <View style={s.card}>
           <Text style={[s.label, { marginBottom: 10 }]}>{t('settings.fields.preferredTypes') || 'Foretrukne typer'}</Text>
           <View style={s.goalGrid}>
@@ -380,7 +396,7 @@ export default function Goals({ profile, onProfileChange, onBack }) {
   </View>
 
         <TouchableOpacity style={s.saveBtn} onPress={save}>
-            <Text style={s.saveBtnText}>{saved ? '✓ ' + (t('settings.actions.saved') || 'Gemt') : (t('settings.actions.save') || 'Gem')}</Text>
+            <Text style={s.saveBtnText}>{saved ? 'â ' + (t('settings.actions.saved') || 'Gemt') : (t('settings.actions.save') || 'Gem')}</Text>
   </TouchableOpacity>
   </ScrollView>
   </SafeAreaView>
