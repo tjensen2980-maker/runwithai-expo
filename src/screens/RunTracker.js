@@ -385,6 +385,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   const lastValidPositionRef = useRef(null);
   const appStateRef = useRef(AppState.currentState);
   const handlePositionUpdateRef = useRef(null);
+  const lastForegroundTimestampRef = useRef(0);
 
   // ─── PHOTO STORY STATE ──────────────────────────────────────────────────
   const [savedRunId, setSavedRunId] = useState(null);
@@ -453,30 +454,29 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   }, []);
 
   // ─── PERIODIC CHECK FOR BACKGROUND LOCATIONS ────────────────────────────
-  // Only flush background buffer when we KNOW we are in the background.
-  // Otherwise the foreground watchPositionAsync already gives us live points,
-  // and the background task duplicates them which inflates distance.
+  // Drain BG buffer regularly. When app is active we DEDUPE against the last
+  // foreground timestamp (instead of throwing all BG points away), so we never
+  // lose distance during the transition foreground→background→foreground.
   useEffect(() => {
     if (!isTracking || isPaused || isWeb) return;
 
     const bgInterval = setInterval(() => {
-      // Skip if app is active - foreground watcher is the source of truth.
-      if (appStateRef.current === 'active') {
-        // Drop any buffered points so they don't get processed when we come back.
-        if (global._backgroundLocations && global._backgroundLocations.length > 0) {
-          global._backgroundLocations = [];
+      if (!global._backgroundLocations || global._backgroundLocations.length === 0) return;
+
+      const bgLocations = [...global._backgroundLocations].sort((a, b) => a.timestamp - b.timestamp);
+      global._backgroundLocations = [];
+
+      const lastFgTs = lastForegroundTimestampRef.current || 0;
+      bgLocations.forEach(newPos => {
+        // Dedupe: skip BG points that are within 2s of a foreground point we already have.
+        // This lets BG buffer fill the GAP without duplicating live foreground samples.
+        if (appStateRef.current === 'active' && Math.abs(newPos.timestamp - lastFgTs) < 2000) {
+          return;
         }
-        return;
-      }
-      if (global._backgroundLocations && global._backgroundLocations.length > 0) {
-        const bgLocations = [...global._backgroundLocations].sort((a, b) => a.timestamp - b.timestamp);
-        global._backgroundLocations = [];
-        bgLocations.forEach(newPos => {
-          if (handlePositionUpdateRef.current) {
-            handlePositionUpdateRef.current(newPos, true);
-          }
-        });
-      }
+        if (handlePositionUpdateRef.current) {
+          handlePositionUpdateRef.current(newPos, true);
+        }
+      });
     }, 1000);
 
     return () => clearInterval(bgInterval);
@@ -486,6 +486,12 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     setGpsStatus('active');
     setCurrentPosition(newPos);
     setGpsPoints(prev => prev + 1);
+
+    // Track timestamp of latest foreground sample so the BG buffer drain
+    // can dedupe instead of duplicating distance.
+    if (!fromBackground) {
+      lastForegroundTimestampRef.current = newPos.timestamp;
+    }
     
     const lastPos = lastValidPositionRef.current;
     
@@ -496,18 +502,26 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       const speedKmh = speedMs * 3.6;
       const accuracy = newPos.accuracy || 15;
       
-            // ── GPS FILTERING (tighter & uniform - no FREE-pass for background) ──
-      const MIN_DISTANCE = 2;         // ignore tiny GPS jitter when standing still
-      const MAX_SINGLE_JUMP = 100;    // any segment > 100 m is almost certainly a GPS jump
-      const MAX_SPEED_KMH = 35;       // sanity check - filter speed spikes
-      const MAX_ACCURACY = 50;        // Apple recommends <= 30 m for fitness apps
+            // ── GPS FILTERING (background-friendly, dynamic) ─────────────────────
+      // Background GPS on Android (and to some extent iOS) batches points with
+      // poorer accuracy and bigger time gaps when the screen is locked. Static
+      // 100 m jump / 50 m accuracy limits were too strict and silently dropped
+      // most BG points → distance ended up far below reality.
+      const MIN_DISTANCE = 2;       // ignore tiny jitter when standing still
+      const MAX_SPEED_KMH = 35;     // sanity speed cap
+      // Allow accuracy up to 100 m for BG points (battery-saving GPS),
+      // keep 75 m for foreground.
+      const MAX_ACCURACY = fromBackground ? 100 : 75;
+      // Dynamic jump limit: speed × time + 30 m safety buffer.
+      // This naturally allows a 250 m segment if 30 s passed between samples
+      // (typical BG batching), while still rejecting a true teleport.
+      const MAX_SINGLE_JUMP = Math.max(100, (MAX_SPEED_KMH / 3.6) * timeDiff + 30);
 
       const isMinDistance = dist >= MIN_DISTANCE;
       const isNotTeleport = dist <= MAX_SINGLE_JUMP;
       const isReasonableSpeed = speedKmh <= MAX_SPEED_KMH;
       const isAccurate = accuracy <= MAX_ACCURACY;
 
-      // Apply ALL filters uniformly, even for background points - prevents bogus distance.
       const isValidPoint = isMinDistance && isNotTeleport && isReasonableSpeed && isAccurate;
       
       if (isValidPoint) {
@@ -539,15 +553,15 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     } else {
               // Første position - kraev god accuracy fra start (ellers springer GPS rundt senere)
         const accuracy = newPos.accuracy || 15;
-        if (accuracy <= 30) {
-          const firstPos = { ...newPos, speed: 0, segmentDistance: 0, isRunning: false };
-          positionsRef.current = [firstPos];
-          setPositions([firstPos]);
-          lastValidPositionRef.current = newPos;
-          console.log(`✓ GPS: First position recorded, acc:${accuracy.toFixed(0)}m`);
-        } else {
-          console.log(`✗ GPS: First position rejected, acc:${accuracy.toFixed(0)}m too poor (need <= 30m)`);
-        }
+        if (accuracy <= 50) {
+        const firstPos = { ...newPos, speed: 0, segmentDistance: 0, isRunning: false };
+        positionsRef.current = [firstPos];
+        setPositions([firstPos]);
+        lastValidPositionRef.current = newPos;
+        console.log(`✓ GPS: First position recorded, acc:${accuracy.toFixed(0)}m`);
+      } else {
+        console.log(`✗ GPS: First position rejected, acc:${accuracy.toFixed(0)}m too poor (need <= 50m)`);
+      }
     }
   };
 
@@ -576,7 +590,11 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         accuracy: Location.Accuracy.BestForNavigation,
         timeInterval: 1000,
         distanceInterval: 1,
-        deferredUpdatesInterval: 500,
+        // Distance-based deferred updates give a more consistent km measurement
+        // in the background than time-based ones (OS won't skip points after
+        // every 10 m of movement, even if it batches them).
+        deferredUpdatesInterval: 1000,
+        deferredUpdatesDistance: 10,
         showsBackgroundLocationIndicator: true,
         foregroundService: {
           notificationTitle: 'RunWithAI',
@@ -584,7 +602,9 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
           notificationColor: '#c8ff00',
         },
         pausesUpdatesAutomatically: false,
-        activityType: Location.ActivityType.Fitness,
+        // Use OtherNavigation instead of Fitness: iOS Fitness mode is more
+        // aggressive about pausing updates when it thinks the user has stopped.
+        activityType: Location.ActivityType.OtherNavigation,
       });
 
       console.log('Background tracking started');
