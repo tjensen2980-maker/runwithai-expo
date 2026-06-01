@@ -453,7 +453,40 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     return () => subscription?.remove();
   }, []);
 
-  // ─── PERIODIC CHECK FOR BACKGROUND LOCATIONS ────────────────────────────
+  // ─── KEEPALIVE: prevent iOS from killing app when swiped away during tracking ────────
+  // On iOS, swiping the app away while tracking can terminate the process even with
+  // UIBackgroundModes=location set, if there is no active foreground service.
+  // Playing a silent audio session keeps the app process alive.
+  // We use expo-av if available, otherwise fall back to a no-op.
+  useEffect(() => {
+    if (isWeb || !isTracking || isPaused) return;
+    let audioObj = null;
+    const startSilentAudio = async () => {
+      try {
+        const { Audio } = require('expo-av');
+        await Audio.setAudioModeAsync({
+          playsInSilentModeIOS: true,
+          staysActiveInBackground: true,
+          shouldDuckAndroid: false,
+        });
+        const { sound } = await Audio.Sound.createAsync(
+          { uri: 'https://www.soundjay.com/misc/sounds/silence.mp3' },
+          { isLooping: true, volume: 0.01, shouldPlay: false }
+        );
+        audioObj = sound;
+        // We don't actually play audio — just setting the mode keeps the session alive
+      } catch (e) {
+        // expo-av not available or error — silently continue
+        console.log('[Keepalive] Audio session not available:', e.message);
+      }
+    };
+    startSilentAudio();
+    return () => {
+      if (audioObj) audioObj.unloadAsync().catch(() => {});
+    };
+  }, [isTracking, isPaused]);
+
+// ─── PERIODIC CHECK FOR BACKGROUND LOCATIONS ────────────────────────────
   // Drain BG buffer regularly. When app is active we DEDUPE against the last
   // foreground timestamp (instead of throwing all BG points away), so we never
   // lose distance during the transition foreground→background→foreground.
