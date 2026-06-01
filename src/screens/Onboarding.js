@@ -80,7 +80,7 @@ export default function Onboarding({ onDone }) {
         </View>
         
         <Text style={s.langTitle}>ðŸŒ Choose your language</Text>
-        <Text style={s.langSubtitle}>VÃ¦lg dit sprog â€¢ WÃ¤hle deine Sprache</Text>
+        <Text style={s.langSubtitle}>Vælg dit sprog • Wähle deine Sprache</Text>
         
         <View style={s.langGrid}>
           {LANGUAGES.map(lang => (
@@ -177,7 +177,7 @@ export default function Onboarding({ onDone }) {
     </SafeAreaView>
   );
 
-  // â”€â”€ STEP 3: Profilinfo & mÃ¥l â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // â”€â”€ STEP 3: Profilinfo & mål â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (step === 3) return (
     <SafeAreaView style={s.safe}>
       <ScrollView contentContainerStyle={s.splash} showsVerticalScrollIndicator={false}>
