@@ -1,4 +1,4 @@
-Ã¸→øÃ¥→åimport React, { useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Platform, Dimensions } from 'react-native';
 import { colors, getZoneForHR } from '../data';
 import Svg, { Path, Line, Text as SvgText, Rect, Circle } from 'react-native-svg';
