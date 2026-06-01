@@ -45,7 +45,7 @@ export default function MotionPicker({ onBack, onPick }) {
         </TouchableOpacity>
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Text style={styles.headerTitle}>
-            {step === 1 ? 'Motion' : selectedType === 'walk' ? 'Gaa' : selectedType === 'bike' ? 'Cykling' : 'Loeb'}
+            {step === 1 ? 'Motion' : selectedType === 'walk' ? 'Gå' : selectedType === 'bike' ? 'Cykling' : 'Løb'}
           </Text>
           <Text style={styles.headerSub}>
             {step === 1 ? 'Hvad vil du lave?' : 'Hvor?'}
@@ -81,7 +81,7 @@ export default function MotionPicker({ onBack, onPick }) {
             >
               <Text style={styles.cardEmoji}>🚴</Text>
               <Text style={styles.cardTitle}>Cykling</Text>
-              <Text style={styles.cardSub}>Udendoers eller indendoers</Text>
+              <Text style={styles.cardSub}>Udendørs eller indendørs</Text>
             </TouchableOpacity>
           </View>
         ) : (
