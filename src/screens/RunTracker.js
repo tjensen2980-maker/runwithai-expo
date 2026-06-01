@@ -565,7 +565,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
           ...newPos,
           speed: speedKmh,
           segmentDistance: dist,
-          isRunning: !fromBackground && speedKmh >= 9,
+          isRunning: speedKmh >= 9, // speed-based only; BG points have real speed data
         };
         
         positionsRef.current = [...positionsRef.current, posWithData];
@@ -896,7 +896,7 @@ const runData = {
   calories,
   route,
   notes: null,
-  type: activityType === 'run' ? 'run' : 'walk',
+  type: (activityType === 'walk') ? 'walk' : (runningKm >= walkingKm ? 'run' : 'walk'),
   date: new Date().toISOString(),
   running_km: runningKm,
   walking_km: walkingKm,
