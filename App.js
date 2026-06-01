@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Svg, { Path, Line, Rect, Polyline, Polygon } from 'react-native-svg';
 import {
   colors, DEFAULT_WEEK_PLAN, DEFAULT_NEXT_WORKOUT, DEFAULT_PROFILE,
-  loadProfile, saveProfile, loadWeekPlan, saveWeekPlan, setAuthToken, generateTrainingPlan, getAuthToken, loadTrainingPlan, loadRuns,
+  loadProfile, saveProfile, loadWeekPlan, saveWeekPlan, setAuthToken, generateTrainingPlan, getAuthToken, loadTrainingPlan, loadRuns, initAuthToken,
 } from './src/data';
 import { useWatch } from './src/hooks/useWatch'
 import useHealthKit from './src/hooks/useHealthKit'
@@ -467,18 +467,30 @@ export default function App() {
     setLoading(false);
   };
 
+  // Init token from AsyncStorage before loading data
   useEffect(() => {
-    const savedToken = getAuthToken();
-    if (savedToken) {
-      fetch(`${SERVER}/profile`, {
-        headers: { Authorization: `Bearer ${savedToken}`, 'Content-Type': 'application/json' }
-      }).then(r => {
-        if (r.ok) { setAuthToken(savedToken); setUser({ token: savedToken }); syncAuthToWatch(savedToken, 'user'); }
-        else { setAuthToken(null); setLoading(false); }
-      }).catch(() => { setAuthToken(null); setLoading(false); });
-    } else {
-      setLoading(false);
-    }
+    initAuthToken().then(() => {
+      const savedToken = getAuthToken();
+      if (savedToken) {
+        fetch(`${SERVER}/profile`, {
+          headers: { Authorization: `Bearer ${savedToken}`, 'Content-Type': 'application/json' }
+        }).then(r => {
+          if (r.ok) { setAuthToken(savedToken); setUser({ token: savedToken }); syncAuthToWatch(savedToken, 'user'); }
+          else if (r.status === 401 || r.status === 403) {
+            // Only log out on real auth errors, not server/network errors
+            setAuthToken(null); setLoading(false);
+          } else {
+            // Server error or timeout — keep session, retry later
+            setLoading(false);
+          }
+        }).catch(() => {
+          // Network error — keep session alive, user can retry
+          setLoading(false);
+        });
+      } else {
+        setLoading(false);
+      }
+    });
   }, []);
 
   useEffect(() => { if (user) loadData(); }, [user]);
