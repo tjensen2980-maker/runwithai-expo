@@ -717,7 +717,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
             accuracy: Location.Accuracy.BestForNavigation,
             timeInterval: 1000,   // 1 s — avoids flooding when screen is on
             distanceInterval: 2,  // at least 2 m movement between foreground samples
-          },          },
+          },
           (location) => {
             const update = handlePositionUpdateRef.current || handlePositionUpdate;
             update({
