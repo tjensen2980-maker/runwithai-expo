@@ -43,7 +43,7 @@ function fmtDate(dateStr) {
   if (!dateStr) return '';
   try {
     const d = new Date(dateStr);
-    const days = ['Sondag','Mandag','Tirsdag','Onsdag','Torsdag','Fredag','Lordag'];
+    const days = ['Søndag','Mandag','Tirsdag','Onsdag','Torsdag','Fredag','Lørdag'];
     const months = ['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'];
     const day = d.getDate();
     const month = months[d.getMonth()];
@@ -119,7 +119,7 @@ function OversigtTab({ run }) {
         {run.notes ? (
           <Text style={s.notes}>{run.notes}</Text>
         ) : (
-          <Text style={s.addNotes}>Tilfoj noter</Text>
+          <Text style={s.addNotes}>Tilføj noter</Text>
         )}
 
         <View style={s.bigStat}>
@@ -159,7 +159,7 @@ export default function RunDetail({ run, profile, onBack }) {
   if (!run) {
     return (
       <View style={s.container}>
-        <Text style={{ color: colors.text, padding: 20 }}>Intet lob valgt</Text>
+        <Text style={{ color: colors.text, padding: 20 }}>Intet løb valgt</Text>
       </View>
     );
   }
