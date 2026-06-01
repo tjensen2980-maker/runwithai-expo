@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+Ã¸→øÃ¥→åimport React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Platform, Dimensions } from 'react-native';
 import { colors, getZoneForHR } from '../data';
 import Svg, { Path, Line, Text as SvgText, Rect, Circle } from 'react-native-svg';
@@ -276,8 +276,8 @@ function StatistikTab({ run, profile }) {
       <View style={s.statRow}><Text style={s.statLabel}>Gennemsnitstempo</Text><Text style={s.statValue}>{pace} /km</Text></View>
       {hasMixed && (
         <>
-          <View style={s.statRow}><Text style={s.statLabel}>LÃ¸bet</Text><Text style={s.statValue}>{runningKm.toFixed(2)} km</Text></View>
-          <View style={s.statRow}><Text style={s.statLabel}>GÃ¥et</Text><Text style={s.statValue}>{walkingKm.toFixed(2)} km</Text></View>
+          <View style={s.statRow}><Text style={s.statLabel}>Løbet</Text><Text style={s.statValue}>{runningKm.toFixed(2)} km</Text></View>
+          <View style={s.statRow}><Text style={s.statLabel}>Gået</Text><Text style={s.statValue}>{walkingKm.toFixed(2)} km</Text></View>
         </>
       )}
 
