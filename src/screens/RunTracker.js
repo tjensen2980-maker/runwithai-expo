@@ -502,22 +502,21 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       const speedKmh = speedMs * 3.6;
       const accuracy = newPos.accuracy || 15;
       
-            // ── GPS FILTERING (background-friendly, dynamic) ─────────────────────
-      // Background GPS on Android (and to some extent iOS) batches points with
-      // poorer accuracy and bigger time gaps when the screen is locked. Static
-      // 100 m jump / 50 m accuracy limits were too strict and silently dropped
-      // most BG points → distance ended up far below reality.
-      const MIN_DISTANCE = 2;       // ignore tiny jitter when standing still
-      const MAX_SPEED_KMH = 35;     // sanity speed cap
-      // Allow accuracy up to 100 m for BG points (battery-saving GPS),
-      // keep 75 m for foreground.
-      const MAX_ACCURACY = fromBackground ? 100 : 75;
-      // Dynamic jump limit: speed × time + 30 m safety buffer.
-      // This naturally allows a 250 m segment if 30 s passed between samples
-      // (typical BG batching), while still rejecting a true teleport.
-      const MAX_SINGLE_JUMP = Math.max(100, (MAX_SPEED_KMH / 3.6) * timeDiff + 30);
+            // ── GPS FILTERING ────────────────────────────────────────────────────────────
+        // When the screen is locked, iOS/Android GPS batches updates with
+        // larger time gaps and worse reported accuracy. We use generous but
+        // physically-sane limits so we don’t silently throw away real movement.
+        const MIN_DISTANCE = 1;           // ignore sub-1m jitter
+        const MAX_SPEED_KMH = 60;         // covers edge-case GPS spikes; real runners won’t hit this
+        // Screen-locked points often report 80-150 m accuracy on battery-saving GPS.
+        // We let anything up to 120 m through for background, 100 m for foreground
+        // (foreground-with-locked-screen still sends fromBackground=false).
+        const MAX_ACCURACY = fromBackground ? 120 : 100;
+        // Dynamic jump limit: allow up to speed×time + 40 m safety buffer.
+        // E.g. 30 s between BG samples at 12 km/h → 100 m + 40 = 140 m allowed.
+        const MAX_SINGLE_JUMP = Math.max(120, (MAX_SPEED_KMH / 3.6) * timeDiff + 40);
 
-      const isMinDistance = dist >= MIN_DISTANCE;
+        const isMinDistance = dist >= MIN_DISTANCE;
       const isNotTeleport = dist <= MAX_SINGLE_JUMP;
       const isReasonableSpeed = speedKmh <= MAX_SPEED_KMH;
       const isAccurate = accuracy <= MAX_ACCURACY;
@@ -590,20 +589,20 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         accuracy: Location.Accuracy.BestForNavigation,
         timeInterval: 1000,
         distanceInterval: 1,
-        // Distance-based deferred updates give a more consistent km measurement
-        // in the background than time-based ones (OS won't skip points after
-        // every 10 m of movement, even if it batches them).
+        // Deferred updates: let OS batch points every 5 m / 1 s — reduces wake-ups
+        // without losing distance precision.
         deferredUpdatesInterval: 1000,
-        deferredUpdatesDistance: 10,
+        deferredUpdatesDistance: 5,
         showsBackgroundLocationIndicator: true,
         foregroundService: {
           notificationTitle: 'RunWithAI',
-          notificationBody: activityType === 'run' ? 'Tracking dit løb...' : 'Tracking din gåtur...',
+          notificationBody: activityType === 'run' ? 'Tracker dit løb...' : 'Tracker din gåtur...',
           notificationColor: '#c8ff00',
         },
+        // iOS: NEVER pause updates automatically — this is the #1 reason
+        // background tracking silently stops mid-run.
         pausesUpdatesAutomatically: false,
-        // Use OtherNavigation instead of Fitness: iOS Fitness mode is more
-        // aggressive about pausing updates when it thinks the user has stopped.
+        // OtherNavigation: less aggressive batching than Fitness mode.
         activityType: Location.ActivityType.OtherNavigation,
       });
 
@@ -681,11 +680,11 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         await startBackgroundLocationTracking();
 
         watchSubscriptionRef.current = await Location.watchPositionAsync(
-          { 
-            accuracy: Location.Accuracy.BestForNavigation, 
-            timeInterval: 500,
-            distanceInterval: 1
-          },
+          {
+            accuracy: Location.Accuracy.BestForNavigation,
+            timeInterval: 1000,   // 1 s — avoids flooding when screen is on
+            distanceInterval: 2,  // at least 2 m movement between foreground samples
+          },          },
           (location) => {
             const update = handlePositionUpdateRef.current || handlePositionUpdate;
             update({
@@ -769,8 +768,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     if (!isWeb && Location) {
       await startBackgroundLocationTracking();
       watchSubscriptionRef.current = await Location.watchPositionAsync(
-        { accuracy: Location.Accuracy.BestForNavigation, timeInterval: 500, distanceInterval: 1 },
-        (location) => {
+          { accuracy: Location.Accuracy.BestForNavigation, timeInterval: 1000, distanceInterval: 2 },       (location) => {
           (handlePositionUpdateRef.current || handlePositionUpdate)({
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
