@@ -30,28 +30,40 @@ export const colors = {
 // ─── SERVER URL ───────────────────────────────────────────────────────────────
 export const SERVER = 'https://runwithai-server-production.up.railway.app';
 
-// ─── AUTH TOKEN ───────────────────────────────────────────────────────────────
+// ─── AUTH TOKEN ────────────────────────────────────────────────────────────────────────────
+import AsyncStorageLib from '@react-native-async-storage/async-storage';
 const TOKEN_KEY = 'runwithai_token';
 let _token = null;
 
-try {
-  _token = (typeof localStorage !== 'undefined' && localStorage.getItem(TOKEN_KEY)) || null;
-} catch {}
+// Init: load token from AsyncStorage (native) or localStorage (web)
+export async function initAuthToken() {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      _token = localStorage.getItem(TOKEN_KEY) || null;
+    } else {
+      _token = await AsyncStorageLib.getItem(TOKEN_KEY);
+    }
+  } catch (e) {
+    _token = null;
+  }
+}
 
-export function setAuthToken(token) {
+export async function setAuthToken(token) {
   _token = token;
   try {
     if (typeof localStorage !== 'undefined') {
       if (token) localStorage.setItem(TOKEN_KEY, token);
       else localStorage.removeItem(TOKEN_KEY);
+    } else {
+      if (token) await AsyncStorageLib.setItem(TOKEN_KEY, token);
+      else await AsyncStorageLib.removeItem(TOKEN_KEY);
     }
-  } catch {}
+  } catch (e) {}
 }
 export function getAuthToken() { return _token; }
 function authHeaders() {
   return { 'Content-Type': 'application/json', ...(_token ? { Authorization: `Bearer ${_token}` } : {}) };
 }
-
 // ─── LEVELS ───────────────────────────────────────────────────────────────────
 export const LEVELS = {
   beginner: {
