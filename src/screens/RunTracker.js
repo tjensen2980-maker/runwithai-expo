@@ -31,7 +31,7 @@ if (!isWeb) {
   } catch (e) {
     console.log('react-native-maps not available');
   }
-  
+
   try {
     Location = require('expo-location');
   } catch (e) {
@@ -240,12 +240,12 @@ function PersonalStats({ runs, activityType, t }) {
   const runsWithPace = filteredRuns.filter(r => r.pace > 0 && r.km >= 0.5);
   const bestPace = runsWithPace.length > 0 ? Math.min(...runsWithPace.map(r => r.pace)) : null;
   const longestRun = Math.max(...filteredRuns.map(r => r.km || 0));
-  
+
   const now = new Date();
   const weekStart = new Date(now);
   weekStart.setDate(now.getDate() - now.getDay() + 1);
   weekStart.setHours(0, 0, 0, 0);
-  
+
   const thisWeekRuns = filteredRuns.filter(r => {
     const runDate = new Date(r.date || r.created_at);
     return runDate >= weekStart;
@@ -256,7 +256,7 @@ function PersonalStats({ runs, activityType, t }) {
   const lastWeekStart = new Date(weekStart);
   lastWeekStart.setDate(lastWeekStart.getDate() - 7);
   const lastWeekEnd = new Date(weekStart);
-  
+
   const lastWeekRuns = filteredRuns.filter(r => {
     const runDate = new Date(r.date || r.created_at);
     return runDate >= lastWeekStart && runDate < lastWeekEnd;
@@ -274,18 +274,18 @@ function PersonalStats({ runs, activityType, t }) {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const label = activityType === 'run' 
-    ? getText('tracker.stats.runs', 'løb') 
+  const label = activityType === 'run'
+    ? getText('tracker.stats.runs', 'løb')
     : getText('tracker.stats.walks', 'gåture');
 
   return (
     <View style={ps.container}>
       <Text style={ps.title}>
-        {activityType === 'run' 
-          ? `🏃 ${getText('tracker.stats.yourProgress', 'Din fremgang')}` 
+        {activityType === 'run'
+          ? `🏃 ${getText('tracker.stats.yourProgress', 'Din fremgang')}`
           : `🚶 ${getText('tracker.stats.yourProgress', 'Din fremgang')}`}
       </Text>
-      
+
       <View style={ps.weekCard}>
         <View style={ps.weekHeader}>
           <Text style={ps.weekTitle}>{getText('tracker.stats.thisWeek', 'Denne uge')}</Text>
@@ -376,7 +376,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   const [gpsError, setGpsError] = useState('');
   const [gpsPoints, setGpsPoints] = useState(0);
   const [filteredPoints, setFilteredPoints] = useState(0);
-  
+
   const watchSubscriptionRef = useRef(null);
   const intervalRef = useRef(null);
   const startTimeRef = useRef(null);
@@ -456,11 +456,14 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   // ─── KEEPALIVE: prevent iOS from killing app when swiped away during tracking ────────
   // On iOS, swiping the app away while tracking can terminate the process even with
   // UIBackgroundModes=location set, if there is no active foreground service.
-  // Playing a silent audio session keeps the app process alive.
-  // We use expo-av if available, otherwise fall back to a no-op.
+  // Playing a (near-)silent looping audio session keeps the app process alive.
+  // IMPORTANT: the audio must ACTUALLY play (shouldPlay: true). A session that is
+  // configured but never plays does NOT keep the process alive — that was the bug.
+  // We bundle a local silent asset so this never depends on the network.
   useEffect(() => {
     if (isWeb || !isTracking || isPaused) return;
     let audioObj = null;
+    let cancelled = false;
     const startSilentAudio = async () => {
       try {
         const { Audio } = require('expo-av');
@@ -468,25 +471,38 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
           playsInSilentModeIOS: true,
           staysActiveInBackground: true,
           shouldDuckAndroid: false,
+          interruptionModeIOS: 0, // MixWithOthers — don't stop the user's music
+          interruptionModeAndroid: 1,
         });
+        // Local bundled silent loop — no network dependency.
         const { sound } = await Audio.Sound.createAsync(
-          { uri: 'https://www.soundjay.com/misc/sounds/silence.mp3' },
-          { isLooping: true, volume: 0.01, shouldPlay: false }
+          require('../../assets/silence.mp3'),
+          { isLooping: true, volume: 0.0, shouldPlay: true }
         );
+        if (cancelled) {
+          await sound.unloadAsync().catch(() => {});
+          return;
+        }
         audioObj = sound;
-        // We don't actually play audio — just setting the mode keeps the session alive
+        // Actually start playback so the audio session stays active in background.
+        await sound.playAsync().catch(() => {});
+        console.log('[Keepalive] Silent audio session active');
       } catch (e) {
-        // expo-av not available or error — silently continue
+        // expo-av not available or asset missing — silently continue.
         console.log('[Keepalive] Audio session not available:', e.message);
       }
     };
     startSilentAudio();
     return () => {
-      if (audioObj) audioObj.unloadAsync().catch(() => {});
+      cancelled = true;
+      if (audioObj) {
+        audioObj.stopAsync().catch(() => {});
+        audioObj.unloadAsync().catch(() => {});
+      }
     };
   }, [isTracking, isPaused]);
 
-// ─── PERIODIC CHECK FOR BACKGROUND LOCATIONS ────────────────────────────
+  // ─── PERIODIC CHECK FOR BACKGROUND LOCATIONS ────────────────────────────
   // Drain BG buffer regularly. When app is active we DEDUPE against the last
   // foreground timestamp (instead of throwing all BG points away), so we never
   // lose distance during the transition foreground→background→foreground.
@@ -525,53 +541,52 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     if (!fromBackground) {
       lastForegroundTimestampRef.current = newPos.timestamp;
     }
-    
+
     const lastPos = lastValidPositionRef.current;
-    
+
     if (lastPos) {
       const dist = calculateDistance(lastPos.latitude, lastPos.longitude, newPos.latitude, newPos.longitude);
       const timeDiff = Math.max(0.1, (newPos.timestamp - lastPos.timestamp) / 1000);
       const speedMs = dist / timeDiff;
       const speedKmh = speedMs * 3.6;
       const accuracy = newPos.accuracy || 15;
-      
-            // ── GPS FILTERING ────────────────────────────────────────────────────────────
-        // When the screen is locked, iOS/Android GPS batches updates with
-        // larger time gaps and worse reported accuracy. We use generous but
-        // physically-sane limits so we don’t silently throw away real movement.
-        const MIN_DISTANCE = 1;           // ignore sub-1m jitter
-        const MAX_SPEED_KMH = 60;         // covers edge-case GPS spikes; real runners won’t hit this
-        // Screen-locked points often report 80-150 m accuracy on battery-saving GPS.
-        // We let anything up to 120 m through for background, 100 m for foreground
-        // (foreground-with-locked-screen still sends fromBackground=false).
-        const MAX_ACCURACY = fromBackground ? 120 : 100;
-        // Dynamic jump limit: allow up to speed×time + 40 m safety buffer.
-        // E.g. 30 s between BG samples at 12 km/h → 100 m + 40 = 140 m allowed.
-        const MAX_SINGLE_JUMP = Math.max(120, (MAX_SPEED_KMH / 3.6) * timeDiff + 40);
 
-        const isMinDistance = dist >= MIN_DISTANCE;
+      // ── GPS FILTERING ────────────────────────────────────────────────────────────
+      // Tightened so the recorded route actually follows roads/paths instead of
+      // drawing long straight lines between inaccurate fixes.
+      const MIN_DISTANCE = 1;        // ignore sub-1m jitter
+      const MAX_SPEED_KMH = 60;      // covers edge-case GPS spikes; real runners won't hit this
+      // Reject low-quality fixes. Phone GPS on a clear sky is typically 5-15m.
+      // Anything worse than ~25-35m produces the "cuts across buildings" artefact.
+      // We allow a little more slack for background (battery-saver) points.
+      const MAX_ACCURACY = fromBackground ? 35 : 25;
+      // Dynamic jump limit: allow up to speed×time + 25 m safety buffer, min 60 m.
+      // Much tighter than before (was 120 m) so a single bad fix can't fling the line.
+      const MAX_SINGLE_JUMP = Math.max(60, (MAX_SPEED_KMH / 3.6) * timeDiff + 25);
+
+      const isMinDistance = dist >= MIN_DISTANCE;
       const isNotTeleport = dist <= MAX_SINGLE_JUMP;
       const isReasonableSpeed = speedKmh <= MAX_SPEED_KMH;
       const isAccurate = accuracy <= MAX_ACCURACY;
 
       const isValidPoint = isMinDistance && isNotTeleport && isReasonableSpeed && isAccurate;
-      
+
       if (isValidPoint) {
         const newDistance = distanceRef.current + dist;
         distanceRef.current = newDistance;
         setDistance(newDistance);
-        
+
         const posWithData = {
           ...newPos,
           speed: speedKmh,
           segmentDistance: dist,
           isRunning: speedKmh >= 9, // speed-based only; BG points have real speed data
         };
-        
+
         positionsRef.current = [...positionsRef.current, posWithData];
         setPositions(positionsRef.current);
         lastValidPositionRef.current = newPos;
-        
+
         console.log(`✓ GPS: +${dist.toFixed(1)}m = ${(newDistance/1000).toFixed(3)}km | ${speedKmh.toFixed(1)}km/h | acc:${accuracy.toFixed(0)}m`);
       } else {
         setFilteredPoints(prev => prev + 1);
@@ -583,16 +598,16 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         console.log(`✗ GPS filtered: ${dist.toFixed(1)}m, ${speedKmh.toFixed(1)}km/h, acc:${accuracy.toFixed(0)}m [${reasons.join(', ')}]`);
       }
     } else {
-              // Første position - kraev god accuracy fra start (ellers springer GPS rundt senere)
-        const accuracy = newPos.accuracy || 15;
-        if (accuracy <= 50) {
+      // Første position - kraev god accuracy fra start (ellers springer GPS rundt senere)
+      const accuracy = newPos.accuracy || 15;
+      if (accuracy <= 30) {
         const firstPos = { ...newPos, speed: 0, segmentDistance: 0, isRunning: false };
         positionsRef.current = [firstPos];
         setPositions([firstPos]);
         lastValidPositionRef.current = newPos;
         console.log(`✓ GPS: First position recorded, acc:${accuracy.toFixed(0)}m`);
       } else {
-        console.log(`✗ GPS: First position rejected, acc:${accuracy.toFixed(0)}m too poor (need <= 50m)`);
+        console.log(`✗ GPS: First position rejected, acc:${accuracy.toFixed(0)}m too poor (need <= 30m)`);
       }
     }
   };
@@ -671,12 +686,12 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     setGpsPoints(0);
     setFilteredPoints(0);
     startTimeRef.current = Date.now() - (duration * 1000);
-    
+
     // Reset refs
     positionsRef.current = positions;
     lastValidPositionRef.current = null;
     distanceRef.current = distance;
-    
+
     const token = getAuthToken();
     setVoiceAuthToken(token);
     const bestPace = (runs || []).filter(r => r.pace > 0 && r.km > 0.5).reduce((best, r) => (!best || r.pace < best) ? r.pace : best, null);
@@ -690,7 +705,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       bestKm,
       targetKm,
     });
-    
+
     intervalRef.current = setInterval(() => {
       const elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000);
       setDuration(elapsed);
@@ -735,7 +750,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       }
       return;
     }
-    
+
     if (isWeb && typeof navigator !== 'undefined' && navigator.geolocation) {
       watchSubscriptionRef.current = navigator.geolocation.watchPosition(
         (position) => {
@@ -756,7 +771,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       );
       return;
     }
-    
+
     setGpsStatus('error');
     setGpsError(t('tracker.gps.notAvailable'));
   };
@@ -801,7 +816,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     if (!isWeb && Location) {
       await startBackgroundLocationTracking();
       watchSubscriptionRef.current = await Location.watchPositionAsync(
-          { accuracy: Location.Accuracy.BestForNavigation, timeInterval: 1000, distanceInterval: 2 },       (location) => {
+        { accuracy: Location.Accuracy.BestForNavigation, timeInterval: 1000, distanceInterval: 2 }, (location) => {
           (handlePositionUpdateRef.current || handlePositionUpdate)({
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
@@ -832,38 +847,38 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     stopGpsWatch();
     await stopBackgroundLocationTracking();
     processBackgroundLocations();
-    
+
     setIsTracking(false);
 
-const km = parseFloat((distance / 1000).toFixed(2));
-const paceMinPerKm = km > 0 ? (duration / 60) / km : 0;
+    const km = parseFloat((distance / 1000).toFixed(2));
+    const paceMinPerKm = km > 0 ? (duration / 60) / km : 0;
 
-// ─── BEREGN KALORIER (kcal = MET × kg × timer) ─────────────────────────
-const weightKg = parseFloat(profile?.weight_kg || profile?.weight) || 70; // fallback 70 kg
-const hours = duration / 3600;
-// MET-værdier: gå ~3.5, jog ~7, løb ~9.8, hurtigt løb ~11.5
-let met;
-const speedKmh = (duration > 0 && km > 0) ? (km / (duration / 3600)) : 0;
+    // ─── BEREGN KALORIER (kcal = MET × kg × timer) ─────────────────────────
+    const weightKg = parseFloat(profile?.weight_kg || profile?.weight) || 70; // fallback 70 kg
+    const hours = duration / 3600;
+    // MET-værdier: gå ~3.5, jog ~7, løb ~9.8, hurtigt løb ~11.5
+    let met;
+    const speedKmh = (duration > 0 && km > 0) ? (km / (duration / 3600)) : 0;
 
-if (activityType === 'walk') {
-  met = 3.5;
-} else if (activityType === 'bike') {
-  // Cykling MET baseret paa hastighed (km/t)
-  if (speedKmh < 16) met = 4.0;        // afslappet
-  else if (speedKmh < 19) met = 6.8;   // moderat
-  else if (speedKmh < 22) met = 8.0;   // raskt
-  else if (speedKmh < 25) met = 10.0;  // hurtigt
-  else if (speedKmh < 30) met = 12.0;  // racer-tempo
-  else met = 15.8;                      // race
-} else {
-  // Loeb: brug pace til at vurdere intensitet
-  if (paceMinPerKm > 0 && paceMinPerKm < 5) met = 11.5;
-  else if (paceMinPerKm > 0 && paceMinPerKm < 6) met = 9.8;
-  else if (paceMinPerKm > 0 && paceMinPerKm < 7) met = 8.3;
-  else met = 7.0;
-}
-const calories = Math.round(met * weightKg * hours);
-console.log('Calories: ' + calories + ' kcal (MET=' + met + ', weight=' + weightKg + 'kg, hours=' + hours.toFixed(2) + ')');
+    if (activityType === 'walk') {
+      met = 3.5;
+    } else if (activityType === 'bike') {
+      // Cykling MET baseret paa hastighed (km/t)
+      if (speedKmh < 16) met = 4.0;        // afslappet
+      else if (speedKmh < 19) met = 6.8;   // moderat
+      else if (speedKmh < 22) met = 8.0;   // raskt
+      else if (speedKmh < 25) met = 10.0;  // hurtigt
+      else if (speedKmh < 30) met = 12.0;  // racer-tempo
+      else met = 15.8;                     // race
+    } else {
+      // Loeb: brug pace til at vurdere intensitet
+      if (paceMinPerKm > 0 && paceMinPerKm < 5) met = 11.5;
+      else if (paceMinPerKm > 0 && paceMinPerKm < 6) met = 9.8;
+      else if (paceMinPerKm > 0 && paceMinPerKm < 7) met = 8.3;
+      else met = 7.0;
+    }
+    const calories = Math.round(met * weightKg * hours);
+    console.log('Calories: ' + calories + ' kcal (MET=' + met + ', weight=' + weightKg + 'kg, hours=' + hours.toFixed(2) + ')');
 
     if (voiceCoachRef.current) {
       voiceCoachRef.current.finish({ km, durationSecs: duration, paceMinPerKm });
@@ -888,32 +903,32 @@ console.log('Calories: ' + calories + ' kcal (MET=' + met + ', weight=' + weight
 
     console.log(`Final: ${km}km (run:${runningKm}, walk:${walkingKm}), ${gpsPoints} GPS pts, ${filteredPoints} filtered`);
 
-const runData = {
-  km,
-  duration,
-  pace: paceMinPerKm,
-  heart_rate: null,
-  calories,
-  route,
-  notes: null,
-  type: (activityType === 'walk') ? 'walk' : (runningKm >= walkingKm ? 'run' : 'walk'),
-  date: new Date().toISOString(),
-  running_km: runningKm,
-  walking_km: walkingKm,
-};
+    const runData = {
+      km,
+      duration,
+      pace: paceMinPerKm,
+      heart_rate: null,
+      calories,
+      route,
+      notes: null,
+      type: (activityType === 'walk') ? 'walk' : (runningKm >= walkingKm ? 'run' : 'walk'),
+      date: new Date().toISOString(),
+      running_km: runningKm,
+      walking_km: walkingKm,
+    };
 
-// Bike-payload til /activities endpoint
-const bikePayload = {
-  type: 'bike',
-  started_at: new Date(Date.now() - duration * 1000).toISOString(),
-  duration_sec: duration,
-  calories_kcal: calories,
-  distance_m: Math.round(km * 1000),
-  avg_speed_kmh: speedKmh > 0 ? parseFloat(speedKmh.toFixed(2)) : null,
-  max_speed_kmh: null,
-  gps_polyline: route.length > 0 ? JSON.stringify(route) : null,
-  source: 'app',
-};
+    // Bike-payload til /activities endpoint
+    const bikePayload = {
+      type: 'bike',
+      started_at: new Date(Date.now() - duration * 1000).toISOString(),
+      duration_sec: duration,
+      calories_kcal: calories,
+      distance_m: Math.round(km * 1000),
+      avg_speed_kmh: speedKmh > 0 ? parseFloat(speedKmh.toFixed(2)) : null,
+      max_speed_kmh: null,
+      gps_polyline: route.length > 0 ? JSON.stringify(route) : null,
+      source: 'app',
+    };
 
     try {
       const token = getAuthToken();
@@ -927,7 +942,7 @@ const bikePayload = {
           body: JSON.stringify(body),
         });
 
-// Check for limit_exceeded (Free tier)
+        // Check for limit_exceeded (Free tier)
         if (res.status === 403) {
           const errData = await res.json().catch(() => ({}));
           if (errData.error === 'limit_exceeded') {
@@ -983,8 +998,8 @@ const bikePayload = {
     if (hrs > 0) return `${hrs}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
-  
-const formatPace = () => {
+
+  const formatPace = () => {
     if (distance < 10) return '--:--';
     const paceInSeconds = duration / (distance / 1000);
     const mins = Math.floor(paceInSeconds / 60);
@@ -1037,7 +1052,7 @@ const formatPace = () => {
       {!isTracking && runs && runs.length > 0 && activityType !== 'bike' && (
         <PersonalStats runs={runs} activityType={activityType} t={t} />
       )}
-      
+
       {isTracking && (
         <Text style={[
           s.gpsStatus,
@@ -1050,7 +1065,7 @@ const formatPace = () => {
            gpsStatus === 'waiting' ? `⏳ ${t('tracker.gps.waiting')}` : ''}
         </Text>
       )}
-      
+
       <View style={s.statsContainer}>
         <View style={s.statBox}>
           <Text style={s.statValue}>{(distance / 1000).toFixed(2)}</Text>
@@ -1065,11 +1080,11 @@ const formatPace = () => {
           <Text style={s.statLabel}>{activityType === 'bike' ? 'KM/T' : 'MIN/KM'}</Text>
         </View>
       </View>
-      
+
       <View style={s.mapContainer}>
         <TrackerMap positions={positions} currentPosition={currentPosition} t={t} />
       </View>
-      
+
       <View style={s.controls}>
         {!isTracking ? (
           <TouchableOpacity style={[s.btn, s.btnStart]} onPress={startTracking}>
