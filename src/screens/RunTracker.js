@@ -457,13 +457,17 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   // On iOS, swiping the app away while tracking can terminate the process even with
   // UIBackgroundModes=location set, if there is no active foreground service.
   // Playing a (near-)silent looping audio session keeps the app process alive.
-  // IMPORTANT: the audio must ACTUALLY play (shouldPlay: true). A session that is
-  // configured but never plays does NOT keep the process alive — that was the bug.
   // We bundle a local silent asset so this never depends on the network.
+  // NOTE: this effect is written to be race-safe — if the user swipes the app away
+  // the instant tracking starts, the cleanup must still find and dispose the sound
+  // even if createAsync() hasn't resolved yet. Otherwise a half-created sound is
+  // orphaned while the audio session tears down, which crashed the app intermittently.
   useEffect(() => {
     if (isWeb || !isTracking || isPaused) return;
-    let audioObj = null;
     let cancelled = false;
+    // Hold the sound in a closure var that cleanup can always see.
+    let soundRef = null;
+
     const startSilentAudio = async () => {
       try {
         const { Audio } = require('expo-av');
@@ -472,30 +476,37 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
           staysActiveInBackground: true,
           shouldDuckAndroid: false,
         });
-        // Local bundled silent loop — no network dependency.
+        if (cancelled) return; // unmounted during setAudioModeAsync — bail out
+        // Local bundled silent loop. shouldPlay:true makes createAsync start playback
+        // itself, so we must NOT call playAsync() again afterwards (double-start crash).
         const { sound } = await Audio.Sound.createAsync(
           require('../../assets/silence.mp3'),
           { isLooping: true, volume: 0.0, shouldPlay: true }
         );
+        soundRef = sound;
+        // If we were cancelled while createAsync was resolving, dispose immediately.
         if (cancelled) {
           await sound.unloadAsync().catch(() => {});
+          soundRef = null;
           return;
         }
-        audioObj = sound;
-        // Actually start playback so the audio session stays active in background.
-        await sound.playAsync().catch(() => {});
         console.log('[Keepalive] Silent audio session active');
       } catch (e) {
         // expo-av not available or asset missing — silently continue.
-        console.log('[Keepalive] Audio session not available:', e.message);
+        console.log('[Keepalive] Audio session not available:', e && e.message);
       }
     };
     startSilentAudio();
+
     return () => {
       cancelled = true;
-      if (audioObj) {
-        audioObj.stopAsync().catch(() => {});
-        audioObj.unloadAsync().catch(() => {});
+      // Dispose whatever exists, guarding every async call so a fast unmount
+      // never throws or leaves an orphaned sound instance.
+      if (soundRef) {
+        const s = soundRef;
+        soundRef = null;
+        s.stopAsync().catch(() => {});
+        s.unloadAsync().catch(() => {});
       }
     };
   }, [isTracking, isPaused]);
