@@ -471,8 +471,6 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
           playsInSilentModeIOS: true,
           staysActiveInBackground: true,
           shouldDuckAndroid: false,
-          interruptionModeIOS: 0, // MixWithOthers — don't stop the user's music
-          interruptionModeAndroid: 1,
         });
         // Local bundled silent loop — no network dependency.
         const { sound } = await Audio.Sound.createAsync(
