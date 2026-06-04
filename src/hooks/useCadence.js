@@ -1,159 +1,132 @@
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { Platform } from 'react-native';
+import { Pedometer } from 'expo-sensors';
+
 /**
- * useCadence.js — React hook for real-time cadence detection
- *
- * Uses expo-sensors Accelerometer as primary source,
- * falls back to pace-based estimation.
+ * useCadence
+ * Uses the native step counter (Core Motion / CMPedometer on iOS) as the
+ * primary source for cadence (steps per minute). This is power-efficient and
+ * handled by the device motion coprocessor, so it does NOT keep the JS thread
+ * awake or pressure memory in the background the way the raw Accelerometer did.
+ * Falls back to a pace-based estimation when the pedometer is unavailable.
  * Starts with a default BPM so music matching works immediately.
  */
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { Platform } from 'react-native';
-import {
-  paceToСadence,
-  cadenceToBpmRange,
-} from '../utils/cadenceEstimator';
+// Typical running cadence ~150-185 spm; walking ~90-120 spm.
+const DEFAULT_BPM = 160;
 
-// Try to import Accelerometer — may not be available on web
-let Accelerometer = null;
-let AccelerometerCadenceDetector = null;
-try {
-  const sensors = require('expo-sensors');
-  Accelerometer = sensors.Accelerometer;
-  const estimator = require('../utils/cadenceEstimator');
-  AccelerometerCadenceDetector = estimator.AccelerometerCadenceDetector;
-} catch (e) {
-  console.log('[useCadence] expo-sensors not available, using pace fallback');
+function estimateFromPace(currentPaceSecondsPerKm, activityType) {
+  // Rough cadence estimate from pace when no sensor data is available.
+  if (!currentPaceSecondsPerKm || currentPaceSecondsPerKm <= 0) {
+    return DEFAULT_BPM;
+  }
+  const minPerKm = currentPaceSecondsPerKm / 60;
+  // Faster pace -> higher cadence. Clamp to a sane range.
+  let bpm;
+  if (activityType === 'walk') {
+    bpm = 130 - (minPerKm - 8) * 4;
+    bpm = Math.max(90, Math.min(135, bpm));
+  } else {
+    bpm = 185 - (minPerKm - 4) * 8;
+    bpm = Math.max(150, Math.min(190, bpm));
+  }
+  return Math.round(bpm);
 }
 
-const ACCELEROMETER_UPDATE_INTERVAL = 16; // ~60Hz
-
-// Default cadences for immediate music matching
-const DEFAULT_CADENCE = {
-  run: 165, // typical running cadence
-  walk: 110, // typical walking cadence
-};
-
 export default function useCadence({ currentPaceSecondsPerKm, isRunning = false, activityType = 'run' }) {
-  const defaultCadence = DEFAULT_CADENCE[activityType] || DEFAULT_CADENCE.run;
-  const [cadence, setCadence] = useState(defaultCadence);
-  const [bpmRange, setBpmRange] = useState(cadenceToBpmRange(defaultCadence));
-  const [source, setSource] = useState('none'); // 'accelerometer' | 'pace' | 'default' | 'none'
+  const [cadence, setCadence] = useState(DEFAULT_BPM);
+  const [bpmRange, setBpmRange] = useState([DEFAULT_BPM - 5, DEFAULT_BPM + 5]);
+  const [source, setSource] = useState('none');
 
-  const detectorRef = useRef(AccelerometerCadenceDetector ? new AccelerometerCadenceDetector() : null);
   const subscriptionRef = useRef(null);
+  const lastSampleRef = useRef(null); // { steps, timestamp }
   const fallbackIntervalRef = useRef(null);
 
-  // Update BPM range whenever cadence changes
-  useEffect(() => {
-    if (cadence > 0) {
-      setBpmRange(cadenceToBpmRange(cadence));
+  const cleanup = useCallback(() => {
+    if (subscriptionRef.current) {
+      try { subscriptionRef.current.remove(); } catch (e) {}
+      subscriptionRef.current = null;
     }
-  }, [cadence]);
-
-  // Set default cadence when run starts
-  useEffect(() => {
-    if (isRunning) {
-      setCadence(defaultCadence);
-      setBpmRange(cadenceToBpmRange(defaultCadence));
-      setSource('default');
+    if (fallbackIntervalRef.current) {
+      clearInterval(fallbackIntervalRef.current);
+      fallbackIntervalRef.current = null;
     }
-  }, [isRunning, defaultCadence]);
-
-  // Try to start accelerometer
-  const startAccelerometer = useCallback(async () => {
-    if (!Accelerometer || !detectorRef.current) return false;
-
-    try {
-      const available = await Accelerometer.isAvailableAsync();
-      if (!available) {
-        console.log('[useCadence] Accelerometer not available, using pace fallback');
-        return false;
-      }
-
-      Accelerometer.setUpdateInterval(ACCELEROMETER_UPDATE_INTERVAL);
-
-      const detector = detectorRef.current;
-      detector.reset();
-      detector.onCadenceUpdate(({ cadence: c }) => {
-        if (c > 0) {
-          setCadence(c);
-          setSource('accelerometer');
-        }
-      });
-
-      subscriptionRef.current = Accelerometer.addListener((data) => {
-        detector.processReading(data, performance.now());
-      });
-
-      return true;
-    } catch (err) {
-      console.warn('[useCadence] Accelerometer error:', err);
-      return false;
-    }
+    lastSampleRef.current = null;
   }, []);
 
-  // Pace-based fallback
-  const startPaceFallback = useCallback(() => {
-    setSource((prev) => prev === 'accelerometer' ? prev : 'pace');
+  // Pace-based fallback updater (used when pedometer is unavailable).
+  const startFallback = useCallback(() => {
+    if (fallbackIntervalRef.current) return;
+    setSource('pace');
+    const tick = () => {
+      const bpm = estimateFromPace(currentPaceSecondsPerKm, activityType);
+      setCadence(bpm);
+      setBpmRange([bpm - 5, bpm + 5]);
+    };
+    tick();
+    fallbackIntervalRef.current = setInterval(tick, 3000);
+  }, [currentPaceSecondsPerKm, activityType]);
 
-    // Update cadence every 3 seconds from pace
-    fallbackIntervalRef.current = setInterval(() => {
-      if (currentPaceSecondsPerKm && currentPaceSecondsPerKm > 0) {
-        const estimated = paceToСadence(currentPaceSecondsPerKm);
-        if (estimated > 0) {
-          setCadence(estimated);
-          setSource('pace');
-        }
-      }
-    }, 3000);
-  }, [currentPaceSecondsPerKm]);
-
-  // Start/stop based on isRunning
   useEffect(() => {
+    let cancelled = false;
+
     if (!isRunning) {
-      // Cleanup
-      if (subscriptionRef.current) {
-        subscriptionRef.current.remove();
-        subscriptionRef.current = null;
-      }
-      if (fallbackIntervalRef.current) {
-        clearInterval(fallbackIntervalRef.current);
-        fallbackIntervalRef.current = null;
-      }
-      if (detectorRef.current) detectorRef.current.reset();
-      setSource('none');
+      cleanup();
       return;
     }
 
-    // Start detection
-    (async () => {
-      const accelStarted = await startAccelerometer();
-      // Always start pace fallback too — it upgrades the default BPM as pace data comes in
-      startPaceFallback();
-    })();
-
-    return () => {
-      if (subscriptionRef.current) {
-        subscriptionRef.current.remove();
-        subscriptionRef.current = null;
+    const start = async () => {
+      let available = false;
+      try {
+        available = await Pedometer.isAvailableAsync();
+      } catch (e) {
+        available = false;
       }
-      if (fallbackIntervalRef.current) {
-        clearInterval(fallbackIntervalRef.current);
-        fallbackIntervalRef.current = null;
+      if (cancelled) return;
+
+      if (!available) {
+        // No native step counter -> use pace-based estimate.
+        startFallback();
+        return;
+      }
+
+      // Subscribe to live step updates from the native motion coprocessor.
+      // watchStepCount reports cumulative steps since subscription start.
+      lastSampleRef.current = { steps: 0, timestamp: Date.now() };
+      try {
+        subscriptionRef.current = Pedometer.watchStepCount((result) => {
+          const now = Date.now();
+          const totalSteps = (result && typeof result.steps === 'number') ? result.steps : 0;
+          const prev = lastSampleRef.current;
+          if (!prev) {
+            lastSampleRef.current = { steps: totalSteps, timestamp: now };
+            return;
+          }
+          const deltaSteps = totalSteps - prev.steps;
+          const deltaMs = now - prev.timestamp;
+          // Only update on a meaningful window to smooth the value.
+          if (deltaMs >= 2000 && deltaSteps >= 0) {
+            const spm = Math.round((deltaSteps / deltaMs) * 60000);
+            lastSampleRef.current = { steps: totalSteps, timestamp: now };
+            if (spm > 0) {
+              setSource('pedometer');
+              setCadence(spm);
+              setBpmRange([Math.max(0, spm - 5), spm + 5]);
+            }
+          }
+        });
+      } catch (e) {
+        startFallback();
       }
     };
-  }, [isRunning, startAccelerometer, startPaceFallback]);
 
-  // If using pace fallback, update when pace changes
-  useEffect(() => {
-    if ((source === 'pace' || source === 'default') && currentPaceSecondsPerKm > 0) {
-      const estimated = paceToСadence(currentPaceSecondsPerKm);
-      if (estimated > 0) {
-        setCadence(estimated);
-        setSource('pace');
-      }
-    }
-  }, [currentPaceSecondsPerKm, source]);
+    start();
+
+    return () => {
+      cancelled = true;
+      cleanup();
+    };
+  }, [isRunning, activityType, startFallback, cleanup]);
 
   return {
     cadence,
