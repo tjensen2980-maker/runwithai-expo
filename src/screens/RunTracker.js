@@ -685,6 +685,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
 
     try {
       const { status: bgStatus } = await Location.requestBackgroundPermissionsAsync();
+      if (global._dbg) global._dbg('BG-perm status: ' + bgStatus);
       if (bgStatus !== 'granted') {
         console.log('Background location permission denied');
         return false;
@@ -698,6 +699,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       global._backgroundLocations = [];
       global._isBackgroundTracking = true;
 
+      if (global._dbg) global._dbg('Kalder startLocationUpdatesAsync NU');
       await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, {
         accuracy: Location.Accuracy.BestForNavigation,
         timeInterval: 1000,
