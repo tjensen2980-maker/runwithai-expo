@@ -706,8 +706,8 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         distanceInterval: 1,
         // Deferred updates: let OS batch points every 5 m / 1 s — reduces wake-ups
         // without losing distance precision.
-        deferredUpdatesInterval: 1000,
-        deferredUpdatesDistance: 5,
+        deferredUpdatesInterval: 0,
+        deferredUpdatesDistance: 0,
         showsBackgroundLocationIndicator: true,
         foregroundService: {
           notificationTitle: 'RunWithAI',
@@ -718,7 +718,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         // background tracking silently stops mid-run.
         pausesUpdatesAutomatically: false,
         // OtherNavigation: less aggressive batching than Fitness mode.
-        activityType: Location.ActivityType.OtherNavigation,
+        activityType: Location.ActivityType.Fitness,
       });
 
       console.log('Background tracking started');
