@@ -684,8 +684,13 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     if (isWeb || !Location || !TaskManager) return false;
 
     try {
-      const { status: bgStatus } = await Location.requestBackgroundPermissionsAsync();
-      if (global._dbg) global._dbg('BG-perm status: ' + bgStatus);
+      let bgPerm = await Location.getBackgroundPermissionsAsync();
+      let bgStatus = bgPerm.status;
+      if (bgStatus !== 'granted') {
+        const req = await Location.requestBackgroundPermissionsAsync();
+        bgStatus = req.status;
+      }
+      if (global._dbg) global._dbg('BG-perm status: ' + bgStatus + ' scope: ' + (bgPerm.ios && bgPerm.ios.scope));
       if (bgStatus !== 'granted') {
         console.log('Background location permission denied');
         return false;
