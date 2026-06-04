@@ -470,18 +470,22 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
 
     const startSilentAudio = async () => {
       try {
-        const { Audio } = require('expo-av');
+        const { Audio, InterruptionModeIOS, InterruptionModeAndroid } = require('expo-av');
         await Audio.setAudioModeAsync({
           playsInSilentModeIOS: true,
           staysActiveInBackground: true,
           shouldDuckAndroid: false,
+          // iOS suspenderer en afbrydelig lydsession i baggrunden, hvilket
+          // stopper location efter ~30-60s. DoNotMix holder sessionen aktiv.
+          interruptionModeIOS: InterruptionModeIOS.DoNotMix,
+          interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
         });
         if (cancelled) return; // unmounted during setAudioModeAsync — bail out
         // Local bundled silent loop. shouldPlay:true makes createAsync start playback
         // itself, so we must NOT call playAsync() again afterwards (double-start crash).
         const { sound } = await Audio.Sound.createAsync(
           require('../../assets/silence.mp3'),
-          { isLooping: true, volume: 0.0, shouldPlay: true }
+          { isLooping: true, volume: 0.01, shouldPlay: true }
         );
         soundRef = sound;
         // If we were cancelled while createAsync was resolving, dispose immediately.
