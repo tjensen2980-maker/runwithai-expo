@@ -63,7 +63,7 @@ global._dbg = (msg) => {
     const ts = new Date().toLocaleTimeString('da-DK', { hour12: false });
     global._dbgLog.push(ts + '  ' + msg);
     if (global._dbgLog.length > 60) { global._dbgLog.shift(); }
-    try { AsyncStorageLib.setItem('_dbgLog', JSON.stringify(global._dbgLog)); } catch (e) {}
+    try { var _now = Date.now(); if (!global._dbgLastSave || _now - global._dbgLastSave > 3000) { global._dbgLastSave = _now; AsyncStorageLib.setItem('_dbgLog', JSON.stringify(global._dbgLog)); } } catch (e) {}
   } catch (e) {}
 };
 TaskManager.defineTask(BACKGROUND_LOCATION_TASK, ({ data, error }) => {
