@@ -468,30 +468,29 @@ export default function App() {
   };
 
   // Init token from AsyncStorage before loading data
-  useEffect(() => {
-    initAuthToken().then(() => {
-      const savedToken = getAuthToken();
-      if (savedToken) {
-        fetch(`${SERVER}/profile`, {
-          headers: { Authorization: `Bearer ${savedToken}`, 'Content-Type': 'application/json' }
-        }).then(r => {
-          if (r.ok) { setAuthToken(savedToken); setUser({ token: savedToken }); syncAuthToWatch(savedToken, 'user'); }
-          else if (r.status === 401 || r.status === 403) {
-            // Only log out on real auth errors, not server/network errors
-            setAuthToken(null); setLoading(false);
-          } else {
-            // Server error or timeout — keep session, retry later
-            setLoading(false);
-          }
-        }).catch(() => {
-          // Network error — keep session alive, user can retry
-          setLoading(false);
-        });
-      } else {
-        setLoading(false);
-      }
-    });
-  }, []);
+useEffect(() => {
+  initAuthToken().then(() => {
+    const savedToken = getAuthToken();
+    if (savedToken) {
+      setAuthToken(savedToken);
+      setUser({ token: savedToken });
+      syncAuthToWatch(savedToken, 'user');
+      setLoading(false);
+      fetch(`${SERVER}/profile`, {
+        headers: { Authorization: `Bearer ${savedToken}`, 'Content-Type': 'application/json' }
+      }).then(r => {
+        if (r.status === 401 || r.status === 403) {
+          setAuthToken(null);
+          setUser(null);
+        }
+      }).catch(() => {});
+    } else {
+      setLoading(false);
+    }
+  }).catch(() => {
+    setLoading(false);
+  });
+}, []);
 
   useEffect(() => { if (user) loadData(); }, [user]);
 
