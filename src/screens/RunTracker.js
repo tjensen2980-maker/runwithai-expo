@@ -131,7 +131,7 @@ function NativeTrackerMap({ positions, currentPosition, t }) {
     >
       {positions.length > 1 && (
         <Polyline
-          coordinates={positions.map(p => ({ latitude: p.latitude, longitude: p.longitude }))}
+          coordinates={positions.slice(-300).map(p => ({ latitude: p.latitude, longitude: p.longitude }))}
           strokeColor={colors.accent}
           strokeWidth={4}
         />
@@ -371,6 +371,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   const [distance, setDistance] = useState(0);
   const [duration, setDuration] = useState(0);
   const [positions, setPositions] = useState([]);
+  const [isForeground, setIsForeground] = useState(true); // pause heavy map when app is backgrounded
   const [currentPosition, setCurrentPosition] = useState(null);
   const [gpsStatus, setGpsStatus] = useState('idle');
   const [gpsError, setGpsError] = useState('');
@@ -448,6 +449,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         }
       }
       appStateRef.current = nextAppState;
+      setIsForeground(nextAppState === 'active');
     });
 
     return () => subscription?.remove();
@@ -1036,7 +1038,9 @@ const formatPace = () => {
       </View>
       
       <View style={s.mapContainer}>
+        {isForeground && (
         <TrackerMap positions={positions} currentPosition={currentPosition} t={t} />
+        )}
       </View>
       
       <View style={s.controls}>
