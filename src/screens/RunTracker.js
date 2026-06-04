@@ -465,6 +465,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   useEffect(() => {
     if (isWeb || !isTracking || isPaused) return;
     let cancelled = false;
+    let kaWatchdog = null;
     // Hold the sound in a closure var that cleanup can always see.
     let soundRef = null;
 
@@ -488,6 +489,20 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
           { isLooping: true, volume: 0.01, shouldPlay: true }
         );
         soundRef = sound;
+        // Watchdog: iOS can silently stop the keepalive audio session, which lets the
+        // app suspend and kills background GPS. Periodically re-assert playback.
+        if (kaWatchdog) { clearInterval(kaWatchdog); }
+        kaWatchdog = setInterval(async () => {
+          if (cancelled || !soundRef) { return; }
+          try {
+            const st = await soundRef.getStatusAsync();
+            if (st && st.isLoaded && !st.isPlaying) {
+              await soundRef.playAsync();
+            }
+          } catch (e) {
+            console.log('keepalive watchdog error', e);
+          }
+        }, 10000);
         // If we were cancelled while createAsync was resolving, dispose immediately.
         if (cancelled) {
           await sound.unloadAsync().catch(() => {});
@@ -507,6 +522,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       // Dispose whatever exists, guarding every async call so a fast unmount
       // never throws or leaves an orphaned sound instance.
       if (soundRef) {
+        if (kaWatchdog) { clearInterval(kaWatchdog); kaWatchdog = null; }
         const s = soundRef;
         soundRef = null;
         s.stopAsync().catch(() => {});
