@@ -525,12 +525,14 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
           try {
             const st = await soundRef.getStatusAsync();
             if (st && st.isLoaded && !st.isPlaying) {
+              try { await Audio.setAudioModeAsync({ playsInSilentMode: true, staysActiveInBackground: true, shouldDuckOthers: false }); } catch (e2) {}
               await soundRef.playAsync();
+              if (global._dbg) global._dbg('keepalive genstartet');
             }
           } catch (e) {
-            console.log('keepalive watchdog error', e);
+            console.log('keepalive watchdog error', e); if (global._dbg) global._dbg('keepalive FEJL');
           }
-        }, 10000);
+        }, 3000);
         // If we were cancelled while createAsync was resolving, dispose immediately.
         if (cancelled) {
           await sound.unloadAsync().catch(() => {});
