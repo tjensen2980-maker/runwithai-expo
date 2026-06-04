@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import AsyncStorageLib from '@react-native-async-storage/async-storage';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator, TextInput, Platform, AppState } from 'react-native';
 import { colors, SERVER, getAuthToken } from '../data';
 import VoiceCoach, { stopSpeaking, setVoiceAuthToken } from '../components/VoiceCoach';
@@ -59,6 +60,7 @@ global._dbg = (msg) => {
     const ts = new Date().toLocaleTimeString('da-DK', { hour12: false });
     global._dbgLog.push(ts + '  ' + msg);
     if (global._dbgLog.length > 60) { global._dbgLog.shift(); }
+    try { AsyncStorageLib.setItem('_dbgLog', JSON.stringify(global._dbgLog)); } catch (e) {}
   } catch (e) {}
 };
 TaskManager.defineTask(BACKGROUND_LOCATION_TASK, ({ data, error }) => {
@@ -378,6 +380,12 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   // DEBUG: refresh debug-panel ca. 1x/sek
   const [dbgTick, setDbgTick] = useState(0);
   useEffect(() => {
+    // Genindlaes gemt debug-log naar appen aabnes igen (overlever app-genstart)
+    AsyncStorageLib.getItem('_dbgLog').then((saved) => {
+      if (saved && (!global._dbgLog || global._dbgLog.length === 0)) {
+        try { global._dbgLog = JSON.parse(saved); } catch (e) {}
+      }
+    }).catch(() => {});
     const id = setInterval(() => setDbgTick(x => x + 1), 1000);
     return () => clearInterval(id);
   }, []);
