@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import AsyncStorageLib from '@react-native-async-storage/async-storage';
+// Core Motion / Bevaegelse & Fitness: holder iOS-baggrundssessionen i live under et loeb
+let Pedometer = null;
+try { Pedometer = require('expo-sensors').Pedometer; } catch (e) { console.log('expo-sensors not available'); }
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator, TextInput, Platform, AppState } from 'react-native';
 import { colors, SERVER, getAuthToken } from '../data';
 import VoiceCoach, { stopSpeaking, setVoiceAuthToken } from '../components/VoiceCoach';
@@ -671,6 +674,13 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   handlePositionUpdateRef.current = handlePositionUpdate;
 
   const startBackgroundLocationTracking = async () => {
+    // Aktivér Core Motion (Bevaegelse & Fitness) saa iOS behandler det som en aktiv traening
+    try {
+      if (Pedometer && Pedometer.watchStepCount && !global._motionSub) {
+        global._motionSub = Pedometer.watchStepCount(() => {});
+        if (global._dbg) global._dbg('Core Motion startet (pedometer)');
+      }
+    } catch (e) { if (global._dbg) global._dbg('Core Motion fejl: ' + (e && e.message)); }
     if (isWeb || !Location || !TaskManager) return false;
 
     try {
@@ -718,6 +728,10 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   };
 
   const stopBackgroundLocationTracking = async () => {
+    // Stop Core Motion-maaling
+    try {
+      if (global._motionSub) { global._motionSub.remove(); global._motionSub = null; if (global._dbg) global._dbg('Core Motion stoppet'); }
+    } catch (e) {}
     if (isWeb || !Location || !TaskManager) return;
 
     try {
