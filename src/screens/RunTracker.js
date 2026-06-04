@@ -52,7 +52,17 @@ if (!isWeb && typeof global !== 'undefined') {
 }
 
 if (!isWeb && TaskManager) {
-  TaskManager.defineTask(BACKGROUND_LOCATION_TASK, ({ data, error }) => {
+  // --- DEBUG LOG (midlertidig fejlsoegning af baggrunds-tracking) ---
+if (!global._dbgLog) { global._dbgLog = []; }
+global._dbg = (msg) => {
+  try {
+    const ts = new Date().toLocaleTimeString('da-DK', { hour12: false });
+    global._dbgLog.push(ts + '  ' + msg);
+    if (global._dbgLog.length > 60) { global._dbgLog.shift(); }
+  } catch (e) {}
+};
+TaskManager.defineTask(BACKGROUND_LOCATION_TASK, ({ data, error }) => {
+    global._dbg('BG-task fired (error=' + (error ? 'JA' : 'nej') + ')');
     if (error) {
       console.error('Background location error:', error);
       return;
@@ -365,6 +375,12 @@ const ps = StyleSheet.create({
 export default function RunTracker({ activityType = 'run', onBack, profile, level, weekPlan, nextWorkout, runs, onShowPricing }) {
   const { t } = useTranslation();
   const [isTracking, setIsTracking] = useState(false);
+  // DEBUG: refresh debug-panel ca. 1x/sek
+  const [dbgTick, setDbgTick] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setDbgTick(x => x + 1), 1000);
+    return () => clearInterval(id);
+  }, []);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const voiceCoachRef = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -431,6 +447,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     if (isWeb) return;
 
     const subscription = AppState.addEventListener('change', nextAppState => {
+      global._dbg('AppState -> ' + nextAppState);
       if (
         appStateRef.current.match(/inactive|background/) &&
         nextAppState === 'active'
@@ -561,6 +578,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   }, [isTracking, isPaused]);
 
   const handlePositionUpdate = (newPos, fromBackground = false) => {
+    global._dbg('pos-update modtaget');
     setGpsStatus('active');
     setCurrentPosition(newPos);
     setGpsPoints(prev => prev + 1);
@@ -1053,6 +1071,12 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
 
   return (
     <View style={s.container}>
+      {/* DEBUG PANEL (midlertidig) */}
+      <View pointerEvents="none" style={{ position: 'absolute', top: 40, left: 4, right: 4, zIndex: 9999, backgroundColor: 'rgba(0,0,0,0.75)', padding: 6, borderRadius: 6, maxHeight: 200 }}>
+        <Text style={{ color: '#0f0', fontSize: 9, fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace' }}>
+          {((global._dbgLog || []).slice(-14).join('\n')) + (dbgTick ? '' : '')}
+        </Text>
+      </View>
       <TouchableOpacity style={s.backBtn} onPress={handleBack} activeOpacity={0.7}>
         <Text style={s.backText}>← {t('common.back')}</Text>
       </TouchableOpacity>
