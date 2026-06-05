@@ -684,7 +684,7 @@ function RunCard({ run, level, allRuns, onDelete, onSelectRun }) {
     setDeleting(true);
     try {
       const token = getAuthToken();
-      await fetch(`${SERVER}/runs/${run.id}`, {
+            await fetch(`${SERVER}${(run.isActivity || run.type === 'bike') ? '/activities/' : '/runs/'}${run.id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
