@@ -510,7 +510,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       // 100 m jump / 50 m accuracy limits were too strict and silently dropped
       // most BG points → distance ended up far below reality.
       const MIN_DISTANCE = 2;       // ignore tiny jitter when standing still
-      const MAX_SPEED_KMH = 35;     // sanity speed cap
+      const MAX_SPEED_KMH = activityType === 'bike' ? 80 : 35; // sanity speed cap (cycling allows downhill/sprint)
       // Allow accuracy up to 100 m for BG points (battery-saving GPS),
       // keep 75 m for foreground.
       const MAX_ACCURACY = fromBackground ? 100 : 75;
@@ -555,7 +555,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     } else {
               // Første position - kraev god accuracy fra start (ellers springer GPS rundt senere)
         const accuracy = newPos.accuracy || 15;
-        if (accuracy <= 50) {
+        if (accuracy <= (activityType === 'bike' ? 75 : 50)) {
         const firstPos = { ...newPos, speed: 0, segmentDistance: 0, isRunning: false };
         positionsRef.current = [firstPos];
         setPositions([firstPos]);
