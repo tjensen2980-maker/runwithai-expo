@@ -441,7 +441,51 @@ let mealPlan = null;
 export async function loadRuns() {
   try {
     const res = await fetch(`${SERVER}/runs`, { headers: authHeaders() });
-    return await res.json();
+    const runs = await res.json();
+    const baseRuns = Array.isArray(runs) ? runs : [];
+    let activities = [];
+    try { activities = await loadActivities(); } catch (e) { activities = []; }
+    const merged = [...baseRuns, ...activities];
+    merged.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+    return merged;
+  } catch { return []; }
+}
+
+// Henter cykel-/andre aktiviteter fra /activities og normaliserer dem til samme form som runs
+export async function loadActivities() {
+  try {
+    const res = await fetch(`${SERVER}/activities`, { headers: authHeaders() });
+    const data = await res.json();
+    const list = Array.isArray(data) ? data : [];
+    return list.map((a) => {
+      const km = a.distance_m != null ? a.distance_m / 1000 : (a.km || 0);
+      const durationSec = a.duration_sec != null ? a.duration_sec : (a.duration || 0);
+      const calories = a.calories_kcal != null ? a.calories_kcal : (a.calories || 0);
+      const paceSec = a.avg_pace_sec_per_km != null ? a.avg_pace_sec_per_km
+        : (km > 0 ? Math.round(durationSec / km) : 0);
+      return {
+        id: a.id,
+        user_id: a.user_id,
+        type: a.type || 'bike',
+        date: a.started_at || a.date,
+        km,
+        duration: durationSec,
+        pace: paceSec,
+        calories,
+        avg_speed_kmh: a.avg_speed_kmh != null ? a.avg_speed_kmh : null,
+        max_speed_kmh: a.max_speed_kmh != null ? a.max_speed_kmh : null,
+        heart_rate: a.avg_hr != null ? a.avg_hr : null,
+        max_hr: a.max_hr != null ? a.max_hr : null,
+        cadence: a.cadence_avg != null ? a.cadence_avg : null,
+        total_ascent: a.total_ascent_m != null ? a.total_ascent_m : null,
+        total_descent: a.total_descent_m != null ? a.total_descent_m : null,
+        total_steps: a.total_steps != null ? a.total_steps : null,
+        route: a.gps_polyline || null,
+        splits: a.splits || null,
+        hr_samples: a.hr_samples || null,
+        isActivity: true,
+      };
+    });
   } catch { return []; }
 }
 
