@@ -131,7 +131,7 @@ function NativeTrackerMap({ positions, currentPosition, t }) {
     >
       {positions.length > 1 && (
         <Polyline
-          coordinates={positions.slice(-300).map(p => ({ latitude: p.latitude, longitude: p.longitude }))}
+          coordinates={positions.map(p => ({ latitude: p.latitude, longitude: p.longitude }))}
           strokeColor={colors.accent}
           strokeWidth={4}
         />
@@ -1038,7 +1038,7 @@ const formatPace = () => {
       </View>
       
       <View style={s.mapContainer}>
-        {isForeground && (
+        {isForeground && !isTracking && !isPaused && (
         <TrackerMap positions={positions} currentPosition={currentPosition} t={t} />
         )}
       </View>
