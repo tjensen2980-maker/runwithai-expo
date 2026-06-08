@@ -509,7 +509,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       // poorer accuracy and bigger time gaps when the screen is locked. Static
       // 100 m jump / 50 m accuracy limits were too strict and silently dropped
       // most BG points → distance ended up far below reality.
-                  const MIN_DISTANCE = 4;        // ignore tiny jitter when standing still
+                        const MIN_DISTANCE = 2;        // ignore tiny jitter when standing still
       const MAX_SPEED_KMH = activityType === 'bike' ? 80 : 35; // sanity speed cap (cycling allows downhill/sprint)
       // Allow accuracy up to 100 m for BG points (battery-saving GPS),
       // keep 75 m for foreground.
@@ -521,7 +521,8 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
 
       const isMinDistance = dist >= MIN_DISTANCE;
       const isNotTeleport = dist <= MAX_SINGLE_JUMP;
-      const isReasonableSpeed = speedKmh <= MAX_SPEED_KMH;
+              // Speed check is only reliable over short gaps; after a pause (big timeDiff) a single sample looks artificially fast, so skip it then.
+              const isReasonableSpeed = timeDiff > 10 ? true : speedKmh <= MAX_SPEED_KMH;
       const isAccurate = accuracy <= MAX_ACCURACY;
 
       const isValidPoint = isMinDistance && isNotTeleport && isReasonableSpeed && isAccurate;
