@@ -509,11 +509,11 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       // poorer accuracy and bigger time gaps when the screen is locked. Static
       // 100 m jump / 50 m accuracy limits were too strict and silently dropped
       // most BG points → distance ended up far below reality.
-      const MIN_DISTANCE = 2;       // ignore tiny jitter when standing still
+            const MIN_DISTANCE = 5;        // ignore tiny jitter when standing still
       const MAX_SPEED_KMH = activityType === 'bike' ? 80 : 35; // sanity speed cap (cycling allows downhill/sprint)
       // Allow accuracy up to 100 m for BG points (battery-saving GPS),
       // keep 75 m for foreground.
-      const MAX_ACCURACY = fromBackground ? 100 : 75;
+            const MAX_ACCURACY = fromBackground ? 100 : 35;
       // Dynamic jump limit: speed × time + 30 m safety buffer.
       // This naturally allows a 250 m segment if 30 s passed between samples
       // (typical BG batching), while still rejecting a true teleport.
