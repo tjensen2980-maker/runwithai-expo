@@ -602,7 +602,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         // in the background than time-based ones (OS won't skip points after
         // every 10 m of movement, even if it batches them).
         deferredUpdatesInterval: 1000,
-        deferredUpdatesDistance: 10,
+                deferredUpdatesDistance: 0,  // deliver points continuously in background (more points, better distance when screen locked)
         showsBackgroundLocationIndicator: true,
         foregroundService: {
           notificationTitle: 'RunWithAI',
@@ -646,6 +646,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     setGpsError('');
     setGpsPoints(0);
     setFilteredPoints(0);
+    global._fr = { dist: 0, jump: 0, speed: 0, acc: 0 };  // reset GPS filter debug counters per run
     startTimeRef.current = Date.now() - (duration * 1000);
     
     // Reset refs
@@ -872,7 +873,7 @@ const runData = {
   heart_rate: null,
   calories,
   route,
-  notes: null,
+      notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0}`,
   type: activityType === 'run' ? 'run' : 'walk',
   date: new Date().toISOString(),
   running_km: runningKm,
