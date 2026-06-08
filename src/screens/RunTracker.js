@@ -550,6 +550,11 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         if (!isNotTeleport) reasons.push(`jump>${MAX_SINGLE_JUMP}m`);
         if (!isReasonableSpeed) reasons.push(`speed>${MAX_SPEED_KMH}km/h`);
         if (!isAccurate) reasons.push(`acc>${MAX_ACCURACY}m`);
+        global._fr = global._fr || { dist: 0, jump: 0, speed: 0, acc: 0 };
+        if (!isMinDistance) global._fr.dist++;
+        if (!isNotTeleport) global._fr.jump++;
+        if (!isReasonableSpeed) global._fr.speed++;
+        if (!isAccurate) global._fr.acc++;
         console.log(`✗ GPS filtered: ${dist.toFixed(1)}m, ${speedKmh.toFixed(1)}km/h, acc:${accuracy.toFixed(0)}m [${reasons.join(', ')}]`);
       }
     } else {
@@ -1017,7 +1022,7 @@ const formatPace = () => {
           gpsStatus === 'waiting' ? s.gpsWaiting : s.gpsIdle
         ]}>
           {gpsStatus === 'error' ? `⚠️ ${gpsError}` :
-           gpsStatus === 'active' ? `📍 ${gpsPoints} punkter (${filteredPoints} filtreret)` :
+                        gpsStatus === 'active' ? `📍 ${gpsPoints} punkter (${filteredPoints} filtreret | d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0})` :
            gpsStatus === 'waiting' ? `⏳ ${t('tracker.gps.waiting')}` : ''}
         </Text>
       )}
