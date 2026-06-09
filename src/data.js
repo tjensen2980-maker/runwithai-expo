@@ -480,7 +480,7 @@ export async function loadActivities() {
         total_ascent: a.total_ascent_m != null ? a.total_ascent_m : null,
         total_descent: a.total_descent_m != null ? a.total_descent_m : null,
         total_steps: a.total_steps != null ? a.total_steps : null,
-        route: a.gps_polyline || null,
+                route: (() => { try { return typeof a.gps_polyline === 'string' ? JSON.parse(a.gps_polyline) : (a.gps_polyline || a.route || null); } catch { return null; } })(),
         splits: a.splits || null,
         hr_samples: a.hr_samples || null,
         isActivity: true,
