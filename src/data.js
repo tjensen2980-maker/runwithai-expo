@@ -458,7 +458,8 @@ export async function loadActivities() {
     const data = await res.json();
     const list = Array.isArray(data) ? data : [];
     return list.map((a) => {
-      const km = a.distance_m != null ? a.distance_m / 1000 : (a.km || 0);
+            const distM = a.bike_distance_m != null ? a.bike_distance_m : (a.run_distance_m != null ? a.run_distance_m : a.distance_m);
+      const km = distM != null ? distM / 1000 : (a.km || 0);
       const durationSec = a.duration_sec != null ? a.duration_sec : (a.duration || 0);
       const calories = a.calories_kcal != null ? a.calories_kcal : (a.calories || 0);
       const paceSec = a.avg_pace_sec_per_km != null ? a.avg_pace_sec_per_km
@@ -480,7 +481,7 @@ export async function loadActivities() {
         total_ascent: a.total_ascent_m != null ? a.total_ascent_m : null,
         total_descent: a.total_descent_m != null ? a.total_descent_m : null,
         total_steps: a.total_steps != null ? a.total_steps : null,
-                route: (() => { try { return typeof a.gps_polyline === 'string' ? JSON.parse(a.gps_polyline) : (a.gps_polyline || a.route || null); } catch { return null; } })(),
+                        route: (() => { const poly = a.bike_gps_polyline || a.run_gps_polyline || a.gps_polyline; try { return typeof poly === 'string' ? JSON.parse(poly) : (poly || a.route || null); } catch { return null; } })(),
         splits: a.splits || null,
         hr_samples: a.hr_samples || null,
         isActivity: true,
