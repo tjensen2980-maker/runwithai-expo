@@ -3,7 +3,7 @@
     "name": "RunWithAI",
     "slug": "runwithai",
     "newArchEnabled": false,
-    "version": "2.5.1",
+    "version": "2.5.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -74,7 +74,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "app.runwithai",
-      "versionCode": 72,
+      "versionCode":80,
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
