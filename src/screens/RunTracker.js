@@ -384,6 +384,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   const distanceRef = useRef(0);
   const positionsRef = useRef([]);
   const lastValidPositionRef = useRef(null);
+  const lastSampleTimestampRef = useRef(0);
   const appStateRef = useRef(AppState.currentState);
   const handlePositionUpdateRef = useRef(null);
   const lastForegroundTimestampRef = useRef(0);
@@ -499,7 +500,11 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     
     if (lastPos) {
       const dist = calculateDistance(lastPos.latitude, lastPos.longitude, newPos.latitude, newPos.longitude);
-      const timeDiff = Math.max(0.1, (newPos.timestamp - lastPos.timestamp) / 1000);
+      // Tid siden SENESTE sample (ikke siden seneste accepterede punkt), saa et
+      // stop ikke faar timeDiff til at vokse og slaa teleport-/fartfiltrene fra.
+      const lastSampleTs = lastSampleTimestampRef.current || lastPos.timestamp;
+      const timeDiff = Math.max(0.1, (newPos.timestamp - lastSampleTs) / 1000);
+      lastSampleTimestampRef.current = newPos.timestamp;
       const speedMs = dist / timeDiff;
       const speedKmh = speedMs * 3.6;
       const accuracy = newPos.accuracy || 15;
@@ -517,12 +522,14 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       // Dynamic jump limit: speed × time + 30 m safety buffer.
       // This naturally allows a 250 m segment if 30 s passed between samples
       // (typical BG batching), while still rejecting a true teleport.
-      const MAX_SINGLE_JUMP = Math.max(100, (MAX_SPEED_KMH / 3.6) * timeDiff + 30);
+      // Dynamisk hop-graense MED absolut loft, saa en pause aldrig kan aabne for et teleport.
+      const MAX_SINGLE_JUMP = Math.min(300, Math.max(100, (MAX_SPEED_KMH / 3.6) * timeDiff + 30));
 
       const isMinDistance = dist >= MIN_DISTANCE;
       const isNotTeleport = dist <= MAX_SINGLE_JUMP;
               // Speed check is only reliable over short gaps; after a pause (big timeDiff) a single sample looks artificially fast, so skip it then.
-              const isReasonableSpeed = timeDiff > 10 ? true : speedKmh <= MAX_SPEED_KMH;
+      // timeDiff er nu tid siden seneste sample (lille), saa fartfiltret er paalideligt - behold det altid.
+      const isReasonableSpeed = speedKmh <= MAX_SPEED_KMH;
       const isAccurate = accuracy <= MAX_ACCURACY;
 
       const isValidPoint = isMinDistance && isNotTeleport && isReasonableSpeed && isAccurate;
@@ -566,6 +573,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         positionsRef.current = [firstPos];
         setPositions([firstPos]);
         lastValidPositionRef.current = newPos;
+        lastSampleTimestampRef.current = newPos.timestamp;
         console.log(`✓ GPS: First position recorded, acc:${accuracy.toFixed(0)}m`);
       } else {
         console.log(`✗ GPS: First position rejected, acc:${accuracy.toFixed(0)}m too poor (need <= 50m)`);
@@ -652,6 +660,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     // Reset refs
     positionsRef.current = positions;
     lastValidPositionRef.current = null;
+    lastSampleTimestampRef.current = 0;
     distanceRef.current = distance;
     
     const token = getAuthToken();
