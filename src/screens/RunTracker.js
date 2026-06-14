@@ -500,13 +500,10 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     
     if (lastPos) {
       const dist = calculateDistance(lastPos.latitude, lastPos.longitude, newPos.latitude, newPos.longitude);
-      // Tid siden SENESTE sample (ikke siden seneste accepterede punkt), saa et
-      // stop ikke faar timeDiff til at vokse og slaa teleport-/fartfiltrene fra.
-      const lastSampleTs = lastSampleTimestampRef.current || lastPos.timestamp;
-      const timeDiff = Math.max(0.1, (newPos.timestamp - lastSampleTs) / 1000);
-      lastSampleTimestampRef.current = newPos.timestamp;
-      const speedMs = dist / timeDiff;
-      const speedKmh = speedMs * 3.6;
+      // timeDiff maales mellem de to FAKTISKE punkter (anker -> nu), saa farten
+      // bliver korrekt selv naar mellemliggende sub-2m-samples er droppet.
+      const timeDiff = Math.max(0.1, (newPos.timestamp - lastPos.timestamp) / 1000);
+      const speedKmh = (dist / timeDiff) * 3.6;
       const accuracy = newPos.accuracy || 15;
       
             // ── GPS FILTERING (background-friendly, dynamic) ─────────────────────
@@ -515,7 +512,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       // 100 m jump / 50 m accuracy limits were too strict and silently dropped
       // most BG points → distance ended up far below reality.
                         const MIN_DISTANCE = 2;        // ignore tiny jitter when standing still
-      const MAX_SPEED_KMH = activityType === 'bike' ? 80 : 35; // sanity speed cap (cycling allows downhill/sprint)
+      const MAX_SPEED_KMH = activityType === 'bike' ? 80 : (activityType === 'walk' ? 12 : 30); // realistisk fartloft pr. aktivitet
       // Allow accuracy up to 100 m for BG points (battery-saving GPS),
       // keep 75 m for foreground.
                   const MAX_ACCURACY = fromBackground ? 100 : 50;
@@ -523,7 +520,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       // This naturally allows a 250 m segment if 30 s passed between samples
       // (typical BG batching), while still rejecting a true teleport.
       // Dynamisk hop-graense MED absolut loft, saa en pause aldrig kan aabne for et teleport.
-      const MAX_SINGLE_JUMP = Math.min(300, Math.max(100, (MAX_SPEED_KMH / 3.6) * timeDiff + 30));
+      const MAX_SINGLE_JUMP = Math.min(150, Math.max(60, (MAX_SPEED_KMH / 3.6) * timeDiff + 20));
 
       const isMinDistance = dist >= MIN_DISTANCE;
       const isNotTeleport = dist <= MAX_SINGLE_JUMP;
@@ -553,6 +550,13 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         console.log(`✓ GPS: +${dist.toFixed(1)}m = ${(newDistance/1000).toFixed(3)}km | ${speedKmh.toFixed(1)}km/h | acc:${accuracy.toFixed(0)}m`);
       } else {
         setFilteredPoints(prev => prev + 1);
+        // Escape-ventil: mistet GPS-signal (stort tidsgab) + punkt langt vaek ->
+        // flyt ankeret derhen saa vi ikke sidder fast resten af turen. Den usikre
+        // afstand taelles IKKE med (bedre at undertaelle end at tegne falsk streg).
+        if (!isNotTeleport && timeDiff > 8 && isAccurate) {
+          lastValidPositionRef.current = newPos;
+          lastSampleTimestampRef.current = newPos.timestamp;
+        }
         const reasons = [];
         if (!isMinDistance) reasons.push(`dist<${MIN_DISTANCE}m`);
         if (!isNotTeleport) reasons.push(`jump>${MAX_SINGLE_JUMP}m`);
