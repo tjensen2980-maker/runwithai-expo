@@ -506,21 +506,19 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       const speedKmh = (dist / timeDiff) * 3.6;
       const accuracy = newPos.accuracy || 15;
       
-            // ── GPS FILTERING (background-friendly, dynamic) ─────────────────────
-      // Background GPS on Android (and to some extent iOS) batches points with
-      // poorer accuracy and bigger time gaps when the screen is locked. Static
-      // 100 m jump / 50 m accuracy limits were too strict and silently dropped
-      // most BG points → distance ended up far below reality.
-                        const MIN_DISTANCE = 2;        // ignore tiny jitter when standing still
-      const MAX_SPEED_KMH = activityType === 'bike' ? 80 : (activityType === 'walk' ? 12 : 30); // realistisk fartloft pr. aktivitet
-      // Allow accuracy up to 100 m for BG points (battery-saving GPS),
-      // keep 75 m for foreground.
-                  const MAX_ACCURACY = fromBackground ? 100 : 50;
-      // Dynamic jump limit: speed × time + 30 m safety buffer.
-      // This naturally allows a 250 m segment if 30 s passed between samples
-      // (typical BG batching), while still rejecting a true teleport.
-      // Dynamisk hop-graense MED absolut loft, saa en pause aldrig kan aabne for et teleport.
-      const MAX_SINGLE_JUMP = Math.min(150, Math.max(60, (MAX_SPEED_KMH / 3.6) * timeDiff + 20));
+            // ── GPS FILTERING (iOS-batching aware) ────────────────────
+      // iOS batches background location heavily when the screen is locked.
+      // We allow larger gaps and bigger jumps on iOS, and use interpolation
+      // (see escape valve below) so distance is still counted when gaps occur.
+      const isIOS = Platform.OS === 'ios';
+      const MIN_DISTANCE = 2;
+      const MAX_SPEED_KMH = activityType === 'bike' ? 80 : (activityType === 'walk' ? 12 : 30);
+      const MAX_ACCURACY = fromBackground ? (isIOS ? 150 : 100) : (isIOS ? 75 : 50);
+      // Platform/activity dependent jump cap so iOS batched points are not dropped.
+      const JUMP_CAP = isIOS
+        ? (activityType === 'bike' ? 500 : 300)
+        : (activityType === 'bike' ? 250 : 150);
+      const MAX_SINGLE_JUMP = Math.min(JUMP_CAP, Math.max(60, (MAX_SPEED_KMH / 3.6) * timeDiff + 30));
 
       const isMinDistance = dist >= MIN_DISTANCE;
       const isNotTeleport = dist <= MAX_SINGLE_JUMP;
@@ -550,10 +548,27 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         console.log(`✓ GPS: +${dist.toFixed(1)}m = ${(newDistance/1000).toFixed(3)}km | ${speedKmh.toFixed(1)}km/h | acc:${accuracy.toFixed(0)}m`);
       } else {
         setFilteredPoints(prev => prev + 1);
-        // Escape-ventil: mistet GPS-signal (stort tidsgab) + punkt langt vaek ->
-        // flyt ankeret derhen saa vi ikke sidder fast resten af turen. Den usikre
-        // afstand taelles IKKE med (bedre at undertaelle end at tegne falsk streg).
-        if (!isNotTeleport && timeDiff > 8 && isAccurate) {
+        // Smart escape: ved GPS-gap (typisk iOS-baggrunds-batch) taeller vi den
+        // interpolerede distance med - capped til hvad max-fart tillader - saa vi
+        // ikke mister km. Bedre at undertaelle lidt end at tegne en lige linje.
+        if (!isNotTeleport && timeDiff > 5 && isAccurate) {
+          const maxAllowedDist = (MAX_SPEED_KMH / 3.6) * timeDiff;
+          const interpolatedDist = Math.min(dist, maxAllowedDist);
+          if (interpolatedDist > MIN_DISTANCE) {
+            const newDistance = distanceRef.current + interpolatedDist;
+            distanceRef.current = newDistance;
+            setDistance(newDistance);
+            const posWithData = {
+              ...newPos,
+              speed: (interpolatedDist / timeDiff) * 3.6,
+              segmentDistance: interpolatedDist,
+              isRunning: false,
+              interpolated: true,
+            };
+            positionsRef.current = [...positionsRef.current, posWithData];
+            setPositions(positionsRef.current);
+            console.log(`~ GPS interpolated: +${interpolatedDist.toFixed(1)}m (raw ${dist.toFixed(1)}m, gap ${timeDiff.toFixed(1)}s)`);
+          }
           lastValidPositionRef.current = newPos;
           lastSampleTimestampRef.current = newPos.timestamp;
         }
@@ -607,9 +622,10 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       global._isBackgroundTracking = true;
 
       await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, {
-        accuracy: Location.Accuracy.BestForNavigation,
+        accuracy: Platform.OS === 'ios' ? Location.Accuracy.Highest : Location.Accuracy.BestForNavigation,
         timeInterval: 1000,
-        distanceInterval: 1,
+        // iOS overholder distanceInterval bedre naar den ikke er 1m - 5m reducerer batching.
+        distanceInterval: Platform.OS === 'ios' ? 5 : 1,
         // Distance-based deferred updates give a more consistent km measurement
         // in the background than time-based ones (OS won't skip points after
         // every 10 m of movement, even if it batches them).
@@ -702,7 +718,8 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
 
         await startBackgroundLocationTracking();
 
-        watchSubscriptionRef.current = await Location.watchPositionAsync(
+        if (Platform.OS === 'android') {
+          watchSubscriptionRef.current = await Location.watchPositionAsync(
           { 
             accuracy: Location.Accuracy.BestForNavigation, 
             timeInterval: 500,
@@ -719,6 +736,9 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
           }
         );
         console.log('Foreground GPS started (500ms/1m)');
+        } else {
+          console.log('iOS: skipping foreground watcher - background task handles all updates');
+        }
       } catch (e) {
         setGpsStatus('error');
         setGpsError(e.message || t('tracker.gps.error'));
@@ -790,7 +810,8 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
 
     if (!isWeb && Location) {
       await startBackgroundLocationTracking();
-      watchSubscriptionRef.current = await Location.watchPositionAsync(
+      if (Platform.OS === 'android') {
+        watchSubscriptionRef.current = await Location.watchPositionAsync(
         { accuracy: Location.Accuracy.BestForNavigation, timeInterval: 500, distanceInterval: 1 },
         (location) => {
           (handlePositionUpdateRef.current || handlePositionUpdate)({
@@ -801,6 +822,9 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
           });
         }
       );
+      } else {
+        console.log('iOS resume: background task handles all updates');
+      }
     } else if (isWeb && typeof navigator !== 'undefined' && navigator.geolocation) {
       watchSubscriptionRef.current = navigator.geolocation.watchPosition(
         (position) => {
