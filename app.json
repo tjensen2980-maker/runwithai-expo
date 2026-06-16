@@ -21,40 +21,18 @@
       "buildNumber": "103",
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
+        "NSSupportsLiveActivities": true,
         "CFBundleLocalizations": [
-          "da",
-          "en",
-          "de",
-          "fr",
-          "es",
-          "it",
-          "pt",
-          "nl",
-          "pl",
-          "sv",
-          "fi",
-          "el",
-          "cs",
-          "ro",
-          "hu",
-          "bg",
-          "hr",
-          "sk",
-          "sl",
-          "lt",
-          "lv",
-          "et",
-          "ga",
-          "mt"
+          "da","en","de","fr","es","it","pt","nl","pl","sv","fi","el","cs","ro","hu","bg","hr","sk","sl","lt","lv","et","ga","mt"
         ],
         "CFBundleDevelopmentRegion": "da",
-        "NSLocationWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine lÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¸beruter i realtid.",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine lÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¸beruter, ogsÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¥ nÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¥r appen kÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¸rer i baggrunden under dit lÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¸b.",
-        "NSMotionUsageDescription": "RunWithAI bruger bevÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¦gelsessensorer til at forbedre distance-beregning og skridttÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¦lling under dine lÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¸beture.",
-        "NSHealthShareUsageDescription": "RunWithAI bruger dine sundhedsdata til at vise puls og kalorier under lÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¸b.",
-        "NSHealthUpdateUsageDescription": "RunWithAI gemmer dine lÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¸beture i Apple Health.",
-        "NSCameraUsageDescription": "RunWithAI bruger kameraet til at tage billeder til din profil og dele lÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¸beoplevelser med venner.",
-        "NSMicrophoneUsageDescription": "RunWithAI bruger mikrofonen til stemmekommandoer under lÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¸b, sÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¥ du kan styre appen hÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¥ndfrit mens du lÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¸ber.",
+        "NSLocationWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter i realtid.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter, også når appen kører i baggrunden under dit løb.",
+        "NSMotionUsageDescription": "RunWithAI bruger bevægelsessensorer til at forbedre distance-beregning og skridttælling under dine løbeture.",
+        "NSHealthShareUsageDescription": "RunWithAI bruger dine sundhedsdata til at vise puls og kalorier under løb.",
+        "NSHealthUpdateUsageDescription": "RunWithAI gemmer dine løbeture i Apple Health.",
+        "NSCameraUsageDescription": "RunWithAI bruger kameraet til at tage billeder til din profil og dele løbeoplevelser med venner.",
+        "NSMicrophoneUsageDescription": "RunWithAI bruger mikrofonen til stemmekommandoer under løb, så du kan styre appen håndfrit mens du løber.",
         "UIBackgroundModes": [
           "location",
           "audio"
@@ -74,7 +52,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "app.runwithai",
-      "versionCode":80,
+      "versionCode": 80,
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
@@ -96,40 +74,9 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "RunWithAI bruger din placering til at tracke dine lÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¸beruter, ogsÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¥ nÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¥r appen kÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¸rer i baggrunden under dit lÃÂÃÂÃÂÃ¢ÂÂÃÂÃ¢ÂÂ ÃÂ¢Ã¢ÂÂ¬Ã¢ÂÂ¢ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ ÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂ¢Ã¢ÂÂÃÂ¢ÃÂÃÂÃÂÃ¢ÂÂÃÂÃÂ¢ÃÂ¢Ã¢ÂÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂÃÂ¢Ã¢ÂÂ¬ÃÂ¡ÃÂÃ¢ÂÂÃÂÃÂ¸b.",
+          "locationAlwaysAndWhenInUsePermission": "RunWithAI bruger din placering til at tracke dine løberuter, også når appen kører i baggrunden under dit løb.",
           "isIosBackgroundLocationEnabled": true,
           "isAndroidBackgroundLocationEnabled": true
-        }
-      ],
-      [
-        "expo-localization",
-        {
-          "supportedLocales": [
-            "da",
-            "en",
-            "de",
-            "fr",
-            "es",
-            "it",
-            "pt",
-            "nl",
-            "pl",
-            "sv",
-            "fi",
-            "el",
-            "cs",
-            "ro",
-            "hu",
-            "bg",
-            "hr",
-            "sk",
-            "sl",
-            "lt",
-            "lv",
-            "et",
-            "ga",
-            "mt"
-          ]
         }
       ],
       "./plugins/withLocales",
@@ -137,7 +84,7 @@
         "@kingstinct/react-native-healthkit",
         {
           "NSHealthShareUsageDescription": "RunWithAI bruger dine sundhedsdata til at vise puls og kalorier.",
-          "NSHealthUpdateUsageDescription": "RunWithAI gemmer dine lobeture i Apple Health."
+          "NSHealthUpdateUsageDescription": "RunWithAI gemmer dine løbeture i Apple Health."
         }
       ]
     ],
