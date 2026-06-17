@@ -22,6 +22,7 @@ class LiveActivityModule: NSObject {
 
   // Vi gemmer aktivitetens ID saa vi kan opdatere/afslutte den senere.
   private static var currentActivityId: String?
+  private static var isUpdating: Bool = false
 
   @objc
   static func requiresMainQueueSetup() -> Bool { return false }
@@ -91,6 +92,12 @@ class LiveActivityModule: NSObject {
         resolve(false)
         return
       }
+
+      guard !LiveActivityModule.isUpdating else {
+        resolve(false)
+        return
+      }
+      LiveActivityModule.isUpdating = true
       let distanceMeters = (params["distanceMeters"] as? NSNumber)?.doubleValue ?? 0
       let durationSeconds = (params["durationSeconds"] as? NSNumber)?.intValue ?? 0
       let paceMinPerKm = (params["paceMinPerKm"] as? NSNumber)?.doubleValue ?? 0
@@ -107,6 +114,7 @@ class LiveActivityModule: NSObject {
         for activity in Activity<RunActivityAttributes>.activities where activity.id == activityId {
           await activity.update(.init(state: newState, staleDate: nil))
         }
+        LiveActivityModule.isUpdating = false
         DispatchQueue.main.async { resolve(true) }
       }
     } else {
