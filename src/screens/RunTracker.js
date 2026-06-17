@@ -3,14 +3,14 @@ import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator
 import { colors, SERVER, getAuthToken } from '../data';
 import VoiceCoach, { stopSpeaking, setVoiceAuthToken } from '../components/VoiceCoach';
 import { useTranslation } from 'react-i18next';
-// ─── MUSIC TEMPO MATCHER IMPORTS ────────────────────────────────────────────
+// â”€â”€â”€ MUSIC TEMPO MATCHER IMPORTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 import MusicButton from './components/MusicButton';
 import MusicMatcher from './components/MusicMatcher';
 import useCadence from '../hooks/useCadence';
-// ─── PHOTO STORY IMPORTS ────────────────────────────────────────────────────
+// â”€â”€â”€ PHOTO STORY IMPORTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 import RunCamera, { uploadPendingPhotos, clearPendingPhotos } from './components/RunCamera';
 import PhotoStory from './components/PhotoStory';
-// ─── VOICE INPUT (talk to AI coach) ─────────────────────────────────────────
+// â”€â”€â”€ VOICE INPUT (talk to AI coach) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 import VoiceInput from './components/VoiceInput';
 // Live Activity (iOS laaseskaerm/Dynamic Island)
 import LiveActivity from '../modules/LiveActivity';
@@ -47,7 +47,7 @@ if (!isWeb) {
   }
 }
 
-// ─── BACKGROUND LOCATION TASK DEFINITION ───────────────────────────────────
+// â”€â”€â”€ BACKGROUND LOCATION TASK DEFINITION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 if (!isWeb && typeof global !== 'undefined') {
   global._backgroundLocations = global._backgroundLocations || [];
   global._isBackgroundTracking = false;
@@ -78,7 +78,7 @@ if (!isWeb && TaskManager) {
   });
 }
 
-// ─── NATIVE TRACKER MAP ─────────────────────────────────────────────────────
+// â”€â”€â”€ NATIVE TRACKER MAP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function NativeTrackerMap({ positions, currentPosition, t }) {
   const mapRef = useRef(null);
   useEffect(() => {
@@ -106,7 +106,7 @@ function NativeTrackerMap({ positions, currentPosition, t }) {
   if (!MapView) {
     return (
       <View style={styles.mapPlaceholder}>
-        <Text style={{ fontSize: 48, marginBottom: 12 }}>🗺️</Text>
+        <Text style={{ fontSize: 48, marginBottom: 12 }}>ðŸ—ºï¸</Text>
         <Text style={{ color: colors.text, fontSize: 14 }}>{t('tracker.mapNotAvailable')}</Text>
       </View>
     );
@@ -149,7 +149,7 @@ function NativeTrackerMap({ positions, currentPosition, t }) {
   );
 }
 
-// ─── WEB TRACKER MAP (Leaflet) ──────────────────────────────────────────────
+// â”€â”€â”€ WEB TRACKER MAP (Leaflet) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function WebTrackerMap({ positions, currentPosition }) {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
@@ -218,13 +218,13 @@ function WebTrackerMap({ positions, currentPosition }) {
   return <View ref={mapRef} style={styles.map} />;
 }
 
-// ─── UNIFIED TRACKER MAP ────────────────────────────────────────────────────
+// â”€â”€â”€ UNIFIED TRACKER MAP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function TrackerMap(props) {
   if (isWeb) return <WebTrackerMap {...props} />;
   return <NativeTrackerMap {...props} />;
 }
 
-// ─── PERSONAL STATS COMPONENT ───────────────────────────────────────────────
+// â”€â”€â”€ PERSONAL STATS COMPONENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function PersonalStats({ runs, activityType, t }) {
   const getText = (key, fallback) => {
     const translated = t(key);
@@ -277,15 +277,15 @@ function PersonalStats({ runs, activityType, t }) {
   };
 
   const label = activityType === 'run' 
-    ? getText('tracker.stats.runs', 'løb') 
-    : getText('tracker.stats.walks', 'gåture');
+    ? getText('tracker.stats.runs', 'lÃ¸b') 
+    : getText('tracker.stats.walks', 'gÃ¥ture');
 
   return (
     <View style={ps.container}>
       <Text style={ps.title}>
         {activityType === 'run' 
-          ? `🏃 ${getText('tracker.stats.yourProgress', 'Din fremgang')}` 
-          : `🚶 ${getText('tracker.stats.yourProgress', 'Din fremgang')}`}
+          ? `ðŸƒ ${getText('tracker.stats.yourProgress', 'Din fremgang')}` 
+          : `ðŸš¶ ${getText('tracker.stats.yourProgress', 'Din fremgang')}`}
       </Text>
       
       <View style={ps.weekCard}>
@@ -294,7 +294,7 @@ function PersonalStats({ runs, activityType, t }) {
           {(trendUp || trendDown) && (
             <View style={[ps.trendBadge, trendUp ? ps.trendUp : ps.trendDown]}>
               <Text style={[ps.trendText, trendUp ? ps.trendTextUp : ps.trendTextDown]}>
-                {trendUp ? '↑' : '↓'} {Math.abs(kmDiff).toFixed(1)} km
+                {trendUp ? 'â†‘' : 'â†“'} {Math.abs(kmDiff).toFixed(1)} km
               </Text>
             </View>
           )}
@@ -319,17 +319,17 @@ function PersonalStats({ runs, activityType, t }) {
 
       <View style={ps.recordsRow}>
         <View style={ps.recordCard}>
-          <Text style={ps.recordIcon}>🏆</Text>
+          <Text style={ps.recordIcon}>ðŸ†</Text>
           <Text style={ps.recordValue}>{formatPaceValue(bestPace)}</Text>
           <Text style={ps.recordLabel}>{getText('tracker.stats.bestPace', 'Bedste tempo')}</Text>
         </View>
         <View style={ps.recordCard}>
-          <Text style={ps.recordIcon}>📏</Text>
+          <Text style={ps.recordIcon}>ðŸ“</Text>
           <Text style={ps.recordValue}>{longestRun.toFixed(1)}</Text>
-          <Text style={ps.recordLabel}>{getText('tracker.stats.longestRun', 'Længste løb')}</Text>
+          <Text style={ps.recordLabel}>{getText('tracker.stats.longestRun', 'LÃ¦ngste lÃ¸b')}</Text>
         </View>
         <View style={ps.recordCard}>
-          <Text style={ps.recordIcon}>📊</Text>
+          <Text style={ps.recordIcon}>ðŸ“Š</Text>
           <Text style={ps.recordValue}>{totalKm.toFixed(0)}</Text>
           <Text style={ps.recordLabel}>{getText('tracker.stats.totalKm', 'Total km')}</Text>
         </View>
@@ -363,7 +363,7 @@ const ps = StyleSheet.create({
   recordLabel: { fontSize: 9, fontWeight: '600', color: colors.muted, marginTop: 2, textTransform: 'uppercase' },
 });
 
-// ─── RUNTRACKER COMPONENT ───────────────────────────────────────────────────
+// â”€â”€â”€ RUNTRACKER COMPONENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function RunTracker({ activityType = 'run', onBack, profile, level, weekPlan, nextWorkout, runs, onShowPricing }) {
   const { t } = useTranslation();
   const [isTracking, setIsTracking] = useState(false);
@@ -391,11 +391,11 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   const handlePositionUpdateRef = useRef(null);
   const lastForegroundTimestampRef = useRef(0);
 
-  // ─── PHOTO STORY STATE ──────────────────────────────────────────────────
+  // â”€â”€â”€ PHOTO STORY STATE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [savedRunId, setSavedRunId] = useState(null);
   const [showStory, setShowStory] = useState(false);
 
-  // ─── MUSIC TEMPO MATCHER STATE & HOOK ───────────────────────────────────
+  // â”€â”€â”€ MUSIC TEMPO MATCHER STATE & HOOK â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [musicVisible, setMusicVisible] = useState(false);
   const paceSecPerKm = distance > 0 ? (duration / (distance / 1000)) : 0;
   const { cadence, bpmRange } = useCadence({
@@ -416,7 +416,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     return R * c;
   };
 
-  // ─── PROCESS BACKGROUND LOCATIONS ───────────────────────────────────────
+  // â”€â”€â”€ PROCESS BACKGROUND LOCATIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const processBackgroundLocations = () => {
     if (!isWeb && global._backgroundLocations && global._backgroundLocations.length > 0) {
       const bgLocations = [...global._backgroundLocations].sort((a, b) => a.timestamp - b.timestamp);
@@ -430,7 +430,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     }
   };
 
-  // ─── APP STATE HANDLER (foreground/background) ────────────────────────────
+  // â”€â”€â”€ APP STATE HANDLER (foreground/background) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   useEffect(() => {
     if (isWeb) return;
 
@@ -458,10 +458,10 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     return () => subscription?.remove();
   }, []);
 
-  // ─── PERIODIC CHECK FOR BACKGROUND LOCATIONS ────────────────────────────
+  // â”€â”€â”€ PERIODIC CHECK FOR BACKGROUND LOCATIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   // Drain BG buffer regularly. When app is active we DEDUPE against the last
   // foreground timestamp (instead of throwing all BG points away), so we never
-  // lose distance during the transition foreground→background→foreground.
+  // lose distance during the transition foregroundâ†’backgroundâ†’foreground.
   useEffect(() => {
     if (!isTracking || isPaused || isWeb) return;
 
@@ -508,7 +508,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       const speedKmh = (dist / timeDiff) * 3.6;
       const accuracy = newPos.accuracy || 15;
       
-            // ── GPS FILTERING (iOS-batching aware) ────────────────────
+            // â”€â”€ GPS FILTERING (iOS-batching aware) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       // iOS batches background location heavily when the screen is locked.
       // We allow larger gaps and bigger jumps on iOS, and use interpolation
       // (see escape valve below) so distance is still counted when gaps occur.
@@ -547,7 +547,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         setPositions(positionsRef.current);
         lastValidPositionRef.current = newPos;
         
-        console.log(`✓ GPS: +${dist.toFixed(1)}m = ${(newDistance/1000).toFixed(3)}km | ${speedKmh.toFixed(1)}km/h | acc:${accuracy.toFixed(0)}m`);
+        console.log(`âœ“ GPS: +${dist.toFixed(1)}m = ${(newDistance/1000).toFixed(3)}km | ${speedKmh.toFixed(1)}km/h | acc:${accuracy.toFixed(0)}m`);
       } else {
         setFilteredPoints(prev => prev + 1);
         // Smart escape: ved GPS-gap (typisk iOS-baggrunds-batch) taeller vi den
@@ -584,10 +584,10 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         if (!isNotTeleport) global._fr.jump++;
         if (!isReasonableSpeed) global._fr.speed++;
         if (!isAccurate) global._fr.acc++;
-        console.log(`✗ GPS filtered: ${dist.toFixed(1)}m, ${speedKmh.toFixed(1)}km/h, acc:${accuracy.toFixed(0)}m [${reasons.join(', ')}]`);
+        console.log(`âœ— GPS filtered: ${dist.toFixed(1)}m, ${speedKmh.toFixed(1)}km/h, acc:${accuracy.toFixed(0)}m [${reasons.join(', ')}]`);
       }
     } else {
-              // Første position - kraev god accuracy fra start (ellers springer GPS rundt senere)
+              // FÃ¸rste position - kraev god accuracy fra start (ellers springer GPS rundt senere)
         const accuracy = newPos.accuracy || 15;
         if (accuracy <= (activityType === 'bike' ? 75 : 50)) {
         const firstPos = { ...newPos, speed: 0, segmentDistance: 0, isRunning: false };
@@ -595,9 +595,9 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         setPositions([firstPos]);
         lastValidPositionRef.current = newPos;
         lastSampleTimestampRef.current = newPos.timestamp;
-        console.log(`✓ GPS: First position recorded, acc:${accuracy.toFixed(0)}m`);
+        console.log(`âœ“ GPS: First position recorded, acc:${accuracy.toFixed(0)}m`);
       } else {
-        console.log(`✗ GPS: First position rejected, acc:${accuracy.toFixed(0)}m too poor (need <= 50m)`);
+        console.log(`âœ— GPS: First position rejected, acc:${accuracy.toFixed(0)}m too poor (need <= 50m)`);
       }
     }
   };
@@ -636,7 +636,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         showsBackgroundLocationIndicator: true,
         foregroundService: {
           notificationTitle: 'RunWithAI',
-          notificationBody: activityType === 'run' ? 'Tracking dit løb...' : 'Tracking din gåtur...',
+          notificationBody: activityType === 'run' ? 'Tracking dit lÃ¸b...' : 'Tracking din gÃ¥tur...',
           notificationColor: '#c8ff00',
         },
         pausesUpdatesAutomatically: false,
@@ -717,12 +717,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         voiceCoachRef.current.update({ km, durationSecs: elapsed, paceMinPerKm });
       }
       // Opdater Live Activity hver sekund med friske stats
-      LiveActivity.update({
-        distanceMeters: distanceRef.current,
-        durationSeconds: elapsed,
-        paceMinPerKm: paceMinPerKm,
-        isPaused: false,
-      }).catch(() => {});
+      /* DISABLED FOR DEBUG:  */
     }, 1000);
 
     if (!isWeb && Location) {
@@ -808,15 +803,10 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
     // Marker Live Activity som pause - bliver staaende paa laaseskaerm
     const km = distanceRef.current / 1000;
     const paceMinPerKm = km > 0 ? (duration / 60) / km : 0;
-    LiveActivity.update({
-      distanceMeters: distanceRef.current,
-      durationSeconds: duration,
-      paceMinPerKm,
-      isPaused: true,
-    }).catch(() => {});
+    /* DISABLED FOR DEBUG:  */
   };
 
-  // ─── RESUME TRACKING (FIX: nulstiller ikke distance/positions) ───────────
+  // â”€â”€â”€ RESUME TRACKING (FIX: nulstiller ikke distance/positions) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const resumeTracking = async () => {
     setIsPaused(false);
     setGpsStatus('waiting');
@@ -834,12 +824,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         voiceCoachRef.current.update({ km, durationSecs: elapsed, paceMinPerKm });
       }
       // Opdater Live Activity hver sekund med friske stats
-      LiveActivity.update({
-        distanceMeters: distanceRef.current,
-        durationSeconds: elapsed,
-        paceMinPerKm: paceMinPerKm,
-        isPaused: false,
-      }).catch(() => {});
+      /* DISABLED FOR DEBUG:  */
     }, 1000);
 
     if (!isWeb && Location) {
@@ -890,10 +875,10 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
 const km = parseFloat((distance / 1000).toFixed(2));
 const paceMinPerKm = km > 0 ? (duration / 60) / km : 0;
 
-// ─── BEREGN KALORIER (kcal = MET × kg × timer) ─────────────────────────
+// â”€â”€â”€ BEREGN KALORIER (kcal = MET Ã— kg Ã— timer) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const weightKg = parseFloat(profile?.weight_kg || profile?.weight) || 70; // fallback 70 kg
 const hours = duration / 3600;
-// MET-værdier: gå ~3.5, jog ~7, løb ~9.8, hurtigt løb ~11.5
+// MET-vÃ¦rdier: gÃ¥ ~3.5, jog ~7, lÃ¸b ~9.8, hurtigt lÃ¸b ~11.5
 let met;
 const speedKmh = (duration > 0 && km > 0) ? (km / (duration / 3600)) : 0;
 
@@ -1064,10 +1049,10 @@ const formatPace = () => {
   return (
     <View style={s.container}>
       <TouchableOpacity style={s.backBtn} onPress={handleBack} activeOpacity={0.7}>
-        <Text style={s.backText}>← {t('common.back')}</Text>
+        <Text style={s.backText}>â† {t('common.back')}</Text>
       </TouchableOpacity>
       <View style={s.header}>
-        <Text style={s.title}>{activityType === 'bike' ? '🚴 Cykling' : activityType === 'run' ? ('🏃 ' + t('run.title')) : ('🚶 ' + t('run.walk'))}</Text>
+        <Text style={s.title}>{activityType === 'bike' ? 'ðŸš´ Cykling' : activityType === 'run' ? ('ðŸƒ ' + t('run.title')) : ('ðŸš¶ ' + t('run.walk'))}</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <TouchableOpacity
             style={[s.voiceToggle, voiceEnabled && s.voiceToggleActive]}
@@ -1077,7 +1062,7 @@ const formatPace = () => {
               if (voiceCoachRef.current) voiceCoachRef.current.setEnabled(next);
             }}
           >
-            <Text style={{ fontSize: 16 }}>{voiceEnabled ? '🔊' : '🔇'}</Text>
+            <Text style={{ fontSize: 16 }}>{voiceEnabled ? 'ðŸ”Š' : 'ðŸ”‡'}</Text>
             <Text style={[s.voiceToggleText, voiceEnabled && s.voiceToggleTextActive]}>
               {voiceEnabled ? t('tracker.voiceOn') : t('tracker.voiceOff')}
             </Text>
@@ -1099,9 +1084,9 @@ const formatPace = () => {
           gpsStatus === 'active' ? s.gpsActive :
           gpsStatus === 'waiting' ? s.gpsWaiting : s.gpsIdle
         ]}>
-          {gpsStatus === 'error' ? `⚠️ ${gpsError}` :
-                        gpsStatus === 'active' ? `📍 ${gpsPoints} punkter (${filteredPoints} filtreret | d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0})` :
-           gpsStatus === 'waiting' ? `⏳ ${t('tracker.gps.waiting')}` : ''}
+          {gpsStatus === 'error' ? `âš ï¸ ${gpsError}` :
+                        gpsStatus === 'active' ? `ðŸ“ ${gpsPoints} punkter (${filteredPoints} filtreret | d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0})` :
+           gpsStatus === 'waiting' ? `â³ ${t('tracker.gps.waiting')}` : ''}
         </Text>
       )}
       
