@@ -23,7 +23,30 @@
         "CFBundleAllowMixedLocalizations": true,
         "NSSupportsLiveActivities": true,
         "CFBundleLocalizations": [
-          "da","en","de","fr","es","it","pt","nl","pl","sv","fi","el","cs","ro","hu","bg","hr","sk","sl","lt","lv","et","ga","mt"
+          "da",
+          "en",
+          "de",
+          "fr",
+          "es",
+          "it",
+          "pt",
+          "nl",
+          "pl",
+          "sv",
+          "fi",
+          "el",
+          "cs",
+          "ro",
+          "hu",
+          "bg",
+          "hr",
+          "sk",
+          "sl",
+          "lt",
+          "lv",
+          "et",
+          "ga",
+          "mt"
         ],
         "CFBundleDevelopmentRegion": "da",
         "NSLocationWhenInUseUsageDescription": "RunWithAI bruger din placering til at tracke dine løberuter i realtid.",
@@ -86,7 +109,11 @@
           "NSHealthShareUsageDescription": "RunWithAI bruger dine sundhedsdata til at vise puls og kalorier.",
           "NSHealthUpdateUsageDescription": "RunWithAI gemmer dine løbeture i Apple Health."
         }
-      ]
+      ],
+      "@react-native-community/datetimepicker",
+      "expo-font",
+      "expo-localization",
+      "expo-web-browser"
     ],
     "owner": "tj2970",
     "extra": {
