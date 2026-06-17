@@ -629,8 +629,8 @@ const MIN_DISTANCE = Math.max(2, Math.min(15, accuracy * 0.5));
       await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, {
         accuracy: Platform.OS === 'ios' ? Location.Accuracy.Highest : Location.Accuracy.BestForNavigation,
         timeInterval: 1000,
-        // iOS overholder distanceInterval bedre naar den ikke er 1m - 5m reducerer batching.
-        distanceInterval: Platform.OS === 'ios' ? 5 : 1,
+        // distanceInterval: 0 = leverer punkter kontinuerligt (ikke kun hver 5m), undgaar GPS-gaps.
+        distanceInterval: 0,
         // Distance-based deferred updates give a more consistent km measurement
         // in the background than time-based ones (OS won't skip points after
         // every 10 m of movement, even if it batches them).
