@@ -514,7 +514,9 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       // We allow larger gaps and bigger jumps on iOS, and use interpolation
       // (see escape valve below) so distance is still counted when gaps occur.
       const isIOS = Platform.OS === 'ios';
-      const MIN_DISTANCE = 2;
+      // Adaptive min distance: reject moves smaller than the GPS noise floor so jitter
+// while standing/walking (small wiggles within the accuracy radius) is not counted.
+const MIN_DISTANCE = Math.max(2, Math.min(15, accuracy * 0.5));
       const MAX_SPEED_KMH = activityType === 'bike' ? 80 : (activityType === 'walk' ? 12 : 30);
       const MAX_ACCURACY = fromBackground ? (isIOS ? 150 : 100) : (isIOS ? 75 : 50);
       // Platform/activity dependent jump cap so iOS batched points are not dropped.
@@ -763,7 +765,18 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         );
         console.log('Foreground GPS started (500ms/1m)');
         } else {
-          console.log('iOS: skipping foreground watcher - background task handles all updates');
+          watchSubscriptionRef.current = await Location.watchPositionAsync(
+{ accuracy: Location.Accuracy.BestForNavigation, timeInterval: 1000, distanceInterval: 1 },
+(location) => {
+(handlePositionUpdateRef.current || handlePositionUpdate)({
+latitude: location.coords.latitude,
+longitude: location.coords.longitude,
+timestamp: location.timestamp,
+accuracy: location.coords.accuracy,
+});
+}
+);
+console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when locked');
         }
       } catch (e) {
         setGpsStatus('error');
@@ -872,7 +885,18 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         }
       );
       } else {
-        console.log('iOS resume: background task handles all updates');
+        watchSubscriptionRef.current = await Location.watchPositionAsync(
+{ accuracy: Location.Accuracy.BestForNavigation, timeInterval: 1000, distanceInterval: 1 },
+(location) => {
+(handlePositionUpdateRef.current || handlePositionUpdate)({
+latitude: location.coords.latitude,
+longitude: location.coords.longitude,
+timestamp: location.timestamp,
+accuracy: location.coords.accuracy,
+});
+}
+);
+console.log('iOS resume foreground GPS started');
       }
     } else if (isWeb && typeof navigator !== 'undefined' && navigator.geolocation) {
       watchSubscriptionRef.current = navigator.geolocation.watchPosition(
