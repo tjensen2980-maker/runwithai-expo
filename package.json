@@ -10,7 +10,7 @@
     },
     "dependencies": {
         "@expo/vector-icons": "^15.0.3",
-        "@kingstinct/react-native-healthkit": "^8.7.2",
+        "@kingstinct/react-native-healthkit": "^9.0.11",
         "@react-native-async-storage/async-storage": "^2.2.0",
         "@react-native-community/datetimepicker": "8.4.5",
         "eas-cli": "^18.7.0",
