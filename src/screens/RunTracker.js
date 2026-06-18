@@ -539,8 +539,20 @@ const MIN_DISTANCE = Math.max(1, Math.min(8, accuracy * 0.3));
         distanceRef.current = newDistance;
         setDistance(newDistance);
         
+                // LET UDJAEVNING (kun visning/rute - distance regnes paa raa punkter, uaendret)
+        const prevDrawn = positionsRef.current[positionsRef.current.length - 1];
+        let drawLat = newPos.latitude;
+        let drawLng = newPos.longitude;
+        if (prevDrawn) {
+          const alpha = 0.7;
+          drawLat = prevDrawn.latitude * (1 - alpha) + newPos.latitude * alpha;
+          drawLng = prevDrawn.longitude * (1 - alpha) + newPos.longitude * alpha;
+        }
+
         const posWithData = {
           ...newPos,
+          latitude: drawLat,
+          longitude: drawLng,
           speed: speedKmh,
           segmentDistance: dist,
           isRunning: !fromBackground && speedKmh >= 9,
