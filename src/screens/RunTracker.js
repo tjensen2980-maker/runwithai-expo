@@ -722,7 +722,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(8, accuracy * 0.3));
       // Opdater Live Activity hver sekund med friske stats
       // Opdater Live Activity max hvert 3. sekund (undgaa iOS race condition)
       const now = Date.now();
-      if (!lastLiveActivityUpdateRef.current || now - lastLiveActivityUpdateRef.current >= 3000) {
+      if (!lastLiveActivityUpdateRef.current || now - lastLiveActivityUpdateRef.current >= 1000) {
         lastLiveActivityUpdateRef.current = now;
         const km = distanceRef.current / 1000;
         const paceMinPerKm = km > 0 ? (elapsed / 60) / km : 0;
@@ -857,7 +857,7 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
       // Opdater Live Activity hver sekund med friske stats
       // Opdater Live Activity max hvert 3. sekund (undgaa iOS race condition)
       const now = Date.now();
-      if (!lastLiveActivityUpdateRef.current || now - lastLiveActivityUpdateRef.current >= 3000) {
+      if (!lastLiveActivityUpdateRef.current || now - lastLiveActivityUpdateRef.current >= 1000) {
         lastLiveActivityUpdateRef.current = now;
         const km = distanceRef.current / 1000;
         const paceMinPerKm = km > 0 ? (elapsed / 60) / km : 0;
