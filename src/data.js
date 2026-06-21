@@ -485,6 +485,7 @@ export async function loadActivities() {
         splits: a.splits || null,
         hr_samples: a.hr_samples || null,
         isActivity: true,
+        notes: a.notes || null,
       };
     });
   } catch { return []; }
