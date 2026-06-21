@@ -565,6 +565,13 @@ const MIN_DISTANCE = Math.max(1, Math.min(8, accuracy * 0.3));
         console.log(`✓ GPS: +${dist.toFixed(1)}m = ${(newDistance/1000).toFixed(3)}km | ${speedKmh.toFixed(1)}km/h | acc:${accuracy.toFixed(0)}m`);
       } else {
         setFilteredPoints(prev => prev + 1);
+        // FIX: punkt forkastet KUN pga. MIN_DISTANCE er stadig en valid position.
+        // Ryk referencen frem saa naeste punkt ikke maales mod et foraeldet punkt
+        // (ellers oppustes afstand+fart -> falske speed-drops). Distancen taelles ikke med her.
+        if (!isMinDistance && isNotTeleport && isReasonableSpeed && isAccurate) {
+          lastValidPositionRef.current = newPos;
+          lastSampleTimestampRef.current = newPos.timestamp;
+        }
         // Smart escape: ved GPS-gap (typisk iOS-baggrunds-batch) taeller vi den
         // interpolerede distance med - capped til hvad max-fart tillader - saa vi
         // ikke mister km. Bedre at undertaelle lidt end at tegne en lige linje.
