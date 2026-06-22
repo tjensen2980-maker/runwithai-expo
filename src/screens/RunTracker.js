@@ -508,7 +508,10 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       const timeDiff = Math.max(0.1, (newPos.timestamp - lastPos.timestamp) / 1000);
       const speedKmh = (dist / timeDiff) * 3.6;
       const accuracy = newPos.accuracy || 15;
-      
+      // DEBUG: track largest gap mellem paa hinanden foelgende samples (detekter iOS BG batching/suspension)
+            global._fr = global._fr || { dist: 0, jump: 0, speed: 0, acc: 0, maxGap: 0, bigGaps: 0 };
+            if (timeDiff > global._fr.maxGap) global._fr.maxGap = timeDiff;
+            if (timeDiff > 10) global._fr.bigGaps++;
             // ── GPS FILTERING (iOS-batching aware) ────────────────────
       // iOS batches background location heavily when the screen is locked.
       // We allow larger gaps and bigger jumps on iOS, and use interpolation
@@ -698,7 +701,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(8, accuracy * 0.3));
     setGpsError('');
     setGpsPoints(0);
     setFilteredPoints(0);
-    global._fr = { dist: 0, jump: 0, speed: 0, acc: 0 };  // reset GPS filter debug counters per run
+    global._fr = { dist: 0, jump: 0, speed: 0, acc: 0, maxGap: 0, bigGaps: 0 }; // reset GPS filter debug counters per run
     startTimeRef.current = Date.now() - (duration * 1000);
     
     // Start Live Activity (iOS) - vises paa laaseskaerm og Dynamic Island
@@ -1005,7 +1008,7 @@ const runData = {
   heart_rate: null,
   calories,
   route,
-      notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0}`,
+      notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0}`,
   type: activityType === 'run' ? 'run' : 'walk',
   date: new Date().toISOString(),
   running_km: runningKm,
@@ -1022,7 +1025,7 @@ const bikePayload = {
   avg_speed_kmh: speedKmh > 0 ? parseFloat(speedKmh.toFixed(2)) : null,
   max_speed_kmh: null,
   gps_polyline: route.length > 0 ? JSON.stringify(route) : null,
-  notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0}`,
+  notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0}`,
   source: 'app',
 };
 
