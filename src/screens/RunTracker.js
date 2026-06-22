@@ -570,17 +570,17 @@ const MIN_DISTANCE = Math.max(1, Math.min(8, accuracy * 0.3));
         setFilteredPoints(prev => prev + 1);
         // FIX: punkt forkastet KUN pga. MIN_DISTANCE er stadig en valid position.
         // Ryk referencen frem saa naeste punkt ikke maales mod et foraeldet punkt
-        // (ellers oppustes afstand+fart -> falske speed-drops). Distancen taelles ikke med her.
-        if (isNotTeleport && isAccurate) {
+                            // (ellers oppustes afstand+fart -> falske speed-drops). Distancen taelles ikke med her.
+                  if (isNotTeleport) {
           lastValidPositionRef.current = newPos;
           lastSampleTimestampRef.current = newPos.timestamp;
         }
         // Smart escape: ved GPS-gap (typisk iOS-baggrunds-batch) taeller vi den
         // interpolerede distance med - capped til hvad max-fart tillader - saa vi
         // ikke mister km. Bedre at undertaelle lidt end at tegne en lige linje.
-        if (!isNotTeleport && timeDiff > 5 && isAccurate) {
-          const maxAllowedDist = (MAX_SPEED_KMH / 3.6) * timeDiff;
-          const interpolatedDist = Math.min(dist, maxAllowedDist);
+                              if (!isNotTeleport && timeDiff > 5 && accuracy <= 200) {
+                    const maxAllowedDist = (MAX_SPEED_KMH / 3.6) * timeDiff;
+                                const interpolatedDist = Math.min(dist, maxAllowedDist);
           if (interpolatedDist > MIN_DISTANCE) {
             const newDistance = distanceRef.current + interpolatedDist;
             distanceRef.current = newDistance;
@@ -655,8 +655,8 @@ const MIN_DISTANCE = Math.max(1, Math.min(8, accuracy * 0.3));
         distanceInterval: 0,
         // Distance-based deferred updates give a more consistent km measurement
         // in the background than time-based ones (OS won't skip points after
-        // every 10 m of movement, even if it batches them).
-        deferredUpdatesInterval: 1000,
+                        // every 10 m of movement, even if it batches them).
+                deferredUpdatesInterval: 0,
                 deferredUpdatesDistance: 0,  // deliver points continuously in background (more points, better distance when screen locked)
         showsBackgroundLocationIndicator: true,
         foregroundService: {
@@ -665,9 +665,9 @@ const MIN_DISTANCE = Math.max(1, Math.min(8, accuracy * 0.3));
           notificationColor: '#c8ff00',
         },
         pausesUpdatesAutomatically: false,
-        // Use OtherNavigation instead of Fitness: iOS Fitness mode is more
-        // aggressive about pausing updates when it thinks the user has stopped.
-        activityType: Location.ActivityType.OtherNavigation,
+                // Fitness holder GPS i live-mode under bevaegelse (mindst iOS-batching
+                // naar skaermen er laast). Deferred updates er slaaet fra ovenfor.
+                activityType: Location.ActivityType.Fitness,
       });
 
       console.log('Background tracking started');
