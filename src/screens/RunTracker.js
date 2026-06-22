@@ -568,7 +568,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(8, accuracy * 0.3));
         // FIX: punkt forkastet KUN pga. MIN_DISTANCE er stadig en valid position.
         // Ryk referencen frem saa naeste punkt ikke maales mod et foraeldet punkt
         // (ellers oppustes afstand+fart -> falske speed-drops). Distancen taelles ikke med her.
-        if (!isMinDistance && isNotTeleport && isReasonableSpeed && isAccurate) {
+        if (isNotTeleport && isAccurate) {
           lastValidPositionRef.current = newPos;
           lastSampleTimestampRef.current = newPos.timestamp;
         }
