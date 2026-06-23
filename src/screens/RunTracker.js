@@ -392,6 +392,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   const handlePositionUpdateRef = useRef(null);
   const lastForegroundTimestampRef = useRef(0);
   const keepAliveSoundRef = useRef(null); // stille loop-lyd der holder appen vaagen i baggrunden (iOS audio-mode)
+  const keepAliveWatchdogRef = useRef(null); // interval der overvaager og genstarter keep-alive lyden
 
   // ─── PHOTO STORY STATE ──────────────────────────────────────────────────
   const [savedRunId, setSavedRunId] = useState(null);
@@ -856,8 +857,26 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
                   }
                   const { sound } = await AV.Audio.Sound.createAsync(
                             require('../../assets/silence.mp3'),
-                    { shouldPlay: true, isLooping: true, volume: 0.03 }                          );
+                    { shouldPlay: true, isLooping: true, volume: 0.05 }                          );
                   keepAliveSoundRef.current = sound;
+                  // Watchdog: hvis iOS pauser den stille loop, genstart den straks saa appen ikke suspenderes.
+                  sound.setOnPlaybackStatusUpdate((status) => {
+                    if (status && status.isLoaded && !status.isPlaying && !status.didJustFinish) {
+                      sound.playAsync().catch(() => {});
+                    }
+                  });
+                  if (keepAliveWatchdogRef.current) clearInterval(keepAliveWatchdogRef.current);
+                  keepAliveWatchdogRef.current = setInterval(async () => {
+                    try {
+                      const s = keepAliveSoundRef.current;
+                      if (!s) return;
+                      const st = await s.getStatusAsync();
+                      if (st && st.isLoaded && !st.isPlaying) {
+                        await s.playAsync().catch(() => {});
+                        console.log('Keep-alive watchdog: restarted silent loop');
+                      }
+                    } catch {}
+                  }, 2000);
                   console.log('Keep-alive audio started');
           } catch (e) {
                   console.log('Keep-alive audio failed:', e.message);
@@ -867,7 +886,12 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
     const stopKeepAliveAudio = async () => {
           if (isWeb) return;
           try {
+                  if (keepAliveWatchdogRef.current) {
+                            clearInterval(keepAliveWatchdogRef.current);
+                            keepAliveWatchdogRef.current = null;
+                  }
                   if (keepAliveSoundRef.current) {
+                            try { await keepAliveSoundRef.current.setOnPlaybackStatusUpdate(null); } catch {}
                             await keepAliveSoundRef.current.stopAsync().catch(() => {});
                             await keepAliveSoundRef.current.unloadAsync().catch(() => {});
                             keepAliveSoundRef.current = null;
