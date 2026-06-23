@@ -71,6 +71,7 @@ async function speakOpenAINative(text) {
     playsInSilentModeIOS: true,
     staysActiveInBackground: true,
     shouldDuckAndroid: true,
+    interruptionModeIOS: AV.Audio.InterruptionModeIOS.MixWithOthers,
   });
 
   // Fetch TTS audio
@@ -166,6 +167,7 @@ async function speakOpenAI(text) {
         playsInSilentModeIOS: true,
         staysActiveInBackground: true,
         shouldDuckAndroid: true,
+        interruptionModeIOS: ExpoAV.Audio.InterruptionModeIOS.MixWithOthers,
       });
     } catch {}
   }
@@ -438,6 +440,7 @@ export default class VoiceCoach {
           playsInSilentModeIOS: true,
           staysActiveInBackground: true,
           shouldDuckAndroid: true,
+          interruptionModeIOS: ExpoAV.Audio.InterruptionModeIOS.MixWithOthers,
         }).catch(() => {});
       } catch {}
     }
