@@ -848,6 +848,7 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
                             playsInSilentModeIOS: true,
                             staysActiveInBackground: true,
                             shouldDuckAndroid: true,
+                    interruptionModeIOS: AV.Audio.InterruptionModeIOS.MixWithOthers,
                   });
                   if (keepAliveSoundRef.current) {
                             try { await keepAliveSoundRef.current.unloadAsync(); } catch {}
@@ -855,8 +856,7 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
                   }
                   const { sound } = await AV.Audio.Sound.createAsync(
                             require('../../assets/silence.mp3'),
-                    { shouldPlay: true, isLooping: true, volume: 0 }
-                          );
+                    { shouldPlay: true, isLooping: true, volume: 0.03 }                          );
                   keepAliveSoundRef.current = sound;
                   console.log('Keep-alive audio started');
           } catch (e) {
