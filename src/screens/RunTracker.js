@@ -391,6 +391,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   const appStateRef = useRef(AppState.currentState);
   const handlePositionUpdateRef = useRef(null);
   const lastForegroundTimestampRef = useRef(0);
+  const keepAliveSoundRef = useRef(null); // stille loop-lyd der holder appen vaagen i baggrunden (iOS audio-mode)
 
   // ─── PHOTO STORY STATE ──────────────────────────────────────────────────
   const [savedRunId, setSavedRunId] = useState(null);
@@ -767,6 +768,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(8, accuracy * 0.3));
         }
 
         await startBackgroundLocationTracking();
+        await startKeepAliveAudio();
 
         if (Platform.OS === 'android') {
           watchSubscriptionRef.current = await Location.watchPositionAsync(
@@ -832,6 +834,50 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
     setGpsError(t('tracker.gps.notAvailable'));
   };
 
+
+    // ─── KEEP-ALIVE AUDIO (holder appen vaagen i baggrunden) ───────────────
+    // Afspiller en stille lyd i loop saa iOS audio-mode holder appen i live mens
+    // skaermen er laast. Uden dette suspenderer iOS appen mellem VoiceCoach-klip
+    // og GPS-leveringen stopper (lange lige linjer / store gaps).
+    const startKeepAliveAudio = async () => {
+          if (isWeb) return;
+          try {
+                  const AV = require('expo-av');
+                  await AV.Audio.setAudioModeAsync({
+                            allowsRecordingIOS: false,
+                            playsInSilentModeIOS: true,
+                            staysActiveInBackground: true,
+                            shouldDuckAndroid: true,
+                  });
+                  if (keepAliveSoundRef.current) {
+                            try { await keepAliveSoundRef.current.unloadAsync(); } catch {}
+                            keepAliveSoundRef.current = null;
+                  }
+                  const { sound } = await AV.Audio.Sound.createAsync(
+                            require('../../assets/silence.mp3'),
+                    { shouldPlay: true, isLooping: true, volume: 0 }
+                          );
+                  keepAliveSoundRef.current = sound;
+                  console.log('Keep-alive audio started');
+          } catch (e) {
+                  console.log('Keep-alive audio failed:', e.message);
+          }
+    };
+
+    const stopKeepAliveAudio = async () => {
+          if (isWeb) return;
+          try {
+                  if (keepAliveSoundRef.current) {
+                            await keepAliveSoundRef.current.stopAsync().catch(() => {});
+                            await keepAliveSoundRef.current.unloadAsync().catch(() => {});
+                            keepAliveSoundRef.current = null;
+                            console.log('Keep-alive audio stopped');
+                  }
+          } catch (e) {
+                  console.log('Keep-alive stop failed:', e.message);
+          }
+    };
+  
   const stopGpsWatch = () => {
     if (watchSubscriptionRef.current) {
       if (!isWeb && watchSubscriptionRef.current.remove) {
@@ -848,6 +894,7 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
     if (intervalRef.current) clearInterval(intervalRef.current);
     stopGpsWatch();
     await stopBackgroundLocationTracking();
+    await stopKeepAliveAudio();
     // Marker Live Activity som pause - bliver staaende paa laaseskaerm
     const km = distanceRef.current / 1000;
     const paceMinPerKm = km > 0 ? (duration / 60) / km : 0;
@@ -894,6 +941,7 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
 
     if (!isWeb && Location) {
       await startBackgroundLocationTracking();
+      await startKeepAliveAudio();
       if (Platform.OS === 'android') {
         watchSubscriptionRef.current = await Location.watchPositionAsync(
         { accuracy: Location.Accuracy.BestForNavigation, timeInterval: 500, distanceInterval: 1 },
@@ -941,6 +989,7 @@ console.log('iOS resume foreground GPS started');
     if (intervalRef.current) clearInterval(intervalRef.current);
     stopGpsWatch();
     await stopBackgroundLocationTracking();
+    await stopKeepAliveAudio();
     processBackgroundLocations();
     
     // Afslut Live Activity
@@ -1081,6 +1130,7 @@ const bikePayload = {
     if (intervalRef.current) clearInterval(intervalRef.current);
     stopGpsWatch();
     await stopBackgroundLocationTracking();
+    await stopKeepAliveAudio();
     LiveActivity.end().catch(() => {});
     if (onBack) onBack();
   };
@@ -1118,6 +1168,7 @@ const formatPace = () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
       stopGpsWatch();
       stopBackgroundLocationTracking();
+      stopKeepAliveAudio();
       LiveActivity.end().catch(() => {});
       if (voiceCoachRef.current) voiceCoachRef.current.destroy();
     };
