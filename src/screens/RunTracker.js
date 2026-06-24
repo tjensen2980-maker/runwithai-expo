@@ -669,7 +669,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(8, accuracy * 0.3));
         pausesUpdatesAutomatically: false,
                 // Fitness holder GPS i live-mode under bevaegelse (mindst iOS-batching
                 // naar skaermen er laast). Deferred updates er slaaet fra ovenfor.
-                activityType: Location.ActivityType.Fitness,
+                activityType: Location.ActivityType.OtherNavigation,
       });
 
       console.log('Background tracking started');
