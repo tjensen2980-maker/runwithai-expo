@@ -65,7 +65,7 @@ function _bgHaversine(lat1, lon1, lat2, lon2) {
             Math.sin(dLam/2) * Math.sin(dLam/2);
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
-
+}
 if (!isWeb && TaskManager) {
   TaskManager.defineTask(BACKGROUND_LOCATION_TASK, ({ data, error }) => {
     if (error) {
