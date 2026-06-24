@@ -51,6 +51,19 @@ if (!isWeb) {
 if (!isWeb && typeof global !== 'undefined') {
   global._backgroundLocations = global._backgroundLocations || [];
   global._isBackgroundTracking = false;
+  global._bgDistance = global._bgDistance || 0;
+global._bgLastPoint = global._bgLastPoint || null;
+
+function _bgHaversine(lat1, lon1, lat2, lon2) {
+  const R = 6371e3;
+  const phi1 = lat1 * Math.PI / 180;
+  const phi2 = lat2 * Math.PI / 180;
+  const dPhi = (lat2 - lat1) * Math.PI / 180;
+  const dLam = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dPhi/2) * Math.sin(dPhi/2) +
+            Math.cos(phi1) * Math.cos(phi2) *
+            Math.sin(dLam/2) * Math.sin(dLam/2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
 if (!isWeb && TaskManager) {
@@ -72,6 +85,21 @@ if (!isWeb && TaskManager) {
           ...(global._backgroundLocations || []),
           ...newLocations,
         ];
+        // ─── Akkumulér distance i baggrunden (kører selv med låst skærm) ───
+        for (const p of newLocations) {
+          if (p.accuracy != null && p.accuracy > 50) continue; // kassér upræcise
+          if (global._bgLastPoint) {
+            const d = _bgHaversine(
+              global._bgLastPoint.latitude, global._bgLastPoint.longitude,
+              p.latitude, p.longitude
+            );
+            if (d >= 3 && d <= 60) {   // min 3m, ignorér teleport-spring
+              global._bgDistance += d;
+            }
+          }
+          global._bgLastPoint = p;
+        }
+        // ────────────────────────────────────────────────────────────────
         console.log('BG location:', newLocations.length, 'pts, acc:', newLocations[0]?.accuracy?.toFixed(0) + 'm');
       }
     }
