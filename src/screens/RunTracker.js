@@ -608,7 +608,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(8, accuracy * 0.3));
         // Smart escape: ved GPS-gap (typisk iOS-baggrunds-batch) taeller vi den
         // interpolerede distance med - capped til hvad max-fart tillader - saa vi
         // ikke mister km. Bedre at undertaelle lidt end at tegne en lige linje.
-                              if (!isNotTeleport && timeDiff > 5 && accuracy <= 200) {
+                              if ((!isNotTeleport || !isReasonableSpeed) && timeDiff > 5 && accuracy <= 200) {
                     const maxAllowedDist = (MAX_SPEED_KMH / 3.6) * timeDiff;
                                 const interpolatedDist = Math.min(dist, maxAllowedDist);
           if (interpolatedDist > MIN_DISTANCE) {
