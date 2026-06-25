@@ -679,7 +679,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(8, accuracy * 0.3));
       global._isBackgroundTracking = true;
 
       await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, {
-        accuracy: Platform.OS === 'ios' ? Location.Accuracy.Highest : Location.Accuracy.BestForNavigation,
+        accuracy: Platform.OS === 'ios' ? Location.Accuracy.BestForNavigation : Location.Accuracy.BestForNavigation,
         timeInterval: 1000,
         // distanceInterval: 0 = leverer punkter kontinuerligt (ikke kun hver 5m), undgaar GPS-gaps.
         distanceInterval: 0,
@@ -697,7 +697,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(8, accuracy * 0.3));
         pausesUpdatesAutomatically: false,
                 // Fitness holder GPS i live-mode under bevaegelse (mindst iOS-batching
                 // naar skaermen er laast). Deferred updates er slaaet fra ovenfor.
-                activityType: Location.ActivityType.OtherNavigation,
+                activityType: Location.ActivityType.Fitness,
       });
 
       console.log('Background tracking started');
