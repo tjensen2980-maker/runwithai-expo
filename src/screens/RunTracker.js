@@ -53,6 +53,7 @@ if (!isWeb && typeof global !== 'undefined') {
   global._isBackgroundTracking = false;
   global._bgDistance = global._bgDistance || 0;
 global._bgLastPoint = global._bgLastPoint || null;
+  global._bgRoute = global._bgRoute || [];
 
 function _bgHaversine(lat1, lon1, lat2, lon2) {
   const R = 6371e3;
@@ -97,6 +98,8 @@ if (!isWeb && TaskManager) {
               global._bgDistance += d;
             }
           }
+          // Tilfoej punktet til baggrunds-ruten saa stregen foelger faktisk vej (ingen lige linjer)
+          global._bgRoute.push({ latitude: p.latitude, longitude: p.longitude, timestamp: p.timestamp });
           global._bgLastPoint = p;
         }
         // ────────────────────────────────────────────────────────────────
@@ -410,6 +413,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   
   const watchSubscriptionRef = useRef(null);
   const lastLiveActivityUpdateRef = useRef(null);
+  const mergeBackgroundProgressRef = useRef(null);
   const intervalRef = useRef(null);
   const startTimeRef = useRef(null);
   const distanceRef = useRef(0);
@@ -481,12 +485,47 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
             }
           });
         }
+        // ─── Flet baggrunds-rute/distance ind (baggrunds-task er sandhed naar JS var frosset) ───
+        if (mergeBackgroundProgressRef.current) {
+          mergeBackgroundProgressRef.current();
+        }
       }
       appStateRef.current = nextAppState;
       setIsForeground(nextAppState === 'active');
     });
 
     return () => subscription?.remove();
+  }, []);
+
+  // ─── MERGE BACKGROUND PROGRESS ───────────────────────────────────────────
+  // Naar JS-timeren har vaeret frosset (laast skaerm) er baggrunds-tasken den
+  // eneste der har koert. Den har bygget global._bgRoute + global._bgDistance.
+  // Her fletter vi det ind: brug den taetteste rute og den stoerste distance.
+  useEffect(() => {
+    mergeBackgroundProgressRef.current = () => {
+      try {
+        const bgRoute = global._bgRoute || [];
+        const bgDist = global._bgDistance || 0;
+        if (bgRoute.length > positionsRef.current.length) {
+          const merged = bgRoute.map(p => ({
+            latitude: p.latitude,
+            longitude: p.longitude,
+            timestamp: p.timestamp,
+            speed: 0,
+            segmentDistance: 0,
+            isRunning: false,
+          }));
+          positionsRef.current = merged;
+          setPositions(merged);
+        }
+        if (bgDist > distanceRef.current) {
+          distanceRef.current = bgDist;
+          setDistance(bgDist);
+        }
+      } catch (e) {
+        console.log('mergeBackgroundProgress failed:', e);
+      }
+    };
   }, []);
 
   // ─── PERIODIC CHECK FOR BACKGROUND LOCATIONS ────────────────────────────
@@ -731,7 +770,11 @@ const MIN_DISTANCE = Math.max(1, Math.min(8, accuracy * 0.3));
     setGpsError('');
     setGpsPoints(0);
     setFilteredPoints(0);
-    global._fr = { dist: 0, jump: 0, speed: 0, acc: 0, maxGap: 0, bigGaps: 0 }; // reset GPS filter debug counters per run
+    global._fr = { dist: 0, jump: 0, speed: 0, acc: 0, maxGap: 0, bigGaps: 0 };
+    // Nulstil baggrunds-akkumulering for en ny tur
+    global._bgDistance = 0;
+    global._bgLastPoint = null;
+    global._bgRoute = []; // reset GPS filter debug counters per run
     startTimeRef.current = Date.now() - (duration * 1000);
     
     // Start Live Activity (iOS) - vises paa laaseskaerm og Dynamic Island
