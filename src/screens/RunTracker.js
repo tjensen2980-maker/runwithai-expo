@@ -88,6 +88,8 @@ if (!isWeb && TaskManager) {
         ];
         // ─── Akkumulér distance i baggrunden (kører selv med låst skærm) ───
         for (const p of newLocations) {
+          // Spring punkter over uden gyldige koordinater (undgaa NaN i gemt rute -> kort-crash)
+          if (!Number.isFinite(p.latitude) || !Number.isFinite(p.longitude)) continue;
           if (p.accuracy != null && p.accuracy > 50) continue; // kassér upræcise
           if (global._bgLastPoint) {
             const d = _bgHaversine(
