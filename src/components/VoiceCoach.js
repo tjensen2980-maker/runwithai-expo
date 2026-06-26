@@ -12,6 +12,12 @@ import { SERVER } from '../config';
 let authToken = null;
 export function setVoiceAuthToken(token) { authToken = token; }
 
+// ─── DELT AUDIO-INDSTILLING (sættes af RunTracker) ───────────────────
+// true  = MixWithOthers (Spotify kan høres, coach ducker oven på)
+// false = DoNotMix (maks GPS-stabilitet)
+let _allowMusicMixing = false;
+export function setAllowMusicMixing(v) { _allowMusicMixing = !!v; }
+
 // Lazy-load native modules
 let ExpoAV = null;
 let ExpoSpeech = null;
@@ -64,15 +70,6 @@ async function processQueue(lang = 'da-DK') {
 // Native-only: fetch TTS, play with expo-av
 async function speakOpenAINative(text) {
   const AV = require('expo-av');
-
-  // Set audio mode for silent mode support
-  await AV.Audio.setAudioModeAsync({
-    allowsRecordingIOS: false,
-    playsInSilentModeIOS: true,
-    staysActiveInBackground: true,
-    shouldDuckAndroid: true,
-    interruptionModeIOS: AV.Audio.InterruptionModeIOS.MixWithOthers,
-  });
 
   // Fetch TTS audio
   const res = await fetch(`${SERVER}/tts`, {
@@ -159,19 +156,6 @@ async function speakOpenAINative(text) {
 
 // OpenAI TTS via server — natural voice
 async function speakOpenAI(text) {
-  // Set audio mode FIRST
-  if (!isWeb && ExpoAV) {
-    try {
-      await ExpoAV.Audio.setAudioModeAsync({
-        allowsRecordingIOS: false,
-        playsInSilentModeIOS: true,
-        staysActiveInBackground: true,
-        shouldDuckAndroid: true,
-        interruptionModeIOS: ExpoAV.Audio.InterruptionModeIOS.MixWithOthers,
-      });
-    } catch {}
-  }
-
   if (!isWeb && ExpoAV && ExpoFileSystem) {
     // Native: fetch as blob, read as base64, write to file, play with expo-av
     const res = await fetch(`${SERVER}/tts`, {
@@ -432,18 +416,6 @@ export default class VoiceCoach {
       window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
     }
 
-    // Configure audio on native
-    if (!isWeb && ExpoAV) {
-      try {
-        ExpoAV.Audio.setAudioModeAsync({
-          allowsRecordingIOS: false,
-          playsInSilentModeIOS: true,
-          staysActiveInBackground: true,
-          shouldDuckAndroid: true,
-          interruptionModeIOS: ExpoAV.Audio.InterruptionModeIOS.MixWithOthers,
-        }).catch(() => {});
-      } catch {}
-    }
   }
 
   update({ km, durationSecs, paceMinPerKm }) {
