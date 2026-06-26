@@ -326,15 +326,30 @@ function WebMiniRouteMap({ route }) {
 }
 
 // ─── UNIFIED MINI ROUTE MAP (trykbar — åbner fuldskærmskort) ─────────────────
-function MiniRouteMap({ route, onPress }) {
+function MiniRouteMap({ route, onPress, lazy }) {
   if (route.length < 2) return null;
+  // Lazy: vis et let placeholder i stedet for at montere et native kort med det samme.
+  // Mange native MapViews paa een gang (run-listen) sprænger iOS CPU-watchdog.
+  const [activated, setActivated] = useState(!lazy);
+  if (!activated) {
+    return (
+      <TouchableOpacity
+        onPress={() => { setActivated(true); }}
+        activeOpacity={0.85}
+        style={{ height: 160, borderRadius: 12, backgroundColor: 'rgba(0,0,0,0.06)', alignItems: 'center', justifyContent: 'center', marginTop: 12 }}
+      >
+        <Text style={{ fontSize: 24, marginBottom: 4 }}>🗺️</Text>
+        <Text style={{ color: colors.muted, fontSize: 13, fontWeight: '600' }}>Tryk for at vise rutekort</Text>
+      </TouchableOpacity>
+    );
+  }
   const mapContent = isWeb ? <WebMiniRouteMap route={route} /> : <NativeMiniRouteMap route={route} />;
   if (onPress) {
     return (
       <TouchableOpacity onPress={onPress} activeOpacity={0.85}>
         {mapContent}
-        <View style={{ position: 'absolute', bottom: 8, right: 8, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 5 }}>
-          <Text style={{ color: '#fff', fontSize: 11, fontWeight: '700' }}>🔍 Åbn kort</Text>
+        <View style={{ position: 'absolute', bottom: 8, right: 8, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4 }}>
+          <Text style={{ color: '#fff', fontSize: 12, fontWeight: '600' }}>🔍 Åbn kort</Text>
         </View>
       </TouchableOpacity>
     );
@@ -751,7 +766,7 @@ function RunCard({ run, level, allRuns, onDelete, onSelectRun }) {
         
         {/* Mini rutekort — tryk for at åbne fuldskærmskort */}
         {route.length >= 2 && (
-          <MiniRouteMap route={route} onPress={() => setShowMap(true)} />
+          <MiniRouteMap route={route} onPress={() => setShowMap(true)} lazy />
         )}
         {splits.length > 0 && (
           <View style={getActivityStyles().splitsPreview}>
