@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator, TextInput, Platform, AppState } from 'react-native';
 import { colors, SERVER, getAuthToken } from '../data';
-import VoiceCoach, { stopSpeaking, setVoiceAuthToken } from '../components/VoiceCoach';
+import VoiceCoach, { stopSpeaking, setVoiceAuthToken, setAllowMusicMixing as setVoiceCoachMixing } from '../components/VoiceCoach';
 import { useTranslation } from 'react-i18next';
 // ─── MUSIC TEMPO MATCHER IMPORTS ────────────────────────────────────────────
 import MusicButton from './components/MusicButton';
@@ -401,6 +401,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   const { t } = useTranslation();
   const [isTracking, setIsTracking] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(false); // TEST: AI-coach starter slaaet fra for at teste baggrunds-GPS
+  const [allowMusicMixing, setAllowMusicMixing] = useState(false); // false=DoNotMix (maks GPS), true=MixWithOthers (Spotify)
   const voiceCoachRef = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
   const [distance, setDistance] = useState(0);
@@ -857,6 +858,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
           return;
         }
 
+        setVoiceCoachMixing(allowMusicMixing);
         await startBackgroundLocationTracking();
         await startKeepAliveAudio();
 
@@ -934,11 +936,13 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
           try {
                   const AV = require('expo-av');
                   await AV.Audio.setAudioModeAsync({
-                            allowsRecordingIOS: false,
-                            playsInSilentModeIOS: true,
-                            staysActiveInBackground: true,
-                            shouldDuckAndroid: false,
-                    interruptionModeIOS: AV.Audio.InterruptionModeIOS.DoNotMix,
+                    allowsRecordingIOS: false,
+                    playsInSilentModeIOS: true,
+                    staysActiveInBackground: true,
+                    shouldDuckAndroid: allowMusicMixing,
+                    interruptionModeIOS: allowMusicMixing
+                      ? AV.Audio.InterruptionModeIOS.MixWithOthers
+                      : AV.Audio.InterruptionModeIOS.DoNotMix,
                   });
                   if (keepAliveSoundRef.current) {
                             try { await keepAliveSoundRef.current.unloadAsync(); } catch {}
@@ -1053,6 +1057,7 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
     }, 1000);
 
     if (!isWeb && Location) {
+      setVoiceCoachMixing(allowMusicMixing);
       await startBackgroundLocationTracking();
       await startKeepAliveAudio();
       if (Platform.OS === 'android') {
@@ -1295,6 +1300,19 @@ const formatPace = () => {
       <View style={s.header}>
         <Text style={s.title}>{activityType === 'bike' ? '🚴 Cykling' : activityType === 'run' ? ('🏃 ' + t('run.title')) : ('🚶 ' + t('run.walk'))}</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <TouchableOpacity
+            style={[s.voiceToggle, allowMusicMixing && s.voiceToggleActive]}
+            onPress={() => {
+              const next = !allowMusicMixing;
+              setAllowMusicMixing(next);
+              setVoiceCoachMixing(next);
+            }}
+          >
+            <Text style={{ fontSize: 16 }}>{allowMusicMixing ? '🎵' : '📍'}</Text>
+            <Text style={[s.voiceToggleText, allowMusicMixing && s.voiceToggleTextActive]}>
+              {allowMusicMixing ? 'Musik' : 'Maks GPS'}
+            </Text>
+          </TouchableOpacity>
           <TouchableOpacity
             style={[s.voiceToggle, voiceEnabled && s.voiceToggleActive]}
             onPress={() => {
