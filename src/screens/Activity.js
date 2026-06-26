@@ -205,12 +205,18 @@ function computeEffortScore(run, allRuns) {
 
 // ─── MINI ROUTE MAP — Native (react-native-maps) ─────────────────────────────
 function NativeMiniRouteMap({ route }) {
-  if (!MapView || route.length < 2) return null;
+  if (!MapView || !Array.isArray(route) || route.length < 2) return null;
 
-  const coords = route.map(p => ({
-    latitude: p.lat || p.latitude,
-    longitude: p.lng || p.longitude,
-  }));
+  // Brug != null (ikke ||) saa gyldige 0-koordinater bevares, og filtrer NaN fra
+  const coords = route
+    .map(p => ({
+      latitude: (p && p.lat != null) ? p.lat : (p ? p.latitude : undefined),
+      longitude: (p && p.lng != null) ? p.lng : (p ? p.longitude : undefined),
+    }))
+    .filter(c => Number.isFinite(c.latitude) && Number.isFinite(c.longitude));
+
+  // Faerre end 2 gyldige punkter -> tegn ikke kort (undgaa native crash)
+  if (coords.length < 2) return null;
 
   // Calculate region to fit all points
   const lats = coords.map(c => c.latitude);
