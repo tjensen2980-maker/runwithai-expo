@@ -937,8 +937,8 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
                             allowsRecordingIOS: false,
                             playsInSilentModeIOS: true,
                             staysActiveInBackground: true,
-                            shouldDuckAndroid: true,
-                    interruptionModeIOS: AV.Audio.InterruptionModeIOS.MixWithOthers,
+                            shouldDuckAndroid: false,
+                    interruptionModeIOS: AV.Audio.InterruptionModeIOS.DoNotMix,
                   });
                   if (keepAliveSoundRef.current) {
                             try { await keepAliveSoundRef.current.unloadAsync(); } catch {}
