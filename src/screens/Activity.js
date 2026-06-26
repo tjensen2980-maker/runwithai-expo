@@ -764,9 +764,16 @@ function RunCard({ run, level, allRuns, onDelete, onSelectRun }) {
           totalKm={run.km || 0} 
         />
         
-        {/* Mini rutekort — tryk for at åbne fuldskærmskort */}
+        {/* Rute-preview: aaben fuldskaermskort foerst ved tryk (intet native kort i listen) */}
         {route.length >= 2 && (
-          <MiniRouteMap route={route} onPress={() => setShowMap(true)} lazy />
+          <TouchableOpacity
+            onPress={() => setShowMap(true)}
+            activeOpacity={0.85}
+            style={{ height: 120, borderRadius: 12, marginTop: 12, backgroundColor: 'rgba(0,0,0,0.06)', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 8 }}
+          >
+            <Text style={{ fontSize: 22 }}>🗺️</Text>
+            <Text style={{ color: colors.muted, fontSize: 13, fontWeight: '600' }}>Vis rute paa kort</Text>
+          </TouchableOpacity>
         )}
         {splits.length > 0 && (
           <View style={getActivityStyles().splitsPreview}>
