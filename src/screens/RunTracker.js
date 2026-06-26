@@ -590,7 +590,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
       const isIOS = Platform.OS === 'ios';
       // Adaptive min distance: reject moves smaller than the GPS noise floor so jitter
 // while standing/walking (small wiggles within the accuracy radius) is not counted.
-const MIN_DISTANCE = Math.max(1, Math.min(8, accuracy * 0.3));
+const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
       const MAX_SPEED_KMH = activityType === 'bike' ? 80 : (activityType === 'walk' ? 12 : 30);
       const MAX_ACCURACY = fromBackground ? (isIOS ? 150 : 100) : (isIOS ? 75 : 50);
       // Platform/activity dependent jump cap so iOS batched points are not dropped.
@@ -645,6 +645,22 @@ const MIN_DISTANCE = Math.max(1, Math.min(8, accuracy * 0.3));
                   if (isNotTeleport) {
           lastValidPositionRef.current = newPos;
           lastSampleTimestampRef.current = newPos.timestamp;
+
+          // NYT: et punkt der KUN fejlede MIN_DISTANCE (lille bevaegelse) er stadig
+          // en gyldig position til at TEGNE ruten - saa stregen foelger vejen i sving.
+          // segmentDistance:0 -> taeller IKKE km (distance uaendret), men fylder ruten ud.
+          if (!isMinDistance && isReasonableSpeed && isAccurate) {
+            const prevDrawn = positionsRef.current[positionsRef.current.length - 1];
+            let drawLat = newPos.latitude;
+            let drawLng = newPos.longitude;
+            if (prevDrawn) {
+              const alpha = 0.7;
+              drawLat = prevDrawn.latitude * (1 - alpha) + newPos.latitude * alpha;
+              drawLng = prevDrawn.longitude * (1 - alpha) + newPos.longitude * alpha;
+            }
+            positionsRef.current = [...positionsRef.current, { ...newPos, latitude: drawLat, longitude: drawLng, speed: speedKmh, segmentDistance: 0, isRunning: false }];
+            setPositions(positionsRef.current);
+          }
         }
         // Smart escape: ved GPS-gap (typisk iOS-baggrunds-batch) taeller vi den
         // interpolerede distance med - capped til hvad max-fart tillader - saa vi
