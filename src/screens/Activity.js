@@ -149,7 +149,13 @@ function getRunRoute(run) {
     try { route = JSON.parse(route); } catch { return []; }
   }
   if (!Array.isArray(route)) return [];
-  return route;
+  // Filtrer punkter uden gyldige koordinater fra (undgaa NaN -> native kort-crash)
+  return route.filter(p => {
+    if (!p) return false;
+    const lat = p.lat != null ? p.lat : p.latitude;
+    const lng = p.lng != null ? p.lng : p.longitude;
+    return Number.isFinite(lat) && Number.isFinite(lng);
+  });
 }
 // ─── HELPER FUNCTIONS ─────────────────────────────────────────────────────────
 function fmtTime(secs) {
