@@ -477,6 +477,12 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         appStateRef.current.match(/inactive|background/) &&
         nextAppState === 'active'
       ) {
+          // Naar appen kommer i forgrunden: genstart location-tasken hvis den blev suspenderet i baggrunden
+          if (global._isBackgroundTracking && global._locationTaskOptions) {
+            Location.hasStartedLocationUpdatesAsync(BACKGROUND_LOCATION_TASK).then(function (running) {
+              if (!running) { Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions); }
+            }).catch(function () {});
+          }
         console.log('App foregrounded, processing background locations...');
         if (global._backgroundLocations && global._backgroundLocations.length > 0) {
           const bgLocations = [...global._backgroundLocations].sort((a, b) => a.timestamp - b.timestamp);
@@ -736,7 +742,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
       global._backgroundLocations = [];
       global._isBackgroundTracking = true;
 
-      await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, {
+      global._locationTaskOptions = {
         accuracy: Platform.OS === 'ios' ? Location.Accuracy.BestForNavigation : Location.Accuracy.BestForNavigation,
         timeInterval: 1000,
         // distanceInterval: 0 = leverer punkter kontinuerligt (ikke kun hver 5m), undgaar GPS-gaps.
@@ -756,7 +762,8 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
                 // Fitness holder GPS i live-mode under bevaegelse (mindst iOS-batching
                 // naar skaermen er laast). Deferred updates er slaaet fra ovenfor.
                 activityType: Location.ActivityType.Fitness,
-      });
+      };
+      await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions);
 
       console.log('Background tracking started');
       return true;
@@ -961,6 +968,11 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
                   if (keepAliveWatchdogRef.current) clearInterval(keepAliveWatchdogRef.current);
                   keepAliveWatchdogRef.current = setInterval(async () => {
                     try {
+                      // Watchdog: genstart location-tasken hvis iOS har suspenderet den (sker ved lav fart/gang)
+                      const _locRunning = await Location.hasStartedLocationUpdatesAsync(BACKGROUND_LOCATION_TASK);
+                      if (!_locRunning && global._isBackgroundTracking && global._locationTaskOptions) {
+                        await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions);
+                      }
                       const s = keepAliveSoundRef.current;
                       if (!s) return;
                       const st = await s.getStatusAsync();
