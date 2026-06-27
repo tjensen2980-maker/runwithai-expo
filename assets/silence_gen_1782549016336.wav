@@ -1,0 +1,16 @@
+{
+  "data": {
+    "filePath": "/public/processing/silence_gen_1782549016336.wav",
+    "fileName": "silence_gen_1782549016336.wav",
+    "contentType": "audio/wav",
+    "size": 7938078,
+    "metadata": {
+      "duration": 45,
+      "sampleRate": 44100,
+      "channels": 2,
+      "outputFormat": "wav",
+      "processingTime": "2026-06-27T08:30:16.990Z"
+    }
+  },
+  "type": "file"
+}
