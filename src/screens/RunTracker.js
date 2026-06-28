@@ -84,6 +84,7 @@ if (!isWeb && TaskManager) {
         }));
         global._backgroundLocations = [
           ...(global._backgroundLocations || []),
+        global._bgLastPointTime = Date.now(); // tidsstempel for sidste modtagne baggrundspunkt (til watchdog)
           ...newLocations,
         ];
         // ─── Akkumulér distance i baggrunden (kører selv med låst skærm) ───
@@ -972,6 +973,13 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
                       const _locRunning = await Location.hasStartedLocationUpdatesAsync(BACKGROUND_LOCATION_TASK);
                       if (!_locRunning && global._isBackgroundTracking && global._locationTaskOptions) {
                         await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions);
+                      }
+                      // Tvungen vaekning: hvis ingen nye punkter i 12 sek (fx langt stop ved madbestilling), genstart tasken haardt
+                      const _lastPt = global._bgLastPointTime || 0;
+                      if (global._isBackgroundTracking && global._locationTaskOptions && _lastPt && (Date.now() - _lastPt) > 12000) {
+                        try { await Location.stopLocationUpdatesAsync(BACKGROUND_LOCATION_TASK); } catch (e) {}
+                        await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions);
+                        global._bgLastPointTime = Date.now();
                       }
                       const s = keepAliveSoundRef.current;
                       if (!s) return;
