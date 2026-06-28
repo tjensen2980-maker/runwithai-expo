@@ -84,9 +84,9 @@ if (!isWeb && TaskManager) {
         }));
         global._backgroundLocations = [
           ...(global._backgroundLocations || []),
-        global._bgLastPointTime = Date.now(); // tidsstempel for sidste modtagne baggrundspunkt (til watchdog)
           ...newLocations,
         ];
+        global._bgLastPointTime = Date.now(); // tidsstempel for sidste modtagne baggrundspunkt (til watchdog)
         // ─── Akkumulér distance i baggrunden (kører selv med låst skærm) ───
         for (const p of newLocations) {
           // Spring punkter over uden gyldige koordinater (undgaa NaN i gemt rute -> kort-crash)
