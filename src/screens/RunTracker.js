@@ -14,6 +14,8 @@ import PhotoStory from './components/PhotoStory';
 import VoiceInput from './components/VoiceInput';
 // Live Activity (iOS laaseskaerm/Dynamic Island)
 import LiveActivity from '../modules/LiveActivity';
+// Native baggrunds-GPS (CLBackgroundActivitySession, iOS 17+)
+import BackgroundLocation from '../modules/BackgroundLocation';
 // Conditionally import native modules
 let MapView, Marker, Polyline, PROVIDER_GOOGLE;
 let Location;
@@ -766,6 +768,27 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
       };
       await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions);
 
+      // Start ogsaa det native modul (aegte baggrundssession, fryser ikke med JS-traaden).
+      try {
+        if (BackgroundLocation.isAvailable()) {
+          await BackgroundLocation.startBackgroundLocation();
+          if (global._bgNativeSub) { global._bgNativeSub.remove(); }
+          global._bgNativeSub = BackgroundLocation.addLocationListener((p) => {
+            try {
+              if (handlePositionUpdateRef.current) {
+                handlePositionUpdateRef.current({
+                  latitude: p.latitude,
+                  longitude: p.longitude,
+                  accuracy: p.accuracy,
+                  timestamp: p.timestamp,
+                }, true);
+              }
+            } catch (e) { console.log('native onLocation err', e); }
+          });
+          global._bgLastPointTime = Date.now();
+        }
+      } catch (e) { console.log('native bg start err', e); }
+
       console.log('Background tracking started');
       return true;
     } catch (e) {
@@ -784,6 +807,12 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
         await Location.stopLocationUpdatesAsync(BACKGROUND_LOCATION_TASK);
         console.log('Background tracking stopped');
       }
+
+      // Stop ogsaa det native modul.
+      try {
+        if (global._bgNativeSub) { global._bgNativeSub.remove(); global._bgNativeSub = null; }
+        if (BackgroundLocation.isAvailable()) { await BackgroundLocation.stopBackgroundLocation(); }
+      } catch (e) { console.log('native bg stop err', e); }
     } catch (e) {
       console.error('Failed to stop background location:', e);
     }
