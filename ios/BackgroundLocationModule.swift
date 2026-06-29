@@ -87,7 +87,7 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
   // MARK: - CLLocationManagerDelegate
 
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    guard self.hasListeners else { return }
+    // hasListeners-guard fjernet: distance + Live Activity skal opdateres ogsaa i baggrund
     for loc in locations {
       let body: [String: Any] = [
         "latitude": loc.coordinate.latitude,
@@ -97,7 +97,7 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
         "altitude": loc.altitude,
         "timestamp": loc.timestamp.timeIntervalSince1970 * 1000.0
       ]
-      self.sendEvent(withName: "onLocation", body: body)
+      if self.hasListeners { self.sendEvent(withName: "onLocation", body: body) }
         // Akkumuler distance til Live Activity (kun gyldige punkter).
         if loc.horizontalAccuracy >= 0 {
           if let prev = self.lastLoc {
