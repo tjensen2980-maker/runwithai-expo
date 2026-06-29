@@ -138,6 +138,7 @@ class LiveActivityModule: NSObject {
   @available(iOS 16.2, *)
   static func updateContent(distanceMeters: Double, durationSeconds: Int, paceMinPerKm: Double, isPaused: Bool) {
     // (opdaterer alle aktive RunActivityAttributes-aktiviteter)
+    NSLog("[RWAI] LiveActivityModule.updateContent naaet dist=%.1f dur=%d", distanceMeters, durationSeconds)
     let newState = RunActivityAttributes.ContentState(
       distanceMeters: distanceMeters,
       durationSeconds: durationSeconds,
@@ -145,6 +146,7 @@ class LiveActivityModule: NSObject {
       isPaused: isPaused
     )
     Task {
+      NSLog("[RWAI] updateContent: aktive aktiviteter=%d", Activity<RunActivityAttributes>.activities.count)
       for activity in Activity<RunActivityAttributes>.activities {
         await activity.update(.init(state: newState, staleDate: nil))
       }
