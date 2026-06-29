@@ -775,7 +775,6 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
           if (global._bgNativeSub) { global._bgNativeSub.remove(); }
           global._bgNativeSub = BackgroundLocation.addLocationListener((p) => {
             try {
-              if (p && typeof p.nativeFireCount !== "undefined") { global._nfCount = p.nativeFireCount; global._ndDist = p.nativeDist; }
               if (handlePositionUpdateRef.current) {
                 handlePositionUpdateRef.current({
                   latitude: p.latitude,
@@ -878,13 +877,12 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
         lastLiveActivityUpdateRef.current = now;
         const km = distanceRef.current / 1000;
         const paceMinPerKm = km > 0 ? (elapsed / 60) / km : 0;
-        // NATIVE EJER LIVE ACTIVITY: opdateres nu fra BackgroundLocationModule (Swift).
-        // LiveActivity.update({
-          // distanceMeters: distanceRef.current,
-          // durationSeconds: elapsed,
-          // paceMinPerKm: paceMinPerKm,
-          // isPaused: false,
-        // }).catch(() => {});
+        LiveActivity.update({
+          distanceMeters: distanceRef.current,
+          durationSeconds: elapsed,
+          paceMinPerKm: paceMinPerKm,
+          isPaused: false,
+        }).catch(() => {});
       }
     }, 1000);
 
@@ -1068,13 +1066,12 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
     // Marker Live Activity som pause - bliver staaende paa laaseskaerm
     const km = distanceRef.current / 1000;
     const paceMinPerKm = km > 0 ? (duration / 60) / km : 0;
-    // NATIVE EJER LIVE ACTIVITY: opdateres nu fra BackgroundLocationModule (Swift).
-    // LiveActivity.update({
-      // distanceMeters: distanceRef.current,
-      // durationSeconds: duration,
-      // paceMinPerKm,
-      // isPaused: true,
-    // }).catch(() => {});
+    LiveActivity.update({
+      distanceMeters: distanceRef.current,
+      durationSeconds: duration,
+      paceMinPerKm,
+      isPaused: true,
+    }).catch(() => {});
   };
 
   // ─── RESUME TRACKING (FIX: nulstiller ikke distance/positions) ───────────
@@ -1101,13 +1098,12 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
         lastLiveActivityUpdateRef.current = now;
         const km = distanceRef.current / 1000;
         const paceMinPerKm = km > 0 ? (elapsed / 60) / km : 0;
-        // NATIVE EJER LIVE ACTIVITY: opdateres nu fra BackgroundLocationModule (Swift).
-        // LiveActivity.update({
-          // distanceMeters: distanceRef.current,
-          // durationSeconds: elapsed,
-          // paceMinPerKm: paceMinPerKm,
-          // isPaused: false,
-        // }).catch(() => {});
+        LiveActivity.update({
+          distanceMeters: distanceRef.current,
+          durationSeconds: elapsed,
+          paceMinPerKm: paceMinPerKm,
+          isPaused: false,
+        }).catch(() => {});
       }
     }, 1000);
 
@@ -1399,7 +1395,7 @@ const formatPace = () => {
           gpsStatus === 'waiting' ? s.gpsWaiting : s.gpsIdle
         ]}>
           {gpsStatus === 'error' ? `⚠️ ${gpsError}` :
-                        gpsStatus === 'active' ? `📍 ${gpsPoints} punkter (${filteredPoints} filtreret | d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0}) nf:${global._nfCount||0} nd:${Math.round(global._ndDist||0)}` :
+                        gpsStatus === 'active' ? `📍 ${gpsPoints} punkter (${filteredPoints} filtreret | d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0})` :
            gpsStatus === 'waiting' ? `⏳ ${t('tracker.gps.waiting')}` : ''}
         </Text>
       )}
