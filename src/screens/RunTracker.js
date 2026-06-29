@@ -877,12 +877,13 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
         lastLiveActivityUpdateRef.current = now;
         const km = distanceRef.current / 1000;
         const paceMinPerKm = km > 0 ? (elapsed / 60) / km : 0;
-        LiveActivity.update({
-          distanceMeters: distanceRef.current,
-          durationSeconds: elapsed,
-          paceMinPerKm: paceMinPerKm,
-          isPaused: false,
-        }).catch(() => {});
+        // NATIVE EJER LIVE ACTIVITY: opdateres nu fra BackgroundLocationModule (Swift).
+        // LiveActivity.update({
+          // distanceMeters: distanceRef.current,
+          // durationSeconds: elapsed,
+          // paceMinPerKm: paceMinPerKm,
+          // isPaused: false,
+        // }).catch(() => {});
       }
     }, 1000);
 
@@ -1066,12 +1067,13 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
     // Marker Live Activity som pause - bliver staaende paa laaseskaerm
     const km = distanceRef.current / 1000;
     const paceMinPerKm = km > 0 ? (duration / 60) / km : 0;
-    LiveActivity.update({
-      distanceMeters: distanceRef.current,
-      durationSeconds: duration,
-      paceMinPerKm,
-      isPaused: true,
-    }).catch(() => {});
+    // NATIVE EJER LIVE ACTIVITY: opdateres nu fra BackgroundLocationModule (Swift).
+    // LiveActivity.update({
+      // distanceMeters: distanceRef.current,
+      // durationSeconds: duration,
+      // paceMinPerKm,
+      // isPaused: true,
+    // }).catch(() => {});
   };
 
   // ─── RESUME TRACKING (FIX: nulstiller ikke distance/positions) ───────────
@@ -1098,12 +1100,13 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
         lastLiveActivityUpdateRef.current = now;
         const km = distanceRef.current / 1000;
         const paceMinPerKm = km > 0 ? (elapsed / 60) / km : 0;
-        LiveActivity.update({
-          distanceMeters: distanceRef.current,
-          durationSeconds: elapsed,
-          paceMinPerKm: paceMinPerKm,
-          isPaused: false,
-        }).catch(() => {});
+        // NATIVE EJER LIVE ACTIVITY: opdateres nu fra BackgroundLocationModule (Swift).
+        // LiveActivity.update({
+          // distanceMeters: distanceRef.current,
+          // durationSeconds: elapsed,
+          // paceMinPerKm: paceMinPerKm,
+          // isPaused: false,
+        // }).catch(() => {});
       }
     }, 1000);
 
