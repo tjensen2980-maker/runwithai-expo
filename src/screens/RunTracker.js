@@ -1003,13 +1003,15 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
                       if (!_locRunning && global._isBackgroundTracking && global._locationTaskOptions) {
                         await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions);
                       }
-                      // Tvungen vaekning: hvis ingen nye punkter i 12 sek (fx langt stop ved madbestilling), genstart tasken haardt
-                      const _lastPt = global._bgLastPointTime || 0;
-                      if (global._isBackgroundTracking && global._locationTaskOptions && _lastPt && (Date.now() - _lastPt) > 12000) {
-                        try { await Location.stopLocationUpdatesAsync(BACKGROUND_LOCATION_TASK); } catch (e) {}
-                        await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions);
-                        global._bgLastPointTime = Date.now();
-                      }
+                      // DEAKTIVERET: tvungen tidsbaseret genstart er ikke noedvendig laengere,
+                      // da det native CLBackgroundActivitySession-modul leverer punkter kontinuerligt.
+                      // // Tvungen vaekning: hvis ingen nye punkter i 12 sek (fx langt stop ved madbestilling), genstart tasken haardt
+                      // const _lastPt = global._bgLastPointTime || 0;
+                      // if (global._isBackgroundTracking && global._locationTaskOptions && _lastPt && (Date.now() - _lastPt) > 12000) {
+                        // try { await Location.stopLocationUpdatesAsync(BACKGROUND_LOCATION_TASK); } catch (e) {}
+                        // await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions);
+                        // global._bgLastPointTime = Date.now();
+                      // }
                       const s = keepAliveSoundRef.current;
                       if (!s) return;
                       const st = await s.getStatusAsync();
