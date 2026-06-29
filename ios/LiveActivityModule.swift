@@ -132,4 +132,22 @@ class LiveActivityModule: NSObject {
       resolve(false)
     }
   }
+
+  // Statisk helper saa andre native moduler (fx baggrunds-GPS) kan opdatere
+  // Live Activity direkte fra Swift, uafhaengigt af JS-traaden.
+  @available(iOS 16.2, *)
+  static func updateContent(distanceMeters: Double, durationSeconds: Int, paceMinPerKm: Double, isPaused: Bool) {
+    guard let activityId = LiveActivityModule.currentActivityId else { return }
+    let newState = RunActivityAttributes.ContentState(
+      distanceMeters: distanceMeters,
+      durationSeconds: durationSeconds,
+      paceMinPerKm: paceMinPerKm,
+      isPaused: isPaused
+    )
+    Task {
+      for activity in Activity<RunActivityAttributes>.activities where activity.id == activityId {
+        await activity.update(.init(state: newState, staleDate: nil))
+      }
+    }
+  }
 }
