@@ -109,12 +109,13 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
     }
       // Opdater Live Activity direkte fra native, saa laaseskaermen ikke hakker
       // naar JS-traaden er suspenderet.
-      if #available(iOS 16.2, *) {
-        let dur = Int(Date().timeIntervalSince(self.startTime ?? Date()))
-        let km = self.totalDistance / 1000.0
-        let pace = km > 0.01 ? (Double(dur) / 60.0) / km : 0
-        LiveActivityModule.updateContent(distanceMeters: self.totalDistance, durationSeconds: dur, paceMinPerKm: pace, isPaused: false)
-      }
+      // DEAKTIVERET: native didUpdateLocations fyrer ikke paalideligt; JS driver Live Activity via LiveActivity.update
+      // if #available(iOS 16.2, *) {
+        // let dur = Int(Date().timeIntervalSince(self.startTime ?? Date()))
+        // let km = self.totalDistance / 1000.0
+        // let pace = km > 0.01 ? (Double(dur) / 60.0) / km : 0
+        // LiveActivityModule.updateContent(distanceMeters: self.totalDistance, durationSeconds: dur, paceMinPerKm: pace, isPaused: false)
+      // }
   }
 
   func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
