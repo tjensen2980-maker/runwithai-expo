@@ -137,7 +137,7 @@ class LiveActivityModule: NSObject {
   // Live Activity direkte fra Swift, uafhaengigt af JS-traaden.
   @available(iOS 16.2, *)
   static func updateContent(distanceMeters: Double, durationSeconds: Int, paceMinPerKm: Double, isPaused: Bool) {
-    guard let activityId = LiveActivityModule.currentActivityId else { return }
+    // (opdaterer alle aktive RunActivityAttributes-aktiviteter)
     let newState = RunActivityAttributes.ContentState(
       distanceMeters: distanceMeters,
       durationSeconds: durationSeconds,
@@ -145,7 +145,7 @@ class LiveActivityModule: NSObject {
       isPaused: isPaused
     )
     Task {
-      for activity in Activity<RunActivityAttributes>.activities where activity.id == activityId {
+      for activity in Activity<RunActivityAttributes>.activities {
         await activity.update(.init(state: newState, staleDate: nil))
       }
     }
