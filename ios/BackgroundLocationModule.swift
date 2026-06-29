@@ -16,6 +16,11 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
   // Holdes som Any fordi typen kun findes paa iOS 17+
   private var bgSession: Any?
 
+  // Til at drive Live Activity direkte fra native (uafhaengigt af JS).
+  private var startTime: Date?
+  private var totalDistance: CLLocationDistance = 0
+  private var lastLoc: CLLocation?
+
   override init() {
     super.init()
     manager.delegate = self
@@ -54,6 +59,9 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
 
       self.manager.startUpdatingLocation();
       self.isTracking = true
+      self.startTime = Date()
+      self.totalDistance = 0
+      self.lastLoc = nil
       resolve(true)
     }
   }
@@ -90,7 +98,23 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
         "timestamp": loc.timestamp.timeIntervalSince1970 * 1000.0
       ]
       self.sendEvent(withName: "onLocation", body: body)
+        // Akkumuler distance til Live Activity (kun gyldige punkter).
+        if loc.horizontalAccuracy >= 0 {
+          if let prev = self.lastLoc {
+            let d = loc.distance(from: prev)
+            if d.isFinite && d < 200 { self.totalDistance += d }
+          }
+          self.lastLoc = loc
+        }
     }
+      // Opdater Live Activity direkte fra native, saa laaseskaermen ikke hakker
+      // naar JS-traaden er suspenderet.
+      if #available(iOS 16.2, *) {
+        let dur = Int(Date().timeIntervalSince(self.startTime ?? Date()))
+        let km = self.totalDistance / 1000.0
+        let pace = km > 0.01 ? (Double(dur) / 60.0) / km : 0
+        LiveActivityModule.updateContent(distanceMeters: self.totalDistance, durationSeconds: dur, paceMinPerKm: pace, isPaused: false)
+      }
   }
 
   func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
