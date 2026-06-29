@@ -775,6 +775,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
           if (global._bgNativeSub) { global._bgNativeSub.remove(); }
           global._bgNativeSub = BackgroundLocation.addLocationListener((p) => {
             try {
+              if (p && typeof p.nativeFireCount !== "undefined") { global._nfCount = p.nativeFireCount; global._ndDist = p.nativeDist; }
               if (handlePositionUpdateRef.current) {
                 handlePositionUpdateRef.current({
                   latitude: p.latitude,
@@ -1398,7 +1399,7 @@ const formatPace = () => {
           gpsStatus === 'waiting' ? s.gpsWaiting : s.gpsIdle
         ]}>
           {gpsStatus === 'error' ? `⚠️ ${gpsError}` :
-                        gpsStatus === 'active' ? `📍 ${gpsPoints} punkter (${filteredPoints} filtreret | d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0})` :
+                        gpsStatus === 'active' ? `📍 ${gpsPoints} punkter (${filteredPoints} filtreret | d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0}) nf:${global._nfCount||0} nd:${Math.round(global._ndDist||0)}` :
            gpsStatus === 'waiting' ? `⏳ ${t('tracker.gps.waiting')}` : ''}
         </Text>
       )}
