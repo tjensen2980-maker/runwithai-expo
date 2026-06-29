@@ -1007,7 +1007,7 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
                       // Blod tvungen vaekning: kun hvis tasken er stoppet OG ingen nye punkter i 20 sek.
                       // Hojere timeout + betinget genstart minimerer forstyrrelse af Live Activity.
                       const _lastPt = global._bgLastPointTime || 0;
-                      if (!_locRunning && global._isBackgroundTracking && global._locationTaskOptions && _lastPt && (Date.now() - _lastPt) > 20000) {
+                      if (global._isBackgroundTracking && global._locationTaskOptions && _lastPt && (Date.now() - _lastPt) > 8000) {
                         try {
                           await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions);
                           global._bgLastPointTime = Date.now();
