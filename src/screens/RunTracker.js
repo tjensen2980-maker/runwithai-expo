@@ -774,6 +774,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
           await BackgroundLocation.startBackgroundLocation();
           if (global._bgNativeSub) { global._bgNativeSub.remove(); }
           global._bgNativeSub = BackgroundLocation.addLocationListener((p) => {
+            if (p) { global._nfCount = p.nativeFireCount; global._scFlag = p.sessionCreated; }
             try {
               if (handlePositionUpdateRef.current) {
                 handlePositionUpdateRef.current({
@@ -1226,7 +1227,7 @@ const runData = {
   heart_rate: null,
   calories,
   route,
-      notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0}`,
+      notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0}`,
   type: activityType === 'run' ? 'run' : 'walk',
   date: new Date().toISOString(),
   running_km: runningKm,
