@@ -20,6 +20,8 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
   private var startTime: Date?
   private var totalDistance: CLLocationDistance = 0
   private var lastLoc: CLLocation?
+  private var nativeFireCount = 0
+  private var sessionCreated = false
 
   override init() {
     super.init()
@@ -54,6 +56,7 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
         // Nyeste Apple-anbefalede API: holder en aegte baggrundssession i live.
         if self.bgSession == nil {
           self.bgSession = CLBackgroundActivitySession()
+          self.sessionCreated = true
         }
       }
 
@@ -87,6 +90,7 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
   // MARK: - CLLocationManagerDelegate
 
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    self.nativeFireCount += 1
     // hasListeners-guard fjernet: distance + Live Activity skal opdateres ogsaa i baggrund
     for loc in locations {
       let body: [String: Any] = [
@@ -95,7 +99,9 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
         "accuracy": loc.horizontalAccuracy,
         "speed": loc.speed,
         "altitude": loc.altitude,
-        "timestamp": loc.timestamp.timeIntervalSince1970 * 1000.0
+        "timestamp": loc.timestamp.timeIntervalSince1970 * 1000.0,
+        "nativeFireCount": self.nativeFireCount,
+        "sessionCreated": self.sessionCreated
       ]
       if self.hasListeners { self.sendEvent(withName: "onLocation", body: body) }
         // Akkumuler distance til Live Activity (kun gyldige punkter).
