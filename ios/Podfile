@@ -61,5 +61,11 @@ target 'RunWithAI' do
       :mac_catalyst_enabled => false,
       :ccache_enabled => ccache_enabled?(podfile_properties),
     )
+    # Force min iOS deployment target to 16.0 for ALL pod targets (CxxStdlib/nitro)
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
+      end
+    end
   end
 end
