@@ -483,7 +483,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
           // Naar appen kommer i forgrunden: genstart location-tasken hvis den blev suspenderet i baggrunden
           if (global._isBackgroundTracking && global._locationTaskOptions) {
             Location.hasStartedLocationUpdatesAsync(BACKGROUND_LOCATION_TASK).then(function (running) {
-              if (!running) { Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions); }
+              // [NATIVE-ONLY DEAKTIVERET] if (!running) { Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions); }
             }).catch(function () {});
           }
         console.log('App foregrounded, processing background locations...');
@@ -766,7 +766,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
                 // naar skaermen er laast). Deferred updates er slaaet fra ovenfor.
                 activityType: Location.ActivityType.Fitness,
       };
-      await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions);
+      // [NATIVE-ONLY DEAKTIVERET] await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions);
 
       // Start ogsaa det native modul (aegte baggrundssession, fryser ikke med JS-traaden).
       try {
@@ -1001,14 +1001,14 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
                       // Watchdog: genstart location-tasken hvis iOS har suspenderet den (sker ved lav fart/gang)
                       const _locRunning = await Location.hasStartedLocationUpdatesAsync(BACKGROUND_LOCATION_TASK);
                       if (!_locRunning && global._isBackgroundTracking && global._locationTaskOptions) {
-                        await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions);
+                        // [NATIVE-ONLY DEAKTIVERET] await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions);
                       }
                       // Blod tvungen vaekning: kun hvis tasken er stoppet OG ingen nye punkter i 20 sek.
                       // Hojere timeout + betinget genstart minimerer forstyrrelse af Live Activity.
                       const _lastPt = global._bgLastPointTime || 0;
                       if (global._isBackgroundTracking && global._locationTaskOptions && _lastPt && (Date.now() - _lastPt) > 8000) {
                         try {
-                          await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions);
+                          // [NATIVE-ONLY DEAKTIVERET] await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions);
                           global._bgLastPointTime = Date.now();
                         } catch (e) { console.log('soft restart err', e); }
                       }
