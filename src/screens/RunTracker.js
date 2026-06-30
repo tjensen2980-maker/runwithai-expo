@@ -775,6 +775,17 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
           if (global._bgNativeSub) { global._bgNativeSub.remove(); }
           global._bgNativeSub = BackgroundLocation.addLocationListener((p) => {
             if (p) { global._nfCount = p.nativeFireCount; global._scFlag = p.sessionCreated; }
+            // [DIAG] tids-gap mellem native fires -> beviser iOS suspension
+            try {
+              const _nowTs = Date.now();
+              if (global._bgLastPointTime) {
+                const _dtSec = (_nowTs - global._bgLastPointTime) / 1000;
+                if (global._fr) {
+                  if (_dtSec > (global._fr.maxTg || 0)) global._fr.maxTg = Math.round(_dtSec);
+                  if (_dtSec > 8) global._fr.batchFires = (global._fr.batchFires || 0) + 1;
+                }
+              }
+            } catch (e) {}
             try {
               if (handlePositionUpdateRef.current) {
                 handlePositionUpdateRef.current({
@@ -827,7 +838,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
     setGpsError('');
     setGpsPoints(0);
     setFilteredPoints(0);
-    global._fr = { dist: 0, jump: 0, speed: 0, acc: 0, maxGap: 0, bigGaps: 0 };
+    global._fr = { dist: 0, jump: 0, speed: 0, acc: 0, maxGap: 0, bigGaps: 0 , maxTg: 0, batchFires: 0 };
     // Nulstil baggrunds-akkumulering for en ny tur
     global._bgDistance = 0;
     global._bgLastPoint = null;
@@ -1231,7 +1242,7 @@ const runData = {
   heart_rate: null,
   calories,
   route,
-      notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0}`,
+      notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0} tg:${(global._fr&&global._fr.maxTg)||0} bf:${(global._fr&&global._fr.batchFires)||0}`,
   type: activityType === 'run' ? 'run' : 'walk',
   date: new Date().toISOString(),
   running_km: runningKm,
@@ -1248,7 +1259,7 @@ const bikePayload = {
   avg_speed_kmh: speedKmh > 0 ? parseFloat(speedKmh.toFixed(2)) : null,
   max_speed_kmh: null,
   gps_polyline: route.length > 0 ? JSON.stringify(route) : null,
-  notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0}`,
+  notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0} tg:${(global._fr&&global._fr.maxTg)||0} bf:${(global._fr&&global._fr.batchFires)||0}`,
   source: 'app',
 };
 
