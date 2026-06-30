@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -36,6 +36,8 @@
 		CC800E0B308E05980FF07CF8 /* libPods-RunWithAI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FFD0584B492186D81F75E2B /* libPods-RunWithAI.a */; };
 		D1E25EA25F874B5883490AAF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 807C4D56DF3C421E92058E08 /* InfoPlist.strings */; };
 		DC01BB5E2FB25BA50091368E /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC01BB5D2FB25BA50091368E /* HealthKit.framework */; };
+		DC0ED84B2FF3D02200BDEAD9 /* BackgroundLocationModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0ED84A2FF3D02200BDEAD9 /* BackgroundLocationModule.swift */; };
+		DC0ED84C2FF3D02200BDEAD9 /* BackgroundLocationModule.m in Sources */ = {isa = PBXBuildFile; fileRef = DC0ED8492FF3D02200BDEAD9 /* BackgroundLocationModule.m */; };
 		DC8970322FE1E76500701113 /* LiveActivityModule.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8970302FE1E76500701113 /* LiveActivityModule.m */; };
 		DC8970332FE1E76500701113 /* LiveActivityModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC8970312FE1E76500701113 /* LiveActivityModule.swift */; };
 		DC89703A2FE1E8ED00701113 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8970392FE1E8ED00701113 /* WidgetKit.framework */; };
@@ -150,6 +152,8 @@
 		BEA55E973C7641D2A51D5CF3 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D8D038CB892B4B67AEAE5151 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = el.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DC01BB5D2FB25BA50091368E /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		DC0ED8492FF3D02200BDEAD9 /* BackgroundLocationModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BackgroundLocationModule.m; sourceTree = "<group>"; };
+		DC0ED84A2FF3D02200BDEAD9 /* BackgroundLocationModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundLocationModule.swift; sourceTree = "<group>"; };
 		DC8970302FE1E76500701113 /* LiveActivityModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiveActivityModule.m; sourceTree = "<group>"; };
 		DC8970312FE1E76500701113 /* LiveActivityModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityModule.swift; sourceTree = "<group>"; };
 		DC8970382FE1E8ED00701113 /* RunWithAILiveActivityExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = RunWithAILiveActivityExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -171,7 +175,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		DC89704A2FE1E8EE00701113 /* Exceptions for "RunWithAILiveActivity" folder in "RunWithAILiveActivityExtension" target */ = {
+		DC89704A2FE1E8EE00701113 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -181,51 +185,10 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		DC89703D2FE1E8ED00701113 /* RunWithAILiveActivity */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				DC89704A2FE1E8EE00701113 /* Exceptions for "RunWithAILiveActivity" folder in "RunWithAILiveActivityExtension" target */,
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = RunWithAILiveActivity;
-			sourceTree = "<group>";
-		};
-		DCCFA0BD2F97F3BB0043FC45 /* watchkitapp Watch App */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = "watchkitapp Watch App";
-			sourceTree = "<group>";
-		};
-		DCCFA0CE2F97F3BE0043FC45 /* watchkitapp Watch AppTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = "watchkitapp Watch AppTests";
-			sourceTree = "<group>";
-		};
-		DCCFA0D82F97F3BE0043FC45 /* watchkitapp Watch AppUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = "watchkitapp Watch AppUITests";
-			sourceTree = "<group>";
-		};
+		DC89703D2FE1E8ED00701113 /* RunWithAILiveActivity */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (DC89704A2FE1E8EE00701113 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = RunWithAILiveActivity; sourceTree = "<group>"; };
+		DCCFA0BD2F97F3BB0043FC45 /* watchkitapp Watch App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "watchkitapp Watch App"; sourceTree = "<group>"; };
+		DCCFA0CE2F97F3BE0043FC45 /* watchkitapp Watch AppTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "watchkitapp Watch AppTests"; sourceTree = "<group>"; };
+		DCCFA0D82F97F3BE0043FC45 /* watchkitapp Watch AppUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "watchkitapp Watch AppUITests"; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -282,6 +245,8 @@
 		13B07FAE1A68108700A75B9A /* RunWithAI */ = {
 			isa = PBXGroup;
 			children = (
+				DC0ED8492FF3D02200BDEAD9 /* BackgroundLocationModule.m */,
+				DC0ED84A2FF3D02200BDEAD9 /* BackgroundLocationModule.swift */,
 				DC8970302FE1E76500701113 /* LiveActivityModule.m */,
 				DC8970312FE1E76500701113 /* LiveActivityModule.swift */,
 				F11748412D0307B40044C1D9 /* AppDelegate.swift */,
@@ -989,6 +954,8 @@
 				DC8970332FE1E76500701113 /* LiveActivityModule.swift in Sources */,
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
 				F1174802301A00000001C0D0 /* RCTWatchConnectivity.mm in Sources */,
+				DC0ED84B2FF3D02200BDEAD9 /* BackgroundLocationModule.swift in Sources */,
+				DC0ED84C2FF3D02200BDEAD9 /* BackgroundLocationModule.m in Sources */,
 				62F3405E7CFC30044DB40313 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
