@@ -1,7 +1,7 @@
 ﻿import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors, LEVELS } from '../data';
+import { colors, LEVELS, generateTrainingPlan } from '../data';
 import OnboardingCarousel from '../components/OnboardingCarousel';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
@@ -40,11 +40,37 @@ export default function Onboarding({ onDone }) {
   const [chosen, setChosen] = useState(null);
   const [selectedLang, setSelectedLang] = useState(i18n.language || 'en');
   const [goalInfo, setGoalInfo] = useState({ name: '', age: '', weeklyKm: '', goal: '', raceDate: '' });
+  const [aiPlan, setAiPlan] = useState(null);
+  const [planLoading, setPlanLoading] = useState(false);
+  const [planError, setPlanError] = useState(false);
 
   const changeLanguage = async (code) => {
     setSelectedLang(code);
     i18n.changeLanguage(code);
     await AsyncStorage.setItem('userLanguage', code);
+  };
+
+  // [ONBOARDING-PLAN] Generer AI-plan ud fra brugerens onboarding-svar
+  const goToPlan = async () => {
+    setStep(4);
+    setPlanError(false);
+    setPlanLoading(true);
+    try {
+      const profile = {
+        name: goalInfo.name || "",
+        age: goalInfo.age || "",
+        weeklyKm: goalInfo.weeklyKm || "",
+        goal: goalInfo.goal || "",
+        raceDate: goalInfo.raceDate || "",
+      };
+      const lvl = chosen || "beginner";
+      const plan = await generateTrainingPlan(profile, lvl, []);
+      if (plan) { setAiPlan(plan); } else { setPlanError(true); }
+    } catch (e) {
+      setPlanError(true);
+    } finally {
+      setPlanLoading(false);
+    }
   };
 
   const features = [
@@ -231,18 +257,72 @@ export default function Onboarding({ onDone }) {
           </View>
         )}
 
-        <TouchableOpacity style={[s.ctaBtn, { marginTop: 24 }]} onPress={() => setStep(4)}>
+        <TouchableOpacity style={[s.ctaBtn, { marginTop: 24 }]} onPress={() => goToPlan()}>
           <Text style={s.ctaBtnText}>{t('auth.continue')} â†’</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{ alignItems: 'center', marginTop: 12 }} onPress={() => setStep(4)}>
+        <TouchableOpacity style={{ alignItems: 'center', marginTop: 12 }} onPress={() => goToPlan()}>
           <Text style={{ color: colors.muted, fontSize: 13 }}>{t('onboarding.skipForNow')}</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
 
-  // â”€â”€ STEP 4: PRO Upsell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── STEP 4: AI leverer din plan ──────────────────────────────────────────────
   if (step === 4) return (
+    <SafeAreaView style={s.container}>
+      <ScrollView contentContainerStyle={{ padding: 24 }}>
+        {planLoading && (
+          <View style={{ alignItems: "center", marginTop: 60 }}>
+            <Text style={[s.levelTitle, { textAlign: "center" }]}>{t("onboarding.plan.building") || "Jeg lægger din plan sammen ud fra det du fortalte…"}</Text>
+            <Text style={{ color: colors.muted, marginTop: 12, textAlign: "center" }}>{goalInfo.name ? (goalInfo.name + ", giv mig et øjeblik.") : "Giv mig et øjeblik."}</Text>
+          </View>
+        )}
+        {!planLoading && planError && (
+          <View style={{ alignItems: "center", marginTop: 60 }}>
+            <Text style={[s.levelTitle, { textAlign: "center" }]}>Kunne ikke lave planen lige nu</Text>
+            <Text style={{ color: colors.muted, marginTop: 12, textAlign: "center" }}>Du kan altid få din coach til at lave den senere.</Text>
+            <TouchableOpacity style={[s.ctaBtn, { marginTop: 24 }]} onPress={() => goToPlan()}>
+              <Text style={s.ctaBtnText}>Prøv igen</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{ alignItems: "center", marginTop: 12 }} onPress={() => setStep(5)}>
+              <Text style={{ color: colors.muted, fontSize: 13 }}>Fortsæt</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        {!planLoading && !planError && aiPlan && (
+          <View>
+            <Text style={s.levelTitle}>{goalInfo.name ? (goalInfo.name + ", her er din plan") : "Her er din plan"}</Text>
+            <Text style={{ color: colors.muted, marginTop: 8, lineHeight: 20 }}>
+              {"Du fortalte at du " + (goalInfo.weeklyKm ? ("løber omkring " + goalInfo.weeklyKm + " km om ugen") : "vil i gang") + (goalInfo.goal ? (" og har som mål: " + goalInfo.goal) : "") + (goalInfo.injuries ? (". Vi tager hensyn til: " + goalInfo.injuries) : "") + ". Derfor ser din uge sådan ud:"}
+            </Text>
+            <View style={{ marginTop: 20 }}>
+              {(aiPlan.weekPlan || aiPlan.plan || []).map((d, i) => (
+                <View key={i} style={{ flexDirection: "row", justifyContent: "space-between", paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: colors.surface }}>
+                  <Text style={{ color: colors.text, fontWeight: "600", width: 50 }}>{d.day || ("Dag " + (i + 1))}</Text>
+                  <Text style={{ color: colors.text, flex: 1 }}>{d.workout || d.title || "—"}</Text>
+                  <Text style={{ color: colors.muted }}>{d.km ? (d.km + " km") : (d.rest ? "Hvile" : "")}</Text>
+                </View>
+              ))}
+            </View>
+            {aiPlan.summary ? (<Text style={{ color: colors.muted, marginTop: 16, lineHeight: 20 }}>{aiPlan.summary}</Text>) : null}
+            <TouchableOpacity style={[s.ctaBtn, { marginTop: 28 }]} onPress={() => setStep(5)}>
+              <Text style={s.ctaBtnText}>Fortsæt →</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        {!planLoading && !planError && !aiPlan && (
+          <View style={{ alignItems: "center", marginTop: 60 }}>
+            <TouchableOpacity style={[s.ctaBtn, { marginTop: 24 }]} onPress={() => goToPlan()}>
+              <Text style={s.ctaBtnText}>Lav min plan</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </ScrollView>
+    </SafeAreaView>
+  );
+
+  // â”€â”€ STEP 5: PRO Upsell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  if (step === 5) return (
     <OnboardingCarousel 
       visible={true}
       isOnboarding={true}
