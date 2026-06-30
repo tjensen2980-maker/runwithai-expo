@@ -1013,6 +1013,10 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
                           global._bgLastPointTime = Date.now();
                         } catch (e) { console.log('soft restart err', e); }
                       }
+                      // [NATIVE-WAKE] Vaek native GPS hvis iOS har throttlet leveringen (ingen punkter i 8s)
+                      if (global._isBackgroundTracking && _lastPt && (Date.now() - _lastPt) > 8000 && BackgroundLocation.isAvailable()) {
+                        try { await BackgroundLocation.startBackgroundLocation(); } catch (e) {}
+                      }
                       const s = keepAliveSoundRef.current;
                       if (!s) return;
                       const st = await s.getStatusAsync();
