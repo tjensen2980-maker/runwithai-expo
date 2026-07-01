@@ -1000,7 +1000,7 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
                             keepAliveSoundRef.current = null;
                   }
                   const { sound } = await AV.Audio.Sound.createAsync(
-                            require('../../assets/silence_gen_1782549016336.wav'),
+                            require('../../assets/silence_gen_1782932507454.m4a'),
                     { shouldPlay: true, isLooping: true, volume: 0.05 }                          );
                   keepAliveSoundRef.current = sound; _bgSound = sound;
                   // Watchdog: hvis iOS pauser den stille loop, genstart den straks saa appen ikke suspenderes.
