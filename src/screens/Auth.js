@@ -894,13 +894,13 @@ export default function Auth({ onAuth }) {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
         <ScrollView contentContainerStyle={{ padding: 24, paddingTop: 48 }}>
-          {(!aiPlan || planLoading) ? (
+          {planLoading ? (
             <View style={{ alignItems: 'center', marginTop: 80 }}>
               <ActivityIndicator size="large" color="#FF5A1F" />
               <Text style={{ fontSize: 20, fontWeight: '700', marginTop: 24, textAlign: 'center' }}>Din AI-coach bygger din plan…</Text>
               <Text style={{ fontSize: 15, color: '#666', marginTop: 12, textAlign: 'center' }}>Vi tilpasser den til dine svar. Det tager et øjeblik.</Text>
             </View>
-          ) : (
+          ) : aiPlan ? (
             <View>
               <Text style={{ fontSize: 26, fontWeight: '800' }}>Her er din plan, {name || 'ven'} 🎯</Text>
               {!!aiPlan.summary && (
@@ -922,6 +922,14 @@ export default function Auth({ onAuth }) {
               </View>
               <Text style={{ fontSize: 13, color: '#999', marginTop: 16, textAlign: 'center' }}>Det her var din gratis startplan.</Text>
               <TouchableOpacity onPress={() => setMode('register_upsell')} style={{ backgroundColor: '#FF5A1F', borderRadius: 16, paddingVertical: 18, marginTop: 12 }}>
+                <Text style={{ color: '#fff', fontSize: 18, fontWeight: '700', textAlign: 'center' }}>Fortsæt →</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View style={{ marginTop: 60 }}>
+              <Text style={{ fontSize: 22, fontWeight: '800', textAlign: 'center' }}>Planen er næsten klar 🙌</Text>
+              <Text style={{ fontSize: 15, color: '#666', marginTop: 12, textAlign: 'center' }}>Vi kunne ikke hente din fulde plan lige nu, men du kan altid få den i appen. Lad os komme i gang.</Text>
+              <TouchableOpacity onPress={() => setMode('register_upsell')} style={{ backgroundColor: '#FF5A1F', borderRadius: 16, paddingVertical: 18, marginTop: 28 }}>
                 <Text style={{ color: '#fff', fontSize: 18, fontWeight: '700', textAlign: 'center' }}>Fortsæt →</Text>
               </TouchableOpacity>
             </View>
