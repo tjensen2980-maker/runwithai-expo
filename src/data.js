@@ -524,14 +524,14 @@ export async function loadTrainingPlan() {
   } catch { return null; }
 }
 
-export async function generateTrainingPlan(profile, level, recentRuns) { const _ctrl = new AbortController(); const _to = setTimeout(function(){ _ctrl.abort(); }, 25000);
+export async function generateTrainingPlan(profile, level, recentRuns) { try { global._planErr = null; } catch(_e){} const _ctrl = new AbortController(); const _to = setTimeout(function(){ _ctrl.abort(); }, 25000);
   try {
     const res = await fetch(`${SERVER}/trainingplan/generate`, { signal: _ctrl.signal,
       method: 'POST', headers: authHeaders(),
       body: JSON.stringify({ profile, level, recentRuns }),
-    }); if (!res.ok) { clearTimeout(_to); return null; } clearTimeout(_to);
+    }); if (!res.ok) { clearTimeout(_to); try { global._planErr = 'HTTP ' + res.status; } catch(_e){} return null; } clearTimeout(_to);
     return await res.json();
-  } catch (e) { clearTimeout(_to); console.error('generatePlan fejl:', e); return null; }
+  } catch (e) { clearTimeout(_to); console.error('generatePlan fejl:', e); try { global._planErr = (e && ((e.name||'Error')+': '+(e.message||''))) || 'ukendt'; } catch(_e){} return null; }
 }
 
 // ─── BADGES & ACHIEVEMENTS API ────────────────────────────────────────────────
