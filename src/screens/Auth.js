@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════════════════════════════
 import OnboardingCarousel from '../components/OnboardingCarousel';
-import { generateTrainingPlan } from '../data';
+import { generateTrainingPlan, setAuthToken } from '../data';
 // AUTH.JS - RunWithAI Login & Registration (med PRO Upsell + Glemt Password + i18n)
 // OPDATERET: Bruger RevenueCat + Terms/Privacy links for App Store compliance
 // ═══════════════════════════════════════════════════════════════════════════
@@ -251,6 +251,7 @@ export default function Auth({ onAuth }) {
       if (res.ok && data.token) {
         setPendingToken(data.token);
         setPendingUser(data.user);
+        if (data.token) await setAuthToken(data.token);
         setMode('register_profile');
       } else {
         setError(data.error || t('auth.errors.registerFailed'));
