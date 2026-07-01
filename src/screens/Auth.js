@@ -1,5 +1,6 @@
 // ═══════════════════════════════════════════════════════════════════════════
 import OnboardingCarousel from '../components/OnboardingCarousel';
+import { generateTrainingPlan } from '../data';
 // AUTH.JS - RunWithAI Login & Registration (med PRO Upsell + Glemt Password + i18n)
 // OPDATERET: Bruger RevenueCat + Terms/Privacy links for App Store compliance
 // ═══════════════════════════════════════════════════════════════════════════
@@ -75,6 +76,8 @@ export default function Auth({ onAuth }) {
   const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
   const [level, setLevel] = useState('');
+  const [aiPlan, setAiPlan] = useState(null);
+  const [planLoading, setPlanLoading] = useState(false);
   const [goals, setGoals] = useState([]);
   const [weeklyGoalKm, setWeeklyGoalKm] = useState('');
 
@@ -301,11 +304,31 @@ export default function Auth({ onAuth }) {
       await AsyncStorage.setItem('userLevel', level);
 
       setPendingProfile(profileData);
-      setMode('register_upsell');
+      try {
+        setPlanLoading(true);
+        const _profile = { name, age, weeklyKm: parseFloat(weeklyGoalKm) || 0, goal: goals };
+        const _plan = await generateTrainingPlan(_profile, level, []);
+        setAiPlan(_plan);
+      } catch (e) {
+        setAiPlan(null);
+      } finally {
+        setPlanLoading(false);
+      }
+      setMode('register_plan');
 
     } catch (err) {
       console.log('Profile save error:', err);
-      setMode('register_upsell');
+      try {
+        setPlanLoading(true);
+        const _profile = { name, age, weeklyKm: parseFloat(weeklyGoalKm) || 0, goal: goals };
+        const _plan = await generateTrainingPlan(_profile, level, []);
+        setAiPlan(_plan);
+      } catch (e) {
+        setAiPlan(null);
+      } finally {
+        setPlanLoading(false);
+      }
+      setMode('register_plan');
     } finally {
       setLoading(false);
     }
@@ -867,6 +890,47 @@ export default function Auth({ onAuth }) {
   }
 
   // ─── REGISTER STEP 3 - PRO UPSELL (with Terms/Privacy/Restore) ────────────
+    if (mode === 'register_plan') {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+        <ScrollView contentContainerStyle={{ padding: 24, paddingTop: 48 }}>
+          {(!aiPlan || planLoading) ? (
+            <View style={{ alignItems: 'center', marginTop: 80 }}>
+              <ActivityIndicator size="large" color="#FF5A1F" />
+              <Text style={{ fontSize: 20, fontWeight: '700', marginTop: 24, textAlign: 'center' }}>Din AI-coach bygger din plan…</Text>
+              <Text style={{ fontSize: 15, color: '#666', marginTop: 12, textAlign: 'center' }}>Vi tilpasser den til dine svar. Det tager et øjeblik.</Text>
+            </View>
+          ) : (
+            <View>
+              <Text style={{ fontSize: 26, fontWeight: '800' }}>Her er din plan, {name || 'ven'} 🎯</Text>
+              {!!aiPlan.summary && (
+                <Text style={{ fontSize: 15, color: '#666', marginTop: 8 }}>{aiPlan.summary}</Text>
+              )}
+              <View style={{ marginTop: 24 }}>
+                {(aiPlan.weekPlan || []).map((d, idx) => (
+                  <View key={idx} style={{ backgroundColor: d.rest ? '#F0F0F0' : '#FFF3EE', borderRadius: 14, padding: 16, marginBottom: 12 }}>
+                    <Text style={{ fontSize: 13, color: '#FF5A1F', fontWeight: '700' }}>{d.day || ('Dag ' + (idx + 1))}</Text>
+                    <Text style={{ fontSize: 16, fontWeight: '700', marginTop: 2 }}>{d.title || d.workout || (d.rest ? 'Hvile' : 'Træning')}</Text>
+                    {!!d.workout && d.workout !== d.title && (
+                      <Text style={{ fontSize: 14, color: '#555', marginTop: 4 }}>{d.workout}</Text>
+                    )}
+                    {!!d.km && (
+                      <Text style={{ fontSize: 14, color: '#555', marginTop: 4 }}>{d.km} km</Text>
+                    )}
+                  </View>
+                ))}
+              </View>
+              <Text style={{ fontSize: 13, color: '#999', marginTop: 16, textAlign: 'center' }}>Det her var din gratis startplan.</Text>
+              <TouchableOpacity onPress={() => setMode('register_upsell')} style={{ backgroundColor: '#FF5A1F', borderRadius: 16, paddingVertical: 18, marginTop: 12 }}>
+                <Text style={{ color: '#fff', fontSize: 18, fontWeight: '700', textAlign: 'center' }}>Fortsæt →</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+
   if (mode === 'register_upsell') {
     return (
       <OnboardingCarousel
