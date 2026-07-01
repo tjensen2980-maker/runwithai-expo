@@ -930,6 +930,7 @@ export default function Auth({ onAuth }) {
             <View style={{ marginTop: 60 }}>
               <Text style={{ fontSize: 22, fontWeight: '800', textAlign: 'center' }}>Planen er næsten klar 🙌</Text>
               <Text style={{ fontSize: 15, color: '#666', marginTop: 12, textAlign: 'center' }}>Vi kunne ikke hente din fulde plan lige nu, men du kan altid få den i appen. Lad os komme i gang.</Text>
+              <Text style={{ color: '#c00', fontSize: 12, textAlign: 'center', marginTop: 8 }}>{'DEBUG: ' + String((global._planErr!=null?global._planErr:'ingen fejl-info'))}</Text>
               <TouchableOpacity onPress={() => setMode('register_upsell')} style={{ backgroundColor: '#FF5A1F', borderRadius: 16, paddingVertical: 18, marginTop: 28 }}>
                 <Text style={{ color: '#fff', fontSize: 18, fontWeight: '700', textAlign: 'center' }}>Fortsæt →</Text>
               </TouchableOpacity>
