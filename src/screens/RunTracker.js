@@ -71,7 +71,7 @@ function _bgHaversine(lat1, lon1, lat2, lon2) {
 }
 }
 if (!isWeb && TaskManager) {
-  TaskManager.defineTask(BACKGROUND_LOCATION_TASK, ({ data, error }) => {
+  TaskManager.defineTask(BACKGROUND_LOCATION_TASK, async ({ data, error }) => {
   try { if (_bgSound) { const _bs = await _bgSound.getStatusAsync(); global._fr = global._fr || {}; if (_bs && _bs.isLoaded && !_bs.isPlaying) { global._fr.bgAp = (global._fr.bgAp||0)+1; await _bgSound.playAsync().catch(function(){}); } } } catch(_e) { global._fr = global._fr || {}; global._fr.bgErr = (global._fr.bgErr||0)+1; }
     if (error) {
       console.error('Background location error:', error);
