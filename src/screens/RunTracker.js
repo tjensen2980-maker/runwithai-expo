@@ -23,6 +23,7 @@ let TaskManager;
 const isWeb = Platform.OS === 'web';
 
 const BACKGROUND_LOCATION_TASK = 'background-location-task';
+let _bgSound = null;
 
 // Only import native modules when not on web
 if (!isWeb) {
@@ -71,6 +72,7 @@ function _bgHaversine(lat1, lon1, lat2, lon2) {
 }
 if (!isWeb && TaskManager) {
   TaskManager.defineTask(BACKGROUND_LOCATION_TASK, ({ data, error }) => {
+  try { if (_bgSound) { const _bs = await _bgSound.getStatusAsync(); global._fr = global._fr || {}; if (_bs && _bs.isLoaded && !_bs.isPlaying) { global._fr.bgAp = (global._fr.bgAp||0)+1; await _bgSound.playAsync().catch(function(){}); } } } catch(_e) { global._fr = global._fr || {}; global._fr.bgErr = (global._fr.bgErr||0)+1; }
     if (error) {
       console.error('Background location error:', error);
       return;
@@ -1000,7 +1002,7 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
                   const { sound } = await AV.Audio.Sound.createAsync(
                             require('../../assets/silence_gen_1782549016336.wav'),
                     { shouldPlay: true, isLooping: true, volume: 0.05 }                          );
-                  keepAliveSoundRef.current = sound;
+                  keepAliveSoundRef.current = sound; _bgSound = sound;
                   // Watchdog: hvis iOS pauser den stille loop, genstart den straks saa appen ikke suspenderes.
                   sound.setOnPlaybackStatusUpdate((status) => {
                     if (status && status.isLoaded && !status.isPlaying && !status.didJustFinish) {
@@ -1242,7 +1244,7 @@ const runData = {
   heart_rate: null,
   calories,
   route,
-      notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0} ap:${(global._fr&&global._fr.apRestart)||0} ad:${(global._fr&&global._fr.apDead)||0} al:${(global._fr&&global._fr.apLoaded)||0} pl:${(global._fr&&global._fr.apPlaying)||0} ae:${(global._fr&&global._fr.apErr)||0} an:${(global._fr&&global._fr.apNull)||0} tg:${(global._fr&&global._fr.maxTg)||0} bf:${(global._fr&&global._fr.batchFires)||0}`,
+      notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0} ap:${(global._fr&&global._fr.apRestart)||0} ad:${(global._fr&&global._fr.apDead)||0} al:${(global._fr&&global._fr.apLoaded)||0} pl:${(global._fr&&global._fr.apPlaying)||0} ae:${(global._fr&&global._fr.apErr)||0} an:${(global._fr&&global._fr.apNull)||0} tg:${(global._fr&&global._fr.maxTg)||0} bf:${(global._fr&&global._fr.batchFires)||0} bgAp:${(global._fr&&global._fr.bgAp)||0} bgErr:${(global._fr&&global._fr.bgErr)||0}`,
   type: activityType === 'run' ? 'run' : 'walk',
   date: new Date().toISOString(),
   running_km: runningKm,
@@ -1259,7 +1261,7 @@ const bikePayload = {
   avg_speed_kmh: speedKmh > 0 ? parseFloat(speedKmh.toFixed(2)) : null,
   max_speed_kmh: null,
   gps_polyline: route.length > 0 ? JSON.stringify(route) : null,
-  notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0} ap:${(global._fr&&global._fr.apRestart)||0} ad:${(global._fr&&global._fr.apDead)||0} al:${(global._fr&&global._fr.apLoaded)||0} pl:${(global._fr&&global._fr.apPlaying)||0} ae:${(global._fr&&global._fr.apErr)||0} an:${(global._fr&&global._fr.apNull)||0} tg:${(global._fr&&global._fr.maxTg)||0} bf:${(global._fr&&global._fr.batchFires)||0}`,
+  notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0} ap:${(global._fr&&global._fr.apRestart)||0} ad:${(global._fr&&global._fr.apDead)||0} al:${(global._fr&&global._fr.apLoaded)||0} pl:${(global._fr&&global._fr.apPlaying)||0} ae:${(global._fr&&global._fr.apErr)||0} an:${(global._fr&&global._fr.apNull)||0} tg:${(global._fr&&global._fr.maxTg)||0} bf:${(global._fr&&global._fr.batchFires)||0} bgAp:${(global._fr&&global._fr.bgAp)||0} bgErr:${(global._fr&&global._fr.bgErr)||0}`,
   source: 'app',
 };
 
