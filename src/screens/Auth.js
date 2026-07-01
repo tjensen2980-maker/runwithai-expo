@@ -5,7 +5,7 @@ import { generateTrainingPlan, setAuthToken } from '../data';
 // OPDATERET: Bruger RevenueCat + Terms/Privacy links for App Store compliance
 // ═══════════════════════════════════════════════════════════════════════════
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -78,6 +78,13 @@ export default function Auth({ onAuth }) {
   const [level, setLevel] = useState('');
   const [aiPlan, setAiPlan] = useState(null);
   const [planLoading, setPlanLoading] = useState(false);
+  const [planStep, setPlanStep] = useState(0);
+  const planMessages = ['Analyserer dine svar…', 'Vurderer dit niveau og mål…', 'Bygger uge 1 og 2…', 'Bygger uge 3 og 4…', 'Tilpasser tempo og hviledage…', 'Finpudser din personlige plan…'];
+  useEffect(() => {
+    if (!planLoading) { setPlanStep(0); return; }
+    const _iv = setInterval(() => { setPlanStep(function(p){ return p < planMessages.length - 1 ? p + 1 : p; }); }, 2500);
+    return function(){ clearInterval(_iv); };
+  }, [planLoading]);
   const [goals, setGoals] = useState([]);
   const [weeklyGoalKm, setWeeklyGoalKm] = useState('');
 
@@ -899,7 +906,7 @@ export default function Auth({ onAuth }) {
             <View style={{ alignItems: 'center', marginTop: 80 }}>
               <ActivityIndicator size="large" color="#FF5A1F" />
               <Text style={{ fontSize: 20, fontWeight: '700', marginTop: 24, textAlign: 'center' }}>Din AI-coach bygger din plan…</Text>
-              <Text style={{ fontSize: 15, color: '#666', marginTop: 12, textAlign: 'center' }}>Vi tilpasser den til dine svar. Det tager et øjeblik.</Text>
+              <Text style={{ fontSize: 15, color: '#666', marginTop: 12, textAlign: 'center' }}>{planMessages[planStep]}</Text>
             </View>
           ) : aiPlan ? (
             <View>
