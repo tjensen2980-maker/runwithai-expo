@@ -1028,9 +1028,9 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
                       if (global._isBackgroundTracking && _lastPt && (Date.now() - _lastPt) > 8000 && BackgroundLocation.isAvailable()) {
                         try { await BackgroundLocation.startBackgroundLocation(); } catch (e) {}
                       }
-                      const s = keepAliveSoundRef.current;
+                      const s = keepAliveSoundRef.current; try{ if(global._fr){ if(!s){ global._fr.apNull=(global._fr.apNull||0)+1; } } }catch(_e){}
                       if (!s) return;
-                      const st = await s.getStatusAsync();
+                      const st = await s.getStatusAsync(); try{ if(global._fr){ global._fr.apLoaded = st.isLoaded?1:0; global._fr.apPlaying = st.isPlaying?1:0; if(st.isLoaded && !st.isPlaying){ try{ if(global._fr){ global._fr.apRestart=(global._fr.apRestart||0)+1; } }catch(_e){} global._fr.apDead=(global._fr.apDead||0)+1; } } }catch(_e){}
                       if (st && st.isLoaded && !st.isPlaying) {
                         await s.playAsync().catch(() => {});
                         console.log('Keep-alive watchdog: restarted silent loop');
@@ -1038,7 +1038,7 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
                     } catch {}
                   }, 2000);
                   console.log('Keep-alive audio started');
-          } catch (e) {
+          } catch (e) { try{ if(global._fr){ global._fr.apErr=(global._fr.apErr||0)+1; } }catch(_e){}
                   console.log('Keep-alive audio failed:', e.message);
           }
     };
@@ -1242,7 +1242,7 @@ const runData = {
   heart_rate: null,
   calories,
   route,
-      notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0} tg:${(global._fr&&global._fr.maxTg)||0} bf:${(global._fr&&global._fr.batchFires)||0}`,
+      notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0} ap:${(global._fr&&global._fr.apRestart)||0} ad:${(global._fr&&global._fr.apDead)||0} al:${(global._fr&&global._fr.apLoaded)||0} pl:${(global._fr&&global._fr.apPlaying)||0} ae:${(global._fr&&global._fr.apErr)||0} an:${(global._fr&&global._fr.apNull)||0} tg:${(global._fr&&global._fr.maxTg)||0} bf:${(global._fr&&global._fr.batchFires)||0}`,
   type: activityType === 'run' ? 'run' : 'walk',
   date: new Date().toISOString(),
   running_km: runningKm,
@@ -1259,7 +1259,7 @@ const bikePayload = {
   avg_speed_kmh: speedKmh > 0 ? parseFloat(speedKmh.toFixed(2)) : null,
   max_speed_kmh: null,
   gps_polyline: route.length > 0 ? JSON.stringify(route) : null,
-  notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0} tg:${(global._fr&&global._fr.maxTg)||0} bf:${(global._fr&&global._fr.batchFires)||0}`,
+  notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0} ap:${(global._fr&&global._fr.apRestart)||0} ad:${(global._fr&&global._fr.apDead)||0} al:${(global._fr&&global._fr.apLoaded)||0} pl:${(global._fr&&global._fr.apPlaying)||0} ae:${(global._fr&&global._fr.apErr)||0} an:${(global._fr&&global._fr.apNull)||0} tg:${(global._fr&&global._fr.maxTg)||0} bf:${(global._fr&&global._fr.batchFires)||0}`,
   source: 'app',
 };
 
