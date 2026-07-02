@@ -314,6 +314,7 @@ export default function Auth({ onAuth }) {
       setPendingProfile(profileData);
       try {
         setPlanLoading(true);
+        setMode('register_plan');
         const _profile = { name, age, weeklyKm: parseFloat(weeklyGoalKm) || 0, goal: goals };
         const _plan = await generateTrainingPlan(_profile, level, []);
         setAiPlan(_plan);
@@ -322,12 +323,12 @@ export default function Auth({ onAuth }) {
       } finally {
         setPlanLoading(false);
       }
-      setMode('register_plan');
 
     } catch (err) {
       console.log('Profile save error:', err);
       try {
         setPlanLoading(true);
+        setMode('register_plan');
         const _profile = { name, age, weeklyKm: parseFloat(weeklyGoalKm) || 0, goal: goals };
         const _plan = await generateTrainingPlan(_profile, level, []);
         setAiPlan(_plan);
@@ -336,7 +337,6 @@ export default function Auth({ onAuth }) {
       } finally {
         setPlanLoading(false);
       }
-      setMode('register_plan');
     } finally {
       setLoading(false);
     }
