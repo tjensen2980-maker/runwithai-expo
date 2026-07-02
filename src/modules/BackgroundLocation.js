@@ -41,10 +41,32 @@ export function addErrorListener(cb) {
   return emitter.addListener('onError', cb);
 }
 
+export async function getBufferedLocations() {
+  if (!isAvailable()) return [];
+  try {
+    return await Native.getBufferedLocations();
+  } catch (e) {
+    console.log("getBufferedLocations error", e);
+    return [];
+  }
+}
+
+export async function getBufferSize() {
+  if (!isAvailable()) return 0;
+  try {
+    return await Native.getBufferSize();
+  } catch (e) {
+    console.log("getBufferSize error", e);
+    return 0;
+  }
+}
+
 export default {
   isAvailable,
   startBackgroundLocation,
   stopBackgroundLocation,
   addLocationListener,
   addErrorListener,
+  getBufferedLocations,
+  getBufferSize,
 };
