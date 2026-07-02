@@ -60,6 +60,15 @@ export async function getBufferSize() {
     return 0;
   }
 }
+export async function getStats() {
+  if (!isAvailable()) return 0;
+  try {
+    return await Native.getStats();
+  } catch (e) {
+    console.log("getStats error", e);
+    return 0;
+  }
+}
 
 export default {
   isAvailable,
