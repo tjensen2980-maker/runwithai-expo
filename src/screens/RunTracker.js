@@ -483,6 +483,26 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         appStateRef.current.match(/inactive|background/) &&
         nextAppState === 'active'
       ) {
+          // Drain native background buffer on resume (points collected while JS was suspended)
+          try {
+            const _bsz = BackgroundLocation.getBufferSize ? BackgroundLocation.getBufferSize() : 0;
+            if (global._fr) { global._fr.bgBuf = (global._fr.bgBuf || 0) + (_bsz || 0); }
+            const _buffered = BackgroundLocation.getBufferedLocations ? BackgroundLocation.getBufferedLocations() : [];
+            if (_buffered && _buffered.length) {
+              _buffered.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+              for (let _bi = 0; _bi < _buffered.length; _bi++) {
+                const _bp = _buffered[_bi];
+                if (_bp && typeof _bp.latitude === "number" && typeof _bp.longitude === "number" && handlePositionUpdateRef.current) {
+                  handlePositionUpdateRef.current({
+                    latitude: _bp.latitude,
+                    longitude: _bp.longitude,
+                    accuracy: _bp.accuracy,
+                    timestamp: _bp.timestamp,
+                  });
+                }
+              }
+            }
+          } catch (_bufErr) {}
           // Naar appen kommer i forgrunden: genstart location-tasken hvis den blev suspenderet i baggrunden
           if (global._isBackgroundTracking && global._locationTaskOptions) {
             Location.hasStartedLocationUpdatesAsync(BACKGROUND_LOCATION_TASK).then(function (running) {
@@ -1248,7 +1268,7 @@ const runData = {
   heart_rate: null,
   calories,
   route,
-      notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0} ap:${(global._fr&&global._fr.apRestart)||0} ad:${(global._fr&&global._fr.apDead)||0} al:${(global._fr&&global._fr.apLoaded)||0} pl:${(global._fr&&global._fr.apPlaying)||0} ae:${(global._fr&&global._fr.apErr)||0} an:${(global._fr&&global._fr.apNull)||0} tg:${(global._fr&&global._fr.maxTg)||0} bf:${(global._fr&&global._fr.batchFires)||0} bgAp:${(global._fr&&global._fr.bgAp)||0} bgErr:${(global._fr&&global._fr.bgErr)||0}`,
+      notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0} ap:${(global._fr&&global._fr.apRestart)||0} ad:${(global._fr&&global._fr.apDead)||0} al:${(global._fr&&global._fr.apLoaded)||0} pl:${(global._fr&&global._fr.apPlaying)||0} ae:${(global._fr&&global._fr.apErr)||0} an:${(global._fr&&global._fr.apNull)||0} tg:${(global._fr&&global._fr.maxTg)||0} bf:${(global._fr&&global._fr.batchFires)||0} bgAp:${(global._fr&&global._fr.bgAp)||0} bgErr:${(global._fr&&global._fr.bgErr)||0} bgBuf:${(global._fr && global._fr.bgBuf) || 0}`,
   type: activityType === 'run' ? 'run' : 'walk',
   date: new Date().toISOString(),
   running_km: runningKm,
@@ -1265,7 +1285,7 @@ const bikePayload = {
   avg_speed_kmh: speedKmh > 0 ? parseFloat(speedKmh.toFixed(2)) : null,
   max_speed_kmh: null,
   gps_polyline: route.length > 0 ? JSON.stringify(route) : null,
-  notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0} ap:${(global._fr&&global._fr.apRestart)||0} ad:${(global._fr&&global._fr.apDead)||0} al:${(global._fr&&global._fr.apLoaded)||0} pl:${(global._fr&&global._fr.apPlaying)||0} ae:${(global._fr&&global._fr.apErr)||0} an:${(global._fr&&global._fr.apNull)||0} tg:${(global._fr&&global._fr.maxTg)||0} bf:${(global._fr&&global._fr.batchFires)||0} bgAp:${(global._fr&&global._fr.bgAp)||0} bgErr:${(global._fr&&global._fr.bgErr)||0}`,
+  notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0} ap:${(global._fr&&global._fr.apRestart)||0} ad:${(global._fr&&global._fr.apDead)||0} al:${(global._fr&&global._fr.apLoaded)||0} pl:${(global._fr&&global._fr.apPlaying)||0} ae:${(global._fr&&global._fr.apErr)||0} an:${(global._fr&&global._fr.apNull)||0} tg:${(global._fr&&global._fr.maxTg)||0} bf:${(global._fr&&global._fr.batchFires)||0} bgAp:${(global._fr&&global._fr.bgAp)||0} bgErr:${(global._fr&&global._fr.bgErr)||0} bgBuf:${(global._fr && global._fr.bgBuf) || 0}`,
   source: 'app',
 };
 
