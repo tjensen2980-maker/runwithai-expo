@@ -51,6 +51,13 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
 
   @objc(start:rejecter:)
   func start(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    // GUARD: allerede i gang -> genstart IKKE. At genskabe CLBackgroundActivitySession
+    // mens appen er i baggrunden giver en UGYLDIG session og invaliderer den gamle,
+    // saa appen mister baggrundsretten og iOS suspenderer den (89s-hullerne).
+    if isTracking {
+      resolve(true)
+      return
+    }
     DispatchQueue.main.async {
       let status = self.manager.authorizationStatus
       if status == .notDetermined {
