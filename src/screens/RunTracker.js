@@ -407,7 +407,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   const { t } = useTranslation();
   const [isTracking, setIsTracking] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(false); // TEST: AI-coach starter slaaet fra for at teste baggrunds-GPS
-  const [allowMusicMixing, setAllowMusicMixing] = useState(false); // false=DoNotMix (maks GPS), true=MixWithOthers (Spotify)
+  const [allowMusicMixing, setAllowMusicMixing] = useState(true); // FIX: MixWithOthers som STANDARD. DoNotMix-keep-alive doer naar anden lyd starter (Spotify/opkald/Bluetooth/Saphe) -> iOS fryser JS/suspenderer appen efter ~55s. Togglen kan stadig skifte til DoNotMix manuelt.
   const voiceCoachRef = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
   const [distance, setDistance] = useState(0);
