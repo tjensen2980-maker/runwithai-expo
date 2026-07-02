@@ -23,6 +23,11 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
   private var nativeFireCount = 0
   private var sessionCreated = false
 
+  // Native buffer: gemmer locations selv naar JS-traaden er suspenderet (laast skaerm)
+  private var bufferedLocations: [[String: Any]] = []
+  private let bufferQueue = DispatchQueue(label: "backgroundlocation.buffer")
+  private let maxBufferSize = 10000
+
   override init() {
     super.init()
     manager.delegate = self
@@ -87,6 +92,32 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
     resolve(self.isTracking)
   }
 
+  // Thread-sikker append til native buffer (kaldt fra didUpdateLocations)
+  private func appendToBuffer(_ item: [String: Any]) {
+    bufferQueue.sync {
+      bufferedLocations.append(item)
+      if bufferedLocations.count > maxBufferSize {
+        bufferedLocations.removeFirst(bufferedLocations.count - maxBufferSize)
+      }
+    }
+  }
+
+  @objc(getBufferedLocations:rejecter:)
+  func getBufferedLocations(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    bufferQueue.sync {
+      let drained = bufferedLocations
+      bufferedLocations = []
+      resolve(drained)
+    }
+  }
+
+  @objc(getBufferSize:rejecter:)
+  func getBufferSize(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    bufferQueue.sync {
+      resolve(bufferedLocations.count)
+    }
+  }
+
   // MARK: - CLLocationManagerDelegate
 
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -103,6 +134,7 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
         "nativeFireCount": self.nativeFireCount,
         "sessionCreated": self.sessionCreated
       ]
+      self.appendToBuffer(body)
       if self.hasListeners { self.sendEvent(withName: "onLocation", body: body) }
         // Akkumuler distance til Live Activity (kun gyldige punkter).
         if loc.horizontalAccuracy >= 0 {
