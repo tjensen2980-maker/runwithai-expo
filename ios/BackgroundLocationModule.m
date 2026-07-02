@@ -11,7 +11,7 @@ RCT_EXTERN_METHOD(start:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(stop:(RCTPromiseResolveBlock)resolve
-Bridge: eksporter getStats til JS
+                  rejecter:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(isTracking:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
@@ -19,11 +19,12 @@ RCT_EXTERN_METHOD(getBufferedLocations:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(getBufferSize:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(getStats:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
 + (BOOL)requiresMainQueueSetup {
-  return NO;
+  return YES;
 }
 
 @end
