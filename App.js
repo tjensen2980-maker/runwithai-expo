@@ -580,14 +580,6 @@ if (type === 'pick') {
     }
   };
 
-  if (!user) return (
-    <SafeAreaProvider>
-      <Auth onAuth={(token, userData) => {
-        setAuthToken(token); setUser(userData); syncAuthToWatch(token, (userData && (userData.email || userData.id || userData._id)) || 'user'); setLoading(true); loadData();
-      }} />
-    </SafeAreaProvider>
-  );
-
   if (loading) return (
     <SafeAreaProvider>
       <StatusBar barStyle="light-content" backgroundColor={colors.black} />
@@ -595,6 +587,14 @@ if (type === 'pick') {
         <AppLogo size={200} />
         <ActivityIndicator color={colors.accent} style={{ marginTop: 2 }} />
       </View>
+    </SafeAreaProvider>
+  );
+
+  if (!user) return (
+    <SafeAreaProvider>
+      <Auth onAuth={(token, userData) => {
+        setAuthToken(token); setUser(userData); syncAuthToWatch(token, (userData && (userData.email || userData.id || userData._id)) || 'user'); setLoading(true); loadData();
+      }} />
     </SafeAreaProvider>
   );
 
