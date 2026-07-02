@@ -440,6 +440,7 @@ export default function App() {
     } catch (e) {
       console.log('AsyncStorage read error:', e);
     }
+    setLoading(false); // vis UI straks fra lokal cache; server-data hentes i baggrunden
     const [savedProfile, savedPlan, savedTrainingPlan, savedRuns] = await Promise.all([
       loadProfile(), loadWeekPlan(), loadTrainingPlan(), loadRuns(),
     ]);
@@ -464,7 +465,6 @@ export default function App() {
         setShowOnboarding(false);
       }
     }
-    setLoading(false);
   };
 
   // Init token from AsyncStorage before loading data
