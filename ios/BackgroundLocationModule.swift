@@ -33,7 +33,7 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
     manager.delegate = self
     manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
     manager.distanceFilter = kCLDistanceFilterNone
-    manager.activityType = .fitness
+    manager.activityType = .otherNavigation
     manager.pausesLocationUpdatesAutomatically = false
     manager.allowsBackgroundLocationUpdates = true
     manager.showsBackgroundLocationIndicator = true
