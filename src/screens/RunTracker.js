@@ -24,6 +24,7 @@ const isWeb = Platform.OS === 'web';
 
 const BACKGROUND_LOCATION_TASK = 'background-location-task';
 let _bgSound = null;
+let _savingActivity = false; // guard mod dobbelt-gemning af samme tur
 
 // Only import native modules when not on web
 if (!isWeb) {
@@ -1172,6 +1173,9 @@ console.log('iOS resume foreground GPS started');
   };
 
   const stopAndSave = async () => {
+    if (_savingActivity) { console.log("[stopAndSave] dobbelt-kald blokeret"); return; }
+    _savingActivity = true;
+    setTimeout(() => { _savingActivity = false; }, 8000);
     console.log('=== STOP AND SAVE ===');
     if (intervalRef.current) clearInterval(intervalRef.current);
     stopGpsWatch();
