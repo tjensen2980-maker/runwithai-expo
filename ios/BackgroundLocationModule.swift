@@ -6,6 +6,18 @@ import React
 // Native baggrunds-GPS via CLBackgroundActivitySession (iOS 17+) med fallback
 // til allowsBackgroundLocationUpdates paa aeldre iOS. Koerer uafhaengigt af
 // JS-traaden saa tracking fortsaetter naar skaermen er slukket/laast.
+//
+// ROOT CAUSE-FIX (suspension efter ~40-55 sek i baggrunden):
+// requiresMainQueueSetup returnerer nu TRUE. Foer blev modulet - og dermed
+// CLLocationManager i init() - oprettet paa en React Native-baggrundstraad
+// UDEN run loop. CoreLocation leverer delegate-callbacks paa den traad hvor
+// manageren blev SKABT, og en traad uden koerende run loop faar kun callbacks
+// naar noget andet (forgrund eller keep-alive lyd) holder maskineriet i gang.
+// Derfor "doede" GPS i baggrunden praecis naar lyden roeg (Bluetooth/Saphe/
+// Spotify/opkald), og derfor virkede native Live Activity aldrig paalideligt.
+// Nu skabes manageren paa main-traaden, hvis run loop ALTID koerer naar
+// processen faar CPU - og med UIBackgroundModes=location vaekker iOS netop
+// processen ved hver ny position. Lyd-hacket er ikke laengere baerende for GPS.
 @objc(BackgroundLocationModule)
 class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
 
@@ -30,6 +42,9 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
 
   override init() {
     super.init()
+    // Koerer nu paa MAIN-traaden (requiresMainQueueSetup = true), saa
+    // CLLocationManager skabes paa en traad med permanent run loop og
+    // delegate-callbacks leveres paalideligt - ogsaa i baggrunden.
     manager.delegate = self
     manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
     manager.distanceFilter = kCLDistanceFilterNone
@@ -40,7 +55,7 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
   }
 
   @objc
-  override static func requiresMainQueueSetup() -> Bool { return false }
+  override static func requiresMainQueueSetup() -> Bool { return true }
 
   override func supportedEvents() -> [String]! {
     return ["onLocation", "onError"]
@@ -64,6 +79,14 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
         self.manager.requestAlwaysAuthorization()
       }
 
+      // Nulstil per-tur diagnostik og buffer. Foer var nativeFireCount og
+      // sessionCreated KUMULATIVE paa tvaers af ture i samme app-session,
+      // saa nf/sc i notes viste misvisende tal. Bufferen toemmes saa gamle
+      // punkter fra forrige tur ikke laekker ind i den nye.
+      self.nativeFireCount = 0
+      self.sessionCreated = false
+      self.bufferQueue.sync { self.bufferedLocations = [] }
+
       if #available(iOS 17.0, *) {
         // Nyeste Apple-anbefalede API: holder en aegte baggrundssession i live.
         if self.bgSession == nil {
@@ -72,7 +95,7 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
         }
       }
 
-      self.manager.startUpdatingLocation();
+      self.manager.startUpdatingLocation()
       self.isTracking = true
       self.startTime = Date()
       self.totalDistance = 0
@@ -90,6 +113,8 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
       }
       self.bgSession = nil
       self.isTracking = false
+      // totalDistance/startTime bevares saa getStats stadig kan aflaeses
+      // af JS-save-flowet EFTER stop. Nulstilles ved naeste start.
       resolve(true)
     }
   }
@@ -97,6 +122,22 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
   @objc(isTracking:rejecter:)
   func isTrackingState(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     resolve(self.isTracking)
+  }
+
+  // Native stats: JS kan afstemme distance/varighed efter perioder hvor
+  // JS-traaden var frosset. Native er sandhedskilden - dette er broen.
+  @objc(getStats:rejecter:)
+  func getStats(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    DispatchQueue.main.async {
+      let duration = self.startTime != nil ? Date().timeIntervalSince(self.startTime!) : 0
+      resolve([
+        "totalDistance": self.totalDistance,
+        "durationSeconds": duration,
+        "nativeFireCount": self.nativeFireCount,
+        "sessionCreated": self.sessionCreated,
+        "isTracking": self.isTracking
+      ])
+    }
   }
 
   // Thread-sikker append til native buffer (kaldt fra didUpdateLocations)
@@ -154,7 +195,8 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
     }
       // Opdater Live Activity direkte fra native, saa laaseskaermen ikke hakker
       // naar JS-traaden er suspenderet.
-      // DEAKTIVERET: native didUpdateLocations fyrer ikke paalideligt; JS driver Live Activity via LiveActivity.update
+      // DEAKTIVERET INDTIL VIDERE - men med main queue-fixet leveres callbacks
+      // nu paalideligt, saa dette kan genaktiveres og testes i en senere build.
       // if #available(iOS 16.2, *) {
         // let dur = Int(Date().timeIntervalSince(self.startTime ?? Date()))
         // let km = self.totalDistance / 1000.0
