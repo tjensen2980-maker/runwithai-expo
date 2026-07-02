@@ -676,8 +676,14 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
         // Ryk referencen frem saa naeste punkt ikke maales mod et foraeldet punkt
                             // (ellers oppustes afstand+fart -> falske speed-drops). Distancen taelles ikke med her.
                   if (isNotTeleport) {
-          lastValidPositionRef.current = newPos;
-          lastSampleTimestampRef.current = newPos.timestamp;
+          // FIX: ryk KUN ankeret frem hvis punktet fejlede paa fart/accuracy.
+          // Fejlede det KUN paa MIN_DISTANCE (lav fart/gang) skal ankeret blive
+          // staaende, saa smaa bevaegelser akkumulerer og taelles med naar de
+          // samlet passerer taersklen (fixer massiv undertaelling ved lav fart).
+          if (isMinDistance) {
+            lastValidPositionRef.current = newPos;
+            lastSampleTimestampRef.current = newPos.timestamp;
+          }
 
           // NYT: et punkt der KUN fejlede MIN_DISTANCE (lille bevaegelse) er stadig
           // en gyldig position til at TEGNE ruten - saa stregen foelger vejen i sving.
@@ -808,6 +814,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
                   if (_dtSec > 8) global._fr.batchFires = (global._fr.batchFires || 0) + 1;
                 }
               }
+              global._bgLastPointTime = _nowTs; // maal aegte gaps mellem native fires (fixer tg/bf-diagnostik)
             } catch (e) {}
             try {
               if (handlePositionUpdateRef.current) {
