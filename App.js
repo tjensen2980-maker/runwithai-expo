@@ -81,15 +81,6 @@ const IconCalendar = ({ active }) => {
     </Svg>
   );
 };
-const IconNutrition = ({ active }) => {
-  const color = active ? '#0a0a0a' : '#b0b0b0';
-  return (
-    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-      <Path d="M12 6c-1.5-2-4-3-6-2-2 1-3 3.5-3 6 0 5 4 12 9 12s9-7 9-12c0-2.5-1-5-3-6-2-1-4.5 0-6 2z" />
-      <Path d="M12 6c0-2 1-3.5 2.5-4" />
-    </Svg>
-  );
-};
 
 const IconZap = ({ color = '#ffffff' }) => (
   <Svg width={22} height={22} viewBox="0 0 24 24" fill={color}>
@@ -253,6 +244,7 @@ function TabBar({ tab, setTab, isPro }) {
     { id: 'home',      label: 'Hjem',             Icon: IconPlan      },
     { id: 'activity',  label: t('tabs.progress'), Icon: IconProgress  },
     { id: 'run',       label: '',                 Icon: null          },
+  { id: 'calendar',  label: 'Kalender',         Icon: IconCalendar  },
     { id: 'more',      label: 'Mere',             Icon: IconStats     },
   ];
   return (
@@ -720,9 +712,6 @@ if (tab === 'cycleTracker') {
             {planChanges.length > 0 && (
               <View style={s.updateDot}><Icon name='edit' size={10} color='#ffffff'/></View>
             )}
-            <TouchableOpacity style={s.menuBtn} onPress={() => setTab('calendar')}>
-              <IconCalendar active={true} />
-            </TouchableOpacity>
           </View>
         </View>
         <View style={{ flex: 1 }}>{renderScreen()}</View>
