@@ -13,7 +13,6 @@ import { SafeAreaView } from
 'react-native-safe-area-context';
 import { SERVER, getAuthToken } from 
 '../data';
-import { Modal } from 'react-native';
 
 // RevenueCat conditional import
 let Purchases = null;
