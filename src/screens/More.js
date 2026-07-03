@@ -88,40 +88,12 @@ export default function More({
         />
       </Section>
 
-      <Section title="SUNDHED">
-        <MenuRow
-          icon="🩸"
-          title="Blodsukker"
-          subtitle="Log og se din udvikling"
-          onPress={go('bloodSugar')}
-        />
-        <MenuRow
-          icon="🍽"
-          title="Madplan"
-          subtitle="AI-genereret madplan til dig"
-          onPress={goPro('mealPlan')}
-          proLocked={isFree}
-        />
-      </Section>
-
       <Section title="SETUP">
         <MenuRow
           icon="🎯"
           title="Mål"
-          subtitle="Ugentlige mål, ernæringsplan og træningstyper"
+          subtitle="Ugentlige mål og træningstyper"
           onPress={go('goals')}
-        />
-        <MenuRow
-          icon="💉"
-          title="Diabetes"
-          subtitle="Insulin, måltal, påminnelser"
-          onPress={go('diabetesSetup')}
-        />
-        <MenuRow
-          icon="⚕️"
-          title="Gastric sleeve / bypass"
-          subtitle="Tilpas appen til din operation"
-          onPress={go('bariatricSetup')}
         />
       </Section>
 
