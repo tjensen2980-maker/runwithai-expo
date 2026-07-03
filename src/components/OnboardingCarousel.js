@@ -10,6 +10,7 @@ import {
 } from 
 'react-native';
 import { SafeAreaView } from 
+import { Modal } from 'react-native';
 'react-native-safe-area-context';
 import { SERVER, getAuthToken } from 
 '../data';
@@ -28,68 +29,18 @@ const PRIVACY_URL = 'https://www.runwithai.app/privacy';
 
 const { width: SCREEN_W } = Dimensions.get('window');
 
-const TIERS = [
-  {
-    id: 'free',
-    name: 'Free',
-    price: '0 kr',
-    period: 'gratis for altid',
-    trial: null,
-    color: '#9CA3AF',
-    accent: '#6B7280',
-    features: [
-      { icon: '✓', text: '3 aktiviteter pr. uge' },
-      { icon: '✓', text: 'Løb, gang og cykling' },
-      { icon: '✓', text: 'Basis statistik' },
-      { icon: '✗', text: 'Ingen AI Coach' },
-      { icon: '✗', text: 'Ingen madtracker' },
-      { icon: '✗', text: 'Ingen madplan' },
-    ],
-    cta: 'Fortsæt gratis',
-    pkgId: null,
-    swipeHint: 'Swipe → for Basic 59 kr/md med AI Coach',
-  },
-  {
-    id: 'basic',
-    name: 'Basic',
-    price: '59 kr',
-    period: 'pr. måned',
-    trial: '14 dages gratis prøve',
-    color: '#3B82F6',
-    accent: '#2563EB',
-    badge: 'POPULÆR',
-    features: [
-      { icon: '✓', text: 'Ubegrænsede aktiviteter' },
-      { icon: '✓', text: 'AI Coach' },
-      { icon: '✓', text: 'Avanceret statistik' },
-      { icon: '✓', text: 'AI ruter' },
-      { icon: '✓', text: 'Kalender og planlægning' },
-      { icon: '✗', text: 'Ingen madtracker' },
-    ],
-    cta: 'Start 14 dages prøve',
-    pkgId: 'basic_monthly',
-    swipeHint: 'Swipe → for Pro 99 kr/md med madplan',
-  },
-  {
-    id: 'pro',
-    name: 'Pro',
-    price: '99 kr',
-    period: 'pr. måned',
-    trial: '14 dages gratis prøve',
-    color: '#EF4444',
-    accent: '#DC2626',
-    badge: 'BEDSTE VÆRDI',
-    features: [
-      { icon: '✓', text: 'Alt i Basic' },
-      { icon: '✓', text: 'Madtracker med AI' },
-      { icon: '✓', text: 'Personlig madplan' },
-      { icon: '✓', text: 'Ernærings-dashboard' },
-      { icon: '✓', text: 'Stregkode-scanner' },
-      { icon: '✓', text: 'Madbillede-analyse' },
-    ],
-    cta: 'Start 14 dages prøve',
-    pkgId: 'pro_monthly',
-  },
+// EN plan: Pro med 14 dages gratis proeveperiode.
+// Prisen vises som tekst her; App Store-arket viser altid den autoritative pris.
+const OFFER = {
+  id: 'pro',
+  pkgId: 'pro_monthly',
+};
+const PRICE_TEXT = '49 kr';
+const BENEFITS = [
+  { emoji: '🧠', text: 'Din plan tilpasser sig efter hvert løb' },
+  { emoji: '🎧', text: 'Coachen i ørerne mens du træner' },
+  { emoji: '📅', text: 'Ugeplan og kalender der følger med' },
+  { emoji: '💬', text: 'Spørg din coach om alt — når som helst' },
 ];
 
 export default function OnboardingCarousel({ visible, onComplete, onClose, isOnboarding }) {
@@ -170,10 +121,6 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
     }
   };
 
-  const handleScroll = (e) => {
-    const idx = Math.round(e.nativeEvent.contentOffset.x / SCREEN_W);
-    setCurrentIndex(idx);
-  };
 
   const handleRestore = async () => {
     if (!Purchases) return;
@@ -195,145 +142,62 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
   if (!visible) return null;
 
   return (
-    <Modal visible={visible} animationType='slide' presentationStyle='fullScreen'>
-      <SafeAreaView style={styles.container}>
-        {!isOnboarding && (
-          <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
-            <Text style={styles.closeBtnText}>✕</Text>
+    <Modal visible={!!visible} animationType="slide" transparent={false}>
+      <SafeAreaView style={s.wrap}>
+        <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
+          <View style={s.badge}><Text style={s.badgeText}>AI COACH</Text></View>
+          <Text style={s.headline}>Din personlige AI-coach</Text>
+          <Text style={s.sub}>En træningsplan der tilpasser sig dig — hver uge, hvert løb.</Text>
+
+          <View style={s.benefits}>
+            {BENEFITS.map((b, i) => (
+              <View key={i} style={s.benefitRow}>
+                <Text style={s.benefitEmoji}>{b.emoji}</Text>
+                <Text style={s.benefitText}>{b.text}</Text>
+              </View>
+            ))}
+          </View>
+
+          <View style={s.giftBox}>
+            <Text style={s.giftBig}>14 dage gratis</Text>
+            <Text style={s.giftSmall}>Derefter {PRICE_TEXT}/md. Opsig når som helst — med ét tryk.</Text>
+          </View>
+
+          <TouchableOpacity style={s.cta} onPress={() => handleSelect(OFFER)} activeOpacity={0.85}>
+            <Text style={s.ctaText}>Start min træning</Text>
           </TouchableOpacity>
-        )}
 
-        <ScrollView
-          ref={scrollRef}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          onMomentumScrollEnd={handleScroll}
-          style={styles.scroll}
-        >
-          {TIERS.map((tier) => (
-            <View key={tier.id} style={[styles.page, { width: SCREEN_W }]}>
-              <ScrollView contentContainerStyle={styles.pageContent}>
-                {tier.badge && (
-                  <View style={[styles.badge, { backgroundColor: tier.accent }]}>
-                    <Text style={styles.badgeText}>{tier.badge}</Text>
-                  </View>
-                )}
-                <Text style={[styles.tierName, { color: tier.color }]}>{tier.name}</Text>
-                <Text style={styles.price}>{tier.price}</Text>
-                <Text style={styles.period}>{tier.period}</Text>
-                {tier.trial && (
-                  <Text style={[styles.trial, { color: tier.accent }]}>{tier.trial}</Text>
-                )}
+          <TouchableOpacity style={s.freeLink} onPress={() => handleSelect({ id: 'free' })}>
+            <Text style={s.freeLinkText}>Fortsæt med gratis version</Text>
+          </TouchableOpacity>
 
-                <View style={styles.featuresBox}>
-                  {tier.features.map((f, i) => (
-                    <View key={i} style={styles.featureRow}>
-                      <Text style={[styles.featureIcon, { color: f.icon === '✓' ? '#10B981' : '#9CA3AF' }]}>{f.icon}</Text>
-                      <Text style={styles.featureText}>{f.text}</Text>
-                    </View>
-                  ))}
-                </View>
-
-                <TouchableOpacity
-                  style={[styles.ctaBtn, { backgroundColor: tier.accent }]}
-                  onPress={() => handleSelect(tier)}
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <ActivityIndicator color='#fff' />
-                  ) : (
-                    <Text style={styles.ctaText}>{tier.cta}</Text>
-                  )}
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={handleRestore} style={styles.restoreBtn}>
-                  <Text style={styles.restoreText}>Gendan køb</Text>
-                </TouchableOpacity>
-
-                {tier.swipeHint && (
-                  <Text style={styles.swipeHint}>{tier.swipeHint}</Text>
-                )}
-                <View style={styles.legal}>
-                  <Text style={styles.legalText}>
-                    Abonnementer fornyes automatisk. Annuller i Apple ID-indstillinger.
-                  </Text>
-                  <View style={styles.legalLinks}>
-                    <TouchableOpacity onPress={() => Linking.openURL(TERMS_URL)}>
-                      <Text style={styles.legalLink}>Vilkaar</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.legalSep}>•</Text>
-                    <TouchableOpacity onPress={() => Linking.openURL(PRIVACY_URL)}>
-                      <Text style={styles.legalLink}>Privatliv</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </ScrollView>
-            </View>
-          ))}
+          <TouchableOpacity style={s.restore} onPress={handleRestore}>
+            <Text style={s.restoreText}>Gendan køb</Text>
+          </TouchableOpacity>
         </ScrollView>
-
-        <View style={styles.dots}>
-          {TIERS.map((_, i) => (
-            <View
-              key={i}
-              style={[styles.dot, currentIndex === i && styles.dotActive]}
-            />
-          ))}
-        </View>
       </SafeAreaView>
     </Modal>
   );
 }
 
-const styles = StyleSheet.create({
-  swipeHint: { color: '#9CA3AF', fontSize: 13, textAlign: 'center', marginTop: 8, marginBottom: 12, fontStyle: 'italic' },
-  container: { flex: 1, backgroundColor: '#000' },
-  closeBtn: {
-    position: 'absolute', top: 50, right: 20, zIndex: 10,
-    width: 36, height: 36, borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,0.15)',
-    alignItems: 'center', justifyContent: 'center',
-  },
-  closeBtnText: { color: '#fff', fontSize: 18, fontWeight: '600' },
-  scroll: { flex: 1 },
-  page: { flex: 1 },
-  pageContent: { padding: 32, paddingTop: 80, alignItems: 'center', paddingBottom: 40 },
-  badge: {
-    paddingHorizontal: 16, paddingVertical: 6, borderRadius: 20,
-    marginBottom: 16,
-  },
-  badgeText: { color: '#fff', fontWeight: '800', fontSize: 12, letterSpacing: 1 },
-  tierName: { fontSize: 36, fontWeight: '900', marginBottom: 8 },
-  price: { fontSize: 48, fontWeight: '900', color: '#fff', marginBottom: 4 },
-  period: { fontSize: 16, color: '#9CA3AF', marginBottom: 8 },
-  trial: { fontSize: 14, fontWeight: '600', marginBottom: 24 },
-  featuresBox: {
-    width: '100%', backgroundColor: 'rgba(255,255,255,0.05)',
-    borderRadius: 16, padding: 20, marginBottom: 32,
-  },
-  featureRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-  featureIcon: { fontSize: 18, fontWeight: '900', width: 28 },
-  featureText: { color: '#fff', fontSize: 15, flex: 1 },
-  ctaBtn: {
-    width: '100%', paddingVertical: 18, borderRadius: 14,
-    alignItems: 'center', marginBottom: 12,
-  },
-  ctaText: { color: '#fff', fontSize: 17, fontWeight: '700' },
-  restoreBtn: { padding: 12, marginBottom: 20 },
-  restoreText: { color: '#9CA3AF', fontSize: 14, textDecorationLine: 'underline' },
-  legal: { alignItems: 'center', paddingHorizontal: 16 },
-  legalText: { color: '#6B7280', fontSize: 11, textAlign: 'center', marginBottom: 8, lineHeight: 16 },
-  legalLinks: { flexDirection: 'row', alignItems: 'center' },
-  legalLink: { color: '#9CA3AF', fontSize: 12, textDecorationLine: 'underline' },
-  legalSep: { color: '#6B7280', marginHorizontal: 8 },
-  dots: {
-    flexDirection: 'row', justifyContent: 'center', alignItems: 'center',
-    paddingVertical: 16,
-  },
-  dot: {
-    width: 8, height: 8, borderRadius: 4,
-    backgroundColor: 'rgba(255,255,255,0.3)', marginHorizontal: 4,
-  },
-  dotActive: { backgroundColor: '#fff', width: 24 },
+const s = StyleSheet.create({
+  wrap: { flex: 1, backgroundColor: '#101114' },
+  scroll: { padding: 24, paddingBottom: 48, alignItems: 'stretch' },
+  badge: { alignSelf: 'flex-start', backgroundColor: 'rgba(255,87,34,0.18)', paddingHorizontal: 12, paddingVertical: 5, borderRadius: 14, marginTop: 8 },
+  badgeText: { color: '#ff7a50', fontWeight: '800', fontSize: 12, letterSpacing: 2 },
+  headline: { color: '#fff', fontSize: 30, fontWeight: '900', marginTop: 14 },
+  sub: { color: 'rgba(255,255,255,0.65)', fontSize: 16, lineHeight: 23, marginTop: 8 },
+  benefits: { marginTop: 26 },
+  benefitRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 14 },
+  benefitEmoji: { fontSize: 20, width: 32 },
+  benefitText: { color: '#fff', fontSize: 15.5, flex: 1, lineHeight: 21 },
+  giftBox: { backgroundColor: 'rgba(255,87,34,0.12)', borderColor: 'rgba(255,87,34,0.45)', borderWidth: 1, borderRadius: 16, padding: 18, marginTop: 22, alignItems: 'center' },
+  giftBig: { color: '#ff7a50', fontSize: 24, fontWeight: '900' },
+  giftSmall: { color: 'rgba(255,255,255,0.75)', fontSize: 13.5, marginTop: 6, textAlign: 'center' },
+  cta: { backgroundColor: '#ff5722', borderRadius: 16, paddingVertical: 17, alignItems: 'center', marginTop: 22 },
+  ctaText: { color: '#fff', fontSize: 17, fontWeight: '900' },
+  freeLink: { alignItems: 'center', marginTop: 18 },
+  freeLinkText: { color: 'rgba(255,255,255,0.55)', fontSize: 14.5, textDecorationLine: 'underline' },
+  restore: { alignItems: 'center', marginTop: 14 },
+  restoreText: { color: 'rgba(255,255,255,0.35)', fontSize: 13 },
 });
