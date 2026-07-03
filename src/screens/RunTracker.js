@@ -1209,6 +1209,15 @@ console.log('iOS resume foreground GPS started');
     await stopBackgroundLocationTracking();
     await stopKeepAliveAudio();
     processBackgroundLocations();
+
+    // [DIAG] Native stats: hb (max heartbeat-hul) afgoer suspension vs. throttling.
+    // hb ~= lokations-hullet -> processen var suspenderet (Verden A).
+    // hb lille trods lokations-hul -> CoreLocation throttlede leveringen (Verden B).
+    let _ns = null;
+    try { _ns = await BackgroundLocation.getStats(); } catch (e) {}
+    const _nsNote = (_ns && typeof _ns === 'object')
+      ? ' hb:' + Math.round(_ns.maxHeartbeatGap || 0) + ' nd:' + Math.round(_ns.totalDistance || 0) + ' fl:' + (_ns.didFailCount || 0) + ' pp:' + (_ns.pauseCount || 0) + ' rr:' + (_ns.resumeCount || 0)
+      : ' hb:-1';
     
     // Afslut Live Activity
     LiveActivity.end().catch(() => {});
@@ -1275,7 +1284,7 @@ const runData = {
   heart_rate: null,
   calories,
   route,
-      notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0} ap:${(global._fr&&global._fr.apRestart)||0} ad:${(global._fr&&global._fr.apDead)||0} al:${(global._fr&&global._fr.apLoaded)||0} pl:${(global._fr&&global._fr.apPlaying)||0} ae:${(global._fr&&global._fr.apErr)||0} an:${(global._fr&&global._fr.apNull)||0} tg:${(global._fr&&global._fr.maxTg)||0} bf:${(global._fr&&global._fr.batchFires)||0} bgAp:${(global._fr&&global._fr.bgAp)||0} bgErr:${(global._fr&&global._fr.bgErr)||0} bgBuf:${(global._fr && global._fr.bgBuf) || 0}`,
+      notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0} ap:${(global._fr&&global._fr.apRestart)||0} ad:${(global._fr&&global._fr.apDead)||0} al:${(global._fr&&global._fr.apLoaded)||0} pl:${(global._fr&&global._fr.apPlaying)||0} ae:${(global._fr&&global._fr.apErr)||0} an:${(global._fr&&global._fr.apNull)||0} tg:${(global._fr&&global._fr.maxTg)||0} bf:${(global._fr&&global._fr.batchFires)||0} bgAp:${(global._fr&&global._fr.bgAp)||0} bgErr:${(global._fr&&global._fr.bgErr)||0} bgBuf:${(global._fr && global._fr.bgBuf) || 0}` + _nsNote,
   type: activityType === 'run' ? 'run' : 'walk',
   date: new Date().toISOString(),
   running_km: runningKm,
@@ -1292,7 +1301,7 @@ const bikePayload = {
   avg_speed_kmh: speedKmh > 0 ? parseFloat(speedKmh.toFixed(2)) : null,
   max_speed_kmh: null,
   gps_polyline: route.length > 0 ? JSON.stringify(route) : null,
-  notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0} ap:${(global._fr&&global._fr.apRestart)||0} ad:${(global._fr&&global._fr.apDead)||0} al:${(global._fr&&global._fr.apLoaded)||0} pl:${(global._fr&&global._fr.apPlaying)||0} ae:${(global._fr&&global._fr.apErr)||0} an:${(global._fr&&global._fr.apNull)||0} tg:${(global._fr&&global._fr.maxTg)||0} bf:${(global._fr&&global._fr.batchFires)||0} bgAp:${(global._fr&&global._fr.bgAp)||0} bgErr:${(global._fr&&global._fr.bgErr)||0} bgBuf:${(global._fr && global._fr.bgBuf) || 0}`,
+  notes: `gps:${gpsPoints}/${gpsPoints + filteredPoints} d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0} g:${((global._fr||{}).maxGap||0).toFixed(0)} b:${(global._fr||{}).bigGaps||0} nf:${global._nfCount||0} sc:${global._scFlag?1:0} ap:${(global._fr&&global._fr.apRestart)||0} ad:${(global._fr&&global._fr.apDead)||0} al:${(global._fr&&global._fr.apLoaded)||0} pl:${(global._fr&&global._fr.apPlaying)||0} ae:${(global._fr&&global._fr.apErr)||0} an:${(global._fr&&global._fr.apNull)||0} tg:${(global._fr&&global._fr.maxTg)||0} bf:${(global._fr&&global._fr.batchFires)||0} bgAp:${(global._fr&&global._fr.bgAp)||0} bgErr:${(global._fr&&global._fr.bgErr)||0} bgBuf:${(global._fr && global._fr.bgBuf) || 0}` + _nsNote,
   source: 'app',
 };
 
