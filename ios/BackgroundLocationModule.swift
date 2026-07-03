@@ -65,7 +65,7 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
   }
 
   @objc
-  override static func requiresMainQueueSetup() -> Bool { return true }
+  override static func requiresMainQueueSetup() -> Bool { return false } // A/B-TEST Build B: tilbage til gammel traad-opsaetning (som den perfekte 7 km-tur)
 
   override func supportedEvents() -> [String]! {
     return ["onLocation", "onError"]
