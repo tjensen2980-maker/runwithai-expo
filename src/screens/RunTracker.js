@@ -432,8 +432,6 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
   const appStateRef = useRef(AppState.currentState);
   const handlePositionUpdateRef = useRef(null);
   const lastForegroundTimestampRef = useRef(0);
-  const keepAliveSoundRef = useRef(null); // stille loop-lyd der holder appen vaagen i baggrunden (iOS audio-mode)
-  const keepAliveWatchdogRef = useRef(null); // interval der overvaager og genstarter keep-alive lyden
 
   // ─── PHOTO STORY STATE ──────────────────────────────────────────────────
   const [savedRunId, setSavedRunId] = useState(null);
@@ -939,7 +937,6 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
 
         setVoiceCoachMixing(allowMusicMixing);
         await startBackgroundLocationTracking();
-        await startKeepAliveAudio();
 
         if (Platform.OS === 'android') {
           watchSubscriptionRef.current = await Location.watchPositionAsync(
@@ -1004,93 +1001,6 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
     setGpsStatus('error');
     setGpsError(t('tracker.gps.notAvailable'));
   };
-
-
-    // ─── KEEP-ALIVE AUDIO (holder appen vaagen i baggrunden) ───────────────
-    // Afspiller en stille lyd i loop saa iOS audio-mode holder appen i live mens
-    // skaermen er laast. Uden dette suspenderer iOS appen mellem VoiceCoach-klip
-    // og GPS-leveringen stopper (lange lige linjer / store gaps).
-    const startKeepAliveAudio = async () => {
-          if (isWeb) return;
-          try {
-                  const AV = require('expo-av');
-                  await AV.Audio.setAudioModeAsync({
-                    allowsRecordingIOS: false,
-                    playsInSilentModeIOS: true,
-                    staysActiveInBackground: true,
-                    shouldDuckAndroid: allowMusicMixing,
-                    interruptionModeIOS: allowMusicMixing
-                      ? AV.Audio.InterruptionModeIOS.MixWithOthers
-                      : AV.Audio.InterruptionModeIOS.DoNotMix,
-                  });
-                  if (keepAliveSoundRef.current) {
-                            try { await keepAliveSoundRef.current.unloadAsync(); } catch {}
-                            keepAliveSoundRef.current = null;
-                  }
-                  const { sound } = await AV.Audio.Sound.createAsync(
-                            require('../../assets/silence_gen_1782932507454.m4a'),
-                    { shouldPlay: true, isLooping: true, volume: 0.05 }                          );
-                  keepAliveSoundRef.current = sound; _bgSound = sound;
-                  // Watchdog: hvis iOS pauser den stille loop, genstart den straks saa appen ikke suspenderes.
-                  sound.setOnPlaybackStatusUpdate((status) => {
-                    if (status && status.isLoaded && !status.isPlaying && !status.didJustFinish) {
-                      sound.playAsync().catch(() => {});
-                    }
-                  });
-                  if (keepAliveWatchdogRef.current) clearInterval(keepAliveWatchdogRef.current);
-                  keepAliveWatchdogRef.current = setInterval(async () => {
-                    try {
-                      // Watchdog: genstart location-tasken hvis iOS har suspenderet den (sker ved lav fart/gang)
-                      const _locRunning = await Location.hasStartedLocationUpdatesAsync(BACKGROUND_LOCATION_TASK);
-                      if (!_locRunning && global._isBackgroundTracking && global._locationTaskOptions) {
-                        // [NATIVE-ONLY DEAKTIVERET] await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions);
-                      }
-                      // Blod tvungen vaekning: kun hvis tasken er stoppet OG ingen nye punkter i 20 sek.
-                      // Hojere timeout + betinget genstart minimerer forstyrrelse af Live Activity.
-                      const _lastPt = global._bgLastPointTime || 0;
-                      if (global._isBackgroundTracking && global._locationTaskOptions && _lastPt && (Date.now() - _lastPt) > 8000) {
-                        try {
-                          // [NATIVE-ONLY DEAKTIVERET] await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions);
-                          global._bgLastPointTime = Date.now();
-                        } catch (e) { console.log('soft restart err', e); }
-                      }
-                      // [NATIVE-WAKE] Vaek native GPS hvis iOS har throttlet leveringen (ingen punkter i 8s)
-                      if (global._isBackgroundTracking && _lastPt && (Date.now() - _lastPt) > 8000 && BackgroundLocation.isAvailable()) {
-                        try { await BackgroundLocation.startBackgroundLocation(); } catch (e) {}
-                      }
-                      const s = keepAliveSoundRef.current; try{ if(global._fr){ if(!s){ global._fr.apNull=(global._fr.apNull||0)+1; } } }catch(_e){}
-                      if (!s) return;
-                      const st = await s.getStatusAsync(); try{ if(global._fr){ global._fr.apLoaded = st.isLoaded?1:0; global._fr.apPlaying = st.isPlaying?1:0; if(st.isLoaded && !st.isPlaying){ try{ if(global._fr){ global._fr.apRestart=(global._fr.apRestart||0)+1; } }catch(_e){} global._fr.apDead=(global._fr.apDead||0)+1; } } }catch(_e){}
-                      if (st && st.isLoaded && !st.isPlaying) {
-                        await s.playAsync().catch(() => {});
-                        console.log('Keep-alive watchdog: restarted silent loop');
-                      }
-                    } catch {}
-                  }, 2000);
-                  console.log('Keep-alive audio started');
-          } catch (e) { try{ if(global._fr){ global._fr.apErr=(global._fr.apErr||0)+1; } }catch(_e){}
-                  console.log('Keep-alive audio failed:', e.message);
-          }
-    };
-
-    const stopKeepAliveAudio = async () => {
-          if (isWeb) return;
-          try {
-                  if (keepAliveWatchdogRef.current) {
-                            clearInterval(keepAliveWatchdogRef.current);
-                            keepAliveWatchdogRef.current = null;
-                  }
-                  if (keepAliveSoundRef.current) {
-                            try { await keepAliveSoundRef.current.setOnPlaybackStatusUpdate(null); } catch {}
-                            await keepAliveSoundRef.current.stopAsync().catch(() => {});
-                            await keepAliveSoundRef.current.unloadAsync().catch(() => {});
-                            keepAliveSoundRef.current = null;
-                            console.log('Keep-alive audio stopped');
-                  }
-          } catch (e) {
-                  console.log('Keep-alive stop failed:', e.message);
-          }
-    };
   
   const stopGpsWatch = () => {
     if (watchSubscriptionRef.current) {
@@ -1108,7 +1018,6 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
     if (intervalRef.current) clearInterval(intervalRef.current);
     stopGpsWatch();
     await stopBackgroundLocationTracking();
-    await stopKeepAliveAudio();
     // Marker Live Activity som pause - bliver staaende paa laaseskaerm
     const km = distanceRef.current / 1000;
     const paceMinPerKm = km > 0 ? (duration / 60) / km : 0;
@@ -1156,7 +1065,6 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
     if (!isWeb && Location) {
       setVoiceCoachMixing(allowMusicMixing);
       await startBackgroundLocationTracking();
-      await startKeepAliveAudio();
       if (Platform.OS === 'android') {
         watchSubscriptionRef.current = await Location.watchPositionAsync(
         { accuracy: Location.Accuracy.BestForNavigation, timeInterval: 500, distanceInterval: 1 },
@@ -1207,7 +1115,6 @@ console.log('iOS resume foreground GPS started');
     if (intervalRef.current) clearInterval(intervalRef.current);
     stopGpsWatch();
     await stopBackgroundLocationTracking();
-    await stopKeepAliveAudio();
     processBackgroundLocations();
 
     // [DIAG] Native stats: hb (max heartbeat-hul) afgoer suspension vs. throttling.
@@ -1357,7 +1264,6 @@ const bikePayload = {
     if (intervalRef.current) clearInterval(intervalRef.current);
     stopGpsWatch();
     await stopBackgroundLocationTracking();
-    await stopKeepAliveAudio();
     LiveActivity.end().catch(() => {});
     if (onBack) onBack();
   };
@@ -1395,7 +1301,6 @@ const formatPace = () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
       stopGpsWatch();
       stopBackgroundLocationTracking();
-      stopKeepAliveAudio();
       LiveActivity.end().catch(() => {});
       if (voiceCoachRef.current) voiceCoachRef.current.destroy();
     };
@@ -1419,7 +1324,7 @@ const formatPace = () => {
           >
             <Text style={{ fontSize: 16 }}>{allowMusicMixing ? '🎵' : '📍'}</Text>
             <Text style={[s.voiceToggleText, allowMusicMixing && s.voiceToggleTextActive]}>
-              {allowMusicMixing ? 'Musik' : 'Maks GPS'}
+              {allowMusicMixing ? 'Musik' : 'Kun stemme'}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
