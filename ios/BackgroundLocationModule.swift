@@ -35,6 +35,16 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
   private var nativeFireCount = 0
   private var sessionCreated = false
 
+  // [DIAG] Heartbeat: 1s-timer paa main run loop. Suspenderes processen,
+  // fryser timeren og maxHeartbeatGap afsloerer det. Koerer timeren ubrudt
+  // mens lokations-leveringen har huller, er det CoreLocation der throttler.
+  private var heartbeatTimer: Timer?
+  private var lastHeartbeat: Date?
+  private var maxHeartbeatGap: TimeInterval = 0
+  private var didFailCount = 0
+  private var pauseCount = 0
+  private var resumeCount = 0
+
   // Native buffer: gemmer locations selv naar JS-traaden er suspenderet (laast skaerm)
   private var bufferedLocations: [[String: Any]] = []
   private let bufferQueue = DispatchQueue(label: "backgroundlocation.buffer")
@@ -86,6 +96,10 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
       self.nativeFireCount = 0
       self.sessionCreated = false
       self.bufferQueue.sync { self.bufferedLocations = [] }
+      self.maxHeartbeatGap = 0
+      self.didFailCount = 0
+      self.pauseCount = 0
+      self.resumeCount = 0
 
       if #available(iOS 17.0, *) {
         // Nyeste Apple-anbefalede API: holder en aegte baggrundssession i live.
@@ -95,7 +109,22 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
         }
       }
 
+      // Genhaevd baggrundsrettigheder ved HVER start (ikke kun i init).
+      self.manager.allowsBackgroundLocationUpdates = true
+      self.manager.pausesLocationUpdatesAutomatically = false
       self.manager.startUpdatingLocation()
+      // [DIAG] Start heartbeat
+      self.lastHeartbeat = Date()
+      self.heartbeatTimer?.invalidate()
+      self.heartbeatTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+        guard let s = self else { return }
+        let now = Date()
+        if let last = s.lastHeartbeat {
+          let gap = now.timeIntervalSince(last)
+          if gap > s.maxHeartbeatGap { s.maxHeartbeatGap = gap }
+        }
+        s.lastHeartbeat = now
+      }
       self.isTracking = true
       self.startTime = Date()
       self.totalDistance = 0
@@ -108,6 +137,8 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
   func stop(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     DispatchQueue.main.async {
       self.manager.stopUpdatingLocation()
+      self.heartbeatTimer?.invalidate()
+      self.heartbeatTimer = nil
       if #available(iOS 17.0, *) {
         (self.bgSession as? CLBackgroundActivitySession)?.invalidate()
       }
@@ -135,6 +166,10 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
         "durationSeconds": duration,
         "nativeFireCount": self.nativeFireCount,
         "sessionCreated": self.sessionCreated,
+        "maxHeartbeatGap": self.maxHeartbeatGap,
+        "didFailCount": self.didFailCount,
+        "pauseCount": self.pauseCount,
+        "resumeCount": self.resumeCount,
         "isTracking": self.isTracking
       ])
     }
@@ -206,8 +241,17 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
   }
 
   func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    self.didFailCount += 1
     guard self.hasListeners else { return }
     self.sendEvent(withName: "onError", body: ["message": error.localizedDescription])
+  }
+
+  func locationManagerDidPauseLocationUpdates(_ manager: CLLocationManager) {
+    self.pauseCount += 1
+  }
+
+  func locationManagerDidResumeLocationUpdates(_ manager: CLLocationManager) {
+    self.resumeCount += 1
   }
 
   func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
