@@ -4,7 +4,6 @@ import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator
 import { colors, LEVELS, DEFAULT_WEEK_PLAN, SERVER, getAuthToken } from '../data';
 import { useTranslation } from 'react-i18next';
 import RecentActivities from '../components/RecentActivities';
-import { loadBariatricProfile, getTrainingRecommendation } from '../utils/bariatric';
 
 // ─── VEJR + TRÆTHED ANBEFALING ────────────────────────────────────────────────
 function WeatherAdvice({ runs, nextWorkout, level, profile }) {
@@ -839,19 +838,6 @@ ${profile?.age ? `Alder: ${profile.age}` : ''}` }),
 
 export default function Dashboard({ level, nextWorkout, weekPlan, planChanges, profile, runs, onNavigate, onStartActivity }) {
   const { t } = useTranslation();
-  const [bariatricProfile, setBariatricProfile] = useState(null);
-  const [trainingRec, setTrainingRec] = useState(null);
-  useEffect(() => {
-    (async () => {
-      try {
-        const bp = await loadBariatricProfile();
-        setBariatricProfile(bp);
-        if (bp && bp.enabled) {
-          setTrainingRec(getTrainingRecommendation(bp));
-        }
-      } catch (e) {}
-    })();
-  }, []);
   const name = (profile?.name || t('dashboard.defaultName')).split(' ')[0].toUpperCase();
   const hour = new Date().getHours();
   const greeting = hour < 10 ? t('dashboard.greeting.morning') : hour < 17 ? t('dashboard.greeting.day') : t('dashboard.greeting.evening');
@@ -910,59 +896,6 @@ export default function Dashboard({ level, nextWorkout, weekPlan, planChanges, p
 
       <WorkoutCard workout={nextWorkout} level={level} onNavigate={onNavigate} onStartActivity={onStartActivity} />
 
-{bariatricProfile && bariatricProfile.enabled && trainingRec && (
-        <View style={{ backgroundColor: colors.card, borderRadius: 12, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: colors.border }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}>
-            <Text style={{ fontSize: 18, fontWeight: '700', color: colors.text, flex: 1 }}>{t('bariatric.training.title')}</Text>
-          </View>
-          <Text style={{ fontSize: 13, color: colors.muted, marginBottom: 12 }}>{t('bariatric.training.subtitle')}</Text>
-
-          <View style={{ backgroundColor: colors.bg, borderRadius: 8, padding: 12, marginBottom: 12 }}>
-            <Text style={{ fontSize: 12, color: colors.muted, marginBottom: 2 }}>{t('bariatric.training.currentPhase')}</Text>
-            <Text style={{ fontSize: 16, fontWeight: '600', color: colors.accent, marginBottom: 6 }}>{t(`bariatric.training.phaseNames.${trainingRec.phase}`)}</Text>
-            <Text style={{ fontSize: 13, color: colors.text, lineHeight: 18 }}>{t(`bariatric.training.phaseDesc.${trainingRec.phase}`)}</Text>
-            {trainingRec.daysUntilNext != null && trainingRec.daysUntilNext > 0 && (
-              <Text style={{ fontSize: 12, color: colors.muted, marginTop: 6 }}>{t('bariatric.training.daysUntilNext', { days: trainingRec.daysUntilNext })}</Text>
-            )}
-          </View>
-
-          <View style={{ flexDirection: 'row', marginBottom: 12 }}>
-            <View style={{ flex: 1, marginRight: 6 }}>
-              <Text style={{ fontSize: 11, color: colors.muted }}>{t('bariatric.training.maxDuration')}</Text>
-              <Text style={{ fontSize: 15, fontWeight: '600', color: colors.text }}>{trainingRec.maxDurationMin} {t('bariatric.training.min')}</Text>
-            </View>
-            <View style={{ flex: 1, marginLeft: 6 }}>
-              <Text style={{ fontSize: 11, color: colors.muted }}>{t('bariatric.training.maxHeartRate')}</Text>
-              <Text style={{ fontSize: 15, fontWeight: '600', color: colors.text }}>{trainingRec.maxHeartRatePct}% {t('bariatric.training.ofMax')}</Text>
-            </View>
-          </View>
-
-          <Text style={{ fontSize: 13, fontWeight: '600', color: '#22c55e', marginBottom: 6 }}>✓ {t('bariatric.training.allowed')}</Text>
-          {(trainingRec.allowed || []).map((a) => (
-            <Text key={'al-'+a} style={{ fontSize: 13, color: colors.text, marginLeft: 8, marginBottom: 3 }}>• {t(`bariatric.training.activities.${a}`)}</Text>
-          ))}
-
-          {(trainingRec.notRecommended || []).length > 0 && (
-            <>
-              <Text style={{ fontSize: 13, fontWeight: '600', color: '#ef4444', marginTop: 10, marginBottom: 6 }}>✗ {t('bariatric.training.notRecommended')}</Text>
-              {trainingRec.notRecommended.map((a) => (
-                <Text key={'nr-'+a} style={{ fontSize: 13, color: colors.muted, marginLeft: 8, marginBottom: 3 }}>• {t(`bariatric.training.activities.${a}`)}</Text>
-              ))}
-            </>
-          )}
-
-          {(trainingRec.warnings || []).length > 0 && (
-            <View style={{ backgroundColor: '#fef3c7', borderRadius: 8, padding: 10, marginTop: 12 }}>
-              <Text style={{ fontSize: 12, fontWeight: '700', color: '#92400e', marginBottom: 4 }}>{t('bariatric.training.warnings.title')}</Text>
-              {trainingRec.warnings.map((w) => (
-                <Text key={'w-'+w} style={{ fontSize: 12, color: '#92400e', marginBottom: 2 }}>• {t(`bariatric.training.warnings.${w}`)}</Text>
-              ))}
-            </View>
-          )}
-
-          <Text style={{ fontSize: 11, color: colors.muted, marginTop: 12, fontStyle: 'italic' }}>{t('bariatric.training.disclaimer')}</Text>
-        </View>
-      )}
 
       <WeekPlan weekPlan={weekPlan} />
 
