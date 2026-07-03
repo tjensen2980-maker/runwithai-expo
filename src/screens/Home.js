@@ -11,7 +11,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../data';
-import { loadReadings, filterByDays, computeStats } from '../utils/bloodSugar';
 
 // ============================================================
 // Home.js - New AI-first home screen
@@ -35,26 +34,10 @@ function getTodayWorkout(weekPlan) {
   return weekPlan.find(d => d.day === todayShort) || weekPlan[0];
 }
 
-function buildAIGreeting({ profile, nextWorkout, todayWorkout, bsStats, lastBs }) {
+function buildAIGreeting({ profile, nextWorkout, todayWorkout }) {
   const name = (profile && profile.name) ? profile.name : '';
   const parts = [];
 
-  // Blood sugar status
-  if (bsStats && typeof bsStats.avg === 'number' && bsStats.count > 0) {
-    const avg = bsStats.avg.toFixed(1).replace('.', ',');
-    if (bsStats.avg >= 4 && bsStats.avg <= 8) {
-      parts.push(`Dit blodsukker er stabilt (snit ${avg} de sidste 7 dage).`);
-    } else if (bsStats.avg > 8) {
-      parts.push(`Dit blodsukker har vaeret lidt hojt (snit ${avg}). Husk at logge maaltider og bevaegelse.`);
-    } else {
-      parts.push(`Dit blodsukker har vaeret lavt (snit ${avg}). Vaer opmaerksom paa symptomer.`);
-    }
-  } else if (lastBs) {
-    const v = (typeof lastBs.value === 'number' ? lastBs.value : parseFloat(lastBs.value));
-    if (!isNaN(v)) {
-      parts.push(`Seneste blodsukker: ${v.toFixed(1).replace('.', ',')} mmol/L.`);
-    }
-  }
 
   // Today's training
   const tw = todayWorkout;
@@ -96,63 +79,17 @@ export default function Home({
 }) {
   const { t } = useTranslation();
   const [chatDraft, setChatDraft] = useState('');
-  const [bsReadings, setBsReadings] = useState([]);
-  const [bsStats, setBsStats] = useState(null);
-  const [calBurned, setCalBurned] = useState(0);
-  const [calTarget, setCalTarget] = useState(2500);
-  const [calEaten, setCalEaten] = useState(0);
 
-  // Load blood sugar
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        const allReadings = await loadReadings(); const recent = filterByDays(allReadings, 7);
-        if (!mounted) return;
-        setBsReadings(recent || []);
-        const stats = computeStats(recent || [], profile);
-        setBsStats(stats);
-      } catch (e) {
-        // Silent: blood sugar is optional
-      }
-    })();
-    return () => { mounted = false; };
-  }, [profile]);
 
-  // Load calorie summary from AsyncStorage (best effort)
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        const today = new Date().toISOString().slice(0, 10);
-        const raw = await AsyncStorage.getItem('nutrition_summary_' + today);
-        if (!mounted) return;
-        if (raw) {
-          const s = JSON.parse(raw);
-          if (s && typeof s === 'object') {
-            if (typeof s.eaten === 'number') setCalEaten(s.eaten);
-            if (typeof s.burned === 'number') setCalBurned(s.burned);
-            if (typeof s.target === 'number') setCalTarget(s.target);
-          }
-        }
-      } catch (e) {
-        // Silent
-      }
-    })();
-    return () => { mounted = false; };
-  }, []);
 
   // Derived values
   const todayWorkout = useMemo(() => getTodayWorkout(weekPlan), [weekPlan]);
-  const lastBs = useMemo(() => (bsReadings && bsReadings.length > 0) ? bsReadings[0] : null, [bsReadings]);
 
   const greeting = useMemo(() => buildAIGreeting({
     profile,
     nextWorkout,
     todayWorkout,
-    bsStats,
-    lastBs,
-  }), [profile, nextWorkout, todayWorkout, bsStats, lastBs]);
+  }), [profile, nextWorkout, todayWorkout]);
 
   // Weekly km from runs
   const weeklyKm = useMemo(() => {
@@ -191,12 +128,6 @@ export default function Home({
       case 'plan':
         if (onOpenChat) onOpenChat('Hvad er min plan for i dag?');
         break;
-      case 'food':
-        if (onOpenChat) onOpenChat('Hvad skal jeg spise i dag?');
-        break;
-      case 'bs':
-        if (onNavigate) onNavigate('bloodSugar');
-        break;
       case 'start':
         if (onStartActivity) onStartActivity('motion');
         break;
@@ -205,7 +136,6 @@ export default function Home({
     }
   };
 
-  const calRemaining = Math.max(0, (calTarget || 0) - (calEaten || 0) + (calBurned || 0));
 
   return (
     <ScrollView
@@ -249,12 +179,6 @@ export default function Home({
         <TouchableOpacity style={[styles.chip, styles.chipPrimary]} onPress={() => handleChip('plan')}>
           <Text style={styles.chipPrimaryText}>📋 Dagens plan</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.chip} onPress={() => handleChip('food')}>
-          <Text style={styles.chipText}>🍽 Hvad skal jeg spise?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.chip} onPress={() => handleChip('bs')}>
-          <Text style={styles.chipText}>🩸 Log blodsukker</Text>
-        </TouchableOpacity>
         <TouchableOpacity style={styles.chip} onPress={() => handleChip('start')}>
           <Text style={styles.chipText}>🏃 Start traening</Text>
         </TouchableOpacity>
@@ -284,21 +208,7 @@ export default function Home({
       {/* Dagens overblik */}
       <Text style={styles.sectionTitle}>DAGENS OVERBLIK</Text>
       <View style={styles.keyGrid}>
-        <TouchableOpacity style={styles.keyCard} onPress={() => onNavigate && onNavigate('bloodSugar')}>
-          <Text style={styles.keyIcon}>🩸</Text>
-          <Text style={styles.keyTitle}>BLODSUKKER</Text>
-          <Text style={styles.keyValue}>
-            {lastBs ? (typeof lastBs.value === 'number' ? lastBs.value.toFixed(1).replace('.', ',') : String(lastBs.value)) : '–'}
-          </Text>
-          <Text style={styles.keySub}>{lastBs ? 'mmol/L' : 'ingen maaling'}</Text>
-        </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.keyCard, styles.keyCardAccent]} onPress={() => onNavigate && onNavigate('nutrition')}>
-          <Text style={styles.keyIcon}>🍎</Text>
-          <Text style={styles.keyTitle}>KALORIER</Text>
-          <Text style={styles.keyValue}>{calRemaining}</Text>
-          <Text style={styles.keySub}>kcal tilbage</Text>
-        </TouchableOpacity>
 
         <TouchableOpacity style={[styles.keyCard, styles.keyCardDark]} onPress={() => onNavigate && onNavigate('activity')}>
           <Text style={styles.keyIcon}>📏</Text>
