@@ -2,33 +2,39 @@ import Foundation
 import CoreLocation
 import React
 
-// BackgroundLocationModule
-// Native baggrunds-GPS via CLBackgroundActivitySession (iOS 17+) med fallback
-// til allowsBackgroundLocationUpdates paa aeldre iOS. Koerer uafhaengigt af
-// JS-traaden saa tracking fortsaetter naar skaermen er slukket/laast.
+// BackgroundLocationModule - REN GENSKRIVNING
 //
-// ROOT CAUSE-FIX (suspension efter ~40-55 sek i baggrunden):
-// requiresMainQueueSetup returnerer nu TRUE. Foer blev modulet - og dermed
-// CLLocationManager i init() - oprettet paa en React Native-baggrundstraad
-// UDEN run loop. CoreLocation leverer delegate-callbacks paa den traad hvor
-// manageren blev SKABT, og en traad uden koerende run loop faar kun callbacks
-// naar noget andet (forgrund eller keep-alive lyd) holder maskineriet i gang.
-// Derfor "doede" GPS i baggrunden praecis naar lyden roeg (Bluetooth/Saphe/
-// Spotify/opkald), og derfor virkede native Live Activity aldrig paalideligt.
-// Nu skabes manageren paa main-traaden, hvis run loop ALTID koerer naar
-// processen faar CPU - og med UIBackgroundModes=location vaekker iOS netop
-// processen ved hver ny position. Lyd-hacket er ikke laengere baerende for GPS.
+// Bygget direkte paa Apples "Handling location updates in the background":
+// CLLocationUpdate.liveUpdates() + CLBackgroundActivitySession (iOS 17+).
+// Det moderne API leverer DIAGNOSTIK med hver update: naar iOS ikke leverer
+// positioner, fortaeller flagene HVORFOR (stationary, insufficientlyInUse,
+// locationUnavailable, auth-problemer). Det er praecis den forklaring paa
+// 55-sekunders-suspensionen vi har manglet.
+//
+// Bridge-interface er 1:1 identisk med den gamle fil (samme klassenavn,
+// samme metode-selectors, samme events) - .m-filen, JS-wrapperen og
+// RunTracker skal IKKE aendres.
+//
+// Diagnostik-mapping i getStats (saa notes-koblingen i RunTracker virker
+// uaendret): i moderne tilstand betyder felterne:
+//   pauseCount (pp)  = antal updates flagget "stationary"
+//   resumeCount (rr) = antal updates flagget "insufficientlyInUse"
+//   didFailCount (fl)= stream-fejl + auth-denied + serviceSessionRequired
+// Paa legacy-stien (iOS < 17) beholder felterne deres gamle betydning.
 @objc(BackgroundLocationModule)
 class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
 
+  // Legacy manager: bruges kun til auth-forespoergsel + fallback paa iOS < 17.
   private let manager = CLLocationManager()
   private var hasListeners = false
   private var isTracking = false
+  private var usingLegacyPath = false
 
-  // Holdes som Any fordi typen kun findes paa iOS 17+
+  // Holdes som Any fordi typerne kun findes paa iOS 17+
   private var bgSession: Any?
+  private var liveTask: Any?
 
-  // Til at drive Live Activity direkte fra native (uafhaengigt af JS).
+  // Stats (laeses af JS via getStats efter stop)
   private var startTime: Date?
   private var totalDistance: CLLocationDistance = 0
   private var lastLoc: CLLocation?
@@ -36,36 +42,29 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
   private var sessionCreated = false
 
   // [DIAG] Heartbeat: 1s-timer paa main run loop. Suspenderes processen,
-  // fryser timeren og maxHeartbeatGap afsloerer det. Koerer timeren ubrudt
-  // mens lokations-leveringen har huller, er det CoreLocation der throttler.
+  // fryser timeren og maxHeartbeatGap afsloerer det.
   private var heartbeatTimer: Timer?
   private var lastHeartbeat: Date?
   private var maxHeartbeatGap: TimeInterval = 0
+
+  // [DIAG] Taellere - se mapping-note oeverst.
   private var didFailCount = 0
   private var pauseCount = 0
   private var resumeCount = 0
 
-  // Native buffer: gemmer locations selv naar JS-traaden er suspenderet (laast skaerm)
+  // Native buffer: gemmer locations selv naar JS-traaden er frosset.
   private var bufferedLocations: [[String: Any]] = []
   private let bufferQueue = DispatchQueue(label: "backgroundlocation.buffer")
   private let maxBufferSize = 10000
 
   override init() {
     super.init()
-    // Koerer nu paa MAIN-traaden (requiresMainQueueSetup = true), saa
-    // CLLocationManager skabes paa en traad med permanent run loop og
-    // delegate-callbacks leveres paalideligt - ogsaa i baggrunden.
+    // requiresMainQueueSetup=true -> init koerer paa main-traaden.
     manager.delegate = self
-    manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-    manager.distanceFilter = kCLDistanceFilterNone
-    manager.activityType = .otherNavigation
-    manager.pausesLocationUpdatesAutomatically = false
-    manager.allowsBackgroundLocationUpdates = true
-    manager.showsBackgroundLocationIndicator = true
   }
 
   @objc
-  override static func requiresMainQueueSetup() -> Bool { return false } // A/B-TEST Build B: tilbage til gammel traad-opsaetning (som den perfekte 7 km-tur)
+  override static func requiresMainQueueSetup() -> Bool { return true }
 
   override func supportedEvents() -> [String]! {
     return ["onLocation", "onError"]
@@ -74,61 +73,43 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
   override func startObserving() { hasListeners = true }
   override func stopObserving() { hasListeners = false }
 
+  // MARK: - Start / Stop
+
   @objc(start:rejecter:)
   func start(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-    // GUARD: allerede i gang -> genstart IKKE. At genskabe CLBackgroundActivitySession
-    // mens appen er i baggrunden giver en UGYLDIG session og invaliderer den gamle,
-    // saa appen mister baggrundsretten og iOS suspenderer den (89s-hullerne).
+    // GUARD: allerede i gang -> genstart IKKE (en session genskabt i
+    // baggrunden er ugyldig og koster baggrundsretten).
     if isTracking {
       resolve(true)
       return
     }
     DispatchQueue.main.async {
-      let status = self.manager.authorizationStatus
-      if status == .notDetermined {
+      if self.manager.authorizationStatus == .notDetermined {
         self.manager.requestAlwaysAuthorization()
       }
 
-      // Nulstil per-tur diagnostik og buffer. Foer var nativeFireCount og
-      // sessionCreated KUMULATIVE paa tvaers af ture i samme app-session,
-      // saa nf/sc i notes viste misvisende tal. Bufferen toemmes saa gamle
-      // punkter fra forrige tur ikke laekker ind i den nye.
+      // Nulstil per-tur stats/diagnostik og buffer.
       self.nativeFireCount = 0
       self.sessionCreated = false
-      self.bufferQueue.sync { self.bufferedLocations = [] }
       self.maxHeartbeatGap = 0
       self.didFailCount = 0
       self.pauseCount = 0
       self.resumeCount = 0
-
-      if #available(iOS 17.0, *) {
-        // Nyeste Apple-anbefalede API: holder en aegte baggrundssession i live.
-        if self.bgSession == nil {
-          self.bgSession = CLBackgroundActivitySession()
-          self.sessionCreated = true
-        }
-      }
-
-      // Genhaevd baggrundsrettigheder ved HVER start (ikke kun i init).
-      self.manager.allowsBackgroundLocationUpdates = true
-      self.manager.pausesLocationUpdatesAutomatically = false
-      self.manager.startUpdatingLocation()
-      // [DIAG] Start heartbeat
-      self.lastHeartbeat = Date()
-      self.heartbeatTimer?.invalidate()
-      self.heartbeatTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-        guard let s = self else { return }
-        let now = Date()
-        if let last = s.lastHeartbeat {
-          let gap = now.timeIntervalSince(last)
-          if gap > s.maxHeartbeatGap { s.maxHeartbeatGap = gap }
-        }
-        s.lastHeartbeat = now
-      }
-      self.isTracking = true
-      self.startTime = Date()
       self.totalDistance = 0
       self.lastLoc = nil
+      self.startTime = Date()
+      self.bufferQueue.sync { self.bufferedLocations = [] }
+
+      if #available(iOS 17.0, *) {
+        self.usingLegacyPath = false
+        self.startModernLiveUpdates()
+      } else {
+        self.usingLegacyPath = true
+        self.startLegacyUpdates()
+      }
+
+      self.isTracking = true
+      self.startHeartbeat()
       resolve(true)
     }
   }
@@ -136,16 +117,18 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
   @objc(stop:rejecter:)
   func stop(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     DispatchQueue.main.async {
-      self.manager.stopUpdatingLocation()
-      self.heartbeatTimer?.invalidate()
-      self.heartbeatTimer = nil
       if #available(iOS 17.0, *) {
+        (self.liveTask as? Task<Void, Never>)?.cancel()
+        self.liveTask = nil
         (self.bgSession as? CLBackgroundActivitySession)?.invalidate()
       }
       self.bgSession = nil
+      self.manager.stopUpdatingLocation() // harmloes hvis legacy ikke koerte
+      self.heartbeatTimer?.invalidate()
+      self.heartbeatTimer = nil
       self.isTracking = false
-      // totalDistance/startTime bevares saa getStats stadig kan aflaeses
-      // af JS-save-flowet EFTER stop. Nulstilles ved naeste start.
+      // totalDistance/startTime/diagnostik bevares saa getStats kan
+      // aflaeses af JS-save-flowet EFTER stop. Nulstilles ved naeste start.
       resolve(true)
     }
   }
@@ -155,8 +138,136 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
     resolve(self.isTracking)
   }
 
-  // Native stats: JS kan afstemme distance/varighed efter perioder hvor
-  // JS-traaden var frosset. Native er sandhedskilden - dette er broen.
+  // MARK: - Moderne sti (iOS 17+): Apples anbefalede opskrift
+
+  @available(iOS 17.0, *)
+  private func startModernLiveUpdates() {
+    // Apple-kravet: skab CLBackgroundActivitySession FOER updates startes,
+    // mens appen er i forgrunden, og hold en staerk reference.
+    let session = CLBackgroundActivitySession()
+    self.bgSession = session
+    self.sessionCreated = true
+
+    let task = Task { [weak self] in
+      do {
+        let updates = CLLocationUpdate.liveUpdates(.otherNavigation)
+        for try await update in updates {
+          if Task.isCancelled { break }
+          guard let s = self else { break }
+          await MainActor.run {
+            s.handleLiveUpdate(update)
+          }
+        }
+      } catch {
+        await MainActor.run { [weak self] in
+          guard let s = self else { return }
+          s.didFailCount += 1
+          if s.hasListeners {
+            s.sendEvent(withName: "onError", body: ["message": error.localizedDescription])
+          }
+        }
+      }
+    }
+    self.liveTask = task
+  }
+
+  @available(iOS 17.0, *)
+  private func handleLiveUpdate(_ update: CLLocationUpdate) {
+    self.nativeFireCount += 1
+
+    // [DIAG] Apples egne forklaringer paa manglende levering.
+    // isStationary findes fra iOS 17; de oevrige flag fra iOS 18.
+    if update.isStationary {
+      self.pauseCount += 1 // pp i notes = stationary-events
+    }
+    if #available(iOS 18.0, *) {
+      if update.insufficientlyInUse {
+        self.resumeCount += 1 // rr i notes = insufficientlyInUse-events
+      }
+      if update.authorizationDenied || update.authorizationDeniedGlobally
+          || update.authorizationRestricted || update.serviceSessionRequired {
+        self.didFailCount += 1 // fl i notes = alvorlige auth/session-problemer
+      }
+    }
+
+    guard let loc = update.location else { return }
+    self.emitAndAccumulate(loc)
+  }
+
+  // MARK: - Legacy sti (iOS < 17): klassisk CLLocationManager
+
+  private func startLegacyUpdates() {
+    manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+    manager.distanceFilter = kCLDistanceFilterNone
+    manager.activityType = .otherNavigation
+    manager.pausesLocationUpdatesAutomatically = false
+    manager.allowsBackgroundLocationUpdates = true
+    manager.showsBackgroundLocationIndicator = true
+    manager.startUpdatingLocation()
+  }
+
+  func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    guard usingLegacyPath else { return }
+    self.nativeFireCount += 1
+    for loc in locations {
+      self.emitAndAccumulate(loc)
+    }
+  }
+
+  func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    self.didFailCount += 1
+    guard self.hasListeners else { return }
+    self.sendEvent(withName: "onError", body: ["message": error.localizedDescription])
+  }
+
+  func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+    if usingLegacyPath && self.isTracking {
+      manager.startUpdatingLocation()
+    }
+  }
+
+  // MARK: - Faelles levering
+
+  private func emitAndAccumulate(_ loc: CLLocation) {
+    let body: [String: Any] = [
+      "latitude": loc.coordinate.latitude,
+      "longitude": loc.coordinate.longitude,
+      "accuracy": loc.horizontalAccuracy,
+      "speed": loc.speed,
+      "altitude": loc.altitude,
+      "timestamp": loc.timestamp.timeIntervalSince1970 * 1000.0,
+      "nativeFireCount": self.nativeFireCount,
+      "sessionCreated": self.sessionCreated
+    ]
+    self.appendToBuffer(body)
+    if self.hasListeners { self.sendEvent(withName: "onLocation", body: body) }
+    if loc.horizontalAccuracy >= 0 {
+      if let prev = self.lastLoc {
+        let d = loc.distance(from: prev)
+        if d.isFinite && d < 200 { self.totalDistance += d }
+      }
+      self.lastLoc = loc
+    }
+  }
+
+  // MARK: - Heartbeat
+
+  private func startHeartbeat() {
+    self.lastHeartbeat = Date()
+    self.heartbeatTimer?.invalidate()
+    self.heartbeatTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+      guard let s = self else { return }
+      let now = Date()
+      if let last = s.lastHeartbeat {
+        let gap = now.timeIntervalSince(last)
+        if gap > s.maxHeartbeatGap { s.maxHeartbeatGap = gap }
+      }
+      s.lastHeartbeat = now
+    }
+  }
+
+  // MARK: - Stats & buffer (uaendret interface)
+
   @objc(getStats:rejecter:)
   func getStats(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     DispatchQueue.main.async {
@@ -175,7 +286,6 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
     }
   }
 
-  // Thread-sikker append til native buffer (kaldt fra didUpdateLocations)
   private func appendToBuffer(_ item: [String: Any]) {
     bufferQueue.sync {
       bufferedLocations.append(item)
@@ -198,66 +308,6 @@ class BackgroundLocationModule: RCTEventEmitter, CLLocationManagerDelegate {
   func getBufferSize(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     bufferQueue.sync {
       resolve(bufferedLocations.count)
-    }
-  }
-
-  // MARK: - CLLocationManagerDelegate
-
-  func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    self.nativeFireCount += 1
-    // hasListeners-guard fjernet: distance + Live Activity skal opdateres ogsaa i baggrund
-    for loc in locations {
-      let body: [String: Any] = [
-        "latitude": loc.coordinate.latitude,
-        "longitude": loc.coordinate.longitude,
-        "accuracy": loc.horizontalAccuracy,
-        "speed": loc.speed,
-        "altitude": loc.altitude,
-        "timestamp": loc.timestamp.timeIntervalSince1970 * 1000.0,
-        "nativeFireCount": self.nativeFireCount,
-        "sessionCreated": self.sessionCreated
-      ]
-      self.appendToBuffer(body)
-      if self.hasListeners { self.sendEvent(withName: "onLocation", body: body) }
-        // Akkumuler distance til Live Activity (kun gyldige punkter).
-        if loc.horizontalAccuracy >= 0 {
-          if let prev = self.lastLoc {
-            let d = loc.distance(from: prev)
-            if d.isFinite && d < 200 { self.totalDistance += d }
-          }
-          self.lastLoc = loc
-        }
-    }
-      // Opdater Live Activity direkte fra native, saa laaseskaermen ikke hakker
-      // naar JS-traaden er suspenderet.
-      // DEAKTIVERET INDTIL VIDERE - men med main queue-fixet leveres callbacks
-      // nu paalideligt, saa dette kan genaktiveres og testes i en senere build.
-      // if #available(iOS 16.2, *) {
-        // let dur = Int(Date().timeIntervalSince(self.startTime ?? Date()))
-        // let km = self.totalDistance / 1000.0
-        // let pace = km > 0.01 ? (Double(dur) / 60.0) / km : 0
-        // LiveActivityModule.updateContent(distanceMeters: self.totalDistance, durationSeconds: dur, paceMinPerKm: pace, isPaused: false)
-      // }
-  }
-
-  func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-    self.didFailCount += 1
-    guard self.hasListeners else { return }
-    self.sendEvent(withName: "onError", body: ["message": error.localizedDescription])
-  }
-
-  func locationManagerDidPauseLocationUpdates(_ manager: CLLocationManager) {
-    self.pauseCount += 1
-  }
-
-  func locationManagerDidResumeLocationUpdates(_ manager: CLLocationManager) {
-    self.resumeCount += 1
-  }
-
-  func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-    // Hvis vi faar Always mens tracking koerer, sikrer vi at updates er aktive.
-    if self.isTracking {
-      manager.startUpdatingLocation()
     }
   }
 }
