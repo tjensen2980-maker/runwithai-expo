@@ -78,4 +78,5 @@ export default {
   addErrorListener,
   getBufferedLocations,
   getBufferSize,
+  getStats,
 };
