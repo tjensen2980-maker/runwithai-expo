@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const OPTIONS = [
-  { type: 'strength', emoji: '\uD83D\uDCAA', label: 'Styrketræning', desc: 'Vægt, maskiner, kropsvægt', color: '#f59e0b' },
   { type: 'mobility', emoji: '\uD83E\uDDD8', label: 'Mobility / Yoga', desc: 'Stretching, yoga, foam rolling', color: '#8b5cf6' },
   { type: 'bike',     emoji: '\uD83D\uDEB4', label: 'Cykel',           desc: 'Indendørs eller udendørs', color: '#3b82f6' },
   { type: 'other',    emoji: '\u26A1',       label: 'Anden aktivitet', desc: 'Padel, fodbold, svømning...', color: '#6b7280' },
