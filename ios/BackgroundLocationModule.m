@@ -24,7 +24,7 @@ RCT_EXTERN_METHOD(getStats:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
 + (BOOL)requiresMainQueueSetup {
-  return YES;
+  return NO;
 }
 
 @end
