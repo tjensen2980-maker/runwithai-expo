@@ -32,21 +32,12 @@ import RunDetail from './src/screens/RunDetail';
 import { RoutesTab as RoutesTabComponent } from './src/screens/RoutesTab';
 import Privacy from './src/screens/Privacy';
 import GoalsSetup from './src/screens/GoalsSetup';
-import BariatricSetup from './src/screens/BariatricSetup';
-import DiabetesSetup from './src/screens/DiabetesSetup';
-import BloodSugarTracker from './src/screens/BloodSugarTracker';
-import NutritionDashboard from './src/screens/NutritionDashboard';
 import { initNotifications, loadSettings as loadNotifSettings, syncFromSettings } from './src/utils/notifications';
-import LogMeal from './src/screens/LogMeal';
-import BarcodeScanner from './src/screens/BarcodeScanner';
-import PhotoAnalyze from './src/screens/PhotoAnalyze';
 import LogActivity from './src/screens/LogActivity';
 import ActivityTypePicker from './src/screens/ActivityTypePicker';
-import StrengthWorkout from './src/screens/StrengthWorkout';
 import MotionPicker from './src/screens/MotionPicker';
 import TreadmillTracker from './src/screens/TreadmillTracker';
 import * as WebBrowser from 'expo-web-browser';
-import MealPlan from './src/screens/MealPlan';
 import Home from './src/screens/Home';
 import More from './src/screens/More';
 WebBrowser.maybeCompleteAuthSession();
@@ -262,7 +253,6 @@ function TabBar({ tab, setTab, isPro }) {
     { id: 'home',      label: 'Hjem',             Icon: IconPlan      },
     { id: 'activity',  label: t('tabs.progress'), Icon: IconProgress  },
     { id: 'run',       label: '',                 Icon: null          },
-    { id: 'nutrition', label: 'Mad',              Icon: IconNutrition },
     { id: 'more',      label: 'Mere',             Icon: IconStats     },
   ];
   return (
@@ -329,7 +319,6 @@ export default function App() {
   const [showOnboarding, setShowOnboarding] = useState(true);
   const [level, setLevel]                   = useState(null);
   const [tab, setTab]                       = useState('home');
-  const [scannedFood, setScannedFood]       = useState(null);
   const [profile, setProfileState]          = useState(DEFAULT_PROFILE);
   const [weekPlan, setWeekPlanState]        = useState(DEFAULT_WEEK_PLAN);
   const [nextWorkout, setNextWorkout]       = useState(DEFAULT_NEXT_WORKOUT);
@@ -374,7 +363,7 @@ export default function App() {
   });
 
   const token = getAuthToken();
-  const { subscription, tier, isPro, isBasic, isFree, canUseMealTracking, canUseMealPlan, canUseAICoach, canUseAllActivities, weeklyActivityLimit, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
+  const { subscription, tier, isPro, isBasic, isFree, canUseAICoach, canUseAllActivities, weeklyActivityLimit, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
   const { calories: hkCalories, fetchDailyCalories, isSupported: hkSupported, isAvailable: hkAvail, isAuthorized: hkAuth, isInitializing: hkInit, error: hkError } = useHealthKit();
   // Android: Health Connect parallel til iOS HealthKit. PÃ¥ modsat platform returnerer hooken bare 0.
   const { calories: hcCalories, fetchDailyCalories: hcFetchDailyCalories, isAuthorized: hcAuth } = useHealthConnect();
@@ -404,7 +393,7 @@ export default function App() {
     })();
   }, [weekPlan]);
 
-  // HealthKit auto-sync til Railway fjernet - vi lÃ¦ser direkte i NutritionDashboard
+  // HealthKit auto-sync til Railway fjernet - vi lÃ¦ser direkte i
   // Watch auto-sync: send today's training when weekPlan loads
   useEffect(() => {
     if (weekPlan && weekPlan.length > 0 && sendTodayTraining) {
@@ -569,9 +558,7 @@ if (type === 'pick') {
       return;
     }
     setActivityType(type);
-    if (type === 'strength') {
-      setTab('strengthWorkout');
-    } else if (type === 'bike') {
+    if (type === 'bike') {
       setTab('cycleTracker');
     } else if (type === 'mobility' || type === 'other') {
       setTab('logActivity');
@@ -681,34 +668,8 @@ if (tab === 'cycleTracker') {
         return <Privacy onBack={() => setTab('settings')} />;
       case 'goals':
         return <GoalsSetup onBack={() => setTab('settings')} />;
-      case 'bariatricSetup':
-        return <BariatricSetup onBack={() => setTab('settings')} />;
-      case 'diabetesSetup':
-        return <DiabetesSetup onBack={() => setTab('settings')} />;
-      case 'bloodSugar':
-        return <BloodSugarTracker onBack={() => setTab('settings')} />;
-case 'mealPlan':
-      return (
-        <MealPlan
-          token={getAuthToken()}
-          onBack={() => setTab('nutrition')}
-          onLogged={() => { if (loadData) loadData(); setTab('nutrition'); }}
-          profile={profile}
-          onProfileChange={(patch) => setProfile(prev => ({ ...prev, ...patch }))}
-        />
-      );
-        case 'nutrition':
-        return isPro ? <NutritionDashboard onBack={() => setTab('settings')} onLogMeal={() => setTab('logMeal')} onMealPlan={() => setTab('mealPlan')} onBariatricSetup={() => setTab('bariatricSetup')} hkCalories={combinedHealthCalories} fetchDailyCalories={combinedFetchDailyCalories} hkSupported={hkSupported} hkAvail={hkAvail} hkAuth={combinedAuth} hkInit={hkInit} hkError={hkError} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowTierCarousel(true)} />;
-      case 'logMeal':
-        return isPro ? <LogMeal onBack={() => { setScannedFood(null); setTab('nutrition'); }} onDone={() => { setScannedFood(null); setTab('nutrition'); }} onScanBarcode={() => setTab('barcodeScanner')} onPhotoAnalyze={() => setTab('photoAnalyze')} scannedFood={scannedFood} onScanConsumed={() => setScannedFood(null)} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowTierCarousel(true)} />;
-      case 'barcodeScanner':
-        return isPro ? <BarcodeScanner onBack={() => setTab('logMeal')} onScanned={(food, barcode) => { setScannedFood({ food, barcode }); setTab('logMeal'); }} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowTierCarousel(true)} />;
-      case 'photoAnalyze':
-        return isPro ? <PhotoAnalyze onBack={() => setTab('logMeal')} onDone={() => setTab('nutrition')} /> : <ProFeatureLock feature={t('pro.nutrition.title')} description={t('pro.nutrition.description')} onUpgrade={() => setShowTierCarousel(true)} />;
       case 'activityPicker':
         return <ActivityTypePicker onBack={() => setTab('dashboard')} onPick={(type) => handleStartActivity(type)} />;
-     case 'strengthWorkout':
-        return <StrengthWorkout token={getAuthToken()} onClose={() => { setActivityType(null); setTab('dashboard'); }} onSaved={() => { loadData(); }} />;
       case 'motionPicker':
         return <MotionPicker onBack={() => setTab('dashboard')} onPick={(type, location) => {
           setActivityType(type);
