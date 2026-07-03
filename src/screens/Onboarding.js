@@ -39,7 +39,7 @@ export default function Onboarding({ onDone }) {
   const [step, setStep] = useState(0);
   const [chosen, setChosen] = useState(null);
   const [selectedLang, setSelectedLang] = useState(i18n.language || 'en');
-  const [goalInfo, setGoalInfo] = useState({ name: '', age: '', weeklyKm: '', goal: '', raceDate: '' });
+  const [goalInfo, setGoalInfo] = useState({ name: '', age: '', weeklyKm: '', goal: '', raceDate: '', injuries: '' });
   const [aiPlan, setAiPlan] = useState(null);
   const [planLoading, setPlanLoading] = useState(false);
   const [planError, setPlanError] = useState(false);
@@ -62,6 +62,7 @@ export default function Onboarding({ onDone }) {
         weeklyKm: goalInfo.weeklyKm || "",
         goal: goalInfo.goal || "",
         raceDate: goalInfo.raceDate || "",
+        injuries: goalInfo.injuries || "",
       };
       const lvl = chosen || "beginner";
       const plan = await generateTrainingPlan(profile, lvl, []);
@@ -230,6 +231,18 @@ export default function Onboarding({ onDone }) {
             />
           </View>
         ))}
+
+        <View style={s.fieldWrap}>
+          <Text style={s.fieldLabel}>{'Skader eller smerter vi skal tage hensyn til? (valgfrit)'}</Text>
+          <TextInput
+            style={[s.fieldInput, { minHeight: 60 }]}
+            placeholder={'F.eks. oemt knae, skinnebensbetaendelse...'}
+            placeholderTextColor={colors.muted}
+            value={goalInfo.injuries}
+            onChangeText={v => setGoalInfo(g => ({ ...g, injuries: v }))}
+            multiline
+          />
+        </View>
 
         <Text style={[s.fieldLabel, { marginTop: 8, marginBottom: 8 }]}>{t('onboarding.primaryGoal')}</Text>
         <View style={s.goalGrid}>
