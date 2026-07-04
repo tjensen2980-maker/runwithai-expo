@@ -624,9 +624,10 @@ if (tab === 'cycleTracker') {
         } catch (e) { console.log('AsyncStorage write error:', e); }
         setProfileState(merged);
         await saveProfile(merged);
-        if (goalInfo && Object.values(goalInfo).some(v => v)) {
-          generateTrainingPlan(merged, chosenLevel, []);
-        }
+        // Genindlaes traeningsplanen fra serveren saa kalenderen viser praecis
+        // den plan brugeren lige fik i onboarding (gemt i goToPlan). Uden dette
+        // staar trainingPlan-staten tilbage fra app-boot (foer planen fandtes).
+        try { const tp = await loadTrainingPlan(); if (tp) setTrainingPlan(tp); } catch (e) {}
         setShowOnboarding(false);
       }} />
     </SafeAreaProvider>
