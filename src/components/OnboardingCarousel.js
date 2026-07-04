@@ -32,7 +32,7 @@ const { width: SCREEN_W } = Dimensions.get('window');
 // Prisen vises som tekst her; App Store-arket viser altid den autoritative pris.
 const OFFER = {
   id: 'pro',
-  pkgId: 'pro_monthly',
+  pkgId: '$rc_monthly', // RevenueCat-pakkens identifier i default-offeringen (verificeret i dashboardet)
 };
 const PRICE_TEXT = '49 kr';
 const BENEFITS = [
