@@ -623,7 +623,9 @@ if (tab === 'cycleTracker') {
           await AsyncStorage.setItem('userLevel', chosenLevel);
         } catch (e) { console.log('AsyncStorage write error:', e); }
         setProfileState(merged);
-        await saveProfile(merged);
+        let _sp = '?'; // DIAG: midlertidig
+          try { _sp = String(await saveProfile(merged)); } catch (e) { _sp = 'THROW: ' + ((e && e.message) || String(e)); }
+          try { Alert.alert('DIAG profil-gem', _sp + ' | felter: ' + Object.keys(goalInfo || {}).join(',')); } catch (e) {}
         // Genindlaes traeningsplanen fra serveren saa kalenderen viser praecis
         // den plan brugeren lige fik i onboarding (gemt i goToPlan). Uden dette
         // staar trainingPlan-staten tilbage fra app-boot (foer planen fandtes).
