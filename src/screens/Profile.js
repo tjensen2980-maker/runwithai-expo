@@ -95,6 +95,7 @@ export default function Profile({ profile, onProfileChange, onBack }) {
         <Text style={s.sectionTitle}>{t('settings.sections.runningGoals')}</Text>
         <View style={s.card}>
           <Field label={t('settings.fields.yearsRunning')} {...field('yearsRunning')} keyboard="numeric" placeholder="3" />
+          <Field label={'Ugentlige km (cirka)'} {...field('weeklyKm')} keyboard="numeric" placeholder="15" />
           <Text style={[s.label, { marginBottom: 8 }]}>{t('settings.fields.primaryGoal')}</Text>
           <View style={s.goalGrid}>
             {goals.map(g => (
