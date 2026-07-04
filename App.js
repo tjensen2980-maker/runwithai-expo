@@ -316,6 +316,29 @@ export default function App() {
   const [nextWorkout, setNextWorkout]       = useState(DEFAULT_NEXT_WORKOUT);
   const [planChanges, setPlanChanges]       = useState([]);
   const [trainingPlan, setTrainingPlan]     = useState(null);
+
+  // Naar den gemte AI-plan findes, saettes dagens traening fra den - saa Home,
+  // PlanTab og RunTab viser den rigtige plan i stedet for den statiske skabelon.
+  // (Samme dato-opslag som RunCalendar: session.date === dags dato.)
+  useEffect(() => {
+    try {
+      if (!trainingPlan || !Array.isArray(trainingPlan.data)) return;
+      const p = x => String(x).padStart(2, '0');
+      const d = new Date();
+      const iso = d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+      let session = null;
+      trainingPlan.data.forEach(week => (week.days || []).forEach(s => { if (s.date === iso) session = s; }));
+      if (!session) return;
+      const navn = session.title || session.workout || (session.rest ? 'Hvile' : '');
+      const besk = session.workout || session.title || '';
+      setNextWorkout(prev => ({
+        ...prev,
+        name: { beginner: navn, intermediate: navn, advanced: navn },
+        desc: { beginner: besk, intermediate: besk, advanced: besk },
+        fromPlan: true,
+      }));
+    } catch (e) {}
+  }, [trainingPlan]);
   const [runs, setRuns]                     = useState([]);
   const [loading, setLoading]               = useState(true);
   const [activityType, setActivityType]     = useState('run');
