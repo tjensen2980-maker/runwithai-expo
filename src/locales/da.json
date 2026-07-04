@@ -111,7 +111,7 @@
     "createAccount": "Opret konto",
     "minChars": "min kode",
     "repeatPassword": "gentag kode",
-    "continue": "forsæt",
+    "continue": "fortsæt",
     "getStarted": "kom igang",
     "step1of3": "trin 1 af 3",
     "step2of3": "trin 2 af 3",
@@ -357,6 +357,88 @@
     "step3": {
       "title": "Nå dine mål",
       "desc": "Sæt mål og følg din fremgang med detaljeret statistik"
+    },
+    "tagline": "Din personlige AI-løbecoach",
+    "headline": {
+      "before": "Træning der ",
+      "highlight": "tilpasser sig",
+      "after": " dig"
+    },
+    "features": {
+      "ai": {
+        "title": "Ægte AI-coach",
+        "desc": "Din plan bygges til dig — ikke en skabelon"
+      },
+      "adapts": {
+        "title": "Planen lever",
+        "desc": "Justeres efter hvert løb du gennemfører"
+      },
+      "injury": {
+        "title": "Hensyn til din krop",
+        "desc": "Skader og smerter tænkes ind i din træning"
+      },
+      "goals": {
+        "title": "Mod dit mål",
+        "desc": "Fra første 5 km til maraton — i dit tempo"
+      }
+    },
+    "tryFree": "Prøv gratis i 14 dage",
+    "fine": "Ingen binding. Opsig når som helst.",
+    "levelQuestion": "Hvor er du på din løberejse?",
+    "selectLevel": "Vælg dit niveau for at fortsætte",
+    "levels": {
+      "beginner": {
+        "label": "Nybegynder",
+        "sub": "Ny eller på vej tilbage efter en pause"
+      },
+      "intermediate": {
+        "label": "Øvet",
+        "sub": "Løber jævnligt og vil gerne videre"
+      },
+      "advanced": {
+        "label": "Erfaren",
+        "sub": "Træner målrettet og kender min pace"
+      }
+    },
+    "tellUsAboutYou": "Fortæl os lidt om dig",
+    "coachUsesThis": "Din coach bruger det her til at bygge din plan",
+    "fields": {
+      "name": "Hvad hedder du?",
+      "age": "Alder",
+      "weeklyKm": "Km om ugen (cirka)"
+    },
+    "primaryGoal": "Hvad er dit mål?",
+    "goals": {
+      "fitness": {
+        "label": "Kom i form",
+        "sub": "Sundhed og overskud"
+      },
+      "5k": {
+        "label": "5 km",
+        "sub": "Mit første store mål"
+      },
+      "10k": {
+        "label": "10 km",
+        "sub": "Det næste niveau"
+      },
+      "half": {
+        "label": "Halvmaraton",
+        "sub": "21,1 km"
+      },
+      "full": {
+        "label": "Maraton",
+        "sub": "42,2 km"
+      },
+      "weight": {
+        "label": "Vægttab",
+        "sub": "Løb dig lettere"
+      }
+    },
+    "raceDate": "Har du en løbsdato? (valgfrit)",
+    "raceDatePlaceholder": "f.eks. 15. september",
+    "skipForNow": "Spring over for nu",
+    "plan": {
+      "building": "Din coach bygger din plan…"
     }
   },
   "dashboard": {
