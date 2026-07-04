@@ -353,6 +353,88 @@
     "step3": {
       "title": "Reach your goals",
       "desc": "Set goals and track your progress with detailed statistics"
+    },
+    "tagline": "Your personal AI running coach",
+    "headline": {
+      "before": "Training that ",
+      "highlight": "adapts to",
+      "after": " you"
+    },
+    "features": {
+      "ai": {
+        "title": "A real AI coach",
+        "desc": "Your plan is built for you — not a template"
+      },
+      "adapts": {
+        "title": "A living plan",
+        "desc": "Adjusts after every run you complete"
+      },
+      "injury": {
+        "title": "Listens to your body",
+        "desc": "Injuries and pain are factored into your training"
+      },
+      "goals": {
+        "title": "Towards your goal",
+        "desc": "From your first 5K to a marathon — at your pace"
+      }
+    },
+    "tryFree": "Try free for 14 days",
+    "fine": "No commitment. Cancel anytime.",
+    "levelQuestion": "Where are you on your running journey?",
+    "selectLevel": "Select your level to continue",
+    "levels": {
+      "beginner": {
+        "label": "Beginner",
+        "sub": "New or coming back after a break"
+      },
+      "intermediate": {
+        "label": "Intermediate",
+        "sub": "I run regularly and want to improve"
+      },
+      "advanced": {
+        "label": "Advanced",
+        "sub": "I train with purpose and know my pace"
+      }
+    },
+    "tellUsAboutYou": "Tell us a bit about you",
+    "coachUsesThis": "Your coach uses this to build your plan",
+    "fields": {
+      "name": "What is your name?",
+      "age": "Age",
+      "weeklyKm": "Km per week (roughly)"
+    },
+    "primaryGoal": "What is your goal?",
+    "goals": {
+      "fitness": {
+        "label": "Get fit",
+        "sub": "Health and energy"
+      },
+      "5k": {
+        "label": "5K",
+        "sub": "My first big goal"
+      },
+      "10k": {
+        "label": "10K",
+        "sub": "The next level"
+      },
+      "half": {
+        "label": "Half marathon",
+        "sub": "21.1 km"
+      },
+      "full": {
+        "label": "Marathon",
+        "sub": "42.2 km"
+      },
+      "weight": {
+        "label": "Lose weight",
+        "sub": "Run yourself lighter"
+      }
+    },
+    "raceDate": "Do you have a race date? (optional)",
+    "raceDatePlaceholder": "e.g. September 15",
+    "skipForNow": "Skip for now",
+    "plan": {
+      "building": "Your coach is building your plan…"
     }
   },
   "dashboard": {
@@ -877,8 +959,7 @@
     "C": "Moderate",
     "D": "Less healthy",
     "E": "Unhealthy"
-  }
-,
+  },
   "units": {
     "g": "g",
     "kg": "kg",
