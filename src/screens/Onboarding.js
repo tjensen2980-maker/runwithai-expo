@@ -6,6 +6,7 @@ import OnboardingCarousel from '../components/OnboardingCarousel';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from 'react-native'; // DIAG: midlertidig
 
 const LANGUAGES = [
   { code: 'da', flag: 'ðŸ‡©ðŸ‡°', name: 'Dansk' },
@@ -70,7 +71,9 @@ export default function Onboarding({ onDone }) {
         setAiPlan(plan);
         // Gem planen paa serveren saa den lander i kalenderen (fire-and-forget:
         // et netvaerksudfald maa aldrig vaelte selve onboarding-oplevelsen)
-        try { await saveTrainingPlan(plan); } catch (e) {}
+        let _sv = '?'; // DIAG: midlertidig
+        try { _sv = String(await saveTrainingPlan(plan)); } catch (e) { _sv = 'THROW: ' + ((e && e.message) || String(e)); }
+        try { Alert.alert('DIAG plan-gem', _sv); } catch (e) {}
       } else { setPlanError(true); }
     } catch (e) {
       setPlanError(true);
