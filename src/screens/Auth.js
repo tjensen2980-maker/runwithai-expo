@@ -259,7 +259,9 @@ export default function Auth({ onAuth }) {
         setPendingToken(data.token);
         setPendingUser(data.user);
         if (data.token) await setAuthToken(data.token);
-        setMode('register_profile');
+        // Mini-onboardingen i Auth er nedlagt: nye brugere sendes direkte til
+        // den rigtige Onboarding-skaerm (App faar isNewUser=true som 3. argument).
+        onAuth && onAuth(data.token, data.user || { email }, true);
       } else {
         setError(data.error || t('auth.errors.registerFailed'));
       }
