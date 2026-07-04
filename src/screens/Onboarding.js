@@ -9,30 +9,30 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native'; // DIAG: midlertidig
 
 const LANGUAGES = [
-  { code: 'da', flag: 'ðŸ‡©ðŸ‡°', name: 'Dansk' },
-  { code: 'en', flag: 'ðŸ‡¬ðŸ‡§', name: 'English' },
-  { code: 'de', flag: 'ðŸ‡©ðŸ‡ª', name: 'Deutsch' },
-  { code: 'fr', flag: 'ðŸ‡«ðŸ‡·', name: 'FranÃ§ais' },
-  { code: 'es', flag: 'ðŸ‡ªðŸ‡¸', name: 'EspaÃ±ol' },
-  { code: 'it', flag: 'ðŸ‡®ðŸ‡¹', name: 'Italiano' },
-  { code: 'pt', flag: 'ðŸ‡µðŸ‡¹', name: 'PortuguÃªs' },
-  { code: 'nl', flag: 'ðŸ‡³ðŸ‡±', name: 'Nederlands' },
-  { code: 'pl', flag: 'ðŸ‡µðŸ‡±', name: 'Polski' },
-  { code: 'sv', flag: 'ðŸ‡¸ðŸ‡ª', name: 'Svenska' },
-  { code: 'fi', flag: 'ðŸ‡«ðŸ‡®', name: 'Suomi' },
-  { code: 'el', flag: 'ðŸ‡¬ðŸ‡·', name: 'Î•Î»Î»Î·Î½Î¹ÎºÎ¬' },
-  { code: 'cs', flag: 'ðŸ‡¨ðŸ‡¿', name: 'ÄŒeÅ¡tina' },
-  { code: 'ro', flag: 'ðŸ‡·ðŸ‡´', name: 'RomÃ¢nÄƒ' },
-  { code: 'hu', flag: 'ðŸ‡­ðŸ‡º', name: 'Magyar' },
-  { code: 'bg', flag: 'ðŸ‡§ðŸ‡¬', name: 'Ð‘ÑŠÐ»Ð³Ð°Ñ€ÑÐºÐ¸' },
-  { code: 'hr', flag: 'ðŸ‡­ðŸ‡·', name: 'Hrvatski' },
-  { code: 'sk', flag: 'ðŸ‡¸ðŸ‡°', name: 'SlovenÄina' },
-  { code: 'sl', flag: 'ðŸ‡¸ðŸ‡®', name: 'SlovenÅ¡Äina' },
-  { code: 'lt', flag: 'ðŸ‡±ðŸ‡¹', name: 'LietuviÅ³' },
-  { code: 'lv', flag: 'ðŸ‡±ðŸ‡»', name: 'LatvieÅ¡u' },
-  { code: 'et', flag: 'ðŸ‡ªðŸ‡ª', name: 'Eesti' },
-  { code: 'ga', flag: 'ðŸ‡®ðŸ‡ª', name: 'Gaeilge' },
-  { code: 'mt', flag: 'ðŸ‡²ðŸ‡¹', name: 'Malti' },
+  { code: 'da', flag: '🇩🇰', name: 'Dansk' },
+  { code: 'en', flag: '🇬🇧', name: 'English' },
+  { code: 'de', flag: '🇩🇪', name: 'Deutsch' },
+  { code: 'fr', flag: '🇫🇷', name: 'Français' },
+  { code: 'es', flag: '🇪🇸', name: 'Español' },
+  { code: 'it', flag: '🇮🇹', name: 'Italiano' },
+  { code: 'pt', flag: '🇵🇹', name: 'Português' },
+  { code: 'nl', flag: '🇳🇱', name: 'Nederlands' },
+  { code: 'pl', flag: '🇵🇱', name: 'Polski' },
+  { code: 'sv', flag: '🇸🇪', name: 'Svenska' },
+  { code: 'fi', flag: '🇫🇮', name: 'Suomi' },
+  { code: 'el', flag: '🇬🇷', name: 'Î•Î»Î»Î·Î½Î¹ÎºÎ¬' },
+  { code: 'cs', flag: '🇨🇿', name: 'ÄŒeÅ¡tina' },
+  { code: 'ro', flag: '🇷🇴', name: 'RomânÄƒ' },
+  { code: 'hu', flag: '🇭🇺', name: 'Magyar' },
+  { code: 'bg', flag: '🇧🇬', name: 'Ð‘ÑŠÐ»Ð³Ð°Ñ€ÑÐºÐ¸' },
+  { code: 'hr', flag: '🇭🇷', name: 'Hrvatski' },
+  { code: 'sk', flag: '🇸🇰', name: 'SlovenÄina' },
+  { code: 'sl', flag: '🇸🇮', name: 'SlovenÅ¡Äina' },
+  { code: 'lt', flag: '🇱🇹', name: 'LietuviÅ³' },
+  { code: 'lv', flag: '🇱🇻', name: 'LatvieÅ¡u' },
+  { code: 'et', flag: '🇪🇪', name: 'Eesti' },
+  { code: 'ga', flag: '🇮🇪', name: 'Gaeilge' },
+  { code: 'mt', flag: '🇲🇹', name: 'Malti' },
 ];
 
 export default function Onboarding({ onDone }) {
@@ -83,16 +83,16 @@ export default function Onboarding({ onDone }) {
   };
 
   const features = [
-    { emoji: 'ðŸ¤–', title: t('onboarding.features.ai.title'), desc: t('onboarding.features.ai.desc') },
-    { emoji: 'ðŸ“ˆ', title: t('onboarding.features.adapts.title'), desc: t('onboarding.features.adapts.desc') },
-    { emoji: 'ðŸ›¡ï¸', title: t('onboarding.features.injury.title'), desc: t('onboarding.features.injury.desc') },
-    { emoji: 'ðŸŽ¯', title: t('onboarding.features.goals.title'), desc: t('onboarding.features.goals.desc') },
+    { emoji: '🤖', title: t('onboarding.features.ai.title'), desc: t('onboarding.features.ai.desc') },
+    { emoji: '📈', title: t('onboarding.features.adapts.title'), desc: t('onboarding.features.adapts.desc') },
+    { emoji: '🛡️', title: t('onboarding.features.injury.title'), desc: t('onboarding.features.injury.desc') },
+    { emoji: '🎯', title: t('onboarding.features.goals.title'), desc: t('onboarding.features.goals.desc') },
   ];
 
   const levels = [
-    { id: 'beginner',     label: t('onboarding.levels.beginner.label'),     sub: t('onboarding.levels.beginner.sub'),     emoji: 'ðŸŒ±', color: '#2ecc71' },
-    { id: 'intermediate', label: t('onboarding.levels.intermediate.label'), sub: t('onboarding.levels.intermediate.sub'), emoji: 'ðŸƒ', color: '#ff6b35' },
-    { id: 'advanced',     label: t('onboarding.levels.advanced.label'),     sub: t('onboarding.levels.advanced.sub'),     emoji: 'âš¡', color: '#c8ff00' },
+    { id: 'beginner',     label: t('onboarding.levels.beginner.label'),     sub: t('onboarding.levels.beginner.sub'),     emoji: '🌱', color: '#2ecc71' },
+    { id: 'intermediate', label: t('onboarding.levels.intermediate.label'), sub: t('onboarding.levels.intermediate.sub'), emoji: '🏃', color: '#ff6b35' },
+    { id: 'advanced',     label: t('onboarding.levels.advanced.label'),     sub: t('onboarding.levels.advanced.sub'),     emoji: '⚡', color: '#c8ff00' },
   ];
 
   const goals = [
@@ -104,7 +104,7 @@ export default function Onboarding({ onDone }) {
     { id: 'weight',  label: t('onboarding.goals.weight.label'),  sub: t('onboarding.goals.weight.sub') },
   ];
 
-  // â”€â”€ STEP 0: Language Selection â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── STEP 0: Language Selection ──────────────────────────────────────────────
   if (step === 0) return (
     <SafeAreaView style={s.safe}>
       <ScrollView contentContainerStyle={s.splash} showsVerticalScrollIndicator={false}>
@@ -114,7 +114,7 @@ export default function Onboarding({ onDone }) {
           <Text style={s.logoAi}>AI</Text>
         </View>
         
-        <Text style={s.langTitle}>ðŸŒ Choose your language</Text>
+        <Text style={s.langTitle}>🌍 Choose your language</Text>
         <Text style={s.langSubtitle}>Vælg dit sprog • Wähle deine Sprache</Text>
         
         <View style={s.langGrid}>
@@ -133,25 +133,25 @@ export default function Onboarding({ onDone }) {
                 selectedLang === lang.code && { color: colors.accent }
               ]}>{lang.name}</Text>
               {selectedLang === lang.code && (
-                <Text style={{ color: colors.accent, fontSize: 14 }}>âœ“</Text>
+                <Text style={{ color: colors.accent, fontSize: 14 }}>✓</Text>
               )}
             </TouchableOpacity>
           ))}
         </View>
 
         <TouchableOpacity style={[s.ctaBtn, { marginTop: 24 }]} onPress={() => setStep(1)}>
-          <Text style={s.ctaBtnText}>{t('auth.continue') || 'Continue'} â†’</Text>
+          <Text style={s.ctaBtnText}>{t('auth.continue') || 'Continue'} →</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
 
-  // â”€â”€ STEP 1: Splash â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── STEP 1: Splash ──────────────────────────────────────────────────────────
   if (step === 1) return (
     <SafeAreaView style={s.safe}>
       <ScrollView contentContainerStyle={s.splash} showsVerticalScrollIndicator={false}>
         <TouchableOpacity onPress={() => setStep(0)} style={s.backBtn}>
-          <Text style={s.backBtnText}>â† {t('common.back')}</Text>
+          <Text style={s.backBtnText}>← {t('common.back')}</Text>
         </TouchableOpacity>
         <View style={s.logoWrap}>
           <Text style={s.logoRun}>RUN</Text>
@@ -174,19 +174,19 @@ export default function Onboarding({ onDone }) {
           ))}
         </View>
         <TouchableOpacity style={s.ctaBtn} onPress={() => setStep(2)}>
-          <Text style={s.ctaBtnText}>{t('onboarding.tryFree')} â†’</Text>
+          <Text style={s.ctaBtnText}>{t('onboarding.tryFree')} →</Text>
         </TouchableOpacity>
         <Text style={s.fine}>{t('onboarding.fine')}</Text>
       </ScrollView>
     </SafeAreaView>
   );
 
-  // â”€â”€ STEP 2: Niveau â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── STEP 2: Niveau ──────────────────────────────────────────────────────────
   if (step === 2) return (
     <SafeAreaView style={s.safe}>
       <ScrollView contentContainerStyle={s.splash} showsVerticalScrollIndicator={false}>
         <TouchableOpacity onPress={() => setStep(1)} style={s.backBtn}>
-          <Text style={s.backBtnText}>â† {t('common.back')}</Text>
+          <Text style={s.backBtnText}>← {t('common.back')}</Text>
         </TouchableOpacity>
         <Text style={s.levelTitle}>{t('onboarding.levelQuestion')}</Text>
         {levels.map(opt => (
@@ -199,7 +199,7 @@ export default function Onboarding({ onDone }) {
               <Text style={[s.levelLabel, chosen === opt.id && { color: opt.color }]}>{opt.label}</Text>
               <Text style={s.levelSub}>{opt.sub}</Text>
             </View>
-            {chosen === opt.id && <Text style={{ color: opt.color, fontSize: 18 }}>âœ“</Text>}
+            {chosen === opt.id && <Text style={{ color: opt.color, fontSize: 18 }}>✓</Text>}
           </TouchableOpacity>
         ))}
         <TouchableOpacity
@@ -212,12 +212,12 @@ export default function Onboarding({ onDone }) {
     </SafeAreaView>
   );
 
-  // â”€â”€ STEP 3: Profilinfo & mål â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── STEP 3: Profilinfo & mål ─────────────────────────────────────────────────
   if (step === 3) return (
     <SafeAreaView style={s.safe}>
       <ScrollView contentContainerStyle={s.splash} showsVerticalScrollIndicator={false}>
         <TouchableOpacity onPress={() => setStep(2)} style={s.backBtn}>
-          <Text style={s.backBtnText}>â† {t('common.back')}</Text>
+          <Text style={s.backBtnText}>← {t('common.back')}</Text>
         </TouchableOpacity>
         <Text style={s.levelTitle}>{t('onboarding.tellUsAboutYou')}</Text>
         <Text style={s.levelSubTitle}>{t('onboarding.coachUsesThis')}</Text>
@@ -279,7 +279,7 @@ export default function Onboarding({ onDone }) {
         )}
 
         <TouchableOpacity style={[s.ctaBtn, { marginTop: 24 }]} onPress={() => goToPlan()}>
-          <Text style={s.ctaBtnText}>{t('auth.continue')} â†’</Text>
+          <Text style={s.ctaBtnText}>{t('auth.continue')} →</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{ alignItems: 'center', marginTop: 12 }} onPress={() => goToPlan()}>
           <Text style={{ color: colors.muted, fontSize: 13 }}>{t('onboarding.skipForNow')}</Text>
@@ -342,7 +342,7 @@ export default function Onboarding({ onDone }) {
     </SafeAreaView>
   );
 
-  // â”€â”€ STEP 5: PRO Upsell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── STEP 5: PRO Upsell ──────────────────────────────────────────────────────
   if (step === 5) return (
     <OnboardingCarousel 
       visible={true}
