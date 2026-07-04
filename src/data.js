@@ -534,6 +534,18 @@ export async function generateTrainingPlan(profile, level, recentRuns) { try { g
   } catch (e) { clearTimeout(_to); console.error('generatePlan fejl:', e); try { global._planErr = (e && ((e.name||'Error')+': '+(e.message||''))) || 'ukendt'; } catch(_e){} return null; }
 }
 
+// Gemmer den genererede plan paa serveren (training_plan-tabellen, UPSERT),
+// saa kalenderen/RunCalendar kan laese den via loadTrainingPlan.
+export async function saveTrainingPlan(plan) { try { global._planErr = null; } catch(_e){} const _ctrl = new AbortController(); const _to = setTimeout(function(){ _ctrl.abort(); }, 25000);
+  try {
+    const res = await fetch(`${SERVER}/trainingplan/save`, { signal: _ctrl.signal,
+      method: 'POST', headers: authHeaders(),
+      body: JSON.stringify({ data: plan }),
+    }); if (!res.ok) { clearTimeout(_to); try { global._planErr = 'HTTP ' + res.status; } catch(_e){} return null; } clearTimeout(_to);
+    return await res.json();
+  } catch (e) { clearTimeout(_to); console.error('generatePlan fejl:', e); try { global._planErr = (e && ((e.name||'Error')+': '+(e.message||''))) || 'ukendt'; } catch(_e){} return null; }
+}
+
 // ─── BADGES & ACHIEVEMENTS API ────────────────────────────────────────────────
 export async function loadBadges() {
   try {
