@@ -536,14 +536,20 @@ export async function generateTrainingPlan(profile, level, recentRuns) { try { g
 
 // Gemmer den genererede plan paa serveren (training_plan-tabellen, UPSERT),
 // saa kalenderen/RunCalendar kan laese den via loadTrainingPlan.
-export async function saveTrainingPlan(plan) { try { global._planErr = null; } catch(_e){} const _ctrl = new AbortController(); const _to = setTimeout(function(){ _ctrl.abort(); }, 25000);
+// VIGTIGT: /trainingplan/save kraever auth (authMiddleware paa serveren) -
+// derfor authHeaders(), praecis som loadTrainingPlan. Generate-endpointet er
+// auth-frit, saa den oprindelige klon herfra manglede tokenet (tavs 401).
+export async function saveTrainingPlan(plan) {
   try {
-    const res = await fetch(`${SERVER}/trainingplan/save`, { signal: _ctrl.signal,
-      method: 'POST', headers: authHeaders(),
+    const res = await fetch(`${SERVER}/trainingplan/save`, {
+      method: 'POST',
+      headers: authHeaders(),
       body: JSON.stringify({ data: plan }),
-    }); if (!res.ok) { clearTimeout(_to); try { global._planErr = 'HTTP ' + res.status; } catch(_e){} return null; } clearTimeout(_to);
-    return await res.json();
-  } catch (e) { clearTimeout(_to); console.error('generatePlan fejl:', e); try { global._planErr = (e && ((e.name||'Error')+': '+(e.message||''))) || 'ukendt'; } catch(_e){} return null; }
+    });
+    return res.ok;
+  } catch (e) {
+    return false;
+  }
 }
 
 // ─── BADGES & ACHIEVEMENTS API ────────────────────────────────────────────────
