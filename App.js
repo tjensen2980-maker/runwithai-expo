@@ -571,7 +571,13 @@ if (type === 'pick') {
 
   if (!user) return (
     <SafeAreaProvider>
-      <Auth onAuth={(token, userData) => {
+      <Auth onAuth={(token, userData, isNewUser) => {
+        // Ny bruger: ryd enhedens gamle onboarding-flag (enheds-globalt spoegelse!)
+        // og aabn den rigtige Onboarding-skaerm.
+        if (isNewUser) {
+          try { AsyncStorage.removeItem('onboardingCompleted'); } catch (e) {}
+          setShowOnboarding(true);
+        }
         setAuthToken(token); setUser(userData); syncAuthToWatch(token, (userData && (userData.email || userData.id || userData._id)) || 'user'); setLoading(true); loadData();
       }} />
     </SafeAreaProvider>
