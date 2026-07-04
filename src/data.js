@@ -535,47 +535,31 @@ export async function generateTrainingPlan(profile, level, recentRuns) { try { g
 }
 
 // ── Plan -> kalender-datoer ──────────────────────────────────────────────
-// AI'en genererer en uge-SKABELON med ugedagsnavne (skemaet i serverens
-// prompt har intet date-felt). RunCalendar mapper udelukkende paa
-// session.date ('YYYY-MM-DD') og forventer et ARRAY af uger med days.
-// Derfor udrulles skabelonen deterministisk til 4 uger med konkrete
-// datoer fra denne uges mandag, inden planen gemmes.
-function danishDayIndex(name) {
-  const n = String(name || '').toLowerCase();
-  const tabel = ['man', 'tir', 'ons', 'tor', 'fre', 'l\u00f8r', 's\u00f8n'];
-  for (let i = 0; i < 7; i++) { if (n.startsWith(tabel[i])) return i; }
-  if (n.startsWith('lor') || n.startsWith('loer') || n.startsWith('sat')) return 5;
-  if (n.startsWith('son') || n.startsWith('soen') || n.startsWith('sun')) return 6;
-  if (n.startsWith('mon')) return 0;
-  if (n.startsWith('tue')) return 1;
-  if (n.startsWith('wed')) return 2;
-  if (n.startsWith('thu')) return 3;
-  if (n.startsWith('fri')) return 4;
-  return -1;
-}
-
+// AI'en genererer alle 28 dage som ET fladt weekPlan-array (verificeret
+// live mod /trainingplan/generate: { summary, weekPlan: [28 x {day, title,
+// workout, km, rest}] }). RunCalendar mapper udelukkende paa session.date
+// ('YYYY-MM-DD') og forventer et ARRAY af uger med days. Derfor: dag i =
+// mandag (denne uge) + i dage, delt i uger af 7. Hele kaeden er bevist
+// ende-til-ende mod produktionsserveren inkl. RunCalendar-simulation.
 function toIsoDate(d) {
   const p = x => String(x).padStart(2, '0');
   return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
 }
 
 export function expandPlanToWeeks(plan) {
-  const template = Array.isArray(plan && plan.weekPlan) ? plan.weekPlan
+  const days = Array.isArray(plan && plan.weekPlan) ? plan.weekPlan
     : (Array.isArray(plan) ? plan : null);
-  if (!template || template.length === 0) return plan;
+  if (!days || days.length === 0) return plan;
   const now = new Date();
   const monday = new Date(now);
   monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
   const weeks = [];
-  for (let w = 0; w < 4; w++) {
-    const days = template.map((day, i) => {
-      let di = danishDayIndex(day && day.day);
-      if (di < 0) di = i % 7;
-      const d = new Date(monday);
-      d.setDate(monday.getDate() + w * 7 + di);
-      return { ...day, date: toIsoDate(d), week: w + 1 };
-    });
-    weeks.push({ week: w + 1, days });
+  for (let i = 0; i < days.length; i++) {
+    const w = Math.floor(i / 7);
+    const dt = new Date(monday);
+    dt.setDate(monday.getDate() + i);
+    if (!weeks[w]) weeks[w] = { week: w + 1, days: [] };
+    weeks[w].days.push({ ...days[i], date: toIsoDate(dt), week: w + 1 });
   }
   return weeks;
 }
