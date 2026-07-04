@@ -576,9 +576,9 @@ export async function saveTrainingPlan(plan) {
       headers: authHeaders(),
       body: JSON.stringify({ data: expandPlanToWeeks(plan) }),
     });
-    return res.ok;
+    return res.ok ? 'OK' : ('HTTP ' + res.status); // DIAG: midlertidig
   } catch (e) {
-    return false;
+    return 'EXC: ' + ((e && e.message) || String(e)); // DIAG: midlertidig
   }
 }
 
