@@ -1,7 +1,7 @@
 ﻿import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors, LEVELS, generateTrainingPlan } from '../data';
+import { colors, LEVELS, generateTrainingPlan, saveTrainingPlan } from '../data';
 import OnboardingCarousel from '../components/OnboardingCarousel';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
@@ -66,7 +66,12 @@ export default function Onboarding({ onDone }) {
       };
       const lvl = chosen || "beginner";
       const plan = await generateTrainingPlan(profile, lvl, []);
-      if (plan) { setAiPlan(plan); } else { setPlanError(true); }
+      if (plan) {
+        setAiPlan(plan);
+        // Gem planen paa serveren saa den lander i kalenderen (fire-and-forget:
+        // et netvaerksudfald maa aldrig vaelte selve onboarding-oplevelsen)
+        try { await saveTrainingPlan(plan); } catch (e) {}
+      } else { setPlanError(true); }
     } catch (e) {
       setPlanError(true);
     } finally {
