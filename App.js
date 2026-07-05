@@ -538,27 +538,48 @@ useEffect(() => {
         day: d.day, workout: d.workout || d.name || 'TrÃÆÃâÃâ Ã¢â¬â¢ÃÆÃ¢â¬Â ÃÂ¢Ã¢âÂ¬Ã¢âÂ¢ÃÆÃâÃÂ¢Ã¢âÂ¬ÃÂ¡ÃÆÃ¢â¬Å¡ÃâÃÂ¦ning', km: d.km || 0,
         color: d.color || '#c8ff00', type: d.type || 'run',
         description: d.description || d.desc || '',
+        date: d.date, // levende plan v2: AI daterer sine aendringer
         rest: d.type === 'rest' || (d.km === 0 && !d.type), today: d.day === todayShort,
       }));
-      // Coach-hjernen har opdateret ugeplanen: udrul den med rigtige datoer
-      // (samme format som onboarding-planen) og flet den ind i den gemte plan,
-      // saa kommende uger bevares og kalenderen forstaar resultatet.
+      // Levende plan v2: AI-aendringer flettes ind i den gemte plan pr. dato.
+      // Har AI'en dateret dagene (den nye kontrakt), bruges datoerne direkte;
+      // ellers udrulles ugen fra denne uges mandag. Eksisterende datoer
+      // erstattes, og NYE datoer forlaenger planen (fx genoptagelse efter pause).
       let mergedPlan = null;
       try {
-        const expanded = expandPlanToWeeks({ weekPlan: planData.map(d => ({
-          day: d.day,
-          title: d.workout,
-          workout: d.description || d.workout,
-          km: d.km || 0,
-          rest: !!d.rest,
-        })) });
+        const harDatoer = planData.some(d => d.date);
+        let expanded;
+        if (harDatoer) {
+          const sessions = planData.filter(d => d.date).map(d => ({
+            day: d.day, title: d.workout, workout: d.description || d.workout,
+            km: d.km || 0, rest: !!d.rest, date: d.date,
+          }));
+          expanded = [{ week: 1, days: sessions }];
+        } else {
+          expanded = expandPlanToWeeks({ weekPlan: planData.map(d => ({
+            day: d.day, title: d.workout, workout: d.description || d.workout,
+            km: d.km || 0, rest: !!d.rest,
+          })) });
+        }
         const byDate = {};
         (expanded || []).forEach(w => (w.days || []).forEach(s => { if (s.date) byDate[s.date] = s; }));
+        const brugt = {};
         if (trainingPlan && Array.isArray(trainingPlan.data) && trainingPlan.data[0] && trainingPlan.data[0].days) {
           mergedPlan = trainingPlan.data.map(w => ({
             ...w,
-            days: (w.days || []).map(s => (s.date && byDate[s.date]) ? { ...byDate[s.date], week: w.week } : s),
+            days: (w.days || []).map(s => {
+              if (s.date && byDate[s.date]) { brugt[s.date] = true; return { ...byDate[s.date], week: w.week }; }
+              return s;
+            }),
           }));
+          const nye = Object.keys(byDate).filter(dt => !brugt[dt]).sort();
+          if (nye.length) {
+            let wk = mergedPlan.length;
+            for (let i = 0; i < nye.length; i += 7) {
+              wk += 1;
+              mergedPlan.push({ week: wk, days: nye.slice(i, i + 7).map(dt => ({ ...byDate[dt], week: wk })) });
+            }
+          }
         } else {
           mergedPlan = expanded;
         }
