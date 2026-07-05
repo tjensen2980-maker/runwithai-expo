@@ -45,19 +45,19 @@ function buildAIGreeting({ profile, nextWorkout, todayWorkout }) {
     parts.push('I dag er en hviledag - god restitution!');
   } else if (tw && (tw.workout || tw.name)) {
     const wname = tw.workout || (typeof tw.name === 'string' ? tw.name : (tw.name && tw.name.intermediate) || 'træning');
-    parts.push(`I dag star der ${wname} paa programmet.`);
+    parts.push(`I dag star der ${wname} på programmet.`);
   } else if (nextWorkout) {
     const wn = typeof nextWorkout.name === 'string'
       ? nextWorkout.name
       : (nextWorkout.name && (nextWorkout.name.intermediate || nextWorkout.name.beginner)) || '';
-    if (wn) parts.push(`Naeste traening: ${wn}.`);
+    if (wn) parts.push(`Næste træning: ${wn}.`);
   }
 
   // Friendly close
   if (parts.length === 0) {
-    parts.push('Klar til at komme i gang? Spoerg mig om noget - planlaegning, mad eller motivation.');
+    parts.push('Klar til at komme i gang? Spørg mig om noget - planlægning, mad eller motivation.');
   } else {
-    parts.push('Spoerg mig om noget hvis du har brug for hjaelp.');
+    parts.push('Spørg mig om noget hvis du har brug for hjælp.');
   }
 
   const greet = formatGreeting();
@@ -91,8 +91,8 @@ export default function Home({
     todayWorkout,
   }), [profile, nextWorkout, todayWorkout]);
 
-  // Den AEGTE hilsen fra coach-hjernen (serveren kender plan, loeb og skader).
-  // Skabelon-hilsenen ovenfor bruges som fallback mens den indlaeses.
+  // Den ÆGTE hilsen fra coach-hjernen (serveren kender plan, løb og skader).
+  // Skabelon-hilsenen ovenfor bruges som fallback mens den indlæses.
   const [liveGreeting, setLiveGreeting] = useState(null);
   useEffect(() => {
     let aktiv = true;
@@ -168,7 +168,7 @@ export default function Home({
             style={styles.aiInput}
             value={chatDraft}
             onChangeText={setChatDraft}
-            placeholder="Spoerg din AI coach..."
+            placeholder="Spørg din AI coach..."
             placeholderTextColor="rgba(255,255,255,0.5)"
             returnKeyType="send"
             onSubmitEditing={handleSendChat}
@@ -189,7 +189,7 @@ export default function Home({
           <Text style={styles.chipPrimaryText}>📋 Dagens plan</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.chip} onPress={() => handleChip('start')}>
-          <Text style={styles.chipText}>🏃 Start traening</Text>
+          <Text style={styles.chipText}>🏃 Start træning</Text>
         </TouchableOpacity>
       </ScrollView>
 
@@ -197,7 +197,7 @@ export default function Home({
       {todayWorkout && (
         <View style={styles.nextWorkoutCard}>
           <View style={styles.nwHead}>
-            <Text style={styles.nwLabel}>NAESTE TRAENING</Text>
+            <Text style={styles.nwLabel}>NÆSTE TRÆNING</Text>
             <View style={styles.nwBadge}><Text style={styles.nwBadgeText}>I DAG</Text></View>
           </View>
           <Text style={styles.nwTitle}>
@@ -208,7 +208,7 @@ export default function Home({
           ) : null}
           {!todayWorkout.rest && (
             <TouchableOpacity style={styles.nwCta} onPress={() => onStartActivity && onStartActivity('motion')}>
-              <Text style={styles.nwCtaText}>▶ Start traening</Text>
+              <Text style={styles.nwCtaText}>▶ Start træning</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -230,11 +230,11 @@ export default function Home({
 
         <TouchableOpacity style={styles.keyCard} onPress={() => onNavigate && onNavigate('stats')}>
           <Text style={styles.keyIcon}>🏆</Text>
-          <Text style={styles.keyTitle}>MILEPAEL</Text>
+          <Text style={styles.keyTitle}>MILEPÆL</Text>
           <Text style={[styles.keyValue, styles.keyValueSmall]}>
             {milestoneRemaining.toFixed(1).replace('.', ',')} km
           </Text>
-          <Text style={styles.keySub}>til 50 km maal</Text>
+          <Text style={styles.keySub}>til 50 km mål</Text>
         </TouchableOpacity>
       </View>
 
