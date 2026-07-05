@@ -657,7 +657,7 @@ if (type === 'pick') {
     return (
       <SafeAreaProvider>
         <RunTracker profile={profile} level={level} weekPlan={weekPlan} nextWorkout={nextWorkout}
-          runs={runs} activityType={activityType} onBack={() => setTab('dashboard')} onShowPricing={() => setShowTierCarousel(true)} />
+          runs={runs} activityType={activityType} onBack={() => setTab('run')} onShowPricing={() => setShowTierCarousel(true)} />
       </SafeAreaProvider>
     );
   }
@@ -667,7 +667,7 @@ if (tab === 'cycleTracker') {
     return (
       <SafeAreaProvider>
         <CycleTracker profile={profile} level={level} weekPlan={weekPlan} nextWorkout={nextWorkout}
-          runs={runs} onBack={() => { setActivityType(null); setTab('dashboard'); loadData(); }} onShowPricing={() => setShowTierCarousel(true)} />
+          runs={runs} onBack={() => { setActivityType(null); setTab('run'); loadData(); }} onShowPricing={() => setShowTierCarousel(true)} />
       </SafeAreaProvider>
     );
   }
@@ -680,7 +680,7 @@ if (tab === 'cycleTracker') {
           token={getAuthToken()}
           profile={profile}
           mode={activityType}
-          onClose={() => { setActivityType(null); setTab('dashboard'); }}
+          onClose={() => { setActivityType(null); setTab('run'); }}
           onSaved={() => { loadData(); }}
         />
       </SafeAreaProvider>
@@ -730,7 +730,7 @@ if (tab === 'cycleTracker') {
       case 'more':
       return <More onNavigate={setTab} profile={profile} isPro={isPro} isFree={isFree} onShowPricing={() => setShowTierCarousel(true)} />;
     case 'settings':
-        return <Settings onNavigate={setTab} level={level || 'intermediate'} onLevelChange={(lv) => { setLevel(lv); setProfile(p => ({ ...p, level: lv })); }} profile={profile} onProfileChange={setProfile} onLogout={handleLogout} onBack={() => setTab('dashboard')} subscription={subscription} onShowPricing={() => setShowTierCarousel(true)} />;
+        return <Settings onNavigate={setTab} level={level || 'intermediate'} onLevelChange={(lv) => { setLevel(lv); setProfile(p => ({ ...p, level: lv })); }} profile={profile} onProfileChange={setProfile} onLogout={handleLogout} onBack={() => setTab('more')} subscription={subscription} onShowPricing={() => setShowTierCarousel(true)} />;
       case 'profile':
         return <Profile profile={profile} onProfileChange={(form) => setProfile(form)} onBack={() => setTab('more')} />;
       case 'goalsScreen':
@@ -740,9 +740,9 @@ if (tab === 'cycleTracker') {
       case 'goals':
         return <GoalsSetup onBack={() => setTab('settings')} />;
       case 'activityPicker':
-        return <ActivityTypePicker onBack={() => setTab('dashboard')} onPick={(type) => handleStartActivity(type)} />;
+        return <ActivityTypePicker onBack={() => setTab('run')} onPick={(type) => handleStartActivity(type)} />;
       case 'motionPicker':
-        return <MotionPicker onBack={() => setTab('dashboard')} onPick={(type, location) => {
+        return <MotionPicker onBack={() => setTab('run')} onPick={(type, location) => {
           setActivityType(type);
           if (location === 'treadmill') {
             setTab('treadmillTracker');
@@ -754,7 +754,7 @@ if (tab === 'cycleTracker') {
         }} />;
 
         case 'logActivity':
-        return <LogActivity activityType={activityType} onBack={() => setTab('dashboard')} onDone={() => { setActivityType(null); setTab('dashboard'); loadData(); }} />;
+        return <LogActivity activityType={activityType} onBack={() => setTab('run')} onDone={() => { setActivityType(null); setTab('run'); loadData(); }} />;
       default:
         return null;
     }
