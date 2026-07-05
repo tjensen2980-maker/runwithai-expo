@@ -383,6 +383,7 @@ Lav 4-5 måltider. meal_type skal være: breakfast, lunch, dinner eller snack.
 
 Format til planændring (inkludér kun ved ændring):
 <plan_update>{"changeNote":"kort forklaring","nextWorkout":{"name":"navn","desc":"beskrivelse","km":9.0,"duration":"~50","targetPace":"5:00","targetHr":155},"weekPlan":[{"day":"Man","workout":"navn","km":9,"color":"#c8ff00","type":"run","description":"konkret beskrivelse"}]}</plan_update>
+Hver dag i weekPlan SKAL have et "date"-felt i formatet YYYY-MM-DD. Brug de faktiske datoer fra brugerens TRÆNINGSPLAN (den står i din kontekst). Du må sende op til 28 dage - send kun de dage der ændres. Skal planen genoptages efter en pause, så angiv de nye træningsdage med deres rigtige datoer efter pausen.
 Svar på dansk, max 2-3 sætninger. Vær direkte og konkret.
 ${medicalProfileBlock}`;
 
