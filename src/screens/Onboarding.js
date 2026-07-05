@@ -6,7 +6,6 @@ import OnboardingCarousel from '../components/OnboardingCarousel';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert } from 'react-native'; // DIAG: midlertidig
 
 const LANGUAGES = [
   { code: 'da', flag: '🇩🇰', name: 'Dansk' },
@@ -71,9 +70,7 @@ export default function Onboarding({ onDone }) {
         setAiPlan(plan);
         // Gem planen paa serveren saa den lander i kalenderen (fire-and-forget:
         // et netvaerksudfald maa aldrig vaelte selve onboarding-oplevelsen)
-        let _sv = '?'; // DIAG: midlertidig
-        try { _sv = String(await saveTrainingPlan(plan)); } catch (e) { _sv = 'THROW: ' + ((e && e.message) || String(e)); }
-        try { Alert.alert('DIAG plan-gem', _sv); } catch (e) {}
+        try { await saveTrainingPlan(plan); } catch (e) {}
       } else { setPlanError(true); }
     } catch (e) {
       setPlanError(true);
@@ -290,7 +287,7 @@ export default function Onboarding({ onDone }) {
 
   // ── STEP 4: AI leverer din plan ──────────────────────────────────────────────
   if (step === 4) return (
-    <SafeAreaView style={s.container}>
+    <SafeAreaView style={s.safe}>
       <ScrollView contentContainerStyle={{ padding: 24 }}>
         {planLoading && (
           <View style={{ alignItems: "center", marginTop: 60 }}>
