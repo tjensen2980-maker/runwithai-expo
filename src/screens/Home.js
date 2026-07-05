@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { colors } from '../data';
+import { colors, loadCoachGreeting } from '../data';
 
 // ============================================================
 // Home.js - New AI-first home screen
@@ -91,6 +91,15 @@ export default function Home({
     todayWorkout,
   }), [profile, nextWorkout, todayWorkout]);
 
+  // Den AEGTE hilsen fra coach-hjernen (serveren kender plan, loeb og skader).
+  // Skabelon-hilsenen ovenfor bruges som fallback mens den indlaeses.
+  const [liveGreeting, setLiveGreeting] = useState(null);
+  useEffect(() => {
+    let aktiv = true;
+    loadCoachGreeting().then(g => { if (aktiv && g) setLiveGreeting(g); }).catch(() => {});
+    return () => { aktiv = false; };
+  }, []);
+
   // Weekly km from runs
   const weeklyKm = useMemo(() => {
     if (!runs || !Array.isArray(runs)) return 0;
@@ -153,7 +162,7 @@ export default function Home({
         <Text style={styles.aiGreetingLine1}>
           {greeting.greet}{greeting.name ? `, ${greeting.name}` : ''} 👋
         </Text>
-        <Text style={styles.aiGreetingBody}>{greeting.body}</Text>
+        <Text style={styles.aiGreetingBody}>{liveGreeting || greeting.body}</Text>
         <View style={styles.aiInputRow}>
           <TextInput
             style={styles.aiInput}
