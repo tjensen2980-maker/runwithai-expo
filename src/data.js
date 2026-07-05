@@ -1,30 +1,29 @@
 // ─── THEME ────────────────────────────────────────────────────────────────────
 export const colors = {
-  // Nike Run Club inspired — hvid, sort, præcis rød
-  black:     '#0a0a0a',
-  surface:   '#f5f5f5',
-  card:      '#ffffff',
-  card2:     '#f0f0f0',
-  border:    '#e8e8e8',
-  border2:   '#d0d0d0',
-  accent:    '#fa3c00',   // Nike rød-orange
-  accent2:   '#ff6b00',
-  blue:      '#0066cc',
-  green:     '#00a550',
-  purple:    '#7c3aed',
-  red:       '#e8001c',
-  yellow:    '#f5a623',
-  muted:     '#8c8c8c',
-  text:      '#0a0a0a',
-  dim:       '#555555',
-  secondary: '#fa3c00',
-  bg:        '#fafafa',
-  // Puls-zoner
-  zone1:     '#3498db',  // Blå - let
-  zone2:     '#2ecc71',  // Grøn - moderat
-  zone3:     '#f1c40f',  // Gul - hård
-  zone4:     '#e67e22',  // Orange - meget hård
-  zone5:     '#e74c3c',  // Rød - maksimal
+  // Rebrand: dyb skovgroen + mint - moerkt, roligt, praecist
+  black:     '#F4FBF8',
+  surface:   '#10201A',
+  card:      '#132720',
+  card2:     '#182E26',
+  border:    '#1E3A30',
+  border2:   '#2A4A3E',
+  accent:    '#19D392',
+  accent2:   '#2EE6A8',
+  blue:      '#4DA3FF',
+  green:     '#2EE6A8',
+  purple:    '#B18CFF',
+  red:       '#FF5C7A',
+  yellow:    '#FFC24D',
+  muted:     '#7FA396',
+  text:      '#F4FBF8',
+  dim:       '#A9C4BA',
+  secondary: '#19D392',
+  bg:        '#0B1712',
+  zone1:     '#4DA3FF',
+  zone2:     '#2EE6A8',
+  zone3:     '#FFD84D',
+  zone4:     '#FF9950',
+  zone5:     '#FF5C5C',
 };
 
 // ─── SERVER URL ───────────────────────────────────────────────────────────────
