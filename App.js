@@ -150,7 +150,7 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, isFree, on
             <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>Løb · Gå · Cykling</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => onStartActivity('pick')}
-            style={{ backgroundColor: '#f59e0b', borderRadius: 20, padding: 28, marginBottom: 20, alignItems: 'center' }}>
+            style={{ backgroundColor: colors.accent, borderRadius: 20, padding: 28, marginBottom: 20, alignItems: 'center' }}>
             <Text style={{ fontSize: 40, marginBottom: 8 }}>💪</Text>
             <Text style={{ fontSize: 22, fontWeight: '900', color: '#fff', letterSpacing: -0.5 }}>Træning</Text>
             <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', marginTop: 4 }}>Styrke, mobility m.m.</Text>
@@ -258,7 +258,7 @@ function TabBar({ tab, setTab, isPro }) {
           return (
             <TouchableOpacity key={t_item.id} style={s.tabItemRun} onPress={() => setTab(t_item.id)}>
               <View style={s.runBtnContainer}>
-                <View style={[s.runBtn, active && s.runBtnActive]}>
+                <View style={s.runBtn}>
                   <IconZap color="#ffffff" />
                 </View>
               </View>
@@ -828,7 +828,6 @@ const s = StyleSheet.create({
   tabActiveDot:    { width: 4, height: 4, borderRadius: 2, backgroundColor: colors.accent, marginTop: 4 },
   runBtnContainer: { height: 24, justifyContent: 'flex-end', alignItems: 'center' },
   runBtn:          { width: 50, height: 50, borderRadius: 25, backgroundColor: colors.accent, alignItems: 'center', justifyContent: 'center', shadowColor: colors.accent, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 8, elevation: 8, position: 'absolute', top: -35 },
-  runBtnActive:    { backgroundColor: '#e03500' },
   tabIconWrap:     { width: 44, height: 24, alignItems: 'center', justifyContent: 'center' },
   tabIcon:         { fontSize: 20, opacity: 0.3 },
   tabIconActive:   { opacity: 1 },
