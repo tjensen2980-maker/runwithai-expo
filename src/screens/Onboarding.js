@@ -315,10 +315,11 @@ export default function Onboarding({ onDone }) {
             </Text>
             <View style={{ marginTop: 20 }}>
               {(aiPlan.weekPlan || aiPlan.plan || []).map((d, i) => (
-                <View key={i} style={{ flexDirection: "row", justifyContent: "space-between", paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: colors.surface }}>
-                  <Text style={{ color: colors.text, fontWeight: "600", width: 50 }}>{d.day || ("Dag " + (i + 1))}</Text>
-                  <Text style={{ color: colors.text, flex: 1 }}>{d.workout || d.title || "—"}</Text>
-                  <Text style={{ color: colors.muted }}>{d.km ? (d.km + " km") : (d.rest ? "Hvile" : "")}</Text>
+                <View key={i} style={[s.planCard, d.rest && s.planCardRest]}>
+                  <Text style={s.planWeekDay}>Uge {Math.floor(i / 7) + 1} – {d.day || ('Dag ' + (i + 1))}</Text>
+                  <Text style={s.planTitle}>{d.rest ? 'Hvile' : (d.title || 'Løbetur')}</Text>
+                  {!!d.workout && <Text style={s.planDesc}>{d.workout}</Text>}
+                  {!!d.km && !d.rest && <Text style={s.planKm}>{d.km} km</Text>}
                 </View>
               ))}
             </View>
@@ -382,6 +383,12 @@ const s = StyleSheet.create({
   fieldInput:    { backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 12, padding: 14, color: colors.text, fontSize: 16 },
   goalGrid:      { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 16 },
   goalCard:      { width: '47%', backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 14, padding: 12 },
+  planCard:      { backgroundColor: '#FDEFE7', borderRadius: 16, padding: 16, marginBottom: 12 },
+  planCardRest:  { backgroundColor: '#F2F2F4' },
+  planWeekDay:   { color: colors.accent, fontWeight: '700', fontSize: 14, marginBottom: 4 },
+  planTitle:     { color: colors.black, fontWeight: '800', fontSize: 20, marginBottom: 4 },
+  planDesc:      { color: colors.muted, fontSize: 16, lineHeight: 22 },
+  planKm:        { color: colors.muted, fontSize: 15, marginTop: 4 },
   goalLabel:     { color: colors.text, fontWeight: '700', fontSize: 13, marginBottom: 3 },
   goalSub:       { color: colors.dim, fontSize: 11 },
   // Language selector styles
