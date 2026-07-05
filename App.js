@@ -779,11 +779,7 @@ if (tab === 'cycleTracker') {
         <View style={s.topBar}>
           <AppLogo size={90} />
           <View style={s.topRight}>
-            {isPro ? (
-              <View style={s.proBadge}>
-                <Text style={s.proBadgeText}>{t('pro.badge')}</Text>
-              </View>
-            ) : (
+            {!isPro && (
               <TouchableOpacity style={s.upgradeButton} onPress={() => setShowTierCarousel(true)}>
                 <Text style={s.upgradeButtonText}>{t('pro.upgrade')}</Text>
               </TouchableOpacity>
@@ -838,8 +834,6 @@ const s = StyleSheet.create({
   tabIconActive:   { opacity: 1 },
   tabLabel:        { fontSize: 10, color: colors.muted, letterSpacing: 0.3, fontWeight: '500', marginTop: 4 },
   tabLabelActive:  { color: colors.accent2, fontWeight: '700' },
-  proBadge:        { backgroundColor: 'rgba(255, 255, 0, 0.64)', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 10, borderWidth: 1, borderColor: colors.accent },
-  proBadgeText:    { color: colors.accent, fontWeight: 'bold', fontSize: 15 },
   upgradeButton:   { backgroundColor: colors.accent, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 10 },
   upgradeButtonText: { color: colors.black, fontWeight: 'bold', fontSize: 15 },
   logoText:        { fontSize: 17, letterSpacing: -0.5 },
