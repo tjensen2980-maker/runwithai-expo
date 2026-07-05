@@ -44,7 +44,7 @@ function buildAIGreeting({ profile, nextWorkout, todayWorkout }) {
   if (tw && tw.rest) {
     parts.push('I dag er en hviledag - god restitution!');
   } else if (tw && (tw.workout || tw.name)) {
-    const wname = tw.workout || (typeof tw.name === 'string' ? tw.name : (tw.name && tw.name.intermediate) || 'traening');
+    const wname = tw.workout || (typeof tw.name === 'string' ? tw.name : (tw.name && tw.name.intermediate) || 'træning');
     parts.push(`I dag star der ${wname} paa programmet.`);
   } else if (nextWorkout) {
     const wn = typeof nextWorkout.name === 'string'
@@ -201,7 +201,7 @@ export default function Home({
             <View style={styles.nwBadge}><Text style={styles.nwBadgeText}>I DAG</Text></View>
           </View>
           <Text style={styles.nwTitle}>
-            {todayWorkout.workout || (typeof todayWorkout.name === 'string' ? todayWorkout.name : 'Traening')}
+            {todayWorkout.workout || (typeof todayWorkout.name === 'string' ? todayWorkout.name : 'Træning')}
           </Text>
           {todayWorkout.description ? (
             <Text style={styles.nwSub} numberOfLines={2}>{todayWorkout.description}</Text>
