@@ -657,6 +657,9 @@ if (tab === 'cycleTracker') {
         // den plan brugeren lige fik i onboarding (gemt i goToPlan). Uden dette
         // staar trainingPlan-staten tilbage fra app-boot (foer planen fandtes).
         try { const tp = await loadTrainingPlan(); if (tp) setTrainingPlan(tp); } catch (e) {}
+        // Opdater Pro-status straks - koebet kan vaere sket paa trial-skaermen i onboardingen
+        // (upgrade-modalen goer allerede det samme; uden dette kraevede det logout/login).
+        try { refreshSubscription && refreshSubscription(); } catch (e) {}
         setShowOnboarding(false);
       }} />
     </SafeAreaProvider>
