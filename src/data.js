@@ -1,4 +1,16 @@
 // ─── THEME ────────────────────────────────────────────────────────────────────
+// Coach-hjerne: dagens personlige hilsen (genereres og caches paa serveren).
+export async function loadCoachGreeting() {
+  try {
+    const res = await fetch(`${SERVER}/coach-greeting`, { headers: authHeaders() });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return (data && data.greeting) || null;
+  } catch (e) {
+    return null;
+  }
+}
+
 export const colors = {
   // Rebrand: dyb skovgroen + mint - moerkt, roligt, praecist
   black:     '#F4FBF8',
