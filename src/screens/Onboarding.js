@@ -6,6 +6,7 @@ import OnboardingCarousel from '../components/OnboardingCarousel';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CoachIntro from './CoachIntro'; // onboarding som samtale
 
 const LANGUAGES = [
   { code: 'da', flag: '🇩🇰', name: 'Dansk' },
@@ -51,20 +52,24 @@ export default function Onboarding({ onDone }) {
   };
 
   // [ONBOARDING-PLAN] Generer AI-plan ud fra brugerens onboarding-svar
-  const goToPlan = async () => {
+  const goToPlan = async (override) => {
     setStep(4);
     setPlanError(false);
     setPlanLoading(true);
+    const gi = { ...goalInfo, ...(override || {}) };
     try {
       const profile = {
-        name: goalInfo.name || "",
-        age: goalInfo.age || "",
-        weeklyKm: goalInfo.weeklyKm || "",
-        goal: goalInfo.goal || "",
-        raceDate: goalInfo.raceDate || "",
-        injuries: goalInfo.injuries || "",
+        name: gi.name || "",
+        age: gi.age || "",
+        weeklyKm: gi.weeklyKm || "",
+        goal: gi.goal || "",
+        raceDate: gi.raceDate || "",
+        injuries: gi.injuries || "",
+        height: gi.height || "",
+        weight: gi.weight || "",
+        level: gi.level || "",
       };
-      const lvl = chosen || "beginner";
+      const lvl = (override && override.level) || chosen || "beginner";
       const plan = await generateTrainingPlan(profile, lvl, []);
       if (plan) {
         setAiPlan(plan);
@@ -101,6 +106,19 @@ export default function Onboarding({ onDone }) {
     { id: 'weight',  label: t('onboarding.goals.weight.label'),  sub: t('onboarding.goals.weight.sub') },
   ];
 
+  // ── COACH-INTERVIEW: erstatter formular-trinnene 2-3 ──────────────────
+  // Sprogvalg (0) og splash (1) beholdes; plan (4) og paywall (5) genbruges.
+  if (step === 2 || step === 3) {
+    return (
+      <CoachIntro
+        onFaerdig={(svar) => {
+          setGoalInfo(g => ({ ...g, ...svar }));
+          setChosen(svar.level || null);
+          goToPlan(svar);
+        }}
+      />
+    );
+  }
   // ── STEP 0: Language Selection ──────────────────────────────────────────────
   if (step === 0) return (
     <SafeAreaView style={s.safe}>
