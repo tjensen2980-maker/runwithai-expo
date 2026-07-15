@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RunWithAI — Din personlige AI-løbecoach</title>
+<meta name="description" content="En løbecoach der kender dig: bygger din træningsplan, tilpasser den når livet sker, og løber med dig. Hent RunWithAI til iPhone.">
+<meta property="og:title" content="RunWithAI — Din personlige AI-løbecoach">
+<meta property="og:description" content="En coach der kender dig, bygger din plan — og træner med dig.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://runwithai.app/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Crect width='240' height='240' rx='54' fill='%230C1A14'/%3E%3Cpath d='M54 184 L54 66 Q54 60 60 60 L88 60 Q114 60 114 80 Q114 98 90 99 L62 99' fill='none' stroke='%232EE6A8' stroke-width='13' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M72 101 L98 184 L120 118 L142 184 L164 60 L188 184' fill='none' stroke='%232EE6A8' stroke-width='13' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='54' cy='184' r='10' fill='%230C1A14' stroke='%232EE6A8' stroke-width='5'/%3E%3Ccircle cx='188' cy='184' r='10' fill='%23EFFFF8' stroke='%232EE6A8' stroke-width='5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0B1712;
+    --bg2: #0E1D16;
+    --card: #132720;
+    --border: #1E3A30;
+    --mint: #2EE6A8;
+    --mint-dyb: #19D392;
+    --sne: #F4FBF8;
+    --taage: #7FA396;
+    --moerk: #07140E;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--sne);
+    font-family: 'Instrument Sans', system-ui, -apple-system, sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, .display { font-family: 'Sora', system-ui, sans-serif; }
+  a { color: var(--mint); text-decoration: none; }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--mint); outline-offset: 3px; border-radius: 6px; }
+
+  .wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px; position: relative; }
+
+  .rute {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    height: 100%;
+    width: 300px;
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .rute svg { width: 100%; height: 100%; }
+  @media (max-width: 900px) { .rute { display: none; } }
+
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 0;
+    position: relative; z-index: 2;
+  }
+  .maerke { display: flex; align-items: center; gap: 12px; color: var(--sne); font-family: 'Sora'; font-weight: 700; font-size: 19px; }
+  .maerke svg { width: 40px; height: 40px; }
+  .top-cta {
+    background: var(--mint); color: var(--moerk);
+    font-family: 'Sora'; font-weight: 700; font-size: 15px;
+    padding: 10px 20px; border-radius: 22px;
+  }
+  .top-cta:hover { background: var(--mint-dyb); }
+
+  .hero {
+    display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px;
+    align-items: center;
+    padding: 64px 0 96px;
+    position: relative; z-index: 1;
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--mint); font-family: 'Sora'; font-weight: 600;
+    font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .eyebrow::before { content: ''; width: 10px; height: 10px; border-radius: 50%; border: 3px solid var(--mint); }
+  .hero h1 {
+    font-size: clamp(34px, 5vw, 54px);
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+  }
+  .hero h1 em { font-style: normal; color: var(--mint); }
+  .hero p.under {
+    color: var(--taage); font-size: 19px; margin: 20px 0 32px; max-width: 44ch;
+  }
+  .cta-raekke { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .appstore {
+    display: inline-flex; align-items: center; gap: 12px;
+    background: var(--mint); color: var(--moerk);
+    font-family: 'Sora'; font-weight: 700; font-size: 17px;
+    padding: 15px 26px; border-radius: 30px;
+    transition: transform .15s ease, background .15s ease;
+  }
+  .appstore:hover { background: var(--mint-dyb); transform: translateY(-2px); }
+  .appstore svg { width: 22px; height: 22px; }
+  .cta-note { color: var(--taage); font-size: 14px; }
+
+  .telefon {
+    justify-self: center;
+    width: 300px; height: 610px;
+    background: var(--moerk);
+    border: 3px solid var(--border);
+    border-radius: 44px;
+    padding: 16px 14px;
+    box-shadow: 0 40px 80px rgba(0,0,0,.45), 0 0 0 1px rgba(46,230,168,.06);
+    position: relative;
+  }
+  .telefon .skaerm {
+    background: var(--bg); border-radius: 32px; height: 100%;
+    padding: 22px 14px; display: flex; flex-direction: column; gap: 12px;
+    overflow: hidden;
+  }
+  .coach-linje { display: flex; align-items: center; gap: 8px; justify-content: center; margin-bottom: 6px; }
+  .ai-prik { width: 15px; height: 15px; border-radius: 50%; background: #EFFFF8; border: 4px solid var(--mint); }
+  .coach-linje span { font-family: 'Sora'; font-weight: 700; font-size: 13px; }
+  .boble {
+    max-width: 85%; border-radius: 18px; padding: 11px 14px;
+    font-size: 14px; line-height: 1.45;
+  }
+  .boble.coach { background: var(--card); align-self: flex-start; border-bottom-left-radius: 5px; }
+  .boble.mig { background: var(--mint); color: var(--moerk); font-weight: 600; align-self: flex-end; border-bottom-right-radius: 5px; }
+  .skriver { display: flex; gap: 4px; padding: 12px 14px; }
+  .skriver i { width: 7px; height: 7px; border-radius: 50%; background: var(--taage); animation: puls 1.2s infinite; }
+  .skriver i:nth-child(2) { animation-delay: .2s; }
+  .skriver i:nth-child(3) { animation-delay: .4s; }
+  @keyframes puls { 0%, 60%, 100% { opacity: .25; } 30% { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .skriver i { animation: none; opacity: .6; } html { scroll-behavior: auto; } }
+
+  section { padding: 84px 0; position: relative; z-index: 1; }
+  .sektion-hoved { text-align: center; max-width: 620px; margin: 0 auto 54px; }
+  .sektion-hoved h2 { font-size: clamp(26px, 3.6vw, 38px); font-weight: 800; letter-spacing: -0.01em; }
+  .sektion-hoved p { color: var(--taage); margin-top: 14px; font-size: 18px; }
+
+  .trin { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .trin article {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 26px; padding: 30px 26px;
+  }
+  .trin .nr {
+    font-family: 'Sora'; font-weight: 800; font-size: 14px;
+    color: var(--mint); letter-spacing: .12em; margin-bottom: 14px; display: block;
+  }
+  .trin h3 { font-size: 20px; margin-bottom: 10px; }
+  .trin p { color: var(--taage); font-size: 15.5px; }
+
+  .funk { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .funk article {
+    background: linear-gradient(160deg, var(--card), var(--bg2));
+    border: 1px solid var(--border); border-radius: 24px; padding: 26px 24px;
+  }
+  .funk .ikon { font-size: 26px; margin-bottom: 12px; display: block; }
+  .funk h3 { font-size: 17.5px; margin-bottom: 8px; }
+  .funk p { color: var(--taage); font-size: 15px; line-height: 1.55; }
+
+  .pris {
+    max-width: 560px; margin: 0 auto;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 30px; padding: 44px 40px; text-align: center;
+  }
+  .pris .stor { font-family: 'Sora'; font-weight: 800; font-size: 42px; }
+  .pris .stor small { font-size: 18px; color: var(--taage); font-weight: 600; }
+  .pris ul { list-style: none; margin: 26px 0 30px; text-align: left; display: inline-block; }
+  .pris li { padding: 7px 0; color: var(--sne); font-size: 16px; }
+  .pris li::before { content: '✓'; color: var(--mint); font-weight: 800; margin-right: 12px; }
+  .pris .gratis-note { color: var(--taage); font-size: 15px; margin-top: 16px; }
+
+  .maal { text-align: center; padding: 90px 0 40px; position: relative; z-index: 1; }
+  .maal .maal-prik { width: 22px; height: 22px; border-radius: 50%; background: #EFFFF8; border: 6px solid var(--mint); margin: 0 auto 22px; }
+  .maal h2 { font-size: clamp(26px, 3.6vw, 38px); font-weight: 800; margin-bottom: 26px; }
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 30px 0 44px; margin-top: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+    color: var(--taage); font-size: 14.5px;
+    position: relative; z-index: 1;
+  }
+  footer nav { display: flex; gap: 22px; }
+  footer a { color: var(--taage); }
+  footer a:hover { color: var(--mint); }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; padding: 40px 0 70px; text-align: center; }
+    .hero p.under { margin-left: auto; margin-right: auto; }
+    .cta-raekke { justify-content: center; }
+    .telefon { width: 280px; height: 570px; margin-top: 14px; }
+    .trin, .funk { grid-template-columns: 1fr; }
+    section { padding: 60px 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="rute" aria-hidden="true">
+    <svg viewBox="0 0 300 3000" preserveAspectRatio="xMidYMin slice" fill="none">
+      <path d="M150 240 C 40 420, 260 560, 150 760 C 40 960, 260 1140, 150 1360 C 60 1540, 240 1700, 150 1930 C 70 2120, 230 2300, 150 2560"
+            stroke="#2EE6A8" stroke-opacity="0.14" stroke-width="3" stroke-dasharray="1 10" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <header>
+    <div class="maerke">
+      <svg viewBox="0 0 240 240" aria-hidden="true">
+        <rect width="240" height="240" rx="54" fill="#0C1A14"/>
+        <path d="M54 184 L54 66 Q54 60 60 60 L88 60 Q114 60 114 80 Q114 98 90 99 L62 99" fill="none" stroke="#2EE6A8" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M72 101 L98 184 L120 118 L142 184 L164 60 L188 184" fill="none" stroke="#2EE6A8" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="54" cy="184" r="10" fill="#0C1A14" stroke="#2EE6A8" stroke-width="5"/>
+        <circle cx="188" cy="184" r="10" fill="#EFFFF8" stroke="#2EE6A8" stroke-width="5"/>
+      </svg>
+      RunWithAI
+    </div>
+  <nav style="display:flex; align-items:center; gap:22px;">
+    <a href="/statistik.html" style="color:var(--taage); font-size:15px; font-weight:600;">Log ind</a>
+    <a class="top-cta" href="https://apps.apple.com/dk/app/id6760615790">Hent appen</a>
+  </nav>
+  </header>
+
+  <section class="hero">
+    <div>
+      <span class="eyebrow">Start</span>
+      <h1>Løb med en coach, der <em>kender dig</em>.</h1>
+      <p class="under">RunWithAI er din personlige AI-løbecoach: den lærer dig at kende, bygger din træningsplan — og tilpasser den, når livet sker. Ondt i knæet? Sig det, og kalenderen retter sig selv.</p>
+      <div class="cta-raekke">
+        <a class="appstore" href="https://apps.apple.com/dk/app/id6760615790">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          Hent i App Store
+        </a>
+        <span class="cta-note">Gratis at starte · iPhone</span>
+      </div>
+    </div>
+
+    <div class="telefon" role="img" aria-label="Coachen interviewer dig i appen: den spørger til dit mål og tager hensyn til dit knæ.">
+      <div class="skaerm">
+        <div class="coach-linje"><span class="ai-prik"></span><span>Din AI-coach</span></div>
+        <div class="boble coach">Hej! Jeg er din personlige løbecoach 🏃 Hvad drømmer du om at opnå?</div>
+        <div class="boble mig">Jeg vil gerne løbe 5 km</div>
+        <div class="boble coach">Stærkt valg! Har du skader, jeg skal tage hensyn til?</div>
+        <div class="boble mig">Lidt ondt i knæet…</div>
+        <div class="boble coach">Så bygger jeg en skånsom plan, der passer på knæet — og skruer op, når du er klar 🌱</div>
+        <div class="skriver" aria-hidden="true"><i></i><i></i><i></i></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="saadan">
+    <div class="sektion-hoved">
+      <span class="eyebrow">Ruten</span>
+      <h2>Sådan virker det</h2>
+      <p>Tre skridt fra sofa til startlinje — og coachen løber med hele vejen.</p>
+    </div>
+    <div class="trin">
+      <article>
+        <span class="nr">1 · FORTÆL</span>
+        <h3>Coachen lærer dig at kende</h3>
+        <p>Ingen formularer. Coachen spørger til din alder, dit niveau, dit mål — og dine skader. Som en rigtig træner ville gøre.</p>
+      </article>
+      <article>
+        <span class="nr">2 · PLANEN</span>
+        <h3>Din plan, ikke en skabelon</h3>
+        <p>Du får en personlig træningsplan i kalenderen, uge for uge, bygget til netop dit mål og din hverdag.</p>
+      </article>
+      <article>
+        <span class="nr">3 · LØB</span>
+        <h3>Coachen følger med</h3>
+        <p>Brug for to ugers pause? Skriv det. Planen flytter sig, genoptager og forlænger sig selv — med forklaring på hvorfor.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="funktioner">
+    <div class="sektion-hoved">
+      <span class="eyebrow">Undervejs</span>
+      <h2>Alt hvad en løber behøver</h2>
+    </div>
+    <div class="funk">
+      <article>
+        <span class="ikon">🧠</span>
+        <h3>En coach med hukommelse</h3>
+        <p>Den kender din plan, dine seneste løb og dine skader — og svarer derefter. Hver gang.</p>
+      </article>
+      <article>
+        <span class="ikon">📅</span>
+        <h3>Levende træningsplan</h3>
+        <p>Planen bor i din kalender og retter sig efter dig: pauser, skader, travle uger.</p>
+      </article>
+      <article>
+        <span class="ikon">📍</span>
+        <h3>GPS-tracking</h3>
+        <p>Rute, distance, tempo og kalorier — se hver tur på kortet bagefter.</p>
+      </article>
+      <article>
+        <span class="ikon">📊</span>
+        <h3>Fremgang du kan se</h3>
+        <p>Grafer over uger og måneder, milepæle og detaljer for hvert eneste løb.</p>
+      </article>
+      <article>
+        <span class="ikon">🎵</span>
+        <h3>Musik i din takt</h3>
+        <p>Kobl Spotify til, og få musik der matcher din kadence, mens du løber.</p>
+      </article>
+      <article>
+        <span class="ikon">🗣️</span>
+        <h3>Stemmecoach undervejs</h3>
+        <p>Coachen taler til dig, mens du løber — tempo, opmuntring og næste interval.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="pris">
+    <div class="sektion-hoved">
+      <span class="eyebrow">Fremgangen</span>
+      <h2>Enkel pris, ingen overraskelser</h2>
+    </div>
+    <div class="pris">
+      <div class="stor">49 kr <small>/måned</small></div>
+      <ul>
+        <li>Personlig AI-coach med fuld hukommelse</li>
+        <li>Levende træningsplan i kalenderen</li>
+        <li>Stemmecoach og musik-tempomatch</li>
+        <li>Ubegrænset chat og planændringer</li>
+      </ul>
+      <a class="appstore" href="https://apps.apple.com/dk/app/id6760615790">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Kom i gang
+      </a>
+      <p class="gratis-note">Du kan starte gratis og opgradere, når du er klar.</p>
+    </div>
+  </section>
+
+  <div class="maal">
+    <div class="maal-prik" aria-hidden="true"></div>
+    <h2>Din startlinje venter.</h2>
+    <a class="appstore" href="https://apps.apple.com/dk/app/id6760615790">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      Hent RunWithAI
+    </a>
+  </div>
+
+  <footer>
+    <span>© 2026 RunWithAI</span>
+    <nav>
+      <a href="mailto:support@runwithai.app">Support</a>
+      <a href="/privatliv.html">Privatlivspolitik</a>
+    </nav>
+  </footer>
+
+</div>
+
+</body>
+</html>
