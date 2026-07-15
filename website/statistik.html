@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statistik — RunWithAI</title>
+<meta name="description" content="Log ind og se dine løbestatistikker: totaler, grafer, rekorder og hver enkelt tur med rute på kortet.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Crect width='240' height='240' rx='54' fill='%230C1A14'/%3E%3Cpath d='M54 184 L54 66 Q54 60 60 60 L88 60 Q114 60 114 80 Q114 98 90 99 L62 99' fill='none' stroke='%232EE6A8' stroke-width='13' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M72 101 L98 184 L120 118 L142 184 L164 60 L188 184' fill='none' stroke='%232EE6A8' stroke-width='13' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='54' cy='184' r='10' fill='%230C1A14' stroke='%232EE6A8' stroke-width='5'/%3E%3Ccircle cx='188' cy='184' r='10' fill='%23EFFFF8' stroke='%232EE6A8' stroke-width='5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  :root {
+    --bg:#0B1712; --bg2:#0E1D16; --card:#132720; --card2:#182E26;
+    --border:#1E3A30; --mint:#2EE6A8; --mint-dyb:#19D392;
+    --sne:#F4FBF8; --taage:#7FA396; --moerk:#07140E;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--sne); font-family:'Instrument Sans',system-ui,sans-serif; font-size:16px; line-height:1.6; }
+  h1,h2,h3,.tal { font-family:'Sora',system-ui,sans-serif; }
+  a { color:var(--mint); text-decoration:none; }
+  button { font-family:inherit; cursor:pointer; }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline:3px solid var(--mint); outline-offset:2px; border-radius:6px; }
+  .wrap { max-width:1080px; margin:0 auto; padding:0 22px; }
+  .skjult { display:none !important; }
+  header { display:flex; align-items:center; justify-content:space-between; padding:20px 0; }
+  .maerke { display:flex; align-items:center; gap:11px; font-family:'Sora'; font-weight:700; font-size:18px; color:var(--sne); }
+  .maerke svg { width:36px; height:36px; }
+  .hoejre { display:flex; align-items:center; gap:18px; color:var(--taage); font-size:14.5px; }
+  .logud { background:none; border:1px solid var(--border); color:var(--taage); border-radius:18px; padding:7px 16px; font-size:14px; }
+  .logud:hover { color:var(--mint); border-color:var(--mint); }
+  .login { max-width:400px; margin:8vh auto 0; text-align:center; }
+  .login .ikon { width:74px; height:74px; margin:0 auto 22px; }
+  .login h1 { font-size:26px; font-weight:800; margin-bottom:8px; }
+  .login p { color:var(--taage); margin-bottom:28px; }
+  .login form { display:flex; flex-direction:column; gap:12px; text-align:left; }
+  .login label { font-size:13.5px; color:var(--taage); font-weight:600; }
+  .login input { background:var(--card); border:1px solid var(--border); border-radius:14px; color:var(--sne); font-size:16px; padding:13px 16px; width:100%; }
+  .login button[type=submit] { margin-top:10px; background:var(--mint); color:var(--moerk); font-family:'Sora'; font-weight:700; font-size:16px; border:none; border-radius:24px; padding:14px; }
+  .login button[type=submit]:hover { background:var(--mint-dyb); }
+  .login button[disabled] { opacity:.6; cursor:wait; }
+  .fejl { color:#FF5C7A; font-size:14.5px; min-height:22px; margin-top:10px; text-align:center; }
+  .login .note { color:var(--taage); font-size:13.5px; margin-top:22px; }
+  .hilsen { margin:14px 0 26px; }
+  .hilsen h1 { font-size:clamp(24px,3.4vw,32px); font-weight:800; }
+  .hilsen p { color:var(--taage); }
+  .kort-raekke { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+  .stat-kort { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:20px 22px; }
+  .stat-kort .tal { font-size:clamp(22px,2.6vw,30px); font-weight:800; }
+  .stat-kort .label { color:var(--taage); font-size:13.5px; margin-top:2px; }
+  .panel { background:var(--card); border:1px solid var(--border); border-radius:24px; padding:24px 26px; margin-bottom:24px; }
+  .panel h2 { font-size:18px; font-weight:700; margin-bottom:16px; }
+  .graf { width:100%; height:220px; }
+  .graf text { font-family:'Instrument Sans'; font-size:11px; fill:var(--taage); }
+  .rekorder { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:24px; }
+  .rekord { background:linear-gradient(160deg,var(--card),var(--bg2)); border:1px solid var(--border); border-radius:20px; padding:18px 20px; }
+  .rekord .r-ikon { font-size:22px; }
+  .rekord .tal { font-size:22px; font-weight:800; margin-top:6px; }
+  .rekord .label { color:var(--taage); font-size:13.5px; }
+  .mdr-hoved { display:flex; align-items:baseline; justify-content:space-between; margin:26px 4px 10px; }
+  .mdr-hoved h3 { font-size:19px; font-weight:800; text-transform:capitalize; }
+  .mdr-hoved span { color:var(--taage); font-size:14px; }
+  .liste { background:var(--card); border:1px solid var(--border); border-radius:22px; overflow:hidden; }
+  .raekke { display:grid; grid-template-columns:46px 1fr auto auto auto 22px; gap:14px; align-items:center; width:100%; text-align:left; background:none; border:none; padding:15px 20px; color:var(--sne); font-size:15.5px; border-top:1px solid var(--border); }
+  .liste .raekke:first-child { border-top:none; }
+  .raekke:hover { background:var(--card2); }
+  .r-cirkel { width:42px; height:42px; border-radius:50%; background:var(--mint-dyb); display:flex; align-items:center; justify-content:center; font-size:19px; }
+  .r-titel { font-weight:700; font-family:'Sora'; }
+  .r-under { color:var(--taage); font-size:13.5px; }
+  .r-kol { color:var(--taage); font-size:14px; text-align:right; }
+  .r-kol b { color:var(--sne); font-family:'Sora'; display:block; font-size:15px; }
+  .chevron { color:var(--taage); }
+  .tom { text-align:center; color:var(--taage); padding:60px 20px; }
+  .overlay { position:fixed; inset:0; background:rgba(4,10,7,.7); backdrop-filter:blur(3px); z-index:40; }
+  .detalje { position:fixed; inset:auto 0 0 0; top:6vh; z-index:41; max-width:840px; margin:0 auto; background:var(--bg); border:1px solid var(--border); border-radius:28px 28px 0 0; overflow:auto; box-shadow:0 -20px 70px rgba(0,0,0,.5); }
+  .det-hoved { display:flex; align-items:center; justify-content:space-between; padding:18px 24px; }
+  .det-hoved h2 { font-size:20px; }
+  .luk { background:var(--card); border:1px solid var(--border); color:var(--sne); border-radius:50%; width:38px; height:38px; font-size:18px; }
+  #kort { height:340px; background:var(--card); }
+  .det-grid { display:grid; grid-template-columns:repeat(3,1fr); padding:12px 10px 30px; }
+  .det-celle { text-align:center; padding:16px 8px; }
+  .det-celle .tal { font-size:23px; font-weight:800; }
+  .det-celle .label { color:var(--taage); font-size:13px; margin-top:3px; }
+  .kort-tom { display:flex; align-items:center; justify-content:center; color:var(--taage); }
+  @media (max-width:860px) {
+    .kort-raekke { grid-template-columns:repeat(2,1fr); }
+    .rekorder { grid-template-columns:1fr; }
+    .raekke { grid-template-columns:42px 1fr auto 18px; }
+    .r-kol.skjul-mobil { display:none; }
+    .det-grid { grid-template-columns:repeat(2,1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="maerke" href="/">
+      <svg viewBox="0 0 240 240" aria-hidden="true">
+        <rect width="240" height="240" rx="54" fill="#0C1A14"/>
+        <path d="M54 184 L54 66 Q54 60 60 60 L88 60 Q114 60 114 80 Q114 98 90 99 L62 99" fill="none" stroke="#2EE6A8" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M72 101 L98 184 L120 118 L142 184 L164 60 L188 184" fill="none" stroke="#2EE6A8" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="54" cy="184" r="10" fill="#0C1A14" stroke="#2EE6A8" stroke-width="5"/>
+        <circle cx="188" cy="184" r="10" fill="#EFFFF8" stroke="#2EE6A8" stroke-width="5"/>
+      </svg>
+      RunWithAI <span style="color:var(--taage); font-weight:500;">· Statistik</span>
+    </a>
+    <div class="hoejre">
+      <span id="brugernavn"></span>
+      <button class="logud skjult" id="logudKnap">Log ud</button>
+    </div>
+  </header>
+  <main class="login" id="loginVisning">
+    <svg class="ikon" viewBox="0 0 240 240" aria-hidden="true">
+      <rect width="240" height="240" rx="54" fill="#0C1A14"/>
+      <path d="M54 184 L54 66 Q54 60 60 60 L88 60 Q114 60 114 80 Q114 98 90 99 L62 99" fill="none" stroke="#2EE6A8" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M72 101 L98 184 L120 118 L142 184 L164 60 L188 184" fill="none" stroke="#2EE6A8" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="54" cy="184" r="10" fill="#0C1A14" stroke="#2EE6A8" stroke-width="5"/>
+      <circle cx="188" cy="184" r="10" fill="#EFFFF8" stroke="#2EE6A8" stroke-width="5"/>
+    </svg>
+    <h1>Se din statistik</h1>
+    <p>Log ind med din konto fra appen.</p>
+    <form id="loginForm">
+      <label for="email">E-mail</label>
+      <input id="email" type="email" autocomplete="email" required>
+      <label for="kode">Adgangskode</label>
+      <input id="kode" type="password" autocomplete="current-password" required>
+      <button type="submit" id="loginKnap">Log ind</button>
+      <div class="fejl" id="loginFejl" role="alert"></div>
+    </form>
+    <p class="note">Har du ikke en konto endnu? Opret den i <a href="https://apps.apple.com/dk/app/id6760615790">appen</a> først.</p>
+  </main>
+  <main class="skjult" id="dashVisning">
+    <div class="hilsen">
+      <h1 id="hilsenTitel">Din løbehistorie</h1>
+      <p id="hilsenUnder"></p>
+    </div>
+    <div class="kort-raekke">
+      <div class="stat-kort"><div class="tal" id="tKm">–</div><div class="label">Kilometer i alt</div></div>
+      <div class="stat-kort"><div class="tal" id="tTure">–</div><div class="label">Ture</div></div>
+      <div class="stat-kort"><div class="tal" id="tTid">–</div><div class="label">Samlet tid</div></div>
+      <div class="stat-kort"><div class="tal" id="tKal">–</div><div class="label">Kalorier</div></div>
+    </div>
+    <div class="panel">
+      <h2>Kilometer pr. uge — de seneste 12 uger</h2>
+      <svg class="graf" id="ugeGraf" viewBox="0 0 1000 220" preserveAspectRatio="none" role="img" aria-label="Søjlediagram over kilometer pr. uge"></svg>
+    </div>
+    <div class="rekorder">
+      <div class="rekord"><span class="r-ikon">🏆</span><div class="tal" id="rLaengste">–</div><div class="label">Længste tur</div></div>
+      <div class="rekord"><span class="r-ikon">⚡</span><div class="tal" id="rTempo">–</div><div class="label">Bedste tempo (ture ≥ 1 km)</div></div>
+      <div class="rekord"><span class="r-ikon">📆</span><div class="tal" id="rMaaned">–</div><div class="label">Stærkeste måned</div></div>
+    </div>
+    <div id="listeOmraade"></div>
+    <div class="tom skjult" id="tomTekst">Ingen ture endnu — snør skoene, og kom tilbage! 🌱</div>
+    <div style="height:60px"></div>
+  </main>
+  <div class="overlay skjult" id="overlay"></div>
+  <div class="detalje skjult" id="detalje" role="dialog" aria-modal="true" aria-labelledby="detTitel">
+    <div class="det-hoved">
+      <h2 id="detTitel"></h2>
+      <button class="luk" id="lukDetalje" aria-label="Luk">✕</button>
+    </div>
+    <div id="kort"></div>
+    <div class="det-grid" id="detGrid"></div>
+  </div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+var SERVER = 'https://runwithai-server-production.up.railway.app';
+var MDR = ['januar','februar','marts','april','maj','juni','juli','august','september','oktober','november','december'];
+var alleRuns = [];
+var kortInstans = null;
+function $(id) { return document.getElementById(id); }
+function fmtKm(km) { return (Math.round((Number(km) || 0) * 10) / 10).toLocaleString('da-DK'); }
+function fmtTid(sek) {
+  var s = Math.max(0, Math.round(Number(sek) || 0));
+  var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), r = s % 60;
+  function p(x) { return String(x).padStart(2, '0'); }
+  return h > 0 ? (h + ':' + p(m) + ':' + p(r)) : (m + ':' + p(r));
+}
+function fmtTidLang(sek) {
+  var s = Math.round(Number(sek) || 0);
+  var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60);
+  return h > 0 ? (h + ' t ' + m + ' min') : (m + ' min');
+}
+function fmtTempo(minPrKm) {
+  var v = Number(minPrKm);
+  if (!v || !isFinite(v) || v <= 0 || v > 60) return null;
+  var m = Math.floor(v), s = Math.round((v - m) * 60);
+  return m + ':' + String(s).padStart(2, '0');
+}
+function typeInfo(run) {
+  var t = String(run.type || '').toLowerCase();
+  if (t.indexOf('walk') > -1 || t.indexOf('gå') > -1 || t.indexOf('gaa') > -1) return { emoji:'🚶', label:'Gåtur' };
+  if (t.indexOf('cyc') > -1 || t.indexOf('bike') > -1 || t.indexOf('cykl') > -1) return { emoji:'🚴', label:'Cykling' };
+  return { emoji:'🏃', label:'Løbetur' };
+}
+function isoUge(d) {
+  var dt = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  var dag = dt.getUTCDay() || 7;
+  dt.setUTCDate(dt.getUTCDate() + 4 - dag);
+  var nyt = new Date(Date.UTC(dt.getUTCFullYear(), 0, 1));
+  return Math.ceil((((dt - nyt) / 86400000) + 1) / 7);
+}
+$('loginForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var knap = $('loginKnap');
+  knap.disabled = true; knap.textContent = 'Logger ind…';
+  $('loginFejl').textContent = '';
+  fetch(SERVER + '/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: $('email').value.trim(), password: $('kode').value })
+  }).then(function (res) {
+    return res.json().catch(function () { return {}; }).then(function (data) {
+      if (!res.ok || !data.token) {
+        $('loginFejl').textContent = data.error || 'Forkert e-mail eller adgangskode.';
+        return;
+      }
+      localStorage.setItem('rwa_token', data.token);
+      visDashboard();
+    });
+  }).catch(function () {
+    $('loginFejl').textContent = 'Kunne ikke få forbindelse. Prøv igen om lidt.';
+  }).finally(function () {
+    knap.disabled = false; knap.textContent = 'Log ind';
+  });
+});
+$('logudKnap').addEventListener('click', function () {
+  localStorage.removeItem('rwa_token');
+  location.reload();
+});
+function authHeaders() {
+  return { Authorization: 'Bearer ' + localStorage.getItem('rwa_token') };
+}
+function visDashboard() {
+  $('loginVisning').classList.add('skjult');
+  $('dashVisning').classList.remove('skjult');
+  $('logudKnap').classList.remove('skjult');
+  Promise.all([
+    fetch(SERVER + '/runs', { headers: authHeaders() }),
+    fetch(SERVER + '/profile', { headers: authHeaders() })
+  ]).then(function (res) {
+    var runsRes = res[0], profilRes = res[1];
+    if (runsRes.status === 401) { localStorage.removeItem('rwa_token'); location.reload(); return; }
+    return runsRes.json().catch(function () { return []; }).then(function (runsJson) {
+      alleRuns = (Array.isArray(runsJson) ? runsJson : (runsJson.runs || [])).filter(function (r) { return r && r.date; });
+      return profilRes.json().catch(function () { return null; });
+    }).then(function (pj) {
+      var profil = pj && (pj.data || pj);
+      if (typeof profil === 'string') { try { profil = JSON.parse(profil); } catch (e) { profil = null; } }
+      if (profil && profil.name) {
+        $('brugernavn').textContent = profil.name;
+        $('hilsenTitel').textContent = profil.name + 's løbehistorie';
+      }
+      byg();
+    });
+  }).catch(function () {
+    $('hilsenUnder').textContent = 'Kunne ikke hente dine data. Genindlæs siden for at prøve igen.';
+  });
+}
+function byg() {
+  var runs = alleRuns.slice().sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
+  if (!runs.length) {
+    $('tomTekst').classList.remove('skjult');
+    $('hilsenUnder').textContent = '';
+    return;
+  }
+  function sum(f) { return runs.reduce(function (a, r) { return a + (Number(r[f]) || 0); }, 0); }
+  var totalKm = sum('km'), totalTid = sum('duration'), totalKal = sum('calories');
+  $('tKm').textContent = fmtKm(totalKm);
+  $('tTure').textContent = runs.length;
+  $('tTid').textContent = fmtTidLang(totalTid);
+  $('tKal').textContent = Math.round(totalKal).toLocaleString('da-DK');
+  var foerste = new Date(runs[runs.length - 1].date);
+  $('hilsenUnder').textContent = 'Siden ' + foerste.toLocaleDateString('da-DK', { day:'numeric', month:'long', year:'numeric' });
+  bygGraf(runs);
+  bygRekorder(runs);
+  bygListe(runs);
+}
+function bygGraf(runs) {
+  var nu = new Date();
+  var uger = [];
+  for (var i = 11; i >= 0; i--) {
+    var d = new Date(nu); d.setDate(nu.getDate() - i * 7);
+    uger.push({ noegle: d.getFullYear() + '-' + isoUge(d), label: 'u' + isoUge(d), km: 0 });
+  }
+  runs.forEach(function (r) {
+    var d = new Date(r.date);
+    var n = d.getFullYear() + '-' + isoUge(d);
+    for (var k = 0; k < uger.length; k++) { if (uger[k].noegle === n) { uger[k].km += Number(r.km) || 0; break; } }
+  });
+  var max = Math.max.apply(null, [1].concat(uger.map(function (u) { return u.km; })));
+  var bredde = 1000 / 12;
+  var svg = '';
+  uger.forEach(function (u, i) {
+    var h = Math.max(4, (u.km / max) * 150);
+    var x = i * bredde + bredde * 0.22;
+    svg += '<rect x="' + x + '" y="' + (180 - h) + '" width="' + (bredde * 0.56) + '" height="' + h + '" rx="9" fill="#2EE6A8" opacity="' + (u.km > 0 ? 1 : 0.15) + '"/>';
+    if (u.km > 0) svg += '<text x="' + (i * bredde + bredde / 2) + '" y="' + (170 - h) + '" text-anchor="middle" fill="#2EE6A8" font-weight="700">' + fmtKm(u.km) + '</text>';
+    svg += '<text x="' + (i * bredde + bredde / 2) + '" y="205" text-anchor="middle">' + u.label + '</text>';
+  });
+  $('ugeGraf').innerHTML = svg;
+}
+function bygRekorder(runs) {
+  var laengste = runs.reduce(function (a, r) { return (Number(r.km) || 0) > (Number(a.km) || 0) ? r : a; }, runs[0]);
+  $('rLaengste').textContent = fmtKm(laengste.km) + ' km';
+  var bedste = null;
+  runs.forEach(function (r) {
+    var km = Number(r.km) || 0, dur = Number(r.duration) || 0;
+    if (km >= 1 && dur > 0) {
+      var tempo = (dur / 60) / km;
+      if (tempo > 2 && (!bedste || tempo < bedste)) bedste = tempo;
+    }
+  });
+  $('rTempo').textContent = bedste ? (fmtTempo(bedste) + ' /km') : '–';
+  var mdr = {};
+  runs.forEach(function (r) {
+    var d = new Date(r.date);
+    var n = d.getFullYear() + '-' + d.getMonth();
+    mdr[n] = (mdr[n] || 0) + (Number(r.km) || 0);
+  });
+  var top = Object.keys(mdr).map(function (k) { return [k, mdr[k]]; }).sort(function (a, b) { return b[1] - a[1]; })[0];
+  if (top) {
+    var dele = top[0].split('-');
+    $('rMaaned').textContent = MDR[Number(dele[1])] + ' ' + dele[0] + ' · ' + fmtKm(top[1]) + ' km';
+  }
+}
+function bygListe(runs) {
+  var grupper = {};
+  runs.forEach(function (r) {
+    var d = new Date(r.date);
+    var n = d.getFullYear() + '-' + String(d.getMonth()).padStart(2, '0');
+    (grupper[n] = grupper[n] || []).push(r);
+  });
+  var omraade = $('listeOmraade');
+  omraade.innerHTML = '';
+  Object.keys(grupper).sort().reverse().forEach(function (n) {
+    var dele = n.split('-');
+    var g = grupper[n];
+    var km = g.reduce(function (a, r) { return a + (Number(r.km) || 0); }, 0);
+    var tid = g.reduce(function (a, r) { return a + (Number(r.duration) || 0); }, 0);
+    var hoved = document.createElement('div');
+    hoved.className = 'mdr-hoved';
+    hoved.innerHTML = '<h3>' + MDR[Number(dele[1])] + ' ' + dele[0] + '</h3><span>' + g.length + ' ture · ' + fmtKm(km) + ' km · ' + fmtTidLang(tid) + '</span>';
+    omraade.appendChild(hoved);
+    var liste = document.createElement('div');
+    liste.className = 'liste';
+    g.forEach(function (r) {
+      var t = typeInfo(r);
+      var dur = Number(r.duration) || 0, kmv = Number(r.km) || 0;
+      var tempo = (kmv >= 0.2 && dur > 0) ? fmtTempo((dur / 60) / kmv) : null;
+      var knap = document.createElement('button');
+      knap.className = 'raekke';
+      knap.innerHTML =
+        '<span class="r-cirkel">' + t.emoji + '</span>' +
+        '<span><span class="r-titel">' + fmtKm(kmv) + ' km</span><br><span class="r-under">' + t.label + ' · ' + new Date(r.date).toLocaleDateString('da-DK') + '</span></span>' +
+        '<span class="r-kol"><b>' + fmtTid(dur) + '</b>tid</span>' +
+        '<span class="r-kol skjul-mobil"><b>' + (tempo ? tempo + ' /km' : '–') + '</b>tempo</span>' +
+        '<span class="r-kol skjul-mobil"><b>' + Math.round(Number(r.calories) || 0) + '</b>kal</span>' +
+        '<span class="chevron">›</span>';
+      knap.addEventListener('click', function () { visDetalje(r); });
+      liste.appendChild(knap);
+    });
+    omraade.appendChild(liste);
+  });
+}
+function ruteKoordinater(run) {
+  var r = run.route || run.polyline;
+  if (typeof r === 'string') { try { r = JSON.parse(r); } catch (e) { return null; } }
+  if (!Array.isArray(r) || r.length < 2) return null;
+  var pts = r.map(function (p) {
+    var la = p.latitude != null ? p.latitude : p.lat;
+    var lo = p.longitude != null ? p.longitude : (p.lng != null ? p.lng : p.lon);
+    return [Number(la), Number(lo)];
+  }).filter(function (p) { return isFinite(p[0]) && isFinite(p[1]); });
+  return pts.length >= 2 ? pts : null;
+}
+function visDetalje(run) {
+  var t = typeInfo(run);
+  $('detTitel').textContent = t.label + ' ' + fmtKm(run.km) + ' km · ' + new Date(run.date).toLocaleDateString('da-DK');
+  var dur = Number(run.duration) || 0, kmv = Number(run.km) || 0;
+  var tempo = (kmv >= 0.2 && dur > 0) ? fmtTempo((dur / 60) / kmv) : null;
+  var celler = [
+    ['👣', run.total_steps ? Number(run.total_steps).toLocaleString('da-DK') : '–', 'Skridt'],
+    ['⏱', fmtTid(dur), 'Varighed'],
+    ['❤️', run.heart_rate ? Math.round(run.heart_rate) : '–', 'Puls (bpm)'],
+    ['📍', fmtKm(kmv) + ' km', 'Distance'],
+    ['🔥', Math.round(Number(run.calories) || 0), 'Kalorier'],
+    ['⏲', tempo ? tempo + ' /km' : '–', 'Tempo']
+  ];
+  $('detGrid').innerHTML = celler.map(function (c) {
+    return '<div class="det-celle"><div class="tal">' + c[1] + '</div><div class="label">' + c[0] + ' ' + c[2] + '</div></div>';
+  }).join('');
+  $('overlay').classList.remove('skjult');
+  $('detalje').classList.remove('skjult');
+  var koord = ruteKoordinater(run);
+  var kortEl = $('kort');
+  if (kortInstans) { kortInstans.remove(); kortInstans = null; }
+  kortEl.classList.remove('kort-tom');
+  kortEl.textContent = '';
+  if (koord) {
+    kortInstans = L.map('kort', { zoomControl: true, attributionControl: true });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 19
+    }).addTo(kortInstans);
+    var linje = L.polyline(koord, { color: '#2EE6A8', weight: 5, lineCap: 'round' }).addTo(kortInstans);
+    L.circleMarker(koord[0], { radius: 7, color: '#2EE6A8', weight: 4, fillColor: '#0B1712', fillOpacity: 1 }).addTo(kortInstans);
+    L.circleMarker(koord[koord.length - 1], { radius: 7, color: '#2EE6A8', weight: 4, fillColor: '#EFFFF8', fillOpacity: 1 }).addTo(kortInstans);
+    kortInstans.fitBounds(linje.getBounds(), { padding: [30, 30] });
+    setTimeout(function () { if (kortInstans) kortInstans.invalidateSize(); }, 120);
+  } else {
+    kortEl.classList.add('kort-tom');
+    kortEl.textContent = 'Ingen rute registreret for denne tur';
+  }
+}
+function lukDetalje() {
+  $('overlay').classList.add('skjult');
+  $('detalje').classList.add('skjult');
+  if (kortInstans) { kortInstans.remove(); kortInstans = null; }
+}
+$('lukDetalje').addEventListener('click', lukDetalje);
+$('overlay').addEventListener('click', lukDetalje);
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') lukDetalje(); });
+if (localStorage.getItem('rwa_token')) visDashboard();
+</script>
+</body>
+</html>
