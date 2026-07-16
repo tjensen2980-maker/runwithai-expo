@@ -11,6 +11,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors, loadCoachGreeting } from '../data';
+import { localizeWorkoutLabel } from '../utils/localizeWorkout';
 
 // ============================================================
 // Home.js - New AI-first home screen
@@ -44,13 +45,14 @@ function buildAIGreeting({ profile, nextWorkout, todayWorkout, t }) {
   if (tw && tw.rest) {
     parts.push(t('home.coach.restDay'));
   } else if (tw && (tw.workout || tw.name)) {
-    const wname = tw.workout || (typeof tw.name === 'string' ? tw.name : (tw.name && tw.name.intermediate) || t('home.training'));
+    const rawName = tw.workout || (typeof tw.name === 'string' ? tw.name : (tw.name && tw.name.intermediate) || t('home.training'));
+    const wname = localizeWorkoutLabel(rawName, t);
     parts.push(t('home.coach.todayWorkout', { workout: wname }));
   } else if (nextWorkout) {
     const wn = typeof nextWorkout.name === 'string'
       ? nextWorkout.name
       : (nextWorkout.name && (nextWorkout.name.intermediate || nextWorkout.name.beginner)) || '';
-    if (wn) parts.push(t('home.coach.nextWorkout', { workout: wn }));
+    if (wn) parts.push(t('home.coach.nextWorkout', { workout: localizeWorkoutLabel(wn, t) }));
   }
 
   // Friendly close
@@ -204,7 +206,10 @@ export default function Home({
             <View style={styles.nwBadge}><Text style={styles.nwBadgeText}>{t('home.today').toUpperCase()}</Text></View>
           </View>
           <Text style={styles.nwTitle}>
-            {todayWorkout.workout || (typeof todayWorkout.name === 'string' ? todayWorkout.name : t('home.training'))}
+            {localizeWorkoutLabel(
+              todayWorkout.workout || (typeof todayWorkout.name === 'string' ? todayWorkout.name : t('home.training')),
+              t,
+            )}
           </Text>
           {todayWorkout.description ? (
             <Text style={styles.nwSub} numberOfLines={2}>{todayWorkout.description}</Text>

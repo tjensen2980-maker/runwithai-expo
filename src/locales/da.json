@@ -1060,6 +1060,19 @@
       "run": "Løbetur"
     }
   },
+  "workoutLabels": {
+    "rest": "Hvile",
+    "injuryRest": "Hvile pga. skade"
+  },
+  "calendar": {
+    "monthSummary_one": "{{count}} løb · {{km}} km",
+    "monthSummary_other": "{{count}} løb · {{km}} km",
+    "completed": "Gennemført",
+    "planned": "Planlagt",
+    "missed": "Misset",
+    "plannedKm": "{{km}} km planlagt",
+    "emptyDay": "Ingen løb eller planlagt træning denne dag"
+  },
   "more": {
     "title": "Mere",
     "subtitle": "Alle dine værktøjer på ét sted",

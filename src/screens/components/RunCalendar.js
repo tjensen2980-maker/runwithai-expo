@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { colors } from '../../data';
+import { localizeWorkoutLabel } from '../../utils/localizeWorkout';
 
 // ─── LØBE-KALENDER ────────────────────────────────────────────────────────────
-const DAY_NAMES = ['Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør', 'Søn'];
-const MONTH_NAMES = ['Januar','Februar','Marts','April','Maj','Juni','Juli','August','September','Oktober','November','December'];
-
 export function RunCalendar({ runs, weekPlan, trainingPlan }) {
+  const { t, i18n } = useTranslation();
+  const locale = i18n.resolvedLanguage || i18n.language || 'en';
   const today = new Date();
   const [year, setYear] = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth());
@@ -75,14 +76,19 @@ export function RunCalendar({ runs, weekPlan, trainingPlan }) {
     return d.getFullYear() === year && d.getMonth() === month && r.km > 0;
   });
   const monthKm = monthRuns.reduce((s, r) => s + r.km, 0);
+  const monthName = new Intl.DateTimeFormat(locale, { month: 'long' }).format(new Date(year, month, 1));
+  const dayNames = Array.from({ length: 7 }, (_, index) =>
+    new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(new Date(2024, 0, index + 1))
+  );
 
   // Kortere træningsnavn til celle
   const shortName = (name) => {
     if (!name) return '';
-    if (name.length <= 10) return name;
-    const words = name.split(' ');
+    const localizedName = localizeWorkoutLabel(name, t);
+    if (localizedName.length <= 10) return localizedName;
+    const words = localizedName.split(' ');
     if (words.length >= 2) return words[0];
-    return name.slice(0, 9) + '…';
+    return localizedName.slice(0, 9) + '…';
   };
 
   return (
@@ -93,9 +99,9 @@ export function RunCalendar({ runs, weekPlan, trainingPlan }) {
           <Text style={cal.navText}>‹</Text>
         </TouchableOpacity>
         <View style={cal.headerCenter}>
-          <Text style={cal.monthTitle}>{MONTH_NAMES[month]} {year}</Text>
+          <Text style={cal.monthTitle}>{monthName} {year}</Text>
           {monthKm > 0 && (
-            <Text style={cal.monthSub}>{monthRuns.length} løb · {Math.round(monthKm*10)/10} km</Text>
+            <Text style={cal.monthSub}>{t('calendar.monthSummary', { count: monthRuns.length, km: Math.round(monthKm * 10) / 10 })}</Text>
           )}
         </View>
         <TouchableOpacity onPress={nextMonth} style={[cal.navBtn, !canGoNext && { opacity: 0.2 }]} disabled={!canGoNext}>
@@ -105,7 +111,7 @@ export function RunCalendar({ runs, weekPlan, trainingPlan }) {
 
       {/* Ugedage-header */}
       <View style={cal.dayRow}>
-        {DAY_NAMES.map(d => (
+        {dayNames.map(d => (
           <Text key={d} style={cal.dayName}>{d}</Text>
         ))}
       </View>
@@ -119,7 +125,7 @@ export function RunCalendar({ runs, weekPlan, trainingPlan }) {
           const isSelected = selected === cell.key;
           const isFuture = new Date(year, month, cell.dayNum) > today;
           const totalKm  = cell.runs.reduce((s, r) => s + (r.km||0), 0);
-          const planName = planned?.workout || planned?.name || planned?.type || '';
+          const planName = localizeWorkoutLabel(planned?.workout || planned?.name || planned?.type || '', t);
           const planKm   = planned?.km || planned?.distance || 0;
           const missedPlan = planned && !hasRun && !isFuture;
 
@@ -171,16 +177,16 @@ export function RunCalendar({ runs, weekPlan, trainingPlan }) {
 
       {/* Forklaring */}
       <View style={cal.legend}>
-        <View style={cal.legendItem}><View style={[cal.legendDot, { backgroundColor: colors.accent }]} /><Text style={cal.legendText}>Gennemført</Text></View>
-        <View style={cal.legendItem}><View style={[cal.legendDot, { backgroundColor: colors.accent, opacity: 0.3 }]} /><Text style={cal.legendText}>Planlagt</Text></View>
-        <View style={cal.legendItem}><View style={[cal.legendDot, { backgroundColor: '#e0e0e0' }]} /><Text style={cal.legendText}>Misset</Text></View>
+        <View style={cal.legendItem}><View style={[cal.legendDot, { backgroundColor: colors.accent }]} /><Text style={cal.legendText}>{t('calendar.completed')}</Text></View>
+        <View style={cal.legendItem}><View style={[cal.legendDot, { backgroundColor: colors.accent, opacity: 0.3 }]} /><Text style={cal.legendText}>{t('calendar.planned')}</Text></View>
+        <View style={cal.legendItem}><View style={[cal.legendDot, { backgroundColor: '#e0e0e0' }]} /><Text style={cal.legendText}>{t('calendar.missed')}</Text></View>
       </View>
 
       {/* Detail-panel */}
       {selectedCell && (
         <View style={cal.detail}>
           <Text style={cal.detailDate}>
-            {DAY_NAMES[(new Date(year, month, selectedCell.dayNum).getDay() + 6) % 7]} {selectedCell.dayNum}. {MONTH_NAMES[month].toLowerCase()}
+            {new Date(year, month, selectedCell.dayNum).toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'long' })}
           </Text>
 
           {selectedRuns.length > 0 ? (
@@ -195,21 +201,21 @@ export function RunCalendar({ runs, weekPlan, trainingPlan }) {
                   </Text>
                 </View>
                 <View style={cal.detailRunBadge}>
-                  <Text style={cal.detailRunBadgeText}>✓ Gennemført</Text>
+                  <Text style={cal.detailRunBadgeText}>✓ {t('calendar.completed')}</Text>
                 </View>
               </View>
             ))
           ) : selectedPlanned ? (
             <View style={cal.detailPlanned}>
               <Text style={cal.detailPlannedName}>
-                {selectedPlanned.workout || selectedPlanned.name || selectedPlanned.type}
+                {localizeWorkoutLabel(selectedPlanned.workout || selectedPlanned.name || selectedPlanned.type, t)}
               </Text>
               {(selectedPlanned.km || selectedPlanned.distance) > 0 &&
-                <Text style={cal.detailPlannedSub}>{selectedPlanned.km || selectedPlanned.distance} km planlagt</Text>}
-              {selectedPlanned.description && <Text style={cal.detailPlannedDesc}>{selectedPlanned.description}</Text>}
+                <Text style={cal.detailPlannedSub}>{t('calendar.plannedKm', { km: selectedPlanned.km || selectedPlanned.distance })}</Text>}
+              {selectedPlanned.description && <Text style={cal.detailPlannedDesc}>{localizeWorkoutLabel(selectedPlanned.description, t)}</Text>}
             </View>
           ) : (
-            <Text style={cal.detailEmpty}>Ingen løb eller planlagt træning denne dag</Text>
+            <Text style={cal.detailEmpty}>{t('calendar.emptyDay')}</Text>
           )}
         </View>
       )}
