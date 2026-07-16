@@ -1,4 +1,30 @@
 ﻿{
+  "coachIntro": {
+    "title": "Váš AI trenér",
+    "qName": "Ahoj! Jsem váš osobní AI běžecký trenér 🏃 Než začneme, rád vás trochu poznám. Jak se jmenujete?",
+    "qAge": "Těší mě, {{name}}! Kolik vám je let?",
+    "qHeight": "Jaká je vaše výška? (v cm)",
+    "qWeight": "A kolik přibližně vážíte? (v kg)",
+    "qLevel": "Děkuji! Jak často nyní běháte?",
+    "levelBeginner": "S běháním právě začínám",
+    "levelIntermediate": "Běhám občas",
+    "levelAdvanced": "Běhám každý týden",
+    "qGoal": "Skvělé! Jakého cíle chcete dosáhnout?",
+    "goal5k": "Uběhnout 5 km",
+    "goal10k": "Uběhnout 10 km",
+    "goalHalf": "Půlmaraton",
+    "goalFull": "Maraton",
+    "goalWeight": "Zdraví a hubnutí",
+    "qInjuries": "Poslední otázka: máte zranění nebo bolesti, které mám při tvorbě plánu zohlednit?",
+    "injuriesNone": "Ne, žádná zranění",
+    "phName": "Vaše jméno",
+    "phAge": "Věk",
+    "phHeight": "Výška v cm",
+    "phWeight": "Hmotnost v kg",
+    "phInjuries": "Stručně popište nebo vyberte Žádné",
+    "done": "Skvělé, {{name}}! Mám vše, co potřebuji. Teď vytvořím váš osobní tréninkový plán 🌱",
+    "fallbackYou": "běžče"
+  },
   "tabs": {
     "home": "Domů",
     "plan": "Plán",
@@ -474,7 +500,14 @@
     "defaultRunner": "Běžec",
     "greeting": "Ahoj {{name}}! Jsem tvůj AI kouč. Jak ti dnes mohu pomoci?",
     "clearedGreeting": "Konverzace vymazána! Jak ti mohu pomoci, {{name}}?",
-    "connectionError": "Omlouvám se, nepodařilo se připojit. Zkus to prosím znovu."
+    "connectionError": "Omlouvám se, nepodařilo se připojit. Zkus to prosím znovu.",
+    "mealPlanTitle": "Jídelní plán",
+    "totalKcal": "Celkem {{kcal}} kcal",
+    "macros": "{{kcal}} kcal · B {{protein}} g · S {{carbs}} g · T {{fat}} g",
+    "logAllMeals": "Zapsat všechna jídla",
+    "logged": "Zapsáno",
+    "mealPlanLoggedMessage": "Jídelní plán byl zapsán na dnešek.",
+    "mealPlanLogError": "Jídelní plán se nepodařilo zapsat: {{error}}"
   },
   "proUpsell": {
     "title": "Odemkni plnou sílu",

@@ -227,6 +227,20 @@ function LanguageSelector() {
 
 export default function Settings({ profile, level, onProfileChange, onLevelChange, onLogout, onBack, onNavigate, subscription: subscriptionProp, onShowPricing }) {
   const { t } = useTranslation();
+  const translatedReminderDays = t('settings.reminders.days', { returnObjects: true });
+  const reminderDays = Array.isArray(translatedReminderDays)
+    ? translatedReminderDays
+    : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const subscriptionTier = subscriptionProp?.tier || 'free';
+  const subscriptionTierKey = ['pro', 'basic', 'free'].includes(subscriptionTier) ? subscriptionTier : 'free';
+  const subscriptionStatus = subscriptionProp?.status || 'inactive';
+  const subscriptionStatusKey = {
+    active: 'active',
+    inactive: 'inactive',
+    trialing: 'trialing',
+    canceled: 'canceled',
+    cancelled: 'canceled',
+  }[subscriptionStatus] || 'inactive';
   const [form, setForm] = useState(profile || {});
   const [saved, setSaved] = useState(false);
   const [runs, setRuns] = useState([]);
@@ -414,7 +428,7 @@ const save = async () => {
   // Skift email handler
   const handleChangeEmail = async () => {
     if (!newEmail || !currentPassword) {
-      Alert.alert('Fejl', 'Udfyld baade ny email og adgangskode');
+      Alert.alert(t('common.error'), t('settings.email.missingFields'));
       return;
     }
     setChangingEmail(true);
@@ -430,16 +444,16 @@ const save = async () => {
       });
       const data = await res.json();
       if (!res.ok) {
-        Alert.alert('Fejl', data.error || 'Kunne ikke skifte email');
+        Alert.alert(t('common.error'), data.error || t('settings.email.changeError'));
         return;
       }
       setUserEmail(data.email);
       setShowEmailModal(false);
       setNewEmail('');
       setCurrentPassword('');
-      Alert.alert('Succes', 'Din email er nu opdateret');
+      Alert.alert(t('common.success'), t('settings.email.successMessage'));
     } catch (e) {
-      Alert.alert('Fejl', 'Netvaerksfejl');
+      Alert.alert(t('common.error'), t('settings.email.networkError'));
     } finally {
       setChangingEmail(false);
     }
@@ -542,52 +556,52 @@ const save = async () => {
         </View>
 
         {/* NOTIFIKATIONER */}
-        <Text style={s.sectionTitle}>{t('settings.sections.reminders') || 'Paamindelser'}</Text>
+        <Text style={s.sectionTitle}>{t('settings.sections.reminders')}</Text>
         <View style={s.card}>
-          {/* Traeningspaamindelse */}
+          {/* Workout reminder */}
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 16, fontWeight: '600', color: colors.text }}>Traeningspaamindelse</Text>
-              <Text style={{ fontSize: 12, color: colors.textMuted, marginTop: 2 }}>Faa besked paa valgte dage og tidspunkt</Text>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: colors.text }}>{t('settings.reminders.workoutTitle')}</Text>
+              <Text style={{ fontSize: 12, color: colors.textMuted, marginTop: 2 }}>{t('settings.reminders.workoutSubtitle')}</Text>
             </View>
             <Switch value={notifEnabled} onValueChange={toggleNotifications} trackColor={{ false: colors.border2, true: colors.primary }} />
           </View>
           {notifEnabled && (
             <View>
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 8, marginBottom: 8 }}>
-                {['Soen','Man','Tir','Ons','Tor','Fre','Loer'].map((lbl, idx) => (
+                {reminderDays.map((lbl, idx) => (
                   <TouchableOpacity key={'wd'+idx} onPress={() => toggleDay('workout', idx)} style={{ paddingVertical: 6, paddingHorizontal: 10, borderRadius: 16, marginRight: 6, marginBottom: 6, backgroundColor: notifDays.includes(idx) ? colors.primary : colors.card2 || colors.border2 }}>
                     <Text style={{ color: notifDays.includes(idx) ? '#fff' : colors.text, fontWeight: '600', fontSize: 13 }}>{lbl}</Text>
                   </TouchableOpacity>
                 ))}
               </View>
               <TouchableOpacity onPress={() => setShowPickerFor('workout')} style={{ paddingVertical: 10, paddingHorizontal: 14, borderRadius: 10, backgroundColor: colors.card2 || colors.border2, alignSelf: 'flex-start' }}>
-                <Text style={{ color: colors.text, fontWeight: '600' }}>{'Tidspunkt: ' + notifTime}</Text>
+                <Text style={{ color: colors.text, fontWeight: '600' }}>{t('settings.reminders.time', { time: notifTime })}</Text>
               </TouchableOpacity>
             </View>
           )}
 
           <View style={{ height: 1, backgroundColor: colors.border2, marginVertical: 14 }} />
 
-          {/* Maaltidspaamindelse */}
+          {/* Meal reminder */}
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 16, fontWeight: '600', color: colors.text }}>Maaltidspaamindelse</Text>
-              <Text style={{ fontSize: 12, color: colors.textMuted, marginTop: 2 }}>Husk at logge dine maaltider</Text>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: colors.text }}>{t('settings.reminders.mealTitle')}</Text>
+              <Text style={{ fontSize: 12, color: colors.textMuted, marginTop: 2 }}>{t('settings.reminders.mealSubtitle')}</Text>
             </View>
             <Switch value={mealNotifEnabled} onValueChange={toggleMealNotifications} trackColor={{ false: colors.border2, true: colors.primary }} />
           </View>
           {mealNotifEnabled && (
             <View>
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 8, marginBottom: 8 }}>
-                {['Soen','Man','Tir','Ons','Tor','Fre','Loer'].map((lbl, idx) => (
+                {reminderDays.map((lbl, idx) => (
                   <TouchableOpacity key={'md'+idx} onPress={() => toggleDay('meal', idx)} style={{ paddingVertical: 6, paddingHorizontal: 10, borderRadius: 16, marginRight: 6, marginBottom: 6, backgroundColor: mealNotifDays.includes(idx) ? colors.primary : colors.card2 || colors.border2 }}>
                     <Text style={{ color: mealNotifDays.includes(idx) ? '#fff' : colors.text, fontWeight: '600', fontSize: 13 }}>{lbl}</Text>
                   </TouchableOpacity>
                 ))}
               </View>
               <TouchableOpacity onPress={() => setShowPickerFor('meal')} style={{ paddingVertical: 10, paddingHorizontal: 14, borderRadius: 10, backgroundColor: colors.card2 || colors.border2, alignSelf: 'flex-start' }}>
-                <Text style={{ color: colors.text, fontWeight: '600' }}>{'Tidspunkt: ' + mealNotifTime}</Text>
+                <Text style={{ color: colors.text, fontWeight: '600' }}>{t('settings.reminders.time', { time: mealNotifTime })}</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -692,33 +706,33 @@ const save = async () => {
         </TouchableOpacity>
 
         {/* === ABONNEMENT === */}
-        <Text style={s.sectionTitle}>Abonnement</Text>
+        <Text style={s.sectionTitle}>{t('settings.subscription.title')}</Text>
         <View style={s.subCard}>
           <View style={s.subRow}>
-            <Text style={s.subLabel}>Type</Text>
-            <Text style={s.subValue}>{(subscriptionProp && subscriptionProp.tier) ? (subscriptionProp.tier === 'pro' ? 'Pro' : subscriptionProp.tier === 'basic' ? 'Basic' : 'Free') : 'Free'}</Text>
+            <Text style={s.subLabel}>{t('settings.subscription.type')}</Text>
+            <Text style={s.subValue}>{t(`settings.subscription.tiers.${subscriptionTierKey}`)}</Text>
           </View>
           <View style={s.subRow}>
-            <Text style={s.subLabel}>Status</Text>
-            <Text style={s.subValue}>{(subscriptionProp && subscriptionProp.status) || 'Inaktiv'}</Text>
+            <Text style={s.subLabel}>{t('settings.subscription.status')}</Text>
+            <Text style={s.subValue}>{t(`settings.subscription.statuses.${subscriptionStatusKey}`)}</Text>
           </View>
           {(!subscriptionProp || !subscriptionProp.tier || subscriptionProp.tier === 'free') ? (
             <TouchableOpacity style={s.upgradeBtn} onPress={onShowPricing}>
-              <Text style={s.upgradeBtnText}>Opgrader</Text>
+              <Text style={s.upgradeBtnText}>{t('settings.subscription.upgrade')}</Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity onPress={() => Linking.openURL('https://apps.apple.com/account/subscriptions')}>
-              <Text style={s.linkText}>Administrer i App Store</Text>
+              <Text style={s.linkText}>{t('settings.subscription.manage')}</Text>
             </TouchableOpacity>
           )}
         </View>
 
         {/* === EMAIL === */}
-        <Text style={s.sectionTitle}>Email</Text>
+        <Text style={s.sectionTitle}>{t('settings.email.title')}</Text>
         <View style={s.subCard}>
           <Text style={s.emailValue}>{userEmail || '-'}</Text>
           <TouchableOpacity onPress={() => setShowEmailModal(true)}>
-            <Text style={s.linkText}>Skift email</Text>
+            <Text style={s.linkText}>{t('settings.email.change')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -726,10 +740,10 @@ const save = async () => {
         <Modal visible={showEmailModal} animationType='slide' transparent>
           <View style={s.modalOverlay}>
             <View style={s.modalCard}>
-              <Text style={s.modalTitle}>Skift email</Text>
+              <Text style={s.modalTitle}>{t('settings.email.change')}</Text>
               <TextInput
                 style={s.modalInput}
-                placeholder='Ny email'
+                placeholder={t('settings.email.newEmail')}
                 placeholderTextColor={colors.muted}
                 value={newEmail}
                 onChangeText={setNewEmail}
@@ -738,7 +752,7 @@ const save = async () => {
               />
               <TextInput
                 style={s.modalInput}
-                placeholder='Nuvaerende adgangskode'
+                placeholder={t('settings.email.currentPassword')}
                 placeholderTextColor={colors.muted}
                 value={currentPassword}
                 onChangeText={setCurrentPassword}
@@ -746,10 +760,10 @@ const save = async () => {
               />
               <View style={s.modalBtnRow}>
                 <TouchableOpacity style={s.modalCancelBtn} onPress={() => { setShowEmailModal(false); setNewEmail(''); setCurrentPassword(''); }} disabled={changingEmail}>
-                  <Text style={s.modalCancelText}>Annuller</Text>
+                  <Text style={s.modalCancelText}>{t('common.cancel')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={s.modalConfirmBtn} onPress={handleChangeEmail} disabled={changingEmail}>
-                  {changingEmail ? <ActivityIndicator color='#fff' /> : <Text style={s.modalConfirmText}>Gem</Text>}
+                  {changingEmail ? <ActivityIndicator color='#fff' /> : <Text style={s.modalConfirmText}>{t('common.save')}</Text>}
                 </TouchableOpacity>
               </View>
             </View>
@@ -765,7 +779,7 @@ const save = async () => {
         {/* ── PRIVATLIVSPOLITIK ── */}
         <TouchableOpacity 
           style={s.privacyBtn}
-          onPress={() => Linking.openURL('https://www.runwithai.app/privacy')}
+          onPress={() => onNavigate && onNavigate('privacy')}
         >
           <Text style={s.privacyText}>📜 {t('settings.privacyPolicy')}</Text>
         </TouchableOpacity>

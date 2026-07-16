@@ -279,6 +279,42 @@
       "time": "Tidspunkt",
       "days": "Dage"
     },
+    "reminders": {
+      "workoutTitle": "Træningspåmindelse",
+      "workoutSubtitle": "Få besked på valgte dage og det valgte tidspunkt",
+      "mealTitle": "Måltidspåmindelse",
+      "mealSubtitle": "Husk at logge dine måltider",
+      "time": "Tidspunkt: {{time}}",
+      "days": ["Søn", "Man", "Tir", "Ons", "Tor", "Fre", "Lør"]
+    },
+    "email": {
+      "title": "E-mail",
+      "change": "Skift e-mail",
+      "newEmail": "Ny e-mail",
+      "currentPassword": "Nuværende adgangskode",
+      "missingFields": "Udfyld både ny e-mail og nuværende adgangskode",
+      "changeError": "Kunne ikke skifte e-mail",
+      "successMessage": "Din e-mail er nu opdateret",
+      "networkError": "Netværksfejl"
+    },
+    "subscription": {
+      "title": "Abonnement",
+      "type": "Type",
+      "status": "Status",
+      "tiers": {
+        "pro": "Pro",
+        "basic": "Basic",
+        "free": "Gratis"
+      },
+      "statuses": {
+        "active": "Aktivt",
+        "inactive": "Inaktivt",
+        "trialing": "Prøveperiode",
+        "canceled": "Opsagt"
+      },
+      "upgrade": "Opgrader",
+      "manage": "Administrer i App Store"
+    },
     "privacy": {
       "shareProfile": "Del profil",
       "shareProfileSub": "Lad andre se din profil",
@@ -650,7 +686,14 @@
     "defaultRunner": "løber",
     "greeting": "Hej {{name}}! Jeg er din AI coach. Hvad kan jeg hjælpe med i dag?",
     "clearedGreeting": "Samtale ryddet! Hvad kan jeg hjælpe dig med, {{name}}?",
-    "connectionError": "Beklager, jeg kunne ikke forbinde. Prøv igen."
+    "connectionError": "Beklager, jeg kunne ikke forbinde. Prøv igen.",
+    "mealPlanTitle": "Madplan",
+    "totalKcal": "{{kcal}} kcal i alt",
+    "macros": "{{kcal}} kcal · P {{protein}} g · K {{carbs}} g · F {{fat}} g",
+    "logAllMeals": "Log alle måltider",
+    "logged": "Logget",
+    "mealPlanLoggedMessage": "Madplanen er logget for i dag.",
+    "mealPlanLogError": "Kunne ikke logge madplanen: {{error}}"
   },
   "proUpsell": {
     "title": "Lås op for fuld kraft",

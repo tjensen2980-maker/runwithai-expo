@@ -37,15 +37,15 @@ function Message({ msg, t, onLogMealPlan }) {
 
       {msg.mealPlan && (
         <View style={s.mealPlanCard}>
-          <Text style={s.mealPlanTitle}>Madplan</Text>
+          <Text style={s.mealPlanTitle}>{t('chat.mealPlanTitle')}</Text>
           <Text style={s.mealPlanSubtitle}>
-            {msg.mealPlan.totalKcal ? msg.mealPlan.totalKcal + ' kcal i alt' : ''}
+            {msg.mealPlan.totalKcal ? t('chat.totalKcal', { kcal: msg.mealPlan.totalKcal }) : ''}
           </Text>
           {(msg.mealPlan.meals || []).map((m, i) => (
             <View key={i} style={s.mealItem}>
               <Text style={s.mealName}>{m.name}</Text>
               <Text style={s.mealMacros}>
-                {m.kcal} kcal - P{m.protein_g}g K{m.carbs_g}g F{m.fat_g}g
+                {t('chat.macros', { kcal: m.kcal, protein: m.protein_g, carbs: m.carbs_g, fat: m.fat_g })}
               </Text>
               {m.description ? <Text style={s.mealDesc}>{m.description}</Text> : null}
             </View>
@@ -54,11 +54,11 @@ function Message({ msg, t, onLogMealPlan }) {
             <TouchableOpacity
               style={s.logAllBtn}
               onPress={() => onLogMealPlan(msg)}>
-              <Text style={s.logAllBtnText}>Log alle maaltider</Text>
+              <Text style={s.logAllBtnText}>{t('chat.logAllMeals')}</Text>
             </TouchableOpacity>
           ) : (
             <View style={s.loggedBadge}>
-              <Text style={s.loggedBadgeText}>Logget</Text>
+              <Text style={s.loggedBadgeText}>{t('chat.logged')}</Text>
             </View>
           )}
         </View>
@@ -68,7 +68,7 @@ function Message({ msg, t, onLogMealPlan }) {
 }
 
 export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpdate, runs, initialMessage, onInitialMessageConsumed }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const lv = LEVELS[level] || LEVELS['intermediate'];
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -174,6 +174,8 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
       const { text: aiText, planUpdate, mealPlan } = await sendToAI({
         messages: newMessages,
         profile: enrichedProfile, level, weekPlan, nextWorkout, runs,
+        language: i18n.resolvedLanguage || i18n.language || 'en',
+        fallbackError: t('chat.connectionError'),
       });
       const aiMsg = {
         role: 'ai',
@@ -203,9 +205,9 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
     try {
       await logMealPlan(msg.mealPlan.meals);
       setMessages(prev => prev.map(m => m === msg ? { ...m, mealPlanLogged: true } : m));
-      Alert.alert('Logget', 'Madplanen er logget i dag.');
+      Alert.alert(t('common.success'), t('chat.mealPlanLoggedMessage'));
     } catch (e) {
-      Alert.alert('Fejl', 'Kunne ikke logge madplan: ' + e.message);
+      Alert.alert(t('common.error'), t('chat.mealPlanLogError', { error: e.message }));
     }
   };
 

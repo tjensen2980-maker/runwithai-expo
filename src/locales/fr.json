@@ -1,4 +1,30 @@
 ﻿{
+  "coachIntro": {
+    "title": "Votre coach IA",
+    "qName": "Bonjour ! Je suis votre coach de course IA personnel 🏃 Avant de commencer, j’aimerais mieux vous connaître. Comment vous appelez-vous ?",
+    "qAge": "Ravi de vous rencontrer, {{name}} ! Quel âge avez-vous ?",
+    "qHeight": "Quelle est votre taille ? (en cm)",
+    "qWeight": "Et combien pesez-vous environ ? (en kg)",
+    "qLevel": "Merci ! À quelle fréquence courez-vous actuellement ?",
+    "levelBeginner": "Je débute en course à pied",
+    "levelIntermediate": "Je cours de temps en temps",
+    "levelAdvanced": "Je cours chaque semaine",
+    "qGoal": "Super ! Quel objectif souhaitez-vous atteindre ?",
+    "goal5k": "Courir 5 km",
+    "goal10k": "Courir 10 km",
+    "goalHalf": "Semi-marathon",
+    "goalFull": "Marathon",
+    "goalWeight": "Santé et perte de poids",
+    "qInjuries": "Dernière question : avez-vous des blessures ou douleurs dont je dois tenir compte dans votre programme ?",
+    "injuriesNone": "Non, aucune blessure",
+    "phName": "Votre nom",
+    "phAge": "Âge",
+    "phHeight": "Taille en cm",
+    "phWeight": "Poids en kg",
+    "phInjuries": "Décrivez brièvement ou choisissez Aucune",
+    "done": "Parfait, {{name}} ! J’ai tout ce qu’il me faut. Je vais maintenant créer votre programme d’entraînement personnalisé 🌱",
+    "fallbackYou": "coureur"
+  },
   "tabs": {
     "home": "Accueil",
     "plan": "Plan",
@@ -474,7 +500,14 @@
     "defaultRunner": "coureur",
     "greeting": "Salut {{name}}! Je suis ton coach IA. Comment puis-je t'aider aujourd'hui?",
     "clearedGreeting": "Conversation effacée ! Comment puis-je vous aider, {{name}} ?",
-    "connectionError": "Désolé, je n'ai pas pu me connecter. Veuillez réessayer."
+    "connectionError": "Désolé, je n'ai pas pu me connecter. Veuillez réessayer.",
+    "mealPlanTitle": "Programme alimentaire",
+    "totalKcal": "{{kcal}} kcal au total",
+    "macros": "{{kcal}} kcal · P {{protein}} g · G {{carbs}} g · L {{fat}} g",
+    "logAllMeals": "Enregistrer tous les repas",
+    "logged": "Enregistré",
+    "mealPlanLoggedMessage": "Le programme alimentaire a été enregistré pour aujourd’hui.",
+    "mealPlanLogError": "Impossible d’enregistrer le programme alimentaire : {{error}}"
   },
   "proUpsell": {
     "title": "Débloquez toute la puissance",

@@ -1,4 +1,30 @@
 ﻿{
+  "coachIntro": {
+    "title": "Jūsų DI treneris",
+    "qName": "Sveiki! Esu jūsų asmeninis DI bėgimo treneris 🏃 Prieš pradėdami norėčiau jus šiek tiek pažinti. Koks jūsų vardas?",
+    "qAge": "Malonu susipažinti, {{name}}! Kiek jums metų?",
+    "qHeight": "Koks jūsų ūgis? (cm)",
+    "qWeight": "O kiek maždaug sveriate? (kg)",
+    "qLevel": "Ačiū! Kaip dažnai šiuo metu bėgiojate?",
+    "levelBeginner": "Tik pradedu bėgioti",
+    "levelIntermediate": "Bėgioju retkarčiais",
+    "levelAdvanced": "Bėgioju kiekvieną savaitę",
+    "qGoal": "Puiku! Kokį tikslą norite pasiekti?",
+    "goal5k": "Nubėgti 5 km",
+    "goal10k": "Nubėgti 10 km",
+    "goalHalf": "Pusmaratonis",
+    "goalFull": "Maratonas",
+    "goalWeight": "Sveikata ir svorio mažinimas",
+    "qInjuries": "Paskutinis klausimas: ar turite traumų ar skausmų, į kuriuos turėčiau atsižvelgti kurdamas planą?",
+    "injuriesNone": "Ne, traumų neturiu",
+    "phName": "Jūsų vardas",
+    "phAge": "Amžius",
+    "phHeight": "Ūgis cm",
+    "phWeight": "Svoris kg",
+    "phInjuries": "Trumpai aprašykite arba pasirinkite Nėra",
+    "done": "Puiku, {{name}}! Turiu viską, ko reikia. Dabar sukursiu jūsų asmeninį treniruočių planą 🌱",
+    "fallbackYou": "bėgike"
+  },
   "tabs": {
     "home": "Pradžia",
     "plan": "Planas",
@@ -474,7 +500,14 @@
     "defaultRunner": "Bėgikas",
     "greeting": "Sveiki {{name}}! Esu jūsų AI treneris. Kaip galiu padėti šiandien?",
     "clearedGreeting": "Pokalbis išvalytas! Kaip galiu jums padėti, {{name}}?",
-    "connectionError": "Atsiprašau, nepavyko prisijungti. Prašome bandyti dar kartą."
+    "connectionError": "Atsiprašau, nepavyko prisijungti. Prašome bandyti dar kartą.",
+    "mealPlanTitle": "Mitybos planas",
+    "totalKcal": "Iš viso {{kcal}} kcal",
+    "macros": "{{kcal}} kcal · B {{protein}} g · A {{carbs}} g · R {{fat}} g",
+    "logAllMeals": "Įrašyti visus valgius",
+    "logged": "Įrašyta",
+    "mealPlanLoggedMessage": "Mitybos planas įrašytas šiandienai.",
+    "mealPlanLogError": "Nepavyko įrašyti mitybos plano: {{error}}"
   },
   "proUpsell": {
     "title": "Atrakinkite visą galią",

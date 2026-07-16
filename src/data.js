@@ -328,8 +328,18 @@ export function getZoneColor(zone) {
 }
 
 // ─── AI CHAT ──────────────────────────────────────────────────────────────────
-export async function sendToAI({ messages, profile, level, weekPlan, nextWorkout, runs }) {
+const AI_RESPONSE_LANGUAGES = {
+  da: 'Danish', en: 'English', de: 'German', fr: 'French', es: 'Spanish',
+  it: 'Italian', pt: 'Portuguese', nl: 'Dutch', pl: 'Polish', sv: 'Swedish',
+  fi: 'Finnish', el: 'Greek', cs: 'Czech', ro: 'Romanian', hu: 'Hungarian',
+  bg: 'Bulgarian', hr: 'Croatian', sk: 'Slovak', sl: 'Slovenian',
+  lt: 'Lithuanian', lv: 'Latvian', et: 'Estonian', ga: 'Irish', mt: 'Maltese',
+};
+
+export async function sendToAI({ messages, profile, level, weekPlan, nextWorkout, runs, language, fallbackError }) {
   console.log('=== SENDTOAI KALDES ===', new Date().toISOString());
+  const languageCode = String(language || 'en').toLowerCase().split('-')[0];
+  const responseLanguage = AI_RESPONSE_LANGUAGES[languageCode] || AI_RESPONSE_LANGUAGES.en;
   const a = assessProfile(profile);
   const lv = LEVELS[level] || LEVELS['intermediate'];
   const name = (profile.name || 'Løber').split(' ')[0];
@@ -395,7 +405,7 @@ Lav 4-5 måltider. meal_type skal være: breakfast, lunch, dinner eller snack.
 Format til planændring (inkludér kun ved ændring):
 <plan_update>{"changeNote":"kort forklaring","nextWorkout":{"name":"navn","desc":"beskrivelse","km":9.0,"duration":"~50","targetPace":"5:00","targetHr":155},"weekPlan":[{"day":"Man","workout":"navn","km":9,"color":"#c8ff00","type":"run","description":"konkret beskrivelse"}]}</plan_update>
 Hver dag i weekPlan SKAL have et "date"-felt i formatet YYYY-MM-DD. Brug de faktiske datoer fra brugerens TRÆNINGSPLAN (den står i din kontekst). Du må sende op til 28 dage - send kun de dage der ændres. Skal planen genoptages efter en pause, så angiv de nye træningsdage med deres rigtige datoer efter pausen.
-Svar på dansk, max 2-3 sætninger. Vær direkte og konkret.
+LANGUAGE REQUIREMENT: Reply only in ${responseLanguage}, including explanations, workout names, descriptions and meal-plan text. Follow this even when earlier conversation messages use another language. Keep the answer to 2-3 sentences and be direct and concrete.
 ${medicalProfileBlock}`;
 
 console.log('[DEBUG] System prompt length:', systemPrompt.length);
@@ -413,7 +423,7 @@ console.log('[DEBUG] System prompt length:', systemPrompt.length);
     }),
   });
   const data = await res.json();
-  let text = data.content?.[0]?.text || 'Fejl — prøv igen.';
+  let text = data.content?.[0]?.text || fallbackError || 'Something went wrong — please try again.';
 
   let planUpdate = null;
   const match = text.match(/<plan_update>([\s\S]*?)<\/plan_update>/);

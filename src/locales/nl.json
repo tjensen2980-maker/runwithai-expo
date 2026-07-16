@@ -1,4 +1,30 @@
 ﻿{
+  "coachIntro": {
+    "title": "Jouw AI-coach",
+    "qName": "Hoi! Ik ben jouw persoonlijke AI-hardloopcoach 🏃 Voor we beginnen, wil ik je graag wat beter leren kennen. Hoe heet je?",
+    "qAge": "Leuk je te ontmoeten, {{name}}! Hoe oud ben je?",
+    "qHeight": "Hoe lang ben je? (in cm)",
+    "qWeight": "En hoeveel weeg je ongeveer? (in kg)",
+    "qLevel": "Bedankt! Hoe vaak loop je momenteel?",
+    "levelBeginner": "Ik begin net met hardlopen",
+    "levelIntermediate": "Ik loop af en toe",
+    "levelAdvanced": "Ik loop elke week",
+    "qGoal": "Mooi! Welk doel wil je bereiken?",
+    "goal5k": "5 km lopen",
+    "goal10k": "10 km lopen",
+    "goalHalf": "Halve marathon",
+    "goalFull": "Marathon",
+    "goalWeight": "Gezondheid en gewichtsverlies",
+    "qInjuries": "Laatste vraag: heb je blessures of pijn waarmee ik rekening moet houden bij je plan?",
+    "injuriesNone": "Nee, geen blessures",
+    "phName": "Jouw naam",
+    "phAge": "Leeftijd",
+    "phHeight": "Lengte in cm",
+    "phWeight": "Gewicht in kg",
+    "phInjuries": "Beschrijf kort of kies Geen",
+    "done": "Perfect, {{name}}! Ik heb alles wat ik nodig heb. Nu maak ik jouw persoonlijke trainingsplan 🌱",
+    "fallbackYou": "hardloper"
+  },
   "tabs": {
     "home": "Home",
     "plan": "Plan",
@@ -474,7 +500,14 @@
     "defaultRunner": "hardloper",
     "greeting": "Hallo {{name}}! Ik ben je AI-coach. Hoe kan ik je vandaag helpen?",
     "clearedGreeting": "Gesprek gewist! Hoe kan ik je helpen, {{name}}?",
-    "connectionError": "Sorry, ik kon geen verbinding maken. Probeer het opnieuw."
+    "connectionError": "Sorry, ik kon geen verbinding maken. Probeer het opnieuw.",
+    "mealPlanTitle": "Maaltijdplan",
+    "totalKcal": "{{kcal}} kcal in totaal",
+    "macros": "{{kcal}} kcal · E {{protein}} g · K {{carbs}} g · V {{fat}} g",
+    "logAllMeals": "Alle maaltijden registreren",
+    "logged": "Geregistreerd",
+    "mealPlanLoggedMessage": "Het maaltijdplan is voor vandaag geregistreerd.",
+    "mealPlanLogError": "Het maaltijdplan kon niet worden geregistreerd: {{error}}"
   },
   "proUpsell": {
     "title": "Ontgrendel volledige kracht",

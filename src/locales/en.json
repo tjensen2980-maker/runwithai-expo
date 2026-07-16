@@ -279,6 +279,42 @@
       "time": "Time",
       "days": "Days"
     },
+    "reminders": {
+      "workoutTitle": "Workout reminder",
+      "workoutSubtitle": "Get notified on selected days and at the selected time",
+      "mealTitle": "Meal reminder",
+      "mealSubtitle": "Remember to log your meals",
+      "time": "Time: {{time}}",
+      "days": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    },
+    "email": {
+      "title": "Email",
+      "change": "Change email",
+      "newEmail": "New email",
+      "currentPassword": "Current password",
+      "missingFields": "Enter both your new email and current password",
+      "changeError": "Could not change email",
+      "successMessage": "Your email has been updated",
+      "networkError": "Network error"
+    },
+    "subscription": {
+      "title": "Subscription",
+      "type": "Type",
+      "status": "Status",
+      "tiers": {
+        "pro": "Pro",
+        "basic": "Basic",
+        "free": "Free"
+      },
+      "statuses": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "trialing": "Trial",
+        "canceled": "Canceled"
+      },
+      "upgrade": "Upgrade",
+      "manage": "Manage in App Store"
+    },
     "privacy": {
       "shareProfile": "Share profile",
       "shareProfileSub": "Let others see your profile",
@@ -650,7 +686,14 @@
     "defaultRunner": "runner",
     "greeting": "Hi {{name}}! I am your AI coach. How can I help you today?",
     "clearedGreeting": "Conversation cleared! How can I help you, {{name}}?",
-    "connectionError": "Sorry, I couldn't connect. Please try again."
+    "connectionError": "Sorry, I couldn't connect. Please try again.",
+    "mealPlanTitle": "Meal plan",
+    "totalKcal": "{{kcal}} kcal total",
+    "macros": "{{kcal}} kcal · P {{protein}} g · C {{carbs}} g · F {{fat}} g",
+    "logAllMeals": "Log all meals",
+    "logged": "Logged",
+    "mealPlanLoggedMessage": "The meal plan has been logged for today.",
+    "mealPlanLogError": "Could not log the meal plan: {{error}}"
   },
   "proUpsell": {
     "title": "Unlock full power",

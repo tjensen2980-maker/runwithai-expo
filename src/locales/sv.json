@@ -1,4 +1,30 @@
 ﻿{
+  "coachIntro": {
+    "title": "Din AI-tränare",
+    "qName": "Hej! Jag är din personliga AI-löptränare 🏃 Innan vi börjar vill jag gärna lära känna dig lite. Vad heter du?",
+    "qAge": "Trevligt att träffas, {{name}}! Hur gammal är du?",
+    "qHeight": "Hur lång är du? (i cm)",
+    "qWeight": "Och ungefär hur mycket väger du? (i kg)",
+    "qLevel": "Tack! Hur ofta springer du just nu?",
+    "levelBeginner": "Jag har precis börjat springa",
+    "levelIntermediate": "Jag springer då och då",
+    "levelAdvanced": "Jag springer varje vecka",
+    "qGoal": "Toppen! Vilket mål vill du nå?",
+    "goal5k": "Springa 5 km",
+    "goal10k": "Springa 10 km",
+    "goalHalf": "Halvmaraton",
+    "goalFull": "Maraton",
+    "goalWeight": "Hälsa och viktnedgång",
+    "qInjuries": "Sista frågan: har du skador eller smärta som jag ska ta hänsyn till i din plan?",
+    "injuriesNone": "Nej, inga skador",
+    "phName": "Ditt namn",
+    "phAge": "Ålder",
+    "phHeight": "Längd i cm",
+    "phWeight": "Vikt i kg",
+    "phInjuries": "Beskriv kort eller välj Inga",
+    "done": "Perfekt, {{name}}! Jag har allt jag behöver. Nu skapar jag din personliga träningsplan 🌱",
+    "fallbackYou": "löpare"
+  },
   "tabs": {
     "home": "Hem",
     "plan": "Plan",
@@ -474,7 +500,14 @@
     "defaultRunner": "Löpare",
     "greeting": "Hej {{name}}! Jag är din AI-coach. Hur kan jag hjälpa dig idag?",
     "clearedGreeting": "Konversation rensad! Hur kan jag hjälpa dig, {{name}}?",
-    "connectionError": "Tyvärr kunde jag inte ansluta. Vänligen försök igen."
+    "connectionError": "Tyvärr kunde jag inte ansluta. Vänligen försök igen.",
+    "mealPlanTitle": "Måltidsplan",
+    "totalKcal": "Totalt {{kcal}} kcal",
+    "macros": "{{kcal}} kcal · P {{protein}} g · K {{carbs}} g · F {{fat}} g",
+    "logAllMeals": "Logga alla måltider",
+    "logged": "Loggat",
+    "mealPlanLoggedMessage": "Måltidsplanen har loggats för idag.",
+    "mealPlanLogError": "Det gick inte att logga måltidsplanen: {{error}}"
   },
   "proUpsell": {
     "title": "Lås upp full kraft",

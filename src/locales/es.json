@@ -1,4 +1,30 @@
 ﻿{
+  "coachIntro": {
+    "title": "Tu coach de IA",
+    "qName": "¡Hola! Soy tu coach personal de running con IA 🏃 Antes de empezar, me gustaría conocerte un poco. ¿Cómo te llamas?",
+    "qAge": "¡Encantado de conocerte, {{name}}! ¿Cuántos años tienes?",
+    "qHeight": "¿Cuánto mides? (en cm)",
+    "qWeight": "¿Y cuánto pesas aproximadamente? (en kg)",
+    "qLevel": "¡Gracias! ¿Con qué frecuencia corres actualmente?",
+    "levelBeginner": "Estoy empezando a correr",
+    "levelIntermediate": "Corro de vez en cuando",
+    "levelAdvanced": "Corro todas las semanas",
+    "qGoal": "¡Genial! ¿Qué objetivo quieres alcanzar?",
+    "goal5k": "Correr 5 km",
+    "goal10k": "Correr 10 km",
+    "goalHalf": "Media maratón",
+    "goalFull": "Maratón",
+    "goalWeight": "Salud y pérdida de peso",
+    "qInjuries": "Última pregunta: ¿tienes alguna lesión o dolor que deba tener en cuenta al crear tu plan?",
+    "injuriesNone": "No, ninguna lesión",
+    "phName": "Tu nombre",
+    "phAge": "Edad",
+    "phHeight": "Altura en cm",
+    "phWeight": "Peso en kg",
+    "phInjuries": "Descríbelo brevemente o elige Ninguna",
+    "done": "¡Perfecto, {{name}}! Ya tengo todo lo que necesito. Ahora crearé tu plan de entrenamiento personal 🌱",
+    "fallbackYou": "corredor"
+  },
   "tabs": {
     "home": "Inicio",
     "plan": "Plan",
@@ -474,7 +500,14 @@
     "defaultRunner": "corredor",
     "greeting": "¡Hola {{name}}! Soy tu coach de IA. ¿Cómo puedo ayudarte hoy?",
     "clearedGreeting": "¡Conversación borrada! ¿Cómo puedo ayudarte, {{name}}?",
-    "connectionError": "Lo siento, no pude conectar. Por favor, intenta de nuevo."
+    "connectionError": "Lo siento, no pude conectar. Por favor, intenta de nuevo.",
+    "mealPlanTitle": "Plan de comidas",
+    "totalKcal": "{{kcal}} kcal en total",
+    "macros": "{{kcal}} kcal · P {{protein}} g · C {{carbs}} g · G {{fat}} g",
+    "logAllMeals": "Registrar todas las comidas",
+    "logged": "Registrado",
+    "mealPlanLoggedMessage": "El plan de comidas se ha registrado para hoy.",
+    "mealPlanLogError": "No se pudo registrar el plan de comidas: {{error}}"
   },
   "proUpsell": {
     "title": "Desbloquea todo el poder",

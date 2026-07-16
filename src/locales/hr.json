@@ -1,4 +1,30 @@
 ﻿{
+  "coachIntro": {
+    "title": "Vaš AI trener",
+    "qName": "Bok! Ja sam vaš osobni AI trener trčanja 🏃 Prije nego što počnemo, želio bih vas malo upoznati. Kako se zovete?",
+    "qAge": "Drago mi je, {{name}}! Koliko imate godina?",
+    "qHeight": "Koliko ste visoki? (u cm)",
+    "qWeight": "A koliko približno težite? (u kg)",
+    "qLevel": "Hvala! Koliko često trenutačno trčite?",
+    "levelBeginner": "Tek počinjem trčati",
+    "levelIntermediate": "Trčim s vremena na vrijeme",
+    "levelAdvanced": "Trčim svaki tjedan",
+    "qGoal": "Odlično! Koji cilj želite postići?",
+    "goal5k": "Istrčati 5 km",
+    "goal10k": "Istrčati 10 km",
+    "goalHalf": "Polumaraton",
+    "goalFull": "Maraton",
+    "goalWeight": "Zdravlje i gubitak težine",
+    "qInjuries": "Posljednje pitanje: imate li ozljede ili bolove koje trebam uzeti u obzir pri izradi plana?",
+    "injuriesNone": "Ne, nemam ozljeda",
+    "phName": "Vaše ime",
+    "phAge": "Dob",
+    "phHeight": "Visina u cm",
+    "phWeight": "Težina u kg",
+    "phInjuries": "Opišite ukratko ili odaberite Nema",
+    "done": "Odlično, {{name}}! Imam sve što mi treba. Sada ću izraditi vaš osobni plan treninga 🌱",
+    "fallbackYou": "trkaču"
+  },
   "tabs": {
     "home": "Početna",
     "plan": "Plan",
@@ -474,7 +500,14 @@
     "defaultRunner": "Trkač",
     "greeting": "Bok {{name}}! Ja sam tvoj AI trener. Kako ti mogu pomoći danas?",
     "clearedGreeting": "Razgovor očišćen! Kako ti mogu pomoći, {{name}}?",
-    "connectionError": "Žao mi je, nisam se mogao spojiti. Molim pokušajte ponovno."
+    "connectionError": "Žao mi je, nisam se mogao spojiti. Molim pokušajte ponovno.",
+    "mealPlanTitle": "Plan prehrane",
+    "totalKcal": "Ukupno {{kcal}} kcal",
+    "macros": "{{kcal}} kcal · P {{protein}} g · U {{carbs}} g · M {{fat}} g",
+    "logAllMeals": "Zabilježi sve obroke",
+    "logged": "Zabilježeno",
+    "mealPlanLoggedMessage": "Plan prehrane zabilježen je za danas.",
+    "mealPlanLogError": "Plan prehrane nije bilo moguće zabilježiti: {{error}}"
   },
   "proUpsell": {
     "title": "Otključajte punu snagu",
