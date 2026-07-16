@@ -1,32 +1,15 @@
 // CoachIntro.js - Onboarding som samtale: coachen interviewer dig.
 // Scriptede spoergsmaal (hurtigt og robust), aegte AI bygger planen bagefter.
+// Alle tekster via i18n (da/en fuldt oversat; oevrige sprog falder tilbage til en).
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { colors } from '../data';
 
 const KM_FOR_NIVEAU = { beginner: 5, intermediate: 15, advanced: 30 };
 
-const SCRIPT = [
-  { key: 'name', type: 'text', placeholder: 'Dit navn', q: () => 'Hej! Jeg er din personlige AI-løbecoach 🏃 Før vi går i gang, vil jeg gerne lære dig lidt at kende. Hvad hedder du?' },
-  { key: 'age', type: 'number', placeholder: 'Alder', q: (s) => 'Hyggeligt at møde dig, ' + (s.name || 'du') + '! Hvor gammel er du?' },
-  { key: 'height', type: 'number', placeholder: 'Højde i cm', q: () => 'Hvor høj er du? (i cm)' },
-  { key: 'weight', type: 'number', placeholder: 'Vægt i kg', q: () => 'Og hvad vejer du cirka? (i kg)' },
-  { key: 'level', type: 'chips', q: () => 'Tak! Hvor meget løber du i dag?', valg: [
-    { id: 'beginner', label: 'Jeg er ny til løb' },
-    { id: 'intermediate', label: 'Jeg løber af og til' },
-    { id: 'advanced', label: 'Jeg løber fast hver uge' },
-  ] },
-  { key: 'goal', type: 'chips', q: () => 'Stærkt! Og hvad drømmer du om at opnå?', valg: [
-    { id: '5k', label: 'Løbe 5 km' },
-    { id: '10k', label: 'Løbe 10 km' },
-    { id: 'half', label: 'Halvmaraton' },
-    { id: 'full', label: 'Maraton' },
-    { id: 'weight', label: 'Sundhed & vægttab' },
-  ] },
-  { key: 'injuries', type: 'text', placeholder: 'Beskriv kort - eller tryk Ingen', chip: 'Nej, ingen skader', q: () => 'Sidste spørgsmål: har du skader eller smerter, jeg skal tage hensyn til, når jeg bygger din plan?' },
-];
-
 export default function CoachIntro({ onFaerdig }) {
+  const { t } = useTranslation();
   const [beskeder, setBeskeder] = useState([]);
   const [svar, setSvar] = useState({});
   const [trin, setTrin] = useState(-1);
@@ -34,6 +17,26 @@ export default function CoachIntro({ onFaerdig }) {
   const [input, setInput] = useState('');
   const scroll = useRef(null);
   const faerdigSendt = useRef(false);
+
+  const SCRIPT = [
+    { key: 'name', type: 'text', placeholder: t('coachIntro.phName'), q: () => t('coachIntro.qName') },
+    { key: 'age', type: 'number', placeholder: t('coachIntro.phAge'), q: (s) => t('coachIntro.qAge', { name: s.name || t('coachIntro.fallbackYou') }) },
+    { key: 'height', type: 'number', placeholder: t('coachIntro.phHeight'), q: () => t('coachIntro.qHeight') },
+    { key: 'weight', type: 'number', placeholder: t('coachIntro.phWeight'), q: () => t('coachIntro.qWeight') },
+    { key: 'level', type: 'chips', q: () => t('coachIntro.qLevel'), valg: [
+      { id: 'beginner', label: t('coachIntro.levelBeginner') },
+      { id: 'intermediate', label: t('coachIntro.levelIntermediate') },
+      { id: 'advanced', label: t('coachIntro.levelAdvanced') },
+    ] },
+    { key: 'goal', type: 'chips', q: () => t('coachIntro.qGoal'), valg: [
+      { id: '5k', label: t('coachIntro.goal5k') },
+      { id: '10k', label: t('coachIntro.goal10k') },
+      { id: 'half', label: t('coachIntro.goalHalf') },
+      { id: 'full', label: t('coachIntro.goalFull') },
+      { id: 'weight', label: t('coachIntro.goalWeight') },
+    ] },
+    { key: 'injuries', type: 'text', placeholder: t('coachIntro.phInjuries'), chip: t('coachIntro.injuriesNone'), q: () => t('coachIntro.qInjuries') },
+  ];
 
   const stil = (trin >= 0 && trin < SCRIPT.length) ? SCRIPT[trin] : null;
 
@@ -47,7 +50,7 @@ export default function CoachIntro({ onFaerdig }) {
         setTimeout(() => {
           if (vaek) return;
           setSkriver(false);
-          setBeskeder(b => [...b, { fra: 'coach', tekst: 'Perfekt, ' + (svar.name || '') + '! Jeg har alt, jeg skal bruge. Nu bygger jeg din personlige træningsplan 🌱' }]);
+          setBeskeder(b => [...b, { fra: 'coach', tekst: t('coachIntro.done', { name: svar.name || t('coachIntro.fallbackYou') }) }]);
           const km = KM_FOR_NIVEAU[svar.level] || 10;
           setTimeout(() => { if (!vaek) onFaerdig({ ...svar, weeklyKm: String(km) }); }, 1400);
         }, 900);
@@ -55,13 +58,13 @@ export default function CoachIntro({ onFaerdig }) {
       return () => { vaek = true; };
     }
     setSkriver(true);
-    const t = setTimeout(() => {
+    const tid = setTimeout(() => {
       if (vaek) return;
       setSkriver(false);
       const naeste = trin + 1 <= 0 ? 0 : trin;
       setBeskeder(b => [...b, { fra: 'coach', tekst: SCRIPT[naeste >= 0 ? naeste : 0].q(svar) }]);
     }, trin === -1 ? 700 : 850);
-    return () => { vaek = true; clearTimeout(t); };
+    return () => { vaek = true; clearTimeout(tid); };
   }, [trin]);
 
   // Foerste spoergsmaal
@@ -74,7 +77,7 @@ export default function CoachIntro({ onFaerdig }) {
     setBeskeder(b => [...b, { fra: 'bruger', tekst: visning || String(vaerdi) }]);
     setSvar(s => ({ ...s, [stil.key]: vaerdi }));
     setInput('');
-    setTrin(t => t + 1);
+    setTrin(x => x + 1);
   }
 
   function sendTekst() {
@@ -93,7 +96,7 @@ export default function CoachIntro({ onFaerdig }) {
     <KeyboardAvoidingView style={s.safe} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={s.top}>
         <View style={s.aiDot} />
-        <Text style={s.topTitel}>Din AI-coach</Text>
+        <Text style={s.topTitel}>{t('coachIntro.title')}</Text>
       </View>
       <ScrollView ref={scroll} style={{ flex: 1 }} contentContainerStyle={{ padding: 16, paddingBottom: 24 }}>
         {beskeder.map((b, i) => (
