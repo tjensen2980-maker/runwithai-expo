@@ -279,6 +279,42 @@
       "time": "Tidspunkt",
       "days": "Dage"
     },
+    "reminders": {
+      "workoutTitle": "Træningspåmindelse",
+      "workoutSubtitle": "Få besked på valgte dage og det valgte tidspunkt",
+      "mealTitle": "Måltidspåmindelse",
+      "mealSubtitle": "Husk at logge dine måltider",
+      "time": "Tidspunkt: {{time}}",
+      "days": ["Søn", "Man", "Tir", "Ons", "Tor", "Fre", "Lør"]
+    },
+    "email": {
+      "title": "E-mail",
+      "change": "Skift e-mail",
+      "newEmail": "Ny e-mail",
+      "currentPassword": "Nuværende adgangskode",
+      "missingFields": "Udfyld både ny e-mail og nuværende adgangskode",
+      "changeError": "Kunne ikke skifte e-mail",
+      "successMessage": "Din e-mail er nu opdateret",
+      "networkError": "Netværksfejl"
+    },
+    "subscription": {
+      "title": "Abonnement",
+      "type": "Type",
+      "status": "Status",
+      "tiers": {
+        "pro": "Pro",
+        "basic": "Basic",
+        "free": "Gratis"
+      },
+      "statuses": {
+        "active": "Aktivt",
+        "inactive": "Inaktivt",
+        "trialing": "Prøveperiode",
+        "canceled": "Opsagt"
+      },
+      "upgrade": "Opgrader",
+      "manage": "Administrer i App Store"
+    },
     "privacy": {
       "shareProfile": "Del profil",
       "shareProfileSub": "Lad andre se din profil",
