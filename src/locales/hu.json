@@ -1,5 +1,6 @@
 ﻿{
   "tabs": {
+    "home": "Kezdőlap",
     "plan": "Terv",
     "run": "Futás",
     "coach": "Edző",
@@ -7,7 +8,8 @@
     "settings": "Beállítások",
     "calendar": "Naptár",
     "progress": "Haladás",
-    "start": "Indítás"
+    "start": "Indítás",
+    "more": "Továbbiak"
   },
   "run": {
     "title": "Futás",

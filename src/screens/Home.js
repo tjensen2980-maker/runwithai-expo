@@ -22,10 +22,10 @@ const DAYS_DA = ['Son', 'Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lor'];
 
 function formatGreeting(t) {
   const hour = new Date().getHours();
-  if (hour < 10) return 'God morgen';
-  if (hour < 17) return 'God dag';
-  if (hour < 22) return 'God aften';
-  return 'God nat';
+  if (hour < 10) return t('home.greeting.morning');
+  if (hour < 17) return t('home.greeting.day');
+  if (hour < 22) return t('home.greeting.evening');
+  return t('home.greeting.night');
 }
 
 function getTodayWorkout(weekPlan) {
@@ -34,7 +34,7 @@ function getTodayWorkout(weekPlan) {
   return weekPlan.find(d => d.day === todayShort) || weekPlan[0];
 }
 
-function buildAIGreeting({ profile, nextWorkout, todayWorkout }) {
+function buildAIGreeting({ profile, nextWorkout, todayWorkout, t }) {
   const name = (profile && profile.name) ? profile.name : '';
   const parts = [];
 
@@ -42,25 +42,25 @@ function buildAIGreeting({ profile, nextWorkout, todayWorkout }) {
   // Today's training
   const tw = todayWorkout;
   if (tw && tw.rest) {
-    parts.push('I dag er en hviledag - god restitution!');
+    parts.push(t('home.coach.restDay'));
   } else if (tw && (tw.workout || tw.name)) {
-    const wname = tw.workout || (typeof tw.name === 'string' ? tw.name : (tw.name && tw.name.intermediate) || 'træning');
-    parts.push(`I dag star der ${wname} på programmet.`);
+    const wname = tw.workout || (typeof tw.name === 'string' ? tw.name : (tw.name && tw.name.intermediate) || t('home.training'));
+    parts.push(t('home.coach.todayWorkout', { workout: wname }));
   } else if (nextWorkout) {
     const wn = typeof nextWorkout.name === 'string'
       ? nextWorkout.name
       : (nextWorkout.name && (nextWorkout.name.intermediate || nextWorkout.name.beginner)) || '';
-    if (wn) parts.push(`Næste træning: ${wn}.`);
+    if (wn) parts.push(t('home.coach.nextWorkout', { workout: wn }));
   }
 
   // Friendly close
   if (parts.length === 0) {
-    parts.push('Klar til at komme i gang? Spørg mig om noget - planlægning, mad eller motivation.');
+    parts.push(t('home.coach.ready'));
   } else {
-    parts.push('Spørg mig om noget hvis du har brug for hjælp.');
+    parts.push(t('home.coach.askForHelp'));
   }
 
-  const greet = formatGreeting();
+  const greet = formatGreeting(t);
   return { name, greet, body: parts.join(' ') };
 }
 
@@ -77,7 +77,7 @@ export default function Home({
   isFree,
   onShowPricing,
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [chatDraft, setChatDraft] = useState('');
 
 
@@ -89,16 +89,19 @@ export default function Home({
     profile,
     nextWorkout,
     todayWorkout,
-  }), [profile, nextWorkout, todayWorkout]);
+    t,
+  }), [profile, nextWorkout, todayWorkout, t]);
 
   // Den ÆGTE hilsen fra coach-hjernen (serveren kender plan, løb og skader).
   // Skabelon-hilsenen ovenfor bruges som fallback mens den indlæses.
   const [liveGreeting, setLiveGreeting] = useState(null);
   useEffect(() => {
+    setLiveGreeting(null);
+    if (i18n.resolvedLanguage !== 'da') return undefined;
     let aktiv = true;
     loadCoachGreeting().then(g => { if (aktiv && g) setLiveGreeting(g); }).catch(() => {});
     return () => { aktiv = false; };
-  }, []);
+  }, [i18n.resolvedLanguage]);
 
   // Weekly km from runs
   const weeklyKm = useMemo(() => {
@@ -135,7 +138,7 @@ export default function Home({
   const handleChip = (chipId) => {
     switch (chipId) {
       case 'plan':
-        if (onOpenChat) onOpenChat('Hvad er min plan for i dag?');
+        if (onOpenChat) onOpenChat(t('home.chat.todayPlanPrompt'));
         break;
       case 'start':
         if (onStartActivity) onStartActivity('motion');
@@ -168,7 +171,7 @@ export default function Home({
             style={styles.aiInput}
             value={chatDraft}
             onChangeText={setChatDraft}
-            placeholder="Spørg din AI coach..."
+            placeholder={t('home.chat.placeholder')}
             placeholderTextColor="rgba(255,255,255,0.5)"
             returnKeyType="send"
             onSubmitEditing={handleSendChat}
@@ -186,10 +189,10 @@ export default function Home({
         contentContainerStyle={styles.chipsRow}
       >
         <TouchableOpacity style={[styles.chip, styles.chipPrimary]} onPress={() => handleChip('plan')}>
-          <Text style={styles.chipPrimaryText}>📋 Dagens plan</Text>
+          <Text style={styles.chipPrimaryText}>📋 {t('home.todayPlan')}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.chip} onPress={() => handleChip('start')}>
-          <Text style={styles.chipText}>🏃 Start træning</Text>
+          <Text style={styles.chipText}>🏃 {t('home.startTraining')}</Text>
         </TouchableOpacity>
       </ScrollView>
 
@@ -197,31 +200,31 @@ export default function Home({
       {todayWorkout && (
         <View style={styles.nextWorkoutCard}>
           <View style={styles.nwHead}>
-            <Text style={styles.nwLabel}>NÆSTE TRÆNING</Text>
-            <View style={styles.nwBadge}><Text style={styles.nwBadgeText}>I DAG</Text></View>
+            <Text style={styles.nwLabel}>{t('home.nextTraining').toUpperCase()}</Text>
+            <View style={styles.nwBadge}><Text style={styles.nwBadgeText}>{t('home.today').toUpperCase()}</Text></View>
           </View>
           <Text style={styles.nwTitle}>
-            {todayWorkout.workout || (typeof todayWorkout.name === 'string' ? todayWorkout.name : 'Træning')}
+            {todayWorkout.workout || (typeof todayWorkout.name === 'string' ? todayWorkout.name : t('home.training'))}
           </Text>
           {todayWorkout.description ? (
             <Text style={styles.nwSub} numberOfLines={2}>{todayWorkout.description}</Text>
           ) : null}
           {!todayWorkout.rest && (
             <TouchableOpacity style={styles.nwCta} onPress={() => onStartActivity && onStartActivity('motion')}>
-              <Text style={styles.nwCtaText}>▶ Start træning</Text>
+              <Text style={styles.nwCtaText}>▶ {t('home.startTraining')}</Text>
             </TouchableOpacity>
           )}
         </View>
       )}
 
       {/* Dagens overblik */}
-      <Text style={styles.sectionTitle}>DAGENS OVERBLIK</Text>
+      <Text style={styles.sectionTitle}>{t('home.todayOverview').toUpperCase()}</Text>
       <View style={styles.keyGrid}>
 
 
         <TouchableOpacity style={[styles.keyCard, styles.keyCardDark]} onPress={() => onNavigate && onNavigate('activity')}>
           <Text style={styles.keyIcon}>📏</Text>
-          <Text style={[styles.keyTitle, styles.keyTitleOnDark]}>UGEN</Text>
+          <Text style={[styles.keyTitle, styles.keyTitleOnDark]}>{t('home.week').toUpperCase()}</Text>
           <Text style={[styles.keyValue, styles.keyValueOnDark]}>
             {weeklyKm.toFixed(1).replace('.', ',')} / {weeklyGoal}
           </Text>
@@ -230,11 +233,11 @@ export default function Home({
 
         <TouchableOpacity style={styles.keyCard} onPress={() => onNavigate && onNavigate('stats')}>
           <Text style={styles.keyIcon}>🏆</Text>
-          <Text style={styles.keyTitle}>MILEPÆL</Text>
+          <Text style={styles.keyTitle}>{t('home.milestone').toUpperCase()}</Text>
           <Text style={[styles.keyValue, styles.keyValueSmall]}>
             {milestoneRemaining.toFixed(1).replace('.', ',')} km
           </Text>
-          <Text style={styles.keySub}>til 50 km mål</Text>
+          <Text style={styles.keySub}>{t('home.toGoal', { distance: 50 })}</Text>
         </TouchableOpacity>
       </View>
 

@@ -26,6 +26,7 @@
     "fallbackYou": "du"
   },
   "tabs": {
+    "home": "Hjem",
     "plan": "Plan",
     "run": "Løb",
     "coach": "Coach",
@@ -33,7 +34,8 @@
     "settings": "Indstillinger",
     "calendar": "Kalender",
     "progress": "Fremgang",
-    "start": "Start"
+    "start": "Start",
+    "more": "Mere"
   },
   "run": {
     "title": "Løb",
@@ -1012,9 +1014,75 @@
     "unit": "Enhed",
     "approxGrams": "≈ {{grams}}g"
   },
+  "home": {
+    "greeting": {
+      "morning": "Godmorgen",
+      "day": "Goddag",
+      "evening": "Godaften",
+      "night": "Godnat"
+    },
+    "coach": {
+      "restDay": "I dag er en hviledag — god restitution!",
+      "todayWorkout": "I dag står der {{workout}} på programmet.",
+      "nextWorkout": "Næste træning: {{workout}}.",
+      "ready": "Klar til at komme i gang? Spørg mig om planlægning, mad eller motivation.",
+      "askForHelp": "Spørg mig om noget, hvis du har brug for hjælp."
+    },
+    "chat": {
+      "placeholder": "Spørg din AI-coach...",
+      "todayPlanPrompt": "Hvad er min plan for i dag?"
+    },
+    "todayPlan": "Dagens plan",
+    "startTraining": "Start træning",
+    "nextTraining": "Næste træning",
+    "today": "I dag",
+    "training": "Træning",
+    "todayOverview": "Dagens overblik",
+    "week": "Ugen",
+    "milestone": "Milepæl",
+    "toGoal": "til {{distance}} km-målet"
+  },
+  "progress": {
+    "weeks": "Uger",
+    "months": "Måneder",
+    "weekLabel": "Uge {{week}}, {{year}}",
+    "weekShort": "U{{week}}",
+    "activities": "Aktiviteter",
+    "empty": "Ingen aktiviteter endnu — kom ud at løbe!",
+    "noRoute": "Ingen rute registreret",
+    "standardTraining": "Standardtræning",
+    "steps": "Skridt",
+    "duration": "Varighed",
+    "caloriesShort": "kal",
+    "activityTypes": {
+      "walk": "Gåtur",
+      "cycling": "Cykling",
+      "run": "Løbetur"
+    }
+  },
   "more": {
+    "title": "Mere",
+    "subtitle": "Alle dine værktøjer på ét sted",
+    "sections": {
+      "account": "Konto",
+      "statistics": "Statistik",
+      "setup": "Opsætning",
+      "app": "App"
+    },
+    "newBadge": "Ny",
     "menu": {
-      "goals": "Mål"
+      "profile": "Profil",
+      "profileSubtitle": "Personlig information, mål, puls og skader",
+      "statistics": "Statistik",
+      "statisticsSubtitle": "Samlet distance, bedste tempo og milepæle",
+      "goals": "Mål",
+      "goalsSubtitle": "Ugentlige mål og træningstyper",
+      "settings": "Indstillinger",
+      "settingsSubtitle": "Niveau, sprog, profil og notifikationer",
+      "privacy": "Privatliv",
+      "privacySubtitle": "Dine data og rettigheder",
+      "upgrade": "Opgrader til PRO",
+      "upgradeSubtitle": "Lås alle funktioner op"
     }
   }
 }

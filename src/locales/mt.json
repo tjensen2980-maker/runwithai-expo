@@ -1,5 +1,6 @@
 ﻿{
   "tabs": {
+    "home": "Paġna ewlenija",
     "plan": "Pjan",
     "run": "Ġirja",
     "coach": "Kowċ",
@@ -7,7 +8,8 @@
     "settings": "Settings",
     "calendar": "Kalendarju",
     "progress": "Progress",
-    "start": "Ibda"
+    "start": "Ibda",
+    "more": "Aktar"
   },
   "run": {
     "title": "Ġirja",

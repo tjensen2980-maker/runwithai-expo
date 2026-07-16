@@ -1,5 +1,6 @@
 ﻿{
   "tabs": {
+    "home": "Domov",
     "plan": "Načrt",
     "run": "Tek",
     "coach": "Trener",
@@ -7,7 +8,8 @@
     "settings": "Nastavitve",
     "calendar": "Koledar",
     "progress": "Napredek",
-    "start": "Start"
+    "start": "Start",
+    "more": "Več"
   },
   "run": {
     "title": "Tek",

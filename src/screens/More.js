@@ -66,57 +66,57 @@ export default function More({
 
   return (
     <ScrollView style={styles.root} contentContainerStyle={styles.scrollContent}>
-      <Text style={styles.pageTitle}>Mere</Text>
-      <Text style={styles.pageSub}>Alle dine værktoejer på et sted</Text>
+      <Text style={styles.pageTitle}>{t('more.title')}</Text>
+      <Text style={styles.pageSub}>{t('more.subtitle')}</Text>
 
-      <Section title="KONTO">
+      <Section title={t('more.sections.account').toUpperCase()}>
         <MenuRow
           icon="👤"
-          title="Profil"
-          subtitle="Personlig info, mål, puls og skader"
+          title={t('more.menu.profile')}
+          subtitle={t('more.menu.profileSubtitle')}
           onPress={go('profile')}
         />
       </Section>
 
-      <Section title="STATISTIK">
+      <Section title={t('more.sections.statistics').toUpperCase()}>
         <MenuRow
           icon="📊"
-          title="Statistik"
-          subtitle="Total km, bedste pace, milepæle"
+          title={t('more.menu.statistics')}
+          subtitle={t('more.menu.statisticsSubtitle')}
           onPress={goPro('stats')}
           proLocked={isFree}
         />
       </Section>
 
-      <Section title="SETUP">
+      <Section title={t('more.sections.setup').toUpperCase()}>
         <MenuRow
           icon="🎯"
-          title="Mål"
-          subtitle="Ugentlige mål og træningstyper"
+          title={t('more.menu.goals')}
+          subtitle={t('more.menu.goalsSubtitle')}
           onPress={go('goals')}
         />
       </Section>
 
-      <Section title="APP">
+      <Section title={t('more.sections.app').toUpperCase()}>
         <MenuRow
           icon="⚙️"
-          title="Indstillinger"
-          subtitle="Niveau, sprog, profil, notifikationer"
+          title={t('more.menu.settings')}
+          subtitle={t('more.menu.settingsSubtitle')}
           onPress={go('settings')}
         />
         <MenuRow
           icon="🔒"
-          title="Privatliv"
-          subtitle="Data og dine rettigheder"
+          title={t('more.menu.privacy')}
+          subtitle={t('more.menu.privacySubtitle')}
           onPress={go('privacy')}
         />
         {isFree && (
           <MenuRow
             icon="⭐"
-            title="Opgrader til PRO"
-            subtitle="Lås alle funktioner op"
+            title={t('more.menu.upgrade')}
+            subtitle={t('more.menu.upgradeSubtitle')}
             onPress={onShowPricing}
-            badge="NY"
+            badge={t('more.newBadge').toUpperCase()}
           />
         )}
       </Section>
