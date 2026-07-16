@@ -1,10 +1,10 @@
-import './src/i18n';
+import { syncLanguageWithDevice } from './src/i18n';
 import { useTranslation } from 'react-i18next';
 import PricingPage, { useSubscription, Paywall } from './components/Pricing';
 import React, { useState, useEffect } from 'react';
 import { Icon } from './src/components/Icons';
 import { SERVER } from './src/config';
-import { View, Text, TouchableOpacity, StyleSheet, StatusBar, ActivityIndicator, ScrollView, Modal, Alert, Platform, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, StatusBar, ActivityIndicator, ScrollView, Modal, Alert, Platform, Image, AppState } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Svg, { Path, Line, Rect, Polyline, Polygon } from 'react-native-svg';
@@ -146,14 +146,14 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, isFree, on
           <TouchableOpacity onPress={() => onStartActivity('motion')}
             style={{ backgroundColor: colors.black, borderRadius: 20, padding: 28, marginBottom: 12, alignItems: 'center' }}>
             <Text style={{ fontSize: 40, marginBottom: 8 }}>🏃</Text>
-            <Text style={{ fontSize: 22, fontWeight: '900', color: colors.card, letterSpacing: -0.5 }}>Motion</Text>
-            <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>Løb · Gå · Cykling</Text>
+            <Text style={{ fontSize: 22, fontWeight: '900', color: colors.card, letterSpacing: -0.5 }}>{t('run.motionTitle')}</Text>
+            <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>{t('run.motionActivities')}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => onStartActivity('pick')}
             style={{ backgroundColor: colors.accent, borderRadius: 20, padding: 28, marginBottom: 20, alignItems: 'center' }}>
             <Text style={{ fontSize: 40, marginBottom: 8 }}>💪</Text>
-            <Text style={{ fontSize: 22, fontWeight: '900', color: '#fff', letterSpacing: -0.5 }}>Træning</Text>
-            <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', marginTop: 4 }}>Styrke, mobility m.m.</Text>
+            <Text style={{ fontSize: 22, fontWeight: '900', color: '#fff', letterSpacing: -0.5 }}>{t('run.trainingTitle')}</Text>
+            <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', marginTop: 4 }}>{t('run.trainingActivities')}</Text>
           </TouchableOpacity>
           {lastRun && (
             <View style={{ backgroundColor: colors.card, borderRadius: 16, padding: 18, borderWidth: 1, borderColor: colors.border }}>
@@ -208,7 +208,7 @@ function PlanTab({ level, nextWorkout, weekPlan, planChanges, profile, runs, onN
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingTop: 16, gap: 10, backgroundColor: colors.bg }}>
-        {[['plan', t('tabs.plan')],['kalender','Kalender'],['coach','AI Coach']].map(([id, label]) => (
+        {[['plan', t('tabs.plan')], ['kalender', t('tabs.calendar')], ['coach', `AI ${t('tabs.coach')}`]].map(([id, label]) => (
           <TouchableOpacity key={id}
             style={{ flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center', backgroundColor: activeTab === id ? colors.black : colors.surface, borderWidth: 2, borderColor: activeTab === id ? colors.black : colors.border2 }}
             onPress={() => setActiveTab(id)}>
@@ -308,6 +308,14 @@ class ErrorBoundary extends React.Component {
 export default function App() {
   const { t } = useTranslation();
   const [chatDraft, setChatDraft] = useState('');
+
+  useEffect(() => {
+    syncLanguageWithDevice();
+    const subscription = AppState.addEventListener('change', nextState => {
+      if (nextState === 'active') syncLanguageWithDevice();
+    });
+    return () => subscription.remove();
+  }, []);
 
   const [user, setUser] = useState(null);
   const [showOnboarding, setShowOnboarding] = useState(true);

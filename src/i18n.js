@@ -58,13 +58,21 @@ const resources = {
 
 const supportedLanguages = Object.keys(resources);
 
-// Initialize with fallback, then load saved language
+export const getDeviceLanguage = () => {
+  const deviceLanguage = Localization.getLocales()?.[0]?.languageCode?.toLowerCase();
+  return supportedLanguages.includes(deviceLanguage) ? deviceLanguage : 'en';
+};
+
+// Start in the device/per-app language to avoid briefly rendering English while
+// AsyncStorage is being read.
 i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: 'en',
+    lng: getDeviceLanguage(),
     fallbackLng: 'en',
+    supportedLngs: supportedLanguages,
+    nonExplicitSupportedLngs: true,
     interpolation: {
       escapeValue: false,
     },
@@ -73,25 +81,23 @@ i18n
     },
   });
 
-// Sprogprioritet: 1) brugerens eget valg (onboarding/indstillinger),
-// 2) enhedens sprog, 3) engelsk.
-const initLanguage = async () => {
+// Keep the app aligned with the locale reported by iOS/Android. This includes
+// both the system language and an app-specific language selected in Settings.
+export const syncLanguageWithDevice = async () => {
   try {
-    // Brugerens eget valg vinder altid
-    const gemt = await AsyncStorage.getItem('userLanguage').catch(() => null);
-    if (gemt && supportedLanguages.includes(gemt)) {
-      i18n.changeLanguage(gemt);
-      return;
+    const language = getDeviceLanguage();
+    if (i18n.resolvedLanguage !== language) {
+      await i18n.changeLanguage(language);
     }
-    const locales = Localization.getLocales();
-    const deviceLang = locales?.[0]?.languageCode || 'en';
-    const lang = supportedLanguages.includes(deviceLang) ? deviceLang : 'en';
-    i18n.changeLanguage(lang);
+
+    // Older builds stored the onboarding selection indefinitely, which blocked
+    // later system-language changes. Remove that obsolete override.
+    await AsyncStorage.removeItem('userLanguage').catch(() => {});
   } catch (e) {
-    console.log('Language init error:', e);
+    console.log('Language sync error:', e);
   }
 };
 
-initLanguage();
+syncLanguageWithDevice();
 
 export default i18n;

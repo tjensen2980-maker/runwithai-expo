@@ -5,7 +5,6 @@ import { colors, LEVELS, generateTrainingPlan, saveTrainingPlan } from '../data'
 import OnboardingCarousel from '../components/OnboardingCarousel';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import CoachIntro from './CoachIntro'; // onboarding som samtale
 
 const LANGUAGES = [
@@ -20,16 +19,16 @@ const LANGUAGES = [
   { code: 'pl', flag: '🇵🇱', name: 'Polski' },
   { code: 'sv', flag: '🇸🇪', name: 'Svenska' },
   { code: 'fi', flag: '🇫🇮', name: 'Suomi' },
-  { code: 'el', flag: '🇬🇷', name: 'Î•Î»Î»Î·Î½Î¹ÎºÎ¬' },
-  { code: 'cs', flag: '🇨🇿', name: 'ÄŒeÅ¡tina' },
-  { code: 'ro', flag: '🇷🇴', name: 'RomânÄƒ' },
+  { code: 'el', flag: '🇬🇷', name: 'Ελληνικά' },
+  { code: 'cs', flag: '🇨🇿', name: 'Čeština' },
+  { code: 'ro', flag: '🇷🇴', name: 'Română' },
   { code: 'hu', flag: '🇭🇺', name: 'Magyar' },
-  { code: 'bg', flag: '🇧🇬', name: 'Ð‘ÑŠÐ»Ð³Ð°Ñ€ÑÐºÐ¸' },
+  { code: 'bg', flag: '🇧🇬', name: 'Български' },
   { code: 'hr', flag: '🇭🇷', name: 'Hrvatski' },
-  { code: 'sk', flag: '🇸🇰', name: 'SlovenÄina' },
-  { code: 'sl', flag: '🇸🇮', name: 'SlovenÅ¡Äina' },
-  { code: 'lt', flag: '🇱🇹', name: 'LietuviÅ³' },
-  { code: 'lv', flag: '🇱🇻', name: 'LatvieÅ¡u' },
+  { code: 'sk', flag: '🇸🇰', name: 'Slovenčina' },
+  { code: 'sl', flag: '🇸🇮', name: 'Slovenščina' },
+  { code: 'lt', flag: '🇱🇹', name: 'Lietuvių' },
+  { code: 'lv', flag: '🇱🇻', name: 'Latviešu' },
   { code: 'et', flag: '🇪🇪', name: 'Eesti' },
   { code: 'ga', flag: '🇮🇪', name: 'Gaeilge' },
   { code: 'mt', flag: '🇲🇹', name: 'Malti' },
@@ -45,10 +44,9 @@ export default function Onboarding({ onDone }) {
   const [planLoading, setPlanLoading] = useState(false);
   const [planError, setPlanError] = useState(false);
 
-  const changeLanguage = async (code) => {
+  const changeLanguage = (code) => {
     setSelectedLang(code);
     i18n.changeLanguage(code);
-    await AsyncStorage.setItem('userLanguage', code);
   };
 
   // [ONBOARDING-PLAN] Generer AI-plan ud fra brugerens onboarding-svar

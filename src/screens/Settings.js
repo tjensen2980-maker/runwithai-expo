@@ -198,12 +198,12 @@ function ShoesSection({ profile, onProfileChange, runs, t }) {
 // ─── LANGUAGE SELECTOR ────────────────────────────────────────────────────────
 function LanguageSelector() {
   const { t } = useTranslation();
-  const currentLang = i18n.language;
+  const currentLang = i18n.resolvedLanguage || i18n.language?.split('-')[0] || 'en';
   const langNames = { da: 'Dansk', en: 'English', de: 'Deutsch', fr: 'Français', es: 'Español', it: 'Italiano', pt: 'Português', nl: 'Nederlands', pl: 'Polski', sv: 'Svenska', fi: 'Suomi', el: 'Ελληνικά', cs: 'Čeština', ro: 'Română', hu: 'Magyar', bg: 'Български', hr: 'Hrvatski', sk: 'Slovenčina', sl: 'Slovenščina', lt: 'Lietuvių', lv: 'Latviešu', et: 'Eesti', ga: 'Gaeilge', mt: 'Malti' };
 
   return (
     <View>
-      <Text style={s.sectionTitle}>{t('settings.sections.language') || 'LANGUAGE'}</Text>
+      <Text style={s.sectionTitle}>{t('settings.language')}</Text>
       <View style={s.card}>
         <Text style={{ color: colors.text, fontSize: 15, fontWeight: '600', marginBottom: 8 }}>
           {langNames[currentLang] || currentLang.toUpperCase()}
@@ -212,11 +212,11 @@ function LanguageSelector() {
           style={s.exportBtn}
           onPress={() => Linking.openSettings()}>
           <Text style={s.exportBtnText}>
-            {t('settings.changeLanguageInSettings') || 'Change language in Settings'}
+            {t('settings.changeLanguageInSettings')}
           </Text>
         </TouchableOpacity>
         <Text style={{ color: colors.muted, fontSize: 11, marginTop: 6, textAlign: 'center', lineHeight: 16 }}>
-          {t('settings.languageHint') || 'Settings \u2192 RunWithAI \u2192 Language'}
+          {t('settings.languageHint')}
         </Text>
       </View>
     </View>
