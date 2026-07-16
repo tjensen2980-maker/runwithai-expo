@@ -51,9 +51,13 @@
     "startThisWorkout": "Start denne træning",
     "nextWorkout": "Næste træning",
     "lastActivity": "Seneste aktivitet",
-    "gpsTracking": "GPS tracking",
-    "walkTracking": "Gå tracking",
-    "aiRoutes": "AI ruter"
+    "gpsTracking": "GPS-sporing",
+    "walkTracking": "Sporing af gåtur",
+    "aiRoutes": "AI-ruter",
+    "motionTitle": "Motion",
+    "motionActivities": "Løb · Gang · Cykling",
+    "trainingTitle": "Træning",
+    "trainingActivities": "Styrke, mobilitet m.m."
   },
   "pro": {
     "badge": "PRO",
@@ -317,6 +321,7 @@
     },
     "language": "Sprog",
     "changeLanguageInSettings": "Skift sprog i Indstillinger",
+    "languageHint": "Åbn enhedens indstillinger, og vælg RunWithAI → Sprog.",
     "actions": {
       "save": "Gem ændringer",
       "saved": "Gemt!"
@@ -926,17 +931,17 @@
       "carbRatio": "Insulin/kulhydrat-ratio (g/E, valgfri)",
       "carbRatioHelp": "F.eks. 10 = 1 enhed insulin daekker 10 g kulhydrat. App'en doserer aldrig - tallet bruges kun informativt.",
       "correctionFactor": "Korrektionsfaktor (mmol/L pr. E, valgfri)",
-      "preExerciseMin": "Mindste blodsukker foer motion (mmol/L)",
+      "preExerciseMin": "Laveste blodsukker før motion (mmol/L)",
       "enable": "Aktiver diabetes-stoette",
       "acceptDisclaimer": "Jeg accepterer ansvarsfraskrivelsen ovenfor",
       "disclaimerRequired": "Du skal acceptere ansvarsfraskrivelsen",
-      "missingType": "Vaelg diabetes-type",
+      "missingType": "Vælg diabetestype",
       "save": "Gem profil",
       "saved": "Profil gemt",
       "delete": "Slet diabetes-profil",
       "deleted": "Profil slettet",
-      "deleteConfirm": "Er du sikker paa at du vil slette din diabetes-profil?",
-      "disclaimer": "VIGTIGT: Denne app erstatter IKKE din laege eller dit diabetesteam. Vi foreslaar ALDRIG konkrete insulin-doser eller medicin-aendringer. Juster aldrig din behandling baseret paa app-raad alene. Kontakt altid sundhedspersonalet ved tvivl."
+      "deleteConfirm": "Er du sikker på, at du vil slette din diabetesprofil?",
+      "disclaimer": "VIGTIGT: Denne app erstatter IKKE din læge eller dit diabetesteam. Vi foreslår ALDRIG konkrete insulindoser eller ændringer i medicin. Juster aldrig din behandling ud fra råd fra appen alene. Kontakt altid sundhedspersonale ved tvivl."
     }
   },
   "bloodSugar": {
