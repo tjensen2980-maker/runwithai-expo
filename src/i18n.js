@@ -73,15 +73,20 @@ i18n
     },
   });
 
-// Always use device/per-app locale (respects iOS Settings > RunWithAI > Language)
-const initLanguage = () => {
+// Sprogprioritet: 1) brugerens eget valg (onboarding/indstillinger),
+// 2) enhedens sprog, 3) engelsk.
+const initLanguage = async () => {
   try {
+    // Brugerens eget valg vinder altid
+    const gemt = await AsyncStorage.getItem('userLanguage').catch(() => null);
+    if (gemt && supportedLanguages.includes(gemt)) {
+      i18n.changeLanguage(gemt);
+      return;
+    }
     const locales = Localization.getLocales();
     const deviceLang = locales?.[0]?.languageCode || 'en';
     const lang = supportedLanguages.includes(deviceLang) ? deviceLang : 'en';
     i18n.changeLanguage(lang);
-    // Clear any old manual override from AsyncStorage
-    AsyncStorage.removeItem('userLanguage').catch(() => {});
   } catch (e) {
     console.log('Language init error:', e);
   }
