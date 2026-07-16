@@ -1,4 +1,30 @@
 ﻿{
+  "coachIntro": {
+    "title": "Jūsu MI treneris",
+    "qName": "Sveiki! Esmu jūsu personīgais MI skriešanas treneris 🏃 Pirms sākam, vēlos jūs mazliet iepazīt. Kā jūs sauc?",
+    "qAge": "Prieks iepazīties, {{name}}! Cik jums gadu?",
+    "qHeight": "Kāds ir jūsu augums? (cm)",
+    "qWeight": "Un cik jūs aptuveni sverat? (kg)",
+    "qLevel": "Paldies! Cik bieži jūs pašlaik skrienat?",
+    "levelBeginner": "Tikko sāku skriet",
+    "levelIntermediate": "Skrienu laiku pa laikam",
+    "levelAdvanced": "Skrienu katru nedēļu",
+    "qGoal": "Lieliski! Kādu mērķi vēlaties sasniegt?",
+    "goal5k": "Noskriet 5 km",
+    "goal10k": "Noskriet 10 km",
+    "goalHalf": "Pusmaratons",
+    "goalFull": "Maratons",
+    "goalWeight": "Veselība un svara samazināšana",
+    "qInjuries": "Pēdējais jautājums: vai jums ir traumas vai sāpes, kas man jāņem vērā, veidojot plānu?",
+    "injuriesNone": "Nē, traumu nav",
+    "phName": "Jūsu vārds",
+    "phAge": "Vecums",
+    "phHeight": "Augums cm",
+    "phWeight": "Svars kg",
+    "phInjuries": "Īsi aprakstiet vai izvēlieties Nav",
+    "done": "Lieliski, {{name}}! Man ir viss nepieciešamais. Tagad izveidošu jūsu personīgo treniņu plānu 🌱",
+    "fallbackYou": "skrējēj"
+  },
   "tabs": {
     "home": "Sākums",
     "plan": "Plāns",
@@ -474,7 +500,14 @@
     "defaultRunner": "Skrējējs",
     "greeting": "Sveiki {{name}}! Esmu tavs AI treneris. Kā varu palīdzēt šodien?",
     "clearedGreeting": "Saruna notīrīta! Kā es varu jums palīdzēt, {{name}}?",
-    "connectionError": "Atvainojiet, nevarēju izveidot savienojumu. Lūdzu, mēģiniet vēlreiz."
+    "connectionError": "Atvainojiet, nevarēju izveidot savienojumu. Lūdzu, mēģiniet vēlreiz.",
+    "mealPlanTitle": "Uztura plāns",
+    "totalKcal": "Kopā {{kcal}} kcal",
+    "macros": "{{kcal}} kcal · O {{protein}} g · Og {{carbs}} g · T {{fat}} g",
+    "logAllMeals": "Reģistrēt visas ēdienreizes",
+    "logged": "Reģistrēts",
+    "mealPlanLoggedMessage": "Uztura plāns ir reģistrēts šodienai.",
+    "mealPlanLogError": "Uztura plānu neizdevās reģistrēt: {{error}}"
   },
   "proUpsell": {
     "title": "Atbloķējiet pilnu jaudu",

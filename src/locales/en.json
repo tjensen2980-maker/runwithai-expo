@@ -686,7 +686,14 @@
     "defaultRunner": "runner",
     "greeting": "Hi {{name}}! I am your AI coach. How can I help you today?",
     "clearedGreeting": "Conversation cleared! How can I help you, {{name}}?",
-    "connectionError": "Sorry, I couldn't connect. Please try again."
+    "connectionError": "Sorry, I couldn't connect. Please try again.",
+    "mealPlanTitle": "Meal plan",
+    "totalKcal": "{{kcal}} kcal total",
+    "macros": "{{kcal}} kcal · P {{protein}} g · C {{carbs}} g · F {{fat}} g",
+    "logAllMeals": "Log all meals",
+    "logged": "Logged",
+    "mealPlanLoggedMessage": "The meal plan has been logged for today.",
+    "mealPlanLogError": "Could not log the meal plan: {{error}}"
   },
   "proUpsell": {
     "title": "Unlock full power",

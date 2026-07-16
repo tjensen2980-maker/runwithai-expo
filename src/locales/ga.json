@@ -1,4 +1,30 @@
 ﻿{
+  "coachIntro": {
+    "title": "Do chóitseálaí AI",
+    "qName": "Dia duit! Is mise do chóitseálaí reatha AI pearsanta 🏃 Sula dtosóimid, ba mhaith liom aithne níos fearr a chur ort. Cad is ainm duit?",
+    "qAge": "Tá áthas orm bualadh leat, {{name}}! Cén aois thú?",
+    "qHeight": "Cé chomh hard is atá tú? (i cm)",
+    "qWeight": "Agus cén meáchan atá ionat, a bheag nó a mhór? (i kg)",
+    "qLevel": "Go raibh maith agat! Cé chomh minic a ritheann tú faoi láthair?",
+    "levelBeginner": "Táim díreach ag tosú ar an rith",
+    "levelIntermediate": "Rithim anois is arís",
+    "levelAdvanced": "Rithim gach seachtain",
+    "qGoal": "Ar fheabhas! Cén sprioc ba mhaith leat a bhaint amach?",
+    "goal5k": "5 km a rith",
+    "goal10k": "10 km a rith",
+    "goalHalf": "Leathmharatón",
+    "goalFull": "Maratón",
+    "goalWeight": "Sláinte agus meáchain caillteanas",
+    "qInjuries": "Ceist dheireanach: an bhfuil gortuithe nó pianta agat ar cheart dom a chur san áireamh i do phlean?",
+    "injuriesNone": "Níl, níl aon ghortú agam",
+    "phName": "D’ainm",
+    "phAge": "Aois",
+    "phHeight": "Airde i cm",
+    "phWeight": "Meáchan i kg",
+    "phInjuries": "Déan cur síos gairid nó roghnaigh Ceann ar bith",
+    "done": "Ar fheabhas, {{name}}! Tá gach rud atá uaim agam. Anois cruthóidh mé do phlean traenála pearsanta 🌱",
+    "fallbackYou": "reathaitheoir"
+  },
   "tabs": {
     "home": "Baile",
     "plan": "Plean",
@@ -474,7 +500,14 @@
     "defaultRunner": "Ritheoir",
     "greeting": "Dia duit {{name}}! Is mise do chóitseálaí AI. Conas is féidir liom cabhrú leat inniu?",
     "clearedGreeting": "Comhrá glanta! Conas is féidir liom cabhrú leat, {{name}}?",
-    "connectionError": "Gabh mo leithscéal, níorbh fhéidir ceangal. Bain triail eile as."
+    "connectionError": "Gabh mo leithscéal, níorbh fhéidir ceangal. Bain triail eile as.",
+    "mealPlanTitle": "Plean béilí",
+    "totalKcal": "{{kcal}} kcal san iomlán",
+    "macros": "{{kcal}} kcal · P {{protein}} g · C {{carbs}} g · S {{fat}} g",
+    "logAllMeals": "Logáil gach béile",
+    "logged": "Logáilte",
+    "mealPlanLoggedMessage": "Logáladh an plean béilí don lá inniu.",
+    "mealPlanLogError": "Níorbh fhéidir an plean béilí a logáil: {{error}}"
   },
   "proUpsell": {
     "title": "Díghlasáil an chumhacht iomlán",

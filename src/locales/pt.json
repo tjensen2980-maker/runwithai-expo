@@ -1,4 +1,30 @@
 ﻿{
+  "coachIntro": {
+    "title": "O seu treinador de IA",
+    "qName": "Olá! Sou o seu treinador pessoal de corrida com IA 🏃 Antes de começarmos, gostaria de o conhecer melhor. Como se chama?",
+    "qAge": "É um prazer conhecê-lo, {{name}}! Que idade tem?",
+    "qHeight": "Qual é a sua altura? (em cm)",
+    "qWeight": "E quanto pesa aproximadamente? (em kg)",
+    "qLevel": "Obrigado! Com que frequência corre atualmente?",
+    "levelBeginner": "Estou a começar a correr",
+    "levelIntermediate": "Corro de vez em quando",
+    "levelAdvanced": "Corro todas as semanas",
+    "qGoal": "Ótimo! Que objetivo deseja alcançar?",
+    "goal5k": "Correr 5 km",
+    "goal10k": "Correr 10 km",
+    "goalHalf": "Meia maratona",
+    "goalFull": "Maratona",
+    "goalWeight": "Saúde e perda de peso",
+    "qInjuries": "Última pergunta: tem alguma lesão ou dor que eu deva considerar ao criar o seu plano?",
+    "injuriesNone": "Não, nenhuma lesão",
+    "phName": "O seu nome",
+    "phAge": "Idade",
+    "phHeight": "Altura em cm",
+    "phWeight": "Peso em kg",
+    "phInjuries": "Descreva brevemente ou escolha Nenhuma",
+    "done": "Perfeito, {{name}}! Já tenho tudo o que preciso. Agora vou criar o seu plano de treino pessoal 🌱",
+    "fallbackYou": "corredor"
+  },
   "tabs": {
     "home": "Início",
     "plan": "Plano",
@@ -474,7 +500,14 @@
     "defaultRunner": "corredor",
     "greeting": "Olá {{name}}! Sou o seu AI coach. Como posso ajudar hoje?",
     "clearedGreeting": "Conversa limpa! Como posso ajudá-lo, {{name}}?",
-    "connectionError": "Desculpe, não consegui ligar. Por favor tente novamente."
+    "connectionError": "Desculpe, não consegui ligar. Por favor tente novamente.",
+    "mealPlanTitle": "Plano alimentar",
+    "totalKcal": "{{kcal}} kcal no total",
+    "macros": "{{kcal}} kcal · P {{protein}} g · C {{carbs}} g · G {{fat}} g",
+    "logAllMeals": "Registar todas as refeições",
+    "logged": "Registado",
+    "mealPlanLoggedMessage": "O plano alimentar foi registado para hoje.",
+    "mealPlanLogError": "Não foi possível registar o plano alimentar: {{error}}"
   },
   "proUpsell": {
     "title": "Desbloqueie todo o potencial",

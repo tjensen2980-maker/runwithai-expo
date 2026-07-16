@@ -1,4 +1,30 @@
 ﻿{
+  "coachIntro": {
+    "title": "Antrenorul tău AI",
+    "qName": "Salut! Sunt antrenorul tău personal de alergare AI 🏃 Înainte să începem, aș vrea să te cunosc puțin. Cum te numești?",
+    "qAge": "Îmi pare bine, {{name}}! Câți ani ai?",
+    "qHeight": "Ce înălțime ai? (în cm)",
+    "qWeight": "Și aproximativ cât cântărești? (în kg)",
+    "qLevel": "Mulțumesc! Cât de des alergi în prezent?",
+    "levelBeginner": "Abia încep să alerg",
+    "levelIntermediate": "Alerg din când în când",
+    "levelAdvanced": "Alerg în fiecare săptămână",
+    "qGoal": "Minunat! Ce obiectiv vrei să atingi?",
+    "goal5k": "Alergare 5 km",
+    "goal10k": "Alergare 10 km",
+    "goalHalf": "Semimaraton",
+    "goalFull": "Maraton",
+    "goalWeight": "Sănătate și scădere în greutate",
+    "qInjuries": "Ultima întrebare: ai accidentări sau dureri de care să țin cont în planul tău?",
+    "injuriesNone": "Nu, nicio accidentare",
+    "phName": "Numele tău",
+    "phAge": "Vârsta",
+    "phHeight": "Înălțime în cm",
+    "phWeight": "Greutate în kg",
+    "phInjuries": "Descrie pe scurt sau alege Niciuna",
+    "done": "Perfect, {{name}}! Am tot ce îmi trebuie. Acum îți voi crea planul personal de antrenament 🌱",
+    "fallbackYou": "alergătorule"
+  },
   "tabs": {
     "home": "Acasă",
     "plan": "Plan",
@@ -474,7 +500,14 @@
     "defaultRunner": "Alergător",
     "greeting": "Salut {{name}}! Sunt coach-ul tău AI. Cum te pot ajuta azi?",
     "clearedGreeting": "Conversație ștearsă! Cum te pot ajuta, {{name}}?",
-    "connectionError": "Îmi pare rău, nu m-am putut conecta. Te rog încearcă din nou."
+    "connectionError": "Îmi pare rău, nu m-am putut conecta. Te rog încearcă din nou.",
+    "mealPlanTitle": "Plan alimentar",
+    "totalKcal": "{{kcal}} kcal în total",
+    "macros": "{{kcal}} kcal · P {{protein}} g · C {{carbs}} g · G {{fat}} g",
+    "logAllMeals": "Înregistrează toate mesele",
+    "logged": "Înregistrat",
+    "mealPlanLoggedMessage": "Planul alimentar a fost înregistrat pentru astăzi.",
+    "mealPlanLogError": "Planul alimentar nu a putut fi înregistrat: {{error}}"
   },
   "proUpsell": {
     "title": "Deblochează puterea completă",

@@ -1,4 +1,30 @@
 ﻿{
+  "coachIntro": {
+    "title": "Vaš trener AI",
+    "qName": "Živjo! Sem vaš osebni tekaški trener AI 🏃 Preden začnemo, bi vas rad malo spoznal. Kako vam je ime?",
+    "qAge": "Veseli me, {{name}}! Koliko ste stari?",
+    "qHeight": "Kako visoki ste? (v cm)",
+    "qWeight": "In koliko približno tehtate? (v kg)",
+    "qLevel": "Hvala! Kako pogosto trenutno tečete?",
+    "levelBeginner": "S tekom šele začenjam",
+    "levelIntermediate": "Tečem občasno",
+    "levelAdvanced": "Tečem vsak teden",
+    "qGoal": "Odlično! Kateri cilj želite doseči?",
+    "goal5k": "Preteči 5 km",
+    "goal10k": "Preteči 10 km",
+    "goalHalf": "Polmaraton",
+    "goalFull": "Maraton",
+    "goalWeight": "Zdravje in izguba teže",
+    "qInjuries": "Še zadnje vprašanje: imate poškodbe ali bolečine, ki jih moram upoštevati pri načrtu?",
+    "injuriesNone": "Ne, nimam poškodb",
+    "phName": "Vaše ime",
+    "phAge": "Starost",
+    "phHeight": "Višina v cm",
+    "phWeight": "Teža v kg",
+    "phInjuries": "Na kratko opišite ali izberite Brez",
+    "done": "Odlično, {{name}}! Imam vse, kar potrebujem. Zdaj bom pripravil vaš osebni načrt treninga 🌱",
+    "fallbackYou": "tekač"
+  },
   "tabs": {
     "home": "Domov",
     "plan": "Načrt",
@@ -474,7 +500,14 @@
     "defaultRunner": "Tekač",
     "greeting": "Pozdravljen {{name}}! Sem tvoj AI trener. Kako ti lahko danes pomagam?",
     "clearedGreeting": "Pogovor počiščen! Kako ti lahko pomagam, {{name}}?",
-    "connectionError": "Oprostite, nisem se mogel povezati. Prosimo, poskusite znova."
+    "connectionError": "Oprostite, nisem se mogel povezati. Prosimo, poskusite znova.",
+    "mealPlanTitle": "Prehranski načrt",
+    "totalKcal": "Skupaj {{kcal}} kcal",
+    "macros": "{{kcal}} kcal · B {{protein}} g · O {{carbs}} g · M {{fat}} g",
+    "logAllMeals": "Zabeleži vse obroke",
+    "logged": "Zabeleženo",
+    "mealPlanLoggedMessage": "Prehranski načrt je zabeležen za danes.",
+    "mealPlanLogError": "Prehranskega načrta ni bilo mogoče zabeležiti: {{error}}"
   },
   "proUpsell": {
     "title": "Odklenite polno moč",

@@ -1,4 +1,30 @@
 ﻿{
+  "coachIntro": {
+    "title": "Twój trener AI",
+    "qName": "Cześć! Jestem Twoim osobistym trenerem biegania AI 🏃 Zanim zaczniemy, chcę Cię trochę poznać. Jak masz na imię?",
+    "qAge": "Miło Cię poznać, {{name}}! Ile masz lat?",
+    "qHeight": "Jaki masz wzrost? (w cm)",
+    "qWeight": "A ile mniej więcej ważysz? (w kg)",
+    "qLevel": "Dziękuję! Jak często obecnie biegasz?",
+    "levelBeginner": "Dopiero zaczynam biegać",
+    "levelIntermediate": "Biegam od czasu do czasu",
+    "levelAdvanced": "Biegam co tydzień",
+    "qGoal": "Świetnie! Jaki cel chcesz osiągnąć?",
+    "goal5k": "Przebiec 5 km",
+    "goal10k": "Przebiec 10 km",
+    "goalHalf": "Półmaraton",
+    "goalFull": "Maraton",
+    "goalWeight": "Zdrowie i utrata wagi",
+    "qInjuries": "Ostatnie pytanie: czy masz urazy lub dolegliwości, które powinienem uwzględnić w planie?",
+    "injuriesNone": "Nie, nie mam urazów",
+    "phName": "Twoje imię",
+    "phAge": "Wiek",
+    "phHeight": "Wzrost w cm",
+    "phWeight": "Waga w kg",
+    "phInjuries": "Opisz krótko lub wybierz Brak",
+    "done": "Świetnie, {{name}}! Mam już wszystko, czego potrzebuję. Teraz przygotuję Twój osobisty plan treningowy 🌱",
+    "fallbackYou": "biegaczu"
+  },
   "tabs": {
     "home": "Główna",
     "plan": "Plan",
@@ -474,7 +500,14 @@
     "defaultRunner": "Biegacz",
     "greeting": "Cześć {{name}}! Jestem twoim AI coachem. Jak mogę ci dzisiaj pomóc?",
     "clearedGreeting": "Rozmowa wyczyszczona! Jak mogę Ci pomóc, {{name}}?",
-    "connectionError": "Przepraszam, nie udało się połączyć. Proszę spróbuj ponownie."
+    "connectionError": "Przepraszam, nie udało się połączyć. Proszę spróbuj ponownie.",
+    "mealPlanTitle": "Plan posiłków",
+    "totalKcal": "Łącznie {{kcal}} kcal",
+    "macros": "{{kcal}} kcal · B {{protein}} g · W {{carbs}} g · T {{fat}} g",
+    "logAllMeals": "Zapisz wszystkie posiłki",
+    "logged": "Zapisano",
+    "mealPlanLoggedMessage": "Plan posiłków został zapisany na dziś.",
+    "mealPlanLogError": "Nie udało się zapisać planu posiłków: {{error}}"
   },
   "proUpsell": {
     "title": "Odblokuj pełną moc",

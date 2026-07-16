@@ -1,4 +1,30 @@
 ﻿{
+  "coachIntro": {
+    "title": "AI-valmentajasi",
+    "qName": "Hei! Olen henkilökohtainen AI-juoksuvalmentajasi 🏃 Ennen kuin aloitamme, haluan tutustua sinuun hieman. Mikä sinun nimesi on?",
+    "qAge": "Hauska tutustua, {{name}}! Kuinka vanha olet?",
+    "qHeight": "Kuinka pitkä olet? (cm)",
+    "qWeight": "Ja kuinka paljon painat suunnilleen? (kg)",
+    "qLevel": "Kiitos! Kuinka usein juokset tällä hetkellä?",
+    "levelBeginner": "Olen vasta aloittamassa juoksua",
+    "levelIntermediate": "Juoksen silloin tällöin",
+    "levelAdvanced": "Juoksen joka viikko",
+    "qGoal": "Hienoa! Minkä tavoitteen haluat saavuttaa?",
+    "goal5k": "Juosta 5 km",
+    "goal10k": "Juosta 10 km",
+    "goalHalf": "Puolimaraton",
+    "goalFull": "Maraton",
+    "goalWeight": "Terveys ja painonpudotus",
+    "qInjuries": "Viimeinen kysymys: onko sinulla vammoja tai kipuja, jotka minun pitäisi huomioida suunnitelmassasi?",
+    "injuriesNone": "Ei, ei vammoja",
+    "phName": "Nimesi",
+    "phAge": "Ikä",
+    "phHeight": "Pituus cm",
+    "phWeight": "Paino kg",
+    "phInjuries": "Kuvaile lyhyesti tai valitse Ei vammoja",
+    "done": "Hienoa, {{name}}! Minulla on kaikki tarvittava. Nyt teen sinulle henkilökohtaisen harjoitussuunnitelman 🌱",
+    "fallbackYou": "juoksija"
+  },
   "tabs": {
     "home": "Koti",
     "plan": "Suunnitelma",
@@ -474,7 +500,14 @@
     "defaultRunner": "Juoksija",
     "greeting": "Hei {{name}}! Olen AI-valmentajasi. Miten voin auttaa tänään?",
     "clearedGreeting": "Keskustelu tyhjennetty! Kuinka voin auttaa sinua, {{name}}?",
-    "connectionError": "Valitan, yhteys epäonnistui. Yritä uudelleen."
+    "connectionError": "Valitan, yhteys epäonnistui. Yritä uudelleen.",
+    "mealPlanTitle": "Ateriasuunnitelma",
+    "totalKcal": "Yhteensä {{kcal}} kcal",
+    "macros": "{{kcal}} kcal · P {{protein}} g · H {{carbs}} g · R {{fat}} g",
+    "logAllMeals": "Kirjaa kaikki ateriat",
+    "logged": "Kirjattu",
+    "mealPlanLoggedMessage": "Ateriasuunnitelma on kirjattu tälle päivälle.",
+    "mealPlanLogError": "Ateriasuunnitelmaa ei voitu kirjata: {{error}}"
   },
   "proUpsell": {
     "title": "Avaa täysi voima",

@@ -1,4 +1,30 @@
 ﻿{
+  "coachIntro": {
+    "title": "A te AI-edződ",
+    "qName": "Szia! Én vagyok a személyes AI-futóedződ 🏃 Mielőtt elkezdjük, szeretnélek egy kicsit megismerni. Hogy hívnak?",
+    "qAge": "Örülök, hogy megismerhetlek, {{name}}! Hány éves vagy?",
+    "qHeight": "Milyen magas vagy? (cm-ben)",
+    "qWeight": "És körülbelül hány kiló vagy?",
+    "qLevel": "Köszönöm! Milyen gyakran futsz jelenleg?",
+    "levelBeginner": "Most kezdek futni",
+    "levelIntermediate": "Időnként futok",
+    "levelAdvanced": "Minden héten futok",
+    "qGoal": "Nagyszerű! Milyen célt szeretnél elérni?",
+    "goal5k": "5 km lefutása",
+    "goal10k": "10 km lefutása",
+    "goalHalf": "Félmaraton",
+    "goalFull": "Maraton",
+    "goalWeight": "Egészség és fogyás",
+    "qInjuries": "Utolsó kérdés: van sérülésed vagy fájdalmad, amit figyelembe kell vennem a tervednél?",
+    "injuriesNone": "Nincs sérülésem",
+    "phName": "A neved",
+    "phAge": "Életkor",
+    "phHeight": "Magasság cm-ben",
+    "phWeight": "Testsúly kg-ban",
+    "phInjuries": "Írd le röviden, vagy válaszd a Nincs lehetőséget",
+    "done": "Tökéletes, {{name}}! Minden szükséges információ megvan. Most elkészítem a személyes edzéstervedet 🌱",
+    "fallbackYou": "futó"
+  },
   "tabs": {
     "home": "Kezdőlap",
     "plan": "Terv",
@@ -474,7 +500,14 @@
     "defaultRunner": "Futó",
     "greeting": "Szia {{name}}! Én vagyok az AI coachod. Miben segíthetek ma?",
     "clearedGreeting": "Beszélgetés törölve! Miben segíthetek, {{name}}?",
-    "connectionError": "Sajnálom, nem tudtam csatlakozni. Kérlek próbáld újra."
+    "connectionError": "Sajnálom, nem tudtam csatlakozni. Kérlek próbáld újra.",
+    "mealPlanTitle": "Étrend",
+    "totalKcal": "Összesen {{kcal}} kcal",
+    "macros": "{{kcal}} kcal · F {{protein}} g · Sz {{carbs}} g · Zs {{fat}} g",
+    "logAllMeals": "Minden étkezés naplózása",
+    "logged": "Naplózva",
+    "mealPlanLoggedMessage": "A mai étrend naplózva lett.",
+    "mealPlanLogError": "Az étrendet nem sikerült naplózni: {{error}}"
   },
   "proUpsell": {
     "title": "Oldd fel a teljes erőt",

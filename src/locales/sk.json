@@ -1,4 +1,30 @@
 ﻿{
+  "coachIntro": {
+    "title": "Váš AI tréner",
+    "qName": "Ahoj! Som váš osobný AI bežecký tréner 🏃 Skôr než začneme, rád vás trochu spoznám. Ako sa voláte?",
+    "qAge": "Teší ma, {{name}}! Koľko máte rokov?",
+    "qHeight": "Aká je vaša výška? (v cm)",
+    "qWeight": "A koľko približne vážite? (v kg)",
+    "qLevel": "Ďakujem! Ako často teraz behávate?",
+    "levelBeginner": "S behaním práve začínam",
+    "levelIntermediate": "Behávam občas",
+    "levelAdvanced": "Behávam každý týždeň",
+    "qGoal": "Skvelé! Aký cieľ chcete dosiahnuť?",
+    "goal5k": "Zabehnúť 5 km",
+    "goal10k": "Zabehnúť 10 km",
+    "goalHalf": "Polmaratón",
+    "goalFull": "Maratón",
+    "goalWeight": "Zdravie a chudnutie",
+    "qInjuries": "Posledná otázka: máte zranenia alebo bolesti, ktoré mám pri tvorbe plánu zohľadniť?",
+    "injuriesNone": "Nie, žiadne zranenia",
+    "phName": "Vaše meno",
+    "phAge": "Vek",
+    "phHeight": "Výška v cm",
+    "phWeight": "Hmotnosť v kg",
+    "phInjuries": "Stručne opíšte alebo vyberte Žiadne",
+    "done": "Skvelé, {{name}}! Mám všetko, čo potrebujem. Teraz vytvorím váš osobný tréningový plán 🌱",
+    "fallbackYou": "bežec"
+  },
   "tabs": {
     "home": "Domov",
     "plan": "Plán",
@@ -474,7 +500,14 @@
     "defaultRunner": "Bežec",
     "greeting": "Ahoj {{name}}! Som tvoj AI kouč. Ako ti dnes môžem pomôcť?",
     "clearedGreeting": "Konverzácia vymazaná! Ako ti môžem pomôcť, {{name}}?",
-    "connectionError": "Prepáč, nepodarilo sa mi pripojiť. Prosím skús znova."
+    "connectionError": "Prepáč, nepodarilo sa mi pripojiť. Prosím skús znova.",
+    "mealPlanTitle": "Jedálniček",
+    "totalKcal": "Spolu {{kcal}} kcal",
+    "macros": "{{kcal}} kcal · B {{protein}} g · S {{carbs}} g · T {{fat}} g",
+    "logAllMeals": "Zapísať všetky jedlá",
+    "logged": "Zapísané",
+    "mealPlanLoggedMessage": "Jedálniček bol zapísaný na dnešný deň.",
+    "mealPlanLogError": "Jedálniček sa nepodarilo zapísať: {{error}}"
   },
   "proUpsell": {
     "title": "Odomknite plnú silu",

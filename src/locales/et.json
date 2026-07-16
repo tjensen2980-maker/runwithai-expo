@@ -1,4 +1,30 @@
 ﻿{
+  "coachIntro": {
+    "title": "Sinu AI-treener",
+    "qName": "Tere! Olen sinu isiklik AI-jooksutreener 🏃 Enne alustamist soovin sind veidi tundma õppida. Mis su nimi on?",
+    "qAge": "Meeldiv tutvuda, {{name}}! Kui vana sa oled?",
+    "qHeight": "Kui pikk sa oled? (cm)",
+    "qWeight": "Ja kui palju sa umbes kaalud? (kg)",
+    "qLevel": "Aitäh! Kui sageli sa praegu jooksed?",
+    "levelBeginner": "Alles alustan jooksmisega",
+    "levelIntermediate": "Jooksen aeg-ajalt",
+    "levelAdvanced": "Jooksen igal nädalal",
+    "qGoal": "Suurepärane! Millise eesmärgi soovid saavutada?",
+    "goal5k": "Joosta 5 km",
+    "goal10k": "Joosta 10 km",
+    "goalHalf": "Poolmaraton",
+    "goalFull": "Maraton",
+    "goalWeight": "Tervis ja kaalulangus",
+    "qInjuries": "Viimane küsimus: kas sul on vigastusi või valusid, mida peaksin plaani koostamisel arvestama?",
+    "injuriesNone": "Ei, vigastusi pole",
+    "phName": "Sinu nimi",
+    "phAge": "Vanus",
+    "phHeight": "Pikkus cm",
+    "phWeight": "Kaal kg",
+    "phInjuries": "Kirjelda lühidalt või vali Puuduvad",
+    "done": "Suurepärane, {{name}}! Mul on kõik vajalik olemas. Nüüd koostan sinu isikliku treeningplaani 🌱",
+    "fallbackYou": "jooksja"
+  },
   "tabs": {
     "home": "Avaleht",
     "plan": "Plaan",
@@ -474,7 +500,14 @@
     "defaultRunner": "Jooksja",
     "greeting": "Tere {{name}}! Olen sinu AI treener. Kuidas saan täna aidata?",
     "clearedGreeting": "Vestlus tühjendatud! Kuidas saan sind aidata, {{name}}?",
-    "connectionError": "Vabandust, ei saanud ühendust. Palun proovige uuesti."
+    "connectionError": "Vabandust, ei saanud ühendust. Palun proovige uuesti.",
+    "mealPlanTitle": "Toitumiskava",
+    "totalKcal": "Kokku {{kcal}} kcal",
+    "macros": "{{kcal}} kcal · V {{protein}} g · S {{carbs}} g · R {{fat}} g",
+    "logAllMeals": "Logi kõik toidukorrad",
+    "logged": "Logitud",
+    "mealPlanLoggedMessage": "Toitumiskava on tänaseks logitud.",
+    "mealPlanLogError": "Toitumiskava ei saanud logida: {{error}}"
   },
   "proUpsell": {
     "title": "Ava täielik võimekus",

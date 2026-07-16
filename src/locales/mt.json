@@ -1,4 +1,30 @@
 ﻿{
+  "coachIntro": {
+    "title": "Il-kowċ AI tiegħek",
+    "qName": "Bonġu! Jien il-kowċ personali AI tiegħek għall-ġiri 🏃 Qabel nibdew, nixtieq insir nafek ftit aħjar. X’jismek?",
+    "qAge": "Nieħu gost niltaqa’ miegħek, {{name}}! Kemm għandek żmien?",
+    "qHeight": "Kemm int twil? (f’ċm)",
+    "qWeight": "U bejn wieħed u ieħor kemm tiżen? (f’kg)",
+    "qLevel": "Grazzi! Kemm-il darba tiġri bħalissa?",
+    "levelBeginner": "Għadni qed nibda niġri",
+    "levelIntermediate": "Niġri kultant",
+    "levelAdvanced": "Niġri kull ġimgħa",
+    "qGoal": "Tajjeb ħafna! Liema mira tixtieq tilħaq?",
+    "goal5k": "Niġri 5 km",
+    "goal10k": "Niġri 10 km",
+    "goalHalf": "Nofs maratona",
+    "goalFull": "Maratona",
+    "goalWeight": "Saħħa u telf ta’ piż",
+    "qInjuries": "L-aħħar mistoqsija: għandek xi korrimenti jew uġigħ li għandi nqis fil-pjan tiegħek?",
+    "injuriesNone": "Le, m’għandi l-ebda korriment",
+    "phName": "Ismek",
+    "phAge": "Età",
+    "phHeight": "Tul f’ċm",
+    "phWeight": "Piż f’kg",
+    "phInjuries": "Iddeskrivi fil-qosor jew agħżel L-ebda",
+    "done": "Tajjeb ħafna, {{name}}! Għandi dak kollu li għandi bżonn. Issa se noħloq il-pjan ta’ taħriġ personali tiegħek 🌱",
+    "fallbackYou": "runner"
+  },
   "tabs": {
     "home": "Paġna ewlenija",
     "plan": "Pjan",
@@ -474,7 +500,14 @@
     "defaultRunner": "Ġerrej",
     "greeting": "Hi {{name}}! Jien il-coach AI tiegħek. Kif nista' ngħinek illum?",
     "clearedGreeting": "Konverżazzjoni mħassra! Kif nista' ngħinek, {{name}}?",
-    "connectionError": "Skużani, ma stajtx nikkonnettja. Jekk jogħġbok erġa' pprova."
+    "connectionError": "Skużani, ma stajtx nikkonnettja. Jekk jogħġbok erġa' pprova.",
+    "mealPlanTitle": "Pjan tal-ikel",
+    "totalKcal": "{{kcal}} kcal b’kollox",
+    "macros": "{{kcal}} kcal · P {{protein}} g · K {{carbs}} g · X {{fat}} g",
+    "logAllMeals": "Irreġistra l-ikliet kollha",
+    "logged": "Irreġistrat",
+    "mealPlanLoggedMessage": "Il-pjan tal-ikel ġie rreġistrat għal-lum.",
+    "mealPlanLogError": "Ma setax jiġi rreġistrat il-pjan tal-ikel: {{error}}"
   },
   "proUpsell": {
     "title": "Iftaħ il-qawwa sħiħa",

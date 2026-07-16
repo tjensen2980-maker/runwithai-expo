@@ -686,7 +686,14 @@
     "defaultRunner": "løber",
     "greeting": "Hej {{name}}! Jeg er din AI coach. Hvad kan jeg hjælpe med i dag?",
     "clearedGreeting": "Samtale ryddet! Hvad kan jeg hjælpe dig med, {{name}}?",
-    "connectionError": "Beklager, jeg kunne ikke forbinde. Prøv igen."
+    "connectionError": "Beklager, jeg kunne ikke forbinde. Prøv igen.",
+    "mealPlanTitle": "Madplan",
+    "totalKcal": "{{kcal}} kcal i alt",
+    "macros": "{{kcal}} kcal · P {{protein}} g · K {{carbs}} g · F {{fat}} g",
+    "logAllMeals": "Log alle måltider",
+    "logged": "Logget",
+    "mealPlanLoggedMessage": "Madplanen er logget for i dag.",
+    "mealPlanLogError": "Kunne ikke logge madplanen: {{error}}"
   },
   "proUpsell": {
     "title": "Lås op for fuld kraft",

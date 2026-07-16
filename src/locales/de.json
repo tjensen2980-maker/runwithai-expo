@@ -1,4 +1,30 @@
 ﻿{
+  "coachIntro": {
+    "title": "Dein KI-Coach",
+    "qName": "Hallo! Ich bin dein persönlicher KI-Laufcoach 🏃 Bevor wir starten, möchte ich dich etwas kennenlernen. Wie heißt du?",
+    "qAge": "Schön, dich kennenzulernen, {{name}}! Wie alt bist du?",
+    "qHeight": "Wie groß bist du? (in cm)",
+    "qWeight": "Und wie viel wiegst du ungefähr? (in kg)",
+    "qLevel": "Danke! Wie viel läufst du derzeit?",
+    "levelBeginner": "Ich fange gerade mit dem Laufen an",
+    "levelIntermediate": "Ich laufe gelegentlich",
+    "levelAdvanced": "Ich laufe jede Woche",
+    "qGoal": "Super! Was möchtest du erreichen?",
+    "goal5k": "5 km laufen",
+    "goal10k": "10 km laufen",
+    "goalHalf": "Halbmarathon",
+    "goalFull": "Marathon",
+    "goalWeight": "Gesundheit & Gewichtsverlust",
+    "qInjuries": "Letzte Frage: Gibt es Verletzungen oder Schmerzen, die ich bei deinem Plan berücksichtigen soll?",
+    "injuriesNone": "Nein, keine Verletzungen",
+    "phName": "Dein Name",
+    "phAge": "Alter",
+    "phHeight": "Größe in cm",
+    "phWeight": "Gewicht in kg",
+    "phInjuries": "Kurz beschreiben oder Keine auswählen",
+    "done": "Perfekt, {{name}}! Ich habe alles, was ich brauche. Jetzt erstelle ich deinen persönlichen Trainingsplan 🌱",
+    "fallbackYou": "Läufer"
+  },
   "tabs": {
     "home": "Startseite",
     "plan": "Plan",
@@ -474,7 +500,14 @@
     "defaultRunner": "Läufer",
     "greeting": "Hallo {{name}}! Ich bin dein AI-Coach. Wie kann ich dir heute helfen?",
     "clearedGreeting": "Unterhaltung gelöscht! Wie kann ich dir helfen, {{name}}?",
-    "connectionError": "Entschuldigung, ich konnte keine Verbindung herstellen. Bitte versuche es erneut."
+    "connectionError": "Entschuldigung, ich konnte keine Verbindung herstellen. Bitte versuche es erneut.",
+    "mealPlanTitle": "Ernährungsplan",
+    "totalKcal": "Insgesamt {{kcal}} kcal",
+    "macros": "{{kcal}} kcal · E {{protein}} g · KH {{carbs}} g · F {{fat}} g",
+    "logAllMeals": "Alle Mahlzeiten protokollieren",
+    "logged": "Protokolliert",
+    "mealPlanLoggedMessage": "Der Ernährungsplan wurde für heute protokolliert.",
+    "mealPlanLogError": "Der Ernährungsplan konnte nicht protokolliert werden: {{error}}"
   },
   "proUpsell": {
     "title": "Volle Power freischalten",
