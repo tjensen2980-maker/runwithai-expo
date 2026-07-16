@@ -1,4 +1,4 @@
-﻿{
+{
   "coachIntro": {
     "title": "Antrenorul tău AI",
     "qName": "Salut! Sunt antrenorul tău personal de alergare AI 🏃 Înainte să începem, aș vrea să te cunosc puțin. Cum te numești?",
@@ -55,7 +55,11 @@
     "lastActivity": "Ultima activitate",
     "gpsTracking": "Urmărire GPS",
     "walkTracking": "Urmărire mers",
-    "aiRoutes": "Trasee AI"
+    "aiRoutes": "Trasee AI",
+    "motionTitle": "Cardio",
+    "motionActivities": "Aleargă · Mergi · Mergi",
+    "trainingTitle": "Instruire",
+    "trainingActivities": "Forță, mobilitate și multe altele"
   },
   "pro": {
     "badge": "PRO",
@@ -86,6 +90,10 @@
     "aiRoutes": {
       "title": "Trasee AI",
       "description": "Primește recomandări de trasee bazate pe antrenamentul tău"
+    },
+    "nutrition": {
+      "title": "Instrument de urmărire a caloriilor",
+      "description": "Numărați caloriile, înregistrați mesele și scanați codurile de bare"
     }
   },
   "stats": {
@@ -146,44 +154,85 @@
     "height": "ÎNĂLȚIME",
     "years": "Ani",
     "runningLevel": "NIVEL DE ALERGARE",
-    "levels.beginner": "Începător",
-    "levels.intermediate": "Intermediar",
-    "levels.advanced": "Avansat",
     "yourGoals": "CARE SUNT OBIECTIVELE TALE",
-    "goals.health": "Sănătate",
-    "goals.weight": "Pierdere în greutate",
-    "goals.distance": "Aleargă mai departe",
-    "goals.speed": "Devino mai rapid",
-    "goals.race": "Aleargă o cursă",
-    "goals.fun": "Distracție",
     "weeklyGoalKm": "OBIECTIV KM SĂPTĂMÂNAL",
     "weeklyGoalExample": "Ex. 20",
     "unlockFullPower": "Deblochează acces complet",
     "unlockDesc": "Obține acces la toate funcțiile și atinge-ți obiectivele mai repede",
-    "proFeatures.aiCoachDesc": "Antrenor AI",
-    "proFeatures.statsDesc": "Statistici",
-    "proFeatures.goalsDesc": "Obiective",
-    "proFeatures.routesDesc": "Trasee",
-    "proFeatures.chatDesc": "Chat AI",
-    "proFeatures.reportsDesc": "Rapoarte",
     "price": "49 kr",
     "guarantee": "✓ Anulează oricând • ✓ 7 zile probă gratuită",
     "perMonth": "/lună",
     "startFreeTrial": "Începe perioada de probă gratuită",
     "continueWithFree": "Continuă cu versiunea gratuită",
-    "levels.beginnerDesc": "Nou în alergare sau reîncepi după o pauză lungă",
-    "levels.intermediateDesc": "Alergi regulat și vrei să te îmbunătățești",
-    "levels.advancedDesc": "Alergător experimentat cu obiective specifice",
     "or": "sau",
     "errors": {
-      "serverConnection": "Nu se poate conecta la server"
+      "serverConnection": "Nu se poate conecta la server",
+      "fillEmailPassword": "Introduceți atât e-mailul, cât și parola",
+      "loginFailed": "Nu s-a putut conecta",
+      "enterEmail": "Introdu adresa ta de e-mail",
+      "resetCodeFailed": "Nu s-a putut trimite codul de resetare",
+      "fillCodePassword": "Introduceți codul de resetare și o nouă parolă",
+      "passwordMismatch": "Parolele nu se potrivesc",
+      "passwordTooShort": "Parola trebuie să aibă cel puțin 6 caractere",
+      "resetFailed": "Nu s-a putut reseta parola",
+      "registerFailed": "Nu s-a putut crea contul",
+      "enterName": "Introduceți numele dvs",
+      "selectLevel": "Selectați nivelul de alergare"
+    },
+    "levels": {
+      "beginner": "Începător",
+      "intermediate": "Intermediar",
+      "advanced": "Avansat",
+      "beginnerDesc": "Nou în alergare sau reîncepi după o pauză lungă",
+      "intermediateDesc": "Alergi regulat și vrei să te îmbunătățești",
+      "advancedDesc": "Alergător experimentat cu obiective specifice"
+    },
+    "goals": {
+      "health": "Sănătate",
+      "weight": "Pierdere în greutate",
+      "distance": "Aleargă mai departe",
+      "speed": "Devino mai rapid",
+      "race": "Aleargă o cursă",
+      "fun": "Distracție"
+    },
+    "proFeatures": {
+      "aiCoachDesc": "Antrenor AI",
+      "statsDesc": "Statistici",
+      "goalsDesc": "Obiective",
+      "routesDesc": "Trasee",
+      "chatDesc": "Chat AI",
+      "reportsDesc": "Rapoarte"
+    },
+    "resetPassword": "Resetați parola",
+    "forgotPasswordDesc": "Introduceți e-mailul și vă vom trimite un cod de resetare.",
+    "sendResetCode": "Trimite codul de resetare",
+    "backToLogin": "Înapoi la autentificare",
+    "createNewPassword": "Creați o nouă parolă",
+    "checkEmail": "Verificați e-mailul pentru codul de resetare din șase cifre.",
+    "resetCode": "Resetați codul",
+    "resetCodePlaceholder": "Cod din 6 cifre",
+    "newPassword": "Parolă nouă",
+    "confirmNewPassword": "Confirmați noua parolă",
+    "resendCode": "Trimiteți un cod nou",
+    "tellUsAboutYou": "Povestește-ne despre tine",
+    "success": {
+      "resetCodeSent": "Am trimis un cod de resetare la adresa ta de e-mail.",
+      "passwordReset": "Parola dvs. a fost resetată. Acum vă puteți autentifica."
     }
   },
   "settings": {
     "pageTitle": "Setări",
     "title": "Setări",
     "profile": "Profil",
-    "days": ["Lun", "Mar", "Mie", "Joi", "Vin", "Sâm", "Dum"],
+    "days": [
+      "Lun",
+      "Mar",
+      "Mie",
+      "Joi",
+      "Vin",
+      "Sâm",
+      "Dum"
+    ],
     "saveChanges": "Salvează modificările",
     "saved": "Salvat!",
     "logout": "Deconectare",
@@ -201,7 +250,8 @@
       "reminders": "Memento-uri",
       "privacy": "Confidențialitate",
       "units": "Unități",
-      "data": "Date"
+      "data": "Date",
+      "profile": "Profil"
     },
     "fields": {
       "name": "Nume",
@@ -304,6 +354,57 @@
       "deletedTitle": "Cont șters",
       "deletedMessage": "Contul tău a fost șters.",
       "error": "Nu s-a putut șterge contul"
+    },
+    "reminders": {
+      "workoutTitle": "Memento de antrenament",
+      "workoutSubtitle": "Primiți notificări în zilele selectate și la ora selectată",
+      "mealTitle": "Memento de masă",
+      "mealSubtitle": "Nu uitați să vă înregistrați mesele",
+      "time": "Ora: {{time}}",
+      "days": [
+        "Soare",
+        "Lun",
+        "Mar",
+        "mier",
+        "joi",
+        "Vin",
+        "Sat"
+      ]
+    },
+    "email": {
+      "title": "E-mail",
+      "change": "Schimbați adresa de e-mail",
+      "newEmail": "E-mail nou",
+      "currentPassword": "Parola curentă",
+      "missingFields": "Introduceți atât noua e-mail, cât și parola actuală",
+      "changeError": "Nu s-a putut schimba adresa de e-mail",
+      "successMessage": "E-mailul dvs. a fost actualizat",
+      "networkError": "Eroare de rețea"
+    },
+    "subscription": {
+      "title": "Abonament",
+      "type": "Tip",
+      "status": "Stare",
+      "tiers": {
+        "pro": "Pro",
+        "basic": "De bază",
+        "free": "Gratuit"
+      },
+      "statuses": {
+        "active": "Activ",
+        "inactive": "Inactiv",
+        "trialing": "Proces",
+        "canceled": "Anulat"
+      },
+      "upgrade": "Upgrade",
+      "manage": "Gestionați în App Store"
+    },
+    "language": "Limba",
+    "changeLanguageInSettings": "Schimbați limba în Setări",
+    "languageHint": "Deschideți setările dispozitivului și selectați RunWithAI → Language.",
+    "actions": {
+      "save": "Salvați modificările",
+      "saved": "Salvat!"
     }
   },
   "pricing": {
@@ -367,6 +468,139 @@
     "step3": {
       "title": "Atinge-ți obiectivele",
       "desc": "Setează obiective și urmărește-ți progresul cu statistici detaliate"
+    },
+    "tagline": "Antrenorul tău personal de alergare AI",
+    "headline": {
+      "before": "Antrenează asta",
+      "highlight": "se adaptează la",
+      "after": "tu"
+    },
+    "features": {
+      "ai": {
+        "title": "Un adevărat antrenor AI",
+        "desc": "Planul tău este creat pentru tine, nu un șablon"
+      },
+      "adapts": {
+        "title": "Un plan de viață",
+        "desc": "Se ajustează după fiecare rulare finalizată"
+      },
+      "injury": {
+        "title": "Vă ascultă corpul",
+        "desc": "Rănile și durerea sunt luate în considerare în antrenamentul tău"
+      },
+      "goals": {
+        "title": "Spre obiectivul tău",
+        "desc": "De la primul tău 5K până la un maraton, în ritmul tău"
+      }
+    },
+    "tryFree": "Încercați gratuit timp de 14 zile",
+    "fine": "Niciun angajament. Anulați oricând.",
+    "levelQuestion": "Unde ești în călătoria ta de alergare?",
+    "selectLevel": "Selectați nivelul pentru a continua",
+    "levels": {
+      "beginner": {
+        "label": "Începător",
+        "sub": "Nou sau revin după o pauză"
+      },
+      "intermediate": {
+        "label": "Intermediar",
+        "sub": "Alerg în mod regulat și vreau să mă perfecționez"
+      },
+      "advanced": {
+        "label": "Avansat",
+        "sub": "Mă antrenez cu scop și îmi cunosc ritmul"
+      }
+    },
+    "tellUsAboutYou": "Povestește-ne puțin despre tine",
+    "coachUsesThis": "Antrenorul tău folosește acest lucru pentru a-ți construi planul",
+    "fields": {
+      "name": "Cum te numești?",
+      "age": "Vârsta",
+      "weeklyKm": "Km pe săptămână (aproximativ)"
+    },
+    "primaryGoal": "Care este scopul tău?",
+    "goals": {
+      "fitness": {
+        "label": "Fii în formă",
+        "sub": "Sănătate și energie"
+      },
+      "5k": {
+        "label": "5K",
+        "sub": "Primul meu mare obiectiv"
+      },
+      "10k": {
+        "label": "10K",
+        "sub": "Următorul nivel"
+      },
+      "half": {
+        "label": "Semimaraton",
+        "sub": "21,1 km"
+      },
+      "full": {
+        "label": "Maraton",
+        "sub": "42,2 km"
+      },
+      "weight": {
+        "label": "Slăbește",
+        "sub": "Mergeți mai ușor"
+      }
+    },
+    "raceDate": "Ai o dată la cursă? (optional)",
+    "raceDatePlaceholder": "de ex. 15 septembrie",
+    "skipForNow": "Omiteți pentru moment",
+    "plan": {
+      "building": "Antrenorul tău îți construiește planul...",
+      "waitNamed": "{{name}}, acordă-mi o clipă.",
+      "wait": "Acordă-mi o clipă.",
+      "errorTitle": "Planul dvs. nu a putut fi creat acum",
+      "errorMessage": "Îți poți oricând cere antrenorului să-l creeze mai târziu.",
+      "readyNamed": "{{name}}, iată planul tău",
+      "ready": "Iată planul tău",
+      "basedOnAnswers": "Planul tău se bazează pe ceea ce i-ai spus antrenorului tău.",
+      "weeklyDistance": "Distanța săptămânală: {{km}} km",
+      "goal": "Obiectiv: {{goal}}",
+      "considerations": "Considerații: {{injuries}}",
+      "weekAndDay": "Săptămâna {{week}} – {{day}}",
+      "day": "Ziua {{day}}",
+      "run": "Rulați",
+      "makePlan": "Creați-mi planul",
+      "weekdays": {
+        "mon": "Luni",
+        "tue": "Marți",
+        "wed": "Miercuri",
+        "thu": "Joi",
+        "fri": "Vineri",
+        "sat": "Sâmbătă",
+        "sun": "Duminică"
+      }
+    },
+    "languageTitle": "Alegeți limba",
+    "languageSubtitle": "O puteți schimba mai târziu în Setări",
+    "paywall": {
+      "headline": "Antrenorul tău personal AI",
+      "subtitle": "Un plan de antrenament care se adaptează la tine — în fiecare săptămână, la fiecare alergare.",
+      "benefits": {
+        "adaptive": "Planul tău se adaptează după fiecare rulare",
+        "audioCoach": "Antrenorul tău în urechi în timp ce te antrenezi",
+        "calendar": "Plan săptămânal și calendar care ține pasul",
+        "chat": "Întrebați-vă antrenorul orice — oricând"
+      },
+      "trial": "14 zile gratuit",
+      "afterTrial": "Apoi {{price}}/lună. Anulați oricând - cu o singură atingere.",
+      "startTraining": "Începeți-mi antrenamentul",
+      "restore": "Restabiliți achizițiile",
+      "welcomeTitle": "🎉 Bun venit!",
+      "welcomeMessage": "Accesul dvs. Pro este acum activ.",
+      "restoreSuccessTitle": "Achiziții restaurate",
+      "restoreSuccessMessage": "Abonamentul dvs. este activ din nou.",
+      "noPurchasesTitle": "Nu s-au găsit achiziții",
+      "noPurchasesMessage": "Nu au fost găsite abonamente active.",
+      "errors": {
+        "prices": "Prețurile nu au putut fi încărcate. Încercați din nou mai târziu.",
+        "packageUnavailable": "Acest abonament nu este disponibil.",
+        "purchaseTitle": "Achiziția nu a reușit",
+        "restore": "Achizițiile nu au putut fi restabilite."
+      }
     }
   },
   "dashboard": {
@@ -419,7 +653,20 @@
       "runsFromRecord": "{{count}} alergări până la record",
       "runsInMonth": "{{count}} alergări în {{month}}"
     },
-    "monthNames": ["Ian", "Feb", "Mar", "Apr", "Mai", "Iun", "Iul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    "monthNames": [
+      "Ian",
+      "Feb",
+      "Mar",
+      "Apr",
+      "Mai",
+      "Iun",
+      "Iul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ],
     "workout": {
       "nextWorkout": "URMĂTORUL ANTRENAMENT",
       "today": "AZI",
@@ -445,7 +692,15 @@
       "addNote": "+ Notiță",
       "mood": "Dispoziție",
       "placeholder": "Cum a fost? Picioare grele? Zi bună? Traseu nou?",
-      "dayNames": ["Dum", "Lun", "Mar", "Mie", "Joi", "Vin", "Sâm"]
+      "dayNames": [
+        "Dum",
+        "Lun",
+        "Mar",
+        "Mie",
+        "Joi",
+        "Vin",
+        "Sâm"
+      ]
     },
     "injury": {
       "title": "RISC DE ACCIDENTARE",
@@ -488,7 +743,31 @@
       "unavailable": "GPS indisponibil",
       "timeout": "Timeout GPS",
       "notAvailable": "GPS indisponibil",
-      "error": "Eroare GPS"
+      "error": "Eroare GPS",
+      "points": "{{count}} puncte ({{filtered}} filtrate)"
+    },
+    "cycling": "Ciclism",
+    "music": "Muzică",
+    "voiceOnly": "Numai voce",
+    "notification": {
+      "run": "Urmărirea alergării...",
+      "walk": "Urmărirea mersului dvs....",
+      "bike": "Urmărirea călătoriei..."
+    },
+    "limit": {
+      "title": "Limita de activitate săptămânală a fost atinsă",
+      "message": "Ați atins limita de activități {{limit}} pe săptămână în planul gratuit. Faceți upgrade la Basic sau Pro pentru acces nelimitat.",
+      "later": "Mai târziu"
+    },
+    "stats": {
+      "runs": "rulează",
+      "walks": "se plimbă",
+      "yourProgress": "Progresul dvs",
+      "thisWeek": "Săptămâna aceasta",
+      "lastWeek": "Săptămâna trecută",
+      "bestPace": "Cel mai bun ritm",
+      "longestRun": "Cea mai lungă rulare",
+      "totalKm": "Total km"
     }
   },
   "chat": {
@@ -507,7 +786,9 @@
     "logAllMeals": "Înregistrează toate mesele",
     "logged": "Înregistrat",
     "mealPlanLoggedMessage": "Planul alimentar a fost înregistrat pentru astăzi.",
-    "mealPlanLogError": "Planul alimentar nu a putut fi înregistrat: {{error}}"
+    "mealPlanLogError": "Planul alimentar nu a putut fi înregistrat: {{error}}",
+    "languageChanged": "Limba a fost schimbată. Antrenorul tău AI va răspunde acum în engleză.",
+    "languageChangedConfirmation": "Limba a fost schimbată. Antrenorul dvs. AI va răspunde acum în limba selectată."
   },
   "proUpsell": {
     "title": "Deblochează puterea completă",
@@ -542,6 +823,675 @@
         "title": "Rapoarte de progres",
         "desc": "Rezumate săptămânale și lunare"
       }
+    }
+  },
+  "bariatric": {
+    "title": "Profil bariatric",
+    "subtitle": "Manșon gastric / suport bypass",
+    "settingsButton": "Profil bariatric",
+    "settingsDescription": "Manșon gastric sau suport de bypass",
+    "setup": {
+      "title": "Profil bariatric",
+      "intro": "Activați asistența bariatrică pentru a obține ținte personalizate pentru proteine, lichide și calorii, în funcție de operația și faza dvs.",
+      "surgeryType": "Tip de intervenție chirurgicală",
+      "surgeryTypeNone": "Niciuna",
+      "surgeryTypeSleeve": "Manșon gastric",
+      "surgeryTypeBypass": "Bypass gastric",
+      "surgeryDate": "Data intervenției chirurgicale",
+      "surgeryDatePlaceholder": "YYYY-MM-DD",
+      "startWeight": "Greutate de pornire (kg)",
+      "goalWeight": "Greutate obiectiv (kg)",
+      "height": "Înălțime (cm)",
+      "enable": "Activați suportul bariatric",
+      "save": "Salvați profilul",
+      "delete": "Ștergeți profilul bariatric",
+      "deleteConfirm": "Sigur vrei să-ți ștergi profilul bariatric?",
+      "disclaimer": "Important: această aplicație NU vă înlocuiește nutriționistul bariatric, medicul sau clinica. Recomandările sunt linii directoare generale bazate pe îndrumările publice ASMBS. Urmați întotdeauna instrucțiunile propriei clinici. Contactați imediat medicul dumneavoastră pentru sindromul de dumping, greață persistentă sau orice nelămurire.",
+      "acceptDisclaimer": "Înțeleg că această aplicație nu înlocuiește echipa mea de îngrijire bariatrică",
+      "disclaimerRequired": "Trebuie să acceptați clauza de declinare a răspunderii",
+      "invalidDate": "Introduceți o dată validă",
+      "missingType": "Selectați tipul de intervenție chirurgicală",
+      "saved": "Profil salvat",
+      "deleted": "Profil șters"
+    },
+    "dashboard": {
+      "title": "Suport bariatric",
+      "edit": "Editați",
+      "phaseLabel": "Faza curentă",
+      "daysSinceLabel": "Zile de la operație",
+      "daysUntilNext": "{{days}} zile până la următoarea fază",
+      "lastPhase": "Sunteți în faza finală",
+      "proteinToday": "Proteine astăzi",
+      "proteinProgress": "Proteine astăzi",
+      "fluidToday": "Fluide astăzi",
+      "kcalRange": "Calorii (țintă)",
+      "portionSize": "Mărimea recomandată a porției",
+      "medicalCheckReminder": "Amintiți-vă de controlul dvs. în ziua {{day}}",
+      "preSurgery": "Data intervenției chirurgicale nu a fost încă atinsă"
+    },
+    "phases": {
+      "clearLiquid": {
+        "name": "Săptămâna 1: lichide limpezi",
+        "description": "Numai lichide limpezi: apă, bulion, suc fără zahăr, ceai. Înghițituri mici pe tot parcursul zilei."
+      },
+      "fullLiquid": {
+        "name": "Săptămâna 2: Lichide pline",
+        "description": "Toate lichidele incl. shake-uri de proteine, supă, iaurt. NU bea 30 de minute înainte/după mese."
+      },
+      "pureed": {
+        "name": "Săptămâna 3-4: Hrană făcută piure",
+        "description": "Mâncare amestecată/piure: brânză de vaci, piure de pește, amestec de pui. Mestecați bine."
+      },
+      "soft": {
+        "name": "Săptămâna 5-6: Mâncare moale",
+        "description": "Mâncare moale: omletă, pește, legume fierte, fructe moi. Proteine ​​în primul rând, mușcături mici."
+      },
+      "regular": {
+        "name": "Săptămâna 7+: Mâncare obișnuită",
+        "description": "Mâncare obișnuită în porții mici. Proteine ​​mai întâi, apoi legume, apoi carbohidrați. Mestecați bine."
+      }
+    },
+    "tips": {
+      "noDrinking": "NU bea 30 de minute înainte sau după masă",
+      "proteinFirst": "Mâncați întotdeauna proteine ​​în primul rând",
+      "chew": "Mestecați fiecare mușcătură de 20-30 de ori",
+      "stopWhenFull": "Opriți când este plin - chiar și cu porții mici",
+      "vitamins": "Amintiți-vă de vitaminele zilnice"
+    },
+    "vitamins": {
+      "title": "Vitaminele de astăzi",
+      "subtitle": "Amintiți-vă de suplimentele zilnice",
+      "names": {
+        "multivitamin": "Multivitamine",
+        "calciumD": "Calciu + Vitamina D",
+        "iron": "Fier de călcat",
+        "b12": "B12",
+        "omega3": "Omega-3 (opțional)"
+      },
+      "taken": "Luat",
+      "notTaken": "Nu a fost luat",
+      "allDone": "Toate vitaminele luate astăzi 🎉",
+      "reset": "Resetare",
+      "optional": "opțional"
+    },
+    "fluid": {
+      "title": "Aportul de lichide astăzi",
+      "subtitle": "Bea între mese, nu cu",
+      "goal": "Obiectiv",
+      "current": "Astăzi",
+      "remaining": "Rămâne",
+      "add250": "+ 250 ml",
+      "add500": "+ 500 ml",
+      "addCustom": "Adăugați",
+      "reset": "Resetare",
+      "goalReached": "Ți-ai atins obiectivul fluid 💧",
+      "warning": "Amintiți-vă înghițiturile mici - nu cantități mari deodată"
+    },
+    "meals": {
+      "title": "Sugestii pentru tine acum",
+      "subtitle": "Adaptat fazei dvs",
+      "kcal": "kcal",
+      "protein": "g proteină",
+      "prep": "min",
+      "logIt": "Jurnal",
+      "types": {
+        "fluid": "Fluid",
+        "puree": "Piure",
+        "soft": "Hrană moale",
+        "normal": "Mâncare normală"
+      },
+      "items": {
+        "water": "Apă",
+        "brothClear": "Supă limpede",
+        "sugarFreeJuice": "Suc fără zahăr (diluat)",
+        "herbalTea": "Ceai din plante",
+        "proteinShake": "Shake de proteine",
+        "skimmedMilk": "Lapte degresat",
+        "thinSoup": "Supă subțire (strecurată)",
+        "skyrThin": "Skyr subțire",
+        "mashedFish": "Pește piure",
+        "cottageCheese": "Brânză de vaci",
+        "eggPuree": "Piure de ouă",
+        "pureedChicken": "Pui în piure",
+        "mashedTofu": "Tofu piure",
+        "softFish": "Pește moale",
+        "scrambledEgg": "Ou omletă",
+        "softChicken": "Pui fraged",
+        "wellCookedVeggies": "Legume bine fierte",
+        "greekYogurt": "Iaurt grecesc",
+        "grilledChicken": "Piept de pui la grătar",
+        "salmonFillet": "File de somon",
+        "eggOmelette": "Omletă",
+        "lentilSoup": "Supă de linte",
+        "leanBeef": "Carne slabă de vită"
+      },
+      "reminders": {
+        "title": "Amintiți-vă la mese",
+        "proteinFirst": "Mănâncă mai întâi proteine",
+        "chew": "Mestecați de 20-30 de ori",
+        "noDrinking": "Nu beți 30 de minute înainte/după mese",
+        "stopWhenFull": "Opriți când este plin",
+        "smallSips": "Luați înghițituri mici",
+        "noStraw": "Fără paie (aer în stomac)",
+        "slowly": "Bea încet",
+        "mashWell": "Pisați bine",
+        "newFoodOneAtATime": "Introduceți câte un aliment nou pe rând",
+        "chewExtra": "Mestecați foarte bine",
+        "mindfulEating": "Mănâncă încet și cu atenție",
+        "avoidEmptyCalories": "Evitați caloriile goale"
+      }
+    },
+    "dumping": {
+      "title": "Risc de sindrom de dumping",
+      "subtitle": "Pe baza meselor de astăzi",
+      "low": "Risc scăzut",
+      "medium": "Fiți conștienți",
+      "high": "Risc ridicat",
+      "lowDesc": "Mesele de astăzi arată bine",
+      "mediumDesc": "Una sau mai multe mese pot declanșa dumpingul. Urmăriți simptomele.",
+      "highDesc": "Mai multe mese cu risc ridicat astăzi. Adresați-vă medicului dumneavoastră dacă aveți greață, bătăi rapide ale inimii, amețeli sau diaree.",
+      "flaggedCount": "{{count}} masă a fost semnalată",
+      "flaggedCount_plural": "{{count}} mesele au fost semnalate",
+      "reasons": {
+        "sugarHigh": "Prea mult zahăr",
+        "sugarMedium": "Conținut moderat de zahăr",
+        "fatHigh": "Conținut ridicat de grăsimi",
+        "carbsNoProtein": "Carbohidrați fără proteine",
+        "carbsHigh": "Aport mare de carbohidrați",
+        "carbsMedium": "Aport moderat de carbohidrați",
+        "proteinLow": "Aportul de proteine este prea scăzut"
+      },
+      "info": "Dumpingul este cel mai frecvent după bypass gastric și este declanșat de zahăr, grăsimi sau carbohidrați cu absorbție rapidă. Simptome: greață, bătăi rapide ale inimii, amețeli, diaree la 15-30 min după masă."
+    },
+    "training": {
+      "title": "Antrenament adaptat",
+      "subtitle": "Activitate recomandată pentru faza dvs",
+      "currentPhase": "Faza ta de antrenament",
+      "daysUntilNext": "{{days}} zile până la următoarea fază de antrenament",
+      "maxDuration": "Durată maximă",
+      "maxHeartRate": "Ritmul cardiac maxim",
+      "min": "min",
+      "ofMax": "de FC max",
+      "intensityLabel": {
+        "veryLight": "Foarte ușor",
+        "light": "Lumină",
+        "moderate": "Moderat",
+        "normal": "Normal"
+      },
+      "phaseNames": {
+        "1": "Recuperare (săptămâna 0-2)",
+        "2": "Început atent (săptămâna 2-4)",
+        "3": "Activitate ușoară (săptămâna 4-6)",
+        "4": "Acumulare (săptămâna 6-8)",
+        "5": "Antrenament normal (săptămâna 8+)"
+      },
+      "phaseDesc": {
+        "1": "Respectați plimbări scurte și exerciții de respirație profundă. Ascultă-ți corpul și odihnește-te mult.",
+        "2": "Puteți crește puțin mersul pe jos. Încă nu există antrenament de forță sau exerciții intense.",
+        "3": "Puteți începe să mergeți cu bicicleta și să înotați (odată ce rănile sunt vindecate). Încă nu alergați sau greutăți mari.",
+        "4": "Este timpul să introduceți antrenamentul ușor de forță și cardio mai lung. Începeți cu greutăți mici.",
+        "5": "Puteți reveni la antrenamentul normal - dar totuși construiți treptat și urmăriți-vă energia."
+      },
+      "allowed": "Recomandat",
+      "notRecommended": "Evitați acum",
+      "activities": {
+        "walkShort": "O scurtă plimbare (5-10 min)",
+        "walkMedium": "Plimbare medie (15-20 min)",
+        "walkLong": "Plimbare lungă (30 min.)",
+        "breathing": "Exerciții de respirație",
+        "gentleStretch": "Întindere blândă",
+        "cycling": "Ciclism",
+        "swimming": "Înot",
+        "lightStrength": "Antrenament ușor de forță",
+        "strength": "Antrenamentul de forță",
+        "jog": "Jogging ușor",
+        "running": "Rulează",
+        "highIntensity": "Antrenament de mare intensitate",
+        "heavyLifting": "Ridicare grele",
+        "extremeIntensity": "Intensitate extremă"
+      },
+      "warnings": {
+        "title": "Important de reținut",
+        "noLifting": "Fără ridicare grele (peste 5 kg)",
+        "staySoftMovements": "Țineți-vă de mișcări moi și lente",
+        "avoidSwimmingUntilHealed": "Evitați înotul până când rănile sunt vindecate (de obicei 3-4 săptămâni)",
+        "lightWeightsOk": "Greutățile ușoare (2-5 kg) sunt în regulă după consultarea medicului dumneavoastră",
+        "startStrengthGradually": "Începeți antrenamentul de forță cu greutăți mici și repetări mari",
+        "stillBuildGradually": "Construiți în continuare treptat - evitați creșterile mari bruște",
+        "hydration": "Amintiți-vă fluidele înainte, în timpul și după antrenament"
+      },
+      "safety": {
+        "activityNotRecommended": "{{activity}} nu este recomandat în faza dvs. Consultați-vă medicul.",
+        "durationTooLong": "Durata recomandată este de cel mult {{max}} min. Ai planificat {{actual}} min.",
+        "checkWithDoctor": "Contactați medicul dumneavoastră dacă aveți durere, greață sau epuizare"
+      },
+      "disclaimer": "Recomandările sunt doar ghiduri. Urmați întotdeauna instrucțiunile propriei clinici."
+    }
+  },
+  "diabetes": {
+    "title": "Profil de diabet",
+    "subtitle": "Tip 1, Tip 2 sau prediabet",
+    "settingsButton": "Profil de diabet",
+    "settingsDescription": "Tip 1, tip 2 sau prediabet - dietă, zahăr din sânge și exerciții fizice",
+    "setup": {
+      "title": "Profil de diabet",
+      "intro": "Activați asistența pentru diabet pentru a obține sugestii personalizate de mese, îndrumări privind glicemia și recomandări de exerciții fizice.",
+      "type": "Tip de diabet",
+      "typeT1": "Tip 1",
+      "typeT2": "Tip 2",
+      "typePre": "Prediabet",
+      "typeGest": "Diabetul gestațional",
+      "treatment": "Tratament",
+      "txNone": "Niciuna",
+      "txDiet": "Numai dieta/stil de viață",
+      "txMetformin": "Metformină",
+      "txOral": "Alte medicamente orale",
+      "txGLP1": "GLP-1 (Ozempic/Wegovy/Mounjaro)",
+      "txBasal": "Insulină bazală",
+      "txBolus": "Insulină bazală + bolus",
+      "txPump": "Pompă de insulină",
+      "diagnosisDate": "Data diagnosticului (opțional)",
+      "datePlaceholder": "YYYY-MM-DD",
+      "hba1c": "HbA1c (mmol/mol, opțional)",
+      "countCarbs": "Număr carbohidrații",
+      "carbRatio": "Raport insulină/carbohidrati (g/U, opțional)",
+      "carbRatioHelp": "De ex. 10 = 1 unitate de insulină acoperă 10 g de carbohidrați. Aplicația nu dozează niciodată - acest număr este doar informativ.",
+      "correctionFactor": "Factor de corecție (mmol/L per U, opțional)",
+      "preExerciseMin": "Nivelul minim de zahăr din sânge înainte de exercițiu (mmol/L)",
+      "enable": "Activați suportul pentru diabet",
+      "acceptDisclaimer": "Accept clauza de declinare a răspunderii de mai sus",
+      "disclaimerRequired": "Trebuie să acceptați clauza de declinare a răspunderii",
+      "missingType": "Selectați tipul de diabet",
+      "save": "Salvați profilul",
+      "saved": "Profil salvat",
+      "delete": "Ștergeți profilul diabetului",
+      "deleted": "Profil șters",
+      "deleteConfirm": "Sigur doriți să vă ștergeți profilul de diabet?",
+      "disclaimer": "IMPORTANT: Această aplicație NU înlocuiește medicul dumneavoastră sau echipa de diabet. NU sugerăm NICIODATĂ doze specifice de insulină sau modificări ale medicamentelor. Nu vă ajustați niciodată tratamentul numai pe baza sfatului aplicației. Contactați întotdeauna furnizorul dumneavoastră de asistență medicală dacă aveți îndoieli."
+    }
+  },
+  "bloodSugar": {
+    "title": "zahăr din sânge",
+    "settingsButton": "Jurnalul de zahăr din sânge",
+    "settingsDescription": "Înregistrați măsurătorile și vedeți tendințele de-a lungul timpului",
+    "add": "Adăugați citire",
+    "save": "Salvați",
+    "history": "Istoric",
+    "empty": "Nicio citire încă. Atingeți butonul de mai sus pentru a vă înregistra prima măsurătoare.",
+    "disclaimer": "Aceste numere sunt doar pentru referință proprie. Discutați întotdeauna despre modele cu medicul dumneavoastră sau cu echipa de diabet.",
+    "valueLabel": "Glicemia (mmol/L)",
+    "contextLabel": "Context",
+    "noteLabel": "Notă (opțional)",
+    "notePlaceholder": "De ex. după micul dejun",
+    "errInvalidTitle": "Valoare nevalidă",
+    "errInvalidBody": "Introduceți o valoare a zahărului din sânge între 1,0 și 40,0 mmol/L.",
+    "errSaveTitle": "Nu s-a putut salva",
+    "deleteTitle": "Ștergeți citirea",
+    "deleteBody": "Ești sigur? Apăsați lung pentru a șterge.",
+    "ctx": {
+      "fasting": "Post",
+      "preMeal": "Înainte de masă",
+      "postMeal": "După masă",
+      "bedtime": "Ora de culcare",
+      "preExercise": "Înainte de exercițiu",
+      "postExercise": "După exercițiu",
+      "random": "Aleatoriu"
+    },
+    "range": {
+      "1d": "1 zi",
+      "7d": "7 zile",
+      "30d": "30 de zile",
+      "90d": "90 de zile"
+    },
+    "stat": {
+      "avg": "Medie",
+      "min": "Min",
+      "max": "Max",
+      "tir": "Timp în interval",
+      "target": "Țintă",
+      "measurements": "citiri"
+    }
+  },
+  "healthScore": {
+    "title": "Scorul de sănătate",
+    "todayLabel": "Scorul de astăzi",
+    "A": "Foarte sănătos",
+    "B": "Sănătos",
+    "C": "Moderat",
+    "D": "Mai puțin sănătos",
+    "E": "Nesănătos"
+  },
+  "units": {
+    "g": "g",
+    "kg": "kg",
+    "ml": "ml",
+    "dl": "dl",
+    "l": "l",
+    "tsk": "linguriță",
+    "spsk": "linguriță",
+    "stk": "buc",
+    "skive": "felie",
+    "portion": "porțiune"
+  },
+  "logMeal": {
+    "amount": "Sumă",
+    "unit": "Unitate",
+    "approxGrams": "≈ {{grams}}g"
+  },
+  "home": {
+    "greeting": {
+      "morning": "Bună dimineața",
+      "day": "Bună ziua",
+      "evening": "Bună seara",
+      "night": "Noapte bună"
+    },
+    "coach": {
+      "restDay": "Astăzi este o zi de odihnă — bucurați-vă de recuperare!",
+      "todayWorkout": "Planul de astăzi include {{workout}}.",
+      "nextWorkout": "Următorul antrenament: {{workout}}.",
+      "ready": "Sunteți gata să începeți? Întrebați-mă despre planificare, nutriție sau motivație.",
+      "askForHelp": "Întrebați-mă orice dacă aveți nevoie de ajutor."
+    },
+    "chat": {
+      "placeholder": "Întrebați-vă antrenorul AI...",
+      "todayPlanPrompt": "Care este planul meu pentru astăzi?"
+    },
+    "todayPlan": "Planul de astăzi",
+    "startTraining": "Începeți antrenamentul",
+    "nextTraining": "Următorul antrenament",
+    "today": "Astăzi",
+    "training": "Antrenament",
+    "todayOverview": "Prezentare generală de astăzi",
+    "week": "Săptămâna",
+    "milestone": "Etapă",
+    "toGoal": "până la {{distance}} obiectiv km"
+  },
+  "progress": {
+    "weeks": "Săptămâni",
+    "months": "Luni",
+    "weekLabel": "Săptămâna {{week}}, {{year}}",
+    "weekShort": "W{{week}}",
+    "activities": "Activități",
+    "empty": "Nu există încă activități — ieși acolo și fugi!",
+    "noRoute": "Nu a fost înregistrată nicio rută",
+    "standardTraining": "Antrenament standard",
+    "steps": "Pași",
+    "duration": "Durată",
+    "caloriesShort": "cal",
+    "activityTypes": {
+      "walk": "Mergi",
+      "cycling": "Ciclism",
+      "run": "Rulați"
+    }
+  },
+  "workoutLabels": {
+    "rest": "Rest",
+    "injuryRest": "Odihnă din cauza rănirii"
+  },
+  "calendar": {
+    "monthSummary_one": "{{count}} alergare · {{km}} km",
+    "monthSummary_other": "{{count}} aleargă · {{km}} km",
+    "completed": "Finalizat",
+    "planned": "Planificat",
+    "missed": "A ratat",
+    "plannedKm": "{{km}} km planificați",
+    "emptyDay": "Nicio alergare sau antrenament nu este planificat pentru această zi"
+  },
+  "motionPicker": {
+    "title": "Cardio",
+    "what": "Ce ți-ar plăcea să faci?",
+    "where": "Unde?",
+    "run": "Rulați",
+    "walk": "Plimbare",
+    "cycling": "Ciclism",
+    "runLocation": "În aer liber sau bandă de alergare",
+    "bikeLocation": "În aer liber sau în interior",
+    "outdoor": "În aer liber",
+    "outdoorDescription": "Urmărire GPS · rute · ritm",
+    "indoor": "În interior",
+    "indoorDescription": "Banda de alergare · contor de pași · distanță manuală"
+  },
+  "activityPicker": {
+    "title": "Alegeți antrenamentul",
+    "intro": "Ce ați dori să vă conectați?",
+    "options": {
+      "mobility": {
+        "label": "Mobilitate / Yoga",
+        "description": "Întindere, yoga, rulare cu spumă"
+      },
+      "bike": {
+        "label": "Ciclism",
+        "description": "În interior sau în exterior"
+      },
+      "other": {
+        "label": "Altă activitate",
+        "description": "Padel, fotbal, înot..."
+      }
+    }
+  },
+  "logActivity": {
+    "types": {
+      "strength": "Antrenamentul de forță",
+      "mobility": "Mobilitate / Yoga",
+      "bike": "Ciclism",
+      "other": "Altă activitate"
+    },
+    "invalidDuration": "Introduceți o durată validă în minute",
+    "savedTitle": "Salvat!",
+    "savedMessage": "{{activity}} înregistrat ({{duration}} min, {{calories}} kcal)",
+    "saveError": "Nu s-a putut salva: {{error}}",
+    "logActivity": "Înregistrați-vă {{activity}}",
+    "duration": "Durată (minute) *",
+    "calories": "Calorii (opțional – altfel calculat automat)",
+    "calorieEstimate": "≈ {{calories}} kcal calculat din {{weight}} kg, RPE {{rpe}}",
+    "effort": "Efort (RPE 1–10)",
+    "notes": "Note (opțional)",
+    "notesPlaceholder": "De exemplu exerciții, greutate, seturi...",
+    "save": "Salvați antrenamentul"
+  },
+  "treadmill": {
+    "invalidValueTitle": "Valoare nevalidă",
+    "invalidValueMessage": "Introduceți un număr, de exemplu 5.2",
+    "noDistanceTitle": "Fără distanță",
+    "noDistanceMessage": "Adăugați distanța manual sau continuați până când pașii pot fi măsurați.",
+    "finishTitle": "Terminați și salvați?",
+    "finishMessage": "Distanță: {{distance}} km · Timp: {{time}} · {{calories}} kcal",
+    "walkNote": "Plimbare în interior (bandă de alergare)",
+    "runNote": "alergare în interior (bandă de alergare)",
+    "savedTitle": "Salvat! 🏃",
+    "savedMessage": "{{distance}} km în {{time}} · {{calories}} kcal arse.",
+    "saveError": "Nu s-a putut salva",
+    "discardTitle": "Renunțați la antrenament?",
+    "discardMessage": "Toate datele din acest antrenament se vor pierde.",
+    "keep": "Păstrați",
+    "discard": "Eliminați",
+    "walkTitle": "Banda de alergare · Plimbare",
+    "runTitle": "Banda de alergare · Alergare",
+    "pedometerActive": "Contor de pași activ",
+    "pedometerUnavailable": "Contorul de pași nu este disponibil",
+    "steps": "PAȘI",
+    "speed": "Viteză",
+    "adjustDistance": "Reglați distanța",
+    "adjustHint": "Adăugați manual distanța de pe afișajul benzii de alergare",
+    "enterExactDistance": "Introduceți distanța exactă de la banda de alergare",
+    "instructionsTitle": "Cum se utilizează trackerul",
+    "instructions": "1. Apăsați START când începeți pe banda de alergare\n2. Adăugați distanța cu butoanele +0,1 / +0,5 / +1,0\n3. Sau introduceți distanța exactă când ați terminat\n4. Pașii sunt numărați automat atunci când purtați telefonul",
+    "saving": "Se salvează...",
+    "exactDistanceTitle": "Introduceți distanța exactă",
+    "exactDistanceHint": "Citiți afișajul benzii de alergare și introduceți distanța în km",
+    "apply": "Aplicați"
+  },
+  "statsPage": {
+    "hoursShort": "h",
+    "minutesShort": "m",
+    "now": "Acum",
+    "weeksAgoShort": "{{count}}w",
+    "emptyTitle": "Nicio statistică încă",
+    "emptyMessage": "Începeți prima rulare pentru a vă vedea datele aici.",
+    "period4Weeks": "4 săptămâni",
+    "period3Months": "3 luni",
+    "bestPace": "Cel mai bun ritm",
+    "dayStreak": "Urmă de zile",
+    "weeklyGoal": "Obiectiv săptămânal",
+    "ofGoal": "din obiectivul km {{goal}}",
+    "goalReached": "Obiectiv atins!",
+    "kmRemaining": "{{km}} km rămași",
+    "milestone": "Etapă",
+    "toMilestone": "{{remaining}} km până la {{milestone}} km",
+    "kmPerWeek": "KM PE SĂPTĂMÂNĂ",
+    "kmPerMonth": "KM PE LUNA",
+    "avgDistance": "Distanța medie",
+    "kmPerRun": "km per cursă",
+    "totalTime": "Timp total",
+    "moving": "în mișcare",
+    "longestRun": "Cea mai lungă rulare",
+    "runsPerWeekday": "Se rulează pe zi lucrătoare",
+    "activityRings": "Inele de activitate",
+    "kmGoal": "OBIECTIV KM",
+    "distance": "Distanță",
+    "activity": "Activitate",
+    "days": "ZILE",
+    "streak": "Streak",
+    "activityTypes": "Tipuri de activitate",
+    "types": {
+      "run": "Rulați",
+      "walk": "Mergi",
+      "bike": "Ciclism"
+    }
+  },
+  "privacyPage": {
+    "title": "Politica de confidențialitate",
+    "updated": "Ultima actualizare: aprilie 2026",
+    "intro": "La RunWithAI, vă luăm în serios confidențialitatea. Această politică explică modul în care colectăm, utilizăm și vă protejăm informațiile personale.",
+    "sections": [
+      {
+        "title": "Controlor de date",
+        "paragraphs": [
+          "RunWithAI este responsabil pentru prelucrarea datelor dumneavoastră cu caracter personal. Contactați-ne la privacy@runwithai.app dacă aveți întrebări."
+        ]
+      },
+      {
+        "title": "Datele pe care le colectăm",
+        "paragraphs": [
+          "Colectăm următoarele tipuri de date:"
+        ],
+        "bullets": [
+          "Informații despre cont: e-mail, nume, vârstă și sex",
+          "Date fizice: greutate și înălțime (opțional)",
+          "Date de antrenament: activități, distanță, ritm, ritm cardiac și rute GPS",
+          "Utilizarea aplicației: preferințe, obiective și nivel",
+          "Informații de plată: gestionate în siguranță de App Store sau Google Play"
+        ]
+      },
+      {
+        "title": "Cum folosim datele dvs",
+        "paragraphs": [
+          "Utilizăm datele dumneavoastră pentru a:"
+        ],
+        "bullets": [
+          "Furnizați planuri de instruire personalizate AI",
+          "Analizați-vă antrenamentele și progresul",
+          "Îmbunătățiți serviciile noastre",
+          "Trimiteți notificări și actualizări relevante",
+          "Gestionați plățile și abonamentele"
+        ]
+      },
+      {
+        "title": "Integrari terță parte",
+        "paragraphs": [
+          "RunWithAI se poate integra cu Garmin Connect pentru a importa date de rulare. Când ne conectăm, recuperăm numai datele de antrenament - niciodată datele de conectare."
+        ]
+      },
+      {
+        "title": "Partajarea datelor",
+        "paragraphs": [
+          "Nu vă vindem niciodată datele. Partajăm date doar cu:"
+        ],
+        "bullets": [
+          "Apple/Google: procesare securizată a plăților",
+          "OpenAI: coaching AI anonim",
+          "Furnizori de găzduire: Vercel și Railway pentru stocarea datelor"
+        ]
+      },
+      {
+        "title": "Securitatea datelor",
+        "paragraphs": [
+          "Folosim măsuri de protecție standard din industrie, inclusiv:"
+        ],
+        "bullets": [
+          "Criptare HTTPS pentru toate conexiunile",
+          "Hashing securizat al parolei cu bcrypt",
+          "Jetoane JWT pentru autentificare",
+          "Actualizări regulate de securitate"
+        ]
+      },
+      {
+        "title": "Drepturile dumneavoastră",
+        "paragraphs": [
+          "Aveți dreptul la:"
+        ],
+        "bullets": [
+          "Accesați datele dvs",
+          "Corectați informațiile inexacte",
+          "Ștergeți contul și toate datele",
+          "Exportați datele ca CSV",
+          "Retrageți consimțământul"
+        ]
+      },
+      {
+        "title": "Păstrarea datelor",
+        "paragraphs": [
+          "Vă păstrăm datele cât timp contul dvs. este activ. Dacă vă ștergeți contul, toate datele sunt șterse în 30 de zile."
+        ]
+      },
+      {
+        "title": "Cookie-uri și urmărire",
+        "paragraphs": [
+          "Folosim cookie-uri minime pentru a vă menține conectat. Nu folosim cookie-uri de urmărire sau de publicitate de la terți."
+        ]
+      },
+      {
+        "title": "Intimitatea copiilor",
+        "paragraphs": [
+          "RunWithAI nu este destinat copiilor sub 13 ani și nu colectăm cu bună știință date de la copiii sub această vârstă."
+        ]
+      },
+      {
+        "title": "Modificări ale politicii",
+        "paragraphs": [
+          "Este posibil să actualizăm această politică din când în când. Vă vom anunța în aplicație sau prin e-mail despre modificările materiale."
+        ]
+      },
+      {
+        "title": "Contact"
+      }
+    ],
+    "contactQuestion": "Aveți întrebări despre această politică sau despre datele dvs.?",
+    "footer": "© 2026 RunWithAI. Toate drepturile rezervate."
+  },
+  "more": {
+    "title": "Mai multe",
+    "subtitle": "Toate uneltele dvs. într-un singur loc",
+    "sections": {
+      "account": "Cont",
+      "statistics": "Statistici",
+      "setup": "Configurare",
+      "app": "Aplicația"
+    },
+    "newBadge": "Nou",
+    "menu": {
+      "profile": "Profil",
+      "profileSubtitle": "Informații personale, obiective, ritm cardiac și răni",
+      "statistics": "Statistici",
+      "statisticsSubtitle": "Distanța totală, cel mai bun ritm și repere",
+      "goals": "Obiective",
+      "goalsSubtitle": "Obiective săptămânale și tipuri de antrenament",
+      "settings": "Setări",
+      "settingsSubtitle": "Nivel, limbă, profil și notificări",
+      "privacy": "Confidențialitate",
+      "privacySubtitle": "Datele și drepturile dumneavoastră",
+      "upgrade": "Faceți upgrade la PRO",
+      "upgradeSubtitle": "Deblocați toate funcțiile"
     }
   }
 }

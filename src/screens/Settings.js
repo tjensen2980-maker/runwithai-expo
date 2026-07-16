@@ -210,7 +210,10 @@ function LanguageSelector() {
         </Text>
         <TouchableOpacity
           style={s.exportBtn}
-          onPress={() => Linking.openSettings()}>
+          onPress={async () => {
+            await AsyncStorage.multiRemove(['userLanguage', 'userLanguageDeviceBaseline']);
+            Linking.openSettings();
+          }}>
           <Text style={s.exportBtnText}>
             {t('settings.changeLanguageInSettings')}
           </Text>

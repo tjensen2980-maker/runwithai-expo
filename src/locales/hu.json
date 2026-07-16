@@ -1,4 +1,4 @@
-﻿{
+{
   "coachIntro": {
     "title": "A te AI-edződ",
     "qName": "Szia! Én vagyok a személyes AI-futóedződ 🏃 Mielőtt elkezdjük, szeretnélek egy kicsit megismerni. Hogy hívnak?",
@@ -55,7 +55,11 @@
     "lastActivity": "Utolsó tevékenység",
     "gpsTracking": "GPS követés",
     "walkTracking": "Séta követés",
-    "aiRoutes": "AI útvonalak"
+    "aiRoutes": "AI útvonalak",
+    "motionTitle": "Kardió",
+    "motionActivities": "Futás · Séta · Kerékpározás",
+    "trainingTitle": "Képzés",
+    "trainingActivities": "Erő, mobilitás és még sok más"
   },
   "pro": {
     "badge": "PRO",
@@ -86,6 +90,10 @@
     "aiRoutes": {
       "title": "AI útvonalak",
       "description": "Útvonalajánlások az edzésed alapján"
+    },
+    "nutrition": {
+      "title": "Kalóriakövető",
+      "description": "Számolja a kalóriákat, naplózza az étkezéseket és olvassa be a vonalkódokat"
     }
   },
   "stats": {
@@ -146,44 +154,85 @@
     "height": "MAGASSÁG",
     "years": "Év",
     "runningLevel": "FUTÁSI SZINT",
-    "levels.beginner": "Kezdő",
-    "levels.intermediate": "Haladó",
-    "levels.advanced": "Tapasztalt",
     "yourGoals": "MIK A CÉLJAID",
-    "goals.health": "Egészség",
-    "goals.weight": "Fogyás",
-    "goals.distance": "Hosszabb futás",
-    "goals.speed": "Gyorsabb lenni",
-    "goals.race": "Versenyt futni",
-    "goals.fun": "Szórakozás",
     "weeklyGoalKm": "HETI KM CÉL",
     "weeklyGoalExample": "Pl. 20",
     "unlockFullPower": "Teljes hozzáférés feloldása",
     "unlockDesc": "Hozzáférés az összes funkcióhoz és célok gyorsabb elérése",
-    "proFeatures.aiCoachDesc": "AI Edző",
-    "proFeatures.statsDesc": "Statisztikák",
-    "proFeatures.goalsDesc": "Célok",
-    "proFeatures.routesDesc": "Útvonalak",
-    "proFeatures.chatDesc": "AI Chat",
-    "proFeatures.reportsDesc": "Jelentések",
     "price": "49 kr",
     "guarantee": "✓ Bármikor lemondható • ✓ 7 nap ingyenes próba",
     "perMonth": "/hónap",
     "startFreeTrial": "Ingyenes próba indítása",
     "continueWithFree": "Folytatás ingyenes verzióval",
-    "levels.beginnerDesc": "Új a futásban vagy újrakezded hosszú szünet után",
-    "levels.intermediateDesc": "Rendszeresen futsz és fejlődni szeretnél",
-    "levels.advancedDesc": "Tapasztalt futó specifikus célokkal",
     "or": "vagy",
     "errors": {
-      "serverConnection": "Nem sikerült csatlakozni a szerverhez"
+      "serverConnection": "Nem sikerült csatlakozni a szerverhez",
+      "fillEmailPassword": "Adja meg az e-mail címet és a jelszót is",
+      "loginFailed": "Nem sikerült bejelentkezni",
+      "enterEmail": "Adja meg e-mail címét",
+      "resetCodeFailed": "Nem sikerült elküldeni a visszaállítási kódot",
+      "fillCodePassword": "Írja be a visszaállítási kódot és az új jelszót",
+      "passwordMismatch": "A jelszavak nem egyeznek",
+      "passwordTooShort": "A jelszónak legalább 6 karakterből kell állnia",
+      "resetFailed": "Nem sikerült visszaállítani a jelszót",
+      "registerFailed": "Nem sikerült létrehozni a fiókot",
+      "enterName": "Írja be a nevét",
+      "selectLevel": "Válassza ki a futási szintet"
+    },
+    "levels": {
+      "beginner": "Kezdő",
+      "intermediate": "Haladó",
+      "advanced": "Tapasztalt",
+      "beginnerDesc": "Új a futásban vagy újrakezded hosszú szünet után",
+      "intermediateDesc": "Rendszeresen futsz és fejlődni szeretnél",
+      "advancedDesc": "Tapasztalt futó specifikus célokkal"
+    },
+    "goals": {
+      "health": "Egészség",
+      "weight": "Fogyás",
+      "distance": "Hosszabb futás",
+      "speed": "Gyorsabb lenni",
+      "race": "Versenyt futni",
+      "fun": "Szórakozás"
+    },
+    "proFeatures": {
+      "aiCoachDesc": "AI Edző",
+      "statsDesc": "Statisztikák",
+      "goalsDesc": "Célok",
+      "routesDesc": "Útvonalak",
+      "chatDesc": "AI Chat",
+      "reportsDesc": "Jelentések"
+    },
+    "resetPassword": "Jelszó visszaállítása",
+    "forgotPasswordDesc": "Adja meg e-mail címét, és küldünk egy visszaállító kódot.",
+    "sendResetCode": "Visszaállítási kód küldése",
+    "backToLogin": "Vissza a bejelentkezéshez",
+    "createNewPassword": "Új jelszó létrehozása",
+    "checkEmail": "Ellenőrizze az e-mailben a hatjegyű visszaállítási kódot.",
+    "resetCode": "Kód visszaállítása",
+    "resetCodePlaceholder": "6 számjegyű kód",
+    "newPassword": "Új jelszó",
+    "confirmNewPassword": "Erősítse meg az új jelszót",
+    "resendCode": "Új kód küldése",
+    "tellUsAboutYou": "Mesélj magadról",
+    "success": {
+      "resetCodeSent": "Visszaállítási kódot küldtünk az e-mail-címére.",
+      "passwordReset": "Jelszava visszaállításra került. Most már bejelentkezhet."
     }
   },
   "settings": {
     "pageTitle": "Beállítások",
     "title": "Beállítások",
     "profile": "Profil",
-    "days": ["H", "K", "Sze", "Cs", "P", "Szo", "V"],
+    "days": [
+      "H",
+      "K",
+      "Sze",
+      "Cs",
+      "P",
+      "Szo",
+      "V"
+    ],
     "saveChanges": "Változtatások mentése",
     "saved": "Mentve!",
     "logout": "Kijelentkezés",
@@ -201,7 +250,8 @@
       "reminders": "Emlékeztetők",
       "privacy": "Adatvédelem",
       "units": "Mértékegységek",
-      "data": "Adatok"
+      "data": "Adatok",
+      "profile": "Profil"
     },
     "fields": {
       "name": "Név",
@@ -304,6 +354,57 @@
       "deletedTitle": "Fiók törölve",
       "deletedMessage": "A fiókod törölve lett.",
       "error": "A fiók törlése nem sikerült"
+    },
+    "reminders": {
+      "workoutTitle": "Emlékeztető edzésre",
+      "workoutSubtitle": "Értesítést kaphat a kiválasztott napokon és a kiválasztott időpontban",
+      "mealTitle": "Étkezési emlékeztető",
+      "mealSubtitle": "Ne felejtse el naplózni étkezéseit",
+      "time": "Idő: {{time}}",
+      "days": [
+        "V",
+        "Hétfő",
+        "Ked",
+        "Sze",
+        "Cs",
+        "Péntek",
+        "Szo"
+      ]
+    },
+    "email": {
+      "title": "E-mail",
+      "change": "E-mail-cím módosítása",
+      "newEmail": "Új e-mail",
+      "currentPassword": "Jelenlegi jelszó",
+      "missingFields": "Adja meg új e-mail címét és jelenlegi jelszavát",
+      "changeError": "Nem sikerült módosítani az e-mail címet",
+      "successMessage": "Az e-mail-címét frissítettük",
+      "networkError": "Hálózati hiba"
+    },
+    "subscription": {
+      "title": "Előfizetés",
+      "type": "Típus",
+      "status": "Állapot",
+      "tiers": {
+        "pro": "Pro",
+        "basic": "Alapvető",
+        "free": "Ingyenes"
+      },
+      "statuses": {
+        "active": "Aktív",
+        "inactive": "Inaktív",
+        "trialing": "Próba",
+        "canceled": "Törölve"
+      },
+      "upgrade": "Frissítés",
+      "manage": "Kezelés az App Store-ban"
+    },
+    "language": "Nyelv",
+    "changeLanguageInSettings": "Módosítsa a nyelvet a Beállításokban",
+    "languageHint": "Nyissa meg az eszközbeállításokat, és válassza a RunWithAI → Nyelv lehetőséget.",
+    "actions": {
+      "save": "Mentse el a változtatásokat",
+      "saved": "Mentve!"
     }
   },
   "pricing": {
@@ -367,6 +468,139 @@
     "step3": {
       "title": "Érd el a céljaidat",
       "desc": "Állíts be célokat és kövesd a haladásodat részletes statisztikákkal"
+    },
+    "tagline": "Az Ön személyes AI futóedzője",
+    "headline": {
+      "before": "Képzés arra",
+      "highlight": "alkalmazkodik",
+      "after": "Ön"
+    },
+    "features": {
+      "ai": {
+        "title": "Egy igazi AI edző",
+        "desc": "A terv az Ön számára készült – nem sablon"
+      },
+      "adapts": {
+        "title": "Élő terv",
+        "desc": "Minden befejezett futtatás után igazodik"
+      },
+      "injury": {
+        "title": "Figyel a testére",
+        "desc": "A sérülések és a fájdalom beleszámítanak az edzésbe"
+      },
+      "goals": {
+        "title": "A cél felé",
+        "desc": "Az első 5K-tól a maratonig – az Ön tempójában"
+      }
+    },
+    "tryFree": "Próbáld ki ingyenesen 14 napig",
+    "fine": "Nincs kötelezettségvállalás. Bármikor lemondhatja.",
+    "levelQuestion": "Hol tart a futóútján?",
+    "selectLevel": "A folytatáshoz válassza ki a szintet",
+    "levels": {
+      "beginner": {
+        "label": "Kezdő",
+        "sub": "Új vagy szünet után visszatér"
+      },
+      "intermediate": {
+        "label": "Középhaladó",
+        "sub": "Rendszeresen futok, és szeretnék fejlődni"
+      },
+      "advanced": {
+        "label": "Speciális",
+        "sub": "Céltudatosan edzek, és ismerem a tempómat"
+      }
+    },
+    "tellUsAboutYou": "Mesélj egy kicsit magadról",
+    "coachUsesThis": "Az edződ ezt használja fel a terved elkészítéséhez",
+    "fields": {
+      "name": "Mi a neved?",
+      "age": "Kor",
+      "weeklyKm": "Km hetente (nagyjából)"
+    },
+    "primaryGoal": "Mi a célja?",
+    "goals": {
+      "fitness": {
+        "label": "Tedd fitt",
+        "sub": "Egészség és energia"
+      },
+      "5k": {
+        "label": "5K",
+        "sub": "Az első nagy célom"
+      },
+      "10k": {
+        "label": "10K",
+        "sub": "A következő szint"
+      },
+      "half": {
+        "label": "Félmaraton",
+        "sub": "21,1 km"
+      },
+      "full": {
+        "label": "Maraton",
+        "sub": "42,2 km"
+      },
+      "weight": {
+        "label": "Fogyjon",
+        "sub": "Fuss könnyebben"
+      }
+    },
+    "raceDate": "Van verseny dátuma? (nem kötelező)",
+    "raceDatePlaceholder": "pl. szeptember 15",
+    "skipForNow": "Most hagyd ki",
+    "plan": {
+      "building": "Az edződ építi a tervedet…",
+      "waitNamed": "{{name}}, adj egy pillanatot.",
+      "wait": "Adj egy pillanatot.",
+      "errorTitle": "A terv most nem hozható létre",
+      "errorMessage": "Később bármikor megkérheti edzőjét, hogy hozza létre.",
+      "readyNamed": "{{name}}, itt a terve",
+      "ready": "Itt a terve",
+      "basedOnAnswers": "A terved azon alapul, amit az edződnek mondott.",
+      "weeklyDistance": "Heti távolság: {{km}} km",
+      "goal": "Cél: {{goal}}",
+      "considerations": "Megfontolások: {{injuries}}",
+      "weekAndDay": "{{week}} – {{day}} hét",
+      "day": "{{day}} nap",
+      "run": "Fuss",
+      "makePlan": "A tervem létrehozása",
+      "weekdays": {
+        "mon": "Hétfő",
+        "tue": "Kedd",
+        "wed": "Szerda",
+        "thu": "Csütörtök",
+        "fri": "Péntek",
+        "sat": "Szombat",
+        "sun": "Vasárnap"
+      }
+    },
+    "languageTitle": "Válassza ki a nyelvet",
+    "languageSubtitle": "Később módosíthatja a Beállításokban",
+    "paywall": {
+      "headline": "Az Ön személyes AI edzője",
+      "subtitle": "Egy edzésterv, amely hozzád igazodik – minden héten, minden futáson.",
+      "benefits": {
+        "adaptive": "A terve minden futás után igazodik",
+        "audioCoach": "Edződ a füledben edzés közben",
+        "calendar": "Heti terv és naptár, amely lépést tart",
+        "chat": "Kérdezzen bármit edzőjétől – bármikor"
+      },
+      "trial": "14 nap ingyenes",
+      "afterTrial": "Ezután {{price}}/hó. Bármikor lemondhatja – egyetlen érintéssel.",
+      "startTraining": "Indítsa el az edzést",
+      "restore": "Vásárlások visszaállítása",
+      "welcomeTitle": "🎉 Üdvözlünk!",
+      "welcomeMessage": "Pro hozzáférése most aktív.",
+      "restoreSuccessTitle": "A vásárlások visszaállítva",
+      "restoreSuccessMessage": "Előfizetése ismét aktív.",
+      "noPurchasesTitle": "Nem található vásárlás",
+      "noPurchasesMessage": "Nem található aktív előfizetés.",
+      "errors": {
+        "prices": "Az árakat nem sikerült betölteni. Próbálja újra később.",
+        "packageUnavailable": "Ez az előfizetés nem érhető el.",
+        "purchaseTitle": "A vásárlás sikertelen",
+        "restore": "A vásárlásokat nem lehetett visszaállítani."
+      }
     }
   },
   "dashboard": {
@@ -419,7 +653,20 @@
       "runsFromRecord": "{{count}} futás a rekordtól",
       "runsInMonth": "{{count}} futás {{month}}-ban"
     },
-    "monthNames": ["Jan", "Feb", "Már", "Ápr", "Máj", "Jún", "Júl", "Aug", "Szep", "Okt", "Nov", "Dec"],
+    "monthNames": [
+      "Jan",
+      "Feb",
+      "Már",
+      "Ápr",
+      "Máj",
+      "Jún",
+      "Júl",
+      "Aug",
+      "Szep",
+      "Okt",
+      "Nov",
+      "Dec"
+    ],
     "workout": {
       "nextWorkout": "KÖVETKEZŐ EDZÉS",
       "today": "MA",
@@ -445,7 +692,15 @@
       "addNote": "+ Jegyzet",
       "mood": "Hangulat",
       "placeholder": "Hogy ment? Nehéz lábak? Jó nap? Új útvonal?",
-      "dayNames": ["V", "H", "K", "Sze", "Cs", "P", "Szo"]
+      "dayNames": [
+        "V",
+        "H",
+        "K",
+        "Sze",
+        "Cs",
+        "P",
+        "Szo"
+      ]
     },
     "injury": {
       "title": "SÉRÜLÉSKOCKÁZAT",
@@ -488,7 +743,31 @@
       "unavailable": "GPS nem elérhető",
       "timeout": "GPS időtúllépés",
       "notAvailable": "GPS nem elérhető",
-      "error": "GPS hiba"
+      "error": "GPS hiba",
+      "points": "{{count}} pontok ({{filtered}} szűrve)"
+    },
+    "cycling": "Kerékpározás",
+    "music": "Zene",
+    "voiceOnly": "Csak hang",
+    "notification": {
+      "run": "Futás követése...",
+      "walk": "A séta nyomon követése...",
+      "bike": "Az utazás követése..."
+    },
+    "limit": {
+      "title": "Elérte a heti aktivitási korlátot",
+      "message": "Elérte a heti {{limit}} tevékenységek ingyenes előfizetési korlátját. Frissítsen Basic vagy Pro verzióra a korlátlan hozzáférés érdekében.",
+      "later": "Később"
+    },
+    "stats": {
+      "runs": "fut",
+      "walks": "sétál",
+      "yourProgress": "Az Ön fejlődése",
+      "thisWeek": "Ezen a héten",
+      "lastWeek": "Múlt héten",
+      "bestPace": "A legjobb tempó",
+      "longestRun": "Leghosszabb futás",
+      "totalKm": "Teljes km"
     }
   },
   "chat": {
@@ -507,7 +786,9 @@
     "logAllMeals": "Minden étkezés naplózása",
     "logged": "Naplózva",
     "mealPlanLoggedMessage": "A mai étrend naplózva lett.",
-    "mealPlanLogError": "Az étrendet nem sikerült naplózni: {{error}}"
+    "mealPlanLogError": "Az étrendet nem sikerült naplózni: {{error}}",
+    "languageChanged": "A nyelv megváltozott. Az AI edzője mostantól angolul válaszol.",
+    "languageChangedConfirmation": "A nyelv megváltozott. Az AI edzője most a választott nyelven válaszol."
   },
   "proUpsell": {
     "title": "Oldd fel a teljes erőt",
@@ -542,6 +823,675 @@
         "title": "Haladási jelentések",
         "desc": "Heti és havi összefoglalók"
       }
+    }
+  },
+  "bariatric": {
+    "title": "Bariatric profil",
+    "subtitle": "Gyomorhüvely / bypass támogatás",
+    "settingsButton": "Bariatric profil",
+    "settingsDescription": "Gyomorhüvely vagy bypass támogatás",
+    "setup": {
+      "title": "Bariatric profil",
+      "intro": "Engedélyezze a bariátriai támogatást, hogy testreszabott fehérje-, folyadék- és kalóriacélokat kapjon a műtét és a fázis alapján.",
+      "surgeryType": "A műtét típusa",
+      "surgeryTypeNone": "Nincs",
+      "surgeryTypeSleeve": "Gyomorhüvely",
+      "surgeryTypeBypass": "Gyomor bypass",
+      "surgeryDate": "A műtét dátuma",
+      "surgeryDatePlaceholder": "YYYY-MM-DD",
+      "startWeight": "Kezdő tömeg (kg)",
+      "goalWeight": "Célsúly (kg)",
+      "height": "Magasság (cm)",
+      "enable": "Bariatric támogatás engedélyezése",
+      "save": "Profil mentése",
+      "delete": "Bariatric profil törlése",
+      "deleteConfirm": "Biztosan törli a bariatric profilját?",
+      "disclaimer": "Fontos: Ez az alkalmazás NEM helyettesíti a bariátriai táplálkozási szakértőt, orvost vagy klinikát. Az ajánlások általános iránymutatások, amelyek nyilvános ASMBS-útmutatón alapulnak. Mindig kövesse a saját klinikája utasításait. Azonnal forduljon orvosához dömpingszindróma, tartós hányinger vagy bármilyen aggály miatt.",
+      "acceptDisclaimer": "Megértem, hogy ez az alkalmazás nem helyettesíti a bariátriai csapatomat",
+      "disclaimerRequired": "El kell fogadnia a felelősség kizárását",
+      "invalidDate": "Adjon meg egy érvényes dátumot",
+      "missingType": "Válassza ki a műtét típusát",
+      "saved": "Profil mentve",
+      "deleted": "Profil törölve"
+    },
+    "dashboard": {
+      "title": "Bariatric támogatás",
+      "edit": "Szerk",
+      "phaseLabel": "Aktuális fázis",
+      "daysSinceLabel": "A műtét óta eltelt napok",
+      "daysUntilNext": "{{days}} nap a következő fázisig",
+      "lastPhase": "Ön a végső fázisban van",
+      "proteinToday": "Fehérje ma",
+      "proteinProgress": "Fehérje ma",
+      "fluidToday": "Folyadékok ma",
+      "kcalRange": "Kalória (cél)",
+      "portionSize": "Ajánlott adagméret",
+      "medicalCheckReminder": "Emlékezzen a {{day}} napos ellenőrzésére",
+      "preSurgery": "A műtét dátuma még nem érkezett el"
+    },
+    "phases": {
+      "clearLiquid": {
+        "name": "1. hét: Tiszta folyadékok",
+        "description": "Csak tiszta folyadékok: víz, húsleves, cukormentes gyümölcslé, tea. Kis kortyokban egész nap."
+      },
+      "fullLiquid": {
+        "name": "2. hét: Teljes folyadék",
+        "description": "Minden folyadék, beleértve fehérjeturmix, leves, joghurt. NE igyon 30 perccel étkezés előtt/után."
+      },
+      "pureed": {
+        "name": "3-4. hét: Pépesített étel",
+        "description": "Kevert/pürésített étel: túró, halpüré, turmixolt csirke. Rágja meg alaposan."
+      },
+      "soft": {
+        "name": "5-6. hét: Lágy étel",
+        "description": "Lágy étel: rántotta, hal, főtt zöldségek, puha gyümölcsök. Először a fehérje, apró falatok."
+      },
+      "regular": {
+        "name": "7+ hét: Rendszeres étkezés",
+        "description": "Szokásos étel kis adagokban. Először a fehérje, aztán a zöldség, majd a szénhidrát. Rágja meg alaposan."
+      }
+    },
+    "tips": {
+      "noDrinking": "NE igyon 30 perccel étkezés előtt vagy után",
+      "proteinFirst": "Először mindig egyél fehérjét",
+      "chew": "Rágjon el minden falatot 20-30-szor",
+      "stopWhenFull": "Állj le, ha tele van – még kis adagok esetén is",
+      "vitamins": "Emlékezzen a napi vitaminokra"
+    },
+    "vitamins": {
+      "title": "Napjaink vitaminjai",
+      "subtitle": "Ne feledje a napi táplálékkiegészítőket",
+      "names": {
+        "multivitamin": "Multivitamin",
+        "calciumD": "Kalcium + D-vitamin",
+        "iron": "Vasaló",
+        "b12": "B12",
+        "omega3": "Omega-3 (opcionális)"
+      },
+      "taken": "Készült",
+      "notTaken": "Nem készült",
+      "allDone": "Az összes ma bevitt vitamin 🎉",
+      "reset": "Visszaállítás",
+      "optional": "opcionális"
+    },
+    "fluid": {
+      "title": "Folyadékbevitel ma",
+      "subtitle": "Igyon étkezések között, ne együtt",
+      "goal": "Cél",
+      "current": "Ma",
+      "remaining": "Maradt",
+      "add250": "+ 250 ml",
+      "add500": "+ 500 ml",
+      "addCustom": "Hozzáad",
+      "reset": "Visszaállítás",
+      "goalReached": "Elérte célját 💧",
+      "warning": "Ne felejtsen el kis kortyokat – nem egyszerre nagy mennyiséget"
+    },
+    "meals": {
+      "title": "Javaslatok most",
+      "subtitle": "Az Ön fázisához szabva",
+      "kcal": "kcal",
+      "protein": "g fehérje",
+      "prep": "min",
+      "logIt": "Napló",
+      "types": {
+        "fluid": "Folyadék",
+        "puree": "Püré",
+        "soft": "Lágy étel",
+        "normal": "Normál étel"
+      },
+      "items": {
+        "water": "Víz",
+        "brothClear": "Tiszta húsleves",
+        "sugarFreeJuice": "Cukormentes gyümölcslé (hígítva)",
+        "herbalTea": "Gyógytea",
+        "proteinShake": "Protein shake",
+        "skimmedMilk": "Sovány tej",
+        "thinSoup": "Vékony leves (szűrt)",
+        "skyrThin": "Vékony skyr",
+        "mashedFish": "Halpüré",
+        "cottageCheese": "Túró",
+        "eggPuree": "Tojáspüré",
+        "pureedChicken": "Pépesített csirke",
+        "mashedTofu": "Pépesített tofu",
+        "softFish": "Puha hal",
+        "scrambledEgg": "Rántotta",
+        "softChicken": "Finom csirke",
+        "wellCookedVeggies": "Jól főtt zöldségek",
+        "greekYogurt": "Görög joghurt",
+        "grilledChicken": "Grillezett csirkemell",
+        "salmonFillet": "Lazacfilé",
+        "eggOmelette": "Omlett",
+        "lentilSoup": "Lencseleves",
+        "leanBeef": "Sovány marhahús"
+      },
+      "reminders": {
+        "title": "Emlékezzen étkezés közben",
+        "proteinFirst": "Egyél először fehérjét",
+        "chew": "20-30-szor rágja meg",
+        "noDrinking": "Ne igyon 30 perccel étkezés előtt/után",
+        "stopWhenFull": "Leállítás, ha megtelt",
+        "smallSips": "Igyon kis kortyokat",
+        "noStraw": "Nincs szívószál (levegő a gyomorban)",
+        "slowly": "Igyon lassan",
+        "mashWell": "Alaposan pépesítse",
+        "newFoodOneAtATime": "Egyszerre egy új ételt vezessen be",
+        "chewExtra": "Extra alaposan rágja meg",
+        "mindfulEating": "Egyél lassan és tudatosan",
+        "avoidEmptyCalories": "Kerülje az üres kalóriákat"
+      }
+    },
+    "dumping": {
+      "title": "A dömping szindróma kockázata",
+      "subtitle": "A mai étkezések alapján",
+      "low": "Alacsony kockázat",
+      "medium": "Legyen tudatában",
+      "high": "Magas kockázat",
+      "lowDesc": "A mai ételek jól néznek ki",
+      "mediumDesc": "Egy vagy több étkezés dömpinget válthat ki. Figyeljen a tünetekre.",
+      "highDesc": "Több nagy kockázatú étkezés ma. Forduljon orvosához, ha hányingert, szapora szívverést, szédülést vagy hasmenést tapasztal.",
+      "flaggedCount": "{{count}} étkezés megjelölve",
+      "flaggedCount_plural": "{{count}} ételek megjelölve",
+      "reasons": {
+        "sugarHigh": "Túl sok cukor",
+        "sugarMedium": "Mérsékelt cukortartalom",
+        "fatHigh": "Magas zsírtartalom",
+        "carbsNoProtein": "Szénhidrát fehérje nélkül",
+        "carbsHigh": "Magas szénhidrátbevitel",
+        "carbsMedium": "Mérsékelt szénhidrátbevitel",
+        "proteinLow": "Túl alacsony a fehérjebevitel"
+      },
+      "info": "A dömping leggyakrabban gyomor-bypass után fordul elő, és cukor, zsír vagy gyorsan felszívódó szénhidrát váltja ki. Tünetek: hányinger, szapora szívverés, szédülés, hasmenés étkezés után 15-30 perccel."
+    },
+    "training": {
+      "title": "Adaptált képzés",
+      "subtitle": "Az Ön fázisában javasolt tevékenység",
+      "currentPhase": "Az Ön edzési szakasza",
+      "daysUntilNext": "{{days}} nap a következő edzési fázisig",
+      "maxDuration": "Maximális időtartam",
+      "maxHeartRate": "Max pulzusszám",
+      "min": "min",
+      "ofMax": "a maximális HR-ből",
+      "intensityLabel": {
+        "veryLight": "Nagyon könnyű",
+        "light": "Fény",
+        "moderate": "Közepes",
+        "normal": "Normál"
+      },
+      "phaseNames": {
+        "1": "Helyreállítás (0-2. hét)",
+        "2": "Óvatos kezdés (2-4. hét)",
+        "3": "Könnyű aktivitás (4-6. hét)",
+        "4": "Felépítés (6-8. hét)",
+        "5": "Normál edzés (8+ hét)"
+      },
+      "phaseDesc": {
+        "1": "Ragaszkodjon a rövid sétákhoz és a mélylégzési gyakorlatokhoz. Hallgass a testedre és pihenj sokat.",
+        "2": "Egy kicsit növelheti a gyaloglást. Még mindig nincs erősítő edzés vagy intenzív edzés.",
+        "3": "Elkezdhet kerékpározni és úszni (ha a sebek begyógyultak). Még mindig nincs futás vagy nehéz súly.",
+        "4": "Ideje bevezetni a könnyű erősítő edzést és a hosszabb kardiót. Kezdje kis súlyokkal.",
+        "5": "Visszatérhet a normál edzéshez – de továbbra is fokozatosan építsen, és figyelje az energiáit."
+      },
+      "allowed": "Ajánlott",
+      "notRecommended": "Kerülje el most",
+      "activities": {
+        "walkShort": "Rövid séta (5-10 perc)",
+        "walkMedium": "Közepes séta (15-20 perc)",
+        "walkLong": "Hosszú séta (30+ perc)",
+        "breathing": "Légzőgyakorlatok",
+        "gentleStretch": "Gyengéd nyújtás",
+        "cycling": "Kerékpározás",
+        "swimming": "Úszás",
+        "lightStrength": "Könnyű erősítő edzés",
+        "strength": "Erősítő edzés",
+        "jog": "Könnyű kocogás",
+        "running": "Futás",
+        "highIntensity": "Nagy intenzitású edzés",
+        "heavyLifting": "Nehéz emelés",
+        "extremeIntensity": "Extrém intenzitás"
+      },
+      "warnings": {
+        "title": "Fontos megjegyezni",
+        "noLifting": "Nincs nehéz emelés (5 kg felett)",
+        "staySoftMovements": "Ragaszkodjon a lágy, lassú mozdulatokhoz",
+        "avoidSwimmingUntilHealed": "Kerülje az úszást, amíg a sebek be nem gyógyulnak (általában 3-4 hét)",
+        "lightWeightsOk": "A könnyű súlyok (2-5 kg) megfelelőek, miután konzultált orvosával",
+        "startStrengthGradually": "Kezdje az erősítő edzést alacsony súlyokkal és magas ismétlésszámmal",
+        "stillBuildGradually": "Továbbra is fokozatosan építsd fel – kerüld a hirtelen nagy növekedéseket",
+        "hydration": "Emlékezzen a folyadékokra az edzés előtt, alatt és után"
+      },
+      "safety": {
+        "activityNotRecommended": "A {{activity}} nem ajánlott az Ön fázisában. Forduljon orvosához.",
+        "durationTooLong": "A javasolt időtartam legfeljebb {{max}} min. Tervezte a {{actual}} min.",
+        "checkWithDoctor": "Forduljon orvosához, ha fájdalmat, hányingert vagy kimerültséget tapasztal"
+      },
+      "disclaimer": "Az ajánlások csak iránymutatások. Mindig kövesse a saját klinikája utasításait."
+    }
+  },
+  "diabetes": {
+    "title": "Cukorbetegség profilja",
+    "subtitle": "1. típusú, 2. típusú vagy prediabetes",
+    "settingsButton": "Cukorbetegség profilja",
+    "settingsDescription": "1-es, 2-es típusú vagy prediabetes - diéta, vércukorszint és testmozgás",
+    "setup": {
+      "title": "Cukorbetegség profilja",
+      "intro": "Engedélyezze a cukorbetegség támogatását, hogy személyre szabott étkezési javaslatokat, vércukorszintre vonatkozó útmutatást és gyakorlati ajánlásokat kapjon.",
+      "type": "Cukorbetegség típusa",
+      "typeT1": "1. típus",
+      "typeT2": "2. típus",
+      "typePre": "Prediabetes",
+      "typeGest": "Terhességi cukorbetegség",
+      "treatment": "Kezelés",
+      "txNone": "Nincs",
+      "txDiet": "Csak diéta/életmód",
+      "txMetformin": "Metformin",
+      "txOral": "Egyéb orális gyógyszerek",
+      "txGLP1": "GLP-1 (Ozempic/Wegovy/Mounjaro)",
+      "txBasal": "Bázis inzulin",
+      "txBolus": "Bázis + bolus inzulin",
+      "txPump": "Inzulinpumpa",
+      "diagnosisDate": "Diagnózis dátuma (opcionális)",
+      "datePlaceholder": "YYYY-MM-DD",
+      "hba1c": "HbA1c (mmol/mol, opcionális)",
+      "countCarbs": "A szénhidrátokat számolom",
+      "carbRatio": "Inzulin/szénhidrát arány (g/U, opcionális)",
+      "carbRatioHelp": "Pl. 10 = 1 egység inzulin 10 g szénhidrátot takar. Az alkalmazás soha nem adagol – ez a szám csak tájékoztató jellegű.",
+      "correctionFactor": "Korrekciós tényező (mmol/L per U, opcionális)",
+      "preExerciseMin": "Minimális vércukorszint edzés előtt (mmol/l)",
+      "enable": "A cukorbetegség támogatásának engedélyezése",
+      "acceptDisclaimer": "Elfogadom a fenti felelősségkizárást",
+      "disclaimerRequired": "El kell fogadnia a felelősség kizárását",
+      "missingType": "Válassza ki a cukorbetegség típusát",
+      "save": "Profil mentése",
+      "saved": "Profil mentve",
+      "delete": "Diabetesprofil törlése",
+      "deleted": "Profil törölve",
+      "deleteConfirm": "Biztos benne, hogy törölni szeretné cukorbetegség-profilját?",
+      "disclaimer": "FONTOS: Ez az alkalmazás NEM helyettesíti orvosát vagy cukorbeteg csapatát. SOHA nem javasolunk konkrét inzulinadagokat vagy gyógyszermódosítást. Soha ne módosítsa a kezelést kizárólag az alkalmazásra vonatkozó tanácsok alapján. Kétség esetén mindig forduljon egészségügyi szolgáltatójához."
+    }
+  },
+  "bloodSugar": {
+    "title": "Vércukor",
+    "settingsButton": "Vércukor napló",
+    "settingsDescription": "Regisztrálja méréseit, és tekintse meg az időbeli trendeket",
+    "add": "Olvasás hozzáadása",
+    "save": "Mentés",
+    "history": "Előzmények",
+    "empty": "Még nincsenek leolvasások. Érintse meg a fenti gombot az első mérés naplózásához.",
+    "disclaimer": "Ezek a számok csak tájékoztatásul szolgálnak. Mindig beszélje meg a mintákat orvosával vagy a cukorbeteg csapattal.",
+    "valueLabel": "Vércukor (mmol/l)",
+    "contextLabel": "Kontextus",
+    "noteLabel": "Megjegyzés (opcionális)",
+    "notePlaceholder": "Pl. reggeli után",
+    "errInvalidTitle": "Érvénytelen érték",
+    "errInvalidBody": "Adjon meg egy 1,0 és 40,0 mmol/L közötti vércukorszintet.",
+    "errSaveTitle": "Nem sikerült menteni",
+    "deleteTitle": "Olvasás törlése",
+    "deleteBody": "Biztos benne? Nyomja meg hosszan a törléshez.",
+    "ctx": {
+      "fasting": "Böjt",
+      "preMeal": "Étkezés előtt",
+      "postMeal": "Étkezés után",
+      "bedtime": "Lefekvés",
+      "preExercise": "Edzés előtt",
+      "postExercise": "Edzés után",
+      "random": "Véletlen"
+    },
+    "range": {
+      "1d": "1 nap",
+      "7d": "7 nap",
+      "30d": "30 nap",
+      "90d": "90 nap"
+    },
+    "stat": {
+      "avg": "Átlag",
+      "min": "Min",
+      "max": "Max",
+      "tir": "Tartományban lévő idő",
+      "target": "Cél",
+      "measurements": "értékek"
+    }
+  },
+  "healthScore": {
+    "title": "Egészségügyi pontszám",
+    "todayLabel": "A mai pontszám",
+    "A": "Nagyon egészséges",
+    "B": "Egészséges",
+    "C": "Közepes",
+    "D": "Kevésbé egészséges",
+    "E": "Egészségtelen"
+  },
+  "units": {
+    "g": "g",
+    "kg": "kg",
+    "ml": "ml",
+    "dl": "dl",
+    "l": "l",
+    "tsk": "tk",
+    "spsk": "evőkanál",
+    "stk": "db",
+    "skive": "szelet",
+    "portion": "rész"
+  },
+  "logMeal": {
+    "amount": "Összeg",
+    "unit": "Egység",
+    "approxGrams": "≈ {{grams}}g"
+  },
+  "home": {
+    "greeting": {
+      "morning": "Jó reggelt",
+      "day": "Hello",
+      "evening": "Jó estét",
+      "night": "Jó éjszakát"
+    },
+    "coach": {
+      "restDay": "Ma pihenőnap van – élvezze a gyógyulást!",
+      "todayWorkout": "A mai terv tartalmazza a {{workout}}-t.",
+      "nextWorkout": "Következő edzés: {{workout}}.",
+      "ready": "Készen áll az indulásra? Kérdezz a tervezésről, táplálkozásról vagy motivációról.",
+      "askForHelp": "Kérdezzen bármit, ha segítségre van szüksége."
+    },
+    "chat": {
+      "placeholder": "Kérdezze meg az AI edzőjét...",
+      "todayPlanPrompt": "Mi a tervem mára?"
+    },
+    "todayPlan": "A mai nap terve",
+    "startTraining": "Kezdje el az edzést",
+    "nextTraining": "Következő edzés",
+    "today": "Ma",
+    "training": "Edzés",
+    "todayOverview": "Mai áttekintés",
+    "week": "hét",
+    "milestone": "Mérföldkő",
+    "toGoal": "a {{distance}} km-es célig"
+  },
+  "progress": {
+    "weeks": "Hetek",
+    "months": "Hónapok",
+    "weekLabel": "{{week}}, {{year}} hét",
+    "weekShort": "W{{week}}",
+    "activities": "Tevékenységek",
+    "empty": "Még nincs tevékenység – menjen ki és fuss!",
+    "noRoute": "Nincs útvonal rögzítve",
+    "standardTraining": "Normál edzés",
+    "steps": "Lépések",
+    "duration": "Időtartam",
+    "caloriesShort": "kal",
+    "activityTypes": {
+      "walk": "Séta",
+      "cycling": "Kerékpározás",
+      "run": "Fuss"
+    }
+  },
+  "workoutLabels": {
+    "rest": "Rest",
+    "injuryRest": "Pihenés sérülés miatt"
+  },
+  "calendar": {
+    "monthSummary_one": "{{count}} futás · {{km}} km",
+    "monthSummary_other": "{{count}} fut · {{km}} km",
+    "completed": "Befejezve",
+    "planned": "Tervezett",
+    "missed": "Kimaradt",
+    "plannedKm": "{{km}} km tervezett",
+    "emptyDay": "Erre a napra nincs tervezett futás vagy edzés"
+  },
+  "motionPicker": {
+    "title": "Kardió",
+    "what": "Mit szeretne csinálni?",
+    "where": "Hol?",
+    "run": "Fuss",
+    "walk": "Séta",
+    "cycling": "Kerékpározás",
+    "runLocation": "Kültéri vagy futópad",
+    "bikeLocation": "Kültéri vagy beltéri",
+    "outdoor": "Kültéri",
+    "outdoorDescription": "GPS követés · útvonalak · tempó",
+    "indoor": "Beltéri",
+    "indoorDescription": "Futópad · lépésszámláló · kézi távolság"
+  },
+  "activityPicker": {
+    "title": "Válasszon edzést",
+    "intro": "Mit szeretne naplózni?",
+    "options": {
+      "mobility": {
+        "label": "Mobilitás / Jóga",
+        "description": "Nyújtás, jóga, habhengerlés"
+      },
+      "bike": {
+        "label": "Kerékpározás",
+        "description": "Beltéri vagy kültéri"
+      },
+      "other": {
+        "label": "Egyéb tevékenység",
+        "description": "Padel, foci, úszás..."
+      }
+    }
+  },
+  "logActivity": {
+    "types": {
+      "strength": "Erősítő edzés",
+      "mobility": "Mobilitás / Jóga",
+      "bike": "Kerékpározás",
+      "other": "Egyéb tevékenység"
+    },
+    "invalidDuration": "Adjon meg egy érvényes időtartamot percben",
+    "savedTitle": "Mentve!",
+    "savedMessage": "{{activity}} naplózva ({{duration}} min, {{calories}} kcal)",
+    "saveError": "Nem sikerült menteni: {{error}}",
+    "logActivity": "Jelentkezzen be {{activity}}",
+    "duration": "Időtartam (perc) *",
+    "calories": "Kalória (opcionális – egyébként automatikusan számítják)",
+    "calorieEstimate": "≈ {{calories}} kcal {{weight}} kg, RPE {{rpe}} értékből számítva",
+    "effort": "Erőfeszítés (RPE 1–10)",
+    "notes": "Megjegyzések (opcionális)",
+    "notesPlaceholder": "Például gyakorlatok, súlyok, sorozatok...",
+    "save": "Edzés mentése"
+  },
+  "treadmill": {
+    "invalidValueTitle": "Érvénytelen érték",
+    "invalidValueMessage": "Írjon be egy számot, például 5.2",
+    "noDistanceTitle": "Nincs távolság",
+    "noDistanceMessage": "Adja hozzá a távolságot manuálisan, vagy folytassa addig, amíg a lépések mérhetők.",
+    "finishTitle": "Befejezi és menti?",
+    "finishMessage": "Távolság: {{distance}} km · Idő: {{time}} · {{calories}} kcal",
+    "walkNote": "Beltéri séta (futópad)",
+    "runNote": "Beltéri futás (futópad)",
+    "savedTitle": "Mentve! 🏃",
+    "savedMessage": "{{distance}} km in {{time}} · {{calories}} kcal égett.",
+    "saveError": "Nem sikerült menteni",
+    "discardTitle": "Elveti az edzést?",
+    "discardMessage": "Az edzés minden adata elvész.",
+    "keep": "Tartsa meg",
+    "discard": "Dobja el",
+    "walkTitle": "Futópad · Séta",
+    "runTitle": "Futópad · Fuss",
+    "pedometerActive": "Lépésszámláló aktív",
+    "pedometerUnavailable": "Lépésszámláló nem érhető el",
+    "steps": "LÉPÉSEK",
+    "speed": "Sebesség",
+    "adjustDistance": "Állítsa be a távolságot",
+    "adjustHint": "Adjon hozzá távolságot manuálisan a futópad kijelzőjén",
+    "enterExactDistance": "Adja meg a futópadtól való pontos távolságot",
+    "instructionsTitle": "A nyomkövető használata",
+    "instructions": "1. Nyomja meg a START gombot, amikor elkezdi használni a futópadon\n2. Adja hozzá a távolságot a +0,1 / +0,5 / +1,0 gombokkal\n3. Vagy adja meg a pontos távolságot, amikor befejezte\n4. A lépések számolása automatikusan történik, amikor magával viszi a telefont",
+    "saving": "Mentés...",
+    "exactDistanceTitle": "Adja meg a pontos távolságot",
+    "exactDistanceHint": "Olvassa el a futópad kijelzőjét, és adja meg a távolságot km-ben",
+    "apply": "Jelentkezzen"
+  },
+  "statsPage": {
+    "hoursShort": "h",
+    "minutesShort": "m",
+    "now": "Most",
+    "weeksAgoShort": "{{count}}w",
+    "emptyTitle": "Még nincs statisztika",
+    "emptyMessage": "Kezdje el az első futtatást, hogy itt lássa adatait.",
+    "period4Weeks": "4 hét",
+    "period3Months": "3 hónap",
+    "bestPace": "A legjobb tempó",
+    "dayStreak": "Napi sorozat",
+    "weeklyGoal": "Heti cél",
+    "ofGoal": "a {{goal}} km célból",
+    "goalReached": "A cél elérve!",
+    "kmRemaining": "{{km}} km van hátra",
+    "milestone": "Mérföldkő",
+    "toMilestone": "{{remaining}} km–{{milestone}} km",
+    "kmPerWeek": "KM HETENTE",
+    "kmPerMonth": "KM HÓNAP",
+    "avgDistance": "Átlagos távolság",
+    "kmPerRun": "km futásonként",
+    "totalTime": "Teljes idő",
+    "moving": "mozog",
+    "longestRun": "Leghosszabb futás",
+    "runsPerWeekday": "Hétköznaponként fut",
+    "activityRings": "Tevékenységgyűrűk",
+    "kmGoal": "KM CÉL",
+    "distance": "Távolság",
+    "activity": "Tevékenység",
+    "days": "NAPOK",
+    "streak": "Csík",
+    "activityTypes": "Tevékenységtípusok",
+    "types": {
+      "run": "Fuss",
+      "walk": "Séta",
+      "bike": "Kerékpározás"
+    }
+  },
+  "privacyPage": {
+    "title": "Adatvédelmi irányelvek",
+    "updated": "Utolsó frissítés: 2026. április",
+    "intro": "A RunWithAI-nál komolyan vesszük az Ön adatainak védelmét. Ez a szabályzat elmagyarázza, hogyan gyűjtjük, használjuk és védjük személyes adatait.",
+    "sections": [
+      {
+        "title": "Adatkezelő",
+        "paragraphs": [
+          "A RunWithAI felelős az Ön személyes adatainak feldolgozásáért. Ha kérdése van, forduljon hozzánk a privacy@runwithai.app címen."
+        ]
+      },
+      {
+        "title": "Az általunk gyűjtött adatok",
+        "paragraphs": [
+          "A következő típusú adatokat gyűjtjük:"
+        ],
+        "bullets": [
+          "Fiókinformációk: e-mail cím, név, életkor és nem",
+          "Fizikai adatok: súly és magasság (opcionális)",
+          "Edzésadatok: tevékenységek, távolság, tempó, pulzusszám és GPS-útvonalak",
+          "Alkalmazáshasználat: preferenciák, célok és szint",
+          "Fizetési információk: az App Store vagy a Google Play biztonságosan kezeli"
+        ]
+      },
+      {
+        "title": "Hogyan használjuk fel adatait",
+        "paragraphs": [
+          "Adatait a következőkre használjuk fel:"
+        ],
+        "bullets": [
+          "Személyre szabott mesterséges intelligencia edzésterveket biztosít",
+          "Elemezze edzéseit és fejlődését",
+          "Javítsa szolgáltatásainkat",
+          "Küldjön vonatkozó értesítéseket és frissítéseket",
+          "Kifizetések és előfizetések kezelése"
+        ]
+      },
+      {
+        "title": "Harmadik féltől származó integrációk",
+        "paragraphs": [
+          "A RunWithAI integrálható a Garmin Connect szolgáltatással a futó adatok importálásához. Csatlakozáskor csak az edzésadatokat kérjük le – a bejelentkezési adatait nem."
+        ]
+      },
+      {
+        "title": "Adatmegosztás",
+        "paragraphs": [
+          "Soha nem adjuk el az adatait. Csak a következőkkel osztunk meg adatokat:"
+        ],
+        "bullets": [
+          "Apple/Google: biztonságos fizetésfeldolgozás",
+          "OpenAI: anonimizált AI coaching",
+          "Tárhelyszolgáltatók: Vercel és Railway az adattároláshoz"
+        ]
+      },
+      {
+        "title": "Adatbiztonság",
+        "paragraphs": [
+          "Ipari szabványos biztosítékokat alkalmazunk, többek között:"
+        ],
+        "bullets": [
+          "HTTPS titkosítás minden kapcsolathoz",
+          "Biztonságos jelszó-kivonatolás a bcrypt segítségével",
+          "JWT tokenek a hitelesítéshez",
+          "Rendszeres biztonsági frissítések"
+        ]
+      },
+      {
+        "title": "Az Ön jogai",
+        "paragraphs": [
+          "Joga van:"
+        ],
+        "bullets": [
+          "Hozzáférhet adataihoz",
+          "Pontatlan információk helyesbítése",
+          "Törölje fiókját és az összes adatot",
+          "Exportálja adatait CSV formátumban",
+          "A hozzájárulás visszavonása"
+        ]
+      },
+      {
+        "title": "Adatmegőrzés",
+        "paragraphs": [
+          "Adatait addig őrizzük, amíg fiókja aktív. Ha törli fiókját, 30 napon belül minden adatot eltávolítunk."
+        ]
+      },
+      {
+        "title": "Cookie-k és nyomon követés",
+        "paragraphs": [
+          "Minimális cookie-kat használunk a bejelentkezéshez. Nem használunk harmadik féltől származó nyomkövető vagy hirdetési cookie-kat."
+        ]
+      },
+      {
+        "title": "Gyermekek magánélete",
+        "paragraphs": [
+          "A RunWithAI nem 13 éven aluli gyermekek számára készült, és tudatosan nem gyűjtünk adatokat ezen kor alatti gyermekektől."
+        ]
+      },
+      {
+        "title": "Az irányelvek változásai",
+        "paragraphs": [
+          "Ezt a szabályzatot időről időre frissíthetjük. A lényeges változásokról az alkalmazásban vagy e-mailben értesítjük."
+        ]
+      },
+      {
+        "title": "Kapcsolat"
+      }
+    ],
+    "contactQuestion": "Kérdései vannak ezzel a szabályzattal vagy adataival kapcsolatban?",
+    "footer": "© 2026 RunWithAI. Minden jog fenntartva."
+  },
+  "more": {
+    "title": "Továbbiak",
+    "subtitle": "Minden eszköze egy helyen",
+    "sections": {
+      "account": "Számla",
+      "statistics": "Statisztika",
+      "setup": "Beállítás",
+      "app": "kb"
+    },
+    "newBadge": "Új",
+    "menu": {
+      "profile": "Profil",
+      "profileSubtitle": "Személyes adatok, célok, pulzusszám és sérülések",
+      "statistics": "Statisztika",
+      "statisticsSubtitle": "Teljes távolság, legjobb tempó és mérföldkövek",
+      "goals": "Célok",
+      "goalsSubtitle": "Heti célok és edzéstípusok",
+      "settings": "Beállítások",
+      "settingsSubtitle": "Szint, nyelv, profil és értesítések",
+      "privacy": "Adatvédelem",
+      "privacySubtitle": "Az Ön adatai és jogai",
+      "upgrade": "Frissítés PRO-ra",
+      "upgradeSubtitle": "Az összes funkció feloldása"
     }
   }
 }

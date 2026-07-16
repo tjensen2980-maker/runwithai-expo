@@ -1,4 +1,4 @@
-﻿{
+{
   "coachIntro": {
     "title": "Il tuo coach IA",
     "qName": "Ciao! Sono il tuo coach personale di corsa con IA 🏃 Prima di iniziare, vorrei conoscerti un po’. Come ti chiami?",
@@ -55,7 +55,11 @@
     "lastActivity": "Ultima attività",
     "gpsTracking": "Tracciamento GPS",
     "walkTracking": "Tracciamento camminata",
-    "aiRoutes": "Percorsi AI"
+    "aiRoutes": "Percorsi AI",
+    "motionTitle": "Cardio",
+    "motionActivities": "Corri · Cammina · Pedala",
+    "trainingTitle": "Formazione",
+    "trainingActivities": "Forza, mobilità e altro ancora"
   },
   "pro": {
     "badge": "PRO",
@@ -86,6 +90,10 @@
     "aiRoutes": {
       "title": "Percorsi AI",
       "description": "Ottieni percorsi suggeriti in base al tuo allenamento"
+    },
+    "nutrition": {
+      "title": "Rilevatore di calorie",
+      "description": "Conta le calorie, registra i pasti e scansiona i codici a barre"
     }
   },
   "stats": {
@@ -146,44 +154,85 @@
     "height": "ALTEZZA",
     "years": "Anni",
     "runningLevel": "LIVELLO DI CORSA",
-    "levels.beginner": "Principiante",
-    "levels.intermediate": "Intermedio",
-    "levels.advanced": "Avanzato",
     "yourGoals": "QUALI SONO I TUOI OBIETTIVI",
-    "goals.health": "Salute",
-    "goals.weight": "Perdita di peso",
-    "goals.distance": "Correre più a lungo",
-    "goals.speed": "Diventare più veloce",
-    "goals.race": "Correre una gara",
-    "goals.fun": "Divertimento",
     "weeklyGoalKm": "OBIETTIVO KM SETTIMANALE",
     "weeklyGoalExample": "Es. 20",
     "unlockFullPower": "Sblocca accesso completo",
     "unlockDesc": "Accedi a tutte le funzionalità e raggiungi i tuoi obiettivi più velocemente",
-    "proFeatures.aiCoachDesc": "Coach IA",
-    "proFeatures.statsDesc": "Statistiche",
-    "proFeatures.goalsDesc": "Obiettivi",
-    "proFeatures.routesDesc": "Percorsi",
-    "proFeatures.chatDesc": "Chat IA",
-    "proFeatures.reportsDesc": "Report",
     "price": "49 kr",
     "guarantee": "✓ Annulla quando vuoi • ✓ 7 giorni di prova gratuita",
     "perMonth": "/mese",
     "startFreeTrial": "Inizia prova gratuita",
     "continueWithFree": "Continua con versione gratuita",
-    "levels.beginnerDesc": "Nuovo alla corsa o ricominciando dopo una lunga pausa",
-    "levels.intermediateDesc": "Corre regolarmente e cerca di migliorare",
-    "levels.advancedDesc": "Corridore esperto con obiettivi specifici",
     "or": "o",
     "errors": {
-      "serverConnection": "Impossibile connettersi al server"
+      "serverConnection": "Impossibile connettersi al server",
+      "fillEmailPassword": "Inserisci sia l'e-mail che la password",
+      "loginFailed": "Impossibile accedere",
+      "enterEmail": "Inserisci il tuo indirizzo email",
+      "resetCodeFailed": "Impossibile inviare il codice di ripristino",
+      "fillCodePassword": "Immettere il codice di ripristino e una nuova password",
+      "passwordMismatch": "Le password non corrispondono",
+      "passwordTooShort": "La password deve contenere almeno 6 caratteri",
+      "resetFailed": "Impossibile reimpostare la password",
+      "registerFailed": "Impossibile creare l'account",
+      "enterName": "Inserisci il tuo nome",
+      "selectLevel": "Seleziona il tuo livello di corsa"
+    },
+    "levels": {
+      "beginner": "Principiante",
+      "intermediate": "Intermedio",
+      "advanced": "Avanzato",
+      "beginnerDesc": "Nuovo alla corsa o ricominciando dopo una lunga pausa",
+      "intermediateDesc": "Corre regolarmente e cerca di migliorare",
+      "advancedDesc": "Corridore esperto con obiettivi specifici"
+    },
+    "goals": {
+      "health": "Salute",
+      "weight": "Perdita di peso",
+      "distance": "Correre più a lungo",
+      "speed": "Diventare più veloce",
+      "race": "Correre una gara",
+      "fun": "Divertimento"
+    },
+    "proFeatures": {
+      "aiCoachDesc": "Coach IA",
+      "statsDesc": "Statistiche",
+      "goalsDesc": "Obiettivi",
+      "routesDesc": "Percorsi",
+      "chatDesc": "Chat IA",
+      "reportsDesc": "Report"
+    },
+    "resetPassword": "Reimposta la password",
+    "forgotPasswordDesc": "Inserisci la tua email e ti invieremo un codice di ripristino.",
+    "sendResetCode": "Invia il codice di ripristino",
+    "backToLogin": "Torna al login",
+    "createNewPassword": "Crea una nuova password",
+    "checkEmail": "Controlla la tua email per il codice di ripristino a sei cifre.",
+    "resetCode": "Reimposta il codice",
+    "resetCodePlaceholder": "Codice a 6 cifre",
+    "newPassword": "Nuova password",
+    "confirmNewPassword": "Conferma la nuova password",
+    "resendCode": "Invia un nuovo codice",
+    "tellUsAboutYou": "Raccontaci di te",
+    "success": {
+      "resetCodeSent": "Abbiamo inviato un codice di ripristino alla tua email.",
+      "passwordReset": "La tua password è stata reimpostata. Ora puoi accedere."
     }
   },
   "settings": {
     "pageTitle": "Impostazioni",
     "title": "Impostazioni",
     "profile": "Profilo",
-    "days": ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"],
+    "days": [
+      "Lun",
+      "Mar",
+      "Mer",
+      "Gio",
+      "Ven",
+      "Sab",
+      "Dom"
+    ],
     "saveChanges": "Salva modifiche",
     "saved": "Salvato!",
     "logout": "Esci",
@@ -201,7 +250,8 @@
       "reminders": "Promemoria",
       "privacy": "Privacy",
       "units": "Unità",
-      "data": "Dati"
+      "data": "Dati",
+      "profile": "Profilo"
     },
     "fields": {
       "name": "Nome",
@@ -304,6 +354,57 @@
       "deletedTitle": "Account eliminato",
       "deletedMessage": "Il tuo account è stato eliminato.",
       "error": "Impossibile eliminare l'account"
+    },
+    "reminders": {
+      "workoutTitle": "Promemoria allenamento",
+      "workoutSubtitle": "Ricevi una notifica nei giorni e all'ora selezionati",
+      "mealTitle": "Promemoria pasto",
+      "mealSubtitle": "Ricordati di registrare i tuoi pasti",
+      "time": "Ora: {{time}}",
+      "days": [
+        "Dom",
+        "Lun",
+        "Mar",
+        "Mercoledì",
+        "Gio",
+        "Ven",
+        "Sab"
+      ]
+    },
+    "email": {
+      "title": "E-mail",
+      "change": "Cambia e-mail",
+      "newEmail": "Nuova email",
+      "currentPassword": "Password attuale",
+      "missingFields": "Inserisci sia la tua nuova email che la password attuale",
+      "changeError": "Impossibile modificare l'e-mail",
+      "successMessage": "La tua email è stata aggiornata",
+      "networkError": "Errore di rete"
+    },
+    "subscription": {
+      "title": "Abbonamento",
+      "type": "Tipo",
+      "status": "Stato",
+      "tiers": {
+        "pro": "Pro",
+        "basic": "Base",
+        "free": "Gratuito"
+      },
+      "statuses": {
+        "active": "Attivo",
+        "inactive": "Inattivo",
+        "trialing": "Prova",
+        "canceled": "Annullato"
+      },
+      "upgrade": "Aggiornamento",
+      "manage": "Gestisci nell'App Store"
+    },
+    "language": "Lingua",
+    "changeLanguageInSettings": "Cambia la lingua nelle Impostazioni",
+    "languageHint": "Apri le impostazioni del dispositivo e seleziona RunWithAI → Lingua.",
+    "actions": {
+      "save": "Salva le modifiche",
+      "saved": "Salvato!"
     }
   },
   "pricing": {
@@ -367,6 +468,139 @@
     "step3": {
       "title": "Raggiungi i tuoi obiettivi",
       "desc": "Imposta obiettivi e monitora i tuoi progressi con statistiche dettagliate"
+    },
+    "tagline": "Il tuo allenatore personale di corsa con intelligenza artificiale",
+    "headline": {
+      "before": "Addestrarlo",
+      "highlight": "si adatta a",
+      "after": "tu"
+    },
+    "features": {
+      "ai": {
+        "title": "Un vero allenatore di intelligenza artificiale",
+        "desc": "Il tuo piano è creato per te, non è un modello"
+      },
+      "adapts": {
+        "title": "Un progetto abitativo",
+        "desc": "Si regola dopo ogni corsa completata"
+      },
+      "injury": {
+        "title": "Ascolta il tuo corpo",
+        "desc": "Gli infortuni e il dolore vengono presi in considerazione nel tuo allenamento"
+      },
+      "goals": {
+        "title": "Verso il tuo obiettivo",
+        "desc": "Dai tuoi primi 5 km a una maratona, al tuo ritmo"
+      }
+    },
+    "tryFree": "Prova gratuita per 14 giorni",
+    "fine": "Nessun impegno. Annulla in qualsiasi momento.",
+    "levelQuestion": "Dove ti trovi nel tuo viaggio di corsa?",
+    "selectLevel": "Seleziona il tuo livello per continuare",
+    "levels": {
+      "beginner": {
+        "label": "Principiante",
+        "sub": "Nuovo o in arrivo dopo una pausa"
+      },
+      "intermediate": {
+        "label": "Intermedio",
+        "sub": "Corro regolarmente e voglio migliorare"
+      },
+      "advanced": {
+        "label": "Avanzato",
+        "sub": "Mi alleno con uno scopo e conosco il mio ritmo"
+      }
+    },
+    "tellUsAboutYou": "Raccontaci un po' di te",
+    "coachUsesThis": "Il tuo coach lo usa per costruire il tuo piano",
+    "fields": {
+      "name": "Qual è il tuo nome?",
+      "age": "Età",
+      "weeklyKm": "Km a settimana (circa)"
+    },
+    "primaryGoal": "Qual è il tuo obiettivo?",
+    "goals": {
+      "fitness": {
+        "label": "Mettiti in forma",
+        "sub": "Salute ed energia"
+      },
+      "5k": {
+        "label": "5K",
+        "sub": "Il mio primo grande obiettivo"
+      },
+      "10k": {
+        "label": "10K",
+        "sub": "Il livello successivo"
+      },
+      "half": {
+        "label": "Mezza maratona",
+        "sub": "21,1 km"
+      },
+      "full": {
+        "label": "Maratona",
+        "sub": "42,2 km"
+      },
+      "weight": {
+        "label": "Perdere peso",
+        "sub": "Corri più leggero"
+      }
+    },
+    "raceDate": "Hai una data per la gara? (facoltativo)",
+    "raceDatePlaceholder": "ad es. 15 settembre",
+    "skipForNow": "Salta per ora",
+    "plan": {
+      "building": "Il tuo coach sta costruendo il tuo piano...",
+      "waitNamed": "{{name}}, dammi un momento.",
+      "wait": "Dammi un momento.",
+      "errorTitle": "Impossibile creare il tuo piano in questo momento",
+      "errorMessage": "Puoi sempre chiedere al tuo allenatore di crearlo in un secondo momento.",
+      "readyNamed": "{{name}}, ecco il tuo piano",
+      "ready": "Ecco il tuo piano",
+      "basedOnAnswers": "Il tuo piano si basa su ciò che hai detto al tuo allenatore.",
+      "weeklyDistance": "Distanza settimanale: {{km}} km",
+      "goal": "Obiettivo: {{goal}}",
+      "considerations": "Considerazioni: {{injuries}}",
+      "weekAndDay": "Settimana {{week}} – {{day}}",
+      "day": "Giorno {{day}}",
+      "run": "Corri",
+      "makePlan": "Crea il mio piano",
+      "weekdays": {
+        "mon": "Lunedì",
+        "tue": "Martedì",
+        "wed": "Mercoledì",
+        "thu": "Giovedì",
+        "fri": "Venerdì",
+        "sat": "Sabato",
+        "sun": "Domenica"
+      }
+    },
+    "languageTitle": "Scegli la tua lingua",
+    "languageSubtitle": "Puoi modificarlo in seguito in Impostazioni",
+    "paywall": {
+      "headline": "Il tuo allenatore personale di intelligenza artificiale",
+      "subtitle": "Un piano di allenamento che si adatta a te: ogni settimana, ogni corsa.",
+      "benefits": {
+        "adaptive": "Il tuo piano si adatta dopo ogni corsa",
+        "audioCoach": "Il tuo allenatore nelle tue orecchie mentre ti alleni",
+        "calendar": "Piano settimanale e calendario che tengono il passo",
+        "chat": "Chiedi qualsiasi cosa al tuo allenatore, in qualsiasi momento"
+      },
+      "trial": "14 giorni gratis",
+      "afterTrial": "Quindi {{price}}/mese. Annulla in qualsiasi momento, con un solo tocco.",
+      "startTraining": "Inizia la mia formazione",
+      "restore": "Ripristina gli acquisti",
+      "welcomeTitle": "🎉 Benvenuto!",
+      "welcomeMessage": "Il tuo accesso Pro è ora attivo.",
+      "restoreSuccessTitle": "Acquisti ripristinati",
+      "restoreSuccessMessage": "Il tuo abbonamento è di nuovo attivo.",
+      "noPurchasesTitle": "Nessun acquisto trovato",
+      "noPurchasesMessage": "Non è stato trovato alcun abbonamento attivo.",
+      "errors": {
+        "prices": "Impossibile caricare i prezzi. Riprova più tardi.",
+        "packageUnavailable": "Questo abbonamento non è disponibile.",
+        "purchaseTitle": "Acquisto non riuscito",
+        "restore": "Impossibile ripristinare gli acquisti."
+      }
     }
   },
   "dashboard": {
@@ -419,7 +653,20 @@
       "runsFromRecord": "{{count}} corse dal record",
       "runsInMonth": "{{count}} corse in {{month}}"
     },
-    "monthNames": ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"],
+    "monthNames": [
+      "Gen",
+      "Feb",
+      "Mar",
+      "Apr",
+      "Mag",
+      "Giu",
+      "Lug",
+      "Ago",
+      "Set",
+      "Ott",
+      "Nov",
+      "Dic"
+    ],
     "workout": {
       "nextWorkout": "PROSSIMO ALLENAMENTO",
       "today": "OGGI",
@@ -445,7 +692,15 @@
       "addNote": "+ Nota",
       "mood": "Umore",
       "placeholder": "Com'è andata? Gambe pesanti? Bella giornata? Nuovo percorso?",
-      "dayNames": ["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"]
+      "dayNames": [
+        "Dom",
+        "Lun",
+        "Mar",
+        "Mer",
+        "Gio",
+        "Ven",
+        "Sab"
+      ]
     },
     "injury": {
       "title": "RISCHIO INFORTUNIO",
@@ -488,7 +743,31 @@
       "unavailable": "GPS non disponibile",
       "timeout": "Timeout GPS",
       "notAvailable": "GPS non disponibile",
-      "error": "Errore GPS"
+      "error": "Errore GPS",
+      "points": "Punti {{count}} ({{filtered}} filtrati)"
+    },
+    "cycling": "Ciclismo",
+    "music": "Musica",
+    "voiceOnly": "Solo voce",
+    "notification": {
+      "run": "Monitoraggio della corsa...",
+      "walk": "Monitoraggio della camminata...",
+      "bike": "Monitoraggio della corsa..."
+    },
+    "limit": {
+      "title": "Limite di attività settimanale raggiunto",
+      "message": "Hai raggiunto il limite del piano gratuito di attività {{limit}} a settimana. Passa a Basic o Pro per un accesso illimitato.",
+      "later": "Più tardi"
+    },
+    "stats": {
+      "runs": "viene eseguito",
+      "walks": "cammina",
+      "yourProgress": "I tuoi progressi",
+      "thisWeek": "Questa settimana",
+      "lastWeek": "La settimana scorsa",
+      "bestPace": "Miglior ritmo",
+      "longestRun": "Corsa più lunga",
+      "totalKm": "Km totali"
     }
   },
   "chat": {
@@ -507,7 +786,9 @@
     "logAllMeals": "Registra tutti i pasti",
     "logged": "Registrato",
     "mealPlanLoggedMessage": "Il piano alimentare è stato registrato per oggi.",
-    "mealPlanLogError": "Impossibile registrare il piano alimentare: {{error}}"
+    "mealPlanLogError": "Impossibile registrare il piano alimentare: {{error}}",
+    "languageChanged": "Lingua modificata. Il tuo coach AI ora risponderà in inglese.",
+    "languageChangedConfirmation": "Lingua modificata. Il tuo coach AI ora risponderà nella lingua selezionata."
   },
   "proUpsell": {
     "title": "Sblocca tutto il potenziale",
@@ -542,6 +823,675 @@
         "title": "Report progressi",
         "desc": "Riepiloghi settimanali e mensili"
       }
+    }
+  },
+  "bariatric": {
+    "title": "Profilo bariatrico",
+    "subtitle": "Manicotto gastrico/supporto bypass",
+    "settingsButton": "Profilo bariatrico",
+    "settingsDescription": "Manicotto gastrico o supporto per bypass",
+    "setup": {
+      "title": "Profilo bariatrico",
+      "intro": "Abilita il supporto bariatrico per ottenere obiettivi personalizzati per proteine, liquidi e calorie in base all'intervento chirurgico e alla fase.",
+      "surgeryType": "Tipo di intervento chirurgico",
+      "surgeryTypeNone": "Nessuno",
+      "surgeryTypeSleeve": "Manicotto gastrico",
+      "surgeryTypeBypass": "Bypass gastrico",
+      "surgeryDate": "Data dell'intervento",
+      "surgeryDatePlaceholder": "YYYY-MM-DD",
+      "startWeight": "Peso iniziale (kg)",
+      "goalWeight": "Peso obiettivo (kg)",
+      "height": "Altezza (cm)",
+      "enable": "Abilita il supporto bariatrico",
+      "save": "Salva profilo",
+      "delete": "Elimina profilo bariatrico",
+      "deleteConfirm": "Sei sicuro di voler eliminare il tuo profilo bariatrico?",
+      "disclaimer": "Importante: questa app NON sostituisce il tuo nutrizionista, medico o clinica bariatrica. Le raccomandazioni sono linee guida generali basate sulle linee guida ASMBS pubbliche. Segui sempre le istruzioni della tua clinica. Contatta immediatamente il tuo medico per la sindrome da dumping, nausea persistente o qualsiasi dubbio.",
+      "acceptDisclaimer": "Sono consapevole che questa app non sostituisce il mio team di assistenza bariatrica",
+      "disclaimerRequired": "È necessario accettare la clausola di esclusione della responsabilità",
+      "invalidDate": "Immettere una data valida",
+      "missingType": "Selezionare il tipo di intervento chirurgico",
+      "saved": "Profilo salvato",
+      "deleted": "Profilo eliminato"
+    },
+    "dashboard": {
+      "title": "Supporto bariatrico",
+      "edit": "Modifica",
+      "phaseLabel": "Fase corrente",
+      "daysSinceLabel": "Giorni trascorsi dall'intervento",
+      "daysUntilNext": "{{days}} giorni fino alla fase successiva",
+      "lastPhase": "Sei nella fase finale",
+      "proteinToday": "Proteine oggi",
+      "proteinProgress": "Proteine oggi",
+      "fluidToday": "Fluidi oggi",
+      "kcalRange": "Calorie (obiettivo)",
+      "portionSize": "Dimensione della porzione consigliata",
+      "medicalCheckReminder": "Ricorda il tuo controllo del giorno {{day}}",
+      "preSurgery": "Data dell'intervento non ancora raggiunta"
+    },
+    "phases": {
+      "clearLiquid": {
+        "name": "Settimana 1: Eliminare i liquidi",
+        "description": "Solo liquidi chiari: acqua, brodo, succo senza zucchero, tè. Piccoli sorsi durante la giornata."
+      },
+      "fullLiquid": {
+        "name": "Settimana 2: Pieno di liquidi",
+        "description": "Tutti i liquidi incl. frullati proteici, zuppe, yogurt. NON bere 30 minuti prima/dopo i pasti."
+      },
+      "pureed": {
+        "name": "Settimana 3-4: cibo frullato",
+        "description": "Cibo frullato/passato: ricotta, purea di pesce, pollo frullato. Masticare accuratamente."
+      },
+      "soft": {
+        "name": "Settimana 5-6: cibi morbidi",
+        "description": "Alimenti morbidi: uova strapazzate, pesce, verdure cotte, frutti di bosco. Prima le proteine, piccoli bocconi."
+      },
+      "regular": {
+        "name": "Settimana 7+: cibo normale",
+        "description": "Cibo normale in piccole porzioni. Prima le proteine, poi le verdure e infine i carboidrati. Masticare accuratamente."
+      }
+    },
+    "tips": {
+      "noDrinking": "NON bere 30 minuti prima o dopo i pasti",
+      "proteinFirst": "Mangia sempre prima le proteine",
+      "chew": "Masticare ogni boccone 20-30 volte",
+      "stopWhenFull": "Fermati quando sei pieno, anche con porzioni piccole",
+      "vitamins": "Ricorda le tue vitamine quotidiane"
+    },
+    "vitamins": {
+      "title": "Le vitamine di oggi",
+      "subtitle": "Ricorda i tuoi integratori giornalieri",
+      "names": {
+        "multivitamin": "Multivitaminico",
+        "calciumD": "Calcio + Vitamina D",
+        "iron": "Ferro",
+        "b12": "B12",
+        "omega3": "Omega-3 (opzionale)"
+      },
+      "taken": "Preso",
+      "notTaken": "Non utilizzato",
+      "allDone": "Tutte le vitamine prese oggi 🎉",
+      "reset": "Ripristina",
+      "optional": "opzionale"
+    },
+    "fluid": {
+      "title": "Assunzione di liquidi oggi",
+      "subtitle": "Bere lontano dai pasti, non insieme",
+      "goal": "Obiettivo",
+      "current": "Oggi",
+      "remaining": "Rimanente",
+      "add250": "+ 250 ml",
+      "add500": "+ 500 ml",
+      "addCustom": "Aggiungi",
+      "reset": "Ripristina",
+      "goalReached": "Hai raggiunto il tuo obiettivo fluido 💧",
+      "warning": "Ricorda i piccoli sorsi, non grandi quantità tutte in una volta"
+    },
+    "meals": {
+      "title": "Suggerimenti per te adesso",
+      "subtitle": "Su misura per la tua fase",
+      "kcal": "kcal",
+      "protein": "g di proteine",
+      "prep": "min",
+      "logIt": "Registro",
+      "types": {
+        "fluid": "Fluido",
+        "puree": "Purea",
+        "soft": "Alimenti morbidi",
+        "normal": "Cibo normale"
+      },
+      "items": {
+        "water": "Acqua",
+        "brothClear": "Brodo limpido",
+        "sugarFreeJuice": "Succo senza zucchero (diluito)",
+        "herbalTea": "Tisana",
+        "proteinShake": "Frullato proteico",
+        "skimmedMilk": "Latte scremato",
+        "thinSoup": "Zuppa liquida (filtrata)",
+        "skyrThin": "Skyr sottile",
+        "mashedFish": "Purè di pesce",
+        "cottageCheese": "Ricotta",
+        "eggPuree": "Purea di uova",
+        "pureedChicken": "Purè di pollo",
+        "mashedTofu": "Purè di tofu",
+        "softFish": "Pesce morbido",
+        "scrambledEgg": "Uovo strapazzato",
+        "softChicken": "Pollo tenero",
+        "wellCookedVeggies": "Verdure ben cotte",
+        "greekYogurt": "Yogurt greco",
+        "grilledChicken": "Petto di pollo alla griglia",
+        "salmonFillet": "Filetto di salmone",
+        "eggOmelette": "Frittata",
+        "lentilSoup": "Zuppa di lenticchie",
+        "leanBeef": "Manzo magro"
+      },
+      "reminders": {
+        "title": "Ricordatelo ai pasti",
+        "proteinFirst": "Mangia prima le proteine",
+        "chew": "Masticare 20-30 volte",
+        "noDrinking": "Non bere 30 minuti prima/dopo i pasti",
+        "stopWhenFull": "Arresta quando è pieno",
+        "smallSips": "Prendi piccoli sorsi",
+        "noStraw": "Nessuna cannuccia (aria nello stomaco)",
+        "slowly": "Bevi lentamente",
+        "mashWell": "Schiaccia bene",
+        "newFoodOneAtATime": "Introdurre un nuovo alimento alla volta",
+        "chewExtra": "Masticare molto accuratamente",
+        "mindfulEating": "Mangia lentamente e con consapevolezza",
+        "avoidEmptyCalories": "Evita le calorie vuote"
+      }
+    },
+    "dumping": {
+      "title": "Rischio sindrome da dumping",
+      "subtitle": "In base ai pasti di oggi",
+      "low": "Basso rischio",
+      "medium": "Sii consapevole",
+      "high": "Rischio alto",
+      "lowDesc": "I pasti di oggi sembrano a posto",
+      "mediumDesc": "Uno o più pasti possono innescare il dumping. Fai attenzione ai sintomi.",
+      "highDesc": "Più pasti ad alto rischio oggi. Rivolgersi al medico se si verificano nausea, battito cardiaco accelerato, vertigini o diarrea.",
+      "flaggedCount": "{{count}} pasto contrassegnato",
+      "flaggedCount_plural": "{{count}} pasti contrassegnati",
+      "reasons": {
+        "sugarHigh": "Troppo zucchero",
+        "sugarMedium": "Contenuto zuccherino moderato",
+        "fatHigh": "Alto contenuto di grassi",
+        "carbsNoProtein": "Carboidrati senza proteine",
+        "carbsHigh": "Elevato apporto di carboidrati",
+        "carbsMedium": "Assunzione moderata di carboidrati",
+        "proteinLow": "Assunzione di proteine troppo bassa"
+      },
+      "info": "Il dumping è più comune dopo il bypass gastrico e innescato da zuccheri, grassi o carboidrati a rapido assorbimento. Sintomi: nausea, battito cardiaco accelerato, vertigini, diarrea 15-30 minuti dopo i pasti."
+    },
+    "training": {
+      "title": "Allenamento adattato",
+      "subtitle": "Attività consigliata per la tua fase",
+      "currentPhase": "La tua fase di allenamento",
+      "daysUntilNext": "{{days}} giorni fino alla prossima fase di allenamento",
+      "maxDuration": "Durata massima",
+      "maxHeartRate": "Frequenza cardiaca massima",
+      "min": "min",
+      "ofMax": "della FC massima",
+      "intensityLabel": {
+        "veryLight": "Molto leggero",
+        "light": "Luce",
+        "moderate": "Moderato",
+        "normal": "Normale"
+      },
+      "phaseNames": {
+        "1": "Recupero (settimana 0-2)",
+        "2": "Inizio attento (settimana 2-4)",
+        "3": "Attività leggera (settimana 4-6)",
+        "4": "Sviluppo (settimana 6-8)",
+        "5": "Allenamento normale (settimana 8+)"
+      },
+      "phaseDesc": {
+        "1": "Scegli brevi passeggiate ed esercizi di respirazione profonda. Ascolta il tuo corpo e riposa molto.",
+        "2": "Puoi aumentare leggermente la camminata. Ancora nessun allenamento per la forza o esercizio intenso.",
+        "3": "Puoi iniziare a pedalare e nuotare (una volta che le ferite saranno guarite). Ancora niente corsa o pesi pesanti.",
+        "4": "È ora di introdurre allenamenti di forza leggeri e cardio più lunghi. Inizia con piccoli pesi.",
+        "5": "Puoi tornare all'allenamento normale, ma accumula comunque gradualmente e osserva la tua energia."
+      },
+      "allowed": "Consigliato",
+      "notRecommended": "Evita adesso",
+      "activities": {
+        "walkShort": "Breve passeggiata (5-10 minuti)",
+        "walkMedium": "Camminata media (15-20 minuti)",
+        "walkLong": "Camminata lunga (oltre 30 minuti)",
+        "breathing": "Esercizi di respirazione",
+        "gentleStretch": "Stretching delicato",
+        "cycling": "Ciclismo",
+        "swimming": "Nuoto",
+        "lightStrength": "Allenamento di forza leggero",
+        "strength": "Allenamento della forza",
+        "jog": "Jogging leggero",
+        "running": "In esecuzione",
+        "highIntensity": "Allenamento ad alta intensità",
+        "heavyLifting": "Sollevamento pesante",
+        "extremeIntensity": "Intensità estrema"
+      },
+      "warnings": {
+        "title": "Importante da ricordare",
+        "noLifting": "Nessun sollevamento pesante (oltre 5 kg)",
+        "staySoftMovements": "Attieniti a movimenti morbidi e lenti",
+        "avoidSwimmingUntilHealed": "Evita di nuotare finché le ferite non sono guarite (in genere 3-4 settimane)",
+        "lightWeightsOk": "I pesi leggeri (2-5 kg) sono accettabili dopo aver consultato il medico",
+        "startStrengthGradually": "Inizia l'allenamento della forza con pesi bassi e ripetizioni elevate",
+        "stillBuildGradually": "Aumenta comunque gradualmente: evita aumenti improvvisi e consistenti",
+        "hydration": "Ricordati di assumere liquidi prima, durante e dopo l'allenamento"
+      },
+      "safety": {
+        "activityNotRecommended": "{{activity}} non è consigliato nella tua fase. Consulta il tuo medico.",
+        "durationTooLong": "La durata consigliata è al massimo {{max}} min. Hai pianificato {{actual}} min.",
+        "checkWithDoctor": "Rivolgiti al tuo medico se avverti dolore, nausea o stanchezza"
+      },
+      "disclaimer": "Le raccomandazioni sono solo linee guida. Segui sempre le istruzioni della tua clinica."
+    }
+  },
+  "diabetes": {
+    "title": "Profilo del diabete",
+    "subtitle": "Tipo 1, Tipo 2 o prediabete",
+    "settingsButton": "Profilo del diabete",
+    "settingsDescription": "Tipo 1, Tipo 2 o prediabete: dieta, glicemia ed esercizio fisico",
+    "setup": {
+      "title": "Profilo del diabete",
+      "intro": "Abilita il supporto per il diabete per ottenere suggerimenti sui pasti personalizzati, indicazioni sulla glicemia e consigli sugli esercizi.",
+      "type": "Tipo di diabete",
+      "typeT1": "Tipo 1",
+      "typeT2": "Tipo 2",
+      "typePre": "Prediabete",
+      "typeGest": "Diabete gestazionale",
+      "treatment": "Trattamento",
+      "txNone": "Nessuno",
+      "txDiet": "Solo dieta/stile di vita",
+      "txMetformin": "Metformina",
+      "txOral": "Altri farmaci orali",
+      "txGLP1": "GLP-1 (Ozempic/Wegovy/Mounjaro)",
+      "txBasal": "Insulina basale",
+      "txBolus": "Insulina basale + bolo",
+      "txPump": "Pompa per insulina",
+      "diagnosisDate": "Data diagnosi (opzionale)",
+      "datePlaceholder": "YYYY-MM-DD",
+      "hba1c": "HbA1c (mmol/mol, opzionale)",
+      "countCarbs": "Conto i carboidrati",
+      "carbRatio": "Rapporto insulina/carboidrati (g/U, opzionale)",
+      "carbRatioHelp": "Ad es. 10 = 1 unità di insulina copre 10 g di carboidrati. L'app non dosa mai: questo numero è solo informativo.",
+      "correctionFactor": "Fattore di correzione (mmol/L per U, opzionale)",
+      "preExerciseMin": "Livello minimo di zucchero nel sangue prima dell'esercizio (mmol/L)",
+      "enable": "Abilita il supporto per il diabete",
+      "acceptDisclaimer": "Accetto la clausola di esclusione della responsabilità di cui sopra",
+      "disclaimerRequired": "È necessario accettare la clausola di esclusione della responsabilità",
+      "missingType": "Selezionare il tipo di diabete",
+      "save": "Salva profilo",
+      "saved": "Profilo salvato",
+      "delete": "Elimina il profilo del diabete",
+      "deleted": "Profilo eliminato",
+      "deleteConfirm": "Sei sicuro di voler eliminare il tuo profilo del diabete?",
+      "disclaimer": "IMPORTANTE: questa app NON sostituisce il tuo medico o il tuo team diabetologico. Non suggeriamo MAI dosi specifiche di insulina o modifiche ai farmaci. Non modificare mai il trattamento basandosi solo sui consigli dell'app. Contatta sempre il tuo medico in caso di dubbi."
+    }
+  },
+  "bloodSugar": {
+    "title": "Zucchero nel sangue",
+    "settingsButton": "Registro della glicemia",
+    "settingsDescription": "Registra le tue misurazioni e osserva le tendenze nel tempo",
+    "add": "Aggiungi lettura",
+    "save": "Salva",
+    "history": "Storia",
+    "empty": "Ancora nessuna lettura. Tocca il pulsante in alto per registrare la tua prima misurazione.",
+    "disclaimer": "Questi numeri sono solo per riferimento. Discuti sempre i modelli con il tuo medico o il team del diabete.",
+    "valueLabel": "Zucchero nel sangue (mmol/L)",
+    "contextLabel": "Contesto",
+    "noteLabel": "Nota (opzionale)",
+    "notePlaceholder": "Ad es. dopo colazione",
+    "errInvalidTitle": "Valore non valido",
+    "errInvalidBody": "Immettere un valore di zucchero nel sangue compreso tra 1,0 e 40,0 mmol/L.",
+    "errSaveTitle": "Impossibile salvare",
+    "deleteTitle": "Elimina la lettura",
+    "deleteBody": "Sei sicuro? Premere a lungo per eliminare.",
+    "ctx": {
+      "fasting": "Digiuno",
+      "preMeal": "Prima del pasto",
+      "postMeal": "Dopo il pasto",
+      "bedtime": "Ora di andare a dormire",
+      "preExercise": "Prima dell'esercizio",
+      "postExercise": "Dopo l'esercizio",
+      "random": "Casuale"
+    },
+    "range": {
+      "1d": "1 giorno",
+      "7d": "7 giorni",
+      "30d": "30 giorni",
+      "90d": "90 giorni"
+    },
+    "stat": {
+      "avg": "Media",
+      "min": "Min",
+      "max": "Max",
+      "tir": "Tempo nell'intervallo",
+      "target": "Obiettivo",
+      "measurements": "letture"
+    }
+  },
+  "healthScore": {
+    "title": "Punteggio di salute",
+    "todayLabel": "Punteggio di oggi",
+    "A": "Molto sano",
+    "B": "Salutare",
+    "C": "Moderare",
+    "D": "Meno sano",
+    "E": "Malsano"
+  },
+  "units": {
+    "g": "G",
+    "kg": "kg",
+    "ml": "ml",
+    "dl": "dl",
+    "l": "l",
+    "tsk": "cucchiaino",
+    "spsk": "cucchiaio",
+    "stk": "pz",
+    "skive": "fetta",
+    "portion": "porzione"
+  },
+  "logMeal": {
+    "amount": "Quantità",
+    "unit": "Unità",
+    "approxGrams": "≈ {{grams}}g"
+  },
+  "home": {
+    "greeting": {
+      "morning": "Buongiorno",
+      "day": "Ciao",
+      "evening": "Buonasera",
+      "night": "Buona notte"
+    },
+    "coach": {
+      "restDay": "Oggi è un giorno di riposo: goditi la tua guarigione!",
+      "todayWorkout": "Il piano di oggi include {{workout}}.",
+      "nextWorkout": "Prossimo allenamento: {{workout}}.",
+      "ready": "Pronti per iniziare? Chiedimi informazioni su pianificazione, alimentazione o motivazione.",
+      "askForHelp": "Chiedimi qualsiasi cosa se hai bisogno di aiuto."
+    },
+    "chat": {
+      "placeholder": "Chiedi al tuo allenatore di intelligenza artificiale...",
+      "todayPlanPrompt": "Qual è il mio piano per oggi?"
+    },
+    "todayPlan": "Il piano di oggi",
+    "startTraining": "Inizia l'allenamento",
+    "nextTraining": "Prossimo allenamento",
+    "today": "Oggi",
+    "training": "Allenamento",
+    "todayOverview": "Panoramica di oggi",
+    "week": "Settimana",
+    "milestone": "Pietra miliare",
+    "toGoal": "all'obiettivo {{distance}} km"
+  },
+  "progress": {
+    "weeks": "Settimane",
+    "months": "Mesi",
+    "weekLabel": "Settimana {{week}}, {{year}}",
+    "weekShort": "W{{week}}",
+    "activities": "Attività",
+    "empty": "Nessuna attività ancora: esci e corri!",
+    "noRoute": "Nessun percorso registrato",
+    "standardTraining": "Allenamento standard",
+    "steps": "Passi",
+    "duration": "Durata",
+    "caloriesShort": "cal",
+    "activityTypes": {
+      "walk": "Cammina",
+      "cycling": "Ciclismo",
+      "run": "Corri"
+    }
+  },
+  "workoutLabels": {
+    "rest": "Riposo",
+    "injuryRest": "Riposo per infortunio"
+  },
+  "calendar": {
+    "monthSummary_one": "{{count}} corsa · {{km}} km",
+    "monthSummary_other": "{{count}} corre · {{km}} km",
+    "completed": "Completato",
+    "planned": "Pianificato",
+    "missed": "Mancato",
+    "plannedKm": "{{km}} km pianificati",
+    "emptyDay": "Nessuna corsa o allenamento pianificato per questo giorno"
+  },
+  "motionPicker": {
+    "title": "Cardio",
+    "what": "Cosa ti piacerebbe fare?",
+    "where": "Dove?",
+    "run": "Corri",
+    "walk": "Cammina",
+    "cycling": "Ciclismo",
+    "runLocation": "All'aperto o tapis roulant",
+    "bikeLocation": "Esterno o interno",
+    "outdoor": "All'aperto",
+    "outdoorDescription": "Tracciamento GPS · percorsi · andatura",
+    "indoor": "Per interni",
+    "indoorDescription": "Tapis roulant · contapassi · distanza manuale"
+  },
+  "activityPicker": {
+    "title": "Scegli l'allenamento",
+    "intro": "Cosa desideri registrare?",
+    "options": {
+      "mobility": {
+        "label": "Mobilità/Yoga",
+        "description": "Stretching, yoga, foam rolling"
+      },
+      "bike": {
+        "label": "Ciclismo",
+        "description": "Interno o esterno"
+      },
+      "other": {
+        "label": "Altre attività",
+        "description": "Padel, calcio, nuoto..."
+      }
+    }
+  },
+  "logActivity": {
+    "types": {
+      "strength": "Allenamento della forza",
+      "mobility": "Mobilità/Yoga",
+      "bike": "Ciclismo",
+      "other": "Altre attività"
+    },
+    "invalidDuration": "Immettere una durata valida in minuti",
+    "savedTitle": "Salvato!",
+    "savedMessage": "{{activity}} registrato ({{duration}} min, {{calories}} kcal)",
+    "saveError": "Impossibile salvare: {{error}}",
+    "logActivity": "Registra il tuo {{activity}}",
+    "duration": "Durata (minuti) *",
+    "calories": "Calorie (facoltativo, altrimenti calcolato automaticamente)",
+    "calorieEstimate": "≈ {{calories}} kcal calcolate da {{weight}} kg, RPE {{rpe}}",
+    "effort": "Impegno (RPE 1–10)",
+    "notes": "Note (opzionale)",
+    "notesPlaceholder": "Ad esempio esercizi, pesi, serie...",
+    "save": "Salva allenamento"
+  },
+  "treadmill": {
+    "invalidValueTitle": "Valore non valido",
+    "invalidValueMessage": "Immettere un numero, ad esempio 5.2",
+    "noDistanceTitle": "Nessuna distanza",
+    "noDistanceMessage": "Aggiungere la distanza manualmente o continuare finché non è possibile misurare i passi.",
+    "finishTitle": "Terminare e salvare?",
+    "finishMessage": "Distanza: {{distance}} km · Tempo: {{time}} · {{calories}} kcal",
+    "walkNote": "Camminata al chiuso (tapis roulant)",
+    "runNote": "Corsa indoor (tapis roulant)",
+    "savedTitle": "Salvato! 🏃",
+    "savedMessage": "{{distance}} km in {{time}} · {{calories}} kcal bruciate.",
+    "saveError": "Impossibile salvare",
+    "discardTitle": "Eliminare l'allenamento?",
+    "discardMessage": "Tutti i dati di questo allenamento andranno persi.",
+    "keep": "Conserva",
+    "discard": "Scarta",
+    "walkTitle": "Tapis roulant · Camminata",
+    "runTitle": "Tapis roulant · Corsa",
+    "pedometerActive": "Contapassi attivo",
+    "pedometerUnavailable": "Contapassi non disponibile",
+    "steps": "PASSI",
+    "speed": "Velocità",
+    "adjustDistance": "Regola la distanza",
+    "adjustHint": "Aggiungere manualmente la distanza dal display del tapis roulant",
+    "enterExactDistance": "Inserisci la distanza esatta dal tapis roulant",
+    "instructionsTitle": "Come utilizzare il localizzatore",
+    "instructions": "1. Premere START quando si inizia a usare il tapis roulant\n2. Aggiungi distanza con i pulsanti +0.1 / +0.5 / +1.0\n3. Oppure inserisci la distanza esatta al termine\n4. I passi vengono contati automaticamente quando porti con te il telefono",
+    "saving": "Salvataggio...",
+    "exactDistanceTitle": "Immettere la distanza esatta",
+    "exactDistanceHint": "Leggi il display del tapis roulant e inserisci la distanza in km",
+    "apply": "Applicare"
+  },
+  "statsPage": {
+    "hoursShort": "h",
+    "minutesShort": "m",
+    "now": "Adesso",
+    "weeksAgoShort": "{{count}}w",
+    "emptyTitle": "Ancora nessuna statistica",
+    "emptyMessage": "Inizia la tua prima corsa per vedere i tuoi dati qui.",
+    "period4Weeks": "4 settimane",
+    "period3Months": "3 mesi",
+    "bestPace": "Miglior ritmo",
+    "dayStreak": "Serie di giorni",
+    "weeklyGoal": "Obiettivo settimanale",
+    "ofGoal": "di {{goal}} km obiettivo",
+    "goalReached": "Obiettivo raggiunto!",
+    "kmRemaining": "{{km}} km rimanenti",
+    "milestone": "Pietra miliare",
+    "toMilestone": "{{remaining}} km a {{milestone}} km",
+    "kmPerWeek": "KM A SETTIMANA",
+    "kmPerMonth": "KM AL MESE",
+    "avgDistance": "Distanza media",
+    "kmPerRun": "km per corsa",
+    "totalTime": "Tempo totale",
+    "moving": "in movimento",
+    "longestRun": "Corsa più lunga",
+    "runsPerWeekday": "Viene eseguito nei giorni feriali",
+    "activityRings": "L'attività squilla",
+    "kmGoal": "KM OBIETTIVO",
+    "distance": "Distanza",
+    "activity": "Attività",
+    "days": "GIORNI",
+    "streak": "Striscia",
+    "activityTypes": "Tipi di attività",
+    "types": {
+      "run": "Corri",
+      "walk": "Cammina",
+      "bike": "Ciclismo"
+    }
+  },
+  "privacyPage": {
+    "title": "Informativa sulla privacy",
+    "updated": "Ultimo aggiornamento: aprile 2026",
+    "intro": "Noi di RunWithAI prendiamo sul serio la tua privacy. Questa politica spiega come raccogliamo, utilizziamo e proteggiamo le tue informazioni personali.",
+    "sections": [
+      {
+        "title": "Titolare del trattamento",
+        "paragraphs": [
+          "RunWithAI è responsabile del trattamento dei tuoi dati personali. Contattaci all'indirizzo privacy@runwithai.app se hai domande."
+        ]
+      },
+      {
+        "title": "Dati che raccogliamo",
+        "paragraphs": [
+          "Raccogliamo i seguenti tipi di dati:"
+        ],
+        "bullets": [
+          "Informazioni sull'account: email, nome, età e sesso",
+          "Dati fisici: peso e altezza (opzionale)",
+          "Dati di allenamento: attività, distanza, andatura, frequenza cardiaca e percorsi GPS",
+          "Utilizzo dell'app: preferenze, obiettivi e livello",
+          "Informazioni di pagamento: gestite in modo sicuro da App Store o Google Play"
+        ]
+      },
+      {
+        "title": "Come utilizziamo i tuoi dati",
+        "paragraphs": [
+          "Utilizziamo i tuoi dati per:"
+        ],
+        "bullets": [
+          "Fornisci piani di formazione AI personalizzati",
+          "Analizza i tuoi allenamenti e i tuoi progressi",
+          "Migliora i nostri servizi",
+          "Invia notifiche e aggiornamenti pertinenti",
+          "Gestisci pagamenti e abbonamenti"
+        ]
+      },
+      {
+        "title": "Integrazioni di terze parti",
+        "paragraphs": [
+          "RunWithAI può integrarsi con Garmin Connect per importare i dati di corsa. Una volta connessi, recuperiamo solo i dati di allenamento, mai le tue credenziali di accesso."
+        ]
+      },
+      {
+        "title": "Condivisione dei dati",
+        "paragraphs": [
+          "Non vendiamo mai i tuoi dati. Condividiamo i dati solo con:"
+        ],
+        "bullets": [
+          "Apple/Google: elaborazione sicura dei pagamenti",
+          "OpenAI: coaching AI anonimizzato",
+          "Provider di hosting: Vercel e Railway per l'archiviazione dei dati"
+        ]
+      },
+      {
+        "title": "Sicurezza dei dati",
+        "paragraphs": [
+          "Utilizziamo misure di sicurezza standard del settore, tra cui:"
+        ],
+        "bullets": [
+          "Crittografia HTTPS per tutte le connessioni",
+          "Hashing sicuro della password con bcrypt",
+          "Token JWT per l'autenticazione",
+          "Aggiornamenti di sicurezza regolari"
+        ]
+      },
+      {
+        "title": "I tuoi diritti",
+        "paragraphs": [
+          "Hai il diritto di:"
+        ],
+        "bullets": [
+          "Accedi ai tuoi dati",
+          "Correggere le informazioni imprecise",
+          "Elimina il tuo account e tutti i dati",
+          "Esporta i tuoi dati come CSV",
+          "Revoca del consenso"
+        ]
+      },
+      {
+        "title": "Conservazione dei dati",
+        "paragraphs": [
+          "Conserviamo i tuoi dati mentre il tuo account è attivo. Se elimini il tuo account, tutti i dati verranno rimossi entro 30 giorni."
+        ]
+      },
+      {
+        "title": "Cookie e tracciamento",
+        "paragraphs": [
+          "Utilizziamo un numero minimo di cookie per mantenere l'accesso. Non utilizziamo cookie di tracciamento o pubblicitari di terze parti."
+        ]
+      },
+      {
+        "title": "Privacy dei bambini",
+        "paragraphs": [
+          "RunWithAI non è destinato a bambini di età inferiore a 13 anni e non raccogliamo consapevolmente dati di bambini di età inferiore a questa età."
+        ]
+      },
+      {
+        "title": "Cambiamenti nella politica",
+        "paragraphs": [
+          "Potremmo aggiornare questa politica di tanto in tanto. Ti informeremo nell'app o tramite e-mail sulle modifiche sostanziali."
+        ]
+      },
+      {
+        "title": "Contatto"
+      }
+    ],
+    "contactQuestion": "Hai domande su questa politica o sui tuoi dati?",
+    "footer": "© 2026 RunWithAI. Tutti i diritti riservati."
+  },
+  "more": {
+    "title": "Altro",
+    "subtitle": "Tutti i tuoi strumenti in un unico posto",
+    "sections": {
+      "account": "Conto",
+      "statistics": "Statistiche",
+      "setup": "Impostazione",
+      "app": "App"
+    },
+    "newBadge": "Nuovo",
+    "menu": {
+      "profile": "Profilo",
+      "profileSubtitle": "Informazioni personali, obiettivi, frequenza cardiaca e infortuni",
+      "statistics": "Statistiche",
+      "statisticsSubtitle": "Distanza totale, ritmo migliore e traguardi",
+      "goals": "Obiettivi",
+      "goalsSubtitle": "Obiettivi settimanali e tipi di allenamento",
+      "settings": "Impostazioni",
+      "settingsSubtitle": "Livello, lingua, profilo e notifiche",
+      "privacy": "Privacy",
+      "privacySubtitle": "I tuoi dati e diritti",
+      "upgrade": "Aggiorna a PRO",
+      "upgradeSubtitle": "Sblocca tutte le funzionalità"
     }
   }
 }

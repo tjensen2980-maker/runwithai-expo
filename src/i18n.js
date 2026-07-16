@@ -85,14 +85,23 @@ i18n
 // both the system language and an app-specific language selected in Settings.
 export const syncLanguageWithDevice = async () => {
   try {
-    const language = getDeviceLanguage();
+    const deviceLanguage = getDeviceLanguage();
+    const savedLanguage = await AsyncStorage.getItem('userLanguage');
+    const overrideDeviceBaseline = await AsyncStorage.getItem('userLanguageDeviceBaseline');
+    const deviceLanguageChanged = !!savedLanguage
+      && !!overrideDeviceBaseline
+      && overrideDeviceBaseline !== deviceLanguage;
+
+    if (deviceLanguageChanged || (savedLanguage && !overrideDeviceBaseline)) {
+      await AsyncStorage.multiRemove(['userLanguage', 'userLanguageDeviceBaseline']);
+    }
+
+    const language = supportedLanguages.includes(savedLanguage) && !deviceLanguageChanged && !!overrideDeviceBaseline
+      ? savedLanguage
+      : deviceLanguage;
     if (i18n.resolvedLanguage !== language) {
       await i18n.changeLanguage(language);
     }
-
-    // Older builds stored the onboarding selection indefinitely, which blocked
-    // later system-language changes. Remove that obsolete override.
-    await AsyncStorage.removeItem('userLanguage').catch(() => {});
   } catch (e) {
     console.log('Language sync error:', e);
   }

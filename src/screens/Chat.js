@@ -10,6 +10,7 @@ import { loadDiabetesProfile, buildAIContext as buildDiabetesContext } from '../
 import { loadBariatricProfile, buildAIContext as buildBariatricContext } from '../utils/bariatric';
 import { loadReadings, buildAIBloodSugarContext } from '../utils/bloodSugar';
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -102,22 +103,28 @@ export default function Chat({ level, profile, weekPlan, nextWorkout, onPlanUpda
   // Hent samtalehistorik fra database ved opstart
   useEffect(() => {
     async function fetchHistory() {
+      const currentLanguage = (i18n.resolvedLanguage || i18n.language || 'en').split('-')[0];
+      const previousLanguage = await AsyncStorage.getItem('chatLanguage');
       const history = await loadMessages();
       if (history && history.length > 0) {
         const converted = history.map(m => ({
           role: m.role === 'assistant' ? 'ai' : m.role,
           text: m.text,
         }));
+        if (previousLanguage !== currentLanguage) {
+          converted.push({ role: 'ai', text: t('chat.languageChangedConfirmation') });
+        }
         setMessages(converted);
       } else {
         const name = (profile?.name || t('chat.defaultRunner')).split(' ')[0];
         setMessages([{ role: 'ai', text: t('chat.greeting', { name }) }]);
       }
+      await AsyncStorage.setItem('chatLanguage', currentLanguage);
       setLoadingHistory(false);
       setTimeout(() => scrollRef.current?.scrollToEnd({ animated: false }), 100);
     }
     fetchHistory();
-  }, [t]);
+  }, [t, i18n.resolvedLanguage, i18n.language, profile?.name]);
 
   // Auto-send initial message from Home chat draft
   useEffect(() => {

@@ -11,6 +11,7 @@ import {
 'react-native';
 import { SafeAreaView } from 
 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { SERVER, getAuthToken } from 
 '../data';
 
@@ -35,18 +36,18 @@ const OFFER = {
   pkgId: '$rc_monthly', // RevenueCat-pakkens identifier i default-offeringen (verificeret i dashboardet)
 };
 const PRICE_TEXT = '49 kr';
-const BENEFITS = [
-  { emoji: '🧠', text: 'Din plan tilpasser sig efter hvert løb' },
-  { emoji: '🎧', text: 'Coachen i ørerne mens du træner' },
-  { emoji: '📅', text: 'Ugeplan og kalender der følger med' },
-  { emoji: '💬', text: 'Spørg din coach om alt — når som helst' },
-];
-
 export default function OnboardingCarousel({ visible, onComplete, onClose, isOnboarding }) {
+  const { t } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState(0); // start on Basic
   const [loading, setLoading] = useState(false);
   const [offerings, setOfferings] = useState(null);
   const scrollRef = useRef(null);
+  const benefits = [
+    { emoji: '🧠', text: t('onboarding.paywall.benefits.adaptive') },
+    { emoji: '🎧', text: t('onboarding.paywall.benefits.audioCoach') },
+    { emoji: '📅', text: t('onboarding.paywall.benefits.calendar') },
+    { emoji: '💬', text: t('onboarding.paywall.benefits.chat') },
+  ];
 
   useEffect(() => {
     if (!visible) return;
@@ -71,7 +72,7 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
     }
 
     if (!Purchases || !offerings) {
-      Alert.alert('Fejl', 'Kunne ikke hente priser. Proev igen senere.');
+      Alert.alert(t('common.error'), t('onboarding.paywall.errors.prices'));
       return;
     }
 
@@ -80,7 +81,7 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
     ) || offerings.availablePackages[0];
 
     if (!pkg) {
-      Alert.alert('Fejl', 'Pakke ikke tilgaengelig.');
+      Alert.alert(t('common.error'), t('onboarding.paywall.errors.packageUnavailable'));
       return;
     }
 
@@ -108,12 +109,12 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
         } catch (syncErr) {
           console.log('Server sync warn:', syncErr);
         }
-        Alert.alert('🎉 Velkommen!', 'Du har nu ' + tier.name + '-adgang.');
+        Alert.alert(t('onboarding.paywall.welcomeTitle'), t('onboarding.paywall.welcomeMessage'));
         onComplete && onComplete(tier.id);
       }
     } catch (err) {
       if (!err.userCancelled) {
-          Alert.alert('Koeb mislykkedes', err.message || 'Proev igen.');
+          Alert.alert(t('onboarding.paywall.errors.purchaseTitle'), err.message || t('common.retry'));
       }
     } finally {
       setLoading(false);
@@ -128,13 +129,13 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
       const tier = info.entitlements.active['pro'] ? 'pro' :
                    info.entitlements.active['basic'] ? 'basic' : null;
       if (tier) {
-        Alert.alert('Gendannet', 'Du er ' + tier + '-bruger.');
+        Alert.alert(t('onboarding.paywall.restoreSuccessTitle'), t('onboarding.paywall.restoreSuccessMessage'));
         onComplete && onComplete(tier);
       } else {
-        Alert.alert('Ingen koeb', 'Ingen aktive abonnementer fundet.');
+        Alert.alert(t('onboarding.paywall.noPurchasesTitle'), t('onboarding.paywall.noPurchasesMessage'));
       }
     } catch (e) {
-      Alert.alert('Fejl', 'Kunne ikke gendanne.');
+      Alert.alert(t('common.error'), t('onboarding.paywall.errors.restore'));
     }
   };
 
@@ -144,12 +145,12 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
     <Modal visible={!!visible} animationType="slide" transparent={false}>
       <SafeAreaView style={s.wrap}>
         <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-          <View style={s.badge}><Text style={s.badgeText}>AI COACH</Text></View>
-          <Text style={s.headline}>Din personlige AI-coach</Text>
-          <Text style={s.sub}>En træningsplan der tilpasser sig dig — hver uge, hvert løb.</Text>
+          <View style={s.badge}><Text style={s.badgeText}>{t('proUpsell.features.aiCoach.title')}</Text></View>
+          <Text style={s.headline}>{t('onboarding.paywall.headline')}</Text>
+          <Text style={s.sub}>{t('onboarding.paywall.subtitle')}</Text>
 
           <View style={s.benefits}>
-            {BENEFITS.map((b, i) => (
+            {benefits.map((b, i) => (
               <View key={i} style={s.benefitRow}>
                 <Text style={s.benefitEmoji}>{b.emoji}</Text>
                 <Text style={s.benefitText}>{b.text}</Text>
@@ -158,20 +159,20 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
           </View>
 
           <View style={s.giftBox}>
-            <Text style={s.giftBig}>14 dage gratis</Text>
-            <Text style={s.giftSmall}>Derefter {PRICE_TEXT}/md. Opsig når som helst — med ét tryk.</Text>
+            <Text style={s.giftBig}>{t('onboarding.paywall.trial')}</Text>
+            <Text style={s.giftSmall}>{t('onboarding.paywall.afterTrial', { price: PRICE_TEXT })}</Text>
           </View>
 
           <TouchableOpacity style={s.cta} onPress={() => handleSelect(OFFER)} activeOpacity={0.85}>
-            <Text style={s.ctaText}>Start min træning</Text>
+            <Text style={s.ctaText}>{t('onboarding.paywall.startTraining')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={s.freeLink} onPress={() => handleSelect({ id: 'free' })}>
-            <Text style={s.freeLinkText}>Fortsæt med gratis version</Text>
+            <Text style={s.freeLinkText}>{t('proUpsell.continueWithFree')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={s.restore} onPress={handleRestore}>
-            <Text style={s.restoreText}>Gendan køb</Text>
+            <Text style={s.restoreText}>{t('onboarding.paywall.restore')}</Text>
           </TouchableOpacity>
         </ScrollView>
       </SafeAreaView>

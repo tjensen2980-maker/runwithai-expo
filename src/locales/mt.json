@@ -1,4 +1,4 @@
-﻿{
+{
   "coachIntro": {
     "title": "Il-kowċ AI tiegħek",
     "qName": "Bonġu! Jien il-kowċ personali AI tiegħek għall-ġiri 🏃 Qabel nibdew, nixtieq insir nafek ftit aħjar. X’jismek?",
@@ -55,7 +55,11 @@
     "lastActivity": "L-aħħar attività",
     "gpsTracking": "Traċċar GPS",
     "walkTracking": "Traċċar tal-mixi",
-    "aiRoutes": "Rotot AI"
+    "aiRoutes": "Rotot AI",
+    "motionTitle": "Kardjo",
+    "motionActivities": "Mexxi · Imxi · Ċiklu",
+    "trainingTitle": "Taħriġ",
+    "trainingActivities": "Qawwa, mobilità u aktar"
   },
   "pro": {
     "badge": "PRO",
@@ -86,6 +90,10 @@
     "aiRoutes": {
       "title": "Rotot AI",
       "description": "Ikseb rakkomandazzjonijiet ta' rotot ibbażati fuq it-taħriġ tiegħek"
+    },
+    "nutrition": {
+      "title": "Tracker tal-kaloriji",
+      "description": "Għadd il-kaloriji, illoggja l-ikliet u skennja l-barcodes"
     }
   },
   "stats": {
@@ -146,44 +154,85 @@
     "height": "TULL",
     "years": "Snin",
     "runningLevel": "LIVELL TA' ĠIRI",
-    "levels.beginner": "Bidu",
-    "levels.intermediate": "Intermedju",
-    "levels.advanced": "Avvanzat",
     "yourGoals": "X'INHUMA L-GĦANIJIET TIEGĦEK",
-    "goals.health": "Saħħa",
-    "goals.weight": "Telf ta' piż",
-    "goals.distance": "Iġri aktar fit-tul",
-    "goals.speed": "Sir aktar mgħaġġel",
-    "goals.race": "Iġri tellieqa",
-    "goals.fun": "Divertiment",
     "weeklyGoalKm": "GĦAN KM TAL-ĠIMGĦA",
     "weeklyGoalExample": "Eż. 20",
     "unlockFullPower": "Iftaħ aċċess sħiħ",
     "unlockDesc": "Ikseb aċċess għall-funzjonijiet kollha u ilħaq l-għanijiet tiegħek aktar malajr",
-    "proFeatures.aiCoachDesc": "Kowċ AI",
-    "proFeatures.statsDesc": "Statistiċi",
-    "proFeatures.goalsDesc": "Għanijiet",
-    "proFeatures.routesDesc": "Rotot",
-    "proFeatures.chatDesc": "Chat AI",
-    "proFeatures.reportsDesc": "Rapporti",
     "price": "49 kr",
     "guarantee": "✓ Ikkanċella meta trid • ✓ 7 ijiem b'xejn",
     "perMonth": "/xahar",
     "startFreeTrial": "Ibda prova b'xejn",
     "continueWithFree": "Kompli bil-verżjoni b'xejn",
-    "levels.beginnerDesc": "Ġdid fil-ġiri jew qed tibda mill-ġdid wara pawża twila",
-    "levels.intermediateDesc": "Tiġri regolarment u trid titjieb",
-    "levels.advancedDesc": "Ġerrej b'esperjenza b'għanijiet speċifiċi",
     "or": "jew",
     "errors": {
-      "serverConnection": "Ma nistax nikkonnettja mas-server"
+      "serverConnection": "Ma nistax nikkonnettja mas-server",
+      "fillEmailPassword": "Daħħal kemm l-email kif ukoll il-password",
+      "loginFailed": "Ma setgħetx tidħol",
+      "enterEmail": "Daħħal l-indirizz elettroniku tiegħek",
+      "resetCodeFailed": "Ma setgħetx tibgħat il-kodiċi reset",
+      "fillCodePassword": "Daħħal il-kodiċi reset u password ġdida",
+      "passwordMismatch": "Il-passwords ma jaqblux",
+      "passwordTooShort": "Il-password għandu jkun ta' mill-inqas 6 karattri",
+      "resetFailed": "Ma setgħetx tirrisettja l-password",
+      "registerFailed": "Ma setgħetx toħloq il-kont",
+      "enterName": "Daħħal ismek",
+      "selectLevel": "Agħżel il-livell ta' ġiri tiegħek"
+    },
+    "levels": {
+      "beginner": "Bidu",
+      "intermediate": "Intermedju",
+      "advanced": "Avvanzat",
+      "beginnerDesc": "Ġdid fil-ġiri jew qed tibda mill-ġdid wara pawża twila",
+      "intermediateDesc": "Tiġri regolarment u trid titjieb",
+      "advancedDesc": "Ġerrej b'esperjenza b'għanijiet speċifiċi"
+    },
+    "goals": {
+      "health": "Saħħa",
+      "weight": "Telf ta' piż",
+      "distance": "Iġri aktar fit-tul",
+      "speed": "Sir aktar mgħaġġel",
+      "race": "Iġri tellieqa",
+      "fun": "Divertiment"
+    },
+    "proFeatures": {
+      "aiCoachDesc": "Kowċ AI",
+      "statsDesc": "Statistiċi",
+      "goalsDesc": "Għanijiet",
+      "routesDesc": "Rotot",
+      "chatDesc": "Chat AI",
+      "reportsDesc": "Rapporti"
+    },
+    "resetPassword": "Irrisettja l-password",
+    "forgotPasswordDesc": "Daħħal l-email tiegħek u aħna nibagħtulek kodiċi reset.",
+    "sendResetCode": "Ibgħat il-kodiċi reset",
+    "backToLogin": "Lura għall-login",
+    "createNewPassword": "Oħloq password ġdida",
+    "checkEmail": "Iċċekkja l-email tiegħek għall-kodiċi ta’ reset b’sitt ċifri.",
+    "resetCode": "Irrisettja l-kodiċi",
+    "resetCodePlaceholder": "Kodiċi b'6 ċifri",
+    "newPassword": "Password ġdida",
+    "confirmNewPassword": "Ikkonferma password ġdida",
+    "resendCode": "Ibgħat kodiċi ġdid",
+    "tellUsAboutYou": "Għidilna dwarek innifsek",
+    "success": {
+      "resetCodeSent": "Aħna bgħatna kodiċi reset fuq l-email tiegħek.",
+      "passwordReset": "Il-password tiegħek ġiet reset. Issa tista' tidħol."
     }
   },
   "settings": {
     "pageTitle": "Settings",
     "title": "Settings",
     "profile": "Profil",
-    "days": ["Tn", "Tl", "Er", "Ħa", "Ġi", "Si", "Ħa"],
+    "days": [
+      "Tn",
+      "Tl",
+      "Er",
+      "Ħa",
+      "Ġi",
+      "Si",
+      "Ħa"
+    ],
     "saveChanges": "Salva l-bidliet",
     "saved": "Salvat!",
     "logout": "Oħroġ",
@@ -201,7 +250,8 @@
       "reminders": "Reminders",
       "privacy": "Privatezza",
       "units": "Unitajiet",
-      "data": "Data"
+      "data": "Data",
+      "profile": "Profil"
     },
     "fields": {
       "name": "Isem",
@@ -304,6 +354,57 @@
       "deletedTitle": "Kont mħassar",
       "deletedMessage": "Il-kont tiegħek ġie mħassar.",
       "error": "Ma rnexxiex tħassar il-kont"
+    },
+    "reminders": {
+      "workoutTitle": "Tfakkira tal-workout",
+      "workoutSubtitle": "Ikseb notifikat fil-jiem magħżula u fil-ħin magħżul",
+      "mealTitle": "Tfakkira tal-ikel",
+      "mealSubtitle": "Ftakar li tilloggja l-ikliet tiegħek",
+      "time": "Ħin: {{time}}",
+      "days": [
+        "Ħad",
+        "Mon",
+        "It-Tlieta",
+        "L-Erb",
+        "Ħam",
+        "Ġim",
+        "Sat"
+      ]
+    },
+    "email": {
+      "title": "Email",
+      "change": "Ibdel l-email",
+      "newEmail": "Email ġdida",
+      "currentPassword": "Password kurrenti",
+      "missingFields": "Daħħal kemm l-email il-ġdida kif ukoll il-password attwali tiegħek",
+      "changeError": "Ma setgħetx tbiddel l-email",
+      "successMessage": "L-email tiegħek ġiet aġġornata",
+      "networkError": "Żball tan-netwerk"
+    },
+    "subscription": {
+      "title": "Abbonament",
+      "type": "Tip",
+      "status": "Status",
+      "tiers": {
+        "pro": "Pro",
+        "basic": "Bażiku",
+        "free": "Ħieles"
+      },
+      "statuses": {
+        "active": "Attiva",
+        "inactive": "Inattiv",
+        "trialing": "Prova",
+        "canceled": "Ikkanċellat"
+      },
+      "upgrade": "Taġġorna",
+      "manage": "Immaniġġja fl-App Store"
+    },
+    "language": "Lingwa",
+    "changeLanguageInSettings": "Ibdel il-lingwa fis-Settings",
+    "languageHint": "Iftaħ is-settings tat-tagħmir u agħżel RunWithAI → Lingwa.",
+    "actions": {
+      "save": "Issejvja l-bidliet",
+      "saved": "Salvat!"
     }
   },
   "pricing": {
@@ -367,6 +468,139 @@
     "step3": {
       "title": "Ilħaq l-għanijiet tiegħek",
       "desc": "Issettja għanijiet u traċċa l-progress tiegħek b'statistika dettaljata"
+    },
+    "tagline": "Il-kowċ personali tal-ġiri tal-AI tiegħek",
+    "headline": {
+      "before": "Taħriġ li",
+      "highlight": "tadatta għal",
+      "after": "int"
+    },
+    "features": {
+      "ai": {
+        "title": "Kowċ tal-AI reali",
+        "desc": "Il-pjan tiegħek huwa mibni għalik — mhux mudell"
+      },
+      "adapts": {
+        "title": "Pjan ta’ għajxien",
+        "desc": "Jaġġusta wara kull ġirja li tlesti"
+      },
+      "injury": {
+        "title": "Jisma' lil ġismek",
+        "desc": "Il-korrimenti u l-uġigħ huma kkunsidrati fit-taħriġ tiegħek"
+      },
+      "goals": {
+        "title": "Lejn il-mira tiegħek",
+        "desc": "Mill-ewwel 5K tiegħek għal maratona — bil-pass tiegħek"
+      }
+    },
+    "tryFree": "Ipprova b'xejn għal 14-il jum",
+    "fine": "L-ebda impenn. Ikkanċella ghaċ.",
+    "levelQuestion": "Fejn int fil-vjaġġ ta' ġiri tiegħek?",
+    "selectLevel": "Agħżel il-livell tiegħek biex tkompli",
+    "levels": {
+      "beginner": {
+        "label": "Bidu",
+        "sub": "Ġdid jew ġej lura wara waqfa"
+      },
+      "intermediate": {
+        "label": "Intermedju",
+        "sub": "Jien niġri regolarment u rrid intejjeb"
+      },
+      "advanced": {
+        "label": "Avvanzat",
+        "sub": "Jien nitħarreġ bi skop u naf il-pass tiegħi"
+      }
+    },
+    "tellUsAboutYou": "Għidilna ftit dwarek",
+    "coachUsesThis": "Il-kowċ tiegħek juża dan biex jibni l-pjan tiegħek",
+    "fields": {
+      "name": "X'inhu ismek?",
+      "age": "Età",
+      "weeklyKm": "Km fil-ġimgħa (bejn wieħed u ieħor)"
+    },
+    "primaryGoal": "X'inhu l-mira tiegħek?",
+    "goals": {
+      "fitness": {
+        "label": "Fittex",
+        "sub": "Saħħa u enerġija"
+      },
+      "5k": {
+        "label": "5K",
+        "sub": "L-ewwel mira kbira tiegħi"
+      },
+      "10k": {
+        "label": "10K",
+        "sub": "Il-livell li jmiss"
+      },
+      "half": {
+        "label": "Nofs maratona",
+        "sub": "21.1 km"
+      },
+      "full": {
+        "label": "Maratona",
+        "sub": "42.2 km"
+      },
+      "weight": {
+        "label": "Jitilfu l-piż",
+        "sub": "Mexxi lilek innifsek eħfef"
+      }
+    },
+    "raceDate": "Għandek data tat-tellieqa? (fakultattiv)",
+    "raceDatePlaceholder": "eż. 15 ta’ Settembru",
+    "skipForNow": "Aqbeż għalissa",
+    "plan": {
+      "building": "Il-kowċ tiegħek qed jibni l-pjan tiegħek...",
+      "waitNamed": "{{name}}, agħtini mument.",
+      "wait": "Agħtini mument.",
+      "errorTitle": "Il-pjan tiegħek ma setax jinħoloq bħalissa",
+      "errorMessage": "Dejjem tista' titlob lill-kowċ tiegħek biex toħloqha aktar tard.",
+      "readyNamed": "{{name}}, hawn hu l-pjan tiegħek",
+      "ready": "Hawn hu l-pjan tiegħek",
+      "basedOnAnswers": "Il-pjan tiegħek huwa bbażat fuq dak li għedt lill-kowċ tiegħek.",
+      "weeklyDistance": "Distanza ta' kull ġimgħa: {{km}} km",
+      "goal": "Għan: {{goal}}",
+      "considerations": "Konsiderazzjonijiet: {{injuries}}",
+      "weekAndDay": "Ġimgħa {{week}} – {{day}}",
+      "day": "Jum {{day}}",
+      "run": "Mexxi",
+      "makePlan": "Oħloq il-pjan tiegħi",
+      "weekdays": {
+        "mon": "It-Tnejn",
+        "tue": "It-Tlieta",
+        "wed": "L-Erbgħa",
+        "thu": "Il-Ħamis",
+        "fri": "Il-Ġimgħa",
+        "sat": "Is-Sibt",
+        "sun": "Il-Ħadd"
+      }
+    },
+    "languageTitle": "Agħżel il-lingwa tiegħek",
+    "languageSubtitle": "Tista' tibdelha aktar tard fis-Settings",
+    "paywall": {
+      "headline": "Il-kowċ personali tiegħek tal-AI",
+      "subtitle": "Pjan ta' taħriġ li jadatta għalik — kull ġimgħa, kull ġirja.",
+      "benefits": {
+        "adaptive": "Il-pjan tiegħek jadatta wara kull ġirja",
+        "audioCoach": "Il-kowċ tiegħek f'widnejk waqt li titħarreġ",
+        "calendar": "Pjan ta' kull ġimgħa u kalendarju li jlaħħaq",
+        "chat": "Staqsi lill-kowċ tiegħek xi ħaġa — ghaċ"
+      },
+      "trial": "14-il jum b'xejn",
+      "afterTrial": "Imbagħad {{price}}/xahar. Ikkanċella ghaċ - b'vit wieħed.",
+      "startTraining": "Ibda t-taħriġ tiegħi",
+      "restore": "Irrestawra xiri",
+      "welcomeTitle": "🎉 Merħba!",
+      "welcomeMessage": "L-aċċess Pro tiegħek issa huwa attiv.",
+      "restoreSuccessTitle": "Xiri restawrati",
+      "restoreSuccessMessage": "L-abbonament tiegħek huwa attiv mill-ġdid.",
+      "noPurchasesTitle": "Ma nstab l-ebda xiri",
+      "noPurchasesMessage": "Ma nstab l-ebda abbonament attiv.",
+      "errors": {
+        "prices": "Il-prezzijiet ma setgħux jitgħabbew. Erġa' pprova aktar tard.",
+        "packageUnavailable": "Dan l-abbonament mhuwiex disponibbli.",
+        "purchaseTitle": "Ix-xiri falla",
+        "restore": "Ix-xiri ma setgħux jiġu restawrati."
+      }
     }
   },
   "dashboard": {
@@ -419,7 +653,20 @@
       "runsFromRecord": "{{count}} ġirjiet għar-rekord",
       "runsInMonth": "{{count}} ġirjiet fi {{month}}"
     },
-    "monthNames": ["Jan", "Fra", "Mar", "Apr", "Mej", "Ġun", "Lul", "Awi", "Set", "Ott", "Nov", "Diċ"],
+    "monthNames": [
+      "Jan",
+      "Fra",
+      "Mar",
+      "Apr",
+      "Mej",
+      "Ġun",
+      "Lul",
+      "Awi",
+      "Set",
+      "Ott",
+      "Nov",
+      "Diċ"
+    ],
     "workout": {
       "nextWorkout": "IT-TAĦRIĠ LI JMISS",
       "today": "ILLUM",
@@ -445,7 +692,15 @@
       "addNote": "+ Nota",
       "mood": "Burdata",
       "placeholder": "Kif mar? Riġlejn tqal? Ġurnata tajba? Rotta ġdida?",
-      "dayNames": ["Ħa", "Tn", "Tl", "Er", "Ħa", "Ġi", "Si"]
+      "dayNames": [
+        "Ħa",
+        "Tn",
+        "Tl",
+        "Er",
+        "Ħa",
+        "Ġi",
+        "Si"
+      ]
     },
     "injury": {
       "title": "RISKJU TA' KORRIMENT",
@@ -488,7 +743,31 @@
       "unavailable": "GPS mhux disponibbli",
       "timeout": "Timeout tal-GPS",
       "notAvailable": "GPS mhux disponibbli",
-      "error": "Żball fil-GPS"
+      "error": "Żball fil-GPS",
+      "points": "{{count}} punti ({{filtered}} iffiltrat)"
+    },
+    "cycling": "Ċikliżmu",
+    "music": "Mużika",
+    "voiceOnly": "Leħen biss",
+    "notification": {
+      "run": "Insegwi l-ġirja tiegħek...",
+      "walk": "Insegwi l-mixja tiegħek...",
+      "bike": "It-traċċar tar-rikba tiegħek..."
+    },
+    "limit": {
+      "title": "Limitu ta' attività ta' kull ġimgħa milħuq",
+      "message": "Int ilħaqt il-limitu tal-pjan Ħieles ta' attivitajiet {{limit}} fil-ġimgħa. Aġġorna għal Basic jew Pro għal aċċess illimitat.",
+      "later": "Aktar tard"
+    },
+    "stats": {
+      "runs": "runs",
+      "walks": "mixjiet",
+      "yourProgress": "Il-progress tiegħek",
+      "thisWeek": "Din il-ġimgħa",
+      "lastWeek": "Il-ġimgħa li għaddiet",
+      "bestPace": "L-aħjar pass",
+      "longestRun": "L-itwal ġirja",
+      "totalKm": "km totali"
     }
   },
   "chat": {
@@ -507,7 +786,9 @@
     "logAllMeals": "Irreġistra l-ikliet kollha",
     "logged": "Irreġistrat",
     "mealPlanLoggedMessage": "Il-pjan tal-ikel ġie rreġistrat għal-lum.",
-    "mealPlanLogError": "Ma setax jiġi rreġistrat il-pjan tal-ikel: {{error}}"
+    "mealPlanLogError": "Ma setax jiġi rreġistrat il-pjan tal-ikel: {{error}}",
+    "languageChanged": "Lingwa mibdula. Il-kowċ tal-AI tiegħek issa se jwieġeb bl-Ingliż.",
+    "languageChangedConfirmation": "Lingwa mibdula. Il-kowċ tal-AI tiegħek issa se jwieġeb fil-lingwa magħżula tiegħek."
   },
   "proUpsell": {
     "title": "Iftaħ il-qawwa sħiħa",
@@ -542,6 +823,675 @@
         "title": "Rapporti tal-progress",
         "desc": "Sommarju tal-ġimgħa u tax-xahar"
       }
+    }
+  },
+  "bariatric": {
+    "title": "Profil Bariatric",
+    "subtitle": "Kmiem gastriku / appoġġ tal-bypass",
+    "settingsButton": "Profil Bariatric",
+    "settingsDescription": "Kmiem gastriku jew appoġġ tal-bypass",
+    "setup": {
+      "title": "Profil Bariatric",
+      "intro": "Ippermetti l-appoġġ barjatriku biex tikseb miri mfassla apposta għal proteini, fluwidi, u kaloriji bbażati fuq il-kirurġija u l-fażi tiegħek.",
+      "surgeryType": "Tip ta’ kirurġija",
+      "surgeryTypeNone": "Xejn",
+      "surgeryTypeSleeve": "Kmiem Gastriku",
+      "surgeryTypeBypass": "Bypass gastriku",
+      "surgeryDate": "Data tal-kirurġija",
+      "surgeryDatePlaceholder": "YYYY-MM-DD",
+      "startWeight": "Piż tal-bidu (kg)",
+      "goalWeight": "Piż tal-mira (kg)",
+      "height": "Għoli (ċm)",
+      "enable": "Ippermetti l-appoġġ barjatriku",
+      "save": "Issejvja l-profil",
+      "delete": "Ħassar il-profil barjatriku",
+      "deleteConfirm": "Żgur li trid tħassar il-profil barjatriku tiegħek?",
+      "disclaimer": "Importanti: Din l-app MHUX tissostitwixxi n-nutrizzjonist barjatriku, it-tabib jew il-klinika tiegħek. Ir-rakkomandazzjonijiet huma linji gwida ġenerali bbażati fuq gwida pubblika ASMBS. Dejjem segwi l-istruzzjonijiet tal-klinika tiegħek stess. Ikkuntattja lit-tabib tiegħek immedjatament għal sindromu tad-dumping, dardir persistenti, jew kwalunkwe tħassib.",
+      "acceptDisclaimer": "Nifhem li din l-app ma tissostitwixxix it-tim tiegħi tal-kura barjatrika",
+      "disclaimerRequired": "Int trid taċċetta ċ-ċaħda",
+      "invalidDate": "Daħħal data valida",
+      "missingType": "Agħżel it-tip ta' kirurġija",
+      "saved": "Profil salvat",
+      "deleted": "Profil imħassar"
+    },
+    "dashboard": {
+      "title": "Appoġġ Bariatric",
+      "edit": "Editja",
+      "phaseLabel": "Fażi kurrenti",
+      "daysSinceLabel": "Jiem mill-kirurġija",
+      "daysUntilNext": "{{days}} jiem sal-fażi li jmiss",
+      "lastPhase": "Inti fil-fażi finali",
+      "proteinToday": "Proteina llum",
+      "proteinProgress": "Proteina llum",
+      "fluidToday": "Fluwidi llum",
+      "kcalRange": "Kaloriji (mira)",
+      "portionSize": "Daqs tal-porzjon rakkomandat",
+      "medicalCheckReminder": "Ftakar iċ-checkup tiegħek ta' jum {{day}}",
+      "preSurgery": "Id-data tal-kirurġija għadha ma ntlaħqitx"
+    },
+    "phases": {
+      "clearLiquid": {
+        "name": "Ġimgħa 1: Likwidi ċari",
+        "description": "Likwidi ċari biss: ilma, brodu, meraq mingħajr zokkor, tè. Sips żgħar matul il-ġurnata."
+      },
+      "fullLiquid": {
+        "name": "Ġimgħa 2: Likwidi sħaħ",
+        "description": "Il-likwidi kollha inkl. proteini shakes, soppa, jogurt. Tixrobx 30 minuta qabel/wara l-ikel."
+      },
+      "pureed": {
+        "name": "Ġimgħa 3-4: Ikel bil-pure",
+        "description": "Ikel imħallat/pureed: ġobon cottage, puree tal-ħut, tiġieġ imħallat. Tomgħod sewwa."
+      },
+      "soft": {
+        "name": "Ġimgħa 5-6: Ikel artab",
+        "description": "Ikel artab: bajd scrambled, ħut, ħaxix imsajjar, frott artab. Proteina l-ewwel, gdim żgħar."
+      },
+      "regular": {
+        "name": "Ġimgħa 7+: Ikel regolari",
+        "description": "Ikel regolari f'porzjonijiet żgħar. L-ewwel proteina, imbagħad ħaxix, imbagħad karboidrati. Tomgħod sewwa."
+      }
+    },
+    "tips": {
+      "noDrinking": "Tixrobx 30 minuta qabel jew wara l-ikel",
+      "proteinFirst": "Dejjem tiekol proteina l-ewwel",
+      "chew": "Tomgħod kull gidma 20-30 darba",
+      "stopWhenFull": "Waqqaf meta mimli - anke b'porzjonijiet żgħar",
+      "vitamins": "Ftakar il-vitamini tiegħek ta' kuljum"
+    },
+    "vitamins": {
+      "title": "Vitamini tal-lum",
+      "subtitle": "Ftakar is-supplimenti ta' kuljum tiegħek",
+      "names": {
+        "multivitamin": "Multivitamini",
+        "calciumD": "Kalċju + Vitamina D",
+        "iron": "Ħadid",
+        "b12": "B12",
+        "omega3": "Omega-3 (mhux obbligatorju)"
+      },
+      "taken": "Meħuda",
+      "notTaken": "Mhux meħud",
+      "allDone": "Il-vitamini kollha meħuda llum 🎉",
+      "reset": "Irrisettja",
+      "optional": "fakultattiv"
+    },
+    "fluid": {
+      "title": "It-teħid tal-fluwidu llum",
+      "subtitle": "Ixrob bejn l-ikliet, mhux ma",
+      "goal": "Għan",
+      "current": "Illum",
+      "remaining": "Fadal",
+      "add250": "+ 250 ml",
+      "add500": "+ 500 ml",
+      "addCustom": "Żid",
+      "reset": "Irrisettja",
+      "goalReached": "Int ilħaqt il-mira fluwidu tiegħek 💧",
+      "warning": "Ftakar sips żgħar - mhux ammonti kbar f'daqqa"
+    },
+    "meals": {
+      "title": "Suġġerimenti għalik issa",
+      "subtitle": "Imfassla għall-fażi tiegħek",
+      "kcal": "kcal",
+      "protein": "g proteina",
+      "prep": "min",
+      "logIt": "Log",
+      "types": {
+        "fluid": "Fluwidu",
+        "puree": "Puree",
+        "soft": "Ikel artab",
+        "normal": "Ikel normali"
+      },
+      "items": {
+        "water": "Ilma",
+        "brothClear": "Brodu ċar",
+        "sugarFreeJuice": "Meraq bla zokkor (dilwit)",
+        "herbalTea": "Te tal-ħxejjex",
+        "proteinShake": "Ħawwad tal-proteini",
+        "skimmedMilk": "Ħalib xkumat",
+        "thinSoup": "Soppa rqiqa (mgħaqqda)",
+        "skyrThin": "Skyr irqiq",
+        "mashedFish": "Ħut maxx",
+        "cottageCheese": "Ġobon cottage",
+        "eggPuree": "Puree tal-bajd",
+        "pureedChicken": "Tiġieġ purè",
+        "mashedTofu": "Tofu maxx",
+        "softFish": "Ħut artab",
+        "scrambledEgg": "Bajda mħarxa",
+        "softChicken": "Tiġieġ tal-offerta",
+        "wellCookedVeggies": "Ħaxix imsajjar tajjeb",
+        "greekYogurt": "Jogurt Grieg",
+        "grilledChicken": "Sider tat-tiġieġ grilled",
+        "salmonFillet": "Flett tas-salamun",
+        "eggOmelette": "Omelette",
+        "lentilSoup": "Soppa tal-għads",
+        "leanBeef": "Ċanga dgħif"
+      },
+      "reminders": {
+        "title": "Ftakar waqt l-ikliet",
+        "proteinFirst": "Kul proteina l-ewwel",
+        "chew": "Tomgħod 20-30 darba",
+        "noDrinking": "Tixrobx 30 minuta qabel/wara l-ikel",
+        "stopWhenFull": "Waqqaf meta jkun mimli",
+        "smallSips": "Ħu sips żgħar",
+        "noStraw": "L-ebda tiben (arja fl-istonku)",
+        "slowly": "Ixrob bil-mod",
+        "mashWell": "Maxx sewwa",
+        "newFoodOneAtATime": "Introduċi ikel ġdid wieħed kull darba",
+        "chewExtra": "Tomgħod aktar sewwa",
+        "mindfulEating": "Kul bil-mod u b'attenzjoni",
+        "avoidEmptyCalories": "Evita kaloriji vojta"
+      }
+    },
+    "dumping": {
+      "title": "Riskju tas-sindromu tad-dumping",
+      "subtitle": "Ibbażat fuq l-ikliet tal-lum",
+      "low": "Riskju baxx",
+      "medium": "Kun konxju",
+      "high": "Riskju għoli",
+      "lowDesc": "L-ikliet tal-lum jidhru tajbin",
+      "mediumDesc": "Ikla waħda jew aktar jistgħu jikkawżaw dumping. Oqgħod attent għas-sintomi.",
+      "highDesc": "Ikliet multipli ta' riskju għoli llum. Ikkuntattja lit-tabib tiegħek jekk ikollok dardir, taħbit tal-qalb mgħaġġel, sturdament jew dijarea.",
+      "flaggedCount": "{{count}} ikla mmarkata",
+      "flaggedCount_plural": "{{count}} ikliet immarkati",
+      "reasons": {
+        "sugarHigh": "Wisq zokkor",
+        "sugarMedium": "Kontenut moderat taz-zokkor",
+        "fatHigh": "Kontenut għoli ta 'xaħam",
+        "carbsNoProtein": "Karboidrati mingħajr proteina",
+        "carbsHigh": "Konsum għoli ta 'karboidrati",
+        "carbsMedium": "Konsum moderat ta 'karboidrati",
+        "proteinLow": "Konsum ta 'proteini baxx wisq"
+      },
+      "info": "Id-dumping huwa l-aktar komuni wara l-bypass gastriku u attivat minn zokkor, xaħam jew karboidrati assorbiti malajr. Sintomi: dardir, taħbit mgħaġġel tal-qalb, sturdament, dijarea 15-30 min wara l-ikel."
+    },
+    "training": {
+      "title": "Taħriġ adattat",
+      "subtitle": "Attività rakkomandata għall-fażi tiegħek",
+      "currentPhase": "Il-fażi tat-taħriġ tiegħek",
+      "daysUntilNext": "{{days}} jiem sal-fażi ta' taħriġ li jmiss",
+      "maxDuration": "Tul massimu",
+      "maxHeartRate": "Rata tal-qalb massima",
+      "min": "min",
+      "ofMax": "ta' HR massimu",
+      "intensityLabel": {
+        "veryLight": "Ħfief ħafna",
+        "light": "Dawl",
+        "moderate": "Moderat",
+        "normal": "Normali"
+      },
+      "phaseNames": {
+        "1": "Irkupru (ġimgħa 0-2)",
+        "2": "Bidu bir-reqqa (ġimgħa 2-4)",
+        "3": "Attività ħafifa (ġimgħa 4-6)",
+        "4": "Akkumulazzjoni (ġimgħa 6-8)",
+        "5": "Taħriġ normali (ġimgħa 8+)"
+      },
+      "phaseDesc": {
+        "1": "Żomm ma 'mixjiet qosra u eżerċizzji tan-nifs fil-fond. Isma' ġismek u tistrieħ ħafna.",
+        "2": "Tista' żżid xi ftit il-mixi. Għadu l-ebda taħriġ ta 'saħħa jew eżerċizzju intens.",
+        "3": "Tista 'tibda ċikliżmu u tgħum (ladarba l-feriti jitfejqu). Għadu l-ebda running jew piżijiet tqal.",
+        "4": "Żmien biex tintroduċi taħriġ ta 'saħħa ħafifa u kardjo itwal. Ibda b'piżijiet żgħar.",
+        "5": "Tista' terġa' lura għat-taħriġ normali - iżda xorta tibni gradwalment u tara l-enerġija tiegħek."
+      },
+      "allowed": "Rakkomandat",
+      "notRecommended": "Evita issa",
+      "activities": {
+        "walkShort": "Mixja qasira (5-10 min)",
+        "walkMedium": "Mixja medja (15-20 min)",
+        "walkLong": "Mixja twila (30+ min)",
+        "breathing": "Eżerċizzji tan-nifs",
+        "gentleStretch": "Tiġbid ġentili",
+        "cycling": "Ċikliżmu",
+        "swimming": "Għawm",
+        "lightStrength": "Taħriġ ta 'saħħa ħafifa",
+        "strength": "Taħriġ ta 'saħħa",
+        "jog": "Jogging ħafif",
+        "running": "Tmexxija",
+        "highIntensity": "Taħriġ ta 'intensità għolja",
+        "heavyLifting": "Irfigħ tqal",
+        "extremeIntensity": "Intensità estrema"
+      },
+      "warnings": {
+        "title": "Importanti li tiftakar",
+        "noLifting": "Ebda rfigħ ta' tqal (aktar minn 5 kg)",
+        "staySoftMovements": "Żomm ma' movimenti artab u bil-mod",
+        "avoidSwimmingUntilHealed": "Evita l-għawm sakemm il-feriti tiegħek ikunu fiequ (tipikament 3-4 ġimgħat)",
+        "lightWeightsOk": "Piżijiet ħfief (2-5 kg) huma OK wara li tikkonsulta lit-tabib tiegħek",
+        "startStrengthGradually": "Ibda t-taħriġ tas-saħħa b'piżijiet baxxi u reps għoljin",
+        "stillBuildGradually": "Xorta tibni gradwalment - evita żidiet kbar f'daqqa",
+        "hydration": "Ftakar fil-fluwidi qabel, waqt u wara t-taħriġ"
+      },
+      "safety": {
+        "activityNotRecommended": "{{activity}} mhux rakkomandat fil-fażi tiegħek. Ikkonsulta lit-tabib tiegħek.",
+        "durationTooLong": "It-tul rakkomandat huwa l-aktar {{max}} min. Int ippjanajt {{actual}} min.",
+        "checkWithDoctor": "Ikkuntattja lit-tabib tiegħek jekk ikollok uġigħ, dardir jew eżawriment"
+      },
+      "disclaimer": "Ir-rakkomandazzjonijiet huma linji gwida biss. Dejjem segwi l-istruzzjonijiet tal-klinika tiegħek stess."
+    }
+  },
+  "diabetes": {
+    "title": "Profil tad-dijabete",
+    "subtitle": "Tip 1, Tip 2 jew prediabetes",
+    "settingsButton": "Profil tad-dijabete",
+    "settingsDescription": "Tip 1, Tip 2 jew prediabetes - dieta, zokkor fid-demm u eżerċizzju",
+    "setup": {
+      "title": "Profil tad-dijabete",
+      "intro": "Ippermetti l-appoġġ tad-dijabete biex tikseb suġġerimenti ta' ikla apposta, gwida dwar iz-zokkor fid-demm u rakkomandazzjonijiet dwar l-eżerċizzju.",
+      "type": "Tip tad-dijabete",
+      "typeT1": "Tip 1",
+      "typeT2": "Tip 2",
+      "typePre": "Predijabete",
+      "typeGest": "Dijabete tat-tqala",
+      "treatment": "Trattament",
+      "txNone": "Xejn",
+      "txDiet": "Dieta/stil ta' ħajja biss",
+      "txMetformin": "Metformin",
+      "txOral": "Mediċini orali oħra",
+      "txGLP1": "GLP-1 (Ozempic/Wegovy/Mounjaro)",
+      "txBasal": "Insulina bażika",
+      "txBolus": "Insulina bażali + bolus",
+      "txPump": "Pompa tal-insulina",
+      "diagnosisDate": "Data tad-dijanjosi (mhux obbligatorja)",
+      "datePlaceholder": "YYYY-MM-DD",
+      "hba1c": "HbA1c (mmol/mol, mhux obbligatorju)",
+      "countCarbs": "Jien ngħodd il-karboidrati",
+      "carbRatio": "Proporzjon ta' insulina/karboidrati (g/U, mhux obbligatorju)",
+      "carbRatioHelp": "E.ż. 10 = 1 unità ta 'insulina tkopri 10g ta' karboidrati. L-app qatt ma tieħu doża - dan in-numru huwa informattiv biss.",
+      "correctionFactor": "Fattur ta' korrezzjoni (mmol/L għal kull U, mhux obbligatorju)",
+      "preExerciseMin": "Zokkor fid-demm minimu qabel l-eżerċizzju (mmol/L)",
+      "enable": "Ippermetti l-appoġġ tad-dijabete",
+      "acceptDisclaimer": "Naċċetta ċ-ċaħda ta' responsabbiltà hawn fuq",
+      "disclaimerRequired": "Int trid taċċetta ċ-ċaħda",
+      "missingType": "Agħżel it-tip tad-dijabete",
+      "save": "Issejvja l-profil",
+      "saved": "Profil salvat",
+      "delete": "Ħassar il-profil tad-dijabete",
+      "deleted": "Profil imħassar",
+      "deleteConfirm": "Żgur li trid tħassar il-profil tad-dijabete tiegħek?",
+      "disclaimer": "IMPORTANTI: Din l-app MA tissostitwixxix lit-tabib jew lit-tim tad-dijabete tiegħek. Aħna QATT nissuġġerixxu dożi speċifiċi ta 'insulina jew bidliet fil-medikazzjoni. Qatt m'għandek taġġusta t-trattament tiegħek abbażi tal-parir tal-app biss. Dejjem ikkuntattja lill-fornitur tal-kura tas-saħħa tiegħek jekk għandek dubju."
+    }
+  },
+  "bloodSugar": {
+    "title": "Zokkor fid-Demm",
+    "settingsButton": "Log taz-zokkor fid-demm",
+    "settingsDescription": "Log il-kejl tiegħek u ara t-tendenzi matul iż-żmien",
+    "add": "Żid il-qari",
+    "save": "Ħlief",
+    "history": "Storja",
+    "empty": "Għadu l-ebda qari. Tektek il-buttuna hawn fuq biex tilloggja l-ewwel kejl tiegħek.",
+    "disclaimer": "Dawn in-numri huma għar-referenza tiegħek biss. Dejjem iddiskuti l-mudelli mat-tabib jew mat-tim tad-dijabete tiegħek.",
+    "valueLabel": "Zokkor fid-demm (mmol/L)",
+    "contextLabel": "Kuntest",
+    "noteLabel": "Nota (mhux obbligatorju)",
+    "notePlaceholder": "E.ż. wara l-kolazzjon",
+    "errInvalidTitle": "Valur mhux validu",
+    "errInvalidBody": "Daħħal valur taz-zokkor fid-demm bejn 1.0 u 40.0 mmol/L.",
+    "errSaveTitle": "Ma setgħetx issalva",
+    "deleteTitle": "Ħassar il-qari",
+    "deleteBody": "Żgur? Agħfas fit-tul biex tħassar.",
+    "ctx": {
+      "fasting": "Sawm",
+      "preMeal": "Qabel l-ikel",
+      "postMeal": "Wara l-ikel",
+      "bedtime": "Ħin l-irqad",
+      "preExercise": "Qabel l-eżerċizzju",
+      "postExercise": "Wara l-eżerċizzju",
+      "random": "Każwali"
+    },
+    "range": {
+      "1d": "ġurnata",
+      "7d": "7 ijiem",
+      "30d": "30 jum",
+      "90d": "90 jum"
+    },
+    "stat": {
+      "avg": "Medja",
+      "min": "Min",
+      "max": "Max",
+      "tir": "Ħin fil-medda",
+      "target": "Mira",
+      "measurements": "qari"
+    }
+  },
+  "healthScore": {
+    "title": "Punteġġ tas-saħħa",
+    "todayLabel": "Il-punteġġ tal-lum",
+    "A": "B'saħħithom ħafna",
+    "B": "B'saħħithom",
+    "C": "Moderat",
+    "D": "Anqas b'saħħithom",
+    "E": "Ħżiena għas-saħħa"
+  },
+  "units": {
+    "g": "g",
+    "kg": "kg",
+    "ml": "ml",
+    "dl": "dl",
+    "l": "l",
+    "tsk": "tsp",
+    "spsk": "tbsp",
+    "stk": "pcs",
+    "skive": "porzjon",
+    "portion": "porzjon"
+  },
+  "logMeal": {
+    "amount": "Ammont",
+    "unit": "Unità",
+    "approxGrams": "≈ {{grams}}g"
+  },
+  "home": {
+    "greeting": {
+      "morning": "L-għodwa t-tajba",
+      "day": "Hello",
+      "evening": "Il-lejla t-tajba",
+      "night": "Il-lejl it-tajjeb"
+    },
+    "coach": {
+      "restDay": "Illum hija jum ta' mistrieħ — igawdi l-irkupru tiegħek!",
+      "todayWorkout": "Il-pjan tal-lum jinkludi {{workout}}.",
+      "nextWorkout": "Workout li jmiss: {{workout}}.",
+      "ready": "Lest biex tibda? Staqsini dwar l-ippjanar, in-nutrizzjoni, jew il-motivazzjoni.",
+      "askForHelp": "Staqsini xi ħaġa jekk għandek bżonn għajnuna."
+    },
+    "chat": {
+      "placeholder": "Staqsi lill-kowċ AI tiegħek...",
+      "todayPlanPrompt": "X'inhu l-pjan tiegħi għal-lum?"
+    },
+    "todayPlan": "Il-pjan tal-lum",
+    "startTraining": "Ibda workout",
+    "nextTraining": "Workout li jmiss",
+    "today": "Illum",
+    "training": "Workout",
+    "todayOverview": "Ħarsa ġenerali tal-lum",
+    "week": "Ġimgħa",
+    "milestone": "Tragward",
+    "toGoal": "għal {{distance}} km mira"
+  },
+  "progress": {
+    "weeks": "Ġimgħat",
+    "months": "Xhur",
+    "weekLabel": "Ġimgħa {{week}}, {{year}}",
+    "weekShort": "W{{week}}",
+    "activities": "Attivitajiet",
+    "empty": "Għadu l-ebda attività — oħroġ hemm u ġri!",
+    "noRoute": "Ebda rotta rreġistrata",
+    "standardTraining": "Workout standard",
+    "steps": "Passi",
+    "duration": "Tul ta' żmien",
+    "caloriesShort": "cal",
+    "activityTypes": {
+      "walk": "Imxi",
+      "cycling": "Ċikliżmu",
+      "run": "Mexxi"
+    }
+  },
+  "workoutLabels": {
+    "rest": "Mistrieħ",
+    "injuryRest": "Mistrieħ minħabba korriment"
+  },
+  "calendar": {
+    "monthSummary_one": "{{count}} ġirja · {{km}} km",
+    "monthSummary_other": "{{count}} jiġri · {{km}} km",
+    "completed": "Imlesta",
+    "planned": "Ippjanat",
+    "missed": "Mitluf",
+    "plannedKm": "{{km}} km ippjanati",
+    "emptyDay": "Ebda ġirja jew workout ippjanat għal din il-ġurnata"
+  },
+  "motionPicker": {
+    "title": "Kardjo",
+    "what": "X'tixtieq tagħmel?",
+    "where": "Fejn?",
+    "run": "Mexxi",
+    "walk": "Imxi",
+    "cycling": "Ċikliżmu",
+    "runLocation": "Barra jew treadmill",
+    "bikeLocation": "Barra jew ġewwa",
+    "outdoor": "Barra",
+    "outdoorDescription": "Traċċar GPS · rotot · pass",
+    "indoor": "Ġewwa",
+    "indoorDescription": "Treadmill · pass counter · distanza manwali"
+  },
+  "activityPicker": {
+    "title": "Agħżel workout",
+    "intro": "X'tixtieq tilloggja?",
+    "options": {
+      "mobility": {
+        "label": "Mobilità / Yoga",
+        "description": "Tiġbid, yoga, irrumblar tal-fowm"
+      },
+      "bike": {
+        "label": "Ċikliżmu",
+        "description": "Ġewwa jew barra"
+      },
+      "other": {
+        "label": "Attività oħra",
+        "description": "Padel, futbol, għawm..."
+      }
+    }
+  },
+  "logActivity": {
+    "types": {
+      "strength": "Taħriġ ta 'saħħa",
+      "mobility": "Mobilità / Yoga",
+      "bike": "Ċikliżmu",
+      "other": "Attività oħra"
+    },
+    "invalidDuration": "Daħħal tul validu f'minuti",
+    "savedTitle": "Salvat!",
+    "savedMessage": "{{activity}} illoggjat ({{duration}} min, {{calories}} kcal)",
+    "saveError": "Ma setgħetx issalva: {{error}}",
+    "logActivity": "Log {{activity}} tiegħek",
+    "duration": "Tul ta' żmien (minuti) *",
+    "calories": "Kaloriji (mhux obbligatorju — inkella kkalkulat awtomatikament)",
+    "calorieEstimate": "≈ {{calories}} kcal ikkalkulat minn {{weight}} kg, RPE {{rpe}}",
+    "effort": "Sforz (RPE 1–10)",
+    "notes": "Noti (mhux obbligatorju)",
+    "notesPlaceholder": "Pereżempju eżerċizzji, piż, settijiet...",
+    "save": "Ħlief workout"
+  },
+  "treadmill": {
+    "invalidValueTitle": "Valur mhux validu",
+    "invalidValueMessage": "Daħħal numru, pereżempju 5.2",
+    "noDistanceTitle": "L-ebda distanza",
+    "noDistanceMessage": "Żid id-distanza manwalment jew kompli sakemm il-passi jkunu jistgħu jitkejlu.",
+    "finishTitle": "Tispiċċa u tiffranka?",
+    "finishMessage": "Distanza: {{distance}} km · Ħin: {{time}} · {{calories}} kcal",
+    "walkNote": "Mixja fuq ġewwa (treadmill)",
+    "runNote": "Ġirja fuq ġewwa (treadmill)",
+    "savedTitle": "Salvat! 🏃",
+    "savedMessage": "{{distance}} km f'{{time}} · {{calories}} kcal maħruq.",
+    "saveError": "Ma setgħetx issalva",
+    "discardTitle": "Armi l-workout?",
+    "discardMessage": "Id-dejta kollha minn dan il-workout se tintilef.",
+    "keep": "Żomm",
+    "discard": "Armi",
+    "walkTitle": "Treadmill · Imxi",
+    "runTitle": "Treadmill · Mexxi",
+    "pedometerActive": "Pass counter attiv",
+    "pedometerUnavailable": "Il-counter tal-passi mhux disponibbli",
+    "steps": "PASSI",
+    "speed": "Veloċità",
+    "adjustDistance": "Aġġusta d-distanza",
+    "adjustHint": "Żid id-distanza manwalment mill-wiri tat-treadmill",
+    "enterExactDistance": "Daħħal id-distanza eżatta mit-treadmill",
+    "instructionsTitle": "Kif tuża t-tracker",
+    "instructions": "1. Agħfas START meta tibda fuq it-treadmill\n2. Żid id-distanza bil-buttuni +0.1 / +0.5 / +1.0\n3. Jew daħħal id-distanza eżatta meta tkun lest\n4. Il-passi jingħaddu awtomatikament meta ġġorr it-telefon tiegħek",
+    "saving": "Niffrankaw...",
+    "exactDistanceTitle": "Daħħal id-distanza eżatta",
+    "exactDistanceHint": "Aqra l-wiri tat-treadmill u daħħal id-distanza f'km",
+    "apply": "Applika"
+  },
+  "statsPage": {
+    "hoursShort": "h",
+    "minutesShort": "m",
+    "now": "Issa",
+    "weeksAgoShort": "{{count}}w",
+    "emptyTitle": "Għadu l-ebda statistika",
+    "emptyMessage": "Ibda l-ewwel ġirja tiegħek biex tara d-dejta tiegħek hawn.",
+    "period4Weeks": "4 ġimgħat",
+    "period3Months": "3 xhur",
+    "bestPace": "L-aħjar pass",
+    "dayStreak": "Ġurnata serje",
+    "weeklyGoal": "Għan ta' kull ġimgħa",
+    "ofGoal": "tal-mira tal-km {{goal}}",
+    "goalReached": "Għan milħuq!",
+    "kmRemaining": "{{km}} km fadal",
+    "milestone": "Tragward",
+    "toMilestone": "{{remaining}} km sa {{milestone}} km",
+    "kmPerWeek": "KM FIL-ĠIMGĦA",
+    "kmPerMonth": "KM GĦAL XAHAR",
+    "avgDistance": "Distanza medja",
+    "kmPerRun": "km kull ġirja",
+    "totalTime": "Ħin totali",
+    "moving": "jiċċaqlaq",
+    "longestRun": "L-itwal ġirja",
+    "runsPerWeekday": "Jiġi għal kull jum tal-ġimgħa",
+    "activityRings": "Ċrieki tal-attività",
+    "kmGoal": "KM GOAL",
+    "distance": "Distanza",
+    "activity": "Attività",
+    "days": "JIEM",
+    "streak": "Streak",
+    "activityTypes": "Tipi ta' attività",
+    "types": {
+      "run": "Mexxi",
+      "walk": "Imxi",
+      "bike": "Ċikliżmu"
+    }
+  },
+  "privacyPage": {
+    "title": "Politika ta' Privatezza",
+    "updated": "Aġġornata l-aħħar: April 2026",
+    "intro": "F'RunWithAI, nieħdu l-privatezza tiegħek bis-serjetà. Din il-politika tispjega kif aħna niġbru, nużaw, u nipproteġu l-informazzjoni personali tiegħek.",
+    "sections": [
+      {
+        "title": "Kontrollur tad-dejta",
+        "paragraphs": [
+          "RunWithAI hija responsabbli għall-ipproċessar tad-dejta personali tiegħek. Ikkuntattjana fuq privacy@runwithai.app jekk għandek mistoqsijiet."
+        ]
+      },
+      {
+        "title": "Dejta li niġbru",
+        "paragraphs": [
+          "Aħna niġbru t-tipi ta' dejta li ġejjin:"
+        ],
+        "bullets": [
+          "Informazzjoni dwar il-kont: email, isem, età, u sess",
+          "Dejta fiżika: piż u għoli (mhux obbligatorju)",
+          "Dejta tal-workout: attivitajiet, distanza, pass, rata tal-qalb, u rotot tal-GPS",
+          "Użu tal-app: preferenzi, għanijiet, u livell",
+          "Informazzjoni dwar il-ħlas: immaniġġjata b'mod sigur mill-App Store jew Google Play"
+        ]
+      },
+      {
+        "title": "Kif nużaw id-dejta tiegħek",
+        "paragraphs": [
+          "Aħna nużaw id-dejta tiegħek biex:"
+        ],
+        "bullets": [
+          "Ipprovdi pjanijiet ta 'taħriġ AI personalizzati",
+          "Analizza l-workouts u l-progress tiegħek",
+          "Intejbu s-servizzi tagħna",
+          "Ibgħat notifiki u aġġornamenti rilevanti",
+          "Immaniġġja l-ħlasijiet u l-abbonamenti"
+        ]
+      },
+      {
+        "title": "Integrazzjonijiet ta' partijiet terzi",
+        "paragraphs": [
+          "RunWithAI jista' jintegra ma' Garmin Connect biex jimporta data tat-tħaddim. Meta konnessi, aħna nġibu d-dejta tal-workout biss — qatt il-kredenzjali tal-login tiegħek."
+        ]
+      },
+      {
+        "title": "Kondiviżjoni tad-dejta",
+        "paragraphs": [
+          "Aħna qatt ma nbigħu d-dejta tiegħek. Aħna naqsmu d-dejta biss ma':"
+        ],
+        "bullets": [
+          "Apple/Google: proċessar ta' ħlas sigur",
+          "OpenAI: taħriġ tal-AI anonimizzat",
+          "Fornituri tal-hosting: Vercel u Railway għall-ħażna tad-dejta"
+        ]
+      },
+      {
+        "title": "Sigurtà tad-dejta",
+        "paragraphs": [
+          "Aħna nużaw salvagwardji standard tal-industrija, inklużi:"
+        ],
+        "bullets": [
+          "Encryption HTTPS għall-konnessjonijiet kollha",
+          "Hashing sigur tal-password b'bcrypt",
+          "JWT tokens għall-awtentikazzjoni",
+          "Aġġornamenti regolari tas-sigurtà"
+        ]
+      },
+      {
+        "title": "Id-drittijiet tiegħek",
+        "paragraphs": [
+          "Għandek id-dritt li:"
+        ],
+        "bullets": [
+          "Aċċessa d-dejta tiegħek",
+          "Ikkoreġi informazzjoni mhux preċiża",
+          "Ħassar il-kont tiegħek u d-dejta kollha",
+          "Esporta d-dejta tiegħek bħala CSV",
+          "Irtira l-kunsens"
+        ]
+      },
+      {
+        "title": "Żamma tad-dejta",
+        "paragraphs": [
+          "Aħna nżommu d-dejta tiegħek waqt li l-kont tiegħek ikun attiv. Jekk tħassar il-kont tiegħek, id-dejta kollha titneħħa fi żmien 30 jum."
+        ]
+      },
+      {
+        "title": "Cookies u traċċar",
+        "paragraphs": [
+          "Aħna nużaw cookies minimi biex inżommuk ffirmat. Aħna ma nużawx cookies ta' traċċar jew ta' reklamar ta' partijiet terzi."
+        ]
+      },
+      {
+        "title": "Privatezza tat-tfal",
+        "paragraphs": [
+          "RunWithAI mhix maħsuba għal tfal taħt it-13-il sena, u aħna ma niġbrux xjentement data minn tfal taħt din l-età."
+        ]
+      },
+      {
+        "title": "Bidliet fil-politika",
+        "paragraphs": [
+          "Aħna nistgħu naġġornaw din il-politika minn żmien għal żmien. Aħna ninnotifikawk fl-app jew bl-email dwar bidliet materjali."
+        ]
+      },
+      {
+        "title": "Kuntatt"
+      }
+    ],
+    "contactQuestion": "Għandek mistoqsijiet dwar din il-politika jew dwar id-dejta tiegħek?",
+    "footer": "© 2026 RunWithAI. Id-drittijiet kollha riżervati."
+  },
+  "more": {
+    "title": "Aktar",
+    "subtitle": "L-għodda kollha tiegħek f'post wieħed",
+    "sections": {
+      "account": "Kont",
+      "statistics": "Statistika",
+      "setup": "Setup",
+      "app": "App"
+    },
+    "newBadge": "Ġdid",
+    "menu": {
+      "profile": "Profil",
+      "profileSubtitle": "Informazzjoni personali, miri, rata tal-qalb, u korrimenti",
+      "statistics": "Statistika",
+      "statisticsSubtitle": "Distanza totali, l-aħjar pass, u tragwardi",
+      "goals": "Għanijiet",
+      "goalsSubtitle": "Għanijiet ta' kull ġimgħa u tipi ta' workout",
+      "settings": "Settings",
+      "settingsSubtitle": "Livell, lingwa, profil, u notifiki",
+      "privacy": "Privatezza",
+      "privacySubtitle": "Id-dejta u d-drittijiet tiegħek",
+      "upgrade": "Aġġorna għal PRO",
+      "upgradeSubtitle": "Nisfrutta l-karatteristiċi kollha"
     }
   }
 }
