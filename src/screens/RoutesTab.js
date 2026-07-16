@@ -392,21 +392,13 @@ function AutoRoutesContent({ profile, runs }) {
         const radiusKm = quarterDistance / 1.3;
         const radiusDeg = radiusKm / 111;
 
-        const angle1 = direction;
-        const angle2 = direction + 90;
-
-        const wp1 = {
-          lat: location.lat + radiusDeg * Math.cos(angle1 * Math.PI / 180),
-          lon: location.lon + radiusDeg * Math.sin(angle1 * Math.PI / 180) / Math.cos(location.lat * Math.PI / 180),
-        };
-        const wp2 = {
-          lat: location.lat + radiusDeg * Math.cos(angle2 * Math.PI / 180),
-          lon: location.lon + radiusDeg * Math.sin(angle2 * Math.PI / 180) / Math.cos(location.lat * Math.PI / 180),
-        };
-
-        const coords = [location, wp1, wp2, location];
+        // GraphHopper round_trip: motoren bygger selv en REN rundtur i den
+        // oenskede laengde - ingen hjemmelavede waypoints, ingen spidser.
+        // direction genbruges som seed, saa forslagene stadig er forskellige.
+        const coords = [location];
+        const rtSeed = Math.abs(Math.round(direction * 7)) % 10000;
         const ghPoints = coords.map(c => `point=${c.lat},${c.lon}`).join('&');
-        const ghUrl = `https://graphhopper.com/api/1/route?${ghPoints}&vehicle=foot&locale=da&points_encoded=false&key=LijBPDQGfu7Iiq80w3HzwB4RUDJbMbhs6BU0dEnn`;
+        const ghUrl = `https://graphhopper.com/api/1/route?${ghPoints}&vehicle=foot&algorithm=round_trip&round_trip.distance=${Math.round(kmNum * 1000)}&round_trip.seed=${rtSeed}&locale=da&points_encoded=false&key=LijBPDQGfu7Iiq80w3HzwB4RUDJbMbhs6BU0dEnn`;
 
         const resp = await fetch(ghUrl);
         const data = await resp.json();
@@ -542,8 +534,8 @@ function AutoRoutesContent({ profile, runs }) {
             disabled={loadingLoc}
           >
             {loadingLoc
-              ? <ActivityIndicator color={colors.black} size="small" />
-              : <Text style={{ color: colors.black, fontWeight: '700', fontSize: 14 }}>📍 Brug GPS</Text>}
+              ? <ActivityIndicator color={'#07140E'} size="small" />
+              : <Text style={{ color: '#07140E', fontWeight: '700', fontSize: 14 }}>📍 Brug GPS</Text>}
           </TouchableOpacity>
           <Text style={{ color: colors.muted, fontSize: 11, textAlign: 'center', marginBottom: 10 }}>— eller indtast adresse —</Text>
           <TextInput
@@ -617,8 +609,8 @@ function AutoRoutesContent({ profile, runs }) {
             disabled={loadingRoutes}
           >
             {loadingRoutes
-              ? <ActivityIndicator color={colors.black} size="small" />
-              : <Text style={{ color: colors.black, fontWeight: '800', fontSize: 14 }}>🗺️ Find ruter</Text>}
+              ? <ActivityIndicator color={'#07140E'} size="small" />
+              : <Text style={{ color: '#07140E', fontWeight: '800', fontSize: 14 }}>🗺️ Find ruter</Text>}
           </TouchableOpacity>
         </View>
       )}
@@ -837,28 +829,28 @@ export function RoutesTab({ profile, runs }) {
           style={[
             { flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center', borderWidth: 2 },
             activeTab === 'auto'
-              ? { backgroundColor: colors.black, borderColor: colors.black }
+              ? { backgroundColor: colors.accent, borderColor: colors.accent }
               : { backgroundColor: colors.surface, borderColor: colors.border }
           ]}
           onPress={() => setActiveTab('auto')}
         >
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-            <Icon name='zap' size={16} color={activeTab === 'auto' ? '#fff' : colors.muted} />
-            <Text style={{ fontSize: 13, fontWeight: '800', color: activeTab === 'auto' ? '#fff' : colors.muted }}>Auto-ruter</Text>
+            <Icon name='zap' size={16} color={activeTab === 'auto' ? '#07140E' : colors.muted} />
+            <Text style={{ fontSize: 13, fontWeight: '800', color: activeTab === 'auto' ? '#07140E' : colors.muted }}>Auto-ruter</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
           style={[
             { flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center', borderWidth: 2 },
             activeTab === 'manual'
-              ? { backgroundColor: colors.black, borderColor: colors.black }
+              ? { backgroundColor: colors.accent, borderColor: colors.accent }
               : { backgroundColor: colors.surface, borderColor: colors.border }
           ]}
           onPress={() => setActiveTab('manual')}
         >
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-            <Icon name='map' size={16} color={activeTab === 'manual' ? '#fff' : colors.muted} />
-            <Text style={{ fontSize: 13, fontWeight: '800', color: activeTab === 'manual' ? '#fff' : colors.muted }}>Manuel planner</Text>
+            <Icon name='map' size={16} color={activeTab === 'manual' ? '#07140E' : colors.muted} />
+            <Text style={{ fontSize: 13, fontWeight: '800', color: activeTab === 'manual' ? '#07140E' : colors.muted }}>Manuel planner</Text>
           </View>
         </TouchableOpacity>
       </View>
