@@ -4,8 +4,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, LEVELS, generateTrainingPlan, saveTrainingPlan } from '../data';
 import OnboardingCarousel from '../components/OnboardingCarousel';
 import { useTranslation } from 'react-i18next';
-import i18n from '../i18n';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import i18n, { getDeviceLanguage } from '../i18n';
 import CoachIntro from './CoachIntro'; // onboarding som samtale
+import { localizeWorkoutLabel } from '../utils/localizeWorkout';
 
 const LANGUAGES = [
   { code: 'da', flag: '🇩🇰', name: 'Dansk' },
@@ -44,9 +46,33 @@ export default function Onboarding({ onDone }) {
   const [planLoading, setPlanLoading] = useState(false);
   const [planError, setPlanError] = useState(false);
 
-  const changeLanguage = (code) => {
+  const localizePlanDay = (value, index) => {
+    const normalized = String(value || '').trim().toLowerCase().replace(/[.]/g, '');
+    const aliases = {
+      mon: 'mon', monday: 'mon', man: 'mon', mandag: 'mon', montag: 'mon', mo: 'mon',
+      tue: 'tue', tuesday: 'tue', tir: 'tue', tirsdag: 'tue', dienstag: 'tue', di: 'tue',
+      wed: 'wed', wednesday: 'wed', ons: 'wed', onsdag: 'wed', mittwoch: 'wed', mi: 'wed',
+      thu: 'thu', thursday: 'thu', tor: 'thu', torsdag: 'thu', donnerstag: 'thu', do: 'thu',
+      fri: 'fri', friday: 'fri', fre: 'fri', fredag: 'fri', freitag: 'fri', fr: 'fri',
+      sat: 'sat', saturday: 'sat', lør: 'sat', lørdag: 'sat', samstag: 'sat', sa: 'sat',
+      sun: 'sun', sunday: 'sun', søn: 'sun', søndag: 'sun', sonntag: 'sun', so: 'sun',
+    };
+    return aliases[normalized]
+      ? t(`onboarding.plan.weekdays.${aliases[normalized]}`)
+      : (value || t('onboarding.plan.day', { day: index + 1 }));
+  };
+
+  const changeLanguage = async (code) => {
     setSelectedLang(code);
-    i18n.changeLanguage(code);
+    if (code === getDeviceLanguage()) {
+      await AsyncStorage.multiRemove(['userLanguage', 'userLanguageDeviceBaseline']);
+    } else {
+      await AsyncStorage.multiSet([
+        ['userLanguage', code],
+        ['userLanguageDeviceBaseline', getDeviceLanguage()],
+      ]);
+    }
+    await i18n.changeLanguage(code);
   };
 
   // [ONBOARDING-PLAN] Generer AI-plan ud fra brugerens onboarding-svar
@@ -66,9 +92,10 @@ export default function Onboarding({ onDone }) {
         height: gi.height || "",
         weight: gi.weight || "",
         level: gi.level || "",
+        language: selectedLang,
       };
       const lvl = (override && override.level) || chosen || "beginner";
-      const plan = await generateTrainingPlan(profile, lvl, []);
+      const plan = await generateTrainingPlan(profile, lvl, [], selectedLang);
       if (plan) {
         setAiPlan(plan);
         // Gem planen paa serveren saa den lander i kalenderen (fire-and-forget:
@@ -127,8 +154,8 @@ export default function Onboarding({ onDone }) {
           <Text style={s.logoAi}>AI</Text>
         </View>
         
-        <Text style={s.langTitle}>🌍 Choose your language</Text>
-        <Text style={s.langSubtitle}>Vælg dit sprog • Wähle deine Sprache</Text>
+        <Text style={s.langTitle}>🌍 {t('onboarding.languageTitle')}</Text>
+        <Text style={s.langSubtitle}>{t('onboarding.languageSubtitle')}</Text>
         
         <View style={s.langGrid}>
           {LANGUAGES.map(lang => (
@@ -307,48 +334,53 @@ export default function Onboarding({ onDone }) {
       <ScrollView contentContainerStyle={{ padding: 24 }}>
         {planLoading && (
           <View style={{ alignItems: "center", marginTop: 60 }}>
-            <Text style={[s.levelTitle, { textAlign: "center" }]}>{t("onboarding.plan.building") || "Jeg lægger din plan sammen ud fra det du fortalte…"}</Text>
-            <Text style={{ color: colors.muted, marginTop: 12, textAlign: "center" }}>{goalInfo.name ? (goalInfo.name + ", giv mig et øjeblik.") : "Giv mig et øjeblik."}</Text>
+            <Text style={[s.levelTitle, { textAlign: "center" }]}>{t('onboarding.plan.building')}</Text>
+            <Text style={{ color: colors.muted, marginTop: 12, textAlign: "center" }}>
+              {goalInfo.name ? t('onboarding.plan.waitNamed', { name: goalInfo.name }) : t('onboarding.plan.wait')}
+            </Text>
           </View>
         )}
         {!planLoading && planError && (
           <View style={{ alignItems: "center", marginTop: 60 }}>
-            <Text style={[s.levelTitle, { textAlign: "center" }]}>Kunne ikke lave planen lige nu</Text>
-            <Text style={{ color: colors.muted, marginTop: 12, textAlign: "center" }}>Du kan altid få din coach til at lave den senere.</Text>
+            <Text style={[s.levelTitle, { textAlign: "center" }]}>{t('onboarding.plan.errorTitle')}</Text>
+            <Text style={{ color: colors.muted, marginTop: 12, textAlign: "center" }}>{t('onboarding.plan.errorMessage')}</Text>
             <TouchableOpacity style={[s.ctaBtn, { marginTop: 24 }]} onPress={() => goToPlan()}>
-              <Text style={s.ctaBtnText}>Prøv igen</Text>
+              <Text style={s.ctaBtnText}>{t('common.retry')}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={{ alignItems: "center", marginTop: 12 }} onPress={() => setStep(5)}>
-              <Text style={{ color: colors.muted, fontSize: 13 }}>Fortsæt</Text>
+              <Text style={{ color: colors.muted, fontSize: 13 }}>{t('auth.continue')}</Text>
             </TouchableOpacity>
           </View>
         )}
         {!planLoading && !planError && aiPlan && (
           <View>
-            <Text style={s.levelTitle}>{goalInfo.name ? (goalInfo.name + ", her er din plan") : "Her er din plan"}</Text>
-            <Text style={{ color: colors.muted, marginTop: 8, lineHeight: 20 }}>
-              {"Du fortalte at du " + (goalInfo.weeklyKm ? ("løber omkring " + goalInfo.weeklyKm + " km om ugen") : "vil i gang") + (goalInfo.goal ? (" og har som mål: " + goalInfo.goal) : "") + (goalInfo.injuries ? (". Vi tager hensyn til: " + goalInfo.injuries) : "") + ". Derfor ser din uge sådan ud:"}
+            <Text style={s.levelTitle}>
+              {goalInfo.name ? t('onboarding.plan.readyNamed', { name: goalInfo.name }) : t('onboarding.plan.ready')}
             </Text>
+            <Text style={{ color: colors.muted, marginTop: 8, lineHeight: 20 }}>{t('onboarding.plan.basedOnAnswers')}</Text>
+            {!!goalInfo.weeklyKm && <Text style={{ color: colors.muted, marginTop: 4 }}>{t('onboarding.plan.weeklyDistance', { km: goalInfo.weeklyKm })}</Text>}
+            {!!goalInfo.goal && <Text style={{ color: colors.muted, marginTop: 4 }}>{t('onboarding.plan.goal', { goal: goalInfo.goal })}</Text>}
+            {!!goalInfo.injuries && <Text style={{ color: colors.muted, marginTop: 4 }}>{t('onboarding.plan.considerations', { injuries: goalInfo.injuries })}</Text>}
             <View style={{ marginTop: 20 }}>
               {(aiPlan.weekPlan || aiPlan.plan || []).map((d, i) => (
                 <View key={i} style={[s.planCard, d.rest && s.planCardRest]}>
-                  <Text style={s.planWeekDay}>Uge {Math.floor(i / 7) + 1} – {d.day || ('Dag ' + (i + 1))}</Text>
-                  <Text style={s.planTitle}>{d.rest ? 'Hvile' : (d.title || 'Løbetur')}</Text>
-                  {!!d.workout && <Text style={s.planDesc}>{d.workout}</Text>}
+                  <Text style={s.planWeekDay}>{t('onboarding.plan.weekAndDay', { week: Math.floor(i / 7) + 1, day: localizePlanDay(d.day, i) })}</Text>
+                  <Text style={s.planTitle}>{d.rest ? t('workoutLabels.rest') : localizeWorkoutLabel(d.title || t('onboarding.plan.run'), t)}</Text>
+                  {!!d.workout && <Text style={s.planDesc}>{localizeWorkoutLabel(d.workout, t)}</Text>}
                   {!!d.km && !d.rest && <Text style={s.planKm}>{d.km} km</Text>}
                 </View>
               ))}
             </View>
             {aiPlan.summary ? (<Text style={{ color: colors.muted, marginTop: 16, lineHeight: 20 }}>{aiPlan.summary}</Text>) : null}
             <TouchableOpacity style={[s.ctaBtn, { marginTop: 28 }]} onPress={() => setStep(5)}>
-              <Text style={s.ctaBtnText}>Fortsæt →</Text>
+              <Text style={s.ctaBtnText}>{t('auth.continue')} →</Text>
             </TouchableOpacity>
           </View>
         )}
         {!planLoading && !planError && !aiPlan && (
           <View style={{ alignItems: "center", marginTop: 60 }}>
             <TouchableOpacity style={[s.ctaBtn, { marginTop: 24 }]} onPress={() => goToPlan()}>
-              <Text style={s.ctaBtnText}>Lav min plan</Text>
+              <Text style={s.ctaBtnText}>{t('onboarding.plan.makePlan')}</Text>
             </TouchableOpacity>
           </View>
         )}

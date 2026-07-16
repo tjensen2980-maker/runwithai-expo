@@ -1,4 +1,4 @@
-﻿{
+{
   "coachIntro": {
     "title": "Jouw AI-coach",
     "qName": "Hoi! Ik ben jouw persoonlijke AI-hardloopcoach 🏃 Voor we beginnen, wil ik je graag wat beter leren kennen. Hoe heet je?",
@@ -55,7 +55,11 @@
     "lastActivity": "Laatste activiteit",
     "gpsTracking": "GPS-tracking",
     "walkTracking": "Wandel-tracking",
-    "aiRoutes": "AI-routes"
+    "aiRoutes": "AI-routes",
+    "motionTitle": "Cardio",
+    "motionActivities": "Rennen · Lopen · Fietsen",
+    "trainingTitle": "Opleiding",
+    "trainingActivities": "Kracht, mobiliteit en meer"
   },
   "pro": {
     "badge": "PRO",
@@ -86,6 +90,10 @@
     "aiRoutes": {
       "title": "AI-routes",
       "description": "Krijg aanbevolen routes op basis van je training"
+    },
+    "nutrition": {
+      "title": "Calorie-tracker",
+      "description": "Calorieën tellen, maaltijden registreren en barcodes scannen"
     }
   },
   "stats": {
@@ -146,44 +154,85 @@
     "height": "LENGTE",
     "years": "Jaar",
     "runningLevel": "HARDLOOPNIVEAU",
-    "levels.beginner": "Beginner",
-    "levels.intermediate": "Gemiddeld",
-    "levels.advanced": "Gevorderd",
     "yourGoals": "WAT ZIJN JOUW DOELEN",
-    "goals.health": "Gezondheid",
-    "goals.weight": "Gewichtsverlies",
-    "goals.distance": "Verder hardlopen",
-    "goals.speed": "Sneller worden",
-    "goals.race": "Een wedstrijd lopen",
-    "goals.fun": "Plezier",
     "weeklyGoalKm": "WEKELIJKS KM DOEL",
     "weeklyGoalExample": "Bijv. 20",
     "unlockFullPower": "Volledige toegang vrijspelen",
     "unlockDesc": "Krijg toegang tot alle functies en bereik je doelen sneller",
-    "proFeatures.aiCoachDesc": "AI Coach",
-    "proFeatures.statsDesc": "Statistieken",
-    "proFeatures.goalsDesc": "Doelen",
-    "proFeatures.routesDesc": "Routes",
-    "proFeatures.chatDesc": "AI Chat",
-    "proFeatures.reportsDesc": "Rapporten",
     "price": "49 kr",
     "guarantee": "✓ Op elk moment opzeggen • ✓ 7 dagen gratis proberen",
     "perMonth": "/maand",
     "startFreeTrial": "Start gratis proefperiode",
     "continueWithFree": "Doorgaan met gratis versie",
-    "levels.beginnerDesc": "Nieuw met hardlopen of opnieuw beginnen na een lange pauze",
-    "levels.intermediateDesc": "Loopt regelmatig en wil verbeteren",
-    "levels.advancedDesc": "Ervaren hardloper met specifieke doelen",
     "or": "of",
     "errors": {
-      "serverConnection": "Kon geen verbinding maken met server"
+      "serverConnection": "Kon geen verbinding maken met server",
+      "fillEmailPassword": "Voer zowel het e-mailadres als het wachtwoord in",
+      "loginFailed": "Kan niet inloggen",
+      "enterEmail": "Voer uw e-mailadres in",
+      "resetCodeFailed": "Kan de resetcode niet verzenden",
+      "fillCodePassword": "Voer de resetcode en een nieuw wachtwoord in",
+      "passwordMismatch": "De wachtwoorden komen niet overeen",
+      "passwordTooShort": "Het wachtwoord moet minimaal 6 tekens lang zijn",
+      "resetFailed": "Kan het wachtwoord niet opnieuw instellen",
+      "registerFailed": "Kan het account niet aanmaken",
+      "enterName": "Voer uw naam in",
+      "selectLevel": "Selecteer uw hardloopniveau"
+    },
+    "levels": {
+      "beginner": "Beginner",
+      "intermediate": "Gemiddeld",
+      "advanced": "Gevorderd",
+      "beginnerDesc": "Nieuw met hardlopen of opnieuw beginnen na een lange pauze",
+      "intermediateDesc": "Loopt regelmatig en wil verbeteren",
+      "advancedDesc": "Ervaren hardloper met specifieke doelen"
+    },
+    "goals": {
+      "health": "Gezondheid",
+      "weight": "Gewichtsverlies",
+      "distance": "Verder hardlopen",
+      "speed": "Sneller worden",
+      "race": "Een wedstrijd lopen",
+      "fun": "Plezier"
+    },
+    "proFeatures": {
+      "aiCoachDesc": "AI Coach",
+      "statsDesc": "Statistieken",
+      "goalsDesc": "Doelen",
+      "routesDesc": "Routes",
+      "chatDesc": "AI Chat",
+      "reportsDesc": "Rapporten"
+    },
+    "resetPassword": "Wachtwoord opnieuw instellen",
+    "forgotPasswordDesc": "Voer uw e-mailadres in en wij sturen u een resetcode.",
+    "sendResetCode": "Resetcode verzenden",
+    "backToLogin": "Terug naar inloggen",
+    "createNewPassword": "Nieuw wachtwoord maken",
+    "checkEmail": "Controleer uw e-mail voor de zescijferige resetcode.",
+    "resetCode": "Resetcode",
+    "resetCodePlaceholder": "6-cijferige code",
+    "newPassword": "Nieuw wachtwoord",
+    "confirmNewPassword": "Bevestig nieuw wachtwoord",
+    "resendCode": "Stuur een nieuwe code",
+    "tellUsAboutYou": "Vertel ons iets over uzelf",
+    "success": {
+      "resetCodeSent": "We hebben een resetcode naar uw e-mail gestuurd.",
+      "passwordReset": "Uw wachtwoord is opnieuw ingesteld. U kunt nu inloggen."
     }
   },
   "settings": {
     "pageTitle": "Instellingen",
     "title": "Instellingen",
     "profile": "Profiel",
-    "days": ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"],
+    "days": [
+      "Ma",
+      "Di",
+      "Wo",
+      "Do",
+      "Vr",
+      "Za",
+      "Zo"
+    ],
     "saveChanges": "Wijzigingen opslaan",
     "saved": "Opgeslagen!",
     "logout": "Uitloggen",
@@ -201,7 +250,8 @@
       "reminders": "Herinneringen",
       "privacy": "Privacy",
       "units": "Eenheden",
-      "data": "Gegevens"
+      "data": "Gegevens",
+      "profile": "Profiel"
     },
     "fields": {
       "name": "Naam",
@@ -304,6 +354,57 @@
       "deletedTitle": "Account verwijderd",
       "deletedMessage": "Je account is verwijderd.",
       "error": "Kon account niet verwijderen"
+    },
+    "reminders": {
+      "workoutTitle": "Trainingsherinnering",
+      "workoutSubtitle": "Ontvang meldingen op geselecteerde dagen en op het geselecteerde tijdstip",
+      "mealTitle": "Maaltijdherinnering",
+      "mealSubtitle": "Vergeet niet uw maaltijden te loggen",
+      "time": "Tijd: {{time}}",
+      "days": [
+        "Zo",
+        "Ma",
+        "di",
+        "Wo",
+        "Do",
+        "Vr",
+        "Zat"
+      ]
+    },
+    "email": {
+      "title": "E-mail",
+      "change": "E-mailadres wijzigen",
+      "newEmail": "Nieuwe e-mail",
+      "currentPassword": "Huidig wachtwoord",
+      "missingFields": "Voer zowel uw nieuwe e-mailadres als uw huidige wachtwoord in",
+      "changeError": "Kan e-mailadres niet wijzigen",
+      "successMessage": "Uw e-mailadres is bijgewerkt",
+      "networkError": "Netwerkfout"
+    },
+    "subscription": {
+      "title": "Abonnement",
+      "type": "Type",
+      "status": "Status",
+      "tiers": {
+        "pro": "Pro",
+        "basic": "Basis",
+        "free": "Gratis"
+      },
+      "statuses": {
+        "active": "Actief",
+        "inactive": "Inactief",
+        "trialing": "Proefperiode",
+        "canceled": "Geannuleerd"
+      },
+      "upgrade": "Upgraden",
+      "manage": "Beheer in de App Store"
+    },
+    "language": "Taal",
+    "changeLanguageInSettings": "Wijzig de taal in Instellingen",
+    "languageHint": "Open de apparaatinstellingen en selecteer RunWithAI → Taal.",
+    "actions": {
+      "save": "Wijzigingen opslaan",
+      "saved": "Opgeslagen!"
     }
   },
   "pricing": {
@@ -367,6 +468,139 @@
     "step3": {
       "title": "Bereik je doelen",
       "desc": "Stel doelen en volg je voortgang met gedetailleerde statistieken"
+    },
+    "tagline": "Je persoonlijke AI-hardloopcoach",
+    "headline": {
+      "before": "Dat trainen",
+      "highlight": "past zich aan",
+      "after": "jou"
+    },
+    "features": {
+      "ai": {
+        "title": "Een echte AI-coach",
+        "desc": "Uw plan is voor u gemaakt, geen sjabloon"
+      },
+      "adapts": {
+        "title": "Een woonplan",
+        "desc": "Wordt aangepast na elke run die u voltooit"
+      },
+      "injury": {
+        "title": "Luistert naar je lichaam",
+        "desc": "Bij je training wordt rekening gehouden met blessures en pijn"
+      },
+      "goals": {
+        "title": "Op weg naar jouw doel",
+        "desc": "Van je eerste 5 km tot een marathon — in jouw tempo"
+      }
+    },
+    "tryFree": "Probeer 14 dagen gratis",
+    "fine": "Geen verplichting. Annuleer op elk gewenst moment.",
+    "levelQuestion": "Waar ben je op je hardloopreis?",
+    "selectLevel": "Selecteer uw niveau om door te gaan",
+    "levels": {
+      "beginner": {
+        "label": "Beginner",
+        "sub": "Nieuw of komt terug na een pauze"
+      },
+      "intermediate": {
+        "label": "Gemiddeld",
+        "sub": "Ik loop regelmatig en wil mezelf verbeteren"
+      },
+      "advanced": {
+        "label": "Geavanceerd",
+        "sub": "Ik train doelgericht en ken mijn tempo"
+      }
+    },
+    "tellUsAboutYou": "Vertel ons iets over jou",
+    "coachUsesThis": "Je coach gebruikt dit om je plan op te stellen",
+    "fields": {
+      "name": "Wat is uw naam?",
+      "age": "Leeftijd",
+      "weeklyKm": "Km per week (ongeveer)"
+    },
+    "primaryGoal": "Wat is uw doel?",
+    "goals": {
+      "fitness": {
+        "label": "Word fit",
+        "sub": "Gezondheid en energie"
+      },
+      "5k": {
+        "label": "5K",
+        "sub": "Mijn eerste grote doel"
+      },
+      "10k": {
+        "label": "10K",
+        "sub": "Het volgende niveau"
+      },
+      "half": {
+        "label": "Halve marathon",
+        "sub": "21,1 km"
+      },
+      "full": {
+        "label": "Marathon",
+        "sub": "42,2 km"
+      },
+      "weight": {
+        "label": "Afvallen",
+        "sub": "Ren jezelf lichter"
+      }
+    },
+    "raceDate": "Heb je een racedatum? (optioneel)",
+    "raceDatePlaceholder": "Bijv. 15 september",
+    "skipForNow": "Voor nu overslaan",
+    "plan": {
+      "building": "Je coach werkt aan je plan…",
+      "waitNamed": "{{name}}, geef me een momentje.",
+      "wait": "Geef me een momentje.",
+      "errorTitle": "Uw plan kan momenteel niet worden gemaakt",
+      "errorMessage": "Je kunt je coach altijd vragen om deze later aan te maken.",
+      "readyNamed": "{{name}}, hier is je plan",
+      "ready": "Hier is uw plan",
+      "basedOnAnswers": "Je plan is gebaseerd op wat je tegen je coach hebt gezegd.",
+      "weeklyDistance": "Wekelijkse afstand: {{km}} km",
+      "goal": "Doel: {{goal}}",
+      "considerations": "Overwegingen: {{injuries}}",
+      "weekAndDay": "Week {{week}} – {{day}}",
+      "day": "Dag {{day}}",
+      "run": "Uitvoeren",
+      "makePlan": "Maak mijn plan",
+      "weekdays": {
+        "mon": "Maandag",
+        "tue": "Dinsdag",
+        "wed": "Woensdag",
+        "thu": "Donderdag",
+        "fri": "Vrijdag",
+        "sat": "Zaterdag",
+        "sun": "Zondag"
+      }
+    },
+    "languageTitle": "Kies uw taal",
+    "languageSubtitle": "U kunt dit later wijzigen in Instellingen",
+    "paywall": {
+      "headline": "Uw persoonlijke AI-coach",
+      "subtitle": "Een trainingsplan dat zich aan jou aanpast — elke week, elke run.",
+      "benefits": {
+        "adaptive": "Je plan wordt na elke run aangepast",
+        "audioCoach": "Je coach in je oren terwijl je traint",
+        "calendar": "Weekplan en kalender die bijblijven",
+        "chat": "Vraag uw coach alles – wanneer dan ook"
+      },
+      "trial": "14 dagen gratis",
+      "afterTrial": "Dan {{price}}/maand. Annuleer op elk gewenst moment - met één tik.",
+      "startTraining": "Start mijn training",
+      "restore": "Aankopen herstellen",
+      "welcomeTitle": "🎉 Welkom!",
+      "welcomeMessage": "Uw Pro-toegang is nu actief.",
+      "restoreSuccessTitle": "Aankopen hersteld",
+      "restoreSuccessMessage": "Uw abonnement is weer actief.",
+      "noPurchasesTitle": "Geen aankopen gevonden",
+      "noPurchasesMessage": "Er zijn geen actieve abonnementen gevonden.",
+      "errors": {
+        "prices": "Prijzen konden niet worden geladen. Probeer het later opnieuw.",
+        "packageUnavailable": "Dit abonnement is niet beschikbaar.",
+        "purchaseTitle": "Aankoop mislukt",
+        "restore": "Aankopen kunnen niet worden hersteld."
+      }
     }
   },
   "dashboard": {
@@ -419,7 +653,20 @@
       "runsFromRecord": "{{count}} sessies van record",
       "runsInMonth": "{{count}} sessies in {{month}}"
     },
-    "monthNames": ["Jan", "Feb", "Mrt", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"],
+    "monthNames": [
+      "Jan",
+      "Feb",
+      "Mrt",
+      "Apr",
+      "Mei",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Dec"
+    ],
     "workout": {
       "nextWorkout": "VOLGENDE WORKOUT",
       "today": "VANDAAG",
@@ -445,7 +692,15 @@
       "addNote": "+ Notitie",
       "mood": "Stemming",
       "placeholder": "Hoe ging het? Zware benen? Goede dag? Nieuwe route?",
-      "dayNames": ["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za"]
+      "dayNames": [
+        "Zo",
+        "Ma",
+        "Di",
+        "Wo",
+        "Do",
+        "Vr",
+        "Za"
+      ]
     },
     "injury": {
       "title": "BLESSURERISICO",
@@ -488,7 +743,31 @@
       "unavailable": "GPS niet beschikbaar",
       "timeout": "GPS time-out",
       "notAvailable": "GPS niet beschikbaar",
-      "error": "GPS-fout"
+      "error": "GPS-fout",
+      "points": "{{count}}-punten ({{filtered}} gefilterd)"
+    },
+    "cycling": "Fietsen",
+    "music": "Muziek",
+    "voiceOnly": "Alleen stem",
+    "notification": {
+      "run": "Je hardloopsessie bijhouden...",
+      "walk": "Uw wandeling volgen...",
+      "bike": "Je rit volgen..."
+    },
+    "limit": {
+      "title": "Wekelijkse activiteitslimiet bereikt",
+      "message": "U heeft de gratis abonnementslimiet van {{limit}}-activiteiten per week bereikt. Upgrade naar Basic of Pro voor onbeperkte toegang.",
+      "later": "Later"
+    },
+    "stats": {
+      "runs": "wordt uitgevoerd",
+      "walks": "loopt",
+      "yourProgress": "Je voortgang",
+      "thisWeek": "Deze week",
+      "lastWeek": "Vorige week",
+      "bestPace": "Beste tempo",
+      "longestRun": "Langste run",
+      "totalKm": "Totaal km"
     }
   },
   "chat": {
@@ -507,7 +786,9 @@
     "logAllMeals": "Alle maaltijden registreren",
     "logged": "Geregistreerd",
     "mealPlanLoggedMessage": "Het maaltijdplan is voor vandaag geregistreerd.",
-    "mealPlanLogError": "Het maaltijdplan kon niet worden geregistreerd: {{error}}"
+    "mealPlanLogError": "Het maaltijdplan kon niet worden geregistreerd: {{error}}",
+    "languageChanged": "Taal gewijzigd. Je AI-coach antwoordt nu in het Engels.",
+    "languageChangedConfirmation": "Taal gewijzigd. Uw AI-coach antwoordt nu in de door u geselecteerde taal."
   },
   "proUpsell": {
     "title": "Ontgrendel volledige kracht",
@@ -542,6 +823,675 @@
         "title": "Voortgangsrapporten",
         "desc": "Wekelijkse en maandelijkse samenvattingen"
       }
+    }
+  },
+  "bariatric": {
+    "title": "Bariatrisch profiel",
+    "subtitle": "Maaghoes/bypass-ondersteuning",
+    "settingsButton": "Bariatrisch profiel",
+    "settingsDescription": "Maaghoes of bypass-ondersteuning",
+    "setup": {
+      "title": "Bariatrisch profiel",
+      "intro": "Schakel bariatrische ondersteuning in om op maat gemaakte doelstellingen voor eiwitten, vloeistoffen en calorieën te krijgen op basis van uw operatie en fase.",
+      "surgeryType": "Type operatie",
+      "surgeryTypeNone": "Geen",
+      "surgeryTypeSleeve": "Maaghoes",
+      "surgeryTypeBypass": "Maagbypass",
+      "surgeryDate": "Datum van de operatie",
+      "surgeryDatePlaceholder": "YYYY-MM-DD",
+      "startWeight": "Startgewicht (kg)",
+      "goalWeight": "Doelgewicht (kg)",
+      "height": "Hoogte (cm)",
+      "enable": "Bariatrische ondersteuning inschakelen",
+      "save": "Profiel opslaan",
+      "delete": "Obesitasprofiel verwijderen",
+      "deleteConfirm": "Weet u zeker dat u uw bariatrische profiel wilt verwijderen?",
+      "disclaimer": "Belangrijk: deze app vervangt NIET uw bariatrische voedingsdeskundige, arts of kliniek. Aanbevelingen zijn algemene richtlijnen gebaseerd op openbare ASMBS-richtlijnen. Volg altijd de instructies van uw eigen kliniek. Neem onmiddellijk contact op met uw arts als u zich zorgen maakt over het dumpingsyndroom, aanhoudende misselijkheid of andere problemen.",
+      "acceptDisclaimer": "Ik begrijp dat deze app mijn bariatrische zorgteam niet vervangt",
+      "disclaimerRequired": "U moet de disclaimer accepteren",
+      "invalidDate": "Voer een geldige datum in",
+      "missingType": "Selecteer het operatietype",
+      "saved": "Profiel opgeslagen",
+      "deleted": "Profiel verwijderd"
+    },
+    "dashboard": {
+      "title": "Bariatrische ondersteuning",
+      "edit": "Bewerken",
+      "phaseLabel": "Huidige fase",
+      "daysSinceLabel": "Dagen sinds de operatie",
+      "daysUntilNext": "{{days}} dagen tot de volgende fase",
+      "lastPhase": "U bevindt zich in de laatste fase",
+      "proteinToday": "Eiwit vandaag",
+      "proteinProgress": "Eiwit vandaag",
+      "fluidToday": "Vloeistoffen vandaag",
+      "kcalRange": "Calorieën (doel)",
+      "portionSize": "Aanbevolen portiegrootte",
+      "medicalCheckReminder": "Onthoud uw {{day}}-dagcontrole",
+      "preSurgery": "Operatiedatum nog niet bereikt"
+    },
+    "phases": {
+      "clearLiquid": {
+        "name": "Week 1: Heldere vloeistoffen",
+        "description": "Alleen heldere vloeistoffen: water, bouillon, suikervrij sap, thee. Kleine slokjes gedurende de dag."
+      },
+      "fullLiquid": {
+        "name": "Week 2: Volle vloeistoffen",
+        "description": "Alle vloeistoffen incl. eiwitshakes, soep, yoghurt. Drink NIET 30 minuten voor/na de maaltijd."
+      },
+      "pureed": {
+        "name": "Week 3-4: Gepureerd voedsel",
+        "description": "Gemengd/gepureerd voer: kwark, vispuree, gemengde kip. Kauw grondig."
+      },
+      "soft": {
+        "name": "Week 5-6: Zachtvoer",
+        "description": "Zachtvoer: roerei, vis, gekookte groenten, zacht fruit. Eerst eiwitten, kleine hapjes."
+      },
+      "regular": {
+        "name": "Week 7+: Regelmatige voeding",
+        "description": "Normale voeding in kleine porties. Eerst eiwitten, dan groenten, dan koolhydraten. Kauw grondig."
+      }
+    },
+    "tips": {
+      "noDrinking": "Drink NIET 30 minuten voor of na de maaltijd",
+      "proteinFirst": "Eet altijd eerst eiwitten",
+      "chew": "Kauw elke hap 20-30 keer",
+      "stopWhenFull": "Stop wanneer deze vol is, zelfs bij kleine porties",
+      "vitamins": "Denk aan uw dagelijkse vitamines"
+    },
+    "vitamins": {
+      "title": "De vitamines van vandaag",
+      "subtitle": "Denk aan uw dagelijkse supplementen",
+      "names": {
+        "multivitamin": "Multivitamine",
+        "calciumD": "Calcium + Vitamine D",
+        "iron": "Ijzer",
+        "b12": "B12",
+        "omega3": "Omega-3 (optioneel)"
+      },
+      "taken": "Genomen",
+      "notTaken": "Niet bezet",
+      "allDone": "Alle vitamines die vandaag zijn ingenomen 🎉",
+      "reset": "Resetten",
+      "optional": "optioneel"
+    },
+    "fluid": {
+      "title": "Vloeistofinname vandaag",
+      "subtitle": "Drink tussen de maaltijden door, niet erbij",
+      "goal": "Doel",
+      "current": "Vandaag",
+      "remaining": "Resterend",
+      "add250": "+ 250 ml",
+      "add500": "+ 500 ml",
+      "addCustom": "Toevoegen",
+      "reset": "Resetten",
+      "goalReached": "Je hebt je vloeiende doel bereikt 💧",
+      "warning": "Denk aan kleine slokjes, niet aan grote hoeveelheden tegelijk"
+    },
+    "meals": {
+      "title": "Suggesties voor u nu",
+      "subtitle": "Afgestemd op jouw fase",
+      "kcal": "kcal",
+      "protein": "g-eiwit",
+      "prep": "min",
+      "logIt": "Logboek",
+      "types": {
+        "fluid": "Vloeistof",
+        "puree": "Pureer",
+        "soft": "Zachtvoer",
+        "normal": "Normale voeding"
+      },
+      "items": {
+        "water": "Water",
+        "brothClear": "Heldere bouillon",
+        "sugarFreeJuice": "Suikervrij sap (verdund)",
+        "herbalTea": "Kruidenthee",
+        "proteinShake": "Eiwitshake",
+        "skimmedMilk": "Magere melk",
+        "thinSoup": "Dunne soep (gezeefd)",
+        "skyrThin": "Dunne lucht",
+        "mashedFish": "Vispuree",
+        "cottageCheese": "Kwark",
+        "eggPuree": "Eierpuree",
+        "pureedChicken": "Gepureerde kip",
+        "mashedTofu": "Gepureerde tofu",
+        "softFish": "Zachte vis",
+        "scrambledEgg": "Roerei",
+        "softChicken": "Malse kip",
+        "wellCookedVeggies": "Goed gekookte groenten",
+        "greekYogurt": "Griekse yoghurt",
+        "grilledChicken": "Gegrilde kipfilet",
+        "salmonFillet": "Zalmfilet",
+        "eggOmelette": "Omelet",
+        "lentilSoup": "Linzensoep",
+        "leanBeef": "Mager rundvlees"
+      },
+      "reminders": {
+        "title": "Denk eraan bij de maaltijden",
+        "proteinFirst": "Eet eerst eiwitten",
+        "chew": "Kauw 20-30 keer",
+        "noDrinking": "Drink niet 30 minuten voor/na de maaltijd",
+        "stopWhenFull": "Stop wanneer vol",
+        "smallSips": "Neem kleine slokjes",
+        "noStraw": "Geen rietjes (lucht in de maag)",
+        "slowly": "Drink langzaam",
+        "mashWell": "Grondig pureren",
+        "newFoodOneAtATime": "Introduceer één nieuw voedingsmiddel tegelijk",
+        "chewExtra": "Kauw extra grondig",
+        "mindfulEating": "Eet langzaam en met aandacht",
+        "avoidEmptyCalories": "Vermijd lege calorieën"
+      }
+    },
+    "dumping": {
+      "title": "Risico op dumpingsyndroom",
+      "subtitle": "Gebaseerd op de maaltijden van vandaag",
+      "low": "Laag risico",
+      "medium": "Let op",
+      "high": "Hoog risico",
+      "lowDesc": "De maaltijden van vandaag zien er prima uit",
+      "mediumDesc": "Een of meer maaltijden kunnen tot dumping leiden. Let op symptomen.",
+      "highDesc": "Vandaag meerdere risicovolle maaltijden. Neem contact op met uw arts als u last heeft van misselijkheid, snelle hartslag, duizeligheid of diarree.",
+      "flaggedCount": "{{count}} maaltijd gemarkeerd",
+      "flaggedCount_plural": "{{count}} maaltijden gemarkeerd",
+      "reasons": {
+        "sugarHigh": "Te veel suiker",
+        "sugarMedium": "Matig suikergehalte",
+        "fatHigh": "Hoog vetgehalte",
+        "carbsNoProtein": "Koolhydraten zonder eiwit",
+        "carbsHigh": "Hoge inname van koolhydraten",
+        "carbsMedium": "Matige inname van koolhydraten",
+        "proteinLow": "Eiwitinname te laag"
+      },
+      "info": "Dumping komt het meest voor na een maagbypass en wordt veroorzaakt door suiker, vet of snel opneembare koolhydraten. Symptomen: misselijkheid, snelle hartslag, duizeligheid, diarree 15-30 minuten na de maaltijd."
+    },
+    "training": {
+      "title": "Aangepaste training",
+      "subtitle": "Aanbevolen activiteit voor uw fase",
+      "currentPhase": "Je trainingsfase",
+      "daysUntilNext": "{{days}} dagen tot de volgende trainingsfase",
+      "maxDuration": "Maximale duur",
+      "maxHeartRate": "Maximale hartslag",
+      "min": "min",
+      "ofMax": "van maximale hartslag",
+      "intensityLabel": {
+        "veryLight": "Zeer licht",
+        "light": "Licht",
+        "moderate": "Matig",
+        "normal": "Normaal"
+      },
+      "phaseNames": {
+        "1": "Herstel (week 0-2)",
+        "2": "Voorzichtige start (week 2-4)",
+        "3": "Lichte activiteit (week 4-6)",
+        "4": "Opbouw (week 6-8)",
+        "5": "Normale training (week 8+)"
+      },
+      "phaseDesc": {
+        "1": "Houd u aan korte wandelingen en diepe ademhalingsoefeningen. Luister naar je lichaam en rust voldoende.",
+        "2": "Je kunt het lopen wat vergroten. Nog steeds geen krachttraining of intensieve training.",
+        "3": "U kunt beginnen met fietsen en zwemmen (zodra de wonden genezen zijn). Nog steeds geen hardlopen of zware gewichten.",
+        "4": "Tijd om lichte krachttraining en langere cardio te introduceren. Begin met kleine gewichten.",
+        "5": "Je kunt terugkeren naar de normale training, maar toch geleidelijk opbouwen en op je energie letten."
+      },
+      "allowed": "Aanbevolen",
+      "notRecommended": "Vermijd nu",
+      "activities": {
+        "walkShort": "Korte wandeling (5-10 min)",
+        "walkMedium": "Middellange wandeling (15-20 min)",
+        "walkLong": "Lange wandeling (30+ min)",
+        "breathing": "Ademhalingsoefeningen",
+        "gentleStretch": "Zachte stretching",
+        "cycling": "Fietsen",
+        "swimming": "Zwemmen",
+        "lightStrength": "Lichte krachttraining",
+        "strength": "Krachttraining",
+        "jog": "Licht joggen",
+        "running": "Actief",
+        "highIntensity": "Training met hoge intensiteit",
+        "heavyLifting": "Zwaar tillen",
+        "extremeIntensity": "Extreme intensiteit"
+      },
+      "warnings": {
+        "title": "Belangrijk om te onthouden",
+        "noLifting": "Geen zwaar tillen (meer dan 5 kg)",
+        "staySoftMovements": "Houd je aan zachte, langzame bewegingen",
+        "avoidSwimmingUntilHealed": "Vermijd zwemmen totdat uw wonden genezen zijn (doorgaans 3-4 weken)",
+        "lightWeightsOk": "Lichte gewichten (2-5 kg) zijn toegestaan na overleg met uw arts",
+        "startStrengthGradually": "Begin met krachttraining met lage gewichten en hoge herhalingen",
+        "stillBuildGradually": "Bouw nog steeds geleidelijk op - vermijd plotselinge grote verhogingen",
+        "hydration": "Onthoud vloeistoffen voor, tijdens en na de training"
+      },
+      "safety": {
+        "activityNotRecommended": "{{activity}} wordt niet aanbevolen in uw fase. Raadpleeg uw arts.",
+        "durationTooLong": "Aanbevolen duur is maximaal {{max}} min. Je had {{actual}} min. gepland.",
+        "checkWithDoctor": "Neem contact op met uw arts als u pijn, misselijkheid of uitputting ervaart"
+      },
+      "disclaimer": "Aanbevelingen zijn slechts richtlijnen. Volg altijd de instructies van uw eigen kliniek."
+    }
+  },
+  "diabetes": {
+    "title": "Diabetesprofiel",
+    "subtitle": "Type 1, Type 2 of prediabetes",
+    "settingsButton": "Diabetesprofiel",
+    "settingsDescription": "Type 1, Type 2 of prediabetes - dieet, bloedsuikerspiegel en lichaamsbeweging",
+    "setup": {
+      "title": "Diabetesprofiel",
+      "intro": "Schakel diabetesondersteuning in om op maat gemaakte maaltijdsuggesties, bloedsuikerbegeleiding en bewegingsaanbevelingen te krijgen.",
+      "type": "Diabetestype",
+      "typeT1": "Type 1",
+      "typeT2": "Type 2",
+      "typePre": "Prediabetes",
+      "typeGest": "Zwangerschapsdiabetes",
+      "treatment": "Behandeling",
+      "txNone": "Geen",
+      "txDiet": "Alleen dieet/levensstijl",
+      "txMetformin": "Metformine",
+      "txOral": "Andere orale medicatie",
+      "txGLP1": "GLP-1 (Ozempic/Wegovy/Mounjaro)",
+      "txBasal": "Basale insuline",
+      "txBolus": "Basale + bolusinsuline",
+      "txPump": "Insulinepomp",
+      "diagnosisDate": "Diagnosedatum (optioneel)",
+      "datePlaceholder": "YYYY-MM-DD",
+      "hba1c": "HbA1c (mmol/mol, optioneel)",
+      "countCarbs": "Ik tel koolhydraten",
+      "carbRatio": "Verhouding insuline/koolhydraten (g/E, optioneel)",
+      "carbRatioHelp": "Bijv. 10 = 1 eenheid insuline dekt 10 g koolhydraten. De app doseert nooit - dit aantal is uitsluitend informatief.",
+      "correctionFactor": "Correctiefactor (mmol/L per U, optioneel)",
+      "preExerciseMin": "Minimale bloedsuikerspiegel vóór inspanning (mmol/L)",
+      "enable": "Diabetesondersteuning inschakelen",
+      "acceptDisclaimer": "Ik accepteer de bovenstaande disclaimer",
+      "disclaimerRequired": "U moet de disclaimer accepteren",
+      "missingType": "Selecteer diabetestype",
+      "save": "Profiel opslaan",
+      "saved": "Profiel opgeslagen",
+      "delete": "Diabetesprofiel verwijderen",
+      "deleted": "Profiel verwijderd",
+      "deleteConfirm": "Weet u zeker dat u uw diabetesprofiel wilt verwijderen?",
+      "disclaimer": "BELANGRIJK: deze app vervangt NIET uw arts of diabetesteam. Wij stellen NOOIT specifieke insulinedoses of medicatiewijzigingen voor. Pas uw behandeling nooit alleen aan op basis van app-advies. Neem bij twijfel altijd contact op met uw zorgverlener."
+    }
+  },
+  "bloodSugar": {
+    "title": "Bloedsuiker",
+    "settingsButton": "Bloedsuikerlogboek",
+    "settingsDescription": "Registreer uw metingen en bekijk trends in de loop van de tijd",
+    "add": "Lezing toevoegen",
+    "save": "Opslaan",
+    "history": "Geschiedenis",
+    "empty": "Nog geen metingen. Tik op de knop hierboven om uw eerste meting te loggen.",
+    "disclaimer": "Deze nummers zijn alleen ter referentie. Bespreek patronen altijd met uw arts of diabetesteam.",
+    "valueLabel": "Bloedsuiker (mmol/L)",
+    "contextLabel": "Context",
+    "noteLabel": "Opmerking (optioneel)",
+    "notePlaceholder": "Bijv. na het ontbijt",
+    "errInvalidTitle": "Ongeldige waarde",
+    "errInvalidBody": "Voer een bloedsuikerwaarde in tussen 1,0 en 40,0 mmol/L.",
+    "errSaveTitle": "Kan niet opslaan",
+    "deleteTitle": "Meting verwijderen",
+    "deleteBody": "Weet je het zeker? Druk lang om te verwijderen.",
+    "ctx": {
+      "fasting": "Vasten",
+      "preMeal": "Vóór de maaltijd",
+      "postMeal": "Na de maaltijd",
+      "bedtime": "Bedtijd",
+      "preExercise": "Vóór het sporten",
+      "postExercise": "Na het sporten",
+      "random": "Willekeurig"
+    },
+    "range": {
+      "1d": "1 dag",
+      "7d": "7 dagen",
+      "30d": "30 dagen",
+      "90d": "90 dagen"
+    },
+    "stat": {
+      "avg": "Gemiddeld",
+      "min": "Min",
+      "max": "Max",
+      "tir": "Tijd binnen bereik",
+      "target": "Doel",
+      "measurements": "-waarden"
+    }
+  },
+  "healthScore": {
+    "title": "Gezondheidsscore",
+    "todayLabel": "De uitslag van vandaag",
+    "A": "Zeer gezond",
+    "B": "Gezond",
+    "C": "Matig",
+    "D": "Minder gezond",
+    "E": "Ongezond"
+  },
+  "units": {
+    "g": "g",
+    "kg": "kg",
+    "ml": "ml",
+    "dl": "dl",
+    "l": "l",
+    "tsk": "theelepel",
+    "spsk": "eetl",
+    "stk": "st",
+    "skive": "segment",
+    "portion": "-gedeelte"
+  },
+  "logMeal": {
+    "amount": "Bedrag",
+    "unit": "Eenheid",
+    "approxGrams": "≈ {{grams}}g"
+  },
+  "home": {
+    "greeting": {
+      "morning": "Goedemorgen",
+      "day": "Hallo",
+      "evening": "Goedenavond",
+      "night": "Goedenacht"
+    },
+    "coach": {
+      "restDay": "Vandaag is een rustdag — geniet van je herstel!",
+      "todayWorkout": "Het abonnement van vandaag omvat {{workout}}.",
+      "nextWorkout": "Volgende training: {{workout}}.",
+      "ready": "Klaar om aan de slag te gaan? Vraag mij naar planning, voeding of motivatie.",
+      "askForHelp": "Vraag me alles als je hulp nodig hebt."
+    },
+    "chat": {
+      "placeholder": "Vraag uw AI-coach...",
+      "todayPlanPrompt": "Wat is mijn plan voor vandaag?"
+    },
+    "todayPlan": "Het plan van vandaag",
+    "startTraining": "Training starten",
+    "nextTraining": "Volgende training",
+    "today": "Vandaag",
+    "training": "Training",
+    "todayOverview": "Het overzicht van vandaag",
+    "week": "Week",
+    "milestone": "Mijlpaal",
+    "toGoal": "naar {{distance}} km-doel"
+  },
+  "progress": {
+    "weeks": "Weken",
+    "months": "Maanden",
+    "weekLabel": "Week {{week}}, {{year}}",
+    "weekShort": "W{{week}}",
+    "activities": "Activiteiten",
+    "empty": "Nog geen activiteiten: ga erop uit en ren!",
+    "noRoute": "Geen route geregistreerd",
+    "standardTraining": "Standaardtraining",
+    "steps": "Stappen",
+    "duration": "Duur",
+    "caloriesShort": "kal",
+    "activityTypes": {
+      "walk": "Lopen",
+      "cycling": "Fietsen",
+      "run": "Uitvoeren"
+    }
+  },
+  "workoutLabels": {
+    "rest": "Rust",
+    "injuryRest": "Rust vanwege blessure"
+  },
+  "calendar": {
+    "monthSummary_one": "{{count}} rennen · {{km}} km",
+    "monthSummary_other": "{{count}} loopt · {{km}} km",
+    "completed": "Voltooid",
+    "planned": "Gepland",
+    "missed": "Gemist",
+    "plannedKm": "{{km}} km gepland",
+    "emptyDay": "Er is geen hardloop- of trainingsprogramma gepland voor deze dag"
+  },
+  "motionPicker": {
+    "title": "Cardio",
+    "what": "Wat zou je graag willen doen?",
+    "where": "Waar?",
+    "run": "Uitvoeren",
+    "walk": "Lopen",
+    "cycling": "Fietsen",
+    "runLocation": "Buiten of loopband",
+    "bikeLocation": "Buiten of binnen",
+    "outdoor": "Buiten",
+    "outdoorDescription": "GPS-tracking · routes · tempo",
+    "indoor": "Binnen",
+    "indoorDescription": "Loopband · stappenteller · handmatige afstand"
+  },
+  "activityPicker": {
+    "title": "Kies training",
+    "intro": "Wat wilt u loggen?",
+    "options": {
+      "mobility": {
+        "label": "Mobiliteit / Yoga",
+        "description": "Stretchen, yoga, foamrollen"
+      },
+      "bike": {
+        "label": "Fietsen",
+        "description": "Binnen of buiten"
+      },
+      "other": {
+        "label": "Andere activiteit",
+        "description": "Padel, voetbal, zwemmen..."
+      }
+    }
+  },
+  "logActivity": {
+    "types": {
+      "strength": "Krachttraining",
+      "mobility": "Mobiliteit / Yoga",
+      "bike": "Fietsen",
+      "other": "Andere activiteit"
+    },
+    "invalidDuration": "Voer een geldige duur in minuten in",
+    "savedTitle": "Opgeslagen!",
+    "savedMessage": "{{activity}} gelogd ({{duration}} min, {{calories}} kcal)",
+    "saveError": "Kan niet opslaan: {{error}}",
+    "logActivity": "Registreer uw {{activity}}",
+    "duration": "Duur (minuten) *",
+    "calories": "Calorieën (optioneel — anders automatisch berekend)",
+    "calorieEstimate": "≈ {{calories}} kcal berekend op basis van {{weight}} kg, RPE {{rpe}}",
+    "effort": "Inspanning (RPE 1–10)",
+    "notes": "Opmerkingen (optioneel)",
+    "notesPlaceholder": "Bijvoorbeeld oefeningen, gewichten, sets...",
+    "save": "Training opslaan"
+  },
+  "treadmill": {
+    "invalidValueTitle": "Ongeldige waarde",
+    "invalidValueMessage": "Voer een getal in, bijvoorbeeld 5.2",
+    "noDistanceTitle": "Geen afstand",
+    "noDistanceMessage": "Voeg de afstand handmatig toe of ga door totdat stappen kunnen worden gemeten.",
+    "finishTitle": "Voltooien en opslaan?",
+    "finishMessage": "Afstand: {{distance}} km · Tijd: {{time}} · {{calories}} kcal",
+    "walkNote": "Indoorwandeling (loopband)",
+    "runNote": "Indoor hardlopen (loopband)",
+    "savedTitle": "Opgeslagen! 🏃",
+    "savedMessage": "{{distance}} km in {{time}} · {{calories}} kcal verbrand.",
+    "saveError": "Kan niet opslaan",
+    "discardTitle": "Training negeren?",
+    "discardMessage": "Alle gegevens van deze training gaan verloren.",
+    "keep": "Behouden",
+    "discard": "Weggooien",
+    "walkTitle": "Loopband · Lopen",
+    "runTitle": "Loopband · Hardlopen",
+    "pedometerActive": "Stappenteller actief",
+    "pedometerUnavailable": "Stappenteller niet beschikbaar",
+    "steps": "STAPPEN",
+    "speed": "Snelheid",
+    "adjustDistance": "Afstand aanpassen",
+    "adjustHint": "Voeg de afstand handmatig toe vanaf het loopbanddisplay",
+    "enterExactDistance": "Voer de exacte afstand vanaf de loopband in",
+    "instructionsTitle": "Hoe de tracker te gebruiken",
+    "instructions": "1. Druk op START wanneer u op de loopband \n2 begint. Voeg afstand toe met de knoppen +0,1 / +0,5 / +1,0 \n3. Of voer de exacte afstand in als u klaar bent\n4. Stappen worden automatisch geteld als u uw telefoon bij u draagt",
+    "saving": "Opslaan...",
+    "exactDistanceTitle": "Voer de exacte afstand in",
+    "exactDistanceHint": "Lees het display van de loopband en voer de afstand in km in",
+    "apply": "Toepassen"
+  },
+  "statsPage": {
+    "hoursShort": "h",
+    "minutesShort": "m",
+    "now": "Nu",
+    "weeksAgoShort": "{{count}}w",
+    "emptyTitle": "Nog geen statistieken",
+    "emptyMessage": "Start uw eerste run om hier uw gegevens te bekijken.",
+    "period4Weeks": "4 weken",
+    "period3Months": "3 maanden",
+    "bestPace": "Beste tempo",
+    "dayStreak": "Dagreeks",
+    "weeklyGoal": "Wekelijks doel",
+    "ofGoal": "van {{goal}} km-doel",
+    "goalReached": "Doel bereikt!",
+    "kmRemaining": "{{km}} resterende km",
+    "milestone": "Mijlpaal",
+    "toMilestone": "{{remaining}} km tot {{milestone}} km",
+    "kmPerWeek": "KM PER WEEK",
+    "kmPerMonth": "KM PER MAAND",
+    "avgDistance": "Gemiddelde afstand",
+    "kmPerRun": "km per run",
+    "totalTime": "Totale tijd",
+    "moving": "beweegt",
+    "longestRun": "Langste run",
+    "runsPerWeekday": "Draait per weekdag",
+    "activityRings": "Activiteitsringen",
+    "kmGoal": "KM-DOEL",
+    "distance": "Afstand",
+    "activity": "Activiteit",
+    "days": "DAGEN",
+    "streak": "Streepje",
+    "activityTypes": "Activiteitstypen",
+    "types": {
+      "run": "Uitvoeren",
+      "walk": "Lopen",
+      "bike": "Fietsen"
+    }
+  },
+  "privacyPage": {
+    "title": "Privacybeleid",
+    "updated": "Laatst bijgewerkt: april 2026",
+    "intro": "Bij RunWithAI nemen we uw privacy serieus. In dit beleid wordt uitgelegd hoe wij uw persoonlijke gegevens verzamelen, gebruiken en beschermen.",
+    "sections": [
+      {
+        "title": "Gegevensbeheerder",
+        "paragraphs": [
+          "RunWithAI is verantwoordelijk voor de verwerking van uw persoonsgegevens. Neem contact met ons op via privacy@runwithai.app als u vragen heeft."
+        ]
+      },
+      {
+        "title": "Gegevens die wij verzamelen",
+        "paragraphs": [
+          "Wij verzamelen de volgende soorten gegevens:"
+        ],
+        "bullets": [
+          "Accountinformatie: e-mailadres, naam, leeftijd en geslacht",
+          "Fysieke gegevens: gewicht en lengte (optioneel)",
+          "Trainingsgegevens: activiteiten, afstand, tempo, hartslag en GPS-routes",
+          "App-gebruik: voorkeuren, doelen en niveau",
+          "Betaalinformatie: veilig afgehandeld door de App Store of Google Play"
+        ]
+      },
+      {
+        "title": "Hoe wij uw gegevens gebruiken",
+        "paragraphs": [
+          "Wij gebruiken uw gegevens om:"
+        ],
+        "bullets": [
+          "Bied gepersonaliseerde AI-trainingsplannen",
+          "Analyseer uw trainingen en voortgang",
+          "Verbeter onze dienstverlening",
+          "Verzend relevante meldingen en updates",
+          "Beheer betalingen en abonnementen"
+        ]
+      },
+      {
+        "title": "Integraties van derden",
+        "paragraphs": [
+          "RunWithAI kan worden geïntegreerd met Garmin Connect om hardloopgegevens te importeren. Wanneer we verbonden zijn, halen we alleen trainingsgegevens op, nooit uw inloggegevens."
+        ]
+      },
+      {
+        "title": "Gegevens delen",
+        "paragraphs": [
+          "Wij verkopen uw gegevens nooit. Wij delen alleen gegevens met:"
+        ],
+        "bullets": [
+          "Apple/Google: beveiligde betalingsverwerking",
+          "OpenAI: geanonimiseerde AI-coaching",
+          "Hostingproviders: Vercel en Railway voor gegevensopslag"
+        ]
+      },
+      {
+        "title": "Gegevensbeveiliging",
+        "paragraphs": [
+          "We gebruiken industriestandaard beveiligingen, waaronder:"
+        ],
+        "bullets": [
+          "HTTPS-codering voor alle verbindingen",
+          "Veilige wachtwoordhashing met bcrypt",
+          "JWT-tokens voor authenticatie",
+          "Regelmatige beveiligingsupdates"
+        ]
+      },
+      {
+        "title": "Uw rechten",
+        "paragraphs": [
+          "U heeft het recht om:"
+        ],
+        "bullets": [
+          "Toegang tot uw gegevens",
+          "Corrigeer onnauwkeurige informatie",
+          "Verwijder uw account en alle gegevens",
+          "Exporteer uw gegevens als CSV",
+          "Toestemming intrekken"
+        ]
+      },
+      {
+        "title": "Gegevensbewaring",
+        "paragraphs": [
+          "Wij bewaren uw gegevens zolang uw account actief is. Als u uw account verwijdert, worden alle gegevens binnen 30 dagen verwijderd."
+        ]
+      },
+      {
+        "title": "Cookies en tracking",
+        "paragraphs": [
+          "We gebruiken minimale cookies om u aangemeld te houden. We gebruiken geen tracking- of advertentiecookies van derden."
+        ]
+      },
+      {
+        "title": "Privacy van kinderen",
+        "paragraphs": [
+          "RunWithAI is niet bedoeld voor kinderen onder de 13 jaar en we verzamelen niet bewust gegevens van kinderen onder deze leeftijd."
+        ]
+      },
+      {
+        "title": "Beleidswijzigingen",
+        "paragraphs": [
+          "We kunnen dit beleid van tijd tot tijd bijwerken. We informeren u in de app of per e-mail over materiële wijzigingen."
+        ]
+      },
+      {
+        "title": "Contactpersoon"
+      }
+    ],
+    "contactQuestion": "Heeft u vragen over dit beleid of uw gegevens?",
+    "footer": "© 2026 RunWithAI. Alle rechten voorbehouden."
+  },
+  "more": {
+    "title": "Meer",
+    "subtitle": "Al uw gereedschap op één plek",
+    "sections": {
+      "account": "Rekening",
+      "statistics": "Statistieken",
+      "setup": "Instelling",
+      "app": "App"
+    },
+    "newBadge": "Nieuw",
+    "menu": {
+      "profile": "Profiel",
+      "profileSubtitle": "Persoonlijke informatie, doelen, hartslag en blessures",
+      "statistics": "Statistieken",
+      "statisticsSubtitle": "Totale afstand, beste tempo en mijlpalen",
+      "goals": "Doelen",
+      "goalsSubtitle": "Wekelijkse doelen en trainingstypes",
+      "settings": "Instellingen",
+      "settingsSubtitle": "Niveau, taal, profiel en meldingen",
+      "privacy": "Privacy",
+      "privacySubtitle": "Uw gegevens en rechten",
+      "upgrade": "Upgrade naar PRO",
+      "upgradeSubtitle": "Ontgrendel alle functies"
     }
   }
 }

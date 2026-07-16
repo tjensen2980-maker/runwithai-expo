@@ -1,4 +1,4 @@
-﻿{
+{
   "coachIntro": {
     "title": "Jūsu MI treneris",
     "qName": "Sveiki! Esmu jūsu personīgais MI skriešanas treneris 🏃 Pirms sākam, vēlos jūs mazliet iepazīt. Kā jūs sauc?",
@@ -55,7 +55,11 @@
     "lastActivity": "Pēdējā aktivitāte",
     "gpsTracking": "GPS izsekošana",
     "walkTracking": "Iešanas izsekošana",
-    "aiRoutes": "AI maršruti"
+    "aiRoutes": "AI maršruti",
+    "motionTitle": "Kardio",
+    "motionActivities": "Skrien · Ejiet · Riteņbraukšana",
+    "trainingTitle": "Apmācība",
+    "trainingActivities": "Spēks, mobilitāte un daudz kas cits"
   },
   "pro": {
     "badge": "PRO",
@@ -86,6 +90,10 @@
     "aiRoutes": {
       "title": "AI maršruti",
       "description": "Saņem maršrutu ieteikumus, pamatojoties uz tavu treniņu"
+    },
+    "nutrition": {
+      "title": "Kaloriju izsekotājs",
+      "description": "Skaitiet kalorijas, reģistrējiet maltītes un skenējiet svītrkodus"
     }
   },
   "stats": {
@@ -146,44 +154,85 @@
     "height": "AUGUMS",
     "years": "Gadi",
     "runningLevel": "SKRIEŠANAS LĪMENIS",
-    "levels.beginner": "Iesācējs",
-    "levels.intermediate": "Vidējais",
-    "levels.advanced": "Pieredzējis",
     "yourGoals": "KĀDI IR TAVI MĒRĶI",
-    "goals.health": "Veselība",
-    "goals.weight": "Svara zaudēšana",
-    "goals.distance": "Skriet tālāk",
-    "goals.speed": "Kļūt ātrākam",
-    "goals.race": "Skriet sacensības",
-    "goals.fun": "Izklaide",
     "weeklyGoalKm": "NEDĒĻAS KM MĒRĶIS",
     "weeklyGoalExample": "Piem. 20",
     "unlockFullPower": "Atbloķēt pilnu piekļuvi",
     "unlockDesc": "Iegūsti piekļuvi visām funkcijām un sasniedz mērķus ātrāk",
-    "proFeatures.aiCoachDesc": "AI Treneris",
-    "proFeatures.statsDesc": "Statistika",
-    "proFeatures.goalsDesc": "Mērķi",
-    "proFeatures.routesDesc": "Maršruti",
-    "proFeatures.chatDesc": "AI Čats",
-    "proFeatures.reportsDesc": "Atskaites",
     "price": "49 kr",
     "guarantee": "✓ Atcel jebkurā laikā • ✓ 7 dienas bez maksas",
     "perMonth": "/mēnesī",
     "startFreeTrial": "Sākt bezmaksas izmēģinājuma periodu",
     "continueWithFree": "Turpināt ar bezmaksas versiju",
-    "levels.beginnerDesc": "Jauns skriešanā vai sāc no jauna pēc ilga pārtraukuma",
-    "levels.intermediateDesc": "Skrien regulāri un vēlies uzlaboties",
-    "levels.advancedDesc": "Pieredzējis skrējējs ar specifiskiem mērķiem",
     "or": "vai",
     "errors": {
-      "serverConnection": "Nevar izveidot savienojumu ar serveri"
+      "serverConnection": "Nevar izveidot savienojumu ar serveri",
+      "fillEmailPassword": "Ievadiet gan e-pastu, gan paroli",
+      "loginFailed": "Nevarēja pieteikties",
+      "enterEmail": "Ievadiet savu e-pasta adresi",
+      "resetCodeFailed": "Nevarēja nosūtīt atiestatīšanas kodu",
+      "fillCodePassword": "Ievadiet atiestatīšanas kodu un jaunu paroli",
+      "passwordMismatch": "Paroles nesakrīt",
+      "passwordTooShort": "Parolei ir jābūt vismaz 6 rakstzīmēm",
+      "resetFailed": "Nevarēja atiestatīt paroli",
+      "registerFailed": "Nevarēja izveidot kontu",
+      "enterName": "Ievadiet savu vārdu",
+      "selectLevel": "Izvēlieties savu skriešanas līmeni"
+    },
+    "levels": {
+      "beginner": "Iesācējs",
+      "intermediate": "Vidējais",
+      "advanced": "Pieredzējis",
+      "beginnerDesc": "Jauns skriešanā vai sāc no jauna pēc ilga pārtraukuma",
+      "intermediateDesc": "Skrien regulāri un vēlies uzlaboties",
+      "advancedDesc": "Pieredzējis skrējējs ar specifiskiem mērķiem"
+    },
+    "goals": {
+      "health": "Veselība",
+      "weight": "Svara zaudēšana",
+      "distance": "Skriet tālāk",
+      "speed": "Kļūt ātrākam",
+      "race": "Skriet sacensības",
+      "fun": "Izklaide"
+    },
+    "proFeatures": {
+      "aiCoachDesc": "AI Treneris",
+      "statsDesc": "Statistika",
+      "goalsDesc": "Mērķi",
+      "routesDesc": "Maršruti",
+      "chatDesc": "AI Čats",
+      "reportsDesc": "Atskaites"
+    },
+    "resetPassword": "Atiestatiet paroli",
+    "forgotPasswordDesc": "Ievadiet savu e-pastu, un mēs jums nosūtīsim atiestatīšanas kodu.",
+    "sendResetCode": "Nosūtiet atiestatīšanas kodu",
+    "backToLogin": "Atpakaļ uz pieteikšanos",
+    "createNewPassword": "Izveidojiet jaunu paroli",
+    "checkEmail": "Pārbaudiet savā e-pastā sešciparu atiestatīšanas kodu.",
+    "resetCode": "Atiestatīt kodu",
+    "resetCodePlaceholder": "6 ciparu kods",
+    "newPassword": "Jauna parole",
+    "confirmNewPassword": "Apstipriniet jauno paroli",
+    "resendCode": "Nosūtiet jaunu kodu",
+    "tellUsAboutYou": "Pastāstiet mums par sevi",
+    "success": {
+      "resetCodeSent": "Mēs nosūtījām atiestatīšanas kodu uz jūsu e-pastu.",
+      "passwordReset": "Jūsu parole ir atiestatīta. Tagad varat pieteikties."
     }
   },
   "settings": {
     "pageTitle": "Iestatījumi",
     "title": "Iestatījumi",
     "profile": "Profils",
-    "days": ["Pr", "Ot", "Tr", "Ce", "Pk", "Se", "Sv"],
+    "days": [
+      "Pr",
+      "Ot",
+      "Tr",
+      "Ce",
+      "Pk",
+      "Se",
+      "Sv"
+    ],
     "saveChanges": "Saglabāt izmaiņas",
     "saved": "Saglabāts!",
     "logout": "Izrakstīties",
@@ -201,7 +250,8 @@
       "reminders": "Atgādinājumi",
       "privacy": "Privātums",
       "units": "Vienības",
-      "data": "Dati"
+      "data": "Dati",
+      "profile": "Profils"
     },
     "fields": {
       "name": "Vārds",
@@ -304,6 +354,57 @@
       "deletedTitle": "Konts dzēsts",
       "deletedMessage": "Jūsu konts tika dzēsts.",
       "error": "Neizdevās dzēst kontu"
+    },
+    "reminders": {
+      "workoutTitle": "Atgādinājums par treniņu",
+      "workoutSubtitle": "Saņemiet paziņojumus atlasītajās dienās un izvēlētajā laikā",
+      "mealTitle": "Atgādinājums par maltīti",
+      "mealSubtitle": "Atcerieties reģistrēt maltītes",
+      "time": "Laiks: {{time}}",
+      "days": [
+        "Sv",
+        "Pirmd",
+        "Otr",
+        "Trešd",
+        "Ce",
+        "Piekt",
+        "Sest"
+      ]
+    },
+    "email": {
+      "title": "E-pasts",
+      "change": "Mainiet e-pastu",
+      "newEmail": "Jauns e-pasta ziņojums",
+      "currentPassword": "Pašreizējā parole",
+      "missingFields": "Ievadiet gan savu jauno e-pastu, gan pašreizējo paroli",
+      "changeError": "Nevarēja mainīt e-pastu",
+      "successMessage": "Jūsu e-pasts ir atjaunināts",
+      "networkError": "Tīkla kļūda"
+    },
+    "subscription": {
+      "title": "Abonements",
+      "type": "Tips",
+      "status": "Statuss",
+      "tiers": {
+        "pro": "Pro",
+        "basic": "Pamata",
+        "free": "Bezmaksas"
+      },
+      "statuses": {
+        "active": "Aktīvs",
+        "inactive": "Neaktīvs",
+        "trialing": "Izmēģinājums",
+        "canceled": "Atcelts"
+      },
+      "upgrade": "Jauninājums",
+      "manage": "Pārvaldiet pakalpojumā App Store"
+    },
+    "language": "Valoda",
+    "changeLanguageInSettings": "Mainiet valodu sadaļā Iestatījumi",
+    "languageHint": "Atveriet ierīces iestatījumus un atlasiet RunWithAI → Language.",
+    "actions": {
+      "save": "Saglabājiet izmaiņas",
+      "saved": "Saglabāts!"
     }
   },
   "pricing": {
@@ -367,6 +468,139 @@
     "step3": {
       "title": "Sasniedziet savus mērķus",
       "desc": "Iestatiet mērķus un sekojiet savam progresam ar detalizētu statistiku"
+    },
+    "tagline": "Jūsu personīgais AI skriešanas treneris",
+    "headline": {
+      "before": "Apmācība, ka",
+      "highlight": "pielāgojas",
+      "after": "jūs"
+    },
+    "features": {
+      "ai": {
+        "title": "Īsts AI treneris",
+        "desc": "Jūsu plāns ir izveidots jums — nevis veidne"
+      },
+      "adapts": {
+        "title": "Dzīves plāns",
+        "desc": "Pielāgojas pēc katras pabeigtās darbības"
+      },
+      "injury": {
+        "title": "Ieklausās savā ķermenī",
+        "desc": "Traumas un sāpes tiek ņemtas vērā jūsu apmācībā"
+      },
+      "goals": {
+        "title": "Ceļā uz savu mērķi",
+        "desc": "No jūsu pirmajiem 5K līdz maratonam — jūsu tempā"
+      }
+    },
+    "tryFree": "Mēģiniet 14 dienas bez maksas",
+    "fine": "Nav saistību. Atcelt jebkurā laikā.",
+    "levelQuestion": "Kur jūs atrodaties savā skriešanas ceļojumā?",
+    "selectLevel": "Lai turpinātu, atlasiet savu līmeni",
+    "levels": {
+      "beginner": {
+        "label": "Iesācējs",
+        "sub": "Jauns vai atgriežas pēc pārtraukuma"
+      },
+      "intermediate": {
+        "label": "Vidēja līmeņa",
+        "sub": "Es regulāri skrienu un vēlos pilnveidoties"
+      },
+      "advanced": {
+        "label": "Papildu",
+        "sub": "Es trenējos ar mērķi un zinu savu tempu"
+      }
+    },
+    "tellUsAboutYou": "Pastāstiet mums mazliet par sevi",
+    "coachUsesThis": "Jūsu treneris to izmanto, lai izveidotu jūsu plānu",
+    "fields": {
+      "name": "Kāds ir jūsu vārds?",
+      "age": "Vecums",
+      "weeklyKm": "km nedēļā (aptuveni)"
+    },
+    "primaryGoal": "Kāds ir jūsu mērķis?",
+    "goals": {
+      "fitness": {
+        "label": "Iegūstiet formu",
+        "sub": "Veselība un enerģija"
+      },
+      "5k": {
+        "label": "5K",
+        "sub": "Mans pirmais lielais mērķis"
+      },
+      "10k": {
+        "label": "10 K",
+        "sub": "Nākamais līmenis"
+      },
+      "half": {
+        "label": "Pusmaratons",
+        "sub": "21,1 km"
+      },
+      "full": {
+        "label": "Maratons",
+        "sub": "42,2 km"
+      },
+      "weight": {
+        "label": "Zaudējiet svaru",
+        "sub": "Skrieniet vieglāk"
+      }
+    },
+    "raceDate": "Vai jums ir sacensību datums? (pēc izvēles)",
+    "raceDatePlaceholder": "piem. 15. septembris",
+    "skipForNow": "Pagaidām izlaist",
+    "plan": {
+      "building": "Jūsu treneris veido jūsu plānu…",
+      "waitNamed": "{{name}}, dodiet man brīdi.",
+      "wait": "Uzdāviniet man brīdi.",
+      "errorTitle": "Jūsu plānu pašlaik nevarēja izveidot",
+      "errorMessage": "Jūs vienmēr varat lūgt trenerim to izveidot vēlāk.",
+      "readyNamed": "{{name}}, lūk, jūsu plāns",
+      "ready": "Šeit ir jūsu plāns",
+      "basedOnAnswers": "Jūsu plāns ir balstīts uz to, ko teicāt savam trenerim.",
+      "weeklyDistance": "Nedēļas distance: {{km}} km",
+      "goal": "Mērķis: {{goal}}",
+      "considerations": "Apsvērumi: {{injuries}}",
+      "weekAndDay": "Nedēļa {{week}}–{{day}}",
+      "day": "Diena {{day}}",
+      "run": "Skrien",
+      "makePlan": "Izveidojiet manu plānu",
+      "weekdays": {
+        "mon": "Pirmdiena",
+        "tue": "Otrdiena",
+        "wed": "Trešdiena",
+        "thu": "Ceturtdiena",
+        "fri": "Piektdiena",
+        "sat": "Sestdiena",
+        "sun": "Svētdiena"
+      }
+    },
+    "languageTitle": "Izvēlieties valodu",
+    "languageSubtitle": "Varat to mainīt vēlāk sadaļā Iestatījumi",
+    "paywall": {
+      "headline": "Jūsu personīgais AI treneris",
+      "subtitle": "Treniņu plāns, kas pielāgojas jums — katru nedēļu, katru skrējienu.",
+      "benefits": {
+        "adaptive": "Jūsu plāns tiek pielāgots pēc katra brauciena",
+        "audioCoach": "Treniņa laikā treneris ir tavās ausīs",
+        "calendar": "Nedēļas plāns un kalendārs, kas seko līdzi",
+        "chat": "Jautājiet savam trenerim jebko — jebkurā laikā"
+      },
+      "trial": "14 dienas bez maksas",
+      "afterTrial": "Pēc tam {{price}} mēnesī. Atcelt jebkurā laikā — ar vienu pieskārienu.",
+      "startTraining": "Sāciet manu apmācību",
+      "restore": "Atjaunot pirkumus",
+      "welcomeTitle": "🎉 Laipni lūdzam!",
+      "welcomeMessage": "Jūsu Pro piekļuve tagad ir aktīva.",
+      "restoreSuccessTitle": "Pirkumi atjaunoti",
+      "restoreSuccessMessage": "Jūsu abonements atkal ir aktīvs.",
+      "noPurchasesTitle": "Nav atrasts neviens pirkums",
+      "noPurchasesMessage": "Aktīvi abonementi netika atrasti.",
+      "errors": {
+        "prices": "Cenas nevarēja ielādēt. Vēlāk mēģiniet vēlreiz.",
+        "packageUnavailable": "Šis abonements nav pieejams.",
+        "purchaseTitle": "Pirkums neizdevās",
+        "restore": "Pirkumus nevarēja atjaunot."
+      }
     }
   },
   "dashboard": {
@@ -419,7 +653,20 @@
       "runsFromRecord": "{{count}} skriešanas līdz rekordam",
       "runsInMonth": "{{count}} skriešanas {{month}}"
     },
-    "monthNames": ["Jan", "Feb", "Mar", "Apr", "Mai", "Jūn", "Jūl", "Aug", "Sep", "Okt", "Nov", "Dec"],
+    "monthNames": [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "Mai",
+      "Jūn",
+      "Jūl",
+      "Aug",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Dec"
+    ],
     "workout": {
       "nextWorkout": "NĀKAMAIS TRENIŅŠ",
       "today": "ŠODIEN",
@@ -445,7 +692,15 @@
       "addNote": "+ Piezīme",
       "mood": "Noskaņojums",
       "placeholder": "Kā gāja? Smagas kājas? Laba diena? Jauns maršruts?",
-      "dayNames": ["Sv", "Pr", "Ot", "Tr", "Ce", "Pk", "Se"]
+      "dayNames": [
+        "Sv",
+        "Pr",
+        "Ot",
+        "Tr",
+        "Ce",
+        "Pk",
+        "Se"
+      ]
     },
     "injury": {
       "title": "TRAUMAS RISKS",
@@ -488,7 +743,31 @@
       "unavailable": "GPS nav pieejams",
       "timeout": "GPS taimauts",
       "notAvailable": "GPS nav pieejams",
-      "error": "GPS kļūda"
+      "error": "GPS kļūda",
+      "points": "{{count}} punkti ({{filtered}} filtrēts)"
+    },
+    "cycling": "Riteņbraukšana",
+    "music": "Mūzika",
+    "voiceOnly": "Tikai balss",
+    "notification": {
+      "run": "Noskrējiena izsekošana...",
+      "walk": "Jūsu pastaigas izsekošana...",
+      "bike": "Jūsu brauciena izsekošana..."
+    },
+    "limit": {
+      "title": "Sasniegts nedēļas aktivitātes ierobežojums",
+      "message": "Jūs esat sasniedzis bezmaksas plāna {{limit}} aktivitāšu ierobežojumu nedēļā. Jauniniet uz Basic vai Pro, lai iegūtu neierobežotu piekļuvi.",
+      "later": "Vēlāk"
+    },
+    "stats": {
+      "runs": "darbojas",
+      "walks": "pastaigas",
+      "yourProgress": "Jūsu progress",
+      "thisWeek": "Šonedēļ",
+      "lastWeek": "Pagājušajā nedēļā",
+      "bestPace": "Labākais temps",
+      "longestRun": "Garākais skrējiens",
+      "totalKm": "Kopējais km"
     }
   },
   "chat": {
@@ -507,7 +786,9 @@
     "logAllMeals": "Reģistrēt visas ēdienreizes",
     "logged": "Reģistrēts",
     "mealPlanLoggedMessage": "Uztura plāns ir reģistrēts šodienai.",
-    "mealPlanLogError": "Uztura plānu neizdevās reģistrēt: {{error}}"
+    "mealPlanLogError": "Uztura plānu neizdevās reģistrēt: {{error}}",
+    "languageChanged": "Valoda ir mainīta. Jūsu AI treneris tagad atbildēs angļu valodā.",
+    "languageChangedConfirmation": "Valoda ir mainīta. Jūsu AI treneris tagad atbildēs jūsu izvēlētajā valodā."
   },
   "proUpsell": {
     "title": "Atbloķējiet pilnu jaudu",
@@ -542,6 +823,675 @@
         "title": "Progresa atskaites",
         "desc": "Nedēļas un mēneša kopsavilkumi"
       }
+    }
+  },
+  "bariatric": {
+    "title": "Bariatriskais profils",
+    "subtitle": "Kuņģa uzmavas / apvedceļa atbalsts",
+    "settingsButton": "Bariatriskais profils",
+    "settingsDescription": "Kuņģa uzmavas vai apvedceļa atbalsts",
+    "setup": {
+      "title": "Bariatriskais profils",
+      "intro": "Iespējojiet bariatrisko atbalstu, lai iegūtu pielāgotus mērķus olbaltumvielām, šķidrumiem un kalorijām, pamatojoties uz jūsu operāciju un fāzi.",
+      "surgeryType": "Operācijas veids",
+      "surgeryTypeNone": "Nav",
+      "surgeryTypeSleeve": "Kuņģa uzmava",
+      "surgeryTypeBypass": "Kuņģa apvedceļš",
+      "surgeryDate": "Operācijas datums",
+      "surgeryDatePlaceholder": "YYYY-MM-DD",
+      "startWeight": "Sākuma svars (kg)",
+      "goalWeight": "Mērķa svars (kg)",
+      "height": "Augstums (cm)",
+      "enable": "Iespējot bariatrisko atbalstu",
+      "save": "Saglabāt profilu",
+      "delete": "Dzēst bariatrisko profilu",
+      "deleteConfirm": "Vai tiešām vēlaties dzēst savu bariatrisko profilu?",
+      "disclaimer": "Svarīgi! Šī lietotne NEAIZSTĀJ jūsu bariatrisko uztura speciālistu, ārstu vai klīniku. Ieteikumi ir vispārīgas vadlīnijas, kuru pamatā ir publiskas ASMBS vadlīnijas. Vienmēr ievērojiet savas klīnikas norādījumus. Nekavējoties sazinieties ar savu ārstu par dempinga sindromu, pastāvīgu sliktu dūšu vai jebkādām bažām.",
+      "acceptDisclaimer": "Es saprotu, ka šī lietotne neaizstāj manu bariatriskās aprūpes komandu",
+      "disclaimerRequired": "Jums ir jāpieņem atruna",
+      "invalidDate": "Ievadiet derīgu datumu",
+      "missingType": "Izvēlieties operācijas veidu",
+      "saved": "Profils saglabāts",
+      "deleted": "Profils izdzēsts"
+    },
+    "dashboard": {
+      "title": "Bariatriskais atbalsts",
+      "edit": "Rediģēt",
+      "phaseLabel": "Pašreizējā fāze",
+      "daysSinceLabel": "Dienas kopš operācijas",
+      "daysUntilNext": "{{days}} dienas līdz nākamajai fāzei",
+      "lastPhase": "Jūs esat pēdējā fāzē",
+      "proteinToday": "Proteīns šodien",
+      "proteinProgress": "Proteīns šodien",
+      "fluidToday": "Šķidrumi šodien",
+      "kcalRange": "Kalorijas (mērķis)",
+      "portionSize": "Ieteicamais porcijas lielums",
+      "medicalCheckReminder": "Atcerieties savu {{day}} dienas pārbaudi",
+      "preSurgery": "Operācijas datums vēl nav sasniegts"
+    },
+    "phases": {
+      "clearLiquid": {
+        "name": "1. nedēļa: dzidri šķidrumi",
+        "description": "Tikai dzidri šķidrumi: ūdens, buljons, sula bez cukura, tēja. Nelieli malciņi visas dienas garumā."
+      },
+      "fullLiquid": {
+        "name": "2. nedēļa: pilns šķidrums",
+        "description": "Visi šķidrumi, t.sk. proteīna kokteiļi, zupa, jogurts. NEdzeriet 30 minūtes pirms/pēc ēšanas."
+      },
+      "pureed": {
+        "name": "3.–4. nedēļa: pārtika biezenī",
+        "description": "Blenderēts/biezenis ēdiens: biezpiens, zivju biezenis, blendēta vista. Kārtīgi sakošļāt."
+      },
+      "soft": {
+        "name": "5.–6. nedēļa: mīksta pārtika",
+        "description": "Mīkstais ēdiens: olu kultenis, zivis, vārīti dārzeņi, mīksti augļi. Vispirms olbaltumvielas, mazi kumosiņi."
+      },
+      "regular": {
+        "name": "7. nedēļa+: parasta pārtika",
+        "description": "Parasta pārtika nelielās porcijās. Vispirms olbaltumvielas, tad dārzeņi, tad ogļhidrāti. Kārtīgi sakošļāt."
+      }
+    },
+    "tips": {
+      "noDrinking": "NEdzeriet 30 minūtes pirms vai pēc ēšanas",
+      "proteinFirst": "Vienmēr vispirms ēdiet proteīnu",
+      "chew": "Košļājiet katru kumosu 20-30 reizes",
+      "stopWhenFull": "Apturiet, kad tas ir pilns – pat ar mazām porcijām",
+      "vitamins": "Atcerieties savus ikdienas vitamīnus"
+    },
+    "vitamins": {
+      "title": "Šodienas vitamīni",
+      "subtitle": "Atcerieties savus ikdienas uztura bagātinātājus",
+      "names": {
+        "multivitamin": "Multivitamīni",
+        "calciumD": "Kalcijs + D vitamīns",
+        "iron": "Gludeklis",
+        "b12": "B12",
+        "omega3": "Omega-3 (pēc izvēles)"
+      },
+      "taken": "Uzņemts",
+      "notTaken": "Nav pieņemts",
+      "allDone": "Visi šodien uzņemtie vitamīni 🎉",
+      "reset": "Atiestatīt",
+      "optional": "pēc izvēles"
+    },
+    "fluid": {
+      "title": "Šķidruma uzņemšana šodien",
+      "subtitle": "Dzert starp ēdienreizēm, nevis ar",
+      "goal": "Mērķis",
+      "current": "Šodien",
+      "remaining": "Atlikušais",
+      "add250": "+ 250 ml",
+      "add500": "+ 500 ml",
+      "addCustom": "Pievienot",
+      "reset": "Atiestatīt",
+      "goalReached": "Jūs sasniedzāt savu plūstošo mērķi 💧",
+      "warning": "Atcerieties mazus malkus — ne lielus daudzumus uzreiz"
+    },
+    "meals": {
+      "title": "Ieteikumi jums tūlīt",
+      "subtitle": "Pielāgots jūsu fāzei",
+      "kcal": "kcal",
+      "protein": "g proteīna",
+      "prep": "min",
+      "logIt": "Žurnāls",
+      "types": {
+        "fluid": "Šķidrums",
+        "puree": "Biezenis",
+        "soft": "Mīksts ēdiens",
+        "normal": "Parasta pārtika"
+      },
+      "items": {
+        "water": "Ūdens",
+        "brothClear": "Dzidrs buljons",
+        "sugarFreeJuice": "Sula bez cukura (atšķaidīta)",
+        "herbalTea": "Zāļu tēja",
+        "proteinShake": "Olbaltumvielu kokteilis",
+        "skimmedMilk": "Vājpiens",
+        "thinSoup": "Plāna zupa (izspīlēta)",
+        "skyrThin": "Plāns skyr",
+        "mashedFish": "Zivju biezeni",
+        "cottageCheese": "Biezpiens",
+        "eggPuree": "Olu biezenis",
+        "pureedChicken": "Vistas biezenī",
+        "mashedTofu": "Tofu biezeni",
+        "softFish": "Mīkstas zivis",
+        "scrambledEgg": "Olu kultenis",
+        "softChicken": "Maiga vista",
+        "wellCookedVeggies": "Labi pagatavoti dārzeņi",
+        "greekYogurt": "Grieķu jogurts",
+        "grilledChicken": "Grilēta vistas krūtiņa",
+        "salmonFillet": "Laša fileja",
+        "eggOmelette": "Omlete",
+        "lentilSoup": "Lēcu zupa",
+        "leanBeef": "Liesa liellopa gaļa"
+      },
+      "reminders": {
+        "title": "Atcerieties ēdienreižu laikā",
+        "proteinFirst": "Vispirms ēdiet proteīnu",
+        "chew": "Košļāt 20-30 reizes",
+        "noDrinking": "Nedzeriet 30 minūtes pirms/pēc ēšanas",
+        "stopWhenFull": "Apturiet, kad tas ir pilns",
+        "smallSips": "Iedzeriet mazus malkus",
+        "noStraw": "Nav salmiņu (gaiss vēderā)",
+        "slowly": "Dzeriet lēnām",
+        "mashWell": "Rūpīgi samaisiet",
+        "newFoodOneAtATime": "Vienlaicīgi ievadiet vienu jaunu ēdienu",
+        "chewExtra": "Īpaši rūpīgi sakošļājiet",
+        "mindfulEating": "Ēd lēnām un apdomīgi",
+        "avoidEmptyCalories": "Izvairieties no tukšām kalorijām"
+      }
+    },
+    "dumping": {
+      "title": "Dempinga sindroma risks",
+      "subtitle": "Pamatojoties uz šodienas ēdienreizēm",
+      "low": "Zems risks",
+      "medium": "Ņemiet vērā",
+      "high": "Augsts risks",
+      "lowDesc": "Šodienas maltītes izskatās labi",
+      "mediumDesc": "Viena vai vairākas ēdienreizes var izraisīt dempingu. Pievērsiet uzmanību simptomiem.",
+      "highDesc": "Vairākas augsta riska maltītes šodien. Sazinieties ar savu ārstu, ja Jums ir slikta dūša, ātra sirdsdarbība, reibonis vai caureja.",
+      "flaggedCount": "{{count}} maltīte atzīmēta",
+      "flaggedCount_plural": "{{count}} ēdieni atzīmēti kā nepiemēroti",
+      "reasons": {
+        "sugarHigh": "Pārāk daudz cukura",
+        "sugarMedium": "Mērens cukura saturs",
+        "fatHigh": "Augsts tauku saturs",
+        "carbsNoProtein": "Ogļhidrāti bez olbaltumvielām",
+        "carbsHigh": "Liela ogļhidrātu uzņemšana",
+        "carbsMedium": "Mērena ogļhidrātu uzņemšana",
+        "proteinLow": "Pārāk zems olbaltumvielu patēriņš"
+      },
+      "info": "Dempings ir visizplatītākais pēc kuņģa apvedceļa, un to izraisa cukurs, tauki vai ātri uzsūcas ogļhidrāti. Simptomi: slikta dūša, paātrināta sirdsdarbība, reibonis, caureja 15-30 min pēc ēšanas."
+    },
+    "training": {
+      "title": "Pielāgota apmācība",
+      "subtitle": "Ieteicamā aktivitāte jūsu fāzei",
+      "currentPhase": "Jūsu apmācības posms",
+      "daysUntilNext": "{{days}} dienas līdz nākamajai apmācības fāzei",
+      "maxDuration": "Maksimālais ilgums",
+      "maxHeartRate": "Maksimālais sirdsdarbības ātrums",
+      "min": "min",
+      "ofMax": "no maksimālā HR",
+      "intensityLabel": {
+        "veryLight": "Ļoti viegls",
+        "light": "Gaisma",
+        "moderate": "Mērens",
+        "normal": "Normāls"
+      },
+      "phaseNames": {
+        "1": "Atgūšana (0.–2. nedēļa)",
+        "2": "Uzmanīgs sākums (2.–4. nedēļa)",
+        "3": "Viegla aktivitāte (4.–6. nedēļa)",
+        "4": "Uzbūve (6.–8. nedēļa)",
+        "5": "Normāls treniņš (no 8. nedēļas)"
+      },
+      "phaseDesc": {
+        "1": "Pieturieties pie īsām pastaigām un dziļas elpošanas vingrinājumiem. Klausieties savu ķermeni un daudz atpūtieties.",
+        "2": "Varat nedaudz palielināt staigāšanu. Joprojām nav spēka treniņu vai intensīvu vingrinājumu.",
+        "3": "Varat sākt braukt ar velosipēdu un peldēt (kad brūces ir sadzijušas). Joprojām nav skriešanas vai liela svara.",
+        "4": "Laiks ieviest vieglus spēka treniņus un ilgāku kardio treniņu. Sāciet ar maziem svariem.",
+        "5": "Varat atgriezties pie parastajiem treniņiem, taču joprojām veidojiet pakāpeniski un vērojiet savu enerģiju."
+      },
+      "allowed": "Ieteicams",
+      "notRecommended": "Izvairieties tūlīt",
+      "activities": {
+        "walkShort": "Īsa pastaiga (5–10 min)",
+        "walkMedium": "Vidēja pastaiga (15–20 min)",
+        "walkLong": "Gara pastaiga (30+ min)",
+        "breathing": "Elpošanas vingrinājumi",
+        "gentleStretch": "Maiga stiepšanās",
+        "cycling": "Riteņbraukšana",
+        "swimming": "Peldēšana",
+        "lightStrength": "Viegls spēka treniņš",
+        "strength": "Spēka treniņš",
+        "jog": "Viegla skriešana",
+        "running": "Skriešana",
+        "highIntensity": "Augstas intensitātes treniņš",
+        "heavyLifting": "Smagas slodzes celšana",
+        "extremeIntensity": "Ārkārtīga intensitāte"
+      },
+      "warnings": {
+        "title": "Svarīgi atcerēties",
+        "noLifting": "Nav smagas celšanas (virs 5 kg)",
+        "staySoftMovements": "Pieturieties pie maigām, lēnām kustībām",
+        "avoidSwimmingUntilHealed": "Izvairieties no peldēšanas, līdz jūsu brūces ir sadzijušas (parasti 3–4 nedēļas)",
+        "lightWeightsOk": "Mazs svars (2–5 kg) ir piemērots pēc konsultēšanās ar ārstu",
+        "startStrengthGradually": "Sāciet spēka treniņu ar mazu svaru un lielu atkārtojumu skaitu",
+        "stillBuildGradually": "Joprojām veidojiet pakāpeniski — izvairieties no pēkšņas lielas palielināšanās",
+        "hydration": "Atcerieties šķidrumus pirms treniņa, tā laikā un pēc tā"
+      },
+      "safety": {
+        "activityNotRecommended": "{{activity}} jūsu fāzē nav ieteicams. Konsultējieties ar savu ārstu.",
+        "durationTooLong": "Ieteicamais ilgums ir ne vairāk kā {{max}} min. Jūs plānojāt {{actual}} min.",
+        "checkWithDoctor": "Sazinieties ar savu ārstu, ja jūtat sāpes, sliktu dūšu vai izsīkumu"
+      },
+      "disclaimer": "Ieteikumi ir tikai vadlīnijas. Vienmēr ievērojiet savas klīnikas norādījumus."
+    }
+  },
+  "diabetes": {
+    "title": "Diabēta profils",
+    "subtitle": "1., 2. tipa vai prediabēts",
+    "settingsButton": "Diabēta profils",
+    "settingsDescription": "1., 2. tipa vai prediabēts — diēta, cukura līmenis asinīs un vingrinājumi",
+    "setup": {
+      "title": "Diabēta profils",
+      "intro": "Iespējojiet diabēta atbalstu, lai saņemtu pielāgotus ēdienreižu ieteikumus, norādījumus par cukura līmeni asinīs un vingrinājumu ieteikumus.",
+      "type": "Diabēta veids",
+      "typeT1": "1. tips",
+      "typeT2": "2. tips",
+      "typePre": "Prediabēts",
+      "typeGest": "Gestācijas diabēts",
+      "treatment": "Ārstēšana",
+      "txNone": "Nav",
+      "txDiet": "Tikai diēta/dzīvesveids",
+      "txMetformin": "Metformīns",
+      "txOral": "Citas iekšķīgi lietojamas zāles",
+      "txGLP1": "GLP-1 (Ozempic/Wegovy/Mounjaro)",
+      "txBasal": "Bazālais insulīns",
+      "txBolus": "Bazālais + bolus insulīns",
+      "txPump": "Insulīna sūknis",
+      "diagnosisDate": "Diagnostikas datums (neobligāti)",
+      "datePlaceholder": "YYYY-MM-DD",
+      "hba1c": "HbA1c (mmol/mol, pēc izvēles)",
+      "countCarbs": "Es skaita ogļhidrātus",
+      "carbRatio": "Insulīna/ogļhidrātu attiecība (g/V, pēc izvēles)",
+      "carbRatioHelp": "Piem. 10 = 1 insulīna vienība aptver 10 g ogļhidrātu. Lietojumprogramma nekad nedod devu — šim skaitlim ir tikai informatīvs raksturs.",
+      "correctionFactor": "Korekcijas koeficients (mmol/L uz U, pēc izvēles)",
+      "preExerciseMin": "Minimālais cukura līmenis asinīs pirms treniņa (mmol/L)",
+      "enable": "Iespējojiet diabēta atbalstu",
+      "acceptDisclaimer": "Es piekrītu iepriekš minētajai atrunai",
+      "disclaimerRequired": "Jums ir jāpieņem atruna",
+      "missingType": "Izvēlieties diabēta veidu",
+      "save": "Saglabāt profilu",
+      "saved": "Profils saglabāts",
+      "delete": "Dzēst diabēta profilu",
+      "deleted": "Profils izdzēsts",
+      "deleteConfirm": "Vai tiešām vēlaties dzēst savu diabēta profilu?",
+      "disclaimer": "SVARĪGI! Šī lietotne NEAIZSTĀJ jūsu ārstu vai diabēta komandu. Mēs NEKAD neiesakām noteiktas insulīna devas vai zāļu izmaiņas. Nekad nepielāgojiet ārstēšanu, pamatojoties tikai uz lietotnes ieteikumiem. Ja rodas šaubas, vienmēr sazinieties ar savu veselības aprūpes sniedzēju."
+    }
+  },
+  "bloodSugar": {
+    "title": "Cukura līmenis asinīs",
+    "settingsButton": "Cukura līmenis asinīs žurnāls",
+    "settingsDescription": "Reģistrējiet savus mērījumus un skatiet tendences laika gaitā",
+    "add": "Pievienojiet nolasījumu",
+    "save": "Saglabāt",
+    "history": "Vēsture",
+    "empty": "Vēl nav rādījumu. Pieskarieties augšējai pogai, lai reģistrētu savu pirmo mērījumu.",
+    "disclaimer": "Šie numuri ir paredzēti tikai jūsu uzziņai. Vienmēr pārrunājiet modeļus ar savu ārstu vai diabēta komandu.",
+    "valueLabel": "Cukurs asinīs (mmol/l)",
+    "contextLabel": "Konteksts",
+    "noteLabel": "Piezīme (pēc izvēles)",
+    "notePlaceholder": "Piem. pēc brokastīm",
+    "errInvalidTitle": "Nederīga vērtība",
+    "errInvalidBody": "Ievadiet cukura līmeni asinīs no 1,0 līdz 40,0 mmol/L.",
+    "errSaveTitle": "Nevarēja saglabāt",
+    "deleteTitle": "Dzēst rādījumus",
+    "deleteBody": "Vai esat pārliecināts? Turiet nospiestu, lai dzēstu.",
+    "ctx": {
+      "fasting": "Badošanās",
+      "preMeal": "Pirms ēšanas",
+      "postMeal": "Pēc ēšanas",
+      "bedtime": "Gulēšanas laiks",
+      "preExercise": "Pirms treniņa",
+      "postExercise": "Pēc treniņa",
+      "random": "Nejauši"
+    },
+    "range": {
+      "1d": "1 diena",
+      "7d": "7 dienas",
+      "30d": "30 dienas",
+      "90d": "90 dienas"
+    },
+    "stat": {
+      "avg": "Vidējais",
+      "min": "Min",
+      "max": "Maks",
+      "tir": "Laiks diapazonā",
+      "target": "Mērķis",
+      "measurements": "rādījumi"
+    }
+  },
+  "healthScore": {
+    "title": "Veselības rādītājs",
+    "todayLabel": "Šodienas rezultāts",
+    "A": "Ļoti veselīgs",
+    "B": "Veselīgs",
+    "C": "Mērens",
+    "D": "Mazāk veselīgs",
+    "E": "Neveselīgs"
+  },
+  "units": {
+    "g": "g",
+    "kg": "kg",
+    "ml": "ml",
+    "dl": "dl",
+    "l": "l",
+    "tsk": "tējk",
+    "spsk": "ēd.k",
+    "stk": "gab",
+    "skive": "šķēle",
+    "portion": "daļa"
+  },
+  "logMeal": {
+    "amount": "Summa",
+    "unit": "Mērvienība",
+    "approxGrams": "≈ {{grams}}g"
+  },
+  "home": {
+    "greeting": {
+      "morning": "Labrīt",
+      "day": "Labdien!",
+      "evening": "Labvakar",
+      "night": "Ar labu nakti"
+    },
+    "coach": {
+      "restDay": "Šodien ir atpūtas diena — izbaudiet atveseļošanos!",
+      "todayWorkout": "Šodienas plānā ietilpst {{workout}}.",
+      "nextWorkout": "Nākamais treniņš: {{workout}}.",
+      "ready": "Vai esat gatavs sākt? Jautājiet man par plānošanu, uzturu vai motivāciju.",
+      "askForHelp": "Ja jums nepieciešama palīdzība, jautājiet man jebko."
+    },
+    "chat": {
+      "placeholder": "Jautājiet savam AI trenerim...",
+      "todayPlanPrompt": "Kāds ir mans šodienas plāns?"
+    },
+    "todayPlan": "Šodienas plāns",
+    "startTraining": "Sāciet treniņu",
+    "nextTraining": "Nākamais treniņš",
+    "today": "Šodien",
+    "training": "Treniņš",
+    "todayOverview": "Šodienas pārskats",
+    "week": "Nedēļa",
+    "milestone": "Pagrieziena punkts",
+    "toGoal": "līdz {{distance}} km mērķim"
+  },
+  "progress": {
+    "weeks": "Nedēļas",
+    "months": "Mēneši",
+    "weekLabel": "Nedēļa {{week}}, {{year}}",
+    "weekShort": "W{{week}}",
+    "activities": "Darbības",
+    "empty": "Vēl nav nekādu aktivitāšu — izkāpiet un skrieniet!",
+    "noRoute": "Maršruts nav ierakstīts",
+    "standardTraining": "Standarta treniņš",
+    "steps": "Darbības",
+    "duration": "Ilgums",
+    "caloriesShort": "kal",
+    "activityTypes": {
+      "walk": "Pastaiga",
+      "cycling": "Riteņbraukšana",
+      "run": "Skrien"
+    }
+  },
+  "workoutLabels": {
+    "rest": "Atpūta",
+    "injuryRest": "Atpūta traumas dēļ"
+  },
+  "calendar": {
+    "monthSummary_one": "{{count}} noskrējiens · {{km}} km",
+    "monthSummary_other": "{{count}} skrien · {{km}} km",
+    "completed": "Pabeigts",
+    "planned": "Plānots",
+    "missed": "Nokavēts",
+    "plannedKm": "Plānots {{km}} km",
+    "emptyDay": "Šajā dienā nav plānots skrējiens vai treniņš"
+  },
+  "motionPicker": {
+    "title": "Kardio",
+    "what": "Ko jūs vēlētos darīt?",
+    "where": "Kur?",
+    "run": "Skrien",
+    "walk": "Pastaiga",
+    "cycling": "Riteņbraukšana",
+    "runLocation": "Āra vai skrejceļš",
+    "bikeLocation": "Ārā vai iekštelpās",
+    "outdoor": "Ārā",
+    "outdoorDescription": "GPS izsekošana · maršruti · temps",
+    "indoor": "Iekštelpās",
+    "indoorDescription": "Skrejceļš · soļu skaitītājs · manuāla distance"
+  },
+  "activityPicker": {
+    "title": "Izvēlieties treniņu",
+    "intro": "Ko jūs vēlētos reģistrēt?",
+    "options": {
+      "mobility": {
+        "label": "Mobilitāte / Joga",
+        "description": "Stiepšanās, joga, putu velmēšana"
+      },
+      "bike": {
+        "label": "Riteņbraukšana",
+        "description": "Iekštelpām vai āra"
+      },
+      "other": {
+        "label": "Cita darbība",
+        "description": "Padels, futbols, peldēšana..."
+      }
+    }
+  },
+  "logActivity": {
+    "types": {
+      "strength": "Spēka treniņš",
+      "mobility": "Mobilitāte / Joga",
+      "bike": "Riteņbraukšana",
+      "other": "Cita darbība"
+    },
+    "invalidDuration": "Ievadiet derīgu ilgumu minūtēs",
+    "savedTitle": "Saglabāts!",
+    "savedMessage": "{{activity}} reģistrēts ({{duration}} min, {{calories}} kcal)",
+    "saveError": "Nevarēja saglabāt: {{error}}",
+    "logActivity": "Reģistrējiet savu {{activity}}",
+    "duration": "Ilgums (minūtes) *",
+    "calories": "Kalorijas (pēc izvēles — citādi tiek aprēķinātas automātiski)",
+    "calorieEstimate": "≈ {{calories}} kcal, aprēķināts no {{weight}} kg, RPE {{rpe}}",
+    "effort": "Piepūle (RPE 1–10)",
+    "notes": "Piezīmes (pēc izvēles)",
+    "notesPlaceholder": "Piemēram, vingrinājumi, svars, komplekti...",
+    "save": "Saglabājiet treniņu"
+  },
+  "treadmill": {
+    "invalidValueTitle": "Nederīga vērtība",
+    "invalidValueMessage": "Ievadiet numuru, piemēram, 5.2",
+    "noDistanceTitle": "Nav attāluma",
+    "noDistanceMessage": "Pievienojiet attālumu manuāli vai turpiniet, līdz var izmērīt soļus.",
+    "finishTitle": "Pabeigt un saglabāt?",
+    "finishMessage": "Attālums: {{distance}} km · Laiks: {{time}} · {{calories}} kcal",
+    "walkNote": "Iekštelpu pastaiga (skrejceļš)",
+    "runNote": "Skrējiens iekštelpās (skrejceļš)",
+    "savedTitle": "Saglabāts! 🏃",
+    "savedMessage": "{{distance}} km iekšā {{time}} · {{calories}} sadedzinātas kcal.",
+    "saveError": "Nevarēja saglabāt",
+    "discardTitle": "Vai atmest treniņu?",
+    "discardMessage": "Visi šī treniņa dati tiks zaudēti.",
+    "keep": "Saglabāt",
+    "discard": "Izmest",
+    "walkTitle": "Skrejceļš · Pastaiga",
+    "runTitle": "Skrejceļš · Skrien",
+    "pedometerActive": "Aktīvs soļu skaitītājs",
+    "pedometerUnavailable": "Soļu skaitītājs nav pieejams",
+    "steps": "SOĻI",
+    "speed": "Ātrums",
+    "adjustDistance": "Pielāgojiet attālumu",
+    "adjustHint": "Manuāli pievienojiet attālumu no skrejceļa displeja",
+    "enterExactDistance": "Ievadiet precīzu attālumu līdz skrejceliņam",
+    "instructionsTitle": "Kā lietot izsekotāju",
+    "instructions": "1. Nospiediet START, kad sākat strādāt ar skrejceliņu\n2. Pievienojiet attālumu, izmantojot pogas +0,1 / +0,5 / +1,0\n3. Vai arī ievadiet precīzu attālumu, kad esat pabeidzis\n4. Soļi tiek skaitīti automātiski, kad nēsājat tālruni",
+    "saving": "Notiek saglabāšana...",
+    "exactDistanceTitle": "Ievadiet precīzu attālumu",
+    "exactDistanceHint": "Izlasiet skrejceļa displeju un ievadiet attālumu kilometros",
+    "apply": "Pieteikties"
+  },
+  "statsPage": {
+    "hoursShort": "h",
+    "minutesShort": "m",
+    "now": "Tagad",
+    "weeksAgoShort": "{{count}}w",
+    "emptyTitle": "Vēl nav statistikas",
+    "emptyMessage": "Sāciet savu pirmo skrējienu, lai šeit skatītu savus datus.",
+    "period4Weeks": "4 nedēļas",
+    "period3Months": "3 mēneši",
+    "bestPace": "Labākais temps",
+    "dayStreak": "Dienas sērija",
+    "weeklyGoal": "Nedēļas mērķis",
+    "ofGoal": "no {{goal}} km mērķa",
+    "goalReached": "Mērķis sasniegts!",
+    "kmRemaining": "Atlikuši {{km}} km",
+    "milestone": "Pagrieziena punkts",
+    "toMilestone": "{{remaining}} km līdz {{milestone}} km",
+    "kmPerWeek": "KM NEDĒĻĀ",
+    "kmPerMonth": "KM MĒNESĪ",
+    "avgDistance": "Vidējais attālums",
+    "kmPerRun": "km vienā noskrējienā",
+    "totalTime": "Kopējais laiks",
+    "moving": "kustas",
+    "longestRun": "Garākais skrējiens",
+    "runsPerWeekday": "Darbojas darba dienās",
+    "activityRings": "Aktivitātes gredzeni",
+    "kmGoal": "KM MĒRĶIS",
+    "distance": "Attālums",
+    "activity": "Darbība",
+    "days": "DIENAS",
+    "streak": "Svītra",
+    "activityTypes": "Darbību veidi",
+    "types": {
+      "run": "Skrien",
+      "walk": "Pastaiga",
+      "bike": "Riteņbraukšana"
+    }
+  },
+  "privacyPage": {
+    "title": "Privātuma politika",
+    "updated": "Pēdējo reizi atjaunināts: 2026. gada aprīlī",
+    "intro": "RunWithAI mēs nopietni uztveram jūsu privātumu. Šajā politikā ir paskaidrots, kā mēs apkopojam, izmantojam un aizsargājam jūsu personisko informāciju.",
+    "sections": [
+      {
+        "title": "Datu kontrolieris",
+        "paragraphs": [
+          "RunWithAI ir atbildīgs par jūsu personas datu apstrādi. Ja jums ir jautājumi, sazinieties ar mums pa e-pastu privacy@runwithai.app."
+        ]
+      },
+      {
+        "title": "Mūsu apkopotie dati",
+        "paragraphs": [
+          "Mēs apkopojam šāda veida datus:"
+        ],
+        "bullets": [
+          "Konta informācija: e-pasts, vārds, vecums un dzimums",
+          "Fiziskie dati: svars un augstums (pēc izvēles)",
+          "Treniņu dati: aktivitātes, attālums, temps, sirdsdarbība un GPS maršruti",
+          "Lietotņu lietojums: preferences, mērķi un līmenis",
+          "Maksājumu informācija: to droši apstrādā App Store vai Google Play"
+        ]
+      },
+      {
+        "title": "Kā mēs izmantojam jūsu datus",
+        "paragraphs": [
+          "Mēs izmantojam jūsu datus, lai:"
+        ],
+        "bullets": [
+          "Nodrošiniet personalizētus AI apmācības plānus",
+          "Analizējiet savus treniņus un progresu",
+          "Uzlabojiet mūsu pakalpojumus",
+          "Nosūtiet atbilstošus paziņojumus un atjauninājumus",
+          "Pārvaldiet maksājumus un abonementus"
+        ]
+      },
+      {
+        "title": "Trešo pušu integrācijas",
+        "paragraphs": [
+          "RunWithAI var integrēties ar Garmin Connect, lai importētu darbības datus. Kad ir izveidots savienojums, mēs izgūstam tikai treniņu datus — nekad jūsu pieteikšanās akreditācijas datus."
+        ]
+      },
+      {
+        "title": "Datu koplietošana",
+        "paragraphs": [
+          "Mēs nekad nepārdodam jūsu datus. Mēs kopīgojam datus tikai ar:"
+        ],
+        "bullets": [
+          "Apple/Google: droša maksājumu apstrāde",
+          "OpenAI: anonimizēta AI apmācība",
+          "Hostinga pakalpojumu sniedzēji: Vercel un Railway datu glabāšanai"
+        ]
+      },
+      {
+        "title": "Datu drošība",
+        "paragraphs": [
+          "Mēs izmantojam nozares standarta drošības pasākumus, tostarp:"
+        ],
+        "bullets": [
+          "HTTPS šifrēšana visiem savienojumiem",
+          "Droša paroles jaukšana ar bcrypt",
+          "JWT marķieri autentifikācijai",
+          "Regulāri drošības atjauninājumi"
+        ]
+      },
+      {
+        "title": "Jūsu tiesības",
+        "paragraphs": [
+          "Jums ir tiesības:"
+        ],
+        "bullets": [
+          "Piekļūstiet saviem datiem",
+          "Labojiet neprecīzu informāciju",
+          "Dzēsiet savu kontu un visus datus",
+          "Eksportējiet savus datus kā CSV",
+          "Atsaukt piekrišanu"
+        ]
+      },
+      {
+        "title": "Datu saglabāšana",
+        "paragraphs": [
+          "Mēs saglabājam jūsu datus, kamēr jūsu konts ir aktīvs. Ja izdzēsīsit savu kontu, visi dati tiks noņemti 30 dienu laikā."
+        ]
+      },
+      {
+        "title": "Sīkfaili un izsekošana",
+        "paragraphs": [
+          "Mēs izmantojam minimālu sīkfailu skaitu, lai jūs varētu pierakstīties. Mēs neizmantojam trešo pušu izsekošanas vai reklāmas sīkfailus."
+        ]
+      },
+      {
+        "title": "Bērnu privātums",
+        "paragraphs": [
+          "RunWithAI nav paredzēts bērniem, kas jaunāki par 13 gadiem, un mēs apzināti neievācam datus no bērniem, kas jaunāki par šo vecumu."
+        ]
+      },
+      {
+        "title": "Politikas izmaiņas",
+        "paragraphs": [
+          "Mēs varam laiku pa laikam atjaunināt šo politiku. Par būtiskām izmaiņām mēs jūs informēsim lietotnē vai pa e-pastu."
+        ]
+      },
+      {
+        "title": "Sazinieties ar"
+      }
+    ],
+    "contactQuestion": "Vai jums ir jautājumi par šo politiku vai jūsu datiem?",
+    "footer": "© 2026 RunWithAI. Visas tiesības paturētas."
+  },
+  "more": {
+    "title": "Vairāk",
+    "subtitle": "Visi jūsu instrumenti vienuviet",
+    "sections": {
+      "account": "Konts",
+      "statistics": "Statistika",
+      "setup": "Iestatīšana",
+      "app": "App"
+    },
+    "newBadge": "Jaunums",
+    "menu": {
+      "profile": "Profils",
+      "profileSubtitle": "Personiskā informācija, mērķi, sirdsdarbības ātrums un traumas",
+      "statistics": "Statistika",
+      "statisticsSubtitle": "Kopējais attālums, labākais temps un atskaites punkti",
+      "goals": "Mērķi",
+      "goalsSubtitle": "Nedēļas mērķi un treniņu veidi",
+      "settings": "Iestatījumi",
+      "settingsSubtitle": "Līmenis, valoda, profils un paziņojumi",
+      "privacy": "Privātums",
+      "privacySubtitle": "Jūsu dati un tiesības",
+      "upgrade": "Jauniniet uz PRO",
+      "upgradeSubtitle": "Atbloķējiet visas funkcijas"
     }
   }
 }

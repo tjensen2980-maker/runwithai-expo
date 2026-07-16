@@ -1,4 +1,4 @@
-﻿{
+{
   "coachIntro": {
     "title": "AI-valmentajasi",
     "qName": "Hei! Olen henkilökohtainen AI-juoksuvalmentajasi 🏃 Ennen kuin aloitamme, haluan tutustua sinuun hieman. Mikä sinun nimesi on?",
@@ -55,7 +55,11 @@
     "lastActivity": "Viimeisin aktiviteetti",
     "gpsTracking": "GPS-seuranta",
     "walkTracking": "Kävelyseuranta",
-    "aiRoutes": "AI-reitit"
+    "aiRoutes": "AI-reitit",
+    "motionTitle": "Kardio",
+    "motionActivities": "Juokse · Kävele · Pyöräile",
+    "trainingTitle": "Koulutus",
+    "trainingActivities": "Voimaa, liikkuvuutta ja paljon muuta"
   },
   "pro": {
     "badge": "PRO",
@@ -86,6 +90,10 @@
     "aiRoutes": {
       "title": "AI-reitit",
       "description": "Saa reittisuosituksia harjoituksesi perusteella"
+    },
+    "nutrition": {
+      "title": "Kalorimittari",
+      "description": "Laske kalorit, kirjaa ateriat ja skannaa viivakoodeja"
     }
   },
   "stats": {
@@ -146,44 +154,85 @@
     "height": "PITUUS",
     "years": "Vuotta",
     "runningLevel": "JUOKSUTASO",
-    "levels.beginner": "Aloittelija",
-    "levels.intermediate": "Keskitaso",
-    "levels.advanced": "Edistynyt",
     "yourGoals": "MITKÄ OVAT TAVOITTEESI",
-    "goals.health": "Terveys",
-    "goals.weight": "Painonpudotus",
-    "goals.distance": "Juosta pidempään",
-    "goals.speed": "Tulla nopeammaksi",
-    "goals.race": "Juosta kilpailu",
-    "goals.fun": "Hauskuus",
     "weeklyGoalKm": "VIIKOITTAINEN KM TAVOITE",
     "weeklyGoalExample": "Esim. 20",
     "unlockFullPower": "Avaa täysi pääsy",
     "unlockDesc": "Saa pääsy kaikkiin ominaisuuksiin ja saavuta tavoitteesi nopeammin",
-    "proFeatures.aiCoachDesc": "AI-valmentaja",
-    "proFeatures.statsDesc": "Tilastot",
-    "proFeatures.goalsDesc": "Tavoitteet",
-    "proFeatures.routesDesc": "Reitit",
-    "proFeatures.chatDesc": "AI-chatti",
-    "proFeatures.reportsDesc": "Raportit",
     "price": "49 kr",
     "guarantee": "✓ Peruuta milloin vain • ✓ 7 päivän ilmainen kokeilu",
     "perMonth": "/kuukausi",
     "startFreeTrial": "Aloita ilmainen kokeilu",
     "continueWithFree": "Jatka ilmaisversiolla",
-    "levels.beginnerDesc": "Uusi juoksussa tai aloittamassa uudelleen pitkän tauon jälkeen",
-    "levels.intermediateDesc": "Juoksee säännöllisesti ja haluaa parantua",
-    "levels.advancedDesc": "Kokenut juoksija erityisillä tavoitteilla",
     "or": "tai",
     "errors": {
-      "serverConnection": "Palvelimeen ei saada yhteyttä"
+      "serverConnection": "Palvelimeen ei saada yhteyttä",
+      "fillEmailPassword": "Anna sekä sähköpostiosoite että salasana",
+      "loginFailed": "Kirjautuminen ei onnistunut",
+      "enterEmail": "Anna sähköpostiosoitteesi",
+      "resetCodeFailed": "Nollauskoodia ei voitu lähettää",
+      "fillCodePassword": "Syötä nollauskoodi ja uusi salasana",
+      "passwordMismatch": "Salasanat eivät täsmää",
+      "passwordTooShort": "Salasanassa on oltava vähintään 6 merkkiä",
+      "resetFailed": "Salasanaa ei voitu nollata",
+      "registerFailed": "Tiliä ei voitu luoda",
+      "enterName": "Kirjoita nimesi",
+      "selectLevel": "Valitse juoksutasosi"
+    },
+    "levels": {
+      "beginner": "Aloittelija",
+      "intermediate": "Keskitaso",
+      "advanced": "Edistynyt",
+      "beginnerDesc": "Uusi juoksussa tai aloittamassa uudelleen pitkän tauon jälkeen",
+      "intermediateDesc": "Juoksee säännöllisesti ja haluaa parantua",
+      "advancedDesc": "Kokenut juoksija erityisillä tavoitteilla"
+    },
+    "goals": {
+      "health": "Terveys",
+      "weight": "Painonpudotus",
+      "distance": "Juosta pidempään",
+      "speed": "Tulla nopeammaksi",
+      "race": "Juosta kilpailu",
+      "fun": "Hauskuus"
+    },
+    "proFeatures": {
+      "aiCoachDesc": "AI-valmentaja",
+      "statsDesc": "Tilastot",
+      "goalsDesc": "Tavoitteet",
+      "routesDesc": "Reitit",
+      "chatDesc": "AI-chatti",
+      "reportsDesc": "Raportit"
+    },
+    "resetPassword": "Palauta salasana",
+    "forgotPasswordDesc": "Anna sähköpostiosoitteesi, niin lähetämme sinulle nollauskoodin.",
+    "sendResetCode": "Lähetä palautuskoodi",
+    "backToLogin": "Takaisin kirjautumiseen",
+    "createNewPassword": "Luo uusi salasana",
+    "checkEmail": "Tarkista sähköpostistasi kuusinumeroinen palautuskoodi.",
+    "resetCode": "Nollaa koodi",
+    "resetCodePlaceholder": "6-numeroinen koodi",
+    "newPassword": "Uusi salasana",
+    "confirmNewPassword": "Vahvista uusi salasana",
+    "resendCode": "Lähetä uusi koodi",
+    "tellUsAboutYou": "Kerro meille itsestäsi",
+    "success": {
+      "resetCodeSent": "Lähetimme palautuskoodin sähköpostiisi.",
+      "passwordReset": "Salasanasi on nollattu. Voit nyt kirjautua sisään."
     }
   },
   "settings": {
     "pageTitle": "Asetukset",
     "title": "Asetukset",
     "profile": "Profiili",
-    "days": ["Ma", "Ti", "Ke", "To", "Pe", "La", "Su"],
+    "days": [
+      "Ma",
+      "Ti",
+      "Ke",
+      "To",
+      "Pe",
+      "La",
+      "Su"
+    ],
     "saveChanges": "Tallenna muutokset",
     "saved": "Tallennettu!",
     "logout": "Kirjaudu ulos",
@@ -201,7 +250,8 @@
       "reminders": "Muistutukset",
       "privacy": "Yksityisyys",
       "units": "Yksiköt",
-      "data": "Tiedot"
+      "data": "Tiedot",
+      "profile": "Profiili"
     },
     "fields": {
       "name": "Nimi",
@@ -304,6 +354,57 @@
       "deletedTitle": "Tili poistettu",
       "deletedMessage": "Tilisi on poistettu.",
       "error": "Tilin poisto epäonnistui"
+    },
+    "reminders": {
+      "workoutTitle": "Harjoitusmuistutus",
+      "workoutSubtitle": "Saat ilmoituksen valittuina päivinä ja valittuna aikana",
+      "mealTitle": "Ateriamuistutus",
+      "mealSubtitle": "Muista kirjata ateriat",
+      "time": "Aika: {{time}}",
+      "days": [
+        "Su",
+        "ma",
+        "Ti",
+        "ke",
+        "to",
+        "pe",
+        "la"
+      ]
+    },
+    "email": {
+      "title": "Sähköposti",
+      "change": "Vaihda sähköpostiosoite",
+      "newEmail": "Uusi sähköposti",
+      "currentPassword": "Nykyinen salasana",
+      "missingFields": "Anna sekä uusi sähköpostiosoitteesi että nykyinen salasanasi",
+      "changeError": "Sähköpostia ei voitu vaihtaa",
+      "successMessage": "Sähköpostisi on päivitetty",
+      "networkError": "Verkkovirhe"
+    },
+    "subscription": {
+      "title": "Tilaus",
+      "type": "Tyyppi",
+      "status": "Tila",
+      "tiers": {
+        "pro": "Pro",
+        "basic": "Perus",
+        "free": "Ilmainen"
+      },
+      "statuses": {
+        "active": "Aktiivinen",
+        "inactive": "Ei käytössä",
+        "trialing": "Kokeilu",
+        "canceled": "Peruutettu"
+      },
+      "upgrade": "Päivitys",
+      "manage": "Hallitse App Storessa"
+    },
+    "language": "Kieli",
+    "changeLanguageInSettings": "Vaihda kieli asetuksista",
+    "languageHint": "Avaa laiteasetukset ja valitse RunWithAI → Kieli.",
+    "actions": {
+      "save": "Tallenna muutokset",
+      "saved": "Tallennettu!"
     }
   },
   "pricing": {
@@ -367,6 +468,139 @@
     "step3": {
       "title": "Saavuta tavoitteesi",
       "desc": "Aseta tavoitteita ja seuraa edistymistäsi yksityiskohtaisilla tilastoilla"
+    },
+    "tagline": "Henkilökohtainen tekoälyvalmentajasi",
+    "headline": {
+      "before": "Harjoittele sitä",
+      "highlight": "mukautuu",
+      "after": "sinulle"
+    },
+    "features": {
+      "ai": {
+        "title": "Todellinen tekoälyvalmentaja",
+        "desc": "Suunnitelmasi on tehty sinua varten – ei mallina"
+      },
+      "adapts": {
+        "title": "Elämisen suunnitelma",
+        "desc": "Säätyy jokaisen suoritetun ajon jälkeen"
+      },
+      "injury": {
+        "title": "Kuuntelee kehoasi",
+        "desc": "Loukkaantumiset ja kivut huomioidaan harjoituksissasi"
+      },
+      "goals": {
+        "title": "Kohti tavoitettasi",
+        "desc": "Ensimmäisestä 5 km:stä maratoniin – omaan tahtiisi"
+      }
+    },
+    "tryFree": "Kokeile ilmaiseksi 14 päivää",
+    "fine": "Ei sitoumusta. Peru milloin tahansa.",
+    "levelQuestion": "Missä olet juoksumatkallasi?",
+    "selectLevel": "Valitse tasosi jatkaaksesi",
+    "levels": {
+      "beginner": {
+        "label": "Aloittelija",
+        "sub": "Uusi tai tulossa takaisin tauon jälkeen"
+      },
+      "intermediate": {
+        "label": "Keskitaso",
+        "sub": "Juoksen säännöllisesti ja haluan kehittyä"
+      },
+      "advanced": {
+        "label": "Lisäasetukset",
+        "sub": "Harjoittelen tarkoituksella ja tiedän vauhtini"
+      }
+    },
+    "tellUsAboutYou": "Kerro meille vähän itsestäsi",
+    "coachUsesThis": "Valmentajasi käyttää tätä suunnitelmasi rakentamiseen",
+    "fields": {
+      "name": "Mikä on nimesi?",
+      "age": "Ikä",
+      "weeklyKm": "Km viikossa (suunnilleen)"
+    },
+    "primaryGoal": "Mikä on tavoitteesi?",
+    "goals": {
+      "fitness": {
+        "label": "Varustaudu",
+        "sub": "Terveys ja energia"
+      },
+      "5k": {
+        "label": "5K",
+        "sub": "Ensimmäinen iso tavoitteeni"
+      },
+      "10k": {
+        "label": "10K",
+        "sub": "Seuraava taso"
+      },
+      "half": {
+        "label": "Puolimaraton",
+        "sub": "21,1 km"
+      },
+      "full": {
+        "label": "Maraton",
+        "sub": "42,2 km"
+      },
+      "weight": {
+        "label": "Laihduta",
+        "sub": "Juokse kevyemmin"
+      }
+    },
+    "raceDate": "Onko sinulla kilpailupäivä? (valinnainen)",
+    "raceDatePlaceholder": "esim. 15. syyskuuta",
+    "skipForNow": "Ohita toistaiseksi",
+    "plan": {
+      "building": "Valmentajasi rakentaa suunnitelmaasi…",
+      "waitNamed": "{{name}}, anna minulle hetki.",
+      "wait": "Odota hetki.",
+      "errorTitle": "Suunnitelmaasi ei voitu luoda juuri nyt",
+      "errorMessage": "Voit aina pyytää valmentajaasi luomaan sen myöhemmin.",
+      "readyNamed": "{{name}}, tässä on suunnitelmasi",
+      "ready": "Tässä on suunnitelmasi",
+      "basedOnAnswers": "Suunnitelmasi perustuu siihen, mitä kerroit valmentajalle.",
+      "weeklyDistance": "Viikoittainen matka: {{km}} km",
+      "goal": "Tavoite: {{goal}}",
+      "considerations": "Huomioitavaa: {{injuries}}",
+      "weekAndDay": "Viikko {{week}} – {{day}}",
+      "day": "Päivä {{day}}",
+      "run": "Suorita",
+      "makePlan": "Luo suunnitelmani",
+      "weekdays": {
+        "mon": "Maanantai",
+        "tue": "Tiistai",
+        "wed": "Keskiviikko",
+        "thu": "Torstai",
+        "fri": "Perjantai",
+        "sat": "Lauantai",
+        "sun": "Sunnuntai"
+      }
+    },
+    "languageTitle": "Valitse kieli",
+    "languageSubtitle": "Voit muuttaa sitä myöhemmin asetuksissa",
+    "paywall": {
+      "headline": "Henkilökohtainen tekoälyvalmentajasi",
+      "subtitle": "Harjoittelusuunnitelma, joka mukautuu sinulle – joka viikko, joka lenkki.",
+      "benefits": {
+        "adaptive": "Suunnitelmasi mukautuu jokaisen ajon jälkeen",
+        "audioCoach": "Valmentajasi korvissasi harjoittelun aikana",
+        "calendar": "Viikkosuunnitelma ja kalenteri, jotka pysyvät ajan tasalla",
+        "chat": "Kysy valmentajaltasi mitä tahansa – milloin tahansa"
+      },
+      "trial": "14 päivää ilmaiseksi",
+      "afterTrial": "Sen jälkeen {{price}}/kk. Peruuta milloin tahansa – yhdellä napautuksella.",
+      "startTraining": "Aloita harjoitteluni",
+      "restore": "Palauta ostokset",
+      "welcomeTitle": "🎉 Tervetuloa!",
+      "welcomeMessage": "Pro-käyttöoikeutesi on nyt aktiivinen.",
+      "restoreSuccessTitle": "Ostokset palautettu",
+      "restoreSuccessMessage": "Tilauksesi on jälleen aktiivinen.",
+      "noPurchasesTitle": "Ostoksia ei löytynyt",
+      "noPurchasesMessage": "Aktiivisia tilauksia ei löytynyt.",
+      "errors": {
+        "prices": "Hintoja ei voitu ladata. Yritä myöhemmin uudelleen.",
+        "packageUnavailable": "Tämä tilaus ei ole saatavilla.",
+        "purchaseTitle": "Osto epäonnistui",
+        "restore": "Ostoksia ei voitu palauttaa."
+      }
     }
   },
   "dashboard": {
@@ -419,7 +653,20 @@
       "runsFromRecord": "{{count}} juoksua ennätykseen",
       "runsInMonth": "{{count}} juoksua {{month}}"
     },
-    "monthNames": ["Tam", "Hel", "Maa", "Huh", "Tou", "Kes", "Hei", "Elo", "Syy", "Lok", "Mar", "Jou"],
+    "monthNames": [
+      "Tam",
+      "Hel",
+      "Maa",
+      "Huh",
+      "Tou",
+      "Kes",
+      "Hei",
+      "Elo",
+      "Syy",
+      "Lok",
+      "Mar",
+      "Jou"
+    ],
     "workout": {
       "nextWorkout": "SEURAAVA HARJOITUS",
       "today": "TÄNÄÄN",
@@ -445,7 +692,15 @@
       "addNote": "+ Muistiinpano",
       "mood": "Fiilis",
       "placeholder": "Miten meni? Raskaat jalat? Hyvä päivä? Uusi reitti?",
-      "dayNames": ["Su", "Ma", "Ti", "Ke", "To", "Pe", "La"]
+      "dayNames": [
+        "Su",
+        "Ma",
+        "Ti",
+        "Ke",
+        "To",
+        "Pe",
+        "La"
+      ]
     },
     "injury": {
       "title": "LOUKKAANTUMISRISKI",
@@ -488,7 +743,31 @@
       "unavailable": "GPS ei saatavilla",
       "timeout": "GPS-aikakatkaisu",
       "notAvailable": "GPS ei saatavilla",
-      "error": "GPS-virhe"
+      "error": "GPS-virhe",
+      "points": "{{count}} pistettä ({{filtered}} suodatettu)"
+    },
+    "cycling": "Pyöräily",
+    "music": "Musiikki",
+    "voiceOnly": "Vain ääni",
+    "notification": {
+      "run": "Seurataan juoksuasi...",
+      "walk": "Seurataan kävelyäsi...",
+      "bike": "Seurataan matkaasi..."
+    },
+    "limit": {
+      "title": "Viikoittainen aktiivisuusraja saavutettu",
+      "message": "Olet saavuttanut {{limit}}-toimintojen ilmaisen suunnitelman rajan viikossa. Päivitä Basic- tai Pro-versioon saadaksesi rajoittamattoman pääsyn.",
+      "later": "Myöhemmin"
+    },
+    "stats": {
+      "runs": "toimii",
+      "walks": "kävelee",
+      "yourProgress": "Edistymisesi",
+      "thisWeek": "Tällä viikolla",
+      "lastWeek": "Viime viikolla",
+      "bestPace": "Paras vauhti",
+      "longestRun": "Pisin juoksu",
+      "totalKm": "Yhteensä km"
     }
   },
   "chat": {
@@ -507,7 +786,9 @@
     "logAllMeals": "Kirjaa kaikki ateriat",
     "logged": "Kirjattu",
     "mealPlanLoggedMessage": "Ateriasuunnitelma on kirjattu tälle päivälle.",
-    "mealPlanLogError": "Ateriasuunnitelmaa ei voitu kirjata: {{error}}"
+    "mealPlanLogError": "Ateriasuunnitelmaa ei voitu kirjata: {{error}}",
+    "languageChanged": "Kieli vaihdettu. Tekoälyvalmentajasi vastaa nyt englanniksi.",
+    "languageChangedConfirmation": "Kieli vaihdettu. Tekoälyvalmentajasi vastaa nyt valitsemallasi kielellä."
   },
   "proUpsell": {
     "title": "Avaa täysi voima",
@@ -542,6 +823,675 @@
         "title": "Edistymisraportit",
         "desc": "Viikko- ja kuukausiyhteenvedot"
       }
+    }
+  },
+  "bariatric": {
+    "title": "Bariatrinen profiili",
+    "subtitle": "Mahalaukun sleeve/bypass-tuki",
+    "settingsButton": "Bariatrinen profiili",
+    "settingsDescription": "Mahalaukku- tai ohitustuki",
+    "setup": {
+      "title": "Bariatrinen profiili",
+      "intro": "Ota bariatrinen tuki käyttöön saadaksesi räätälöityjä proteiini-, neste- ja kaloritavoitteita leikkauksen ja vaiheen perusteella.",
+      "surgeryType": "Leikkaustyyppi",
+      "surgeryTypeNone": "Ei mitään",
+      "surgeryTypeSleeve": "Mahalaukku",
+      "surgeryTypeBypass": "Mahalaukun ohitus",
+      "surgeryDate": "Leikkauspäivämäärä",
+      "surgeryDatePlaceholder": "YYYY-MM-DD",
+      "startWeight": "Lähtöpaino (kg)",
+      "goalWeight": "Tavoitteen paino (kg)",
+      "height": "Korkeus (cm)",
+      "enable": "Ota bariatrinen tuki käyttöön",
+      "save": "Tallenna profiili",
+      "delete": "Poista bariatrinen profiili",
+      "deleteConfirm": "Haluatko varmasti poistaa bariatric-profiilisi?",
+      "disclaimer": "Tärkeää: Tämä sovellus EI korvaa bariatrista ravitsemusterapeuttia, lääkäriä tai klinikkaa. Suositukset ovat yleisiä ohjeita, jotka perustuvat julkisiin ASMBS-ohjeisiin. Noudata aina oman klinikan ohjeita. Ota välittömästi yhteyttä lääkäriin, jos sinulla on oireyhtymä, jatkuva pahoinvointi tai jokin muu huolenaihe.",
+      "acceptDisclaimer": "Ymmärrän, että tämä sovellus ei korvaa bariatrista hoitotiimiäni",
+      "disclaimerRequired": "Sinun on hyväksyttävä vastuuvapauslauseke",
+      "invalidDate": "Anna kelvollinen päivämäärä",
+      "missingType": "Valitse leikkaustyyppi",
+      "saved": "Profiili tallennettu",
+      "deleted": "Profiili poistettu"
+    },
+    "dashboard": {
+      "title": "Bariatrinen tuki",
+      "edit": "Muokkaa",
+      "phaseLabel": "Nykyinen vaihe",
+      "daysSinceLabel": "Päiviä leikkauksesta",
+      "daysUntilNext": "{{days}} päivää seuraavaan vaiheeseen",
+      "lastPhase": "Olet viimeisessä vaiheessa",
+      "proteinToday": "Proteiinia tänään",
+      "proteinProgress": "Proteiinia tänään",
+      "fluidToday": "Nesteitä tänään",
+      "kcalRange": "Kalorit (tavoite)",
+      "portionSize": "Suositeltu annoskoko",
+      "medicalCheckReminder": "Muista {{day}}-päivän tarkastus",
+      "preSurgery": "Leikkauspäivää ei ole vielä saavutettu"
+    },
+    "phases": {
+      "clearLiquid": {
+        "name": "Viikko 1: Kirkkaat nesteet",
+        "description": "Vain kirkkaat nesteet: vesi, liemi, sokeriton mehu, tee. Pienet kulaukset pitkin päivää."
+      },
+      "fullLiquid": {
+        "name": "Viikko 2: Täysi neste",
+        "description": "Kaikki nesteet, sis. proteiinipirtelöitä, keittoa, jogurttia. ÄLÄ juo 30 min ennen/jälkeen ateriaa."
+      },
+      "pureed": {
+        "name": "Viikko 3–4: Sosetettu ruoka",
+        "description": "Sekoitettu/soseutettu ruoka: raejuusto, kalasose, sekoitettu kana. Pureskella perusteellisesti."
+      },
+      "soft": {
+        "name": "Viikko 5–6: Pehmeä ruoka",
+        "description": "Pehmeä ruoka: munakokkelia, kalaa, keitettyjä vihanneksia, marjoja. Proteiini ensin, pienet puremat."
+      },
+      "regular": {
+        "name": "Viikko 7+: Tavallinen ruoka",
+        "description": "Tavallinen ruoka pieninä annoksina. Ensin proteiini, sitten kasvikset ja sitten hiilihydraatit. Pureskella perusteellisesti."
+      }
+    },
+    "tips": {
+      "noDrinking": "ÄLÄ juo 30 minuuttia ennen ateriaa tai sen jälkeen",
+      "proteinFirst": "Syö aina ensin proteiinia",
+      "chew": "Pureskele jokaista puremaa 20-30 kertaa",
+      "stopWhenFull": "Pysäytä, kun se on täynnä – jopa pienillä annoksilla",
+      "vitamins": "Muista päivittäiset vitamiinit"
+    },
+    "vitamins": {
+      "title": "Tämän päivän vitamiinit",
+      "subtitle": "Muista päivittäiset ravintolisät",
+      "names": {
+        "multivitamin": "Monivitamiini",
+        "calciumD": "Kalsium + D-vitamiini",
+        "iron": "Silitysrauta",
+        "b12": "B12",
+        "omega3": "Omega-3 (valinnainen)"
+      },
+      "taken": "Otettu",
+      "notTaken": "Ei otettu",
+      "allDone": "Kaikki vitamiinit otettu tänään 🎉",
+      "reset": "Nollaa",
+      "optional": "valinnainen"
+    },
+    "fluid": {
+      "title": "Nesteenotto tänään",
+      "subtitle": "Juo aterioiden välillä, ei kanssa",
+      "goal": "Tavoite",
+      "current": "Tänään",
+      "remaining": "Jäljellä",
+      "add250": "+ 250 ml",
+      "add500": "+ 500 ml",
+      "addCustom": "Lisää",
+      "reset": "Nollaa",
+      "goalReached": "Saavutit juoksevan tavoitteesi 💧",
+      "warning": "Muista pienet kulaukset – ei suuria määriä kerralla"
+    },
+    "meals": {
+      "title": "Ehdotuksia sinulle nyt",
+      "subtitle": "Räätälöity vaiheesi mukaan",
+      "kcal": "kcal",
+      "protein": "g proteiinia",
+      "prep": "min",
+      "logIt": "Loki",
+      "types": {
+        "fluid": "Neste",
+        "puree": "sose",
+        "soft": "Pehmeä ruoka",
+        "normal": "Normaali ruoka"
+      },
+      "items": {
+        "water": "Vesi",
+        "brothClear": "Kirkas liemi",
+        "sugarFreeJuice": "Sokeriton mehu (laimennettu)",
+        "herbalTea": "Yrttitee",
+        "proteinShake": "Proteiinipirtelö",
+        "skimmedMilk": "Rasvaton maito",
+        "thinSoup": "Ohut keitto (kiristynyt)",
+        "skyrThin": "Ohut skyr",
+        "mashedFish": "Muussattu kala",
+        "cottageCheese": "Raejuusto",
+        "eggPuree": "Munasose",
+        "pureedChicken": "Soseutettu kana",
+        "mashedTofu": "Muussattu tofu",
+        "softFish": "Pehmeä kala",
+        "scrambledEgg": "munakokkelia",
+        "softChicken": "Pehmeä kana",
+        "wellCookedVeggies": "Hyvin keitetyt vihannekset",
+        "greekYogurt": "Kreikkalainen jogurtti",
+        "grilledChicken": "Grillattua kananrintaa",
+        "salmonFillet": "Lohifilee",
+        "eggOmelette": "Munakas",
+        "lentilSoup": "Linssikeitto",
+        "leanBeef": "Vähärasvaista naudanlihaa"
+      },
+      "reminders": {
+        "title": "Muista aterioiden yhteydessä",
+        "proteinFirst": "Syö ensin proteiinia",
+        "chew": "Pureskele 20-30 kertaa",
+        "noDrinking": "Älä juo 30 minuuttia ennen/jälkeen aterian",
+        "stopWhenFull": "Pysäytä, kun se on täynnä",
+        "smallSips": "Ota pieniä kulauksia",
+        "noStraw": "Ei pillejä (ilmaa mahassa)",
+        "slowly": "Juo hitaasti",
+        "mashWell": "Soseuta perusteellisesti",
+        "newFoodOneAtATime": "Esittele yksi uusi ruoka kerrallaan",
+        "chewExtra": "Pureskele erityisen perusteellisesti",
+        "mindfulEating": "Syö hitaasti ja tietoisesti",
+        "avoidEmptyCalories": "Vältä tyhjiä kaloreita"
+      }
+    },
+    "dumping": {
+      "title": "Dumping-oireyhtymän riski",
+      "subtitle": "Tämän päivän aterioiden perusteella",
+      "low": "Pieni riski",
+      "medium": "Ole tietoinen",
+      "high": "Suuri riski",
+      "lowDesc": "Tämän päivän ateriat näyttävät hyvältä",
+      "mediumDesc": "Yksi tai useampi ateria voi laukaista kaatumisen. Varo oireita.",
+      "highDesc": "Useita riskialttiita aterioita tänään. Ota yhteyttä lääkäriisi, jos sinulla on pahoinvointia, nopeaa sydämenlyöntiä, huimausta tai ripulia.",
+      "flaggedCount": "{{count}} ateria merkitty",
+      "flaggedCount_plural": "{{count}} ateriat merkitty",
+      "reasons": {
+        "sugarHigh": "Liian paljon sokeria",
+        "sugarMedium": "Kohtalainen sokeripitoisuus",
+        "fatHigh": "Korkea rasvapitoisuus",
+        "carbsNoProtein": "Hiilihydraatteja ilman proteiinia",
+        "carbsHigh": "Suuri hiilihydraattien saanti",
+        "carbsMedium": "Kohtuullinen hiilihydraattien saanti",
+        "proteinLow": "Liian alhainen proteiinin saanti"
+      },
+      "info": "Dumping on yleisintä mahalaukun ohituksen jälkeen, ja sen laukaisee sokeri, rasva tai nopeasti imeytyvät hiilihydraatit. Oireet: pahoinvointi, nopea sydämen syke, huimaus, ripuli 15-30 min ruokailun jälkeen."
+    },
+    "training": {
+      "title": "Mukautettu koulutus",
+      "subtitle": "Vaihellesi suositeltu toiminta",
+      "currentPhase": "Harjoitteluvaiheesi",
+      "daysUntilNext": "{{days}} päivää seuraavaan harjoitusvaiheeseen",
+      "maxDuration": "Enimmäiskesto",
+      "maxHeartRate": "Maksimisyke",
+      "min": "min",
+      "ofMax": "enimmäissykkeestä",
+      "intensityLabel": {
+        "veryLight": "Erittäin kevyt",
+        "light": "Valo",
+        "moderate": "Keskitaso",
+        "normal": "Normaali"
+      },
+      "phaseNames": {
+        "1": "Palautuminen (viikko 0-2)",
+        "2": "Varovainen aloitus (viikko 2-4)",
+        "3": "Kevyt aktiivisuus (viikko 4–6)",
+        "4": "Kokoonpano (viikko 6–8)",
+        "5": "Normaali harjoittelu (viikko 8+)"
+      },
+      "phaseDesc": {
+        "1": "Pidä kiinni lyhyistä kävelylenkeistä ja syvähengitysharjoituksista. Kuuntele kehoasi ja lepää paljon.",
+        "2": "Voit lisätä kävelyä hieman. Ei vieläkään voimaharjoittelua tai intensiivistä harjoittelua.",
+        "3": "Voit aloittaa pyöräilyn ja uinnin (kun haavat ovat parantuneet). Ei vieläkään juoksua tai raskaita painoja.",
+        "4": "On aika aloittaa kevyt voimaharjoittelu ja pidempi kardioharjoittelu. Aloita pienillä painoilla.",
+        "5": "Voit palata normaaliin harjoitteluun – mutta rakenna silti vähitellen ja tarkkaile energiaasi."
+      },
+      "allowed": "Suositeltu",
+      "notRecommended": "Vältä nyt",
+      "activities": {
+        "walkShort": "Lyhyt kävelymatka (5–10 min)",
+        "walkMedium": "Keskipitkä kävely (15-20 min)",
+        "walkLong": "Pitkä kävelymatka (yli 30 min)",
+        "breathing": "Hengitysharjoitukset",
+        "gentleStretch": "Hellävarainen venyttely",
+        "cycling": "Pyöräily",
+        "swimming": "Uinti",
+        "lightStrength": "Kevyt voimaharjoittelu",
+        "strength": "Voimaharjoittelu",
+        "jog": "Kevyt lenkkeily",
+        "running": "Juokse",
+        "highIntensity": "Korkean intensiteetin harjoittelu",
+        "heavyLifting": "Raskas nosto",
+        "extremeIntensity": "Äärimmäinen intensiteetti"
+      },
+      "warnings": {
+        "title": "Tärkeää muistaa",
+        "noLifting": "Ei raskaita nostoja (yli 5 kg)",
+        "staySoftMovements": "Pidä kiinni pehmeistä, hitaista liikkeistä",
+        "avoidSwimmingUntilHealed": "Vältä uimista, kunnes haavasi ovat parantuneet (tyypillisesti 3-4 viikkoa)",
+        "lightWeightsOk": "Kevyet painot (2-5 kg) ovat kunnossa, kun olet neuvotellut lääkärisi kanssa",
+        "startStrengthGradually": "Aloita voimaharjoittelu pienillä painoilla ja suurilla toistoilla",
+        "stillBuildGradually": "Rakenna edelleen asteittain - vältä äkillisiä suuria nousuja",
+        "hydration": "Muista nesteet ennen harjoittelua, sen aikana ja sen jälkeen"
+      },
+      "safety": {
+        "activityNotRecommended": "{{activity}}:tä ei suositella vaiheessasi. Ota yhteyttä lääkäriisi.",
+        "durationTooLong": "Suositeltu kesto on enintään {{max}} min. Suunnittelet {{actual}} min.",
+        "checkWithDoctor": "Ota yhteyttä lääkäriisi, jos tunnet kipua, pahoinvointia tai uupumusta"
+      },
+      "disclaimer": "Suositukset ovat vain suuntaa antavia. Noudata aina oman klinikan ohjeita."
+    }
+  },
+  "diabetes": {
+    "title": "Diabetesprofiili",
+    "subtitle": "Tyypin 1, tyypin 2 tai esidiabetes",
+    "settingsButton": "Diabetesprofiili",
+    "settingsDescription": "Tyypin 1, tyypin 2 tai esidiabetes - ruokavalio, verensokeri ja liikunta",
+    "setup": {
+      "title": "Diabetesprofiili",
+      "intro": "Ota diabetestuki käyttöön saadaksesi räätälöityjä ateriaehdotuksia, verensokeriohjeita ja harjoitussuosituksia.",
+      "type": "Diabetestyyppi",
+      "typeT1": "Tyyppi 1",
+      "typeT2": "Tyyppi 2",
+      "typePre": "Prediabetes",
+      "typeGest": "Raskausdiabetes",
+      "treatment": "Hoito",
+      "txNone": "Ei mitään",
+      "txDiet": "Vain ruokavalio/elämäntapa",
+      "txMetformin": "Metformiini",
+      "txOral": "Muut suun kautta otettavat lääkkeet",
+      "txGLP1": "GLP-1 (Ozempic/Wegovy/Mounjaro)",
+      "txBasal": "Perusinsuliini",
+      "txBolus": "Perusinsuliini + bolusinsuliini",
+      "txPump": "Insuliinipumppu",
+      "diagnosisDate": "Diagnoosipäivämäärä (valinnainen)",
+      "datePlaceholder": "YYYY-MM-DD",
+      "hba1c": "HbA1c (mmol/mol, valinnainen)",
+      "countCarbs": "Lasken hiilihydraatteja",
+      "carbRatio": "Insuliini/hiilihydraatti-suhde (g/U, valinnainen)",
+      "carbRatioHelp": "Esim. 10 = 1 yksikkö insuliinia kattaa 10 g hiilihydraatteja. Sovellus ei koskaan annostele - tämä numero on vain tiedoksi.",
+      "correctionFactor": "Korjauskerroin (mmol/L per U, valinnainen)",
+      "preExerciseMin": "Minimi verensokeri ennen harjoittelua (mmol/l)",
+      "enable": "Ota diabetestuki käyttöön",
+      "acceptDisclaimer": "Hyväksyn yllä olevan vastuuvapauslausekkeen",
+      "disclaimerRequired": "Sinun on hyväksyttävä vastuuvapauslauseke",
+      "missingType": "Valitse diabetestyyppi",
+      "save": "Tallenna profiili",
+      "saved": "Profiili tallennettu",
+      "delete": "Poista diabetesprofiili",
+      "deleted": "Profiili poistettu",
+      "deleteConfirm": "Haluatko varmasti poistaa diabetesprofiilisi?",
+      "disclaimer": "TÄRKEÄÄ: Tämä sovellus EI korvaa lääkäriäsi tai diabetestiimiäsi. Emme KOSKAAN ehdota tiettyjä insuliiniannoksia tai lääkkeiden muutoksia. Älä koskaan säädä hoitoasi pelkästään sovellusohjeiden perusteella. Ota aina yhteyttä terveydenhuollon tarjoajaan, jos olet epävarma."
+    }
+  },
+  "bloodSugar": {
+    "title": "Verensokeri",
+    "settingsButton": "Verensokeriloki",
+    "settingsDescription": "Kirjaa mittauksesi ja katso trendejä ajan mittaan",
+    "add": "Lisää lukema",
+    "save": "Tallenna",
+    "history": "Historia",
+    "empty": "Ei vielä lukemia. Napauta yllä olevaa painiketta kirjataksesi ensimmäisen mittasi.",
+    "disclaimer": "Nämä numerot ovat vain viitteellisiä. Keskustele aina malleista lääkärisi tai diabetestiimin kanssa.",
+    "valueLabel": "Verensokeri (mmol/l)",
+    "contextLabel": "Konteksti",
+    "noteLabel": "Huomautus (valinnainen)",
+    "notePlaceholder": "Esim. aamiaisen jälkeen",
+    "errInvalidTitle": "Virheellinen arvo",
+    "errInvalidBody": "Anna verensokeriarvo välillä 1,0–40,0 mmol/L.",
+    "errSaveTitle": "Ei voitu tallentaa",
+    "deleteTitle": "Poista lukema",
+    "deleteBody": "Oletko varma? Poista painamalla pitkään.",
+    "ctx": {
+      "fasting": "Paasto",
+      "preMeal": "Ennen ateriaa",
+      "postMeal": "Aterian jälkeen",
+      "bedtime": "Nukkumaanmenoaika",
+      "preExercise": "Ennen harjoitusta",
+      "postExercise": "Harjoituksen jälkeen",
+      "random": "Satunnainen"
+    },
+    "range": {
+      "1d": "1 päivä",
+      "7d": "7 päivää",
+      "30d": "30 päivää",
+      "90d": "90 päivää"
+    },
+    "stat": {
+      "avg": "Keskiarvo",
+      "min": "Min",
+      "max": "Max",
+      "tir": "Aika alueella",
+      "target": "Kohde",
+      "measurements": "lukemat"
+    }
+  },
+  "healthScore": {
+    "title": "Terveyspisteet",
+    "todayLabel": "Tämän päivän tulos",
+    "A": "Erittäin terve",
+    "B": "Terve",
+    "C": "Keskitaso",
+    "D": "Vähemmän terve",
+    "E": "Epäterveellistä"
+  },
+  "units": {
+    "g": "g",
+    "kg": "kg",
+    "ml": "ml",
+    "dl": "dl",
+    "l": "l",
+    "tsk": "tl",
+    "spsk": "rkl",
+    "stk": "kpl",
+    "skive": "viipale",
+    "portion": "osa"
+  },
+  "logMeal": {
+    "amount": "Määrä",
+    "unit": "Yksikkö",
+    "approxGrams": "≈ {{grams}}g"
+  },
+  "home": {
+    "greeting": {
+      "morning": "Hyvää huomenta",
+      "day": "Hei",
+      "evening": "Hyvää iltaa",
+      "night": "Hyvää yötä"
+    },
+    "coach": {
+      "restDay": "Tänään on lepopäivä – nauti palautumisesta!",
+      "todayWorkout": "Tämän päivän suunnitelmaan sisältyy {{workout}}.",
+      "nextWorkout": "Seuraava harjoitus: {{workout}}.",
+      "ready": "Oletko valmis aloittamaan? Kysy suunnittelusta, ravinnosta tai motivaatiosta.",
+      "askForHelp": "Kysy minulta mitä tahansa, jos tarvitset apua."
+    },
+    "chat": {
+      "placeholder": "Kysy tekoälyvalmentajaltasi...",
+      "todayPlanPrompt": "Mikä on suunnitelmani tälle päivälle?"
+    },
+    "todayPlan": "Tämän päivän suunnitelma",
+    "startTraining": "Aloita harjoitus",
+    "nextTraining": "Seuraava harjoitus",
+    "today": "Tänään",
+    "training": "Harjoittelu",
+    "todayOverview": "Tämän päivän yleiskatsaus",
+    "week": "Viikko",
+    "milestone": "virstanpylväs",
+    "toGoal": "{{distance}} km tavoitteeseen"
+  },
+  "progress": {
+    "weeks": "Viikkoa",
+    "months": "Kuukaudet",
+    "weekLabel": "Viikko {{week}}, {{year}}",
+    "weekShort": "W{{week}}",
+    "activities": "Aktiviteetit",
+    "empty": "Ei vielä aktiviteetteja – mene ulos ja juokse!",
+    "noRoute": "Reittiä ei tallennettu",
+    "standardTraining": "Normaali harjoitus",
+    "steps": "Vaiheet",
+    "duration": "Kesto",
+    "caloriesShort": "cal",
+    "activityTypes": {
+      "walk": "Kävele",
+      "cycling": "Pyöräily",
+      "run": "Suorita"
+    }
+  },
+  "workoutLabels": {
+    "rest": "Lepo",
+    "injuryRest": "Lepo loukkaantumisen vuoksi"
+  },
+  "calendar": {
+    "monthSummary_one": "{{count}} juoksu · {{km}} km",
+    "monthSummary_other": "{{count}} juoksee · {{km}} km",
+    "completed": "Valmis",
+    "planned": "Suunniteltu",
+    "missed": "Unohtunut",
+    "plannedKm": "{{km}} km suunniteltu",
+    "emptyDay": "Tälle päivälle ei ole suunniteltu juoksua tai harjoittelua"
+  },
+  "motionPicker": {
+    "title": "Kardio",
+    "what": "Mitä haluaisit tehdä?",
+    "where": "Missä?",
+    "run": "Suorita",
+    "walk": "Kävele",
+    "cycling": "Pyöräily",
+    "runLocation": "Ulkokäyttöön tai juoksumatto",
+    "bikeLocation": "Ulkona tai sisällä",
+    "outdoor": "Ulkona",
+    "outdoorDescription": "GPS-seuranta · reitit · tahti",
+    "indoor": "Sisätiloissa",
+    "indoorDescription": "Juoksumatto · askellaskuri · manuaalinen etäisyys"
+  },
+  "activityPicker": {
+    "title": "Valitse harjoitus",
+    "intro": "Mitä haluaisit kirjata?",
+    "options": {
+      "mobility": {
+        "label": "Liikkuvuus / jooga",
+        "description": "Venyttely, jooga, vaahtorullaus"
+      },
+      "bike": {
+        "label": "Pyöräily",
+        "description": "Sisä- tai ulkokäyttöön"
+      },
+      "other": {
+        "label": "Muu toiminta",
+        "description": "Padel, jalkapallo, uinti..."
+      }
+    }
+  },
+  "logActivity": {
+    "types": {
+      "strength": "Voimaharjoittelu",
+      "mobility": "Liikkuvuus / jooga",
+      "bike": "Pyöräily",
+      "other": "Muu toiminta"
+    },
+    "invalidDuration": "Anna kelvollinen kesto minuutteina",
+    "savedTitle": "Tallennettu!",
+    "savedMessage": "{{activity}} kirjattu ({{duration}} min, {{calories}} kcal)",
+    "saveError": "Ei voitu tallentaa: {{error}}",
+    "logActivity": "Kirjaa {{activity}}",
+    "duration": "Kesto (minuutteja) *",
+    "calories": "Kalorit (valinnainen – muuten lasketaan automaattisesti)",
+    "calorieEstimate": "≈ {{calories}} kcal laskettuna {{weight}} kg, RPE {{rpe}}",
+    "effort": "Vaiva (RPE 1–10)",
+    "notes": "Huomautuksia (valinnainen)",
+    "notesPlaceholder": "Esimerkiksi harjoitukset, painot, sarjat...",
+    "save": "Tallenna harjoitus"
+  },
+  "treadmill": {
+    "invalidValueTitle": "Virheellinen arvo",
+    "invalidValueMessage": "Syötä numero, esimerkiksi 5.2",
+    "noDistanceTitle": "Ei etäisyyttä",
+    "noDistanceMessage": "Lisää etäisyys manuaalisesti tai jatka, kunnes askeleet voidaan mitata.",
+    "finishTitle": "Valmis ja tallenna?",
+    "finishMessage": "Etäisyys: {{distance}} km · Aika: {{time}} · {{calories}} kcal",
+    "walkNote": "Sisäkävely (juoksumatto)",
+    "runNote": "Sisäjuoksu (juoksumatto)",
+    "savedTitle": "Tallennettu! 🏃",
+    "savedMessage": "{{distance}} km in {{time}} · {{calories}} kcal poltettu.",
+    "saveError": "Ei voitu tallentaa",
+    "discardTitle": "Hylätäänkö harjoitus?",
+    "discardMessage": "Kaikki tämän harjoituksen tiedot menetetään.",
+    "keep": "Säilytä",
+    "discard": "Hävitä",
+    "walkTitle": "Juoksumatto · Kävely",
+    "runTitle": "Juoksumatto · Juokse",
+    "pedometerActive": "Askellaskuri aktiivinen",
+    "pedometerUnavailable": "Askellaskuri ei ole saatavilla",
+    "steps": "VAIHEET",
+    "speed": "Nopeus",
+    "adjustDistance": "Säädä etäisyyttä",
+    "adjustHint": "Lisää etäisyys manuaalisesti juoksumaton näytöstä",
+    "enterExactDistance": "Anna tarkka etäisyys juoksumatosta",
+    "instructionsTitle": "Kuinka käyttää seurantaa",
+    "instructions": "1. Paina START, kun aloitat juoksumatolla\n2. Lisää etäisyys +0.1 / +0.5 / +1.0 painikkeilla\n3. Tai syötä tarkka etäisyys, kun olet valmis\n4. Vaiheet lasketaan automaattisesti, kun kannat puhelinta",
+    "saving": "Tallennetaan...",
+    "exactDistanceTitle": "Syötä tarkka etäisyys",
+    "exactDistanceHint": "Lue juoksumaton näyttö ja syötä etäisyys kilometreinä",
+    "apply": "Käytä"
+  },
+  "statsPage": {
+    "hoursShort": "h",
+    "minutesShort": "m",
+    "now": "Nyt",
+    "weeksAgoShort": "{{count}}w",
+    "emptyTitle": "Ei vielä tilastoja",
+    "emptyMessage": "Aloita ensimmäinen ajo, jotta näet tietosi täällä.",
+    "period4Weeks": "4 viikkoa",
+    "period3Months": "3 kuukautta",
+    "bestPace": "Paras vauhti",
+    "dayStreak": "Päiväputki",
+    "weeklyGoal": "Viikkotavoite",
+    "ofGoal": "{{goal}} km tavoitteesta",
+    "goalReached": "Tavoite saavutettu!",
+    "kmRemaining": "{{km}} km jäljellä",
+    "milestone": "virstanpylväs",
+    "toMilestone": "{{remaining}} km - {{milestone}} km",
+    "kmPerWeek": "KM VIIKOSSA",
+    "kmPerMonth": "KM KUUKAUDESSA",
+    "avgDistance": "Keskimääräinen etäisyys",
+    "kmPerRun": "km per ajo",
+    "totalTime": "Kokonaisaika",
+    "moving": "liikkuu",
+    "longestRun": "Pisin juoksu",
+    "runsPerWeekday": "Kulkee arkipäivisin",
+    "activityRings": "Aktiivisoittimet",
+    "kmGoal": "KM TAVOITE",
+    "distance": "Etäisyys",
+    "activity": "Toiminto",
+    "days": "PÄIVÄÄ",
+    "streak": "Viiri",
+    "activityTypes": "Toimintotyypit",
+    "types": {
+      "run": "Suorita",
+      "walk": "Kävele",
+      "bike": "Pyöräily"
+    }
+  },
+  "privacyPage": {
+    "title": "Tietosuojakäytäntö",
+    "updated": "Päivitetty viimeksi: huhtikuussa 2026",
+    "intro": "RunWithAI:ssa otamme yksityisyytesi vakavasti. Tämä käytäntö selittää, kuinka keräämme, käytämme ja suojaamme henkilötietojasi.",
+    "sections": [
+      {
+        "title": "Tietojen ohjain",
+        "paragraphs": [
+          "RunWithAI vastaa henkilötietojesi käsittelystä. Ota yhteyttä osoitteeseen privacy@runwithai.app, jos sinulla on kysyttävää."
+        ]
+      },
+      {
+        "title": "Keräämämme tiedot",
+        "paragraphs": [
+          "Keräämme seuraavan tyyppisiä tietoja:"
+        ],
+        "bullets": [
+          "Tilitiedot: sähköpostiosoite, nimi, ikä ja sukupuoli",
+          "Fyysiset tiedot: paino ja pituus (valinnainen)",
+          "Harjoitustiedot: aktiviteetit, matka, vauhti, syke ja GPS-reitit",
+          "Sovelluksen käyttö: asetukset, tavoitteet ja taso",
+          "Maksutiedot: niitä käsitellään turvallisesti App Storessa tai Google Playssa"
+        ]
+      },
+      {
+        "title": "Kuinka käytämme tietojasi",
+        "paragraphs": [
+          "Käytämme tietojasi:"
+        ],
+        "bullets": [
+          "Tarjoa henkilökohtaisia tekoälyn harjoitussuunnitelmia",
+          "Analysoi harjoituksiasi ja edistymistäsi",
+          "Paranna palveluitamme",
+          "Lähetä asiaankuuluvia ilmoituksia ja päivityksiä",
+          "Hallinnoi maksuja ja tilauksia"
+        ]
+      },
+      {
+        "title": "Kolmannen osapuolen integraatiot",
+        "paragraphs": [
+          "RunWithAI voi integroitua Garmin Connectiin juoksutietojen tuomista varten. Kun yhteys on muodostettu, haemme vain harjoitustiedot – emme koskaan kirjautumistietojasi."
+        ]
+      },
+      {
+        "title": "Tiedon jakaminen",
+        "paragraphs": [
+          "Emme koskaan myy tietojasi. Jaamme tietoja vain seuraavien kanssa:"
+        ],
+        "bullets": [
+          "Apple/Google: turvallinen maksujen käsittely",
+          "OpenAI: anonymisoitu tekoälyvalmennus",
+          "Isännöintipalveluntarjoajat: Vercel ja Railway tietojen tallentamiseen"
+        ]
+      },
+      {
+        "title": "Tietoturva",
+        "paragraphs": [
+          "Käytämme alan standardien mukaisia suojatoimia, mukaan lukien:"
+        ],
+        "bullets": [
+          "HTTPS-salaus kaikille yhteyksille",
+          "Suojattu salasanan hajautus bcryptillä",
+          "JWT-tunnukset todennusta varten",
+          "Säännölliset tietoturvapäivitykset"
+        ]
+      },
+      {
+        "title": "Oikeutesi",
+        "paragraphs": [
+          "Sinulla on oikeus:"
+        ],
+        "bullets": [
+          "Pääsy tietoihisi",
+          "Korjaa virheelliset tiedot",
+          "Poista tilisi ja kaikki tiedot",
+          "Vie tietosi CSV-muodossa",
+          "Peruuta suostumus"
+        ]
+      },
+      {
+        "title": "Tietojen säilyttäminen",
+        "paragraphs": [
+          "Säilytämme tietosi, kun tilisi on aktiivinen. Jos poistat tilisi, kaikki tiedot poistetaan 30 päivän kuluessa."
+        ]
+      },
+      {
+        "title": "Evästeet ja seuranta",
+        "paragraphs": [
+          "Käytämme vain vähän evästeitä pitääksemme sinut kirjautuneena sisään. Emme käytä kolmannen osapuolen seuranta- tai mainosevästeitä."
+        ]
+      },
+      {
+        "title": "Lasten yksityisyys",
+        "paragraphs": [
+          "RunWithAI ei ole tarkoitettu alle 13-vuotiaille lapsille, emmekä tietoisesti kerää tietoja tämän ikäisiltä lapsilta."
+        ]
+      },
+      {
+        "title": "Käytäntömuutokset",
+        "paragraphs": [
+          "Saatamme päivittää tätä käytäntöä ajoittain. Ilmoitamme sinulle sovelluksessa tai sähköpostitse olennaisista muutoksista."
+        ]
+      },
+      {
+        "title": "Ota yhteyttä"
+      }
+    ],
+    "contactQuestion": "Onko sinulla kysyttävää tästä käytännöstä tai tiedoistasi?",
+    "footer": "© 2026 RunWithAI. Kaikki oikeudet pidätetään."
+  },
+  "more": {
+    "title": "Lisää",
+    "subtitle": "Kaikki työkalusi yhdessä paikassa",
+    "sections": {
+      "account": "Tili",
+      "statistics": "Tilastot",
+      "setup": "Asennus",
+      "app": "App"
+    },
+    "newBadge": "Uusi",
+    "menu": {
+      "profile": "Profiili",
+      "profileSubtitle": "Henkilökohtaiset tiedot, tavoitteet, syke ja vammat",
+      "statistics": "Tilastot",
+      "statisticsSubtitle": "Kokonaismatka, paras vauhti ja virstanpylväät",
+      "goals": "Tavoitteet",
+      "goalsSubtitle": "Viikoittaiset tavoitteet ja harjoitustyypit",
+      "settings": "Asetukset",
+      "settingsSubtitle": "Taso, kieli, profiili ja ilmoitukset",
+      "privacy": "Yksityisyys",
+      "privacySubtitle": "Tietosi ja oikeutesi",
+      "upgrade": "Päivitä PRO:ksi",
+      "upgradeSubtitle": "Avaa kaikki ominaisuudet"
     }
   }
 }

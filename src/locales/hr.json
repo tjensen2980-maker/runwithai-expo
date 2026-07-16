@@ -1,4 +1,4 @@
-﻿{
+{
   "coachIntro": {
     "title": "Vaš AI trener",
     "qName": "Bok! Ja sam vaš osobni AI trener trčanja 🏃 Prije nego što počnemo, želio bih vas malo upoznati. Kako se zovete?",
@@ -55,7 +55,11 @@
     "lastActivity": "Posljednja aktivnost",
     "gpsTracking": "GPS praćenje",
     "walkTracking": "Praćenje hodanja",
-    "aiRoutes": "AI rute"
+    "aiRoutes": "AI rute",
+    "motionTitle": "Kardio",
+    "motionActivities": "Trčanje · Hodanje · Bicikl",
+    "trainingTitle": "Obuka",
+    "trainingActivities": "Snaga, pokretljivost i više"
   },
   "pro": {
     "badge": "PRO",
@@ -86,6 +90,10 @@
     "aiRoutes": {
       "title": "AI rute",
       "description": "Dobij preporuke ruta na temelju tvog treninga"
+    },
+    "nutrition": {
+      "title": "Praćenje kalorija",
+      "description": "Brojite kalorije, zapisujte obroke i skenirajte bar kodove"
     }
   },
   "stats": {
@@ -146,44 +154,85 @@
     "height": "VISINA",
     "years": "Godina",
     "runningLevel": "RAZINA TRČANJA",
-    "levels.beginner": "Početnik",
-    "levels.intermediate": "Srednji",
-    "levels.advanced": "Napredni",
     "yourGoals": "KOJI SU TVOJI CILJEVI",
-    "goals.health": "Zdravlje",
-    "goals.weight": "Gubitak težine",
-    "goals.distance": "Trčati dalje",
-    "goals.speed": "Postati brži",
-    "goals.race": "Trčati utrku",
-    "goals.fun": "Zabava",
     "weeklyGoalKm": "TJEDNI CILJ KM",
     "weeklyGoalExample": "Npr. 20",
     "unlockFullPower": "Otključaj puni pristup",
     "unlockDesc": "Dobij pristup svim funkcijama i postigni ciljeve brže",
-    "proFeatures.aiCoachDesc": "AI Trener",
-    "proFeatures.statsDesc": "Statistike",
-    "proFeatures.goalsDesc": "Ciljevi",
-    "proFeatures.routesDesc": "Rute",
-    "proFeatures.chatDesc": "AI Chat",
-    "proFeatures.reportsDesc": "Izvještaji",
     "price": "49 kr",
     "guarantee": "✓ Otkaži kad god želiš • ✓ 7 dana besplatno",
     "perMonth": "/mjesec",
     "startFreeTrial": "Započni besplatno probno razdoblje",
     "continueWithFree": "Nastavi s besplatnom verzijom",
-    "levels.beginnerDesc": "Nov u trčanju ili počinješ nakon duge pauze",
-    "levels.intermediateDesc": "Trčiš redovito i želiš se poboljšati",
-    "levels.advancedDesc": "Iskusan trkač sa specifičnim ciljevima",
     "or": "ili",
     "errors": {
-      "serverConnection": "Nije moguće spojiti se na poslužitelj"
+      "serverConnection": "Nije moguće spojiti se na poslužitelj",
+      "fillEmailPassword": "Unesite e-poštu i lozinku",
+      "loginFailed": "Ne mogu se prijaviti",
+      "enterEmail": "Unesite svoju adresu e-pošte",
+      "resetCodeFailed": "Nije moguće poslati kod za resetiranje",
+      "fillCodePassword": "Unesite kod za resetiranje i novu lozinku",
+      "passwordMismatch": "Lozinke se ne podudaraju",
+      "passwordTooShort": "Lozinka mora imati najmanje 6 znakova",
+      "resetFailed": "Nije moguće poništiti lozinku",
+      "registerFailed": "Nije moguće stvoriti račun",
+      "enterName": "Unesite svoje ime",
+      "selectLevel": "Odaberite svoju razinu trčanja"
+    },
+    "levels": {
+      "beginner": "Početnik",
+      "intermediate": "Srednji",
+      "advanced": "Napredni",
+      "beginnerDesc": "Nov u trčanju ili počinješ nakon duge pauze",
+      "intermediateDesc": "Trčiš redovito i želiš se poboljšati",
+      "advancedDesc": "Iskusan trkač sa specifičnim ciljevima"
+    },
+    "goals": {
+      "health": "Zdravlje",
+      "weight": "Gubitak težine",
+      "distance": "Trčati dalje",
+      "speed": "Postati brži",
+      "race": "Trčati utrku",
+      "fun": "Zabava"
+    },
+    "proFeatures": {
+      "aiCoachDesc": "AI Trener",
+      "statsDesc": "Statistike",
+      "goalsDesc": "Ciljevi",
+      "routesDesc": "Rute",
+      "chatDesc": "AI Chat",
+      "reportsDesc": "Izvještaji"
+    },
+    "resetPassword": "Poništi lozinku",
+    "forgotPasswordDesc": "Unesite svoju e-poštu i poslat ćemo vam kod za resetiranje.",
+    "sendResetCode": "Pošalji kod za resetiranje",
+    "backToLogin": "Natrag na prijavu",
+    "createNewPassword": "Stvorite novu lozinku",
+    "checkEmail": "Provjerite svoju e-poštu za šesteroznamenkasti kod za resetiranje.",
+    "resetCode": "Poništavanje koda",
+    "resetCodePlaceholder": "6-znamenkasti kod",
+    "newPassword": "Nova lozinka",
+    "confirmNewPassword": "Potvrdite novu lozinku",
+    "resendCode": "Pošalji novi kod",
+    "tellUsAboutYou": "Recite nam nešto o sebi",
+    "success": {
+      "resetCodeSent": "Poslali smo kod za resetiranje na vašu e-poštu.",
+      "passwordReset": "Vaša lozinka je ponovno postavljena. Sada se možete prijaviti."
     }
   },
   "settings": {
     "pageTitle": "Postavke",
     "title": "Postavke",
     "profile": "Profil",
-    "days": ["Pon", "Uto", "Sri", "Čet", "Pet", "Sub", "Ned"],
+    "days": [
+      "Pon",
+      "Uto",
+      "Sri",
+      "Čet",
+      "Pet",
+      "Sub",
+      "Ned"
+    ],
     "saveChanges": "Spremi promjene",
     "saved": "Spremljeno!",
     "logout": "Odjava",
@@ -201,7 +250,8 @@
       "reminders": "Podsjetnici",
       "privacy": "Privatnost",
       "units": "Mjerne jedinice",
-      "data": "Podaci"
+      "data": "Podaci",
+      "profile": "Profil"
     },
     "fields": {
       "name": "Ime",
@@ -304,6 +354,57 @@
       "deletedTitle": "Račun obrisan",
       "deletedMessage": "Vaš račun je obrisan.",
       "error": "Nije uspjelo brisanje računa"
+    },
+    "reminders": {
+      "workoutTitle": "Podsjetnik na vježbanje",
+      "workoutSubtitle": "Primajte obavijesti odabranim danima i u odabrano vrijeme",
+      "mealTitle": "Podsjetnik na obrok",
+      "mealSubtitle": "Ne zaboravite zabilježiti svoje obroke",
+      "time": "Vrijeme: {{time}}",
+      "days": [
+        "Ned",
+        "Pon",
+        "uto",
+        "Srijeda",
+        "čet",
+        "Pet",
+        "sub"
+      ]
+    },
+    "email": {
+      "title": "E-pošta",
+      "change": "Promjena e-pošte",
+      "newEmail": "Nova e-pošta",
+      "currentPassword": "Trenutna lozinka",
+      "missingFields": "Unesite svoju novu e-poštu i trenutnu lozinku",
+      "changeError": "Nije moguće promijeniti e-poštu",
+      "successMessage": "Vaša e-pošta je ažurirana",
+      "networkError": "Mrežna pogreška"
+    },
+    "subscription": {
+      "title": "Pretplata",
+      "type": "Vrsta",
+      "status": "Status",
+      "tiers": {
+        "pro": "Pro",
+        "basic": "Osnovno",
+        "free": "Besplatno"
+      },
+      "statuses": {
+        "active": "Aktivno",
+        "inactive": "Neaktivno",
+        "trialing": "Proba",
+        "canceled": "Otkazano"
+      },
+      "upgrade": "Nadogradnja",
+      "manage": "Upravljanje u App Storeu"
+    },
+    "language": "Jezik",
+    "changeLanguageInSettings": "Promijenite jezik u Postavkama",
+    "languageHint": "Otvorite postavke uređaja i odaberite RunWithAI → Jezik.",
+    "actions": {
+      "save": "Spremi promjene",
+      "saved": "Spremljeno!"
     }
   },
   "pricing": {
@@ -367,6 +468,139 @@
     "step3": {
       "title": "Ostvarite svoje ciljeve",
       "desc": "Postavite ciljeve i pratite svoj napredak s detaljnom statistikom"
+    },
+    "tagline": "Vaš osobni AI trener trčanja",
+    "headline": {
+      "before": "To treniranje",
+      "highlight": "prilagođava se",
+      "after": "ti"
+    },
+    "features": {
+      "ai": {
+        "title": "Pravi AI trener",
+        "desc": "Vaš plan je napravljen za vas - a ne predložak"
+      },
+      "adapts": {
+        "title": "Životni plan",
+        "desc": "Prilagođava se nakon svakog pokretanja koje završite"
+      },
+      "injury": {
+        "title": "Sluša svoje tijelo",
+        "desc": "Ozljede i bol uključeni su u vaš trening"
+      },
+      "goals": {
+        "title": "Prema svom cilju",
+        "desc": "Od vaših prvih 5 km do maratona — vašim tempom"
+      }
+    },
+    "tryFree": "Isprobajte besplatno 14 dana",
+    "fine": "Bez obveza. Otkaži bilo kada.",
+    "levelQuestion": "Gdje ste na svom putu trčanja?",
+    "selectLevel": "Odaberite svoju razinu za nastavak",
+    "levels": {
+      "beginner": {
+        "label": "Početnik",
+        "sub": "Novo ili se vraća nakon pauze"
+      },
+      "intermediate": {
+        "label": "Srednje",
+        "sub": "Redovito trčim i želim napredovati"
+      },
+      "advanced": {
+        "label": "Napredno",
+        "sub": "Treniram sa svrhom i znam svoj tempo"
+      }
+    },
+    "tellUsAboutYou": "Recite nam nešto o sebi",
+    "coachUsesThis": "Vaš trener koristi ovo za izradu vašeg plana",
+    "fields": {
+      "name": "Kako se zoveš?",
+      "age": "Starost",
+      "weeklyKm": "Km tjedno (otprilike)"
+    },
+    "primaryGoal": "Koji je vaš cilj?",
+    "goals": {
+      "fitness": {
+        "label": "Osposobite se",
+        "sub": "Zdravlje i energija"
+      },
+      "5k": {
+        "label": "5K",
+        "sub": "Moj prvi veliki cilj"
+      },
+      "10k": {
+        "label": "10K",
+        "sub": "Sljedeća razina"
+      },
+      "half": {
+        "label": "Polumaraton",
+        "sub": "21,1 km"
+      },
+      "full": {
+        "label": "Maraton",
+        "sub": "42,2 km"
+      },
+      "weight": {
+        "label": "Smršavite",
+        "sub": "Trčite lakše"
+      }
+    },
+    "raceDate": "Imate li datum utrke? (neobavezno)",
+    "raceDatePlaceholder": "npr. 15. rujna",
+    "skipForNow": "Preskoči za sada",
+    "plan": {
+      "building": "Vaš trener gradi vaš plan...",
+      "waitNamed": "{{name}}, daj mi trenutak.",
+      "wait": "Daj mi trenutak.",
+      "errorTitle": "Vaš plan trenutno nije moguće izraditi",
+      "errorMessage": "Uvijek možete zamoliti svog trenera da ga kreira kasnije.",
+      "readyNamed": "{{name}}, evo tvog plana",
+      "ready": "Evo tvog plana",
+      "basedOnAnswers": "Vaš se plan temelji na onome što ste rekli svom treneru.",
+      "weeklyDistance": "Tjedna udaljenost: {{km}} km",
+      "goal": "Cilj: {{goal}}",
+      "considerations": "Razmatranja: {{injuries}}",
+      "weekAndDay": "Tjedan {{week}} – {{day}}",
+      "day": "Dan {{day}}",
+      "run": "Trči",
+      "makePlan": "Napravi moj plan",
+      "weekdays": {
+        "mon": "Ponedjeljak",
+        "tue": "Utorak",
+        "wed": "Srijeda",
+        "thu": "Četvrtak",
+        "fri": "Petak",
+        "sat": "Subota",
+        "sun": "Nedjelja"
+      }
+    },
+    "languageTitle": "Odaberite svoj jezik",
+    "languageSubtitle": "To možete promijeniti kasnije u Postavkama",
+    "paywall": {
+      "headline": "Vaš osobni AI trener",
+      "subtitle": "Plan treninga koji se prilagođava vama — svaki tjedan, svako trčanje.",
+      "benefits": {
+        "adaptive": "Vaš se plan prilagođava nakon svakog trčanja",
+        "audioCoach": "Vaš trener u ušima dok trenirate",
+        "calendar": "Tjedni plan i kalendar koji idu u korak",
+        "chat": "Pitajte svog trenera bilo što - bilo kada"
+      },
+      "trial": "14 dana besplatno",
+      "afterTrial": "Zatim {{price}}/mjesec. Otkažite bilo kada — jednim dodirom.",
+      "startTraining": "Započni moj trening",
+      "restore": "Vraćanje kupnji",
+      "welcomeTitle": "🎉 Dobrodošli!",
+      "welcomeMessage": "Vaš Pro pristup je sada aktivan.",
+      "restoreSuccessTitle": "Kupnje su vraćene",
+      "restoreSuccessMessage": "Vaša pretplata ponovno je aktivna.",
+      "noPurchasesTitle": "Nema pronađenih kupnji",
+      "noPurchasesMessage": "Nisu pronađene aktivne pretplate.",
+      "errors": {
+        "prices": "Cijene se ne mogu učitati. Pokušajte ponovno kasnije.",
+        "packageUnavailable": "Ova pretplata nije dostupna.",
+        "purchaseTitle": "Kupnja nije uspjela",
+        "restore": "Kupnje se ne mogu vratiti."
+      }
     }
   },
   "dashboard": {
@@ -419,7 +653,20 @@
       "runsFromRecord": "{{count}} trčanja do rekorda",
       "runsInMonth": "{{count}} trčanja u {{month}}"
     },
-    "monthNames": ["Sij", "Velj", "Ožu", "Tra", "Svi", "Lip", "Srp", "Kol", "Ruj", "Lis", "Stu", "Pro"],
+    "monthNames": [
+      "Sij",
+      "Velj",
+      "Ožu",
+      "Tra",
+      "Svi",
+      "Lip",
+      "Srp",
+      "Kol",
+      "Ruj",
+      "Lis",
+      "Stu",
+      "Pro"
+    ],
     "workout": {
       "nextWorkout": "SLJEDEĆI TRENING",
       "today": "DANAS",
@@ -445,7 +692,15 @@
       "addNote": "+ Bilješka",
       "mood": "Raspoloženje",
       "placeholder": "Kako je bilo? Teške noge? Dobar dan? Nova ruta?",
-      "dayNames": ["Ned", "Pon", "Uto", "Sri", "Čet", "Pet", "Sub"]
+      "dayNames": [
+        "Ned",
+        "Pon",
+        "Uto",
+        "Sri",
+        "Čet",
+        "Pet",
+        "Sub"
+      ]
     },
     "injury": {
       "title": "RIZIK OD OZLJEDE",
@@ -488,7 +743,31 @@
       "unavailable": "GPS nije dostupan",
       "timeout": "GPS timeout",
       "notAvailable": "GPS nije dostupan",
-      "error": "GPS greška"
+      "error": "GPS greška",
+      "points": "{{count}} bodova ({{filtered}} filtrirano)"
+    },
+    "cycling": "Biciklizam",
+    "music": "Glazba",
+    "voiceOnly": "Samo glas",
+    "notification": {
+      "run": "Praćenje vašeg trčanja...",
+      "walk": "Praćenje vašeg hoda...",
+      "bike": "Praćenje vaše vožnje..."
+    },
+    "limit": {
+      "title": "Dosegnuto je tjedno ograničenje aktivnosti",
+      "message": "Dosegli ste ograničenje besplatnih planova {{limit}} aktivnosti tjedno. Nadogradite na Basic ili Pro za neograničeni pristup.",
+      "later": "Kasnije"
+    },
+    "stats": {
+      "runs": "radi",
+      "walks": "hoda",
+      "yourProgress": "Vaš napredak",
+      "thisWeek": "Ovaj tjedan",
+      "lastWeek": "Prošli tjedan",
+      "bestPace": "Najbolji tempo",
+      "longestRun": "Najduže trčanje",
+      "totalKm": "Ukupno km"
     }
   },
   "chat": {
@@ -507,7 +786,9 @@
     "logAllMeals": "Zabilježi sve obroke",
     "logged": "Zabilježeno",
     "mealPlanLoggedMessage": "Plan prehrane zabilježen je za danas.",
-    "mealPlanLogError": "Plan prehrane nije bilo moguće zabilježiti: {{error}}"
+    "mealPlanLogError": "Plan prehrane nije bilo moguće zabilježiti: {{error}}",
+    "languageChanged": "Jezik je promijenjen. Vaš AI trener sada će odgovoriti na engleskom.",
+    "languageChangedConfirmation": "Jezik je promijenjen. Vaš AI trener sada će odgovoriti na vašem odabranom jeziku."
   },
   "proUpsell": {
     "title": "Otključajte punu snagu",
@@ -542,6 +823,675 @@
         "title": "Izvještaji o napretku",
         "desc": "Tjedni i mjesečni sažeci"
       }
+    }
+  },
+  "bariatric": {
+    "title": "Barijatrijski profil",
+    "subtitle": "Potpora za želučani rukav / premosnicu",
+    "settingsButton": "Barijatrijski profil",
+    "settingsDescription": "Potpora za želučani rukav ili premosnicu",
+    "setup": {
+      "title": "Barijatrijski profil",
+      "intro": "Omogućite barijatrijsku podršku kako biste dobili prilagođene ciljeve za proteine, tekućine i kalorije na temelju vaše operacije i faze.",
+      "surgeryType": "Vrsta operacije",
+      "surgeryTypeNone": "Ništa",
+      "surgeryTypeSleeve": "Želučani rukavac",
+      "surgeryTypeBypass": "Želučana premosnica",
+      "surgeryDate": "Datum operacije",
+      "surgeryDatePlaceholder": "YYYY-MM-DD",
+      "startWeight": "Početna težina (kg)",
+      "goalWeight": "Ciljana težina (kg)",
+      "height": "Visina (cm)",
+      "enable": "Omogući barijatrijsku podršku",
+      "save": "Spremi profil",
+      "delete": "Izbriši barijatrijski profil",
+      "deleteConfirm": "Jeste li sigurni da želite izbrisati svoj barijatrijski profil?",
+      "disclaimer": "Važno: Ova aplikacija NE zamjenjuje vašeg barijatrijskog nutricionista, liječnika ili kliniku. Preporuke su opće smjernice temeljene na javnim smjernicama ASMBS-a. Uvijek slijedite upute svoje klinike. Odmah se obratite svom liječniku u slučaju damping sindroma, stalne mučnine ili bilo kakvih problema.",
+      "acceptDisclaimer": "Razumijem da ova aplikacija ne zamjenjuje moj tim za barijatrijsku njegu",
+      "disclaimerRequired": "Morate prihvatiti odricanje od odgovornosti",
+      "invalidDate": "Unesite važeći datum",
+      "missingType": "Odaberite vrstu operacije",
+      "saved": "Profil spremljen",
+      "deleted": "Profil izbrisan"
+    },
+    "dashboard": {
+      "title": "Barijatrijska podrška",
+      "edit": "Uredi",
+      "phaseLabel": "Trenutna faza",
+      "daysSinceLabel": "Dana od operacije",
+      "daysUntilNext": "{{days}} dana do sljedeće faze",
+      "lastPhase": "U završnoj ste fazi",
+      "proteinToday": "Proteini danas",
+      "proteinProgress": "Proteini danas",
+      "fluidToday": "Tekućine danas",
+      "kcalRange": "Kalorije (cilj)",
+      "portionSize": "Preporučena veličina porcije",
+      "medicalCheckReminder": "Zapamtite svoj pregled od {{day}} dana",
+      "preSurgery": "Datum operacije još nije postignut"
+    },
+    "phases": {
+      "clearLiquid": {
+        "name": "1. tjedan: Bistre tekućine",
+        "description": "Samo bistre tekućine: voda, juha, sok bez šećera, čaj. Mali gutljaji tijekom dana."
+      },
+      "fullLiquid": {
+        "name": "2. tjedan: puno tekućine",
+        "description": "Sve tekućine uklj. proteinski shake, juha, jogurt. NEMOJTE piti 30 minuta prije/poslije jela."
+      },
+      "pureed": {
+        "name": "Tjedan 3-4: Pasirana hrana",
+        "description": "Miješana/pire hrana: svježi sir, riblji pire, miješana piletina. Temeljito žvakati."
+      },
+      "soft": {
+        "name": "Tjedan 5-6: mekana hrana",
+        "description": "Mekana hrana: kajgana, riba, kuhano povrće, mekano voće. Prvo proteini, mali zalogaji."
+      },
+      "regular": {
+        "name": "Tjedan 7+: Redovita hrana",
+        "description": "Redovita hrana u malim porcijama. Prvo proteini, zatim povrće, pa ugljikohidrati. Temeljito žvakati."
+      }
+    },
+    "tips": {
+      "noDrinking": "NE piti 30 minuta prije ili poslije jela",
+      "proteinFirst": "Uvijek prvo jedite proteine",
+      "chew": "Žvačite svaki zalogaj 20-30 puta",
+      "stopWhenFull": "Prestanite kada ste siti - čak i s malim porcijama",
+      "vitamins": "Zapamtite svoje dnevne vitamine"
+    },
+    "vitamins": {
+      "title": "Današnji vitamini",
+      "subtitle": "Zapamtite svoje dnevne dodatke prehrani",
+      "names": {
+        "multivitamin": "Multivitamin",
+        "calciumD": "Kalcij + vitamin D",
+        "iron": "Željezo",
+        "b12": "B12",
+        "omega3": "Omega-3 (izborno)"
+      },
+      "taken": "Zauzeto",
+      "notTaken": "Nije zauzeto",
+      "allDone": "Svi vitamini uzeti danas 🎉",
+      "reset": "Reset",
+      "optional": "izborno"
+    },
+    "fluid": {
+      "title": "Današnji unos tekućine",
+      "subtitle": "Pijte između obroka, ne uz",
+      "goal": "Cilj",
+      "current": "Danas",
+      "remaining": "Preostalo",
+      "add250": "+ 250 ml",
+      "add500": "+ 500 ml",
+      "addCustom": "Dodaj",
+      "reset": "Reset",
+      "goalReached": "Dostigli ste svoj tečni cilj 💧",
+      "warning": "Zapamtite male gutljaje - ne velike količine odjednom"
+    },
+    "meals": {
+      "title": "Prijedlozi za vas sada",
+      "subtitle": "Prilagođeno vašoj fazi",
+      "kcal": "kcal",
+      "protein": "g proteina",
+      "prep": "min",
+      "logIt": "Dnevnik",
+      "types": {
+        "fluid": "Tekućina",
+        "puree": "Pire",
+        "soft": "Mekana hrana",
+        "normal": "Normalna hrana"
+      },
+      "items": {
+        "water": "Voda",
+        "brothClear": "Bistra juha",
+        "sugarFreeJuice": "Sok bez šećera (razrijeđen)",
+        "herbalTea": "Biljni čaj",
+        "proteinShake": "Proteinski shake",
+        "skimmedMilk": "Obrano mlijeko",
+        "thinSoup": "Rijetka juha (procijeđena)",
+        "skyrThin": "Tanko nebo",
+        "mashedFish": "Riblji pire",
+        "cottageCheese": "Svježi sir",
+        "eggPuree": "Pire od jaja",
+        "pureedChicken": "Pire od piletine",
+        "mashedTofu": "Pire od tofua",
+        "softFish": "Meka riba",
+        "scrambledEgg": "Kajgana",
+        "softChicken": "Mekana piletina",
+        "wellCookedVeggies": "Dobro kuhano povrće",
+        "greekYogurt": "Grčki jogurt",
+        "grilledChicken": "Pileća prsa na žaru",
+        "salmonFillet": "Filet lososa",
+        "eggOmelette": "Omlet",
+        "lentilSoup": "Juha od leće",
+        "leanBeef": "Nemasna govedina"
+      },
+      "reminders": {
+        "title": "Sjetite se za vrijeme obroka",
+        "proteinFirst": "Prvo jedite proteine",
+        "chew": "Žvačite 20-30 puta",
+        "noDrinking": "Nemojte piti 30 minuta prije/poslije jela",
+        "stopWhenFull": "Zaustavi kada je pun",
+        "smallSips": "Pijte male gutljaje",
+        "noStraw": "Bez slamki (zrak u želucu)",
+        "slowly": "Pijte polako",
+        "mashWell": "Dobro izgnječiti",
+        "newFoodOneAtATime": "Uvodite jednu po jednu novu hranu",
+        "chewExtra": "Posebno temeljito žvačite",
+        "mindfulEating": "Jedite polako i pažljivo",
+        "avoidEmptyCalories": "Izbjegavajte prazne kalorije"
+      }
+    },
+    "dumping": {
+      "title": "Rizik od damping sindroma",
+      "subtitle": "Na temelju današnjih obroka",
+      "low": "Mali rizik",
+      "medium": "Budite svjesni",
+      "high": "Visok rizik",
+      "lowDesc": "Današnji obroci izgledaju dobro",
+      "mediumDesc": "Jedan ili više obroka može izazvati izbacivanje. Pripazite na simptome.",
+      "highDesc": "Višestruki visokorizični obroci danas. Obratite se svom liječniku ako osjetite mučninu, ubrzan rad srca, vrtoglavicu ili proljev.",
+      "flaggedCount": "{{count}} obrok označen zastavicom",
+      "flaggedCount_plural": "{{count}} obroci označeni",
+      "reasons": {
+        "sugarHigh": "Previše šećera",
+        "sugarMedium": "Umjereni sadržaj šećera",
+        "fatHigh": "Visok sadržaj masti",
+        "carbsNoProtein": "Ugljikohidrati bez proteina",
+        "carbsHigh": "Visoki unos ugljikohidrata",
+        "carbsMedium": "Umjereni unos ugljikohidrata",
+        "proteinLow": "Prenizak unos proteina"
+      },
+      "info": "Damping je najčešći nakon želučane premosnice i potaknut šećerom, masnoćom ili brzo apsorbiranim ugljikohidratima. Simptomi: mučnina, ubrzan rad srca, vrtoglavica, proljev 15-30 min nakon jela."
+    },
+    "training": {
+      "title": "Prilagođeni trening",
+      "subtitle": "Preporučena aktivnost za vašu fazu",
+      "currentPhase": "Vaša faza treninga",
+      "daysUntilNext": "{{days}} dana do sljedeće faze treninga",
+      "maxDuration": "Maksimalno trajanje",
+      "maxHeartRate": "Maksimalni broj otkucaja srca",
+      "min": "min",
+      "ofMax": "od maks. HR",
+      "intensityLabel": {
+        "veryLight": "Vrlo lagan",
+        "light": "Svjetlo",
+        "moderate": "Umjereno",
+        "normal": "Normalno"
+      },
+      "phaseNames": {
+        "1": "Oporavak (tjedan 0-2)",
+        "2": "Pažljiv početak (2.-4. tjedan)",
+        "3": "Lagana aktivnost (4-6. tjedan)",
+        "4": "Nakupljanje (tjedan 6-8)",
+        "5": "Normalni trening (tjedan 8+)"
+      },
+      "phaseDesc": {
+        "1": "Držite se kratkih šetnji i vježbi dubokog disanja. Slušajte svoje tijelo i puno se odmarajte.",
+        "2": "Možete malo povećati hodanje. I dalje nema treninga snage ili intenzivne vježbe.",
+        "3": "Možete početi voziti bicikl i plivati ​​(kada rane zacijele). I dalje nema trčanja ili velikih utega.",
+        "4": "Vrijeme je za uvođenje laganog treninga snage i duljeg kardio treninga. Počnite s malim utezima.",
+        "5": "Možete se vratiti normalnom treningu - ali i dalje gradite postupno i pazite na svoju energiju."
+      },
+      "allowed": "Preporučeno",
+      "notRecommended": "Izbjegavajte sada",
+      "activities": {
+        "walkShort": "Kratka šetnja (5-10 min)",
+        "walkMedium": "Srednje hodanje (15-20 min)",
+        "walkLong": "Duga šetnja (30+ min)",
+        "breathing": "Vježbe disanja",
+        "gentleStretch": "Lagano istezanje",
+        "cycling": "Biciklizam",
+        "swimming": "Plivanje",
+        "lightStrength": "Lagani trening snage",
+        "strength": "Trening snage",
+        "jog": "Lagano trčanje",
+        "running": "Trčanje",
+        "highIntensity": "Trening visokog intenziteta",
+        "heavyLifting": "Podizanje teškog tereta",
+        "extremeIntensity": "Ekstremni intenzitet"
+      },
+      "warnings": {
+        "title": "Važno je zapamtiti",
+        "noLifting": "Bez dizanja teških stvari (preko 5 kg)",
+        "staySoftMovements": "Držite se mekih, sporih pokreta",
+        "avoidSwimmingUntilHealed": "Izbjegavajte plivanje dok vam rane ne zacijele (obično 3-4 tjedna)",
+        "lightWeightsOk": "Lagane težine (2-5 kg) su u redu nakon savjetovanja s liječnikom",
+        "startStrengthGradually": "Započnite trening snage s malim težinama i velikim brojem ponavljanja",
+        "stillBuildGradually": "I dalje gradite postupno - izbjegavajte nagla velika povećanja",
+        "hydration": "Zapamtite tekućine prije, tijekom i nakon treninga"
+      },
+      "safety": {
+        "activityNotRecommended": "{{activity}} se ne preporučuje u vašoj fazi. Posavjetujte se sa svojim liječnikom.",
+        "durationTooLong": "Preporučeno trajanje je najviše {{max}} min. Planirali ste {{actual}} min.",
+        "checkWithDoctor": "Obratite se svom liječniku ako osjetite bol, mučninu ili iscrpljenost"
+      },
+      "disclaimer": "Preporuke su samo smjernice. Uvijek slijedite upute svoje klinike."
+    }
+  },
+  "diabetes": {
+    "title": "Profil dijabetesa",
+    "subtitle": "Tip 1, Tip 2 ili predijabetes",
+    "settingsButton": "Profil dijabetesa",
+    "settingsDescription": "Tip 1, tip 2 ili predijabetes - prehrana, šećer u krvi i vježbanje",
+    "setup": {
+      "title": "Profil dijabetesa",
+      "intro": "Omogućite podršku za dijabetes kako biste dobili prilagođene prijedloge obroka, smjernice za razinu šećera u krvi i preporuke za vježbanje.",
+      "type": "Tip dijabetesa",
+      "typeT1": "Vrsta 1",
+      "typeT2": "Vrsta 2",
+      "typePre": "Predijabetes",
+      "typeGest": "Gestacijski dijabetes",
+      "treatment": "Liječenje",
+      "txNone": "Ništa",
+      "txDiet": "Samo prehrana/način života",
+      "txMetformin": "Metformin",
+      "txOral": "Ostali oralni lijekovi",
+      "txGLP1": "GLP-1 (Ozempic/Wegovy/Mounjaro)",
+      "txBasal": "Bazalni inzulin",
+      "txBolus": "Bazalni + bolus inzulin",
+      "txPump": "Inzulinska pumpa",
+      "diagnosisDate": "Datum dijagnoze (nije obavezno)",
+      "datePlaceholder": "YYYY-MM-DD",
+      "hba1c": "HbA1c (mmol/mol, izborno)",
+      "countCarbs": "Brojim ugljikohidrate",
+      "carbRatio": "Omjer inzulin/ugljikohidrati (g/U, izborno)",
+      "carbRatioHelp": "Npr. 10 = 1 jedinica inzulina pokriva 10 g ugljikohidrata. Aplikacija nikada ne dozira - ovaj broj je samo informativan.",
+      "correctionFactor": "Faktor korekcije (mmol/L po U, izborno)",
+      "preExerciseMin": "Minimalni šećer u krvi prije vježbanja (mmol/L)",
+      "enable": "Omogući podršku za dijabetes",
+      "acceptDisclaimer": "Prihvaćam gore navedeno odricanje od odgovornosti",
+      "disclaimerRequired": "Morate prihvatiti odricanje od odgovornosti",
+      "missingType": "Odaberite tip dijabetesa",
+      "save": "Spremi profil",
+      "saved": "Profil spremljen",
+      "delete": "Izbriši profil dijabetesa",
+      "deleted": "Profil izbrisan",
+      "deleteConfirm": "Jeste li sigurni da želite izbrisati svoj profil dijabetesa?",
+      "disclaimer": "VAŽNO: Ova aplikacija NE zamjenjuje vašeg liječnika ili tim za dijabetes. NIKADA ne predlažemo određene doze inzulina ili promjene lijekova. Nikada nemojte prilagođavati svoje liječenje samo na temelju savjeta aplikacije. Uvijek se obratite svom liječniku ako ste u nedoumici."
+    }
+  },
+  "bloodSugar": {
+    "title": "Šećer u krvi",
+    "settingsButton": "Dnevnik šećera u krvi",
+    "settingsDescription": "Bilježite svoja mjerenja i pogledajte trendove tijekom vremena",
+    "add": "Dodaj očitanje",
+    "save": "Spremi",
+    "history": "Povijest",
+    "empty": "Još nema očitanja. Dodirnite gornji gumb da biste zabilježili svoje prvo mjerenje.",
+    "disclaimer": "Ovi brojevi služe samo za vašu vlastitu referencu. Uvijek razgovarajte o obrascima sa svojim liječnikom ili timom za dijabetes.",
+    "valueLabel": "Šećer u krvi (mmol/L)",
+    "contextLabel": "Kontekst",
+    "noteLabel": "Napomena (nije obavezno)",
+    "notePlaceholder": "Npr. nakon doručka",
+    "errInvalidTitle": "Nevažeća vrijednost",
+    "errInvalidBody": "Unesite vrijednost šećera u krvi između 1,0 i 40,0 mmol/L.",
+    "errSaveTitle": "Nije moguće spremiti",
+    "deleteTitle": "Brisanje očitanja",
+    "deleteBody": "Jeste li sigurni? Dugo pritisnite za brisanje.",
+    "ctx": {
+      "fasting": "Post",
+      "preMeal": "Prije jela",
+      "postMeal": "Nakon jela",
+      "bedtime": "Vrijeme za spavanje",
+      "preExercise": "Prije vježbanja",
+      "postExercise": "Nakon vježbanja",
+      "random": "Nasumično"
+    },
+    "range": {
+      "1d": "1 dan",
+      "7d": "7 dana",
+      "30d": "30 dana",
+      "90d": "90 dana"
+    },
+    "stat": {
+      "avg": "Prosječno",
+      "min": "Min",
+      "max": "Maks",
+      "tir": "Vrijeme u rasponu",
+      "target": "Cilj",
+      "measurements": "očitanja"
+    }
+  },
+  "healthScore": {
+    "title": "Zdravstveni rezultat",
+    "todayLabel": "Današnji rezultat",
+    "A": "Vrlo zdravo",
+    "B": "Zdravo",
+    "C": "Umjereno",
+    "D": "Manje zdravo",
+    "E": "Nezdravo"
+  },
+  "units": {
+    "g": "g",
+    "kg": "kg",
+    "ml": "ml",
+    "dl": "dl",
+    "l": "l",
+    "tsk": "žličica",
+    "spsk": "žlica",
+    "stk": "kom",
+    "skive": "kriška",
+    "portion": "dio"
+  },
+  "logMeal": {
+    "amount": "Iznos",
+    "unit": "Jedinica",
+    "approxGrams": "≈ {{grams}}g"
+  },
+  "home": {
+    "greeting": {
+      "morning": "Dobro jutro",
+      "day": "Pozdrav",
+      "evening": "Dobro veče",
+      "night": "Laku noć"
+    },
+    "coach": {
+      "restDay": "Danas je dan odmora — uživajte u oporavku!",
+      "todayWorkout": "Današnji plan uključuje {{workout}}.",
+      "nextWorkout": "Sljedeći trening: {{workout}}.",
+      "ready": "Jeste li spremni za početak? Pitajte me o planiranju, prehrani ili motivaciji.",
+      "askForHelp": "Pitajte me bilo što ako trebate pomoć."
+    },
+    "chat": {
+      "placeholder": "Pitajte svog AI trenera...",
+      "todayPlanPrompt": "Koji je moj plan za danas?"
+    },
+    "todayPlan": "Današnji plan",
+    "startTraining": "Započnite vježbanje",
+    "nextTraining": "Sljedeći trening",
+    "today": "Danas",
+    "training": "Vježbanje",
+    "todayOverview": "Današnji pregled",
+    "week": "Tjedan",
+    "milestone": "Prekretnica",
+    "toGoal": "do cilja {{distance}} km"
+  },
+  "progress": {
+    "weeks": "Tjednima",
+    "months": "Mjeseci",
+    "weekLabel": "Tjedan {{week}}, {{year}}",
+    "weekShort": "W{{week}}",
+    "activities": "Aktivnosti",
+    "empty": "Još nema aktivnosti — izađi van i trči!",
+    "noRoute": "Nije zabilježena ruta",
+    "standardTraining": "Standardna vježba",
+    "steps": "Koraci",
+    "duration": "Trajanje",
+    "caloriesShort": "kal",
+    "activityTypes": {
+      "walk": "Hodaj",
+      "cycling": "Biciklizam",
+      "run": "Trči"
+    }
+  },
+  "workoutLabels": {
+    "rest": "Odmor",
+    "injuryRest": "Odmor zbog ozljede"
+  },
+  "calendar": {
+    "monthSummary_one": "{{count}} trčanje · {{km}} km",
+    "monthSummary_other": "{{count}} trči · {{km}} km",
+    "completed": "Dovršeno",
+    "planned": "Planirano",
+    "missed": "Propušteno",
+    "plannedKm": "Planirano {{km}} km",
+    "emptyDay": "Nema planiranog trčanja ili vježbanja za ovaj dan"
+  },
+  "motionPicker": {
+    "title": "Kardio",
+    "what": "Što biste željeli raditi?",
+    "where": "Gdje?",
+    "run": "Trči",
+    "walk": "Hodaj",
+    "cycling": "Biciklizam",
+    "runLocation": "Vanjski ili traka za trčanje",
+    "bikeLocation": "Na otvorenom ili u zatvorenom prostoru",
+    "outdoor": "Na otvorenom",
+    "outdoorDescription": "GPS praćenje · rute · tempo",
+    "indoor": "Unutarnji",
+    "indoorDescription": "Traka za trčanje · brojač koraka · ručna udaljenost"
+  },
+  "activityPicker": {
+    "title": "Odaberite vježbu",
+    "intro": "Što želite zabilježiti?",
+    "options": {
+      "mobility": {
+        "label": "Mobilnost / Joga",
+        "description": "Istezanje, joga, valjanje pjene"
+      },
+      "bike": {
+        "label": "Biciklizam",
+        "description": "Unutarnji ili vanjski"
+      },
+      "other": {
+        "label": "Ostale djelatnosti",
+        "description": "Padel, nogomet, plivanje..."
+      }
+    }
+  },
+  "logActivity": {
+    "types": {
+      "strength": "Trening snage",
+      "mobility": "Mobilnost / joga",
+      "bike": "Biciklizam",
+      "other": "Ostale djelatnosti"
+    },
+    "invalidDuration": "Unesite važeće trajanje u minutama",
+    "savedTitle": "Spremljeno!",
+    "savedMessage": "{{activity}} zabilježeno ({{duration}} min, {{calories}} kcal)",
+    "saveError": "Nije moguće spremiti: {{error}}",
+    "logActivity": "Prijavite svoj {{activity}}",
+    "duration": "Trajanje (minute) *",
+    "calories": "Kalorije (neobavezno — inače se izračunavaju automatski)",
+    "calorieEstimate": "≈ {{calories}} kcal izračunato iz {{weight}} kg, RPE {{rpe}}",
+    "effort": "Napor (RPE 1-10)",
+    "notes": "Bilješke (nije obavezno)",
+    "notesPlaceholder": "Na primjer vježbe, težine, serije...",
+    "save": "Spremi vježbanje"
+  },
+  "treadmill": {
+    "invalidValueTitle": "Nevažeća vrijednost",
+    "invalidValueMessage": "Unesite broj, na primjer 5.2",
+    "noDistanceTitle": "Nema udaljenosti",
+    "noDistanceMessage": "Dodajte udaljenost ručno ili nastavite dok se koraci ne budu mogli mjeriti.",
+    "finishTitle": "Završiti i spremiti?",
+    "finishMessage": "Udaljenost: {{distance}} km · Vrijeme: {{time}} · {{calories}} kcal",
+    "walkNote": "Šetnja u zatvorenom (traka za trčanje)",
+    "runNote": "Trčanje u zatvorenom (traka za trčanje)",
+    "savedTitle": "Spremljeno! 🏃",
+    "savedMessage": "{{distance}} km u {{time}} · {{calories}} potrošeno kcal.",
+    "saveError": "Nije moguće spremiti",
+    "discardTitle": "Odbaciti vježbanje?",
+    "discardMessage": "Svi podaci s ovog vježbanja bit će izgubljeni.",
+    "keep": "Zadrži",
+    "discard": "Odbaciti",
+    "walkTitle": "Traka za trčanje · Hodajte",
+    "runTitle": "Traka za trčanje · Trčanje",
+    "pedometerActive": "Brojač koraka je aktivan",
+    "pedometerUnavailable": "Brojač koraka nije dostupan",
+    "steps": "KORACI",
+    "speed": "Brzina",
+    "adjustDistance": "Podesite udaljenost",
+    "adjustHint": "Ručno dodajte udaljenost sa zaslona trake za trčanje",
+    "enterExactDistance": "Unesite točnu udaljenost od trake za trčanje",
+    "instructionsTitle": "Kako koristiti tracker",
+    "instructions": "1. Pritisnite START kada počnete raditi na traci za trčanje\n2. Dodajte udaljenost pomoću gumba +0,1 / +0,5 / +1,0 \n3. Ili unesite točnu udaljenost kada završite\n4. Koraci se broje automatski kada nosite telefon",
+    "saving": "Spremanje...",
+    "exactDistanceTitle": "Unesite točnu udaljenost",
+    "exactDistanceHint": "Pročitajte zaslon trake za trčanje i unesite udaljenost u km",
+    "apply": "Primijeni"
+  },
+  "statsPage": {
+    "hoursShort": "h",
+    "minutesShort": "m",
+    "now": "Sada",
+    "weeksAgoShort": "{{count}}w",
+    "emptyTitle": "Još nema statistike",
+    "emptyMessage": "Započnite svoje prvo pokretanje kako biste ovdje vidjeli svoje podatke.",
+    "period4Weeks": "4 tjedna",
+    "period3Months": "3 mjeseca",
+    "bestPace": "Najbolji tempo",
+    "dayStreak": "Niz dana",
+    "weeklyGoal": "Tjedni cilj",
+    "ofGoal": "od cilja {{goal}} km",
+    "goalReached": "Cilj postignut!",
+    "kmRemaining": "Još {{km}} km",
+    "milestone": "Prekretnica",
+    "toMilestone": "{{remaining}} km do {{milestone}} km",
+    "kmPerWeek": "KM TJEDNO",
+    "kmPerMonth": "KM MJESEČNO",
+    "avgDistance": "Prosječna udaljenost",
+    "kmPerRun": "km po vožnji",
+    "totalTime": "Ukupno vrijeme",
+    "moving": "kreće se",
+    "longestRun": "Najduže trčanje",
+    "runsPerWeekday": "Radi svakog radnog dana",
+    "activityRings": "Prstenovi za aktivnosti",
+    "kmGoal": "KM GOAL",
+    "distance": "Udaljenost",
+    "activity": "Aktivnost",
+    "days": "DANA",
+    "streak": "Niz",
+    "activityTypes": "Vrste aktivnosti",
+    "types": {
+      "run": "Trči",
+      "walk": "Hodaj",
+      "bike": "Biciklizam"
+    }
+  },
+  "privacyPage": {
+    "title": "Politika privatnosti",
+    "updated": "Zadnje ažuriranje: travanj 2026",
+    "intro": "U RunWithAI-u vašu privatnost shvaćamo ozbiljno. Ova politika objašnjava kako prikupljamo, koristimo i štitimo vaše osobne podatke.",
+    "sections": [
+      {
+        "title": "Kontrolor podataka",
+        "paragraphs": [
+          "RunWithAI je odgovoran za obradu vaših osobnih podataka. Kontaktirajte nas na privacy@runwithai.app ako imate pitanja."
+        ]
+      },
+      {
+        "title": "Podaci koje prikupljamo",
+        "paragraphs": [
+          "Prikupljamo sljedeće vrste podataka:"
+        ],
+        "bullets": [
+          "Podaci o računu: e-pošta, ime, dob i spol",
+          "Fizički podaci: težina i visina (nije obavezno)",
+          "Podaci o vježbanju: aktivnosti, udaljenost, tempo, otkucaji srca i GPS rute",
+          "Upotreba aplikacije: postavke, ciljevi i razina",
+          "Podaci o plaćanju: sigurno ih obrađuje App Store ili Google Play"
+        ]
+      },
+      {
+        "title": "Kako koristimo vaše podatke",
+        "paragraphs": [
+          "Vaše podatke koristimo za:"
+        ],
+        "bullets": [
+          "Omogućite personalizirane planove obuke AI",
+          "Analizirajte svoje treninge i napredak",
+          "Poboljšajte naše usluge",
+          "Šalji relevantne obavijesti i ažuriranja",
+          "Upravljanje plaćanjima i pretplatama"
+        ]
+      },
+      {
+        "title": "Integracije trećih strana",
+        "paragraphs": [
+          "RunWithAI se može integrirati s Garmin Connectom za uvoz podataka o trčanju. Kada smo povezani, dohvaćamo samo podatke o vježbanju - nikada vaše vjerodajnice za prijavu."
+        ]
+      },
+      {
+        "title": "Dijeljenje podataka",
+        "paragraphs": [
+          "Nikada ne prodajemo vaše podatke. Podatke dijelimo samo sa:"
+        ],
+        "bullets": [
+          "Apple/Google: sigurna obrada plaćanja",
+          "OpenAI: anonimizirano AI treniranje",
+          "Hosting provideri: Vercel i Railway za pohranu podataka"
+        ]
+      },
+      {
+        "title": "Sigurnost podataka",
+        "paragraphs": [
+          "Koristimo industrijske standarde zaštite, uključujući:"
+        ],
+        "bullets": [
+          "HTTPS enkripcija za sve veze",
+          "Zaštitite raspršivanje lozinki uz bcrypt",
+          "JWT tokeni za autentifikaciju",
+          "Redovita sigurnosna ažuriranja"
+        ]
+      },
+      {
+        "title": "Vaša prava",
+        "paragraphs": [
+          "Imate pravo na:"
+        ],
+        "bullets": [
+          "Pristup vašim podacima",
+          "Ispravite netočne informacije",
+          "Izbrišite svoj račun i sve podatke",
+          "Izvezite svoje podatke kao CSV",
+          "Povuci privolu"
+        ]
+      },
+      {
+        "title": "Zadržavanje podataka",
+        "paragraphs": [
+          "Čuvamo vaše podatke dok je vaš račun aktivan. Ako izbrišete svoj račun, svi podaci se uklanjaju u roku od 30 dana."
+        ]
+      },
+      {
+        "title": "Kolačići i praćenje",
+        "paragraphs": [
+          "Koristimo minimalan broj kolačića kako bismo ostali prijavljeni. Ne koristimo kolačiće za praćenje ili oglašavanje trećih strana."
+        ]
+      },
+      {
+        "title": "Privatnost djece",
+        "paragraphs": [
+          "RunWithAI nije namijenjen djeci mlađoj od 13 godina i ne prikupljamo svjesno podatke od djece mlađe od te dobi."
+        ]
+      },
+      {
+        "title": "Promjene pravila",
+        "paragraphs": [
+          "S vremena na vrijeme možemo ažurirati ovu politiku. Obavijestit ćemo vas u aplikaciji ili e-poštom o materijalnim promjenama."
+        ]
+      },
+      {
+        "title": "Kontakt"
+      }
+    ],
+    "contactQuestion": "Imate li pitanja o ovoj politici ili svojim podacima?",
+    "footer": "© 2026 RunWithAI. Sva prava pridržana."
+  },
+  "more": {
+    "title": "Više",
+    "subtitle": "Svi vaši alati na jednom mjestu",
+    "sections": {
+      "account": "Račun",
+      "statistics": "Statistika",
+      "setup": "Postavljanje",
+      "app": "App"
+    },
+    "newBadge": "Novo",
+    "menu": {
+      "profile": "Profil",
+      "profileSubtitle": "Osobni podaci, ciljevi, otkucaji srca i ozljede",
+      "statistics": "Statistika",
+      "statisticsSubtitle": "Ukupna udaljenost, najbolji tempo i prekretnice",
+      "goals": "Ciljevi",
+      "goalsSubtitle": "Tjedni ciljevi i vrste vježbanja",
+      "settings": "Postavke",
+      "settingsSubtitle": "Razina, jezik, profil i obavijesti",
+      "privacy": "Privatnost",
+      "privacySubtitle": "Vaši podaci i prava",
+      "upgrade": "Nadogradite na PRO",
+      "upgradeSubtitle": "Otključajte sve značajke"
     }
   }
 }

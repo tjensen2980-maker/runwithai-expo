@@ -1,4 +1,4 @@
-﻿{
+{
   "coachIntro": {
     "title": "Váš AI trenér",
     "qName": "Ahoj! Jsem váš osobní AI běžecký trenér 🏃 Než začneme, rád vás trochu poznám. Jak se jmenujete?",
@@ -55,7 +55,11 @@
     "lastActivity": "Poslední aktivita",
     "gpsTracking": "GPS sledování",
     "walkTracking": "Sledování chůze",
-    "aiRoutes": "AI trasy"
+    "aiRoutes": "AI trasy",
+    "motionTitle": "Kardio",
+    "motionActivities": "Běh · Chůze · Cyklistika",
+    "trainingTitle": "Školení",
+    "trainingActivities": "Síla, mobilita a další"
   },
   "pro": {
     "badge": "PRO",
@@ -86,6 +90,10 @@
     "aiRoutes": {
       "title": "AI trasy",
       "description": "Získej doporučení tras na základě svého tréninku"
+    },
+    "nutrition": {
+      "title": "Měřič kalorií",
+      "description": "Počítejte kalorie, protokolujte jídla a skenujte čárové kódy"
     }
   },
   "stats": {
@@ -146,44 +154,85 @@
     "height": "VÝŠKA",
     "years": "Let",
     "runningLevel": "ÚROVEŇ BĚHU",
-    "levels.beginner": "Začátečník",
-    "levels.intermediate": "Pokročilý",
-    "levels.advanced": "Expert",
     "yourGoals": "JAKÉ JSOU TVÉ CÍLE",
-    "goals.health": "Zdraví",
-    "goals.weight": "Hubnutí",
-    "goals.distance": "Běhat déle",
-    "goals.speed": "Být rychlejší",
-    "goals.race": "Běžet závod",
-    "goals.fun": "Zábava",
     "weeklyGoalKm": "TÝDENNÍ CÍL KM",
     "weeklyGoalExample": "Např. 20",
     "unlockFullPower": "Odemknout plný přístup",
     "unlockDesc": "Získej přístup ke všem funkcím a dosáhni cílů rychleji",
-    "proFeatures.aiCoachDesc": "AI Trenér",
-    "proFeatures.statsDesc": "Statistiky",
-    "proFeatures.goalsDesc": "Cíle",
-    "proFeatures.routesDesc": "Trasy",
-    "proFeatures.chatDesc": "AI Chat",
-    "proFeatures.reportsDesc": "Reporty",
     "price": "49 kr",
     "guarantee": "✓ Zruš kdykoliv • ✓ 7 dní zdarma",
     "perMonth": "/měsíc",
     "startFreeTrial": "Zahájit bezplatnou zkušební verzi",
     "continueWithFree": "Pokračovat s bezplatnou verzí",
-    "levels.beginnerDesc": "Nový v běhání nebo začínáš po dlouhé pauze",
-    "levels.intermediateDesc": "Běháš pravidelně a chceš se zlepšit",
-    "levels.advancedDesc": "Zkušený běžec se specifickými cíli",
     "or": "nebo",
     "errors": {
-      "serverConnection": "Nelze se připojit k serveru"
+      "serverConnection": "Nelze se připojit k serveru",
+      "fillEmailPassword": "Zadejte e-mail i heslo",
+      "loginFailed": "Nelze se přihlásit",
+      "enterEmail": "Zadejte svou e-mailovou adresu",
+      "resetCodeFailed": "Nelze odeslat resetovací kód",
+      "fillCodePassword": "Zadejte resetovací kód a nové heslo",
+      "passwordMismatch": "Hesla se neshodují",
+      "passwordTooShort": "Heslo musí mít alespoň 6 znaků",
+      "resetFailed": "Nelze resetovat heslo",
+      "registerFailed": "Nelze vytvořit účet",
+      "enterName": "Zadejte své jméno",
+      "selectLevel": "Vyberte úroveň běhu"
+    },
+    "levels": {
+      "beginner": "Začátečník",
+      "intermediate": "Pokročilý",
+      "advanced": "Expert",
+      "beginnerDesc": "Nový v běhání nebo začínáš po dlouhé pauze",
+      "intermediateDesc": "Běháš pravidelně a chceš se zlepšit",
+      "advancedDesc": "Zkušený běžec se specifickými cíli"
+    },
+    "goals": {
+      "health": "Zdraví",
+      "weight": "Hubnutí",
+      "distance": "Běhat déle",
+      "speed": "Být rychlejší",
+      "race": "Běžet závod",
+      "fun": "Zábava"
+    },
+    "proFeatures": {
+      "aiCoachDesc": "AI Trenér",
+      "statsDesc": "Statistiky",
+      "goalsDesc": "Cíle",
+      "routesDesc": "Trasy",
+      "chatDesc": "AI Chat",
+      "reportsDesc": "Reporty"
+    },
+    "resetPassword": "Resetujte heslo",
+    "forgotPasswordDesc": "Zadejte svůj e-mail a my vám zašleme resetovací kód.",
+    "sendResetCode": "Odeslat resetovací kód",
+    "backToLogin": "Zpět k přihlášení",
+    "createNewPassword": "Vytvořte nové heslo",
+    "checkEmail": "Zkontrolujte svůj e-mail pro šestimístný resetovací kód.",
+    "resetCode": "Resetujte kód",
+    "resetCodePlaceholder": "6místný kód",
+    "newPassword": "Nové heslo",
+    "confirmNewPassword": "Potvrďte nové heslo",
+    "resendCode": "Pošlete nový kód",
+    "tellUsAboutYou": "Řekněte nám o sobě",
+    "success": {
+      "resetCodeSent": "Na váš e-mail jsme zaslali resetovací kód.",
+      "passwordReset": "Vaše heslo bylo resetováno. Nyní se můžete přihlásit."
     }
   },
   "settings": {
     "pageTitle": "Nastavení",
     "title": "Nastavení",
     "profile": "Profil",
-    "days": ["Po", "Út", "St", "Čt", "Pá", "So", "Ne"],
+    "days": [
+      "Po",
+      "Út",
+      "St",
+      "Čt",
+      "Pá",
+      "So",
+      "Ne"
+    ],
     "saveChanges": "Uložit změny",
     "saved": "Uloženo!",
     "logout": "Odhlásit se",
@@ -201,7 +250,8 @@
       "reminders": "Připomínky",
       "privacy": "Soukromí",
       "units": "Jednotky",
-      "data": "Data"
+      "data": "Data",
+      "profile": "Profil"
     },
     "fields": {
       "name": "Jméno",
@@ -304,6 +354,57 @@
       "deletedTitle": "Účet smazán",
       "deletedMessage": "Tvůj účet byl smazán.",
       "error": "Nepodařilo se smazat účet"
+    },
+    "reminders": {
+      "workoutTitle": "Připomenutí tréninku",
+      "workoutSubtitle": "Získejte upozornění ve vybrané dny a ve zvolený čas",
+      "mealTitle": "Připomenutí jídla",
+      "mealSubtitle": "Nezapomeňte si zapsat svá jídla",
+      "time": "Čas: {{time}}",
+      "days": [
+        "Ne",
+        "Pon",
+        "Út",
+        "St",
+        "Čt",
+        "Pá",
+        "So"
+      ]
+    },
+    "email": {
+      "title": "E-mail",
+      "change": "Změňte e-mail",
+      "newEmail": "Nový e-mail",
+      "currentPassword": "Aktuální heslo",
+      "missingFields": "Zadejte svůj nový e-mail i aktuální heslo",
+      "changeError": "Nelze změnit e-mail",
+      "successMessage": "Váš e-mail byl aktualizován",
+      "networkError": "Chyba sítě"
+    },
+    "subscription": {
+      "title": "Předplatné",
+      "type": "Typ",
+      "status": "Stav",
+      "tiers": {
+        "pro": "Pro",
+        "basic": "Základní",
+        "free": "Zdarma"
+      },
+      "statuses": {
+        "active": "Aktivní",
+        "inactive": "Neaktivní",
+        "trialing": "Zkušební verze",
+        "canceled": "Zrušeno"
+      },
+      "upgrade": "Upgrade",
+      "manage": "Spravujte v App Store"
+    },
+    "language": "Jazyk",
+    "changeLanguageInSettings": "Změňte jazyk v Nastavení",
+    "languageHint": "Otevřete nastavení zařízení a vyberte RunWithAI → Language.",
+    "actions": {
+      "save": "Uložte změny",
+      "saved": "Uloženo!"
     }
   },
   "pricing": {
@@ -367,6 +468,139 @@
     "step3": {
       "title": "Dosáhni svých cílů",
       "desc": "Nastav si cíle a sleduj svůj pokrok s detailními statistikami"
+    },
+    "tagline": "Váš osobní běžecký trenér AI",
+    "headline": {
+      "before": "Školení",
+      "highlight": "se přizpůsobí",
+      "after": "vás"
+    },
+    "features": {
+      "ai": {
+        "title": "Skutečný trenér AI",
+        "desc": "Váš plán je vytvořen pro vás – nikoli šablona"
+      },
+      "adapts": {
+        "title": "Životní plán",
+        "desc": "Upraví se po každém dokončení běhu"
+      },
+      "injury": {
+        "title": "Naslouchá svému tělu",
+        "desc": "Zranění a bolest jsou zahrnuty do vašeho tréninku"
+      },
+      "goals": {
+        "title": "K vašemu cíli",
+        "desc": "Od vašich prvních 5K až po maraton – vaším tempem"
+      }
+    },
+    "tryFree": "Vyzkoušejte zdarma na 14 dní",
+    "fine": "Bez závazku. Kdykoli zrušit.",
+    "levelQuestion": "Kde jste na své běžecké cestě?",
+    "selectLevel": "Chcete-li pokračovat, vyberte svou úroveň",
+    "levels": {
+      "beginner": {
+        "label": "Začátečník",
+        "sub": "Nové nebo se vrací po přestávce"
+      },
+      "intermediate": {
+        "label": "Střední",
+        "sub": "Běhám pravidelně a chci se zlepšit"
+      },
+      "advanced": {
+        "label": "Pokročilé",
+        "sub": "Cvičím cíleně a znám své tempo"
+      }
+    },
+    "tellUsAboutYou": "Řekněte nám něco o sobě",
+    "coachUsesThis": "Váš trenér to použije k vytvoření vašeho plánu",
+    "fields": {
+      "name": "Jak se jmenujete?",
+      "age": "Věk",
+      "weeklyKm": "Km za týden (zhruba)"
+    },
+    "primaryGoal": "Jaký je váš cíl?",
+    "goals": {
+      "fitness": {
+        "label": "Buďte fit",
+        "sub": "Zdraví a energie"
+      },
+      "5k": {
+        "label": "5K",
+        "sub": "Můj první velký cíl"
+      },
+      "10k": {
+        "label": "10K",
+        "sub": "Další úroveň"
+      },
+      "half": {
+        "label": "Půlmaraton",
+        "sub": "21,1 km"
+      },
+      "full": {
+        "label": "Maraton",
+        "sub": "42,2 km"
+      },
+      "weight": {
+        "label": "Zhubněte",
+        "sub": "Běžte lehčeji"
+      }
+    },
+    "raceDate": "Máte datum závodu? (volitelné)",
+    "raceDatePlaceholder": "např. 15. září",
+    "skipForNow": "Prozatím přeskočte",
+    "plan": {
+      "building": "Váš trenér vytváří váš plán…",
+      "waitNamed": "{{name}}, dej mi chvilku.",
+      "wait": "Dejte mi chvilku.",
+      "errorTitle": "Váš plán nyní nelze vytvořit",
+      "errorMessage": "Vždy můžete požádat svého kouče, aby jej vytvořil později.",
+      "readyNamed": "{{name}}, zde je váš plán",
+      "ready": "Zde je váš plán",
+      "basedOnAnswers": "Váš plán je založen na tom, co jste řekl svému trenérovi.",
+      "weeklyDistance": "Týdenní vzdálenost: {{km}} km",
+      "goal": "Branka: {{goal}}",
+      "considerations": "Úvahy: {{injuries}}",
+      "weekAndDay": "Týden {{week}} – {{day}}",
+      "day": "Den {{day}}",
+      "run": "Spustit",
+      "makePlan": "Vytvořte můj plán",
+      "weekdays": {
+        "mon": "Pondělí",
+        "tue": "Úterý",
+        "wed": "Středa",
+        "thu": "Čtvrtek",
+        "fri": "Pátek",
+        "sat": "Sobota",
+        "sun": "Neděle"
+      }
+    },
+    "languageTitle": "Vyberte svůj jazyk",
+    "languageSubtitle": "Můžete to později změnit v Nastavení",
+    "paywall": {
+      "headline": "Váš osobní trenér AI",
+      "subtitle": "Tréninkový plán, který se vám přizpůsobí – každý týden, každý běh.",
+      "benefits": {
+        "adaptive": "Váš plán se po každém běhu přizpůsobí",
+        "audioCoach": "Váš trenér ve vašich uších, když trénujete",
+        "calendar": "Týdenní plán a kalendář, který drží krok",
+        "chat": "Zeptejte se svého trenéra na cokoli – kdykoli"
+      },
+      "trial": "14 dní zdarma",
+      "afterTrial": "Poté {{price}}/měsíc. Zrušit kdykoli – jedním klepnutím.",
+      "startTraining": "Začněte trénovat",
+      "restore": "Obnovit nákupy",
+      "welcomeTitle": "🎉 Vítejte!",
+      "welcomeMessage": "Váš přístup Pro je nyní aktivní.",
+      "restoreSuccessTitle": "Nákupy obnoveny",
+      "restoreSuccessMessage": "Vaše předplatné je opět aktivní.",
+      "noPurchasesTitle": "Nebyly nalezeny žádné nákupy",
+      "noPurchasesMessage": "Nebyly nalezeny žádné aktivní odběry.",
+      "errors": {
+        "prices": "Ceny se nepodařilo načíst. Zkuste to znovu později.",
+        "packageUnavailable": "Toto předplatné není k dispozici.",
+        "purchaseTitle": "Nákup se nezdařil",
+        "restore": "Nákupy nelze obnovit."
+      }
     }
   },
   "dashboard": {
@@ -419,7 +653,20 @@
       "runsFromRecord": "{{count}} běhů do rekordu",
       "runsInMonth": "{{count}} běhů v {{month}}"
     },
-    "monthNames": ["Led", "Úno", "Bře", "Dub", "Kvě", "Čvn", "Čvc", "Srp", "Zář", "Říj", "Lis", "Pro"],
+    "monthNames": [
+      "Led",
+      "Úno",
+      "Bře",
+      "Dub",
+      "Kvě",
+      "Čvn",
+      "Čvc",
+      "Srp",
+      "Zář",
+      "Říj",
+      "Lis",
+      "Pro"
+    ],
     "workout": {
       "nextWorkout": "DALŠÍ TRÉNINK",
       "today": "DNES",
@@ -445,7 +692,15 @@
       "addNote": "+ Poznámka",
       "mood": "Nálada",
       "placeholder": "Jak to šlo? Těžké nohy? Dobrý den? Nová trasa?",
-      "dayNames": ["Ne", "Po", "Út", "St", "Čt", "Pá", "So"]
+      "dayNames": [
+        "Ne",
+        "Po",
+        "Út",
+        "St",
+        "Čt",
+        "Pá",
+        "So"
+      ]
     },
     "injury": {
       "title": "RIZIKO ZRANĚNÍ",
@@ -488,7 +743,31 @@
       "unavailable": "GPS není k dispozici",
       "timeout": "Časový limit GPS",
       "notAvailable": "GPS není k dispozici",
-      "error": "Chyba GPS"
+      "error": "Chyba GPS",
+      "points": "{{count}} body (filtrováno {{filtered}})"
+    },
+    "cycling": "Cyklistika",
+    "music": "Hudba",
+    "voiceOnly": "Pouze hlas",
+    "notification": {
+      "run": "Sledování vašeho běhu...",
+      "walk": "Sledování vaší chůze...",
+      "bike": "Sledování vaší jízdy..."
+    },
+    "limit": {
+      "title": "Bylo dosaženo týdenního limitu aktivity",
+      "message": "Dosáhli jste limitu bezplatného plánu aktivit {{limit}} za týden. Upgradujte na Basic nebo Pro pro neomezený přístup.",
+      "later": "Později"
+    },
+    "stats": {
+      "runs": "běží",
+      "walks": "procházky",
+      "yourProgress": "Váš pokrok",
+      "thisWeek": "Tento týden",
+      "lastWeek": "Minulý týden",
+      "bestPace": "Nejlepší tempo",
+      "longestRun": "Nejdelší běh",
+      "totalKm": "Celkem km"
     }
   },
   "chat": {
@@ -507,7 +786,9 @@
     "logAllMeals": "Zapsat všechna jídla",
     "logged": "Zapsáno",
     "mealPlanLoggedMessage": "Jídelní plán byl zapsán na dnešek.",
-    "mealPlanLogError": "Jídelní plán se nepodařilo zapsat: {{error}}"
+    "mealPlanLogError": "Jídelní plán se nepodařilo zapsat: {{error}}",
+    "languageChanged": "Jazyk se změnil. Váš trenér AI vám nyní odpoví v angličtině.",
+    "languageChangedConfirmation": "Jazyk se změnil. Váš trenér AI vám nyní odpoví ve vámi zvoleném jazyce."
   },
   "proUpsell": {
     "title": "Odemkni plnou sílu",
@@ -542,6 +823,675 @@
         "title": "Reporty pokroku",
         "desc": "Týdenní a měsíční souhrny"
       }
+    }
+  },
+  "bariatric": {
+    "title": "Bariatrický profil",
+    "subtitle": "Podpora žaludeční manžety / bypassu",
+    "settingsButton": "Bariatrický profil",
+    "settingsDescription": "Podpora žaludeční manžety nebo bypassu",
+    "setup": {
+      "title": "Bariatrický profil",
+      "intro": "Povolte bariatrickou podporu, abyste získali cíle pro bílkoviny, tekutiny a kalorie na míru na základě vaší operace a fáze.",
+      "surgeryType": "Typ operace",
+      "surgeryTypeNone": "Žádné",
+      "surgeryTypeSleeve": "Gastrický návlek",
+      "surgeryTypeBypass": "Žaludeční bypass",
+      "surgeryDate": "Datum operace",
+      "surgeryDatePlaceholder": "YYYY-MM-DD",
+      "startWeight": "Počáteční hmotnost (kg)",
+      "goalWeight": "Cílová hmotnost (kg)",
+      "height": "Výška (cm)",
+      "enable": "Povolit bariatrickou podporu",
+      "save": "Uložit profil",
+      "delete": "Smazat bariatrický profil",
+      "deleteConfirm": "Opravdu chcete smazat svůj bariatrický profil?",
+      "disclaimer": "Důležité: Tato aplikace nenahrazuje vašeho bariatrického odborníka na výživu, lékaře nebo kliniku. Doporučení jsou obecné pokyny založené na veřejných pokynech ASMBS. Vždy dodržujte pokyny své vlastní kliniky. Okamžitě kontaktujte svého lékaře v případě dumpingového syndromu, přetrvávající nevolnosti nebo jakýchkoli obav.",
+      "acceptDisclaimer": "Chápu, že tato aplikace nenahrazuje můj tým bariatrické péče",
+      "disclaimerRequired": "Musíte přijmout prohlášení o vyloučení odpovědnosti",
+      "invalidDate": "Zadejte platné datum",
+      "missingType": "Vyberte typ operace",
+      "saved": "Profil uložen",
+      "deleted": "Profil byl smazán"
+    },
+    "dashboard": {
+      "title": "Bariatrická podpora",
+      "edit": "Upravit",
+      "phaseLabel": "Fáze proudu",
+      "daysSinceLabel": "Dny od operace",
+      "daysUntilNext": "{{days}} dní do další fáze",
+      "lastPhase": "Jste v závěrečné fázi",
+      "proteinToday": "Protein dnes",
+      "proteinProgress": "Protein dnes",
+      "fluidToday": "Tekutiny dnes",
+      "kcalRange": "Kalorie (cíl)",
+      "portionSize": "Doporučená velikost porce",
+      "medicalCheckReminder": "Zapamatujte si svou denní kontrolu {{day}}",
+      "preSurgery": "Datum operace ještě nebylo dosaženo"
+    },
+    "phases": {
+      "clearLiquid": {
+        "name": "1. týden: Čiré kapaliny",
+        "description": "Pouze čisté tekutiny: voda, vývar, šťáva bez cukru, čaj. Malé doušky po celý den."
+      },
+      "fullLiquid": {
+        "name": "2. týden: Plné tekutiny",
+        "description": "Všechny kapaliny vč. proteinové koktejly, polévka, jogurt. NEPIJTE 30 minut před/po jídle."
+      },
+      "pureed": {
+        "name": "3.–4. týden: Jídlo v pyré",
+        "description": "Směs/pyré: tvaroh, rybí pyré, míchané kuře. Důkladně žvýkejte."
+      },
+      "soft": {
+        "name": "5.–6. týden: Měkké jídlo",
+        "description": "Měkká jídla: míchaná vejce, ryby, vařená zelenina, měkké ovoce. Protein jako první, malá sousta."
+      },
+      "regular": {
+        "name": "Týden 7+: Pravidelné jídlo",
+        "description": "Běžné jídlo v malých porcích. Nejdříve bílkoviny, pak zelenina, pak sacharidy. Důkladně žvýkejte."
+      }
+    },
+    "tips": {
+      "noDrinking": "NEPIJTE 30 minut před nebo po jídle",
+      "proteinFirst": "Vždy jezte nejprve bílkoviny",
+      "chew": "Každé sousto žvýkejte 20–30krát",
+      "stopWhenFull": "Zastavte, když je plný – i u malých porcí",
+      "vitamins": "Pamatujte na své denní vitamíny"
+    },
+    "vitamins": {
+      "title": "Dnešní vitamíny",
+      "subtitle": "Pamatujte na své denní doplňky",
+      "names": {
+        "multivitamin": "Multivitamin",
+        "calciumD": "Vápník + vitamín D",
+        "iron": "Železo",
+        "b12": "B12",
+        "omega3": "Omega-3 (volitelné)"
+      },
+      "taken": "Převzato",
+      "notTaken": "Neobsazeno",
+      "allDone": "Všechny vitamíny dnes přijaté 🎉",
+      "reset": "Resetovat",
+      "optional": "volitelný"
+    },
+    "fluid": {
+      "title": "Příjem tekutin dnes",
+      "subtitle": "Pijte mezi jídly, ne spolu",
+      "goal": "Cíl",
+      "current": "Dnes",
+      "remaining": "Zbývající",
+      "add250": "+ 250 ml",
+      "add500": "+ 500 ml",
+      "addCustom": "Přidat",
+      "reset": "Resetovat",
+      "goalReached": "Dosáhli jste svého tekutého cíle 💧",
+      "warning": "Pamatujte na malé doušky – ne velké množství najednou"
+    },
+    "meals": {
+      "title": "Návrhy pro vás",
+      "subtitle": "Na míru vaší fázi",
+      "kcal": "kcal",
+      "protein": "g proteinu",
+      "prep": "min",
+      "logIt": "Log",
+      "types": {
+        "fluid": "Kapalina",
+        "puree": "Pyré",
+        "soft": "Měkké krmivo",
+        "normal": "Normální jídlo"
+      },
+      "items": {
+        "water": "Voda",
+        "brothClear": "Čirý vývar",
+        "sugarFreeJuice": "Šťáva bez cukru (zředěná)",
+        "herbalTea": "Bylinný čaj",
+        "proteinShake": "Proteinový koktejl",
+        "skimmedMilk": "Odstředěné mléko",
+        "thinSoup": "Řídká polévka (pasírovaná)",
+        "skyrThin": "Tenký skyr",
+        "mashedFish": "Rybí kaše",
+        "cottageCheese": "Tvaroh",
+        "eggPuree": "Vaječné pyré",
+        "pureedChicken": "Kuřecí pyré",
+        "mashedTofu": "Šťouchané tofu",
+        "softFish": "Měkká ryba",
+        "scrambledEgg": "Míchaná vejce",
+        "softChicken": "Křehké kuře",
+        "wellCookedVeggies": "Dobře uvařená zelenina",
+        "greekYogurt": "Řecký jogurt",
+        "grilledChicken": "Grilovaná kuřecí prsa",
+        "salmonFillet": "Filet z lososa",
+        "eggOmelette": "Omeleta",
+        "lentilSoup": "Čočková polévka",
+        "leanBeef": "Libové hovězí maso"
+      },
+      "reminders": {
+        "title": "Pamatujte při jídle",
+        "proteinFirst": "Nejprve jezte bílkoviny",
+        "chew": "Žvýkejte 20–30krát",
+        "noDrinking": "Nepijte 30 minut před/po jídle",
+        "stopWhenFull": "Zastavit, když je plný",
+        "smallSips": "Pijte po malých doušcích",
+        "noStraw": "Žádná brčka (vzduch v žaludku)",
+        "slowly": "Pijte pomalu",
+        "mashWell": "Důkladně rozmačkejte",
+        "newFoodOneAtATime": "Zavádějte vždy jedno nové jídlo",
+        "chewExtra": "Žvýkejte extra důkladně",
+        "mindfulEating": "Jezte pomalu a pozorně",
+        "avoidEmptyCalories": "Vyhněte se prázdným kaloriím"
+      }
+    },
+    "dumping": {
+      "title": "Riziko dumpingového syndromu",
+      "subtitle": "Na základě dnešních jídel",
+      "low": "Nízké riziko",
+      "medium": "Buďte si vědomi",
+      "high": "Vysoké riziko",
+      "lowDesc": "Dnešní jídla vypadají dobře",
+      "mediumDesc": "Jedno nebo více jídel může spustit vypouštění. Sledujte příznaky.",
+      "highDesc": "Dnes několik vysoce rizikových jídel. Kontaktujte svého lékaře, pokud zaznamenáte nevolnost, rychlý srdeční tep, závratě nebo průjem.",
+      "flaggedCount": "{{count}} jídlo označeno",
+      "flaggedCount_plural": "Jídla {{count}} označena",
+      "reasons": {
+        "sugarHigh": "Příliš mnoho cukru",
+        "sugarMedium": "Střední obsah cukru",
+        "fatHigh": "Vysoký obsah tuku",
+        "carbsNoProtein": "Sacharidy bez bílkovin",
+        "carbsHigh": "Vysoký příjem sacharidů",
+        "carbsMedium": "Mírný příjem sacharidů",
+        "proteinLow": "Příliš nízký příjem bílkovin"
+      },
+      "info": "Dumping je nejčastější po bypassu žaludku a je spuštěn cukrem, tukem nebo rychle vstřebatelnými sacharidy. Příznaky: nevolnost, zrychlený tep, závratě, průjem 15-30 min po jídle."
+    },
+    "training": {
+      "title": "Přizpůsobený trénink",
+      "subtitle": "Doporučená aktivita pro vaši fázi",
+      "currentPhase": "Vaše tréninková fáze",
+      "daysUntilNext": "{{days}} dní do další tréninkové fáze",
+      "maxDuration": "Maximální doba trvání",
+      "maxHeartRate": "Maximální tepová frekvence",
+      "min": "min",
+      "ofMax": "max. HR",
+      "intensityLabel": {
+        "veryLight": "Velmi lehký",
+        "light": "Světlo",
+        "moderate": "Střední",
+        "normal": "Normální"
+      },
+      "phaseNames": {
+        "1": "Obnova (týden 0-2)",
+        "2": "Opatrný začátek (týden 2-4)",
+        "3": "Světelná aktivita (4.–6. týden)",
+        "4": "Sestavování (6.–8. týden)",
+        "5": "Normální trénink (týden 8+)"
+      },
+      "phaseDesc": {
+        "1": "Držte se krátkých procházek a hlubokých dechových cvičení. Poslouchejte své tělo a hodně odpočívejte.",
+        "2": "Můžete trochu zvýšit chůzi. Stále žádný silový trénink nebo intenzivní cvičení.",
+        "3": "Můžete začít jezdit na kole a plavat (až se rány zahojí). Stále žádný běh ani těžké váhy.",
+        "4": "Čas představit lehký silový trénink a delší kardio. Začněte s malými váhami.",
+        "5": "Můžete se vrátit k normálnímu tréninku – ale stále budujte postupně a sledujte svou energii."
+      },
+      "allowed": "Doporučeno",
+      "notRecommended": "Vyhněte se hned",
+      "activities": {
+        "walkShort": "Krátká procházka (5–10 minut)",
+        "walkMedium": "Střední chůze (15–20 minut)",
+        "walkLong": "Dlouhá chůze (30+ min.)",
+        "breathing": "Dechová cvičení",
+        "gentleStretch": "Jemné protažení",
+        "cycling": "Cyklistika",
+        "swimming": "Plavání",
+        "lightStrength": "Lehký silový trénink",
+        "strength": "Silový trénink",
+        "jog": "Lehké běhání",
+        "running": "Běží",
+        "highIntensity": "Vysoce intenzivní trénink",
+        "heavyLifting": "Těžké zvedání",
+        "extremeIntensity": "Extrémní intenzita"
+      },
+      "warnings": {
+        "title": "Důležité k zapamatování",
+        "noLifting": "Žádné těžké zvedání (nad 5 kg)",
+        "staySoftMovements": "Držte se měkkých, pomalých pohybů",
+        "avoidSwimmingUntilHealed": "Vyhněte se plavání, dokud se vaše rány nezahojí (obvykle 3-4 týdny)",
+        "lightWeightsOk": "Lehké váhy (2-5 kg) jsou po poradě s lékařem v pořádku",
+        "startStrengthGradually": "Začněte silový trénink s nízkými váhami a vysokým počtem opakování",
+        "stillBuildGradually": "Stále budujte postupně – vyhněte se náhlým velkým nárůstům",
+        "hydration": "Pamatujte na tekutiny před, během a po tréninku"
+      },
+      "safety": {
+        "activityNotRecommended": "{{activity}} se ve vaší fázi nedoporučuje. Poraďte se se svým lékařem.",
+        "durationTooLong": "Doporučená doba trvání je maximálně {{max}} min. Plánovali jste {{actual}} min.",
+        "checkWithDoctor": "Pokud pociťujete bolest, nevolnost nebo vyčerpání, kontaktujte svého lékaře"
+      },
+      "disclaimer": "Doporučení jsou pouze orientační. Vždy dodržujte pokyny své vlastní kliniky."
+    }
+  },
+  "diabetes": {
+    "title": "Profil diabetu",
+    "subtitle": "Typ 1, Typ 2 nebo prediabetes",
+    "settingsButton": "Profil diabetu",
+    "settingsDescription": "Typ 1, Typ 2 nebo prediabetes – dieta, hladina cukru v krvi a cvičení",
+    "setup": {
+      "title": "Profil diabetu",
+      "intro": "Povolte podporu diabetu, abyste získali přizpůsobené návrhy jídel, pokyny pro hladinu cukru v krvi a doporučení týkající se cvičení.",
+      "type": "Typ diabetu",
+      "typeT1": "Typ 1",
+      "typeT2": "Typ 2",
+      "typePre": "Prediabetes",
+      "typeGest": "Gestační diabetes",
+      "treatment": "Léčba",
+      "txNone": "Žádné",
+      "txDiet": "Pouze dieta/životní styl",
+      "txMetformin": "Metformin",
+      "txOral": "Jiné perorální léky",
+      "txGLP1": "GLP-1 (Ozempic/Wegovy/Mounjaro)",
+      "txBasal": "Bazální inzulín",
+      "txBolus": "Bazální + bolusový inzulín",
+      "txPump": "Inzulínová pumpa",
+      "diagnosisDate": "Datum diagnostiky (volitelné)",
+      "datePlaceholder": "YYYY-MM-DD",
+      "hba1c": "HbA1c (mmol/mol, volitelné)",
+      "countCarbs": "Počítám sacharidy",
+      "carbRatio": "Poměr inzulin/sacharid (g/U, volitelný)",
+      "carbRatioHelp": "Např. 10 = 1 jednotka inzulínu pokryje 10 g sacharidů. Aplikace nikdy nedávkuje – toto číslo je pouze informativní.",
+      "correctionFactor": "Korekční faktor (mmol/l na U, volitelný)",
+      "preExerciseMin": "Minimální hladina cukru v krvi před cvičením (mmol/l)",
+      "enable": "Povolit podporu diabetu",
+      "acceptDisclaimer": "Přijímám výše uvedené vyloučení odpovědnosti",
+      "disclaimerRequired": "Musíte přijmout prohlášení o vyloučení odpovědnosti",
+      "missingType": "Vyberte typ diabetu",
+      "save": "Uložit profil",
+      "saved": "Profil uložen",
+      "delete": "Smazat profil diabetu",
+      "deleted": "Profil byl smazán",
+      "deleteConfirm": "Opravdu chcete smazat svůj diabetický profil?",
+      "disclaimer": "DŮLEŽITÉ: Tato aplikace nenahrazuje vašeho lékaře nebo diabetologický tým. NIKDY nenavrhujeme konkrétní dávky inzulínu nebo změny léků. Nikdy neupravujte svou léčbu pouze na základě doporučení aplikace. V případě pochybností vždy kontaktujte svého poskytovatele zdravotní péče."
+    }
+  },
+  "bloodSugar": {
+    "title": "Krevní cukr",
+    "settingsButton": "Záznam cukru v krvi",
+    "settingsDescription": "Zaznamenejte svá měření a sledujte trendy v průběhu času",
+    "add": "Přidat čtení",
+    "save": "Uložit",
+    "history": "Historie",
+    "empty": "Zatím žádné údaje. Klepnutím na tlačítko výše zaznamenejte své první měření.",
+    "disclaimer": "Tato čísla jsou pouze pro vaši informaci. Vzorce vždy prodiskutujte se svým lékařem nebo diabetologickým týmem.",
+    "valueLabel": "Krevní cukr (mmol/l)",
+    "contextLabel": "Kontext",
+    "noteLabel": "Poznámka (volitelné)",
+    "notePlaceholder": "Např. po snídani",
+    "errInvalidTitle": "Neplatná hodnota",
+    "errInvalidBody": "Zadejte hodnotu cukru v krvi mezi 1,0 a 40,0 mmol/l.",
+    "errSaveTitle": "Nelze uložit",
+    "deleteTitle": "Smazat čtení",
+    "deleteBody": "Jste si jisti? Dlouhým stisknutím smažete.",
+    "ctx": {
+      "fasting": "Půst",
+      "preMeal": "Před jídlem",
+      "postMeal": "Po jídle",
+      "bedtime": "Před spaním",
+      "preExercise": "Před cvičením",
+      "postExercise": "Po cvičení",
+      "random": "Náhodně"
+    },
+    "range": {
+      "1d": "1 den",
+      "7d": "7 dní",
+      "30d": "30 dní",
+      "90d": "90 dní"
+    },
+    "stat": {
+      "avg": "Průměr",
+      "min": "Min",
+      "max": "Max",
+      "tir": "Čas v rozsahu",
+      "target": "Cíl",
+      "measurements": "čtení"
+    }
+  },
+  "healthScore": {
+    "title": "Skóre zdraví",
+    "todayLabel": "Dnešní skóre",
+    "A": "Velmi zdravé",
+    "B": "Zdravé",
+    "C": "Střední",
+    "D": "Méně zdravé",
+    "E": "Nezdravé"
+  },
+  "units": {
+    "g": "g",
+    "kg": "kg",
+    "ml": "ml",
+    "dl": "dl",
+    "l": "l",
+    "tsk": "lžička",
+    "spsk": "polévková lžíce",
+    "stk": "ks",
+    "skive": "plátek",
+    "portion": "část"
+  },
+  "logMeal": {
+    "amount": "Částka",
+    "unit": "Jednotka",
+    "approxGrams": "≈ {{grams}}g"
+  },
+  "home": {
+    "greeting": {
+      "morning": "Dobré ráno",
+      "day": "Dobrý den",
+      "evening": "Dobrý večer",
+      "night": "Dobrou noc"
+    },
+    "coach": {
+      "restDay": "Dnes je den odpočinku – užijte si zotavení!",
+      "todayWorkout": "Dnešní plán zahrnuje {{workout}}.",
+      "nextWorkout": "Další trénink: {{workout}}.",
+      "ready": "Jste připraveni začít? Zeptejte se mě na plánování, výživu nebo motivaci.",
+      "askForHelp": "Zeptejte se mě na cokoliv, pokud potřebujete pomoc."
+    },
+    "chat": {
+      "placeholder": "Zeptejte se svého trenéra AI...",
+      "todayPlanPrompt": "Jaký je můj plán na dnešek?"
+    },
+    "todayPlan": "Dnešní plán",
+    "startTraining": "Začněte cvičit",
+    "nextTraining": "Další trénink",
+    "today": "Dnes",
+    "training": "Cvičení",
+    "todayOverview": "Dnešní přehled",
+    "week": "Týden",
+    "milestone": "Milník",
+    "toGoal": "do cíle {{distance}} km"
+  },
+  "progress": {
+    "weeks": "Týdny",
+    "months": "Měsíce",
+    "weekLabel": "Týden {{week}}, {{year}}",
+    "weekShort": "W{{week}}",
+    "activities": "Činnosti",
+    "empty": "Zatím žádné aktivity – jděte ven a běžte!",
+    "noRoute": "Nebyla zaznamenána žádná trasa",
+    "standardTraining": "Standardní trénink",
+    "steps": "Kroky",
+    "duration": "Doba trvání",
+    "caloriesShort": "kal",
+    "activityTypes": {
+      "walk": "Procházka",
+      "cycling": "Cyklistika",
+      "run": "Spustit"
+    }
+  },
+  "workoutLabels": {
+    "rest": "Odpoč",
+    "injuryRest": "Odpočinek kvůli zranění"
+  },
+  "calendar": {
+    "monthSummary_one": "{{count}} běh · {{km}} km",
+    "monthSummary_other": "{{count}} jízdy · {{km}} km",
+    "completed": "Dokončeno",
+    "planned": "Plánováno",
+    "missed": "Chybí",
+    "plannedKm": "Naplánováno {{km}} km",
+    "emptyDay": "Na tento den není plánován žádný běh ani trénink"
+  },
+  "motionPicker": {
+    "title": "Kardio",
+    "what": "Co byste chtěli dělat?",
+    "where": "Kde?",
+    "run": "Spustit",
+    "walk": "Procházka",
+    "cycling": "Cyklistika",
+    "runLocation": "Venkovní nebo běžecký pás",
+    "bikeLocation": "Venkovní nebo vnitřní",
+    "outdoor": "Venkovní",
+    "outdoorDescription": "GPS sledování · trasy · tempo",
+    "indoor": "Vnitřní",
+    "indoorDescription": "Běžecký pás · počítadlo kroků · manuální vzdálenost"
+  },
+  "activityPicker": {
+    "title": "Vyberte cvičení",
+    "intro": "Co chcete zaznamenat?",
+    "options": {
+      "mobility": {
+        "label": "Mobilita / Jóga",
+        "description": "Strečink, jóga, pěnové rolování"
+      },
+      "bike": {
+        "label": "Cyklistika",
+        "description": "Vnitřní nebo venkovní"
+      },
+      "other": {
+        "label": "Jiná činnost",
+        "description": "Padel, fotbal, plavání..."
+      }
+    }
+  },
+  "logActivity": {
+    "types": {
+      "strength": "Silový trénink",
+      "mobility": "Mobilita / Jóga",
+      "bike": "Cyklistika",
+      "other": "Jiná činnost"
+    },
+    "invalidDuration": "Zadejte platnou dobu trvání v minutách",
+    "savedTitle": "Uloženo!",
+    "savedMessage": "{{activity}} přihlášeno ({{duration}} min, {{calories}} kcal)",
+    "saveError": "Nelze uložit: {{error}}",
+    "logActivity": "Zaznamenejte svůj {{activity}}",
+    "duration": "Délka (minuty) *",
+    "calories": "Kalorie (volitelné – jinak se počítají automaticky)",
+    "calorieEstimate": "≈ {{calories}} kcal vypočteno z {{weight}} kg, RPE {{rpe}}",
+    "effort": "Úsilí (RPE 1–10)",
+    "notes": "Poznámky (volitelné)",
+    "notesPlaceholder": "Například cviky, váha, sestavy...",
+    "save": "Uložit cvičení"
+  },
+  "treadmill": {
+    "invalidValueTitle": "Neplatná hodnota",
+    "invalidValueMessage": "Zadejte číslo, například 5.2",
+    "noDistanceTitle": "Žádná vzdálenost",
+    "noDistanceMessage": "Přidejte vzdálenost ručně nebo pokračujte, dokud nebude možné měřit kroky.",
+    "finishTitle": "Dokončit a uložit?",
+    "finishMessage": "Vzdálenost: {{distance}} km · Čas: {{time}} · {{calories}} kcal",
+    "walkNote": "Vnitřní chůze (běžecký pás)",
+    "runNote": "Vnitřní běh (běžecký pás)",
+    "savedTitle": "Uloženo! 🏃",
+    "savedMessage": "{{distance}} km v {{time}} · {{calories}} spáleno kcal.",
+    "saveError": "Nelze uložit",
+    "discardTitle": "Zahodit trénink?",
+    "discardMessage": "Všechna data z tohoto cvičení budou ztracena.",
+    "keep": "Zachovat",
+    "discard": "Vyřadit",
+    "walkTitle": "Běžecký pás · Procházka",
+    "runTitle": "Běžecký pás · Běh",
+    "pedometerActive": "Krokoměr aktivní",
+    "pedometerUnavailable": "Počítadlo kroků není k dispozici",
+    "steps": "KROKY",
+    "speed": "Rychlost",
+    "adjustDistance": "Upravte vzdálenost",
+    "adjustHint": "Přidejte vzdálenost ručně z displeje běžeckého pásu",
+    "enterExactDistance": "Zadejte přesnou vzdálenost od běžeckého pásu",
+    "instructionsTitle": "Jak používat sledovač",
+    "instructions": "1. Stiskněte START, když začnete na běžeckém pásu\n2. Přidejte vzdálenost pomocí tlačítek +0,1 / +0,5 / +1,0\n3. Nebo zadejte přesnou vzdálenost po dokončení\n4. Kroky se počítají automaticky, když nosíte telefon",
+    "saving": "Ukládání...",
+    "exactDistanceTitle": "Zadejte přesnou vzdálenost",
+    "exactDistanceHint": "Přečtěte si displej běžeckého pásu a zadejte vzdálenost v km",
+    "apply": "Použít"
+  },
+  "statsPage": {
+    "hoursShort": "h",
+    "minutesShort": "m",
+    "now": "Nyní",
+    "weeksAgoShort": "{{count}}w",
+    "emptyTitle": "Zatím žádné statistiky",
+    "emptyMessage": "Spusťte svůj první běh, abyste zde viděli svá data.",
+    "period4Weeks": "4 týdny",
+    "period3Months": "3 měsíce",
+    "bestPace": "Nejlepší tempo",
+    "dayStreak": "Denní série",
+    "weeklyGoal": "Týdenní cíl",
+    "ofGoal": "cíle {{goal}} km",
+    "goalReached": "Cíl dosažen!",
+    "kmRemaining": "Zbývá {{km}} km",
+    "milestone": "Milník",
+    "toMilestone": "{{remaining}} km až {{milestone}} km",
+    "kmPerWeek": "KM ZA TÝDEN",
+    "kmPerMonth": "KM ZA MĚSÍC",
+    "avgDistance": "Průměrná vzdálenost",
+    "kmPerRun": "km na jízdu",
+    "totalTime": "Celkový čas",
+    "moving": "pohybující se",
+    "longestRun": "Nejdelší běh",
+    "runsPerWeekday": "Běží každý den v týdnu",
+    "activityRings": "Aktivní kroužky",
+    "kmGoal": "CÍL KM",
+    "distance": "Vzdálenost",
+    "activity": "Aktivita",
+    "days": "DNY",
+    "streak": "Pruh",
+    "activityTypes": "Typy aktivit",
+    "types": {
+      "run": "Spustit",
+      "walk": "Procházka",
+      "bike": "Cyklistika"
+    }
+  },
+  "privacyPage": {
+    "title": "Zásady ochrany osobních údajů",
+    "updated": "Poslední aktualizace: duben 2026",
+    "intro": "Ve společnosti RunWithAI bereme vaše soukromí vážně. Tyto zásady vysvětlují, jak shromažďujeme, používáme a chráníme vaše osobní údaje.",
+    "sections": [
+      {
+        "title": "Správce dat",
+        "paragraphs": [
+          "RunWithAI odpovídá za zpracování vašich osobních údajů. Pokud máte dotazy, kontaktujte nás na adrese privacy@runwithai.app."
+        ]
+      },
+      {
+        "title": "Data, která shromažďujeme",
+        "paragraphs": [
+          "Shromažďujeme následující typy údajů:"
+        ],
+        "bullets": [
+          "Informace o účtu: e-mail, jméno, věk a pohlaví",
+          "Fyzické údaje: hmotnost a výška (volitelné)",
+          "Údaje o cvičení: aktivity, vzdálenost, tempo, srdeční frekvence a trasy GPS",
+          "Použití aplikace: preference, cíle a úroveň",
+          "Platební údaje: bezpečně zpracovány App Store nebo Google Play"
+        ]
+      },
+      {
+        "title": "Jak používáme vaše data",
+        "paragraphs": [
+          "Vaše údaje používáme k:"
+        ],
+        "bullets": [
+          "Poskytujte personalizované tréninkové plány AI",
+          "Analyzujte své tréninky a pokroky",
+          "Zlepšete naše služby",
+          "Odesílejte příslušná oznámení a aktualizace",
+          "Spravujte platby a předplatné"
+        ]
+      },
+      {
+        "title": "Integrace třetích stran",
+        "paragraphs": [
+          "RunWithAI se může integrovat s Garmin Connect a importovat data o běhu. Když jste připojeni, získáváme pouze data o cvičení – nikdy ne vaše přihlašovací údaje."
+        ]
+      },
+      {
+        "title": "Sdílení dat",
+        "paragraphs": [
+          "Vaše data nikdy neprodáváme. Údaje sdílíme pouze s:"
+        ],
+        "bullets": [
+          "Apple/Google: bezpečné zpracování plateb",
+          "OpenAI: anonymizované koučování AI",
+          "Poskytovatelé hostingu: Vercel a Railway pro ukládání dat"
+        ]
+      },
+      {
+        "title": "Zabezpečení dat",
+        "paragraphs": [
+          "Používáme průmyslová standardní ochranná opatření, včetně:"
+        ],
+        "bullets": [
+          "HTTPS šifrování pro všechna připojení",
+          "Bezpečné hašování hesel pomocí bcrypt",
+          "JWT tokeny pro ověřování",
+          "Pravidelné aktualizace zabezpečení"
+        ]
+      },
+      {
+        "title": "Vaše práva",
+        "paragraphs": [
+          "Máte právo:"
+        ],
+        "bullets": [
+          "Získejte přístup k vašim datům",
+          "Opravte nepřesné informace",
+          "Smažte svůj účet a všechna data",
+          "Exportujte svá data jako CSV",
+          "Odebrat souhlas"
+        ]
+      },
+      {
+        "title": "Uchovávání dat",
+        "paragraphs": [
+          "Vaše data uchováváme, dokud je váš účet aktivní. Pokud svůj účet smažete, všechna data budou odstraněna do 30 dnů."
+        ]
+      },
+      {
+        "title": "Soubory cookie a sledování",
+        "paragraphs": [
+          "Používáme minimum souborů cookie, abychom vás udrželi přihlášeni. Nepoužíváme sledovací nebo reklamní soubory cookie třetích stran."
+        ]
+      },
+      {
+        "title": "Soukromí dětí",
+        "paragraphs": [
+          "RunWithAI není určen pro děti mladší 13 let a vědomě neshromažďujeme data od dětí mladších tohoto věku."
+        ]
+      },
+      {
+        "title": "Změny zásad",
+        "paragraphs": [
+          "Tyto zásady můžeme čas od času aktualizovat. O podstatných změnách vás budeme informovat v aplikaci nebo e-mailem."
+        ]
+      },
+      {
+        "title": "Kontakt"
+      }
+    ],
+    "contactQuestion": "Máte otázky týkající se těchto zásad nebo vašich údajů?",
+    "footer": "© 2026 RunWithAI. Všechna práva vyhrazena."
+  },
+  "more": {
+    "title": "Více",
+    "subtitle": "Všechny vaše nástroje na jednom místě",
+    "sections": {
+      "account": "Účet",
+      "statistics": "Statistika",
+      "setup": "Nastavení",
+      "app": "App"
+    },
+    "newBadge": "Nové",
+    "menu": {
+      "profile": "Profil",
+      "profileSubtitle": "Osobní informace, cíle, srdeční frekvence a zranění",
+      "statistics": "Statistiky",
+      "statisticsSubtitle": "Celková vzdálenost, nejlepší tempo a milníky",
+      "goals": "Cíle",
+      "goalsSubtitle": "Týdenní cíle a typy cvičení",
+      "settings": "Nastavení",
+      "settingsSubtitle": "Úroveň, jazyk, profil a upozornění",
+      "privacy": "Ochrana osobních údajů",
+      "privacySubtitle": "Vaše data a práva",
+      "upgrade": "Upgradujte na PRO",
+      "upgradeSubtitle": "Odemkněte všechny funkce"
     }
   }
 }

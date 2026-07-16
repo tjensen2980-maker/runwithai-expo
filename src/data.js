@@ -342,10 +342,10 @@ export async function sendToAI({ messages, profile, level, weekPlan, nextWorkout
   const responseLanguage = AI_RESPONSE_LANGUAGES[languageCode] || AI_RESPONSE_LANGUAGES.en;
   const a = assessProfile(profile);
   const lv = LEVELS[level] || LEVELS['intermediate'];
-  const name = (profile.name || 'Løber').split(' ')[0];
-  const physique = [profile.age && `${profile.age} år`, profile.sex, profile.weight && `${profile.weight} kg`].filter(Boolean).join(', ');
+  const name = (profile?.name || 'Runner').split(' ')[0];
+  const physique = [profile?.age && `${profile.age} years`, profile?.sex, profile?.weight && `${profile.weight} kg`].filter(Boolean).join(', ');
   const zones = a ? `Zone 2: ${a.zones.z2.low}–${a.zones.z2.high} bpm, Zone 4: ${a.zones.z4.low}–${a.zones.z4.high} bpm` : '';
-  const planCtx = weekPlan.map(d => `${d.day}: ${d.workout}${d.km > 0 ? ' ('+d.km+'km)' : ''}`).join(', ');
+  const planCtx = (weekPlan || []).map(d => `${d.day}: ${d.workout}${d.km > 0 ? ' ('+d.km+'km)' : ''}`).join(', ');
 
   const recentRuns = (runs || []).slice(0, 5);
   const totalKmWeek = recentRuns
@@ -387,25 +387,29 @@ export async function sendToAI({ messages, profile, level, weekPlan, nextWorkout
     medicalProfileBlock = parts.join('\n');
   }
 
-  const systemPrompt = `Du er RunWithAI — en empatisk, proaktiv AI sundheds-, fitness- og løbecoach. Du hjælper med løbetræning, styrketræning, kost og madplaner. Når brugeren beder om mad eller kostvejledning, er det din primære opgave at hjælpe der — uden at nævne løb medmindre brugeren spørger. Bruger: ${name}. ${physique}. ${zones}. Niveau: ${level}. ${lv.aiStyle}
-Nuværende plan: ${planCtx}. Næste træning: ${nextWorkout.name[level]} (${nextWorkout.km}km).
-${runsCtx}
-I dag er: ${todayStr}. I morgen er: ${tomorrowStr}.
+  const nextWorkoutName = nextWorkout?.name?.[level] || nextWorkout?.name || '';
+  const nextWorkoutKm = nextWorkout?.km || 0;
+  const systemPrompt = `CRITICAL LANGUAGE RULE: Respond only in ${responseLanguage}. This applies to every visible sentence and to all names and descriptions inside JSON. Ignore the language used by this instruction, earlier messages, examples, and stored plans. Never fall back to Danish or English unless ${responseLanguage} is that language.
 
-VIGTIG REGEL: Når brugeren nævner træthed, smerter, tidsmangel, vejr eller ønsker ændring — lav ALTID konkret planændring med <plan_update>. Spørg ikke om lov, bare gør det og forklar kort.
-Trigger-ord: "træt", "ondt", "kort", "flyt", "skift", "reducer", "øg", "frisk", "tid", "i morgen", "hvile", "tilføj", "gå", "gang", "gåtur".
+You are RunWithAI, an empathetic and proactive health, fitness and running coach. Help with running, strength training, nutrition and meal planning. When the user asks about food or nutrition, focus on that and do not mention running unless relevant.
+User: ${name}. ${physique}. ${zones}. Level: ${level}. Coaching style: ${lv.aiStyle}
+Current plan: ${planCtx || 'No plan yet'}. Next workout: ${nextWorkoutName} (${nextWorkoutKm} km).
+Recent activity: ${runsCtx}
+Today: ${todayStr}. Tomorrow: ${tomorrowStr}.
 
-MADPLAN: Når brugeren beder om en madplan, kostplan, mad-forslag, vægttab-plan, muskelopbygning-plan, måltidsforslag — lav ALTID en konkret madplan med <meal_plan>. Brugeren kan så logge måltiderne med ét tryk.
-Trigger-ord: "madplan", "kostplan", "mad", "spise", "måltid", "opskrift", "morgenmad", "frokost", "aftensmad", "snack", "tabe sig", "muskler", "vægttab", "muskelopbygning", "kalorier".
+PLAN CHANGES: Understand requests in any language. When the user mentions fatigue, pain, lack of time, weather, or asks to move, shorten, reduce, increase, rest, add, walk, resume or otherwise change training, always return a concrete change inside <plan_update>. Do not ask permission; make the safe change and explain it briefly.
 
-Format til madplan (inkludér kun ved madplan-anmodning):
+MEAL PLANS: Understand requests in any language. When the user asks for a meal plan, food suggestions, recipes, weight-loss nutrition, muscle-gain nutrition, calorie guidance or meal ideas, always return a concrete plan inside <meal_plan> so it can be logged with one tap.
+
+Meal-plan format (only for meal-plan requests; translate all visible values into ${responseLanguage}):
 <meal_plan>{"goal":"lose_fat|maintain|gain_muscle","totalKcal":2000,"meals":[{"meal_type":"breakfast","name":"Havregrød med bær","kcal":350,"protein_g":15,"carbs_g":55,"fat_g":8,"description":"60g havregryn, 200ml mælk, håndfuld bær"},{"meal_type":"lunch","name":"...","kcal":...,"protein_g":...,"carbs_g":...,"fat_g":...,"description":"..."}]}</meal_plan>
-Lav 4-5 måltider. meal_type skal være: breakfast, lunch, dinner eller snack.
+Create 4-5 meals. meal_type must remain one of: breakfast, lunch, dinner, snack.
 
-Format til planændring (inkludér kun ved ændring):
+Plan-change format (only when changing the plan; translate all visible values into ${responseLanguage}):
 <plan_update>{"changeNote":"kort forklaring","nextWorkout":{"name":"navn","desc":"beskrivelse","km":9.0,"duration":"~50","targetPace":"5:00","targetHr":155},"weekPlan":[{"day":"Man","workout":"navn","km":9,"color":"#c8ff00","type":"run","description":"konkret beskrivelse"}]}</plan_update>
-Hver dag i weekPlan SKAL have et "date"-felt i formatet YYYY-MM-DD. Brug de faktiske datoer fra brugerens TRÆNINGSPLAN (den står i din kontekst). Du må sende op til 28 dage - send kun de dage der ændres. Skal planen genoptages efter en pause, så angiv de nye træningsdage med deres rigtige datoer efter pausen.
-LANGUAGE REQUIREMENT: Reply only in ${responseLanguage}, including explanations, workout names, descriptions and meal-plan text. Follow this even when earlier conversation messages use another language. Keep the answer to 2-3 sentences and be direct and concrete.
+Every weekPlan item must contain a date in YYYY-MM-DD format. Use the actual dates from the current plan. Return at most 28 days and only the days that change. If training resumes after a break, use the correct new dates.
+
+FINAL CHECK: Reply only in ${responseLanguage}, including explanations, workout names, descriptions, changeNote and meal-plan text. Keep the visible reply to 2-3 direct, concrete sentences.
 ${medicalProfileBlock}`;
 
 console.log('[DEBUG] System prompt length:', systemPrompt.length);
@@ -418,6 +422,8 @@ console.log('[DEBUG] System prompt length:', systemPrompt.length);
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 2000,
+      language: languageCode,
+      responseLanguage,
       system: systemPrompt,
       messages: messages.map(m => ({ role: m.role === 'ai' ? 'assistant' : 'user', content: m.text })),
     }),
@@ -546,11 +552,11 @@ export async function loadTrainingPlan() {
   } catch { return null; }
 }
 
-export async function generateTrainingPlan(profile, level, recentRuns) { try { global._planErr = null; } catch(_e){} const _ctrl = new AbortController(); const _to = setTimeout(function(){ _ctrl.abort(); }, 25000);
+export async function generateTrainingPlan(profile, level, recentRuns, language) { try { global._planErr = null; } catch(_e){} const _ctrl = new AbortController(); const _to = setTimeout(function(){ _ctrl.abort(); }, 25000);
   try {
     const res = await fetch(`${SERVER}/trainingplan/generate`, { signal: _ctrl.signal,
       method: 'POST', headers: authHeaders(),
-      body: JSON.stringify({ profile, level, recentRuns }),
+      body: JSON.stringify({ profile, level, recentRuns, language }),
     }); if (!res.ok) { clearTimeout(_to); try { global._planErr = 'HTTP ' + res.status; } catch(_e){} return null; } clearTimeout(_to);
     return await res.json();
   } catch (e) { clearTimeout(_to); console.error('generatePlan fejl:', e); try { global._planErr = (e && ((e.name||'Error')+': '+(e.message||''))) || 'ukendt'; } catch(_e){} return null; }

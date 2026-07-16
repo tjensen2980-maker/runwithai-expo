@@ -1,4 +1,4 @@
-﻿{
+{
   "coachIntro": {
     "title": "Jūsų DI treneris",
     "qName": "Sveiki! Esu jūsų asmeninis DI bėgimo treneris 🏃 Prieš pradėdami norėčiau jus šiek tiek pažinti. Koks jūsų vardas?",
@@ -55,7 +55,11 @@
     "lastActivity": "Paskutinė veikla",
     "gpsTracking": "GPS sekimas",
     "walkTracking": "Ėjimo sekimas",
-    "aiRoutes": "AI maršrutai"
+    "aiRoutes": "AI maršrutai",
+    "motionTitle": "Kardio",
+    "motionActivities": "Bėgimas · Vaikščiojimas · Važiuokite dviračiu",
+    "trainingTitle": "Mokymai",
+    "trainingActivities": "Jėga, mobilumas ir dar daugiau"
   },
   "pro": {
     "badge": "PRO",
@@ -86,6 +90,10 @@
     "aiRoutes": {
       "title": "AI maršrutai",
       "description": "Gauk maršrutų rekomendacijas pagal savo treniruotes"
+    },
+    "nutrition": {
+      "title": "Kalorijų stebėjimo priemonė",
+      "description": "Skaičiuokite kalorijas, registruokite maistą ir nuskaitykite brūkšninius kodus"
     }
   },
   "stats": {
@@ -146,44 +154,85 @@
     "height": "ŪGIS",
     "years": "Metų",
     "runningLevel": "BĖGIMO LYGIS",
-    "levels.beginner": "Pradedantysis",
-    "levels.intermediate": "Vidutinis",
-    "levels.advanced": "Pažengęs",
     "yourGoals": "KOKIE TAVO TIKSLAI",
-    "goals.health": "Sveikata",
-    "goals.weight": "Svorio metimas",
-    "goals.distance": "Bėgti toliau",
-    "goals.speed": "Tapti greitesniu",
-    "goals.race": "Bėgti varžybas",
-    "goals.fun": "Pramoga",
     "weeklyGoalKm": "SAVAITINIS KM TIKSLAS",
     "weeklyGoalExample": "Pvz. 20",
     "unlockFullPower": "Atrakinti pilną prieigą",
     "unlockDesc": "Gauk prieigą prie visų funkcijų ir pasiek tikslus greičiau",
-    "proFeatures.aiCoachDesc": "AI Treneris",
-    "proFeatures.statsDesc": "Statistika",
-    "proFeatures.goalsDesc": "Tikslai",
-    "proFeatures.routesDesc": "Maršrutai",
-    "proFeatures.chatDesc": "AI Pokalbis",
-    "proFeatures.reportsDesc": "Ataskaitos",
     "price": "49 kr",
     "guarantee": "✓ Atšauk bet kada • ✓ 7 dienos nemokamai",
     "perMonth": "/mėnesį",
     "startFreeTrial": "Pradėti nemokamą bandomąjį laikotarpį",
     "continueWithFree": "Tęsti su nemokama versija",
-    "levels.beginnerDesc": "Naujas bėgime arba pradedi po ilgos pertraukos",
-    "levels.intermediateDesc": "Bėgioji reguliariai ir nori tobulėti",
-    "levels.advancedDesc": "Patyręs bėgikas su specifiniais tikslais",
     "or": "arba",
     "errors": {
-      "serverConnection": "Nepavyko prisijungti prie serverio"
+      "serverConnection": "Nepavyko prisijungti prie serverio",
+      "fillEmailPassword": "Įveskite el. pašto adresą ir slaptažodį",
+      "loginFailed": "Nepavyko prisijungti",
+      "enterEmail": "Įveskite savo el. pašto adresą",
+      "resetCodeFailed": "Nepavyko išsiųsti atstatymo kodo",
+      "fillCodePassword": "Įveskite atstatymo kodą ir naują slaptažodį",
+      "passwordMismatch": "Slaptažodžiai nesutampa",
+      "passwordTooShort": "Slaptažodis turi būti sudarytas iš mažiausiai 6 simbolių",
+      "resetFailed": "Nepavyko iš naujo nustatyti slaptažodžio",
+      "registerFailed": "Nepavyko sukurti paskyros",
+      "enterName": "Įveskite savo vardą",
+      "selectLevel": "Pasirinkite bėgimo lygį"
+    },
+    "levels": {
+      "beginner": "Pradedantysis",
+      "intermediate": "Vidutinis",
+      "advanced": "Pažengęs",
+      "beginnerDesc": "Naujas bėgime arba pradedi po ilgos pertraukos",
+      "intermediateDesc": "Bėgioji reguliariai ir nori tobulėti",
+      "advancedDesc": "Patyręs bėgikas su specifiniais tikslais"
+    },
+    "goals": {
+      "health": "Sveikata",
+      "weight": "Svorio metimas",
+      "distance": "Bėgti toliau",
+      "speed": "Tapti greitesniu",
+      "race": "Bėgti varžybas",
+      "fun": "Pramoga"
+    },
+    "proFeatures": {
+      "aiCoachDesc": "AI Treneris",
+      "statsDesc": "Statistika",
+      "goalsDesc": "Tikslai",
+      "routesDesc": "Maršrutai",
+      "chatDesc": "AI Pokalbis",
+      "reportsDesc": "Ataskaitos"
+    },
+    "resetPassword": "Iš naujo nustatykite slaptažodį",
+    "forgotPasswordDesc": "Įveskite savo el. pašto adresą ir atsiųsime iš naujo nustatymo kodą.",
+    "sendResetCode": "Siųsti atstatymo kodą",
+    "backToLogin": "Grįžti į prisijungimą",
+    "createNewPassword": "Sukurti naują slaptažodį",
+    "checkEmail": "Patikrinkite, ar el. pašte nėra šešių skaitmenų nustatymo iš naujo kodo.",
+    "resetCode": "Iš naujo nustatyti kodą",
+    "resetCodePlaceholder": "6 skaitmenų kodas",
+    "newPassword": "Naujas slaptažodis",
+    "confirmNewPassword": "Patvirtinkite naują slaptažodį",
+    "resendCode": "Siųsti naują kodą",
+    "tellUsAboutYou": "Papasakokite apie save",
+    "success": {
+      "resetCodeSent": "Išsiuntėme iš naujo nustatymo kodą jūsų el. paštu.",
+      "passwordReset": "Jūsų slaptažodis nustatytas iš naujo. Dabar galite prisijungti."
     }
   },
   "settings": {
     "pageTitle": "Nustatymai",
     "title": "Nustatymai",
     "profile": "Profilis",
-    "days": ["Pr", "An", "Tr", "Kt", "Pn", "Št", "Sk"],
+    "days": [
+      "Pr",
+      "An",
+      "Tr",
+      "Kt",
+      "Pn",
+      "Št",
+      "Sk"
+    ],
     "saveChanges": "Išsaugoti pakeitimus",
     "saved": "Išsaugota!",
     "logout": "Atsijungti",
@@ -201,7 +250,8 @@
       "reminders": "Priminimai",
       "privacy": "Privatumas",
       "units": "Vienetai",
-      "data": "Duomenys"
+      "data": "Duomenys",
+      "profile": "profilis"
     },
     "fields": {
       "name": "Vardas",
@@ -304,6 +354,57 @@
       "deletedTitle": "Paskyra ištrinta",
       "deletedMessage": "Jūsų paskyra buvo ištrinta.",
       "error": "Nepavyko ištrinti paskyros"
+    },
+    "reminders": {
+      "workoutTitle": "Treniruotės priminimas",
+      "workoutSubtitle": "Gaukite pranešimus pasirinktomis dienomis ir pasirinktu laiku",
+      "mealTitle": "Valgio priminimas",
+      "mealSubtitle": "Nepamirškite užregistruoti savo valgių",
+      "time": "Laikas: {{time}}",
+      "days": [
+        "sekm",
+        "Pirm",
+        "Antra",
+        "Trečiadienis",
+        "Ketvirtadienis",
+        "Penk",
+        "Šešt"
+      ]
+    },
+    "email": {
+      "title": "El",
+      "change": "Pakeiskite el. pašto adresą",
+      "newEmail": "Naujas el",
+      "currentPassword": "Dabartinis slaptažodis",
+      "missingFields": "Įveskite naują el. pašto adresą ir dabartinį slaptažodį",
+      "changeError": "Nepavyko pakeisti el. pašto adreso",
+      "successMessage": "Jūsų el. paštas buvo atnaujintas",
+      "networkError": "Tinklo klaida"
+    },
+    "subscription": {
+      "title": "Prenumerata",
+      "type": "Tipas",
+      "status": "Būsena",
+      "tiers": {
+        "pro": "Pro",
+        "basic": "Pagrindinis",
+        "free": "Nemokama"
+      },
+      "statuses": {
+        "active": "Aktyvus",
+        "inactive": "Neaktyvus",
+        "trialing": "Bandomoji versija",
+        "canceled": "Atšaukta"
+      },
+      "upgrade": "Atnaujinkite",
+      "manage": "Tvarkyti „App Store“."
+    },
+    "language": "Kalba",
+    "changeLanguageInSettings": "Pakeiskite kalbą nustatymuose",
+    "languageHint": "Atidarykite įrenginio nustatymus ir pasirinkite RunWithAI → Language.",
+    "actions": {
+      "save": "Išsaugokite pakeitimus",
+      "saved": "Išsaugota!"
     }
   },
   "pricing": {
@@ -367,6 +468,139 @@
     "step3": {
       "title": "Pasiekite savo tikslus",
       "desc": "Nustatykite tikslus ir sekite savo progresą su išsamia statistika"
+    },
+    "tagline": "Jūsų asmeninis AI bėgimo treneris",
+    "headline": {
+      "before": "Mokymas, kad",
+      "highlight": "prisitaiko prie",
+      "after": "jums"
+    },
+    "features": {
+      "ai": {
+        "title": "Tikras AI treneris",
+        "desc": "Jūsų planas sukurtas jums – ne šablonas"
+      },
+      "adapts": {
+        "title": "Gyvenimo planas",
+        "desc": "Reguliuojamas po kiekvieno važiavimo"
+      },
+      "injury": {
+        "title": "Klauso savo kūno",
+        "desc": "Traumos ir skausmas atsižvelgiama į jūsų treniruotę"
+      },
+      "goals": {
+        "title": "Tikslo link",
+        "desc": "Nuo pirmųjų 5K iki maratono – jūsų tempu"
+      }
+    },
+    "tryFree": "Išbandykite nemokamai 14 dienų",
+    "fine": "Jokių įsipareigojimų. Atšaukti bet kada.",
+    "levelQuestion": "Kur esate bėgimo kelionėje?",
+    "selectLevel": "Norėdami tęsti, pasirinkite savo lygį",
+    "levels": {
+      "beginner": {
+        "label": "Pradedantysis",
+        "sub": "Nauja arba grįžta po pertraukos"
+      },
+      "intermediate": {
+        "label": "Vidutinis",
+        "sub": "Reguliariai bėgioju ir noriu tobulėti"
+      },
+      "advanced": {
+        "label": "Išplėstinė",
+        "sub": "Treniruojuosi su tikslu ir žinau savo tempą"
+      }
+    },
+    "tellUsAboutYou": "Papasakokite šiek tiek apie save",
+    "coachUsesThis": "Jūsų treneris tai naudoja kurdamas jūsų planą",
+    "fields": {
+      "name": "Koks jūsų vardas?",
+      "age": "Amžius",
+      "weeklyKm": "Km per savaitę (apytiksliai)"
+    },
+    "primaryGoal": "Koks jūsų tikslas?",
+    "goals": {
+      "fitness": {
+        "label": "Pasipuoškite",
+        "sub": "Sveikata ir energija"
+      },
+      "5k": {
+        "label": "5K",
+        "sub": "Mano pirmasis didelis tikslas"
+      },
+      "10k": {
+        "label": "10 tūkst",
+        "sub": "Kitas lygis"
+      },
+      "half": {
+        "label": "Pusmaratonis",
+        "sub": "21,1 km"
+      },
+      "full": {
+        "label": "Maratonas",
+        "sub": "42,2 km"
+      },
+      "weight": {
+        "label": "Numeskite svorio",
+        "sub": "Bėkite lengviau"
+      }
+    },
+    "raceDate": "Ar turite lenktynių datą? (neprivaloma)",
+    "raceDatePlaceholder": "pvz. rugsėjo 15 d",
+    "skipForNow": "Kol kas praleiskite",
+    "plan": {
+      "building": "Jūsų treneris kuria jūsų planą…",
+      "waitNamed": "{{name}}, duok man akimirką.",
+      "wait": "Duok man akimirką.",
+      "errorTitle": "Jūsų plano dabar sukurti nepavyko",
+      "errorMessage": "Visada galite paprašyti savo trenerio sukurti jį vėliau.",
+      "readyNamed": "{{name}}, štai jūsų planas",
+      "ready": "Štai jūsų planas",
+      "basedOnAnswers": "Jūsų planas pagrįstas tuo, ką pasakėte savo treneriui.",
+      "weeklyDistance": "Savaitinis atstumas: {{km}} km",
+      "goal": "Tikslas: {{goal}}",
+      "considerations": "Pastabos: {{injuries}}",
+      "weekAndDay": "Savaitė {{week}} – {{day}}",
+      "day": "Diena {{day}}",
+      "run": "Paleisti",
+      "makePlan": "Sukurti mano planą",
+      "weekdays": {
+        "mon": "Pirmadienis",
+        "tue": "Antradienis",
+        "wed": "Trečiadienis",
+        "thu": "Ketvirtadienis",
+        "fri": "Penktadienis",
+        "sat": "Šeštadienis",
+        "sun": "Sekmadienis"
+      }
+    },
+    "languageTitle": "Pasirinkite kalbą",
+    "languageSubtitle": "Jį vėliau galėsite pakeisti nustatymuose",
+    "paywall": {
+      "headline": "Jūsų asmeninis AI treneris",
+      "subtitle": "Treniruočių planas, kuris prisitaiko prie jūsų – kiekvieną savaitę, kiekvieną bėgimą.",
+      "benefits": {
+        "adaptive": "Jūsų planas pritaikomas po kiekvieno bėgimo",
+        "audioCoach": "Treniruotės metu jūsų treneris jūsų ausyse",
+        "calendar": "Savaitės planas ir kalendorius",
+        "chat": "Paklauskite savo trenerio bet ko – bet kada"
+      },
+      "trial": "14 dienų nemokamai",
+      "afterTrial": "Tada {{price}} per mėnesį. Atšaukti bet kada – vienu bakstelėjimu.",
+      "startTraining": "Pradėkite treniruotę",
+      "restore": "Atkurti pirkinius",
+      "welcomeTitle": "🎉 Sveiki atvykę!",
+      "welcomeMessage": "Jūsų profesionalų prieiga dabar aktyvi.",
+      "restoreSuccessTitle": "Pirkiniai atstatyti",
+      "restoreSuccessMessage": "Jūsų prenumerata vėl aktyvi.",
+      "noPurchasesTitle": "Pirkinių nerasta",
+      "noPurchasesMessage": "Aktyvių prenumeratų nerasta.",
+      "errors": {
+        "prices": "Kainų įkelti nepavyko. Vėliau bandykite dar kartą.",
+        "packageUnavailable": "Ši prenumerata negalima.",
+        "purchaseTitle": "Pirkimas nepavyko",
+        "restore": "Pirkinių atkurti nepavyko."
+      }
     }
   },
   "dashboard": {
@@ -419,7 +653,20 @@
       "runsFromRecord": "{{count}} bėgimų iki rekordo",
       "runsInMonth": "{{count}} bėgimų {{month}}"
     },
-    "monthNames": ["Sau", "Vas", "Kov", "Bal", "Geg", "Bir", "Lie", "Rgp", "Rgs", "Spa", "Lap", "Grd"],
+    "monthNames": [
+      "Sau",
+      "Vas",
+      "Kov",
+      "Bal",
+      "Geg",
+      "Bir",
+      "Lie",
+      "Rgp",
+      "Rgs",
+      "Spa",
+      "Lap",
+      "Grd"
+    ],
     "workout": {
       "nextWorkout": "KITA TRENIRUOTĖ",
       "today": "ŠIANDIEN",
@@ -445,7 +692,15 @@
       "addNote": "+ Pastaba",
       "mood": "Nuotaika",
       "placeholder": "Kaip sekėsi? Sunkios kojos? Gera diena? Naujas maršrutas?",
-      "dayNames": ["Sk", "Pr", "An", "Tr", "Kt", "Pn", "Št"]
+      "dayNames": [
+        "Sk",
+        "Pr",
+        "An",
+        "Tr",
+        "Kt",
+        "Pn",
+        "Št"
+      ]
     },
     "injury": {
       "title": "TRAUMOS RIZIKA",
@@ -488,7 +743,31 @@
       "unavailable": "GPS nepasiekiamas",
       "timeout": "GPS skirtasis laikas",
       "notAvailable": "GPS nepasiekiamas",
-      "error": "GPS klaida"
+      "error": "GPS klaida",
+      "points": "{{count}} taškai (filtruota {{filtered}})"
+    },
+    "cycling": "Važiavimas dviračiu",
+    "music": "Muzika",
+    "voiceOnly": "Tik balsas",
+    "notification": {
+      "run": "Bėgimo stebėjimas...",
+      "walk": "Stebėti jūsų ėjimą...",
+      "bike": "Stebėti jūsų kelionę..."
+    },
+    "limit": {
+      "title": "Pasiektas savaitės aktyvumo limitas",
+      "message": "Pasiekėte nemokamo plano {{limit}} veiklos per savaitę limitą. Naujovinkite į „Basic“ arba „Pro“, kad gautumėte neribotą prieigą.",
+      "later": "Vėliau"
+    },
+    "stats": {
+      "runs": "veikia",
+      "walks": "vaikšto",
+      "yourProgress": "Jūsų pažanga",
+      "thisWeek": "Šią savaitę",
+      "lastWeek": "Praėjusią savaitę",
+      "bestPace": "Geriausias tempas",
+      "longestRun": "Ilgiausias bėgimas",
+      "totalKm": "Bendras km"
     }
   },
   "chat": {
@@ -507,7 +786,9 @@
     "logAllMeals": "Įrašyti visus valgius",
     "logged": "Įrašyta",
     "mealPlanLoggedMessage": "Mitybos planas įrašytas šiandienai.",
-    "mealPlanLogError": "Nepavyko įrašyti mitybos plano: {{error}}"
+    "mealPlanLogError": "Nepavyko įrašyti mitybos plano: {{error}}",
+    "languageChanged": "Kalba pakeista. Jūsų AI treneris dabar atsakys anglų kalba.",
+    "languageChangedConfirmation": "Kalba pakeista. Jūsų AI treneris dabar atsakys jūsų pasirinkta kalba."
   },
   "proUpsell": {
     "title": "Atrakinkite visą galią",
@@ -542,6 +823,675 @@
         "title": "Progreso ataskaitos",
         "desc": "Savaitės ir mėnesio suvestinės"
       }
+    }
+  },
+  "bariatric": {
+    "title": "Bariatrinis profilis",
+    "subtitle": "Skrandžio įvorės / aplinkkelio atrama",
+    "settingsButton": "Bariatrinis profilis",
+    "settingsDescription": "Skrandžio įvorė arba aplinkkelio atrama",
+    "setup": {
+      "title": "Bariatrinis profilis",
+      "intro": "Įgalinkite bariatrinę pagalbą, kad gautumėte pritaikytus baltymų, skysčių ir kalorijų tikslus pagal jūsų operaciją ir fazę.",
+      "surgeryType": "Chirurgijos tipas",
+      "surgeryTypeNone": "Nėra",
+      "surgeryTypeSleeve": "Skrandžio įvorė",
+      "surgeryTypeBypass": "Skrandžio apvedimas",
+      "surgeryDate": "Operacijos data",
+      "surgeryDatePlaceholder": "YYYY-MM-DD",
+      "startWeight": "Pradinis svoris (kg)",
+      "goalWeight": "Tikslo svoris (kg)",
+      "height": "Aukštis (cm)",
+      "enable": "Įgalinti bariatrinį palaikymą",
+      "save": "Išsaugoti profilį",
+      "delete": "Ištrinti bariatrinį profilį",
+      "deleteConfirm": "Ar tikrai norite ištrinti savo bariatrinį profilį?",
+      "disclaimer": "Svarbu: ši programa nepakeičia jūsų bariatrinio mitybos specialisto, gydytojo ar klinikos. Rekomendacijos yra bendros gairės, pagrįstos viešosiomis ASMBS gairėmis. Visada laikykitės savo klinikos nurodymų. Nedelsdami kreipkitės į gydytoją dėl dempingo sindromo, nuolatinio pykinimo ar bet kokių rūpesčių.",
+      "acceptDisclaimer": "Suprantu, kad ši programa nepakeičia mano bariatrinės priežiūros komandos",
+      "disclaimerRequired": "Turite sutikti su atsakomybės atsisakymu",
+      "invalidDate": "Įveskite galiojančią datą",
+      "missingType": "Pasirinkite operacijos tipą",
+      "saved": "Profilis išsaugotas",
+      "deleted": "Profilis ištrintas"
+    },
+    "dashboard": {
+      "title": "Bariatrinis palaikymas",
+      "edit": "Redaguoti",
+      "phaseLabel": "Dabartinė fazė",
+      "daysSinceLabel": "Dienos po operacijos",
+      "daysUntilNext": "{{days}} dienos iki kito etapo",
+      "lastPhase": "Esate paskutiniame etape",
+      "proteinToday": "Baltymai šiandien",
+      "proteinProgress": "Baltymai šiandien",
+      "fluidToday": "Skysčiai šiandien",
+      "kcalRange": "Kalorijos (tikslinė)",
+      "portionSize": "Rekomenduojamas porcijos dydis",
+      "medicalCheckReminder": "Prisiminkite {{day}} dienos patikrinimą",
+      "preSurgery": "Operacijos data dar nepasiekta"
+    },
+    "phases": {
+      "clearLiquid": {
+        "name": "1 savaitė: skaidrūs skysčiai",
+        "description": "Tik skaidrūs skysčiai: vanduo, sultinys, sultys be cukraus, arbata. Mažais gurkšneliais visą dieną."
+      },
+      "fullLiquid": {
+        "name": "2 savaitė: pilni skysčiai",
+        "description": "Visi skysčiai, įskaitant baltyminiai kokteiliai, sriuba, jogurtas. NEGALIMA gerti 30 min prieš/po valgio."
+      },
+      "pureed": {
+        "name": "3–4 savaitė: maisto tyrės",
+        "description": "Maišytas / tyrinis maistas: varškė, žuvies tyrė, sumaišyta vištiena. Kruopščiai sukramtykite."
+      },
+      "soft": {
+        "name": "5–6 savaitė: minkštas maistas",
+        "description": "Minkštas maistas: plakta kiaušinienė, žuvis, virtos daržovės, minkšti vaisiai. Pirmiausia baltymai, nedideli kąsneliai."
+      },
+      "regular": {
+        "name": "7+ savaitė: įprastas maistas",
+        "description": "Įprastas maistas mažomis porcijomis. Pirmiausia baltymai, tada daržovės, tada angliavandeniai. Kruopščiai sukramtykite."
+      }
+    },
+    "tips": {
+      "noDrinking": "NEGALIMA gerti 30 minučių prieš ar po valgio",
+      "proteinFirst": "Visada pirmiausia valgykite baltymus",
+      "chew": "Kiekvieną kąsnį kramtykite 20–30 kartų",
+      "stopWhenFull": "Sustokite, kai pilnas – net ir valgydami mažas porcijas",
+      "vitamins": "Prisiminkite savo kasdienius vitaminus"
+    },
+    "vitamins": {
+      "title": "Šiandieniniai vitaminai",
+      "subtitle": "Prisiminkite savo kasdienius papildus",
+      "names": {
+        "multivitamin": "Multivitaminai",
+        "calciumD": "Kalcis + vitaminas D",
+        "iron": "Lygintuvas",
+        "b12": "B12",
+        "omega3": "Omega-3 (neprivaloma)"
+      },
+      "taken": "Paimta",
+      "notTaken": "Nepriimta",
+      "allDone": "Visi vitaminai išgerti šiandien 🎉",
+      "reset": "Nustatyti iš naujo",
+      "optional": "neprivaloma"
+    },
+    "fluid": {
+      "title": "Skysčių suvartojimas šiandien",
+      "subtitle": "Gerkite tarp valgymų, o ne su",
+      "goal": "Tikslas",
+      "current": "Šiandien",
+      "remaining": "Liko",
+      "add250": "+ 250 ml",
+      "add500": "+ 500 ml",
+      "addCustom": "Pridėti",
+      "reset": "Nustatyti iš naujo",
+      "goalReached": "Pasiekėte sklandų tikslą 💧",
+      "warning": "Atsiminkite mažus gurkšnelius – ne didelius kiekius iš karto"
+    },
+    "meals": {
+      "title": "Pasiūlymai jums dabar",
+      "subtitle": "Pritaikyta jūsų fazei",
+      "kcal": "kcal",
+      "protein": "g baltymų",
+      "prep": "min",
+      "logIt": "Žurnalas",
+      "types": {
+        "fluid": "Skystis",
+        "puree": "Tyrė",
+        "soft": "Minkštas maistas",
+        "normal": "Normalus maistas"
+      },
+      "items": {
+        "water": "Vanduo",
+        "brothClear": "Skaidrus sultinys",
+        "sugarFreeJuice": "Sultys be cukraus (praskiestos)",
+        "herbalTea": "Žolelių arbata",
+        "proteinShake": "Baltymų kokteilis",
+        "skimmedMilk": "Nugriebtas pienas",
+        "thinSoup": "Plona sriuba (įtempta)",
+        "skyrThin": "Plonas skyr",
+        "mashedFish": "Trinta žuvis",
+        "cottageCheese": "Varškė",
+        "eggPuree": "Kiaušinių tyrė",
+        "pureedChicken": "Vištienos tyrė",
+        "mashedTofu": "Sutrintas tofu",
+        "softFish": "Minkšta žuvis",
+        "scrambledEgg": "Kiaušinė",
+        "softChicken": "Švelni vištiena",
+        "wellCookedVeggies": "Gerai išvirtos daržovės",
+        "greekYogurt": "Graikiškas jogurtas",
+        "grilledChicken": "Ant grotelių kepta vištienos krūtinėlė",
+        "salmonFillet": "Lašišos filė",
+        "eggOmelette": "Omletas",
+        "lentilSoup": "Lęšių sriuba",
+        "leanBeef": "Liesa jautiena"
+      },
+      "reminders": {
+        "title": "Prisiminkite valgydami",
+        "proteinFirst": "Pirmiausia valgykite baltymus",
+        "chew": "Kramtykite 20–30 kartų",
+        "noDrinking": "Negerkite 30 minučių prieš / po valgio",
+        "stopWhenFull": "Sustabdykite, kai pilnas",
+        "smallSips": "Gerkite mažais gurkšneliais",
+        "noStraw": "Nėra šiaudelių (oro skrandyje)",
+        "slowly": "Gerkite lėtai",
+        "mashWell": "Kruopščiai sutrinkite",
+        "newFoodOneAtATime": "Vienu metu pristatykite vieną naują maistą",
+        "chewExtra": "Ypač kruopščiai kramtykite",
+        "mindfulEating": "Valgykite lėtai ir apgalvotai",
+        "avoidEmptyCalories": "Venkite tuščių kalorijų"
+      }
+    },
+    "dumping": {
+      "title": "Dempingo sindromo rizika",
+      "subtitle": "Remiantis šiandienos patiekalais",
+      "low": "Maža rizika",
+      "medium": "Būkite atsargūs",
+      "high": "Didelė rizika",
+      "lowDesc": "Šiandienos patiekalai atrodo puikiai",
+      "mediumDesc": "Vienas ar daugiau valgių gali sukelti dempingą. Stebėkite simptomus.",
+      "highDesc": "Šiandien keli didelės rizikos patiekalai. Kreipkitės į gydytoją, jei jaučiate pykinimą, greitą širdies plakimą, galvos svaigimą ar viduriavimą.",
+      "flaggedCount": "{{count}} patiekalas pažymėtas",
+      "flaggedCount_plural": "{{count}} patiekalai pažymėti",
+      "reasons": {
+        "sugarHigh": "Per daug cukraus",
+        "sugarMedium": "Vidutinis cukraus kiekis",
+        "fatHigh": "Didelis riebalų kiekis",
+        "carbsNoProtein": "Angliavandeniai be baltymų",
+        "carbsHigh": "Didelis angliavandenių suvartojimas",
+        "carbsMedium": "Saikingas angliavandenių suvartojimas",
+        "proteinLow": "Baltymų suvartojimas per mažas"
+      },
+      "info": "Dempingas dažniausiai atsiranda po skrandžio apėjimo ir jį sukelia cukrus, riebalai arba greitai pasisavinami angliavandeniai. Simptomai: pykinimas, dažnas širdies plakimas, galvos svaigimas, viduriavimas 15-30 min. po valgio."
+    },
+    "training": {
+      "title": "Pritaikytas mokymas",
+      "subtitle": "Jūsų fazei rekomenduojama veikla",
+      "currentPhase": "Jūsų mokymo etapas",
+      "daysUntilNext": "{{days}} dienos iki kito mokymo etapo",
+      "maxDuration": "Maksimali trukmė",
+      "maxHeartRate": "Maksimalus širdies ritmas",
+      "min": "min",
+      "ofMax": "maks. ŠSD",
+      "intensityLabel": {
+        "veryLight": "Labai lengvas",
+        "light": "Šviesa",
+        "moderate": "Vidutinis",
+        "normal": "Normalus"
+      },
+      "phaseNames": {
+        "1": "Atkūrimas (0–2 savaitė)",
+        "2": "Atsargiai pradėkite (2–4 savaitė)",
+        "3": "Lengvas aktyvumas (4–6 savaitė)",
+        "4": "Sukūrimas (6–8 savaitė)",
+        "5": "Įprasta treniruotė (8 savaitė ir daugiau)"
+      },
+      "phaseDesc": {
+        "1": "Laikykitės trumpų pasivaikščiojimų ir gilaus kvėpavimo pratimų. Klausykitės savo kūno ir daug ilsėkitės.",
+        "2": "Galite šiek tiek padidinti vaikščiojimą. Vis dar nėra jėgos treniruočių ar intensyvių pratimų.",
+        "3": "Galite pradėti važinėti dviračiu ir plaukti (užgijus žaizdoms). Vis dar nėra bėgimo ar didelių svorių.",
+        "4": "Laikas pradėti lengvą jėgos treniruotę ir ilgesnę kardio treniruotę. Pradėkite nuo mažų svorių.",
+        "5": "Galite grįžti prie įprastų treniruočių, bet vis tiek kurkite palaipsniui ir stebėkite savo energiją."
+      },
+      "allowed": "Rekomenduojama",
+      "notRecommended": "Venkite dabar",
+      "activities": {
+        "walkShort": "Trumpas pasivaikščiojimas (5–10 min.)",
+        "walkMedium": "Vidutinis ėjimas (15–20 min.)",
+        "walkLong": "Ilgas ėjimas (30+ min.)",
+        "breathing": "Kvėpavimo pratimai",
+        "gentleStretch": "Švelnus tempimas",
+        "cycling": "Važiavimas dviračiu",
+        "swimming": "Plaukimas",
+        "lightStrength": "Lengva jėgos treniruotė",
+        "strength": "Jėgos lavinimas",
+        "jog": "Lengvas bėgiojimas",
+        "running": "Bėgimas",
+        "highIntensity": "Didelio intensyvumo treniruotės",
+        "heavyLifting": "Sunkus kėlimas",
+        "extremeIntensity": "Ypatingas intensyvumas"
+      },
+      "warnings": {
+        "title": "Svarbu atsiminti",
+        "noLifting": "Nekeliamas sunkus (daugiau nei 5 kg)",
+        "staySoftMovements": "Laikykitės švelnių, lėtų judesių",
+        "avoidSwimmingUntilHealed": "Venkite maudytis, kol neužgis žaizdos (paprastai 3–4 savaites)",
+        "lightWeightsOk": "Lengvas svoris (2–5 kg) yra tinkamas pasikonsultavus su gydytoju",
+        "startStrengthGradually": "Pradėkite jėgos treniruotes mažais svoriais ir dideliais pakartojimais",
+        "stillBuildGradually": "Vis tiek statykite palaipsniui – venkite staigių didelių padidėjimų",
+        "hydration": "Prisiminkite skysčius prieš treniruotę, jos metu ir po jos"
+      },
+      "safety": {
+        "activityNotRecommended": "Jūsų fazėje {{activity}} nerekomenduojama. Pasitarkite su gydytoju.",
+        "durationTooLong": "Rekomenduojama trukmė yra daugiausia {{max}} min. Suplanavote {{actual}} min.",
+        "checkWithDoctor": "Jei jaučiate skausmą, pykinimą ar išsekimą, kreipkitės į gydytoją"
+      },
+      "disclaimer": "Rekomendacijos yra tik gairės. Visada laikykitės savo klinikos nurodymų."
+    }
+  },
+  "diabetes": {
+    "title": "Diabeto profilis",
+    "subtitle": "1 tipo, 2 tipo arba prediabetas",
+    "settingsButton": "Diabeto profilis",
+    "settingsDescription": "1 tipo, 2 tipo arba prediabetas – dieta, cukraus kiekis kraujyje ir mankšta",
+    "setup": {
+      "title": "Diabeto profilis",
+      "intro": "Įgalinkite diabeto palaikymą, kad gautumėte pritaikytus valgio pasiūlymus, nurodymus dėl cukraus kiekio kraujyje ir mankštos rekomendacijų.",
+      "type": "Cukrinio diabeto tipas",
+      "typeT1": "1 tipas",
+      "typeT2": "2 tipas",
+      "typePre": "Prediabetas",
+      "typeGest": "Gestacinis diabetas",
+      "treatment": "Gydymas",
+      "txNone": "Nėra",
+      "txDiet": "Tik dieta / gyvenimo būdas",
+      "txMetformin": "Metforminas",
+      "txOral": "Kiti geriamieji vaistai",
+      "txGLP1": "GLP-1 („Ozempic“ / „Wegovy“ / „Mounjaro“)",
+      "txBasal": "Bazinis insulinas",
+      "txBolus": "Bazinis + boliusinis insulinas",
+      "txPump": "Insulino pompa",
+      "diagnosisDate": "Diagnozės data (neprivaloma)",
+      "datePlaceholder": "YYYY-MM-DD",
+      "hba1c": "HbA1c (mmol/mol, neprivaloma)",
+      "countCarbs": "Aš skaičiuoju angliavandenius",
+      "carbRatio": "Insulino ir angliavandenių santykis (g/U, neprivaloma)",
+      "carbRatioHelp": "Pvz. 10 = 1 vienetas insulino apima 10 g angliavandenių. Programėlė niekada nedozuoja – šis skaičius yra tik informacinis.",
+      "correctionFactor": "Pataisos koeficientas (mmol/l vienam vienetui, neprivaloma)",
+      "preExerciseMin": "Minimalus cukraus kiekis kraujyje prieš mankštą (mmol/l)",
+      "enable": "Įgalinkite diabeto palaikymą",
+      "acceptDisclaimer": "Sutinku su anksčiau pateiktu atsisakymu",
+      "disclaimerRequired": "Turite sutikti su atsakomybės atsisakymu",
+      "missingType": "Pasirinkite diabeto tipą",
+      "save": "Išsaugoti profilį",
+      "saved": "Profilis išsaugotas",
+      "delete": "Ištrinkite diabeto profilį",
+      "deleted": "Profilis ištrintas",
+      "deleteConfirm": "Ar tikrai norite ištrinti savo diabeto profilį?",
+      "disclaimer": "SVARBU: ši programa nepakeičia jūsų gydytojo ar diabeto komandos. NIEKADA nesiūlome konkrečių insulino dozių ar vaistų keitimo. Niekada nekoreguokite gydymo remdamiesi vien programos patarimais. Jei abejojate, visada kreipkitės į savo sveikatos priežiūros paslaugų teikėją."
+    }
+  },
+  "bloodSugar": {
+    "title": "Cukraus kiekis kraujyje",
+    "settingsButton": "Cukraus kiekio kraujyje žurnalas",
+    "settingsDescription": "Užregistruokite savo matavimus ir peržiūrėkite tendencijas laikui bėgant",
+    "add": "Pridėkite rodmenis",
+    "save": "Išsaugokite",
+    "history": "Istorija",
+    "empty": "Dar nėra rodmenų. Bakstelėkite aukščiau esantį mygtuką, kad užregistruotumėte pirmąjį matavimą.",
+    "disclaimer": "Šie numeriai skirti tik jums. Visada aptarkite modelius su savo gydytoju arba diabeto komanda.",
+    "valueLabel": "Cukraus kiekis kraujyje (mmol/l)",
+    "contextLabel": "Kontekstas",
+    "noteLabel": "Pastaba (pasirenkama)",
+    "notePlaceholder": "Pvz. po pusryčių",
+    "errInvalidTitle": "Neteisinga reikšmė",
+    "errInvalidBody": "Įveskite cukraus kiekį kraujyje nuo 1,0 iki 40,0 mmol/L.",
+    "errSaveTitle": "Nepavyko išsaugoti",
+    "deleteTitle": "Ištrinti rodmenis",
+    "deleteBody": "Ar esate tikras? Norėdami ištrinti, paspauskite ilgai.",
+    "ctx": {
+      "fasting": "Pasninkas",
+      "preMeal": "Prieš valgį",
+      "postMeal": "Po valgio",
+      "bedtime": "Laikas miegoti",
+      "preExercise": "Prieš mankštą",
+      "postExercise": "Po treniruotės",
+      "random": "Atsitiktinis"
+    },
+    "range": {
+      "1d": "1 diena",
+      "7d": "7 dienos",
+      "30d": "30 dienų",
+      "90d": "90 dienų"
+    },
+    "stat": {
+      "avg": "Vidutinis",
+      "min": "Min",
+      "max": "Maks",
+      "tir": "Laikas diapazone",
+      "target": "Tikslas",
+      "measurements": "rodmenys"
+    }
+  },
+  "healthScore": {
+    "title": "Sveikatos balas",
+    "todayLabel": "Šios dienos rezultatas",
+    "A": "Labai sveikas",
+    "B": "Sveikas",
+    "C": "Vidutinis",
+    "D": "Mažiau sveikas",
+    "E": "Nesveika"
+  },
+  "units": {
+    "g": "g",
+    "kg": "kg",
+    "ml": "ml",
+    "dl": "dl",
+    "l": "l",
+    "tsk": "šaukštelis",
+    "spsk": "valg",
+    "stk": "vnt",
+    "skive": "gabalas",
+    "portion": "dalis"
+  },
+  "logMeal": {
+    "amount": "Suma",
+    "unit": "vienetas",
+    "approxGrams": "≈ {{grams}}g"
+  },
+  "home": {
+    "greeting": {
+      "morning": "Labas rytas",
+      "day": "Sveiki",
+      "evening": "Labas vakaras",
+      "night": "Labanakt"
+    },
+    "coach": {
+      "restDay": "Šiandien poilsio diena – mėgaukitės atsigavimu!",
+      "todayWorkout": "Šiandieniniame plane yra {{workout}}.",
+      "nextWorkout": "Kita treniruotė: {{workout}}.",
+      "ready": "Pasiruošę pradėti? Paklauskite manęs apie planavimą, mitybą ar motyvaciją.",
+      "askForHelp": "Paklauskite manęs ko nors, jei reikia pagalbos."
+    },
+    "chat": {
+      "placeholder": "Paklauskite savo AI trenerio...",
+      "todayPlanPrompt": "Koks mano planas šiai dienai?"
+    },
+    "todayPlan": "Šiandienos planas",
+    "startTraining": "Pradėkite treniruotę",
+    "nextTraining": "Kita treniruotė",
+    "today": "Šiandien",
+    "training": "Treniruotė",
+    "todayOverview": "Šiandienos apžvalga",
+    "week": "Savaitė",
+    "milestone": "Gairės",
+    "toGoal": "iki {{distance}} km tikslo"
+  },
+  "progress": {
+    "weeks": "Savaitės",
+    "months": "Mėnesiai",
+    "weekLabel": "Savaitė {{week}}, {{year}}",
+    "weekShort": "W{{week}}",
+    "activities": "Veikla",
+    "empty": "Kol kas jokios veiklos – išeikite ir bėkite!",
+    "noRoute": "Maršrutas neįrašytas",
+    "standardTraining": "Standartinė treniruotė",
+    "steps": "Žingsniai",
+    "duration": "Trukmė",
+    "caloriesShort": "kal",
+    "activityTypes": {
+      "walk": "Vaikščiokite",
+      "cycling": "Važiavimas dviračiu",
+      "run": "Paleisti"
+    }
+  },
+  "workoutLabels": {
+    "rest": "Poilsis",
+    "injuryRest": "Poilsis dėl traumos"
+  },
+  "calendar": {
+    "monthSummary_one": "{{count}} bėgimas · {{km}} km",
+    "monthSummary_other": "{{count}} važiuoja · {{km}} km",
+    "completed": "Užbaigta",
+    "planned": "Planuojama",
+    "missed": "Praleista",
+    "plannedKm": "Numatyta {{km}} km",
+    "emptyDay": "Šią dieną neplanuojamas bėgimas ar treniruotė"
+  },
+  "motionPicker": {
+    "title": "Kardio",
+    "what": "Ką norėtumėte daryti?",
+    "where": "Kur?",
+    "run": "Paleisti",
+    "walk": "Vaikščiokite",
+    "cycling": "Važiavimas dviračiu",
+    "runLocation": "Lauke arba bėgimo takelis",
+    "bikeLocation": "Lauke arba viduje",
+    "outdoor": "Lauke",
+    "outdoorDescription": "GPS sekimas · maršrutai · tempas",
+    "indoor": "Vidinis",
+    "indoorDescription": "Bėgimo takelis · žingsnių skaitiklis · rankinis atstumas"
+  },
+  "activityPicker": {
+    "title": "Pasirinkite treniruotę",
+    "intro": "Ką norėtumėte užregistruoti?",
+    "options": {
+      "mobility": {
+        "label": "Mobilumas / Joga",
+        "description": "Tempimas, joga, volavimas putomis"
+      },
+      "bike": {
+        "label": "Važiavimas dviračiu",
+        "description": "Viduje arba lauke"
+      },
+      "other": {
+        "label": "Kita veikla",
+        "description": "Padelis, futbolas, plaukimas..."
+      }
+    }
+  },
+  "logActivity": {
+    "types": {
+      "strength": "Jėgos lavinimas",
+      "mobility": "Mobilumas / Joga",
+      "bike": "Važiavimas dviračiu",
+      "other": "Kita veikla"
+    },
+    "invalidDuration": "Įveskite galiojančią trukmę minutėmis",
+    "savedTitle": "Išsaugota!",
+    "savedMessage": "{{activity}} užregistruotas ({{duration}} min, {{calories}} kcal)",
+    "saveError": "Nepavyko išsaugoti: {{error}}",
+    "logActivity": "Užregistruokite savo {{activity}}",
+    "duration": "Trukmė (minutėmis) *",
+    "calories": "Kalorijos (neprivaloma – kitaip apskaičiuojama automatiškai)",
+    "calorieEstimate": "≈ {{calories}} kcal skaičiuojant nuo {{weight}} kg, RPE {{rpe}}",
+    "effort": "Pastangos (RPE 1–10)",
+    "notes": "Pastabos (neprivaloma)",
+    "notesPlaceholder": "Pavyzdžiui, pratimai, svoris, rinkiniai...",
+    "save": "Išsaugokite treniruotę"
+  },
+  "treadmill": {
+    "invalidValueTitle": "Neteisinga reikšmė",
+    "invalidValueMessage": "Įveskite skaičių, pavyzdžiui, 5.2",
+    "noDistanceTitle": "Nėra atstumo",
+    "noDistanceMessage": "Pridėkite atstumą rankiniu būdu arba tęskite tol, kol bus galima išmatuoti žingsnius.",
+    "finishTitle": "Baigti ir išsaugoti?",
+    "finishMessage": "Atstumas: {{distance}} km · Laikas: {{time}} · {{calories}} kcal",
+    "walkNote": "Vaikščiojimas viduje (bėgimo takelis)",
+    "runNote": "Bėgimas patalpose (bėgimo takelis)",
+    "savedTitle": "Išsaugota! 🏃",
+    "savedMessage": "Sudegė {{distance}} km {{time}} · {{calories}} kcal.",
+    "saveError": "Nepavyko išsaugoti",
+    "discardTitle": "Atmesti treniruotę?",
+    "discardMessage": "Visi šios treniruotės duomenys bus prarasti.",
+    "keep": "Laikyti",
+    "discard": "Išmeskite",
+    "walkTitle": "Bėgimo takelis · Pasivaikščiojimas",
+    "runTitle": "Bėgimo takelis · Bėgimas",
+    "pedometerActive": "Aktyvus žingsnių skaitiklis",
+    "pedometerUnavailable": "Žingsnių skaitiklis nepasiekiamas",
+    "steps": "ŽINGSNIAI",
+    "speed": "Greitis",
+    "adjustDistance": "Sureguliuokite atstumą",
+    "adjustHint": "Pridėkite atstumą rankiniu būdu iš bėgimo takelio ekrano",
+    "enterExactDistance": "Įveskite tikslų atstumą iki bėgimo takelio",
+    "instructionsTitle": "Kaip naudoti sekiklį",
+    "instructions": "1. Paspauskite START, kai pradedate dirbti ant bėgimo takelio\n2. Pridėkite atstumą +0,1 / +0,5 / +1,0 mygtukais\n3. Arba baigę įveskite tikslų atstumą\n4. Žingsniai skaičiuojami automatiškai, kai nešiojate telefoną",
+    "saving": "Išsaugoma...",
+    "exactDistanceTitle": "Įveskite tikslų atstumą",
+    "exactDistanceHint": "Nuskaitykite bėgimo takelio ekraną ir įveskite atstumą km",
+    "apply": "Taikyti"
+  },
+  "statsPage": {
+    "hoursShort": "val",
+    "minutesShort": "m",
+    "now": "Dabar",
+    "weeksAgoShort": "{{count}}w",
+    "emptyTitle": "Statistikos dar nėra",
+    "emptyMessage": "Pradėkite pirmąjį paleidimą, kad pamatytumėte savo duomenis čia.",
+    "period4Weeks": "4 savaites",
+    "period3Months": "3 mėnesiai",
+    "bestPace": "Geriausias tempas",
+    "dayStreak": "Dienos serija",
+    "weeklyGoal": "Savaitės tikslas",
+    "ofGoal": "iš {{goal}} km tikslo",
+    "goalReached": "Tikslas pasiektas!",
+    "kmRemaining": "Liko {{km}} km",
+    "milestone": "Gairės",
+    "toMilestone": "{{remaining}} km iki {{milestone}} km",
+    "kmPerWeek": "KM PER SAVAITĘ",
+    "kmPerMonth": "KM PER MĖNESĮ",
+    "avgDistance": "Vidutinis atstumas",
+    "kmPerRun": "km vienam bėgimui",
+    "totalTime": "Visas laikas",
+    "moving": "juda",
+    "longestRun": "Ilgiausias bėgimas",
+    "runsPerWeekday": "Veikia darbo dienomis",
+    "activityRings": "Veiklos žiedai",
+    "kmGoal": "KM TIKSLAS",
+    "distance": "Atstumas",
+    "activity": "Veikla",
+    "days": "DIENOS",
+    "streak": "Juostelė",
+    "activityTypes": "Veiklos tipai",
+    "types": {
+      "run": "Paleisti",
+      "walk": "Vaikščiokite",
+      "bike": "Važiavimas dviračiu"
+    }
+  },
+  "privacyPage": {
+    "title": "Privatumo politika",
+    "updated": "Paskutinį kartą atnaujinta: 2026 m. balandžio mėn",
+    "intro": "„RunWithAI“ rimtai žiūri į jūsų privatumą. Šioje politikoje paaiškinama, kaip renkame, naudojame ir saugome jūsų asmeninę informaciją.",
+    "sections": [
+      {
+        "title": "Duomenų valdiklis",
+        "paragraphs": [
+          "„RunWithAI“ yra atsakinga už jūsų asmens duomenų tvarkymą. Jei turite klausimų, susisiekite su mumis adresu privacy@runwithai.app."
+        ]
+      },
+      {
+        "title": "Duomenys, kuriuos renkame",
+        "paragraphs": [
+          "Renkame šių tipų duomenis:"
+        ],
+        "bullets": [
+          "Paskyros informacija: el. pašto adresas, vardas, amžius ir lytis",
+          "Fiziniai duomenys: svoris ir ūgis (neprivaloma)",
+          "Treniruočių duomenys: veikla, atstumas, tempas, širdies ritmas ir GPS maršrutai",
+          "Programos naudojimas: nuostatos, tikslai ir lygis",
+          "Mokėjimo informacija: saugiai tvarkoma „App Store“ arba „Google Play“."
+        ]
+      },
+      {
+        "title": "Kaip naudojame jūsų duomenis",
+        "paragraphs": [
+          "Jūsų duomenis naudojame siekdami:"
+        ],
+        "bullets": [
+          "Pateikite suasmenintus AI mokymo planus",
+          "Analizuokite savo treniruotes ir pažangą",
+          "Pagerinkite savo paslaugas",
+          "Siųskite atitinkamus pranešimus ir atnaujinimus",
+          "Tvarkykite mokėjimus ir prenumeratas"
+        ]
+      },
+      {
+        "title": "Trečiųjų šalių integravimas",
+        "paragraphs": [
+          "„RunWithAI“ gali būti integruotas su „Garmin Connect“, kad importuotų bėgimo duomenis. Prisijungę gauname tik treniruočių duomenis – niekada jūsų prisijungimo duomenų."
+        ]
+      },
+      {
+        "title": "Duomenų bendrinimas",
+        "paragraphs": [
+          "Mes niekada neparduodame jūsų duomenų. Dalinamės duomenimis tik su:"
+        ],
+        "bullets": [
+          "Apple / Google: saugus mokėjimų apdorojimas",
+          "OpenAI: anoniminis AI mokymas",
+          "Prieglobos teikėjai: „Vercel“ ir „Railway“ duomenų saugojimui"
+        ]
+      },
+      {
+        "title": "Duomenų saugumas",
+        "paragraphs": [
+          "Mes naudojame pramonės standartines apsaugos priemones, įskaitant:"
+        ],
+        "bullets": [
+          "HTTPS šifravimas visoms jungtims",
+          "Saugus slaptažodžio maišymas naudojant bcrypt",
+          "JWT žetonai autentifikavimui",
+          "Reguliarūs saugos naujinimai"
+        ]
+      },
+      {
+        "title": "Jūsų teisės",
+        "paragraphs": [
+          "Jūs turite teisę:"
+        ],
+        "bullets": [
+          "Pasiekite savo duomenis",
+          "Ištaisykite netikslią informaciją",
+          "Ištrinkite paskyrą ir visus duomenis",
+          "Eksportuokite duomenis kaip CSV",
+          "Atšaukti sutikimą"
+        ]
+      },
+      {
+        "title": "Duomenų saugojimas",
+        "paragraphs": [
+          "Saugome jūsų duomenis, kol paskyra aktyvi. Jei ištrinsite paskyrą, visi duomenys bus pašalinti per 30 dienų."
+        ]
+      },
+      {
+        "title": "Slapukai ir sekimas",
+        "paragraphs": [
+          "Kad būtumėte prisijungę, naudojame minimalius slapukus. Nenaudojame trečiųjų šalių stebėjimo ar reklamos slapukų."
+        ]
+      },
+      {
+        "title": "Vaikų privatumas",
+        "paragraphs": [
+          "„RunWithAI“ nėra skirtas vaikams iki 13 metų ir mes sąmoningai nerenkame duomenų apie jaunesnius nei šio amžiaus vaikus."
+        ]
+      },
+      {
+        "title": "Politikos pakeitimai",
+        "paragraphs": [
+          "Retkarčiais galime atnaujinti šią politiką. Apie esminius pakeitimus informuosime programėlėje arba el. paštu."
+        ]
+      },
+      {
+        "title": "Susisiekite"
+      }
+    ],
+    "contactQuestion": "Ar turite klausimų apie šią politiką arba savo duomenis?",
+    "footer": "© 2026 RunWithAI. Visos teisės saugomos."
+  },
+  "more": {
+    "title": "Daugiau",
+    "subtitle": "Visi jūsų įrankiai vienoje vietoje",
+    "sections": {
+      "account": "Paskyra",
+      "statistics": "Statistika",
+      "setup": "Sąranka",
+      "app": "Programa"
+    },
+    "newBadge": "Nauja",
+    "menu": {
+      "profile": "profilis",
+      "profileSubtitle": "Asmeninė informacija, tikslai, širdies ritmas ir traumos",
+      "statistics": "Statistika",
+      "statisticsSubtitle": "Visas atstumas, geriausias tempas ir etapai",
+      "goals": "Tikslai",
+      "goalsSubtitle": "Savaitės tikslai ir treniruočių tipai",
+      "settings": "Nustatymai",
+      "settingsSubtitle": "Lygis, kalba, profilis ir pranešimai",
+      "privacy": "Privatumas",
+      "privacySubtitle": "Jūsų duomenys ir teisės",
+      "upgrade": "Naujovinkite į PRO",
+      "upgradeSubtitle": "Atrakinkite visas funkcijas"
     }
   }
 }

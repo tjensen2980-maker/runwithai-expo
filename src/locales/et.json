@@ -1,4 +1,4 @@
-﻿{
+{
   "coachIntro": {
     "title": "Sinu AI-treener",
     "qName": "Tere! Olen sinu isiklik AI-jooksutreener 🏃 Enne alustamist soovin sind veidi tundma õppida. Mis su nimi on?",
@@ -55,7 +55,11 @@
     "lastActivity": "Viimane tegevus",
     "gpsTracking": "GPS jälgimine",
     "walkTracking": "Kõnni jälgimine",
-    "aiRoutes": "AI marsruudid"
+    "aiRoutes": "AI marsruudid",
+    "motionTitle": "Kardio",
+    "motionActivities": "Jookse · Kõndi · Rattaga",
+    "trainingTitle": "Koolitus",
+    "trainingActivities": "Tugevus, liikuvus ja palju muud"
   },
   "pro": {
     "badge": "PRO",
@@ -86,6 +90,10 @@
     "aiRoutes": {
       "title": "AI marsruudid",
       "description": "Saa marsruudi soovitusi oma treeningu põhjal"
+    },
+    "nutrition": {
+      "title": "Kalorite jälgija",
+      "description": "Loendage kaloreid, logige sisse sööki ja skannige vöötkoode"
     }
   },
   "stats": {
@@ -146,44 +154,85 @@
     "height": "PIKKUS",
     "years": "Aastat",
     "runningLevel": "JOOKSUTASE",
-    "levels.beginner": "Algaja",
-    "levels.intermediate": "Kesktase",
-    "levels.advanced": "Edasijõudnu",
     "yourGoals": "MIS ON SINU EESMÄRGID",
-    "goals.health": "Tervis",
-    "goals.weight": "Kaalulangus",
-    "goals.distance": "Joosta kaugemale",
-    "goals.speed": "Saada kiiremaks",
-    "goals.race": "Joosta võistlus",
-    "goals.fun": "Lõbu",
     "weeklyGoalKm": "NÄDALA KM EESMÄRK",
     "weeklyGoalExample": "Nt. 20",
     "unlockFullPower": "Ava täielik juurdepääs",
     "unlockDesc": "Saa juurdepääs kõigile funktsioonidele ja saavuta eesmärgid kiiremini",
-    "proFeatures.aiCoachDesc": "AI Treener",
-    "proFeatures.statsDesc": "Statistika",
-    "proFeatures.goalsDesc": "Eesmärgid",
-    "proFeatures.routesDesc": "Marsruudid",
-    "proFeatures.chatDesc": "AI Vestlus",
-    "proFeatures.reportsDesc": "Aruanded",
     "price": "49 kr",
     "guarantee": "✓ Tühista igal ajal • ✓ 7 päeva tasuta",
     "perMonth": "/kuus",
     "startFreeTrial": "Alusta tasuta prooviperioodi",
     "continueWithFree": "Jätka tasuta versiooniga",
-    "levels.beginnerDesc": "Jooksmises uus või alustad pärast pikka pausi",
-    "levels.intermediateDesc": "Jooksed regulaarselt ja soovid areneda",
-    "levels.advancedDesc": "Kogenud jooksja kindlate eesmärkidega",
     "or": "või",
     "errors": {
-      "serverConnection": "Serveriga ei saa ühendust"
+      "serverConnection": "Serveriga ei saa ühendust",
+      "fillEmailPassword": "Sisestage nii e-posti aadress kui ka parool",
+      "loginFailed": "Ei saanud sisse logida",
+      "enterEmail": "Sisestage oma e-posti aadress",
+      "resetCodeFailed": "Lähtestamiskoodi ei saanud saata",
+      "fillCodePassword": "Sisestage lähtestuskood ja uus parool",
+      "passwordMismatch": "Paroolid ei ühti",
+      "passwordTooShort": "Parool peab olema vähemalt 6 tähemärgi pikkune",
+      "resetFailed": "Parooli ei saanud lähtestada",
+      "registerFailed": "Kontot ei saanud luua",
+      "enterName": "Sisestage oma nimi",
+      "selectLevel": "Valige oma jooksutase"
+    },
+    "levels": {
+      "beginner": "Algaja",
+      "intermediate": "Kesktase",
+      "advanced": "Edasijõudnu",
+      "beginnerDesc": "Jooksmises uus või alustad pärast pikka pausi",
+      "intermediateDesc": "Jooksed regulaarselt ja soovid areneda",
+      "advancedDesc": "Kogenud jooksja kindlate eesmärkidega"
+    },
+    "goals": {
+      "health": "Tervis",
+      "weight": "Kaalulangus",
+      "distance": "Joosta kaugemale",
+      "speed": "Saada kiiremaks",
+      "race": "Joosta võistlus",
+      "fun": "Lõbu"
+    },
+    "proFeatures": {
+      "aiCoachDesc": "AI Treener",
+      "statsDesc": "Statistika",
+      "goalsDesc": "Eesmärgid",
+      "routesDesc": "Marsruudid",
+      "chatDesc": "AI Vestlus",
+      "reportsDesc": "Aruanded"
+    },
+    "resetPassword": "Lähtestage parool",
+    "forgotPasswordDesc": "Sisestage oma e-posti aadress ja me saadame teile lähtestuskoodi.",
+    "sendResetCode": "Saatke lähtestuskood",
+    "backToLogin": "Tagasi sisselogimise juurde",
+    "createNewPassword": "Looge uus parool",
+    "checkEmail": "Kontrollige oma meili kuuekohalist lähtestuskoodi.",
+    "resetCode": "Lähtestage kood",
+    "resetCodePlaceholder": "6-kohaline kood",
+    "newPassword": "Uus parool",
+    "confirmNewPassword": "Kinnitage uus parool",
+    "resendCode": "Saatke uus kood",
+    "tellUsAboutYou": "Rääkige meile endast",
+    "success": {
+      "resetCodeSent": "Saatsime teie meilile lähtestuskoodi.",
+      "passwordReset": "Teie parool on lähtestatud. Nüüd saate sisse logida."
     }
   },
   "settings": {
     "pageTitle": "Seaded",
     "title": "Seaded",
     "profile": "Profiil",
-    "days": ["E", "T", "K", "N", "R", "L", "P"],
+    "days": [
+      "E",
+      "T",
+      "K",
+      "N",
+      "R",
+      "L",
+      "P"
+    ],
     "saveChanges": "Salvesta muudatused",
     "saved": "Salvestatud!",
     "logout": "Logi välja",
@@ -201,7 +250,8 @@
       "reminders": "Meeldetuletused",
       "privacy": "Privaatsus",
       "units": "Ühikud",
-      "data": "Andmed"
+      "data": "Andmed",
+      "profile": "Profiil"
     },
     "fields": {
       "name": "Nimi",
@@ -304,6 +354,57 @@
       "deletedTitle": "Konto kustutatud",
       "deletedMessage": "Teie konto on kustutatud.",
       "error": "Konto kustutamine ebaõnnestus"
+    },
+    "reminders": {
+      "workoutTitle": "Treeningu meeldetuletus",
+      "workoutSubtitle": "Saate märguandeid valitud päevadel ja valitud ajal",
+      "mealTitle": "Toidukorra meeldetuletus",
+      "mealSubtitle": "Ärge unustage oma toidukordi logida",
+      "time": "Aeg: {{time}}",
+      "days": [
+        "Pühap",
+        "Esmasp",
+        "Teis",
+        "Kolmap",
+        "Neljap",
+        "P",
+        "laup"
+      ]
+    },
+    "email": {
+      "title": "E-post",
+      "change": "Muuda e-posti aadressi",
+      "newEmail": "Uus meil",
+      "currentPassword": "Praegune parool",
+      "missingFields": "Sisestage nii oma uus e-posti aadress kui ka praegune parool",
+      "changeError": "E-posti ei saanud muuta",
+      "successMessage": "Teie e-posti aadressi on värskendatud",
+      "networkError": "Võrguviga"
+    },
+    "subscription": {
+      "title": "Tellimus",
+      "type": "Tüüp",
+      "status": "Olek",
+      "tiers": {
+        "pro": "Pro",
+        "basic": "Põhiline",
+        "free": "Tasuta"
+      },
+      "statuses": {
+        "active": "Aktiivne",
+        "inactive": "Mitteaktiivne",
+        "trialing": "Prooviversioon",
+        "canceled": "Tühistatud"
+      },
+      "upgrade": "Uuendamine",
+      "manage": "Hallake App Store'is"
+    },
+    "language": "Keel",
+    "changeLanguageInSettings": "Muutke keelt menüüs Seaded",
+    "languageHint": "Avage seadme sätted ja valige RunWithAI → Language.",
+    "actions": {
+      "save": "Salvestage muudatused",
+      "saved": "Salvestatud!"
     }
   },
   "pricing": {
@@ -367,6 +468,139 @@
     "step3": {
       "title": "Saavuta oma eesmärgid",
       "desc": "Sea eesmärgid ja jälgi oma progressi üksikasjaliku statistikaga"
+    },
+    "tagline": "Teie isiklik tehisintellekti jooksutreener",
+    "headline": {
+      "before": "Koolitus, et",
+      "highlight": "kohandub",
+      "after": "teile"
+    },
+    "features": {
+      "ai": {
+        "title": "Tõeline tehisintellekti treener",
+        "desc": "Teie plaan on loodud teie jaoks – mitte mall"
+      },
+      "adapts": {
+        "title": "Elamisplaan",
+        "desc": "Reguleerib pärast iga lõpetatud jooksu"
+      },
+      "injury": {
+        "title": "Kuulab teie keha",
+        "desc": "Vigastused ja valu on teie treeningus arvesse võetud"
+      },
+      "goals": {
+        "title": "Oma eesmärgi poole",
+        "desc": "Esimesest 5 km-st maratonini – teie tempos"
+      }
+    },
+    "tryFree": "Proovige 14 päeva tasuta",
+    "fine": "Kohustus puudub. Tühistage igal ajal.",
+    "levelQuestion": "Kus olete oma jooksuteekonnal?",
+    "selectLevel": "Jätkamiseks valige oma tase",
+    "levels": {
+      "beginner": {
+        "label": "Algaja",
+        "sub": "Uus või tuleb pärast pausi tagasi"
+      },
+      "intermediate": {
+        "label": "Keskmine",
+        "sub": "Jooksin regulaarselt ja tahan end parandada"
+      },
+      "advanced": {
+        "label": "Täpsem",
+        "sub": "Treenin eesmärgiga ja tean oma tempot"
+      }
+    },
+    "tellUsAboutYou": "Räägi meile natuke endast",
+    "coachUsesThis": "Teie treener kasutab seda teie plaani koostamiseks",
+    "fields": {
+      "name": "Mis on teie nimi?",
+      "age": "Vanus",
+      "weeklyKm": "km nädalas (umbes)"
+    },
+    "primaryGoal": "Mis on teie eesmärk?",
+    "goals": {
+      "fitness": {
+        "label": "Saa end vormis",
+        "sub": "Tervis ja energia"
+      },
+      "5k": {
+        "label": "5K",
+        "sub": "Minu esimene suur eesmärk"
+      },
+      "10k": {
+        "label": "10K",
+        "sub": "Järgmine tase"
+      },
+      "half": {
+        "label": "Poolmaraton",
+        "sub": "21,1 km"
+      },
+      "full": {
+        "label": "Maraton",
+        "sub": "42,2 km"
+      },
+      "weight": {
+        "label": "Kaalust alla võtta",
+        "sub": "Jookse end kergemalt"
+      }
+    },
+    "raceDate": "Kas teil on võistluse kuupäev? (valikuline)",
+    "raceDatePlaceholder": "nt. 15. september",
+    "skipForNow": "Jäta praegu vahele",
+    "plan": {
+      "building": "Teie treener koostab teie plaani…",
+      "waitNamed": "{{name}}, andke mulle hetk.",
+      "wait": "Andke mulle hetk.",
+      "errorTitle": "Teie plaani ei saanud praegu luua",
+      "errorMessage": "Võite alati paluda oma treeneril see hiljem luua.",
+      "readyNamed": "{{name}}, siin on teie plaan",
+      "ready": "Siin on teie plaan",
+      "basedOnAnswers": "Teie plaan põhineb sellel, mida olete oma treenerile öelnud.",
+      "weeklyDistance": "Nädala vahemaa: {{km}} km",
+      "goal": "Eesmärk: {{goal}}",
+      "considerations": "Kaalutlused: {{injuries}}",
+      "weekAndDay": "Nädal {{week}} – {{day}}",
+      "day": "Päev {{day}}",
+      "run": "Jookse",
+      "makePlan": "Loo minu plaan",
+      "weekdays": {
+        "mon": "Esmaspäev",
+        "tue": "Teisipäev",
+        "wed": "Kolmapäev",
+        "thu": "Neljapäev",
+        "fri": "Reede",
+        "sat": "Laupäev",
+        "sun": "Pühapäev"
+      }
+    },
+    "languageTitle": "Valige oma keel",
+    "languageSubtitle": "Saate seda hiljem seadetes muuta",
+    "paywall": {
+      "headline": "Teie isiklik tehisintellekti treener",
+      "subtitle": "Treeningplaan, mis kohandub teiega – iga nädal, iga jooks.",
+      "benefits": {
+        "adaptive": "Teie plaan kohandub pärast iga jooksu",
+        "audioCoach": "Treener on treenimise ajal kõrvas",
+        "calendar": "Nädalaplaan ja kalender, mis on kursis",
+        "chat": "Küsige oma treenerilt kõike – igal ajal"
+      },
+      "trial": "14 päeva tasuta",
+      "afterTrial": "Seejärel {{price}} kuus. Tühistage igal ajal – ühe puudutusega.",
+      "startTraining": "Alustage treeningut",
+      "restore": "Ostude taastamine",
+      "welcomeTitle": "🎉 Tere tulemast!",
+      "welcomeMessage": "Teie Pro juurdepääs on nüüd aktiivne.",
+      "restoreSuccessTitle": "Ostud taastatud",
+      "restoreSuccessMessage": "Teie tellimus on taas aktiivne.",
+      "noPurchasesTitle": "Oste ei leitud",
+      "noPurchasesMessage": "Aktiivseid tellimusi ei leitud.",
+      "errors": {
+        "prices": "Hindu ei saanud laadida. Proovige hiljem uuesti.",
+        "packageUnavailable": "See tellimus pole saadaval.",
+        "purchaseTitle": "Ost nurjus",
+        "restore": "Oste ei saanud taastada."
+      }
     }
   },
   "dashboard": {
@@ -419,7 +653,20 @@
       "runsFromRecord": "{{count}} jooksu rekordini",
       "runsInMonth": "{{count}} jooksu {{month}}"
     },
-    "monthNames": ["Jaan", "Veeb", "Märts", "Apr", "Mai", "Juuni", "Juuli", "Aug", "Sept", "Okt", "Nov", "Dets"],
+    "monthNames": [
+      "Jaan",
+      "Veeb",
+      "Märts",
+      "Apr",
+      "Mai",
+      "Juuni",
+      "Juuli",
+      "Aug",
+      "Sept",
+      "Okt",
+      "Nov",
+      "Dets"
+    ],
     "workout": {
       "nextWorkout": "JÄRGMINE TREENING",
       "today": "TÄNA",
@@ -445,7 +692,15 @@
       "addNote": "+ Märge",
       "mood": "Meeleolu",
       "placeholder": "Kuidas läks? Rasked jalad? Hea päev? Uus marsruut?",
-      "dayNames": ["P", "E", "T", "K", "N", "R", "L"]
+      "dayNames": [
+        "P",
+        "E",
+        "T",
+        "K",
+        "N",
+        "R",
+        "L"
+      ]
     },
     "injury": {
       "title": "VIGASTUSE RISK",
@@ -488,7 +743,31 @@
       "unavailable": "GPS pole saadaval",
       "timeout": "GPS-i ajalõpp",
       "notAvailable": "GPS pole saadaval",
-      "error": "GPS-i viga"
+      "error": "GPS-i viga",
+      "points": "{{count}} punktid ({{filtered}} filtreeritud)"
+    },
+    "cycling": "Jalgrattasõit",
+    "music": "Muusika",
+    "voiceOnly": "Ainult hääl",
+    "notification": {
+      "run": "Jooksu jälgimine...",
+      "walk": "Teie jalutuskäigu jälgimine...",
+      "bike": "Teie sõidu jälgimine..."
+    },
+    "limit": {
+      "title": "Nädala aktiivsuse limiit on täis",
+      "message": "Olete täis {{limit}} nädala tegevuste tasuta plaani limiidi. Piiramatu juurdepääsu saamiseks uuendage versioonile Basic või Pro.",
+      "later": "Hiljem"
+    },
+    "stats": {
+      "runs": "töötab",
+      "walks": "kõnnib",
+      "yourProgress": "Teie edusammud",
+      "thisWeek": "Sel nädalal",
+      "lastWeek": "Eelmisel nädalal",
+      "bestPace": "Parim tempo",
+      "longestRun": "Pikim jooks",
+      "totalKm": "km kokku"
     }
   },
   "chat": {
@@ -507,7 +786,9 @@
     "logAllMeals": "Logi kõik toidukorrad",
     "logged": "Logitud",
     "mealPlanLoggedMessage": "Toitumiskava on tänaseks logitud.",
-    "mealPlanLogError": "Toitumiskava ei saanud logida: {{error}}"
+    "mealPlanLogError": "Toitumiskava ei saanud logida: {{error}}",
+    "languageChanged": "Keel muudetud. Teie tehisintellekti treener vastab nüüd inglise keeles.",
+    "languageChangedConfirmation": "Keel muudetud. Teie tehisintellekti treener vastab nüüd teie valitud keeles."
   },
   "proUpsell": {
     "title": "Ava täielik võimekus",
@@ -542,6 +823,675 @@
         "title": "Progressi aruanded",
         "desc": "Nädala ja kuu kokkuvõtted"
       }
+    }
+  },
+  "bariatric": {
+    "title": "Bariaatriline profiil",
+    "subtitle": "Mao varruka / möödaviigu tugi",
+    "settingsButton": "Bariaatriline profiil",
+    "settingsDescription": "Mao ümbris või möödaviigu tugi",
+    "setup": {
+      "title": "Bariaatriline profiil",
+      "intro": "Lubage bariaatriline tugi, et saada teie operatsiooni ja faasi põhjal kohandatud valgu-, vedeliku- ja kalorite sihtmärgid.",
+      "surgeryType": "Operatsiooni tüüp",
+      "surgeryTypeNone": "Puudub",
+      "surgeryTypeSleeve": "Maoümbris",
+      "surgeryTypeBypass": "Mao ümbersõit",
+      "surgeryDate": "Operatsiooni kuupäev",
+      "surgeryDatePlaceholder": "YYYY-MM-DD",
+      "startWeight": "Algkaal (kg)",
+      "goalWeight": "Eesmärgi kaal (kg)",
+      "height": "Kõrgus (cm)",
+      "enable": "Luba bariaatriline tugi",
+      "save": "Salvesta profiil",
+      "delete": "Kustutage bariaatriline profiil",
+      "deleteConfirm": "Kas soovite kindlasti oma bariaatrilise profiili kustutada?",
+      "disclaimer": "Tähtis: see rakendus EI asenda teie bariaatrilist toitumisspetsialisti, arsti ega kliinikut. Soovitused on üldised juhised, mis põhinevad avalikel ASMBS-i juhistel. Järgige alati oma kliiniku juhiseid. Dumpingu sündroomi, püsiva iivelduse või muude probleemide korral pöörduge viivitamatult oma arsti poole.",
+      "acceptDisclaimer": "Ma saan aru, et see rakendus ei asenda minu bariaatrilise hoolduse meeskonda",
+      "disclaimerRequired": "Peate loobuma",
+      "invalidDate": "Sisestage kehtiv kuupäev",
+      "missingType": "Valige operatsiooni tüüp",
+      "saved": "Profiil on salvestatud",
+      "deleted": "Profiil kustutatud"
+    },
+    "dashboard": {
+      "title": "Bariaatriline tugi",
+      "edit": "Redigeeri",
+      "phaseLabel": "Praegune faas",
+      "daysSinceLabel": "Päevi pärast operatsiooni",
+      "daysUntilNext": "{{days}} päeva järgmise etapini",
+      "lastPhase": "Olete viimases faasis",
+      "proteinToday": "Valk täna",
+      "proteinProgress": "Valk täna",
+      "fluidToday": "Vedelikud täna",
+      "kcalRange": "Kalorid (eesmärk)",
+      "portionSize": "Soovitatav portsjoni suurus",
+      "medicalCheckReminder": "Pidage meeles oma {{day}}-päevast kontrolli",
+      "preSurgery": "Operatsiooni kuupäev pole veel käes"
+    },
+    "phases": {
+      "clearLiquid": {
+        "name": "1. nädal: selged vedelikud",
+        "description": "Ainult selged vedelikud: vesi, puljong, suhkruvaba mahl, tee. Väikeste lonksudena terve päeva."
+      },
+      "fullLiquid": {
+        "name": "2. nädal: täis vedelikud",
+        "description": "Kõik vedelikud, sh. valgukokteilid, supp, jogurt. MITTE juua 30 min enne/pärast sööki."
+      },
+      "pureed": {
+        "name": "3.–4. nädal: püreestatud toit",
+        "description": "Segatud/püreestatud toit: kodujuust, kalapüree, segatud kana. Näri põhjalikult."
+      },
+      "soft": {
+        "name": "5.–6. nädal: pehme toit",
+        "description": "Pehme toit: munapuder, kala, keedetud köögiviljad, pehmed puuviljad. Esiteks valk, väikesed ampsud."
+      },
+      "regular": {
+        "name": "Nädal 7+: tavaline toit",
+        "description": "Tavaline toit väikeste portsjonitena. Esmalt valk, siis köögiviljad ja siis süsivesikud. Näri põhjalikult."
+      }
+    },
+    "tips": {
+      "noDrinking": "ÄRGE jooge 30 minutit enne või pärast sööki",
+      "proteinFirst": "Söö alati kõigepealt valku",
+      "chew": "Närige iga hammustust 20–30 korda",
+      "stopWhenFull": "Peatage, kui see on täis – isegi väikeste portsjonite puhul",
+      "vitamins": "Pidage meeles oma igapäevaseid vitamiine"
+    },
+    "vitamins": {
+      "title": "Tänapäeva vitamiinid",
+      "subtitle": "Pidage meeles oma igapäevaseid toidulisandeid",
+      "names": {
+        "multivitamin": "Multivitamiin",
+        "calciumD": "Kaltsium + D-vitamiin",
+        "iron": "Raud",
+        "b12": "B12",
+        "omega3": "Omega-3 (valikuline)"
+      },
+      "taken": "Jäädvustatud",
+      "notTaken": "Pole võetud",
+      "allDone": "Kõik täna võetud vitamiinid 🎉",
+      "reset": "Lähtesta",
+      "optional": "valikuline"
+    },
+    "fluid": {
+      "title": "Vedeliku tarbimine täna",
+      "subtitle": "Jooge söögikordade vahel, mitte koos",
+      "goal": "Eesmärk",
+      "current": "Täna",
+      "remaining": "Alles",
+      "add250": "+ 250 ml",
+      "add500": "+ 500 ml",
+      "addCustom": "Lisa",
+      "reset": "Lähtesta",
+      "goalReached": "Jõudsite oma sujuva eesmärgini 💧",
+      "warning": "Pidage meeles väikseid lonksu – mitte suuri koguseid korraga"
+    },
+    "meals": {
+      "title": "Soovitused teile kohe",
+      "subtitle": "Teie faasi jaoks kohandatud",
+      "kcal": "kcal",
+      "protein": "g valku",
+      "prep": "min",
+      "logIt": "Logi",
+      "types": {
+        "fluid": "Vedelik",
+        "puree": "Püree",
+        "soft": "Pehme toit",
+        "normal": "Tavaline toit"
+      },
+      "items": {
+        "water": "Vesi",
+        "brothClear": "Selge puljong",
+        "sugarFreeJuice": "Suhkruvaba mahl (lahjendatud)",
+        "herbalTea": "Taimetee",
+        "proteinShake": "Valgukokteil",
+        "skimmedMilk": "Lõss",
+        "thinSoup": "Õhuke supp (kurnatud)",
+        "skyrThin": "Õhuke skyr",
+        "mashedFish": "Kala püreestatud",
+        "cottageCheese": "Kodujuust",
+        "eggPuree": "Munapüree",
+        "pureedChicken": "Püreestatud kana",
+        "mashedTofu": "Tofupüree",
+        "softFish": "Pehme kala",
+        "scrambledEgg": "Munapuder",
+        "softChicken": "Õrn kana",
+        "wellCookedVeggies": "Hästi küpsetatud köögiviljad",
+        "greekYogurt": "Kreeka jogurt",
+        "grilledChicken": "Grillitud kanarind",
+        "salmonFillet": "Lõhefilee",
+        "eggOmelette": "Omlett",
+        "lentilSoup": "Läätsesupp",
+        "leanBeef": "Lahja veiseliha"
+      },
+      "reminders": {
+        "title": "Pidage meeles toidukordade ajal",
+        "proteinFirst": "Söö kõigepealt valku",
+        "chew": "Närige 20–30 korda",
+        "noDrinking": "Ärge jooge 30 minutit enne/pärast sööki",
+        "stopWhenFull": "Peatage, kui see on täis",
+        "smallSips": "Võtke väikesed lonksud",
+        "noStraw": "Õhku pole (õhk maos)",
+        "slowly": "Jooge aeglaselt",
+        "mashWell": "Püreesta põhjalikult",
+        "newFoodOneAtATime": "Tutvustage ühte uut toitu korraga",
+        "chewExtra": "Närige eriti põhjalikult",
+        "mindfulEating": "Sööge aeglaselt ja tähelepanelikult",
+        "avoidEmptyCalories": "Vältige tühje kaloreid"
+      }
+    },
+    "dumping": {
+      "title": "Dumpingu sündroomi oht",
+      "subtitle": "Põhineb tänastel toitudel",
+      "low": "Madal risk",
+      "medium": "Olge teadlik",
+      "high": "Suur risk",
+      "lowDesc": "Tänased toidud näevad head välja",
+      "mediumDesc": "Üks või mitu söögikorda võib vallandada mahajäämuse. Jälgige sümptomeid.",
+      "highDesc": "Mitu kõrge riskiga toidukorda täna. Võtke ühendust oma arstiga, kui teil tekib iiveldus, kiire südametegevus, pearinglus või kõhulahtisus.",
+      "flaggedCount": "{{count}} eine märgistatud",
+      "flaggedCount_plural": "{{count}} toidud märgistatud",
+      "reasons": {
+        "sugarHigh": "Liiga palju suhkrut",
+        "sugarMedium": "Mõõdukas suhkrusisaldus",
+        "fatHigh": "Kõrge rasvasisaldus",
+        "carbsNoProtein": "Süsivesikud ilma valguta",
+        "carbsHigh": "Suur süsivesikute tarbimine",
+        "carbsMedium": "Mõõdukas süsivesikute tarbimine",
+        "proteinLow": "Valgu tarbimine on liiga madal"
+      },
+      "info": "Dumping on kõige tavalisem pärast mao ümbersõitu ja selle käivitavad suhkur, rasv või kiiresti imenduvad süsivesikud. Sümptomid: iiveldus, kiire südametegevus, pearinglus, kõhulahtisus 15-30 min pärast sööki."
+    },
+    "training": {
+      "title": "Kohandatud koolitus",
+      "subtitle": "Teie faasi jaoks soovitatav tegevus",
+      "currentPhase": "Teie treeningfaas",
+      "daysUntilNext": "{{days}} päeva järgmise treeningfaasini",
+      "maxDuration": "Maksimaalne kestus",
+      "maxHeartRate": "Maksimaalne pulsisagedus",
+      "min": "min",
+      "ofMax": "maksimaalsest HR-st",
+      "intensityLabel": {
+        "veryLight": "Väga kerge",
+        "light": "Valgus",
+        "moderate": "Mõõdukas",
+        "normal": "Tavaline"
+      },
+      "phaseNames": {
+        "1": "Taastumine (nädal 0–2)",
+        "2": "Ettevaatlik alustamine (nädal 2–4)",
+        "3": "Kerge aktiivsus (4.–6. nädal)",
+        "4": "Ülesehitus (6.–8. nädal)",
+        "5": "Tavaline treening (nädal 8+)"
+      },
+      "phaseDesc": {
+        "1": "Järgige lühikesi jalutuskäike ja sügavaid hingamisharjutusi. Kuulake oma keha ja puhake palju.",
+        "2": "Saate kõndimist veidi suurendada. Endiselt pole jõutreeningut ega intensiivset treeningut.",
+        "3": "Võite alustada jalgrattasõitu ja ujumist (kui haavad on paranenud). Ikka ei jooksmist ega suuri raskusi.",
+        "4": "On aeg tutvustada kerget jõutreeningut ja pikemat kardiotreeningut. Alustage väikeste raskustega.",
+        "5": "Võite naasta tavapärase treeningu juurde, kuid siiski järk-järgult ehitada ja jälgida oma energiat."
+      },
+      "allowed": "Soovitatav",
+      "notRecommended": "Vältige kohe",
+      "activities": {
+        "walkShort": "Lühike jalutuskäik (5–10 min)",
+        "walkMedium": "Keskmine kõndimine (15–20 min)",
+        "walkLong": "Pikk jalutuskäik (30+ min)",
+        "breathing": "Hingamisharjutused",
+        "gentleStretch": "Õrn venitus",
+        "cycling": "Jalgrattasõit",
+        "swimming": "Ujumine",
+        "lightStrength": "Kerge jõutreening",
+        "strength": "Jõutreening",
+        "jog": "Kerge sörkimine",
+        "running": "Jookseb",
+        "highIntensity": "Suure intensiivsusega treening",
+        "heavyLifting": "Raske tõstmine",
+        "extremeIntensity": "Äärmuslik intensiivsus"
+      },
+      "warnings": {
+        "title": "Oluline on meeles pidada",
+        "noLifting": "Raskuste tõstmine keelatud (üle 5 kg)",
+        "staySoftMovements": "Jääge pehmete ja aeglaste liigutuste juurde",
+        "avoidSwimmingUntilHealed": "Vältige ujumist, kuni teie haavad on paranenud (tavaliselt 3–4 nädalat)",
+        "lightWeightsOk": "Kerge kaal (2–5 kg) sobib pärast arstiga konsulteerimist",
+        "startStrengthGradually": "Alustage jõutreeningut väikeste raskuste ja suurte kordustega",
+        "stillBuildGradually": "Ehitage ikka järk-järgult – vältige järske suuri tõuse",
+        "hydration": "Pidage meeles vedelikke enne, treeningu ajal ja pärast treeningut"
+      },
+      "safety": {
+        "activityNotRecommended": "{{activity}} pole teie faasis soovitatav. Konsulteerige oma arstiga.",
+        "durationTooLong": "Soovitatav kestus on maksimaalselt {{max}} min. Planeerisite {{actual}} min.",
+        "checkWithDoctor": "Võtke ühendust oma arstiga, kui teil tekib valu, iiveldus või kurnatus"
+      },
+      "disclaimer": "Soovitused on ainult juhised. Järgige alati oma kliiniku juhiseid."
+    }
+  },
+  "diabetes": {
+    "title": "Diabeedi profiil",
+    "subtitle": "1., 2. tüüpi või prediabeet",
+    "settingsButton": "Diabeedi profiil",
+    "settingsDescription": "1., 2. tüüpi või eeldiabeet – dieet, veresuhkur ja treening",
+    "setup": {
+      "title": "Diabeedi profiil",
+      "intro": "Lubage diabeedi tugi, et saada kohandatud söögisoovitusi, juhiseid veresuhkru taseme kohta ja treeningsoovitusi.",
+      "type": "Diabeedi tüüp",
+      "typeT1": "Tüüp 1",
+      "typeT2": "Tüüp 2",
+      "typePre": "Prediabeet",
+      "typeGest": "Rasedusdiabeet",
+      "treatment": "Ravi",
+      "txNone": "Puudub",
+      "txDiet": "Ainult dieet/eluviis",
+      "txMetformin": "Metformiin",
+      "txOral": "Muud suukaudsed ravimid",
+      "txGLP1": "GLP-1 (Ozempic/Wegovy/Mounjaro)",
+      "txBasal": "Basaalinsuliin",
+      "txBolus": "Basaal + boolusinsuliin",
+      "txPump": "Insuliinipump",
+      "diagnosisDate": "Diagnoosimise kuupäev (valikuline)",
+      "datePlaceholder": "YYYY-MM-DD",
+      "hba1c": "HbA1c (mmol/mol, valikuline)",
+      "countCarbs": "Loen süsivesikuid",
+      "carbRatio": "Insuliini/süsivesikute suhe (g/U, valikuline)",
+      "carbRatioHelp": "Nt. 10 = 1 ühik insuliini katab 10 g süsivesikuid. Rakendus ei doseeri kunagi – see number on ainult informatiivne.",
+      "correctionFactor": "Parandustegur (mmol/L U kohta, valikuline)",
+      "preExerciseMin": "Minimaalne veresuhkur enne treeningut (mmol/l)",
+      "enable": "Lubage diabeedi tugi",
+      "acceptDisclaimer": "Nõustun ülaltoodud lahtiütlemisega",
+      "disclaimerRequired": "Peate nõustuma lahtiütlemisega",
+      "missingType": "Valige diabeedi tüüp",
+      "save": "Salvesta profiil",
+      "saved": "Profiil on salvestatud",
+      "delete": "Diabeedi profiili kustutamine",
+      "deleted": "Profiil kustutatud",
+      "deleteConfirm": "Kas olete kindel, et soovite oma diabeediprofiili kustutada?",
+      "disclaimer": "TÄHTIS: see rakendus EI asenda teie arsti ega diabeedimeeskonda. Me EI soovita KUNAGI konkreetseid insuliiniannuseid ega ravimite muutmist. Ärge kunagi kohandage oma ravi ainult rakenduse nõuannete põhjal. Kahtluse korral võtke alati ühendust oma tervishoiuteenuse osutajaga."
+    }
+  },
+  "bloodSugar": {
+    "title": "Veresuhkur",
+    "settingsButton": "Veresuhkru logi",
+    "settingsDescription": "Logige oma mõõtmised ja vaadake trende aja jooksul",
+    "add": "Lisa näit",
+    "save": "Salvestage",
+    "history": "Ajalugu",
+    "empty": "Näiteid veel pole. Esimese mõõtmise logimiseks puudutage ülalolevat nuppu.",
+    "disclaimer": "Need numbrid on ainult teile viitamiseks. Arutage mustreid alati oma arsti või diabeedimeeskonnaga.",
+    "valueLabel": "Veresuhkur (mmol/l)",
+    "contextLabel": "Kontekst",
+    "noteLabel": "Märkus (valikuline)",
+    "notePlaceholder": "Nt. peale hommikusööki",
+    "errInvalidTitle": "Kehtetu väärtus",
+    "errInvalidBody": "Sisestage veresuhkru väärtus vahemikus 1,0–40,0 mmol/L.",
+    "errSaveTitle": "Ei saanud salvestada",
+    "deleteTitle": "Näidu kustutamine",
+    "deleteBody": "Kas olete kindel? Kustutamiseks vajutage pikalt.",
+    "ctx": {
+      "fasting": "Paastumine",
+      "preMeal": "Enne sööki",
+      "postMeal": "Pärast sööki",
+      "bedtime": "Uneaeg",
+      "preExercise": "Enne treeningut",
+      "postExercise": "Pärast treeningut",
+      "random": "Juhuslik"
+    },
+    "range": {
+      "1d": "1 päev",
+      "7d": "7 päeva",
+      "30d": "30 päeva",
+      "90d": "90 päeva"
+    },
+    "stat": {
+      "avg": "Keskmine",
+      "min": "Min",
+      "max": "Maks",
+      "tir": "Aeg vahemikus",
+      "target": "Sihtmärk",
+      "measurements": "näidud"
+    }
+  },
+  "healthScore": {
+    "title": "Tervise skoor",
+    "todayLabel": "Tänane tulemus",
+    "A": "Väga tervislik",
+    "B": "Terve",
+    "C": "Mõõdukas",
+    "D": "Vähem tervislik",
+    "E": "Ebatervislik"
+  },
+  "units": {
+    "g": "g",
+    "kg": "kg",
+    "ml": "ml",
+    "dl": "dl",
+    "l": "l",
+    "tsk": "tl",
+    "spsk": "spl",
+    "stk": "tk",
+    "skive": "viil",
+    "portion": "osa"
+  },
+  "logMeal": {
+    "amount": "Kogus",
+    "unit": "Ühik",
+    "approxGrams": "≈ {{grams}}g"
+  },
+  "home": {
+    "greeting": {
+      "morning": "Tere hommikust",
+      "day": "Tere",
+      "evening": "Tere õhtust",
+      "night": "Head ööd"
+    },
+    "coach": {
+      "restDay": "Täna on puhkepäev – nautige taastumist!",
+      "todayWorkout": "Tänane plaan sisaldab {{workout}}.",
+      "nextWorkout": "Järgmine treening: {{workout}}.",
+      "ready": "Kas olete alustamiseks valmis? Küsige minult planeerimise, toitumise või motivatsiooni kohta.",
+      "askForHelp": "Kui vajate abi, küsige minult midagi."
+    },
+    "chat": {
+      "placeholder": "Küsige oma AI treenerilt...",
+      "todayPlanPrompt": "Mis on minu tänane plaan?"
+    },
+    "todayPlan": "Tänane plaan",
+    "startTraining": "Alustage treeningut",
+    "nextTraining": "Järgmine treening",
+    "today": "Täna",
+    "training": "Treening",
+    "todayOverview": "Tänane ülevaade",
+    "week": "Nädal",
+    "milestone": "Verstapost",
+    "toGoal": "{{distance}} km eesmärgini"
+  },
+  "progress": {
+    "weeks": "Nädalad",
+    "months": "kuud",
+    "weekLabel": "Nädal {{week}}, {{year}}",
+    "weekShort": "W{{week}}",
+    "activities": "Tegevused",
+    "empty": "Ühtegi tegevust pole veel – minge välja ja jookske!",
+    "noRoute": "Marsruuti pole salvestatud",
+    "standardTraining": "Tavaline treening",
+    "steps": "Sammud",
+    "duration": "Kestus",
+    "caloriesShort": "kaal",
+    "activityTypes": {
+      "walk": "Jalutage",
+      "cycling": "Jalgrattasõit",
+      "run": "Jookse"
+    }
+  },
+  "workoutLabels": {
+    "rest": "Puhk",
+    "injuryRest": "Vigastuse tõttu puhata"
+  },
+  "calendar": {
+    "monthSummary_one": "{{count}} jooks · {{km}} km",
+    "monthSummary_other": "{{count}} jookseb · {{km}} km",
+    "completed": "Lõpetatud",
+    "planned": "Planeeritud",
+    "missed": "Vastamata",
+    "plannedKm": "{{km}} km planeeritud",
+    "emptyDay": "Sellel päeval pole jooksu ega treeningut planeeritud"
+  },
+  "motionPicker": {
+    "title": "Kardio",
+    "what": "Mida soovite teha?",
+    "where": "Kus?",
+    "run": "Jookse",
+    "walk": "Jalutage",
+    "cycling": "Jalgrattasõit",
+    "runLocation": "Õues või jooksulint",
+    "bikeLocation": "Väljas või siseruumides",
+    "outdoor": "Õues",
+    "outdoorDescription": "GPS jälgimine · marsruudid · tempo",
+    "indoor": "Siseruumides",
+    "indoorDescription": "jooksulint · sammuloendur · manuaalne vahemaa"
+  },
+  "activityPicker": {
+    "title": "Valige treening",
+    "intro": "Mida soovite logida?",
+    "options": {
+      "mobility": {
+        "label": "Liikuvus / jooga",
+        "description": "Venitamine, jooga, vahtrullimine"
+      },
+      "bike": {
+        "label": "Jalgrattasõit",
+        "description": "Sise- või välistingimustes"
+      },
+      "other": {
+        "label": "Muu tegevus",
+        "description": "Padel, jalgpall, ujumine..."
+      }
+    }
+  },
+  "logActivity": {
+    "types": {
+      "strength": "Jõutreening",
+      "mobility": "Liikuvus / jooga",
+      "bike": "Jalgrattasõit",
+      "other": "Muu tegevus"
+    },
+    "invalidDuration": "Sisestage kehtiv kestus minutites",
+    "savedTitle": "Salvestatud!",
+    "savedMessage": "{{activity}} logitud ({{duration}} min, {{calories}} kcal)",
+    "saveError": "Ei saanud salvestada: {{error}}",
+    "logActivity": "Logige oma {{activity}}",
+    "duration": "Kestus (minutites) *",
+    "calories": "Kalorid (valikuline – muidu arvutatakse automaatselt)",
+    "calorieEstimate": "≈ {{calories}} kcal arvutatud {{weight}} kg, RPE {{rpe}}",
+    "effort": "Jõupingutus (RPE 1–10)",
+    "notes": "Märkused (valikuline)",
+    "notesPlaceholder": "Näiteks harjutused, raskused, seeriad...",
+    "save": "Salvestage treening"
+  },
+  "treadmill": {
+    "invalidValueTitle": "Kehtetu väärtus",
+    "invalidValueMessage": "Sisestage number, näiteks 5.2",
+    "noDistanceTitle": "Vahemaa puudub",
+    "noDistanceMessage": "Lisage vahemaa käsitsi või jätkake, kuni samme on võimalik mõõta.",
+    "finishTitle": "Kas lõpetada ja salvestada?",
+    "finishMessage": "Kaugus: {{distance}} km · Aeg: {{time}} · {{calories}} kcal",
+    "walkNote": "Kõndimine siseruumides (jooksurada)",
+    "runNote": "Sisejooks ( jooksulint)",
+    "savedTitle": "Salvestatud! 🏃",
+    "savedMessage": "{{distance}} km in {{time}} · {{calories}} kcal põletatud.",
+    "saveError": "Ei saanud salvestada",
+    "discardTitle": "Kas loobuda treeningust?",
+    "discardMessage": "Kõik selle treeningu andmed lähevad kaotsi.",
+    "keep": "Hoidke",
+    "discard": "Visake ära",
+    "walkTitle": "jooksulint · Kõndimine",
+    "runTitle": "jooksulint · Jookse",
+    "pedometerActive": "Sammuloendur on aktiivne",
+    "pedometerUnavailable": "Sammuloendur pole saadaval",
+    "steps": "SAMMUD",
+    "speed": "Kiirus",
+    "adjustDistance": "Reguleerige kaugust",
+    "adjustHint": "Lisage kaugus käsitsi jooksulinti ekraanilt",
+    "enterExactDistance": "Sisestage täpne kaugus jooksulint",
+    "instructionsTitle": "Jälgija kasutamine",
+    "instructions": "1. Kui alustate jooksulindil\n2, vajutage nuppu START. Lisage kaugus +0,1 / +0,5 / +1,0 nuppudega\n3. Või sisestage lõpetamisel täpne vahemaa\n4. Telefoni kaasas kandmisel loendatakse samme automaatselt",
+    "saving": "Salvestamine...",
+    "exactDistanceTitle": "Sisestage täpne kaugus",
+    "exactDistanceHint": "Lugege jooksulindi kuva ja sisestage vahemaa kilomeetrites",
+    "apply": "Rakenda"
+  },
+  "statsPage": {
+    "hoursShort": "h",
+    "minutesShort": "m",
+    "now": "Nüüd",
+    "weeksAgoShort": "{{count}}w",
+    "emptyTitle": "Statistika veel puudub",
+    "emptyMessage": "Alustage oma esimest käiku, et näha oma andmeid siin.",
+    "period4Weeks": "4 nädalat",
+    "period3Months": "3 kuud",
+    "bestPace": "Parim tempo",
+    "dayStreak": "Päevane jada",
+    "weeklyGoal": "Nädala eesmärk",
+    "ofGoal": "{{goal}} km eesmärgist",
+    "goalReached": "Eesmärk saavutatud!",
+    "kmRemaining": "{{km}} km on jäänud",
+    "milestone": "Verstapost",
+    "toMilestone": "{{remaining}} km kuni {{milestone}} km",
+    "kmPerWeek": "KM NÄDALAS",
+    "kmPerMonth": "KM KUU",
+    "avgDistance": "Keskmine vahemaa",
+    "kmPerRun": "km jooksu kohta",
+    "totalTime": "Koguaeg",
+    "moving": "liigub",
+    "longestRun": "Pikim jooks",
+    "runsPerWeekday": "Töötab nädalapäevadel",
+    "activityRings": "Tegevusrõngad",
+    "kmGoal": "KM EESMÄRK",
+    "distance": "Kaugus",
+    "activity": "Tegevus",
+    "days": "PÄEVAD",
+    "streak": "Vööt",
+    "activityTypes": "Tegevuse tüübid",
+    "types": {
+      "run": "Jookse",
+      "walk": "Jalutage",
+      "bike": "Jalgrattasõit"
+    }
+  },
+  "privacyPage": {
+    "title": "Privaatsuspoliitika",
+    "updated": "Viimati värskendatud: aprill 2026",
+    "intro": "RunWithAI-s võtame teie privaatsust tõsiselt. See poliitika selgitab, kuidas me teie isikuandmeid kogume, kasutame ja kaitseme.",
+    "sections": [
+      {
+        "title": "Andmekontroller",
+        "paragraphs": [
+          "RunWithAI vastutab teie isikuandmete töötlemise eest. Kui teil on küsimusi, võtke meiega ühendust aadressil privacy@runwithai.app."
+        ]
+      },
+      {
+        "title": "Andmed, mida kogume",
+        "paragraphs": [
+          "Kogume järgmist tüüpi andmeid:"
+        ],
+        "bullets": [
+          "Kontoteave: e-post, nimi, vanus ja sugu",
+          "Füüsilised andmed: kaal ja pikkus (valikuline)",
+          "Treeningu andmed: tegevused, vahemaa, tempo, pulss ja GPS-marsruudid",
+          "Rakenduse kasutus: eelistused, eesmärgid ja tase",
+          "Makseteave: seda haldab turvaliselt App Store või Google Play"
+        ]
+      },
+      {
+        "title": "Kuidas me teie andmeid kasutame",
+        "paragraphs": [
+          "Kasutame teie andmeid selleks, et:"
+        ],
+        "bullets": [
+          "Pakkuge isikupärastatud AI koolituskavasid",
+          "Analüüsige oma treeninguid ja edusamme",
+          "Täiustage oma teenuseid",
+          "Saatke asjakohaseid teateid ja värskendusi",
+          "Hallake makseid ja tellimusi"
+        ]
+      },
+      {
+        "title": "Kolmandate osapoolte integratsioonid",
+        "paragraphs": [
+          "RunWithAI võib jooksvate andmete importimiseks integreeruda Garmin Connectiga. Kui see on ühendatud, hangime ainult treeninguandmeid – mitte kunagi teie sisselogimismandaate."
+        ]
+      },
+      {
+        "title": "Andmete jagamine",
+        "paragraphs": [
+          "Me ei müü kunagi teie andmeid. Jagame andmeid ainult:"
+        ],
+        "bullets": [
+          "Apple/Google: turvaline maksete töötlemine",
+          "OpenAI: anonüümne AI juhendamine",
+          "Hostingi pakkujad: Vercel ja Railway andmete salvestamiseks"
+        ]
+      },
+      {
+        "title": "Andmete turvalisus",
+        "paragraphs": [
+          "Kasutame tööstusharu standardseid kaitsemeetmeid, sealhulgas:"
+        ],
+        "bullets": [
+          "HTTPS-krüptimine kõigi ühenduste jaoks",
+          "Turvaline parooliräsimine bcryptiga",
+          "JWT märgid autentimiseks",
+          "Regulaarsed turvavärskendused"
+        ]
+      },
+      {
+        "title": "Teie õigused",
+        "paragraphs": [
+          "Teil on õigus:"
+        ],
+        "bullets": [
+          "Juurdepääs oma andmetele",
+          "Parandage ebatäpne teave",
+          "Kustutage oma konto ja kõik andmed",
+          "Eksportige oma andmed CSV-vormingus",
+          "Võtke nõusolek tagasi"
+        ]
+      },
+      {
+        "title": "Andmete säilitamine",
+        "paragraphs": [
+          "Hoiame teie andmeid, kuni teie konto on aktiivne. Kui kustutate oma konto, eemaldatakse kõik andmed 30 päeva jooksul."
+        ]
+      },
+      {
+        "title": "Küpsised ja jälgimine",
+        "paragraphs": [
+          "Kasutame teie sisselogituna hoidmiseks minimaalselt küpsiseid. Me ei kasuta kolmandate osapoolte jälgimis- ega reklaamiküpsiseid."
+        ]
+      },
+      {
+        "title": "Laste privaatsus",
+        "paragraphs": [
+          "RunWithAI ei ole mõeldud alla 13-aastastele lastele ja me ei kogu teadlikult andmeid alla selle vanusega laste kohta."
+        ]
+      },
+      {
+        "title": "Eeskirjade muudatused",
+        "paragraphs": [
+          "Võime seda eeskirja aeg-ajalt värskendada. Olulistest muudatustest teavitame teid rakenduses või meili teel."
+        ]
+      },
+      {
+        "title": "Võtke ühendust"
+      }
+    ],
+    "contactQuestion": "Kas teil on selle poliitika või oma andmete kohta küsimusi?",
+    "footer": "© 2026 RunWithAI. Kõik õigused kaitstud."
+  },
+  "more": {
+    "title": "Veel",
+    "subtitle": "Kõik teie tööriistad ühes kohas",
+    "sections": {
+      "account": "Konto",
+      "statistics": "Statistika",
+      "setup": "Seadistamine",
+      "app": "Rakendus"
+    },
+    "newBadge": "Uus",
+    "menu": {
+      "profile": "Profiil",
+      "profileSubtitle": "Isiklik teave, eesmärgid, pulss ja vigastused",
+      "statistics": "Statistika",
+      "statisticsSubtitle": "Kogu vahemaa, parim tempo ja verstapostid",
+      "goals": "Eesmärgid",
+      "goalsSubtitle": "Nädala eesmärgid ja treeningutüübid",
+      "settings": "Seaded",
+      "settingsSubtitle": "Tase, keel, profiil ja teatised",
+      "privacy": "Privaatsus",
+      "privacySubtitle": "Teie andmed ja õigused",
+      "upgrade": "Minge üle PRO versioonile",
+      "upgradeSubtitle": "Avage kõik funktsioonid"
     }
   }
 }

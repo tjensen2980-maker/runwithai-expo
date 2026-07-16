@@ -1,4 +1,4 @@
-﻿{
+{
   "coachIntro": {
     "title": "Do chóitseálaí AI",
     "qName": "Dia duit! Is mise do chóitseálaí reatha AI pearsanta 🏃 Sula dtosóimid, ba mhaith liom aithne níos fearr a chur ort. Cad is ainm duit?",
@@ -55,7 +55,11 @@
     "lastActivity": "Gníomhaíocht dheireanach",
     "gpsTracking": "Rianú GPS",
     "walkTracking": "Rianú siúil",
-    "aiRoutes": "Bealaí AI"
+    "aiRoutes": "Bealaí AI",
+    "motionTitle": "Cardio",
+    "motionActivities": "Rith · Siúl · Rothaíocht",
+    "trainingTitle": "Oiliúint",
+    "trainingActivities": "Neart, soghluaisteacht agus níos mó"
   },
   "pro": {
     "badge": "PRO",
@@ -86,6 +90,10 @@
     "aiRoutes": {
       "title": "Bealaí AI",
       "description": "Faigh moltaí bealaí bunaithe ar do thraenáil"
+    },
+    "nutrition": {
+      "title": "Rianaire calorie",
+      "description": "Comhaireamh calraí, logáil béilí agus scanadh barrachóid"
     }
   },
   "stats": {
@@ -146,44 +154,85 @@
     "height": "AIRDE",
     "years": "Bliain",
     "runningLevel": "LEIBHÉAL RITH",
-    "levels.beginner": "Tosaíoch",
-    "levels.intermediate": "Meánleibhéal",
-    "levels.advanced": "Ardleibhéal",
     "yourGoals": "CAD IAD DO SPRIOCANNA",
-    "goals.health": "Sláinte",
-    "goals.weight": "Caillteanas meáchain",
-    "goals.distance": "Rith níos faide",
-    "goals.speed": "Éirigh níos tapúla",
-    "goals.race": "Rith rás",
-    "goals.fun": "Spraoi",
     "weeklyGoalKm": "SPRIOC KM SEACHTAINIÚIL",
     "weeklyGoalExample": "M.sh. 20",
     "unlockFullPower": "Díghlasáil rochtain iomlán",
     "unlockDesc": "Faigh rochtain ar gach gné agus bain do spriocanna amach níos tapúla",
-    "proFeatures.aiCoachDesc": "Traenálaí AI",
-    "proFeatures.statsDesc": "Staitisticí",
-    "proFeatures.goalsDesc": "Spriocanna",
-    "proFeatures.routesDesc": "Bealaí",
-    "proFeatures.chatDesc": "Comhrá AI",
-    "proFeatures.reportsDesc": "Tuairiscí",
     "price": "49 kr",
     "guarantee": "✓ Cealaigh am ar bith • ✓ 7 lá saor in aisce",
     "perMonth": "/mí",
     "startFreeTrial": "Tosaigh triail saor in aisce",
     "continueWithFree": "Lean leis an leagan saor in aisce",
-    "levels.beginnerDesc": "Nua don rith nó ag tosú arís tar éis sos fada",
-    "levels.intermediateDesc": "Ritheann go rialta agus ag iarraidh feabhsú",
-    "levels.advancedDesc": "Reathaire taithíoch le spriocanna sonracha",
     "or": "nó",
     "errors": {
-      "serverConnection": "Ní féidir ceangal leis an bhfreastalaí"
+      "serverConnection": "Ní féidir ceangal leis an bhfreastalaí",
+      "fillEmailPassword": "Cuir isteach an dá ríomhphost agus pasfhocal",
+      "loginFailed": "Níorbh fhéidir logáil isteach",
+      "enterEmail": "Cuir isteach do sheoladh ríomhphoist",
+      "resetCodeFailed": "Níorbh fhéidir an cód athshocraithe a sheoladh",
+      "fillCodePassword": "Cuir isteach an cód athshocraithe agus pasfhocal nua",
+      "passwordMismatch": "Ní hionann na pasfhocail",
+      "passwordTooShort": "Caithfidh 6 charachtar ar a laghad a bheith sa phasfhocal",
+      "resetFailed": "Níorbh fhéidir an focal faire a athshocrú",
+      "registerFailed": "Níorbh fhéidir an cuntas a chruthú",
+      "enterName": "Cuir isteach d’ainm",
+      "selectLevel": "Roghnaigh do leibhéal reatha"
+    },
+    "levels": {
+      "beginner": "Tosaíoch",
+      "intermediate": "Meánleibhéal",
+      "advanced": "Ardleibhéal",
+      "beginnerDesc": "Nua don rith nó ag tosú arís tar éis sos fada",
+      "intermediateDesc": "Ritheann go rialta agus ag iarraidh feabhsú",
+      "advancedDesc": "Reathaire taithíoch le spriocanna sonracha"
+    },
+    "goals": {
+      "health": "Sláinte",
+      "weight": "Caillteanas meáchain",
+      "distance": "Rith níos faide",
+      "speed": "Éirigh níos tapúla",
+      "race": "Rith rás",
+      "fun": "Spraoi"
+    },
+    "proFeatures": {
+      "aiCoachDesc": "Traenálaí AI",
+      "statsDesc": "Staitisticí",
+      "goalsDesc": "Spriocanna",
+      "routesDesc": "Bealaí",
+      "chatDesc": "Comhrá AI",
+      "reportsDesc": "Tuairiscí"
+    },
+    "resetPassword": "Athshocraigh an pasfhocal",
+    "forgotPasswordDesc": "Cuir isteach do r-phost agus seolfaimid cód athshocraithe chugat.",
+    "sendResetCode": "Seol cód athshocraithe",
+    "backToLogin": "Ar ais chuig logáil isteach",
+    "createNewPassword": "Cruthaigh pasfhocal nua",
+    "checkEmail": "Seiceáil do ríomhphost le haghaidh an cód athshocraithe sé dhigit.",
+    "resetCode": "Cód athshocraigh",
+    "resetCodePlaceholder": "Cód 6 dhigit",
+    "newPassword": "Pasfhocal nua",
+    "confirmNewPassword": "Deimhnigh pasfhocal nua",
+    "resendCode": "Seol cód nua",
+    "tellUsAboutYou": "Inis dúinn fút féin",
+    "success": {
+      "resetCodeSent": "Chuireamar cód athshocraithe chuig do r-phost.",
+      "passwordReset": "Athshocraíodh do phasfhocal. Is féidir leat logáil isteach anois."
     }
   },
   "settings": {
     "pageTitle": "Socruithe",
     "title": "Socruithe",
     "profile": "Próifíl",
-    "days": ["Lu", "Má", "Cé", "Dé", "Ao", "Sa", "Do"],
+    "days": [
+      "Lu",
+      "Má",
+      "Cé",
+      "Dé",
+      "Ao",
+      "Sa",
+      "Do"
+    ],
     "saveChanges": "Sábháil athruithe",
     "saved": "Sábháilte!",
     "logout": "Logáil amach",
@@ -201,7 +250,8 @@
       "reminders": "Meabhrúcháin",
       "privacy": "Príobháideacht",
       "units": "Aonaid",
-      "data": "Sonraí"
+      "data": "Sonraí",
+      "profile": "Próifíl"
     },
     "fields": {
       "name": "Ainm",
@@ -304,6 +354,57 @@
       "deletedTitle": "Cuntas scriosta",
       "deletedMessage": "Scriosadh do chuntas.",
       "error": "Theip ar scriosadh an chuntais"
+    },
+    "reminders": {
+      "workoutTitle": "Meabhrúchán aclaíochta",
+      "workoutSubtitle": "Faigh fógra ar laethanta roghnaithe agus ag an am roghnaithe",
+      "mealTitle": "Meabhrúchán béilí",
+      "mealSubtitle": "Ná déan dearmad do bhéilí a logáil",
+      "time": "Am: {{time}}",
+      "days": [
+        "Grian",
+        "Luan",
+        "Dé Máirt",
+        "Céad",
+        "Thu",
+        "Fri",
+        "Dé Sathairn"
+      ]
+    },
+    "email": {
+      "title": "Ríomhphost",
+      "change": "Athraigh ríomhphost",
+      "newEmail": "Ríomhphost nua",
+      "currentPassword": "Focal faire reatha",
+      "missingFields": "Cuir isteach do r-phost nua agus do phasfhocal reatha araon",
+      "changeError": "Níorbh fhéidir an ríomhphost a athrú",
+      "successMessage": "Nuashonraíodh do ríomhphost",
+      "networkError": "Earráid líonra"
+    },
+    "subscription": {
+      "title": "Síntiús",
+      "type": "Cineál",
+      "status": "Stádas",
+      "tiers": {
+        "pro": "Pro",
+        "basic": "Bunúsach",
+        "free": "Saor in aisce"
+      },
+      "statuses": {
+        "active": "Gníomhach",
+        "inactive": "Neamhghníomhach",
+        "trialing": "Triail",
+        "canceled": "Ar ceal"
+      },
+      "upgrade": "Uasghrádú",
+      "manage": "Bainistigh san App Store"
+    },
+    "language": "Teanga",
+    "changeLanguageInSettings": "Athraigh teanga sna Socruithe",
+    "languageHint": "Oscail socruithe an ghléis agus roghnaigh RunWithAI → Language.",
+    "actions": {
+      "save": "Sábháil na hathruithe",
+      "saved": "Sábháilte!"
     }
   },
   "pricing": {
@@ -367,6 +468,139 @@
     "step3": {
       "title": "Sroich do spriocanna",
       "desc": "Socraigh spriocanna agus rianaigh do dhul chun cinn le staitisticí mionsonraithe"
+    },
+    "tagline": "Do chóiste reatha AI pearsanta",
+    "headline": {
+      "before": "Traenáil go",
+      "highlight": "in oiriúint do",
+      "after": "tú"
+    },
+    "features": {
+      "ai": {
+        "title": "Cóiste fíor AI",
+        "desc": "Tá do phlean tógtha duit — ní teimpléad"
+      },
+      "adapts": {
+        "title": "Plean maireachtála",
+        "desc": "Coigeartaítear é tar éis gach rith a chríochnaíonn tú"
+      },
+      "injury": {
+        "title": "Éisteann le do chorp",
+        "desc": "Cuirtear gortuithe agus pian san áireamh i do oiliúint"
+      },
+      "goals": {
+        "title": "I dtreo do sprice",
+        "desc": "Ó do chéad 5K go maratón - ar do luas"
+      }
+    },
+    "tryFree": "Bain triail as saor in aisce ar feadh 14 lá",
+    "fine": "Gan gealltanas. Cealaigh am ar bith.",
+    "levelQuestion": "Cá bhfuil tú ar do thuras reatha?",
+    "selectLevel": "Roghnaigh do leibhéal chun leanúint ar aghaidh",
+    "levels": {
+      "beginner": {
+        "label": "Bunrang",
+        "sub": "Nua nó ag teacht ar ais tar éis sos"
+      },
+      "intermediate": {
+        "label": "Meánrang",
+        "sub": "Ritheann mé go rialta agus ba mhaith liom a fheabhsú"
+      },
+      "advanced": {
+        "label": "Casta",
+        "sub": "Téim ag traenáil le cuspóir agus tá a fhios agam mo luas"
+      }
+    },
+    "tellUsAboutYou": "Inis dúinn beagán faoi tú",
+    "coachUsesThis": "Úsáideann do chóitseálaí é seo chun do phlean a chur le chéile",
+    "fields": {
+      "name": "Cad is ainm duit?",
+      "age": "Aois",
+      "weeklyKm": "Km in aghaidh na seachtaine (thart ar)"
+    },
+    "primaryGoal": "Cad é do sprioc?",
+    "goals": {
+      "fitness": {
+        "label": "Bí aclaí",
+        "sub": "Sláinte agus fuinneamh"
+      },
+      "5k": {
+        "label": "5K",
+        "sub": "Mo chéad sprioc mór"
+      },
+      "10k": {
+        "label": "10K",
+        "sub": "An chéad leibhéal eile"
+      },
+      "half": {
+        "label": "Leath maratón",
+        "sub": "21.1 km"
+      },
+      "full": {
+        "label": "Maratón",
+        "sub": "42.2 km"
+      },
+      "weight": {
+        "label": "Meáchan a chailleadh",
+        "sub": "Rith tú féin níos éadroime"
+      }
+    },
+    "raceDate": "An bhfuil dáta rása agat? (roghnach)",
+    "raceDatePlaceholder": "e.g. 15 Meán Fómhair",
+    "skipForNow": "Léim go dtí seo",
+    "plan": {
+      "building": "Tá do chóitseálaí ag tógáil do phlean…",
+      "waitNamed": "{{name}}, tabhair nóiméad dom.",
+      "wait": "Tabhair nóiméad dom.",
+      "errorTitle": "Níorbh fhéidir do phlean a chruthú faoi láthair",
+      "errorMessage": "Is féidir leat iarraidh i gcónaí ar do chóiste é a chruthú níos déanaí.",
+      "readyNamed": "{{name}}, seo é do phlean",
+      "ready": "Seo do phlean",
+      "basedOnAnswers": "Tá do phlean bunaithe ar an méid a dúirt tú le do chóitseálaí.",
+      "weeklyDistance": "Fad seachtainiúil: {{km}} km",
+      "goal": "Sprioc: {{goal}}",
+      "considerations": "Breithnithe: {{injuries}}",
+      "weekAndDay": "Seachtain {{week}} – {{day}}",
+      "day": "Lá {{day}}",
+      "run": "Rith",
+      "makePlan": "Cruthaigh mo phlean",
+      "weekdays": {
+        "mon": "Dé Luain",
+        "tue": "Dé Máirt",
+        "wed": "Dé Céadaoin",
+        "thu": "Déardaoin",
+        "fri": "Dé hAoine",
+        "sat": "Dé Sathairn",
+        "sun": "Dé Domhnaigh"
+      }
+    },
+    "languageTitle": "Roghnaigh do theanga",
+    "languageSubtitle": "Is féidir leat é a athrú níos déanaí sna Socruithe",
+    "paywall": {
+      "headline": "Do chóiste AI pearsanta",
+      "subtitle": "Plean oiliúna a chuireann in oiriúint duit - gach seachtain, gach rith.",
+      "benefits": {
+        "adaptive": "Déanann do phlean oiriúnú tar éis gach rith",
+        "audioCoach": "Do chóiste i do chluasa agus tú ag traenáil",
+        "calendar": "Plean seachtainiúil agus féilire a choinníonn suas",
+        "chat": "Iarr ar do chóiste rud ar bith - am ar bith"
+      },
+      "trial": "14 lá saor in aisce",
+      "afterTrial": "Ansin {{price}}/mí. Cealaigh am ar bith - le sconna amháin.",
+      "startTraining": "Cuir tús le m’oiliúint",
+      "restore": "Athchóirigh ceannacháin",
+      "welcomeTitle": "🎉 Fáilte romhat!",
+      "welcomeMessage": "Tá do rochtain Pro gníomhach anois.",
+      "restoreSuccessTitle": "Ceannacháin athchóirithe",
+      "restoreSuccessMessage": "Tá do shíntiús gníomhach arís.",
+      "noPurchasesTitle": "Níor aimsíodh aon cheannacháin",
+      "noPurchasesMessage": "Níor aimsíodh aon síntiús gníomhach.",
+      "errors": {
+        "prices": "Níorbh fhéidir praghsanna a luchtú. Bain triail eile as ar ball.",
+        "packageUnavailable": "Níl an síntiús seo ar fáil.",
+        "purchaseTitle": "Theip ar an gceannach",
+        "restore": "Níorbh fhéidir ceannacháin a athchóiriú."
+      }
     }
   },
   "dashboard": {
@@ -419,7 +653,20 @@
       "runsFromRecord": "{{count}} ritheanna go dtí an taifead",
       "runsInMonth": "{{count}} ritheanna i {{month}}"
     },
-    "monthNames": ["Ean", "Feab", "Már", "Aib", "Beal", "Meith", "Iúil", "Lún", "MFó", "DF", "Sam", "Nol"],
+    "monthNames": [
+      "Ean",
+      "Feab",
+      "Már",
+      "Aib",
+      "Beal",
+      "Meith",
+      "Iúil",
+      "Lún",
+      "MFó",
+      "DF",
+      "Sam",
+      "Nol"
+    ],
     "workout": {
       "nextWorkout": "AN CHÉAD TRAENÁIL EILE",
       "today": "INNIU",
@@ -445,7 +692,15 @@
       "addNote": "+ Nóta",
       "mood": "Giúmar",
       "placeholder": "Conas a bhí sé? Cosa troma? Lá maith? Bealach nua?",
-      "dayNames": ["Do", "Lu", "Má", "Cé", "Dé", "Ao", "Sa"]
+      "dayNames": [
+        "Do",
+        "Lu",
+        "Má",
+        "Cé",
+        "Dé",
+        "Ao",
+        "Sa"
+      ]
     },
     "injury": {
       "title": "RIOSCA GORTAITHE",
@@ -488,7 +743,31 @@
       "unavailable": "GPS níl ar fáil",
       "timeout": "Am istigh GPS",
       "notAvailable": "GPS níl ar fáil",
-      "error": "Earráid GPS"
+      "error": "Earráid GPS",
+      "points": "Pointí {{count}} ({{filtered}} scagtha)"
+    },
+    "cycling": "Rothaíocht",
+    "music": "Ceol",
+    "voiceOnly": "Guth amháin",
+    "notification": {
+      "run": "Do rith á rianú...",
+      "walk": "Do shiúlóid á rianú...",
+      "bike": "Do turas á rianú..."
+    },
+    "limit": {
+      "title": "Teorainn seachtaine gníomhaíochta bainte amach",
+      "message": "Tá teorainn an phlean saor in aisce de ghníomhaíochtaí {{limit}} in aghaidh na seachtaine sroichte agat. Uasghrádaigh go Basic nó Pro le haghaidh rochtain gan teorainn.",
+      "later": "Níos déanaí"
+    },
+    "stats": {
+      "runs": "ritheann",
+      "walks": "siúlóidí",
+      "yourProgress": "Do dhul chun cinn",
+      "thisWeek": "An tseachtain seo",
+      "lastWeek": "An tseachtain seo caite",
+      "bestPace": "Luas is fearr",
+      "longestRun": "An rith is faide",
+      "totalKm": "km iomlán"
     }
   },
   "chat": {
@@ -507,7 +786,9 @@
     "logAllMeals": "Logáil gach béile",
     "logged": "Logáilte",
     "mealPlanLoggedMessage": "Logáladh an plean béilí don lá inniu.",
-    "mealPlanLogError": "Níorbh fhéidir an plean béilí a logáil: {{error}}"
+    "mealPlanLogError": "Níorbh fhéidir an plean béilí a logáil: {{error}}",
+    "languageChanged": "Athraíodh an teanga. Freagróidh do chóiste AI i mBéarla anois.",
+    "languageChangedConfirmation": "Athraíodh an teanga. Freagróidh do chóitseálaí AI sa teanga roghnaithe anois."
   },
   "proUpsell": {
     "title": "Díghlasáil an chumhacht iomlán",
@@ -542,6 +823,675 @@
         "title": "Tuairiscí dul chun cinn",
         "desc": "Achoimrí seachtainiúla agus míosúla"
       }
+    }
+  },
+  "bariatric": {
+    "title": "Próifíl bhariatrach",
+    "subtitle": "sleeve gastric / tacaíocht sheachbhóthar",
+    "settingsButton": "Próifíl bhariatrach",
+    "settingsDescription": "Muinchille gastric nó tacaíocht sheachbhóthar",
+    "setup": {
+      "title": "Próifíl bhariatrach",
+      "intro": "Cumasaigh tacaíocht bariatric chun spriocanna oiriúnaithe a fháil maidir le próitéin, sreabhán, agus calraí bunaithe ar do mháinliacht agus do chéim.",
+      "surgeryType": "Cineál máinliachta",
+      "surgeryTypeNone": "Dada",
+      "surgeryTypeSleeve": "Muinchille Gastric",
+      "surgeryTypeBypass": "Seachbhóthar Gastrach",
+      "surgeryDate": "Dáta na máinliachta",
+      "surgeryDatePlaceholder": "YYYY-MM-DD",
+      "startWeight": "Meáchan tosaigh (kg)",
+      "goalWeight": "Meáchan sprice (kg)",
+      "height": "Airde (cm)",
+      "enable": "Cumasaigh tacaíocht bariatric",
+      "save": "Sábháil próifíl",
+      "delete": "Scrios an phróifíl bhariatrach",
+      "deleteConfirm": "An bhfuil tú cinnte gur mhaith leat do phróifíl bhariatrach a scriosadh?",
+      "disclaimer": "Tábhachtach: NÍ thagann an aip seo in ionad do chothaitheoir bariatrach, do dhochtúir nó do chlinic. Is treoirlínte ginearálta iad moltaí atá bunaithe ar threoir phoiblí ASMBS. Lean treoracha do chlinic féin i gcónaí. Déan teagmháil le do dhochtúir láithreach le haghaidh siondróm dumpála, nausea leanúnach, nó aon imní.",
+      "acceptDisclaimer": "Tuigim nach dtagann an aip seo in ionad m’fhoireann cúraim bariatrach",
+      "disclaimerRequired": "Ní mór duit glacadh leis an séanadh",
+      "invalidDate": "Cuir isteach dáta bailí",
+      "missingType": "Roghnaigh cineál na máinliachta",
+      "saved": "Próifíl sábháilte",
+      "deleted": "Scriosadh an phróifíl"
+    },
+    "dashboard": {
+      "title": "Tacaíocht bariatric",
+      "edit": "Cuir in eagar",
+      "phaseLabel": "An chéim reatha",
+      "daysSinceLabel": "Laethanta ó máinliacht",
+      "daysUntilNext": "Laethanta {{days}} go dtí an chéad chéim eile",
+      "lastPhase": "Tá tú sa chéim dheireanach",
+      "proteinToday": "Próitéin inniu",
+      "proteinProgress": "Próitéin inniu",
+      "fluidToday": "Sreabháin inniu",
+      "kcalRange": "Calories (sprioc)",
+      "portionSize": "Méid na coda molta",
+      "medicalCheckReminder": "Cuimhnigh ar do sheiceáil lá {{day}}",
+      "preSurgery": "Níl dáta na máinliachta sroichte fós"
+    },
+    "phases": {
+      "clearLiquid": {
+        "name": "Seachtain 1: Leachtanna soiléire",
+        "description": "Leachtanna soiléire amháin: uisce, brat, sú saor ó shiúcra, tae. Sipeanna beaga i rith an lae."
+      },
+      "fullLiquid": {
+        "name": "Seachtain 2: Leachtanna iomlána",
+        "description": "Gach leacht lena n-áirítear. shakes próitéin, anraith, iógart. NÁ ól 30 nóiméad roimh / tar éis béilí."
+      },
+      "pureed": {
+        "name": "Seachtain 3-4: Bia íonaithe",
+        "description": "Bia cumaiscthe/íonghlan: cáis teachín, puree éisc, sicín cumaiscthe. Chew go maith."
+      },
+      "soft": {
+        "name": "Seachtain 5-6: Bia bog",
+        "description": "Bia bog: uibheacha scrofa, iasc, glasraí bruite, torthaí boga. Próitéin ar dtús, bites beaga."
+      },
+      "regular": {
+        "name": "Seachtain 7+: Bia rialta",
+        "description": "Bia rialta i gcodanna beaga. Próitéin ar dtús, ansin glasraí, ansin carbs. Chew go maith."
+      }
+    },
+    "tips": {
+      "noDrinking": "NÁ ól 30 nóiméad roimh nó tar éis béilí",
+      "proteinFirst": "Ith próitéin ar dtús i gcónaí",
+      "chew": "Chew gach greim 20-30 uair",
+      "stopWhenFull": "Stop nuair a bhíonn sé lán - fiú le codanna beaga",
+      "vitamins": "Cuimhnigh ar do vitimíní laethúil"
+    },
+    "vitamins": {
+      "title": "Vitimíní an lae inniu",
+      "subtitle": "Cuimhnigh ar do forlíontaí laethúla",
+      "names": {
+        "multivitamin": "Ilvitimín",
+        "calciumD": "Cailciam + Vitimín D",
+        "iron": "Iarann",
+        "b12": "B12",
+        "omega3": "Omega-3 (roghnach)"
+      },
+      "taken": "Tógtha",
+      "notTaken": "Níor tógadh",
+      "allDone": "Na vitimíní go léir a tógadh inniu 🎉",
+      "reset": "Athshocraigh",
+      "optional": "roghnach"
+    },
+    "fluid": {
+      "title": "Iontógáil sreabhán inniu",
+      "subtitle": "Ól idir béilí, ní le",
+      "goal": "Sprioc",
+      "current": "Inniu",
+      "remaining": "fágtha",
+      "add250": "+ 250 ml",
+      "add500": "+ 500 ml",
+      "addCustom": "Cuir",
+      "reset": "Athshocraigh",
+      "goalReached": "Shroich tú do sprioc sreabhach 💧",
+      "warning": "Cuimhnigh sips beaga - ní suimeanna móra ag an am céanna"
+    },
+    "meals": {
+      "title": "Moltaí duit anois",
+      "subtitle": "In oiriúint do do chéim",
+      "kcal": "kcal",
+      "protein": "g próitéin",
+      "prep": "nóim",
+      "logIt": "Loga",
+      "types": {
+        "fluid": "Sreabhán",
+        "puree": "Píonán",
+        "soft": "Bia bog",
+        "normal": "Gnáthbhia"
+      },
+      "items": {
+        "water": "Uisce",
+        "brothClear": "Brat glan",
+        "sugarFreeJuice": "Sú saor ó shiúcra (caolaithe)",
+        "herbalTea": "Tae luibhe",
+        "proteinShake": "Croith próitéin",
+        "skimmedMilk": "Bainne bhearrtha",
+        "thinSoup": "Anraith tanaí (faoi bhrú)",
+        "skyrThin": "Spéir tanaí",
+        "mashedFish": "Iasc brúite",
+        "cottageCheese": "Cáis teachín",
+        "eggPuree": "Píonó uibhe",
+        "pureedChicken": "Sicín íonghlan",
+        "mashedTofu": "Tofu brúite",
+        "softFish": "Iasc bog",
+        "scrambledEgg": "Ubh scrofa",
+        "softChicken": "Sicín tairisceana",
+        "wellCookedVeggies": "Glasraí dea-chócaráilte",
+        "greekYogurt": "Iógart Gréagach",
+        "grilledChicken": "Cíoch sicín grilled",
+        "salmonFillet": "Filléad bradán",
+        "eggOmelette": "Omelette",
+        "lentilSoup": "Anraith lentil",
+        "leanBeef": "Mairteoil thrua"
+      },
+      "reminders": {
+        "title": "Cuimhnigh ag béilí",
+        "proteinFirst": "Ith próitéin ar dtús",
+        "chew": "Chew 20-30 uair",
+        "noDrinking": "Ná hól 30 nóiméad roimh/tar éis béilí",
+        "stopWhenFull": "Stop nuair a bheidh sé lán",
+        "smallSips": "Tóg sips beaga",
+        "noStraw": "Gan sopaí (aer sa bholg)",
+        "slowly": "Ól go mall",
+        "mashWell": "Mash go maith",
+        "newFoodOneAtATime": "Tabhair isteach bia nua amháin ag an am",
+        "chewExtra": "Chew breise go maith",
+        "mindfulEating": "Ith go mall agus go meabhrach",
+        "avoidEmptyCalories": "Seachain calories folamh"
+      }
+    },
+    "dumping": {
+      "title": "Riosca siondróm dumpála",
+      "subtitle": "Bunaithe ar bhéilí an lae inniu",
+      "low": "Riosca íseal",
+      "medium": "Bí ar an eolas",
+      "high": "Riosca ard",
+      "lowDesc": "Tá cuma bhreá ar bhéilí an lae inniu",
+      "mediumDesc": "Féadfaidh béile amháin nó níos mó tús a chur le dumpáil. Bí ag faire le haghaidh comharthaí.",
+      "highDesc": "Béilí ardriosca iomadúla inniu. Déan teagmháil le do dhochtúir má bhíonn nausea ort, buille croí tapa, meadhrán nó buinneach.",
+      "flaggedCount": "Béile {{count}} bratach",
+      "flaggedCount_plural": "{{count}} béilí marcáilte",
+      "reasons": {
+        "sugarHigh": "An iomarca siúcra",
+        "sugarMedium": "Cion measartha siúcra",
+        "fatHigh": "Cion ard saille",
+        "carbsNoProtein": "Carbs gan próitéin",
+        "carbsHigh": "Iontógáil ard carbaihiodráit",
+        "carbsMedium": "Iontógáil measartha carbaihiodráit",
+        "proteinLow": "Iontógáil próitéin ró-íseal"
+      },
+      "info": "Is é an dumpáil is coitianta tar éis sheachbhóthar gastric agus spreagtha ag siúcra, saill nó carbs tapa-ionsú. Comharthaí: nausea, buille croí tapa, meadhrán, buinneach 15-30 nóiméad tar éis béilí."
+    },
+    "training": {
+      "title": "Oiliúint oiriúnaithe",
+      "subtitle": "Gníomhaíocht mholta do do chéim",
+      "currentPhase": "Do chéim oiliúna",
+      "daysUntilNext": "Laethanta {{days}} go dtí an chéad chéim oiliúna eile",
+      "maxDuration": "Uasfhad",
+      "maxHeartRate": "Ráta croí uasta",
+      "min": "nóim",
+      "ofMax": "de HR uasta",
+      "intensityLabel": {
+        "veryLight": "An-éadrom",
+        "light": "Solas",
+        "moderate": "Measartha",
+        "normal": "Gnáth"
+      },
+      "phaseNames": {
+        "1": "Aisghabháil (seachtain 0-2)",
+        "2": "Tús cúramach (seachtain 2-4)",
+        "3": "Gníomhaíocht éadrom (seachtain 4-6)",
+        "4": "Tógáil (seachtain 6-8)",
+        "5": "Gnáthoiliúint (seachtain 8+)"
+      },
+      "phaseDesc": {
+        "1": "Cloí le siúlóidí gearra agus cleachtaí análaithe domhain. Éist le do chorp agus scíth a ligean go leor.",
+        "2": "Is féidir leat siúl beagán a mhéadú. Fós gan oiliúint neart nó aclaíocht dian.",
+        "3": "Is féidir leat tosú ag rothaíocht agus ag snámh (a luaithe a leigheastar créachta). Fós gan rith nó meáchain trom.",
+        "4": "Am chun oiliúint neart éadrom agus cardio níos faide a thabhairt isteach. Tosaigh le meáchain bheaga.",
+        "5": "Is féidir leat filleadh ar an ngnáthoiliúint - ach fós tógáil de réir a chéile agus féachaint ar do chuid fuinnimh."
+      },
+      "allowed": "Molta",
+      "notRecommended": "Seachain anois",
+      "activities": {
+        "walkShort": "Siúlóid ghearr (5-10 nóim)",
+        "walkMedium": "Siúlóid mheánach (15-20 nóim)",
+        "walkLong": "Siúlóid fhada (30+ nóim)",
+        "breathing": "Cleachtaí análaithe",
+        "gentleStretch": "Síneadh milis",
+        "cycling": "Rothaíocht",
+        "swimming": "Snámh",
+        "lightStrength": "Oiliúint neart éadrom",
+        "strength": "Oiliúint neart",
+        "jog": "Bogshodar éadrom",
+        "running": "Ag rith",
+        "highIntensity": "Oiliúint ard-déine",
+        "heavyLifting": "Ardaithe trom",
+        "extremeIntensity": "Ard-déine"
+      },
+      "warnings": {
+        "title": "Tábhachtach cuimhneamh",
+        "noLifting": "Gan ardú trom (os cionn 5 kg)",
+        "staySoftMovements": "Cloí le gluaiseachtaí boga, mall",
+        "avoidSwimmingUntilHealed": "Seachain ag snámh go dtí go bhfuil do wounds leighis (de ghnáth 3-4 seachtaine)",
+        "lightWeightsOk": "Tá meáchain éadroma (2-5 kg) ceart go leor tar éis dul i gcomhairle le do dhochtúir",
+        "startStrengthGradually": "Tosaigh oiliúint neart le meáchain íseal agus ionadaithe ard",
+        "stillBuildGradually": "Fós ag tógáil de réir a chéile - seachain méaduithe tobanna móra",
+        "hydration": "Cuimhnigh ar shreabháin roimh, le linn agus tar éis oiliúna"
+      },
+      "safety": {
+        "activityNotRecommended": "Ní mholtar {{activity}} i do chéim. Téigh i gcomhairle le do dhochtúir.",
+        "durationTooLong": "Is é an fad ama a mholtar ná {{max}} min ar a mhéad. Phleanáil tú {{actual}} min.",
+        "checkWithDoctor": "Déan teagmháil le do dhochtúir má bhíonn pian, masmas nó traochta ort"
+      },
+      "disclaimer": "Is treoirlínte amháin atá sna moltaí. Lean treoracha do chlinic féin i gcónaí."
+    }
+  },
+  "diabetes": {
+    "title": "Próifíl diaibéiteas",
+    "subtitle": "Cineál 1, Cineál 2 nó prediabetes",
+    "settingsButton": "Próifíl diaibéiteas",
+    "settingsDescription": "Cineál 1, Cineál 2 nó prediabetes - aiste bia, siúcra fola & aclaíocht",
+    "setup": {
+      "title": "Próifíl diaibéiteas",
+      "intro": "Cumasaigh tacaíocht diaibéiteas chun moltaí béile oiriúnaithe, treoir siúcra fola agus moltaí aclaíochta a fháil.",
+      "type": "Cineál diaibéiteas",
+      "typeT1": "Cineál 1",
+      "typeT2": "Cineál 2",
+      "typePre": "Réamh-diaibéiteas",
+      "typeGest": "Diaibéiteas gestational",
+      "treatment": "Cóireáil",
+      "txNone": "Dada",
+      "txDiet": "Aiste bia/stíl mhaireachtála amháin",
+      "txMetformin": "Metformin",
+      "txOral": "Míochainí béil eile",
+      "txGLP1": "GLP-1 (Ozempic/Wegovy/Mounjaro)",
+      "txBasal": "Insline basal",
+      "txBolus": "Inslin basal + bolus",
+      "txPump": "Caidéal insulin",
+      "diagnosisDate": "Dáta diagnóise (roghnach)",
+      "datePlaceholder": "YYYY-MM-DD",
+      "hba1c": "HbA1c (mmol/mol, roghnach)",
+      "countCarbs": "Áirím carbaihiodráití",
+      "carbRatio": "Cóimheas inslin/carb (g/U, roghnach)",
+      "carbRatioHelp": "E.g. Clúdaíonn inslin 10 = 1 aonad 10g de charbaihiodráití. Ní dáileoga an aip riamh - níl an uimhir seo ach faisnéiseach.",
+      "correctionFactor": "Fachtóir ceartúcháin (mmol/L in aghaidh an U, roghnach)",
+      "preExerciseMin": "Siúcra fola íosta roimh aclaíocht (mmol/L)",
+      "enable": "Cumasaigh tacaíocht diaibéiteas",
+      "acceptDisclaimer": "Glacaim leis an séanadh thuas",
+      "disclaimerRequired": "Ní mór duit glacadh leis an séanadh",
+      "missingType": "Roghnaigh cineál diaibéiteas",
+      "save": "Sábháil próifíl",
+      "saved": "Próifíl sábháilte",
+      "delete": "Scrios próifíl diaibéiteas",
+      "deleted": "Scriosadh an phróifíl",
+      "deleteConfirm": "An bhfuil tú cinnte gur mhaith leat do phróifíl diaibéiteas a scriosadh?",
+      "disclaimer": "TÁBHACHTACH: NÍ thagann an aip seo in ionad do dhochtúir nó d'fhoireann diaibéiteas. NÁ mholaimid dáileoga sonracha insline nó athruithe cógais. Ná coigeartaigh do chóireáil riamh bunaithe ar chomhairle aipe amháin. Déan teagmháil i gcónaí le do sholáthraí cúram sláinte má tá amhras ort."
+    }
+  },
+  "bloodSugar": {
+    "title": "Siúcra Fola",
+    "settingsButton": "Log siúcra fola",
+    "settingsDescription": "Logáil isteach do thomhais agus féach ar threochtaí le himeacht ama",
+    "add": "Cuir léamh leis",
+    "save": "Sábháil",
+    "history": "Stair",
+    "empty": "Níl aon léamh fós. Tapáil an cnaipe thuas chun do chéad tomhas a logáil.",
+    "disclaimer": "Is do do thagairt féin amháin na huimhreacha seo. Pléigh patrúin i gcónaí le do dhochtúir nó le foireann diaibéiteas.",
+    "valueLabel": "Siúcra fola (mmol/L)",
+    "contextLabel": "Comhthéacs",
+    "noteLabel": "Nóta (roghnach)",
+    "notePlaceholder": "E.g. tar éis an bhricfeasta",
+    "errInvalidTitle": "Luach neamhbhailí",
+    "errInvalidBody": "Cuir isteach luach siúcra fola idir 1.0 agus 40.0 mmol/L.",
+    "errSaveTitle": "Níorbh fhéidir a shábháil",
+    "deleteTitle": "Scrios léamh",
+    "deleteBody": "An bhfuil tú cinnte? Brúigh fada le scriosadh.",
+    "ctx": {
+      "fasting": "Troscadh",
+      "preMeal": "Roimh béile",
+      "postMeal": "Tar éis béile",
+      "bedtime": "Am codlata",
+      "preExercise": "Roimh aclaíocht",
+      "postExercise": "Tar éis aclaíocht",
+      "random": "Randamach"
+    },
+    "range": {
+      "1d": "1 lá",
+      "7d": "7 lá",
+      "30d": "30 lá",
+      "90d": "90 lá"
+    },
+    "stat": {
+      "avg": "Meán",
+      "min": "Min",
+      "max": "Uas",
+      "tir": "Am sa raon",
+      "target": "Sprioc",
+      "measurements": "léamha"
+    }
+  },
+  "healthScore": {
+    "title": "Scór sláinte",
+    "todayLabel": "Scór an lae inniu",
+    "A": "An-shláintiúil",
+    "B": "Sláintiúil",
+    "C": "Measartha",
+    "D": "Níos lú sláintiúil",
+    "E": "Míshláintiúil"
+  },
+  "units": {
+    "g": "g",
+    "kg": "kg",
+    "ml": "ml",
+    "dl": "dl",
+    "l": "l",
+    "tsk": "tsp",
+    "spsk": "tbsp",
+    "stk": "ríomhairí pearsanta",
+    "skive": "slisne",
+    "portion": "chuid"
+  },
+  "logMeal": {
+    "amount": "Méid",
+    "unit": "Aonad",
+    "approxGrams": "≈ {{grams}}g"
+  },
+  "home": {
+    "greeting": {
+      "morning": "Maidin mhaith",
+      "day": "Dia duit",
+      "evening": "Tráthnóna maith",
+      "night": "Oíche mhaith"
+    },
+    "coach": {
+      "restDay": "Is lá scíthe é inniu - bain sult as do théarnamh!",
+      "todayWorkout": "Áirítear {{workout}} i bplean an lae inniu.",
+      "nextWorkout": "An chéad oiliúint eile: {{workout}}.",
+      "ready": "Réidh le tosú? Cuir ceist orm faoi phleanáil, faoi chothú nó faoi spreagadh.",
+      "askForHelp": "Fiafraigh díom rud ar bith má tá cabhair uait."
+    },
+    "chat": {
+      "placeholder": "Cuir ceist ar do chóitseálaí AI...",
+      "todayPlanPrompt": "Cad é mo phlean don lá inniu?"
+    },
+    "todayPlan": "Plean an lae inniu",
+    "startTraining": "Tosaigh workout",
+    "nextTraining": "An chéad oiliúint eile",
+    "today": "Inniu",
+    "training": "Aclaíocht",
+    "todayOverview": "Forbhreathnú inniu",
+    "week": "Seachtain",
+    "milestone": "Cloch mhíle",
+    "toGoal": "go sprioc km {{distance}}"
+  },
+  "progress": {
+    "weeks": "Seachtaine",
+    "months": "Míonna",
+    "weekLabel": "Seachtain {{week}}, {{year}}",
+    "weekShort": "W{{week}}",
+    "activities": "Gníomhaíochtaí",
+    "empty": "Níl aon ghníomhaíochtaí fós - téigh amach ansin agus rith!",
+    "noRoute": "Níor taifeadadh aon bhealach",
+    "standardTraining": "Cleachtadh caighdeánach",
+    "steps": "Céimeanna",
+    "duration": "Fad",
+    "caloriesShort": "cal",
+    "activityTypes": {
+      "walk": "Siúlóid",
+      "cycling": "Rothaíocht",
+      "run": "Rith"
+    }
+  },
+  "workoutLabels": {
+    "rest": "An chuid eile",
+    "injuryRest": "An chuid eile de bharr gortaithe"
+  },
+  "calendar": {
+    "monthSummary_one": "{{count}} run · {{km}} km",
+    "monthSummary_other": "Ritheann {{count}} · {{km}} km",
+    "completed": "Críochnaithe",
+    "planned": "Pleanáilte",
+    "missed": "Ar iarraidh",
+    "plannedKm": "{{km}} km pleanáilte",
+    "emptyDay": "Níl aon rith nó cleachtadh beartaithe don lá seo"
+  },
+  "motionPicker": {
+    "title": "Cardio",
+    "what": "Cad ba mhaith leat a dhéanamh?",
+    "where": "Cá háit?",
+    "run": "Rith",
+    "walk": "Siúlóid",
+    "cycling": "Rothaíocht",
+    "runLocation": "Lasmuigh nó muileann tread",
+    "bikeLocation": "Lasmuigh nó taobh istigh",
+    "outdoor": "Amuigh faoin aer",
+    "outdoorDescription": "Rianú GPS · bealaí · luas",
+    "indoor": "Laistigh",
+    "indoorDescription": "Treadmill · cuntar céim · achar láimhe"
+  },
+  "activityPicker": {
+    "title": "Roghnaigh workout",
+    "intro": "Cad ba mhaith leat a logáil?",
+    "options": {
+      "mobility": {
+        "label": "Soghluaisteacht / Yoga",
+        "description": "Síneadh, yoga, rollta cúr"
+      },
+      "bike": {
+        "label": "Rothaíocht",
+        "description": "Laistigh nó lasmuigh"
+      },
+      "other": {
+        "label": "Gníomhaíocht eile",
+        "description": "Padel, peil, snámha..."
+      }
+    }
+  },
+  "logActivity": {
+    "types": {
+      "strength": "Oiliúint neart",
+      "mobility": "Soghluaisteacht / Yoga",
+      "bike": "Rothaíocht",
+      "other": "Gníomhaíocht eile"
+    },
+    "invalidDuration": "Cuir isteach ré bailí i nóiméid",
+    "savedTitle": "Sábháilte!",
+    "savedMessage": "{{activity}} logáilte ({{duration}} min, {{calories}} kcal)",
+    "saveError": "Níorbh fhéidir a shábháil: {{error}}",
+    "logActivity": "Logáil isteach do {{activity}}",
+    "duration": "Fad (nóiméid) *",
+    "calories": "Calraí (roghnach — ríomhtar go huathoibríoch ar shlí eile)",
+    "calorieEstimate": "≈ {{calories}} kcal ríomh ó {{weight}} kg, RPE {{rpe}}",
+    "effort": "Iarracht (RPE 1–10)",
+    "notes": "Nótaí (roghnach)",
+    "notesPlaceholder": "Mar shampla cleachtaí, meáchan, tacair...",
+    "save": "Sábháil workout"
+  },
+  "treadmill": {
+    "invalidValueTitle": "Luach neamhbhailí",
+    "invalidValueMessage": "Cuir isteach uimhir, mar shampla 5.2",
+    "noDistanceTitle": "Gan achar",
+    "noDistanceMessage": "Cuir an t-achar de láimh nó lean ar aghaidh go dtí gur féidir céimeanna a thomhas.",
+    "finishTitle": "Críochnaigh agus sábháil?",
+    "finishMessage": "Fad: {{distance}} km · Am: {{time}} · {{calories}} kcal",
+    "walkNote": "Siúlóid laistigh (muileann tread)",
+    "runNote": "Rith laistigh (muileann tread)",
+    "savedTitle": "Sábháilte! 🏃",
+    "savedMessage": "{{distance}} km i {{time}} · {{calories}} kcal dóite.",
+    "saveError": "Níorbh fhéidir a shábháil",
+    "discardTitle": "An bhfuil fonn ort é a chaitheamh amach?",
+    "discardMessage": "Caillfear na sonraí go léir ón gcleachtadh seo.",
+    "keep": "Coinnigh",
+    "discard": "Caith amach",
+    "walkTitle": "Treadmill · Siúlóid",
+    "runTitle": "Treadmill · Rith",
+    "pedometerActive": "Cuntar céimeanna gníomhach",
+    "pedometerUnavailable": "Níl fáil ar chuntar céime",
+    "steps": "CÉIMEANNA",
+    "speed": "Luas",
+    "adjustDistance": "Coigeartaigh fad",
+    "adjustHint": "Cuir fad de láimh ón taispeáint treadmill",
+    "enterExactDistance": "Cuir isteach an t-achar beacht ón muileann tread",
+    "instructionsTitle": "Conas an rianaitheoir a úsáid",
+    "instructions": "1. Brúigh START nuair a thosaíonn tú ar an muileann tread\n2. Cuir fad leis na cnaipí +0.1 / +0.5 / +1.0\n3. Nó cuir isteach an t-achar cruinn nuair a bheidh sé críochnaithe\n4. Déantar céimeanna a chomhaireamh go huathoibríoch nuair a iompraíonn tú do ghuthán",
+    "saving": "Ag sábháil...",
+    "exactDistanceTitle": "Cuir isteach achar beacht",
+    "exactDistanceHint": "Léigh an taispeáint treadmill agus cuir isteach an t-achar i km",
+    "apply": "Cuir i bhfeidhm"
+  },
+  "statsPage": {
+    "hoursShort": "h",
+    "minutesShort": "m",
+    "now": "Anois",
+    "weeksAgoShort": "{{count}}w",
+    "emptyTitle": "Níl aon staitisticí fós ann",
+    "emptyMessage": "Tosaigh do chéad rith chun do shonraí a fheiceáil anseo.",
+    "period4Weeks": "4 seachtaine",
+    "period3Months": "3 mhí",
+    "bestPace": "Luas is fearr",
+    "dayStreak": "Stráice lae",
+    "weeklyGoal": "Sprioc sheachtainiúil",
+    "ofGoal": "de sprioc km {{goal}}",
+    "goalReached": "Sprioc bainte amach!",
+    "kmRemaining": "{{km}} km fágtha",
+    "milestone": "Cloch mhíle",
+    "toMilestone": "{{remaining}} km go {{milestone}} km",
+    "kmPerWeek": "KM IN AGHAIDH SEACHTAIN",
+    "kmPerMonth": "KM IN AGHAIDH MÍ",
+    "avgDistance": "Meánfhad",
+    "kmPerRun": "km in aghaidh an rith",
+    "totalTime": "Am iomlán",
+    "moving": "ag gluaiseacht",
+    "longestRun": "An rith is faide",
+    "runsPerWeekday": "Ritheann sé in aghaidh an lae i rith na seachtaine",
+    "activityRings": "Fáinní gníomhaíochta",
+    "kmGoal": "KM SPRIOC",
+    "distance": "Fad",
+    "activity": "Gníomhaíocht",
+    "days": "LAETHANTA",
+    "streak": "Stráice",
+    "activityTypes": "Cineálacha gníomhaíochta",
+    "types": {
+      "run": "Rith",
+      "walk": "Siúlóid",
+      "bike": "Rothaíocht"
+    }
+  },
+  "privacyPage": {
+    "title": "Beartas Príobháideachta",
+    "updated": "Nuashonrú is déanaí: Aibreán 2026",
+    "intro": "Ag RunWithAI, glacaimid do phríobháideachas i ndáiríre. Míníonn an polasaí seo conas a bhailímid, a úsáidimid agus a chosnaíonn tú do chuid faisnéise pearsanta.",
+    "sections": [
+      {
+        "title": "Rialaitheoir sonraí",
+        "paragraphs": [
+          "Tá RunWithAI freagrach as do shonraí pearsanta a phróiseáil. Déan teagmháil linn ag privacy@runwithai.app má tá ceisteanna agat."
+        ]
+      },
+      {
+        "title": "Sonraí a bhailímid",
+        "paragraphs": [
+          "Bailímid na cineálacha sonraí seo a leanas:"
+        ],
+        "bullets": [
+          "Eolas cuntais: ríomhphost, ainm, aois agus inscne",
+          "Sonraí fisiceacha: meáchan agus airde (roghnach)",
+          "Sonraí workout: gníomhaíochtaí, achar, luas, ráta croí, agus bealaí GPS",
+          "Úsáid aipe: sainroghanna, spriocanna agus leibhéal",
+          "Faisnéis íocaíochta: láimhseáilte go slán ag an App Store nó Google Play"
+        ]
+      },
+      {
+        "title": "Conas a úsáidimid do shonraí",
+        "paragraphs": [
+          "Úsáidimid do shonraí chun:"
+        ],
+        "bullets": [
+          "Cuir pleananna oiliúna AI pearsanta ar fáil",
+          "Déan anailís ar do chuid cleachtaí agus dul chun cinn",
+          "Ár seirbhísí a fheabhsú",
+          "Seol fógraí agus nuashonruithe ábhartha",
+          "Bainistigh íocaíochtaí agus síntiúis"
+        ]
+      },
+      {
+        "title": "Comhtháthú tríú páirtí",
+        "paragraphs": [
+          "Féadfaidh RunWithAI comhtháthú le Garmin Connect chun sonraí reatha a allmhairiú. Nuair a bhíonn baint againn, ní aisghabhaimid ach sonraí cleachtaidh - gan do dhintiúir logáil isteach riamh."
+        ]
+      },
+      {
+        "title": "Comhroinnt sonraí",
+        "paragraphs": [
+          "Ní dhíolaimid do shonraí riamh. Ní roinnimid sonraí ach le:"
+        ],
+        "bullets": [
+          "Apple/Google: próiseáil slán íocaíochta",
+          "OpenAI: oiliúint AI gan ainm",
+          "Soláthraithe óstála: Vercel and Railway le haghaidh stórála sonraí"
+        ]
+      },
+      {
+        "title": "Slándáil sonraí",
+        "paragraphs": [
+          "Úsáidimid cosaintí de chaighdeán an tionscail, lena n-áirítear:"
+        ],
+        "bullets": [
+          "Criptiú HTTPS do gach nasc",
+          "Déan pasfhocail slán le bcrypt",
+          "Comharthaí JWT le haghaidh fíordheimhnithe",
+          "Nuashonruithe slándála rialta"
+        ]
+      },
+      {
+        "title": "Do chearta",
+        "paragraphs": [
+          "Tá an ceart agat:"
+        ],
+        "bullets": [
+          "Faigh rochtain ar do shonraí",
+          "Faisnéis mhíchruinn cheart",
+          "Scrios do chuntas agus na sonraí go léir",
+          "Easpórtáil do shonraí mar CSV",
+          "Tarraingt siar an toiliú"
+        ]
+      },
+      {
+        "title": "Coimeád sonraí",
+        "paragraphs": [
+          "Coinneoimid do shonraí agus do chuntas gníomhach. Má scriosann tú do chuntas, baintear na sonraí go léir laistigh de 30 lá."
+        ]
+      },
+      {
+        "title": "Fianáin agus rianú",
+        "paragraphs": [
+          "Úsáidimid fianáin íosta chun tú a choinneáil sínithe isteach. Ní úsáidimid fianáin rianaithe nó fógraíochta tríú páirtí."
+        ]
+      },
+      {
+        "title": "Príobháideacht leanaí",
+        "paragraphs": [
+          "Níl RunWithAI beartaithe do leanaí faoi 13, agus ní bhailímid go feasach sonraí ó leanaí faoin aois seo."
+        ]
+      },
+      {
+        "title": "Athruithe beartais",
+        "paragraphs": [
+          "D’fhéadfaimis an polasaí seo a nuashonrú ó am go chéile. Tabharfaimid fógra duit san aip nó trí ríomhphost faoi athruithe ábhartha."
+        ]
+      },
+      {
+        "title": "Teagmháil"
+      }
+    ],
+    "contactQuestion": "An bhfuil ceisteanna agat faoin bpolasaí seo nó faoi na sonraí atá agat?",
+    "footer": "© 2026 RunWithAI. Gach ceart ar cosaint."
+  },
+  "more": {
+    "title": "Tuilleadh",
+    "subtitle": "Do chuid uirlisí go léir in aon áit amháin",
+    "sections": {
+      "account": "Cuntas",
+      "statistics": "Staitisticí",
+      "setup": "Socrú",
+      "app": "Aip"
+    },
+    "newBadge": "Nua",
+    "menu": {
+      "profile": "Próifíl",
+      "profileSubtitle": "Faisnéis phearsanta, spriocanna, ráta croí, agus gortuithe",
+      "statistics": "Staitisticí",
+      "statisticsSubtitle": "Fad iomlán, luas is fearr, agus clocha míle",
+      "goals": "Spriocanna",
+      "goalsSubtitle": "Spriocanna seachtainiúla agus cineálacha aclaíochta",
+      "settings": "Socruithe",
+      "settingsSubtitle": "Leibhéal, teanga, próifíl, agus fógraí",
+      "privacy": "Príobháideacht",
+      "privacySubtitle": "Do shonraí agus cearta",
+      "upgrade": "Uasghrádú go PRO",
+      "upgradeSubtitle": "Díghlasáil na gnéithe go léir"
     }
   }
 }

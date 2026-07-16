@@ -1,4 +1,4 @@
-﻿{
+{
   "coachIntro": {
     "title": "Din AI-tränare",
     "qName": "Hej! Jag är din personliga AI-löptränare 🏃 Innan vi börjar vill jag gärna lära känna dig lite. Vad heter du?",
@@ -55,7 +55,11 @@
     "lastActivity": "Senaste aktivitet",
     "gpsTracking": "GPS-spårning",
     "walkTracking": "Promenadspårning",
-    "aiRoutes": "AI-rutter"
+    "aiRoutes": "AI-rutter",
+    "motionTitle": "Cardio",
+    "motionActivities": "Spring · Gå · Cykla",
+    "trainingTitle": "Utbildning",
+    "trainingActivities": "Styrka, rörlighet och mer"
   },
   "pro": {
     "badge": "PRO",
@@ -86,6 +90,10 @@
     "aiRoutes": {
       "title": "AI-rutter",
       "description": "Få ruttrekommendationer baserade på din träning"
+    },
+    "nutrition": {
+      "title": "Kalorispårare",
+      "description": "Räkna kalorier, logga måltider och skanna streckkoder"
     }
   },
   "stats": {
@@ -146,44 +154,85 @@
     "height": "LÄNGD",
     "years": "År",
     "runningLevel": "LÖPNIVÅ",
-    "levels.beginner": "Nybörjare",
-    "levels.intermediate": "Medel",
-    "levels.advanced": "Avancerad",
     "yourGoals": "VAD ÄR DINA MÅL",
-    "goals.health": "Hälsa",
-    "goals.weight": "Viktminskning",
-    "goals.distance": "Springa längre",
-    "goals.speed": "Bli snabbare",
-    "goals.race": "Springa ett lopp",
-    "goals.fun": "Nöje",
     "weeklyGoalKm": "VECKOVIS KM MÅL",
     "weeklyGoalExample": "T.ex. 20",
     "unlockFullPower": "Lås upp full tillgång",
     "unlockDesc": "Få tillgång till alla funktioner och nå dina mål snabbare",
-    "proFeatures.aiCoachDesc": "AI-tränare",
-    "proFeatures.statsDesc": "Statistik",
-    "proFeatures.goalsDesc": "Mål",
-    "proFeatures.routesDesc": "Rutter",
-    "proFeatures.chatDesc": "AI-chatt",
-    "proFeatures.reportsDesc": "Rapporter",
     "price": "49 kr",
     "guarantee": "✓ Avsluta när som helst • ✓ 7 dagars gratis provperiod",
     "perMonth": "/månad",
     "startFreeTrial": "Starta gratis provperiod",
     "continueWithFree": "Fortsätt med gratisversionen",
-    "levels.beginnerDesc": "Ny till löpning eller börjar igen efter lång paus",
-    "levels.intermediateDesc": "Springer regelbundet och vill förbättras",
-    "levels.advancedDesc": "Erfaren löpare med specifika mål",
     "or": "eller",
     "errors": {
-      "serverConnection": "Kan inte ansluta till servern"
+      "serverConnection": "Kan inte ansluta till servern",
+      "fillEmailPassword": "Ange både e-postadress och lösenord",
+      "loginFailed": "Kunde inte logga in",
+      "enterEmail": "Ange din e-postadress",
+      "resetCodeFailed": "Kunde inte skicka återställningskoden",
+      "fillCodePassword": "Ange återställningskoden och ett nytt lösenord",
+      "passwordMismatch": "Lösenorden stämmer inte överens",
+      "passwordTooShort": "Lösenordet måste vara minst 6 tecken",
+      "resetFailed": "Kunde inte återställa lösenordet",
+      "registerFailed": "Kunde inte skapa kontot",
+      "enterName": "Ange ditt namn",
+      "selectLevel": "Välj din löpnivå"
+    },
+    "levels": {
+      "beginner": "Nybörjare",
+      "intermediate": "Medel",
+      "advanced": "Avancerad",
+      "beginnerDesc": "Ny till löpning eller börjar igen efter lång paus",
+      "intermediateDesc": "Springer regelbundet och vill förbättras",
+      "advancedDesc": "Erfaren löpare med specifika mål"
+    },
+    "goals": {
+      "health": "Hälsa",
+      "weight": "Viktminskning",
+      "distance": "Springa längre",
+      "speed": "Bli snabbare",
+      "race": "Springa ett lopp",
+      "fun": "Nöje"
+    },
+    "proFeatures": {
+      "aiCoachDesc": "AI-tränare",
+      "statsDesc": "Statistik",
+      "goalsDesc": "Mål",
+      "routesDesc": "Rutter",
+      "chatDesc": "AI-chatt",
+      "reportsDesc": "Rapporter"
+    },
+    "resetPassword": "Återställ lösenord",
+    "forgotPasswordDesc": "Ange din e-postadress så skickar vi dig en återställningskod.",
+    "sendResetCode": "Skicka återställningskod",
+    "backToLogin": "Tillbaka till inloggning",
+    "createNewPassword": "Skapa nytt lösenord",
+    "checkEmail": "Kontrollera din e-post för den sexsiffriga återställningskoden.",
+    "resetCode": "Återställ koden",
+    "resetCodePlaceholder": "6-siffrig kod",
+    "newPassword": "Nytt lösenord",
+    "confirmNewPassword": "Bekräfta nytt lösenord",
+    "resendCode": "Skicka en ny kod",
+    "tellUsAboutYou": "Berätta om dig själv",
+    "success": {
+      "resetCodeSent": "Vi skickade en återställningskod till din e-post.",
+      "passwordReset": "Ditt lösenord har återställts. Du kan nu logga in."
     }
   },
   "settings": {
     "pageTitle": "Inställningar",
     "title": "Inställningar",
     "profile": "Profil",
-    "days": ["Mån", "Tis", "Ons", "Tor", "Fre", "Lör", "Sön"],
+    "days": [
+      "Mån",
+      "Tis",
+      "Ons",
+      "Tor",
+      "Fre",
+      "Lör",
+      "Sön"
+    ],
     "saveChanges": "Spara ändringar",
     "saved": "Sparat!",
     "logout": "Logga ut",
@@ -201,7 +250,8 @@
       "reminders": "Påminnelser",
       "privacy": "Integritet",
       "units": "Enheter",
-      "data": "Data"
+      "data": "Data",
+      "profile": "Profil"
     },
     "fields": {
       "name": "Namn",
@@ -304,6 +354,57 @@
       "deletedTitle": "Konto raderat",
       "deletedMessage": "Ditt konto har raderats.",
       "error": "Kunde inte radera kontot"
+    },
+    "reminders": {
+      "workoutTitle": "Träningspåminnelse",
+      "workoutSubtitle": "Få aviseringar på valda dagar och vid vald tid",
+      "mealTitle": "Måltidspåminnelse",
+      "mealSubtitle": "Kom ihåg att logga dina måltider",
+      "time": "Tid: {{time}}",
+      "days": [
+        "Sön",
+        "Mån",
+        "Tis",
+        "Ons",
+        "Tors",
+        "Fre",
+        "Lör"
+      ]
+    },
+    "email": {
+      "title": "E-post",
+      "change": "Ändra e-post",
+      "newEmail": "Nytt e-postmeddelande",
+      "currentPassword": "Aktuellt lösenord",
+      "missingFields": "Ange både din nya e-postadress och ditt nuvarande lösenord",
+      "changeError": "Kunde inte ändra e-post",
+      "successMessage": "Din e-post har uppdaterats",
+      "networkError": "Nätverksfel"
+    },
+    "subscription": {
+      "title": "Prenumeration",
+      "type": "Typ",
+      "status": "Status",
+      "tiers": {
+        "pro": "Pro",
+        "basic": "Grundläggande",
+        "free": "Gratis"
+      },
+      "statuses": {
+        "active": "Aktiv",
+        "inactive": "Inaktiv",
+        "trialing": "Provperiod",
+        "canceled": "Avbruten"
+      },
+      "upgrade": "Uppgradering",
+      "manage": "Hantera i App Store"
+    },
+    "language": "Språk",
+    "changeLanguageInSettings": "Ändra språk i Inställningar",
+    "languageHint": "Öppna enhetsinställningarna och välj RunWithAI → Language.",
+    "actions": {
+      "save": "Spara ändringar",
+      "saved": "Sparad!"
     }
   },
   "pricing": {
@@ -367,6 +468,139 @@
     "step3": {
       "title": "Nå dina mål",
       "desc": "Sätt mål och följ dina framsteg med detaljerad statistik"
+    },
+    "tagline": "Din personliga AI-löparcoach",
+    "headline": {
+      "before": "Att träna det",
+      "highlight": "anpassar sig till",
+      "after": "du"
+    },
+    "features": {
+      "ai": {
+        "title": "En riktig AI-coach",
+        "desc": "Din plan är byggd för dig – inte en mall"
+      },
+      "adapts": {
+        "title": "En levande plan",
+        "desc": "Justeras efter varje körning du slutför"
+      },
+      "injury": {
+        "title": "Lyssnar på din kropp",
+        "desc": "Skador och smärta tas med i din träning"
+      },
+      "goals": {
+        "title": "Mot ditt mål",
+        "desc": "Från dina första 5K till ett maraton – i din takt"
+      }
+    },
+    "tryFree": "Prova gratis i 14 dagar",
+    "fine": "Inget åtagande. Avbryt när som helst.",
+    "levelQuestion": "Var är du på din löpresa?",
+    "selectLevel": "Välj din nivå för att fortsätta",
+    "levels": {
+      "beginner": {
+        "label": "Nybörjare",
+        "sub": "Ny eller kommer tillbaka efter ett uppehåll"
+      },
+      "intermediate": {
+        "label": "Mellanliggande",
+        "sub": "Jag springer regelbundet och vill förbättra mig"
+      },
+      "advanced": {
+        "label": "Avancerat",
+        "sub": "Jag tränar målmedvetet och känner mitt tempo"
+      }
+    },
+    "tellUsAboutYou": "Berätta lite om dig",
+    "coachUsesThis": "Din coach använder detta för att bygga upp din plan",
+    "fields": {
+      "name": "Vad heter du?",
+      "age": "Ålder",
+      "weeklyKm": "Km per vecka (ungefär)"
+    },
+    "primaryGoal": "Vad är ditt mål?",
+    "goals": {
+      "fitness": {
+        "label": "Kom i form",
+        "sub": "Hälsa och energi"
+      },
+      "5k": {
+        "label": "5K",
+        "sub": "Mitt första stora mål"
+      },
+      "10k": {
+        "label": "10K",
+        "sub": "Nästa nivå"
+      },
+      "half": {
+        "label": "Halvmaraton",
+        "sub": "21,1 km"
+      },
+      "full": {
+        "label": "Maraton",
+        "sub": "42,2 km"
+      },
+      "weight": {
+        "label": "Gå ner i vikt",
+        "sub": "Kör dig lättare"
+      }
+    },
+    "raceDate": "Har du ett tävlingsdatum? (valfritt)",
+    "raceDatePlaceholder": "t.ex. 15 september",
+    "skipForNow": "Hoppa över nu",
+    "plan": {
+      "building": "Din coach bygger din plan...",
+      "waitNamed": "{{name}}, ge mig ett ögonblick.",
+      "wait": "Ge mig en stund.",
+      "errorTitle": "Din plan kunde inte skapas just nu",
+      "errorMessage": "Du kan alltid be din tränare skapa den senare.",
+      "readyNamed": "{{name}}, här är din plan",
+      "ready": "Här är din plan",
+      "basedOnAnswers": "Din plan är baserad på vad du sa till din tränare.",
+      "weeklyDistance": "Veckoavstånd: {{km}} km",
+      "goal": "Mål: {{goal}}",
+      "considerations": "Överväganden: {{injuries}}",
+      "weekAndDay": "Vecka {{week}} – {{day}}",
+      "day": "Dag {{day}}",
+      "run": "Kör",
+      "makePlan": "Skapa min plan",
+      "weekdays": {
+        "mon": "Måndag",
+        "tue": "Tisdag",
+        "wed": "Onsdag",
+        "thu": "Torsdag",
+        "fri": "Fredag",
+        "sat": "Lördag",
+        "sun": "Söndag"
+      }
+    },
+    "languageTitle": "Välj ditt språk",
+    "languageSubtitle": "Du kan ändra det senare i Inställningar",
+    "paywall": {
+      "headline": "Din personliga AI-coach",
+      "subtitle": "En träningsplan som anpassar sig efter dig — varje vecka, varje löprunda.",
+      "benefits": {
+        "adaptive": "Din plan anpassas efter varje löpning",
+        "audioCoach": "Din tränare i dina öron medan du tränar",
+        "calendar": "Veckoplan och kalender som hänger med",
+        "chat": "Fråga din tränare vad som helst – när som helst"
+      },
+      "trial": "14 dagar gratis",
+      "afterTrial": "Sedan {{price}}/månad. Avbryt när som helst - med ett tryck.",
+      "startTraining": "Börja min träning",
+      "restore": "Återställ inköp",
+      "welcomeTitle": "🎉 Välkommen!",
+      "welcomeMessage": "Din Pro-åtkomst är nu aktiv.",
+      "restoreSuccessTitle": "Inköp återställda",
+      "restoreSuccessMessage": "Ditt abonnemang är aktivt igen.",
+      "noPurchasesTitle": "Inga köp hittades",
+      "noPurchasesMessage": "Inga aktiva prenumerationer hittades.",
+      "errors": {
+        "prices": "Priserna kunde inte laddas. Försök igen senare.",
+        "packageUnavailable": "Den här prenumerationen är inte tillgänglig.",
+        "purchaseTitle": "Köp misslyckades",
+        "restore": "Inköp kunde inte återställas."
+      }
     }
   },
   "dashboard": {
@@ -419,7 +653,20 @@
       "runsFromRecord": "{{count}} löpningar till rekord",
       "runsInMonth": "{{count}} löpningar i {{month}}"
     },
-    "monthNames": ["Jan", "Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"],
+    "monthNames": [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "Maj",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Dec"
+    ],
     "workout": {
       "nextWorkout": "NÄSTA TRÄNING",
       "today": "IDAG",
@@ -445,7 +692,15 @@
       "addNote": "+ Anteckning",
       "mood": "Humör",
       "placeholder": "Hur gick det? Tunga ben? Bra dag? Ny rutt?",
-      "dayNames": ["Sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör"]
+      "dayNames": [
+        "Sön",
+        "Mån",
+        "Tis",
+        "Ons",
+        "Tor",
+        "Fre",
+        "Lör"
+      ]
     },
     "injury": {
       "title": "SKADERISK",
@@ -488,7 +743,31 @@
       "unavailable": "GPS ej tillgänglig",
       "timeout": "GPS-timeout",
       "notAvailable": "GPS ej tillgänglig",
-      "error": "GPS-fel"
+      "error": "GPS-fel",
+      "points": "{{count}} poäng ({{filtered}} filtrerad)"
+    },
+    "cycling": "Cykling",
+    "music": "Musik",
+    "voiceOnly": "Endast röst",
+    "notification": {
+      "run": "Spårar din löprunda...",
+      "walk": "Spårar din promenad...",
+      "bike": "Spårar din resa..."
+    },
+    "limit": {
+      "title": "Veckoaktivitetsgräns nådd",
+      "message": "Du har nått gränsen för gratisplanen för {{limit}}-aktiviteter per vecka. Uppgradera till Basic eller Pro för obegränsad åtkomst.",
+      "later": "Senare"
+    },
+    "stats": {
+      "runs": "körs",
+      "walks": "går",
+      "yourProgress": "Dina framsteg",
+      "thisWeek": "Den här veckan",
+      "lastWeek": "Förra veckan",
+      "bestPace": "Bästa tempot",
+      "longestRun": "Längsta körningen",
+      "totalKm": "Totalt km"
     }
   },
   "chat": {
@@ -507,7 +786,9 @@
     "logAllMeals": "Logga alla måltider",
     "logged": "Loggat",
     "mealPlanLoggedMessage": "Måltidsplanen har loggats för idag.",
-    "mealPlanLogError": "Det gick inte att logga måltidsplanen: {{error}}"
+    "mealPlanLogError": "Det gick inte att logga måltidsplanen: {{error}}",
+    "languageChanged": "Språket har ändrats. Din AI-coach kommer nu att svara på engelska.",
+    "languageChangedConfirmation": "Språket har ändrats. Din AI-coach kommer nu att svara på ditt valda språk."
   },
   "proUpsell": {
     "title": "Lås upp full kraft",
@@ -542,6 +823,675 @@
         "title": "Framstegsrapporter",
         "desc": "Vecko- och månadssammanfattningar"
       }
+    }
+  },
+  "bariatric": {
+    "title": "Bariatrisk profil",
+    "subtitle": "Gastric sleeve/bypass-stöd",
+    "settingsButton": "Bariatrisk profil",
+    "settingsDescription": "Gastric sleeve eller bypass-stöd",
+    "setup": {
+      "title": "Bariatrisk profil",
+      "intro": "Aktivera bariatriskt stöd för att få skräddarsydda mål för protein, vätskor och kalorier baserat på din operation och fas.",
+      "surgeryType": "Operationstyp",
+      "surgeryTypeNone": "Inga",
+      "surgeryTypeSleeve": "Gastric Sleeve",
+      "surgeryTypeBypass": "Gastric Bypass",
+      "surgeryDate": "Operationsdatum",
+      "surgeryDatePlaceholder": "YYYY-MM-DD",
+      "startWeight": "Startvikt (kg)",
+      "goalWeight": "Målvikt (kg)",
+      "height": "Höjd (cm)",
+      "enable": "Aktivera bariatriskt stöd",
+      "save": "Spara profil",
+      "delete": "Ta bort bariatrisk profil",
+      "deleteConfirm": "Är du säker på att du vill ta bort din bariatriska profil?",
+      "disclaimer": "Viktigt: Denna app ersätter INTE din bariatriska nutritionist, läkare eller klinik. Rekommendationer är allmänna riktlinjer baserade på offentlig ASMBS-vägledning. Följ alltid din egen kliniks instruktioner. Kontakta din läkare omedelbart för dumpningssyndrom, ihållande illamående eller andra bekymmer.",
+      "acceptDisclaimer": "Jag förstår att den här appen inte ersätter mitt bariatriska vårdteam",
+      "disclaimerRequired": "Du måste acceptera ansvarsfriskrivningen",
+      "invalidDate": "Ange ett giltigt datum",
+      "missingType": "Välj operationstyp",
+      "saved": "Profilen sparad",
+      "deleted": "Profilen raderad"
+    },
+    "dashboard": {
+      "title": "Bariatriskt stöd",
+      "edit": "Redigera",
+      "phaseLabel": "Aktuell fas",
+      "daysSinceLabel": "Dagar sedan operationen",
+      "daysUntilNext": "{{days}} dagar till nästa fas",
+      "lastPhase": "Du är i slutfasen",
+      "proteinToday": "Protein idag",
+      "proteinProgress": "Protein idag",
+      "fluidToday": "Vätskor idag",
+      "kcalRange": "Kalorier (mål)",
+      "portionSize": "Rekommenderad portionsstorlek",
+      "medicalCheckReminder": "Kom ihåg din {{day}}-dagskontroll",
+      "preSurgery": "Operationsdatum ännu inte uppnått"
+    },
+    "phases": {
+      "clearLiquid": {
+        "name": "Vecka 1: Klara vätskor",
+        "description": "Endast klara vätskor: vatten, buljong, sockerfri juice, te. Små klunkar hela dagen."
+      },
+      "fullLiquid": {
+        "name": "Vecka 2: Fulla vätskor",
+        "description": "Alla vätskor inkl. proteinshakes, soppa, yoghurt. Drick INTE 30 min före/efter måltid."
+      },
+      "pureed": {
+        "name": "Vecka 3-4: Mosad mat",
+        "description": "Blandad/purerad mat: keso, fiskpuré, blandad kyckling. Tugga ordentligt."
+      },
+      "soft": {
+        "name": "Vecka 5-6: Mjuk mat",
+        "description": "Mjuk mat: äggröra, fisk, kokta grönsaker, mjuk frukt. Protein först, små tuggor."
+      },
+      "regular": {
+        "name": "Vecka 7+: Vanlig mat",
+        "description": "Vanlig mat i små portioner. Protein först, sedan grönsaker och sedan kolhydrater. Tugga ordentligt."
+      }
+    },
+    "tips": {
+      "noDrinking": "Drick INTE 30 minuter före eller efter måltid",
+      "proteinFirst": "Ät alltid protein först",
+      "chew": "Tugga varje tugga 20-30 gånger",
+      "stopWhenFull": "Stanna när den är full – även med små portioner",
+      "vitamins": "Kom ihåg dina dagliga vitaminer"
+    },
+    "vitamins": {
+      "title": "Dagens vitaminer",
+      "subtitle": "Kom ihåg dina dagliga kosttillskott",
+      "names": {
+        "multivitamin": "Multivitamin",
+        "calciumD": "Kalcium + D-vitamin",
+        "iron": "Järn",
+        "b12": "B12",
+        "omega3": "Omega-3 (valfritt)"
+      },
+      "taken": "Tagen",
+      "notTaken": "Ej tagen",
+      "allDone": "Alla vitaminer tagna idag 🎉",
+      "reset": "Återställ",
+      "optional": "valfritt"
+    },
+    "fluid": {
+      "title": "Vätskeintag idag",
+      "subtitle": "Drick mellan måltiderna, inte med",
+      "goal": "Mål",
+      "current": "Idag",
+      "remaining": "Kvar",
+      "add250": "+ 250 ml",
+      "add500": "+ 500 ml",
+      "addCustom": "Lägg till",
+      "reset": "Återställ",
+      "goalReached": "Du nådde ditt flytande mål 💧",
+      "warning": "Kom ihåg små klunkar - inte stora mängder på en gång"
+    },
+    "meals": {
+      "title": "Förslag till dig nu",
+      "subtitle": "Skräddarsydd efter din fas",
+      "kcal": "kcal",
+      "protein": "g protein",
+      "prep": "min",
+      "logIt": "Logg",
+      "types": {
+        "fluid": "Vätska",
+        "puree": "Puré",
+        "soft": "Mjuk mat",
+        "normal": "Normal mat"
+      },
+      "items": {
+        "water": "Vatten",
+        "brothClear": "Klar buljong",
+        "sugarFreeJuice": "Sockerfri juice (utspädd)",
+        "herbalTea": "Örtte",
+        "proteinShake": "Proteinshake",
+        "skimmedMilk": "Skummjölk",
+        "thinSoup": "Tunn soppa (silad)",
+        "skyrThin": "Tunn skyr",
+        "mashedFish": "Mosad fisk",
+        "cottageCheese": "Keso",
+        "eggPuree": "Äggpuré",
+        "pureedChicken": "Mosad kyckling",
+        "mashedTofu": "Mosad tofu",
+        "softFish": "Mjuk fisk",
+        "scrambledEgg": "Äggröra",
+        "softChicken": "Mör kyckling",
+        "wellCookedVeggies": "Vällagade grönsaker",
+        "greekYogurt": "Grekisk yoghurt",
+        "grilledChicken": "Grillat kycklingbröst",
+        "salmonFillet": "Laxfilé",
+        "eggOmelette": "Omelett",
+        "lentilSoup": "Linssoppa",
+        "leanBeef": "Magert nötkött"
+      },
+      "reminders": {
+        "title": "Kom ihåg vid måltiderna",
+        "proteinFirst": "Ät protein först",
+        "chew": "Tugga 20-30 gånger",
+        "noDrinking": "Drick inte 30 minuter före/efter måltider",
+        "stopWhenFull": "Stoppa när den är full",
+        "smallSips": "Ta små klunkar",
+        "noStraw": "Inga sugrör (luft i magen)",
+        "slowly": "Drick långsamt",
+        "mashWell": "Mosa ordentligt",
+        "newFoodOneAtATime": "Introducera en ny mat i taget",
+        "chewExtra": "Tugga extra noggrant",
+        "mindfulEating": "Ät långsamt och medvetet",
+        "avoidEmptyCalories": "Undvik tomma kalorier"
+      }
+    },
+    "dumping": {
+      "title": "Risk för dumpningssyndrom",
+      "subtitle": "Baserat på dagens måltider",
+      "low": "Låg risk",
+      "medium": "Var uppmärksam",
+      "high": "Hög risk",
+      "lowDesc": "Dagens måltider ser bra ut",
+      "mediumDesc": "En eller flera måltider kan utlösa dumpning. Håll utkik efter symtom.",
+      "highDesc": "Flera högriskmåltider idag. Kontakta din läkare om du upplever illamående, snabba hjärtslag, yrsel eller diarré.",
+      "flaggedCount": "{{count}} måltid flaggad",
+      "flaggedCount_plural": "{{count}} måltider flaggade",
+      "reasons": {
+        "sugarHigh": "För mycket socker",
+        "sugarMedium": "Måttlig sockerhalt",
+        "fatHigh": "Hög fetthalt",
+        "carbsNoProtein": "Kolhydrater utan protein",
+        "carbsHigh": "Högt kolhydratintag",
+        "carbsMedium": "Måttligt kolhydratintag",
+        "proteinLow": "Proteinintaget för lågt"
+      },
+      "info": "Dumpning är vanligast efter gastric bypass och utlöses av socker, fett eller snabbabsorberade kolhydrater. Symtom: illamående, snabba hjärtslag, yrsel, diarré 15-30 min efter måltid."
+    },
+    "training": {
+      "title": "Anpassad träning",
+      "subtitle": "Rekommenderad aktivitet för din fas",
+      "currentPhase": "Din träningsfas",
+      "daysUntilNext": "{{days}} dagar till nästa träningsfas",
+      "maxDuration": "Max varaktighet",
+      "maxHeartRate": "Maxpuls",
+      "min": "min",
+      "ofMax": "av max HR",
+      "intensityLabel": {
+        "veryLight": "Mycket lätt",
+        "light": "Ljus",
+        "moderate": "Måttlig",
+        "normal": "Normal"
+      },
+      "phaseNames": {
+        "1": "Återhämtning (vecka 0-2)",
+        "2": "Försiktig start (vecka 2-4)",
+        "3": "Lätt aktivitet (vecka 4-6)",
+        "4": "Uppbyggnad (vecka 6-8)",
+        "5": "Normal träning (vecka 8+)"
+      },
+      "phaseDesc": {
+        "1": "Håll dig till korta promenader och djupa andningsövningar. Lyssna på din kropp och vila mycket.",
+        "2": "Du kan öka promenaderna lite. Fortfarande ingen styrketräning eller intensiv träning.",
+        "3": "Du kan börja cykla och simma (när såren är läkt). Fortfarande ingen löpning eller tunga vikter.",
+        "4": "Dags att introducera lätt styrketräning och längre konditionsträning. Börja med små vikter.",
+        "5": "Du kan återgå till normal träning – men ändå bygga gradvis och titta på din energi."
+      },
+      "allowed": "Rekommenderas",
+      "notRecommended": "Undvik nu",
+      "activities": {
+        "walkShort": "Kort promenad (5–10 min)",
+        "walkMedium": "Medellång promenad (15–20 min)",
+        "walkLong": "Lång promenad (30+ min)",
+        "breathing": "Andningsövningar",
+        "gentleStretch": "Mjuk stretching",
+        "cycling": "Cykling",
+        "swimming": "Simning",
+        "lightStrength": "Lätt styrketräning",
+        "strength": "Styrketräning",
+        "jog": "Lätt jogging",
+        "running": "Kör",
+        "highIntensity": "Högintensiv träning",
+        "heavyLifting": "Tunga lyft",
+        "extremeIntensity": "Extrem intensitet"
+      },
+      "warnings": {
+        "title": "Viktigt att komma ihåg",
+        "noLifting": "Inga tunga lyft (över 5 kg)",
+        "staySoftMovements": "Håll dig till mjuka, långsamma rörelser",
+        "avoidSwimmingUntilHealed": "Undvik simning tills dina sår är läkta (vanligtvis 3-4 veckor)",
+        "lightWeightsOk": "Lätta vikter (2-5 kg) är OK efter att ha rådfrågat din läkare",
+        "startStrengthGradually": "Börja styrketräna med låga vikter och höga reps",
+        "stillBuildGradually": "Bygg fortfarande gradvis - undvik plötsliga stora ökningar",
+        "hydration": "Kom ihåg vätska före, under och efter träning"
+      },
+      "safety": {
+        "activityNotRecommended": "{{activity}} rekommenderas inte i din fas. Rådfråga din läkare.",
+        "durationTooLong": "Rekommenderad varaktighet är högst {{max}} min. Du planerade {{actual}} min.",
+        "checkWithDoctor": "Kontakta din läkare om du upplever smärta, illamående eller utmattning"
+      },
+      "disclaimer": "Rekommendationer är endast riktlinjer. Följ alltid din egen kliniks instruktioner."
+    }
+  },
+  "diabetes": {
+    "title": "Diabetesprofil",
+    "subtitle": "Typ 1, Typ 2 eller prediabetes",
+    "settingsButton": "Diabetesprofil",
+    "settingsDescription": "Typ 1, Typ 2 eller prediabetes - kost, blodsocker och träning",
+    "setup": {
+      "title": "Diabetesprofil",
+      "intro": "Aktivera diabetesstöd för att få skräddarsydda måltidsförslag, blodsockervägledning och träningsrekommendationer.",
+      "type": "Typ av diabetes",
+      "typeT1": "Typ 1",
+      "typeT2": "Typ 2",
+      "typePre": "Prediabetes",
+      "typeGest": "Graviditetsdiabetes",
+      "treatment": "Behandling",
+      "txNone": "Inga",
+      "txDiet": "Endast kost/livsstil",
+      "txMetformin": "Metformin",
+      "txOral": "Andra orala läkemedel",
+      "txGLP1": "GLP-1 (Ozempic/Wegovy/Mounjaro)",
+      "txBasal": "Basalinsulin",
+      "txBolus": "Basal + bolusinsulin",
+      "txPump": "Insulinpump",
+      "diagnosisDate": "Diagnosdatum (valfritt)",
+      "datePlaceholder": "YYYY-MM-DD",
+      "hba1c": "HbA1c (mmol/mol, valfritt)",
+      "countCarbs": "Jag räknar kolhydrater",
+      "carbRatio": "Insulin/kolhydratförhållande (g/U, valfritt)",
+      "carbRatioHelp": "T.ex. 10 = 1 enhet insulin täcker 10 g kolhydrater. Appen doserar aldrig - detta nummer är endast informativt.",
+      "correctionFactor": "Korrektionsfaktor (mmol/L per U, valfritt)",
+      "preExerciseMin": "Lägsta blodsocker före träning (mmol/L)",
+      "enable": "Aktivera diabetesstöd",
+      "acceptDisclaimer": "Jag accepterar friskrivningen ovan",
+      "disclaimerRequired": "Du måste acceptera ansvarsfriskrivningen",
+      "missingType": "Välj diabetestyp",
+      "save": "Spara profil",
+      "saved": "Profilen sparad",
+      "delete": "Ta bort diabetesprofil",
+      "deleted": "Profilen raderad",
+      "deleteConfirm": "Är du säker på att du vill ta bort din diabetesprofil?",
+      "disclaimer": "VIKTIGT: Denna app ersätter INTE din läkare eller diabetesteam. Vi föreslår ALDRIG specifika insulindoser eller läkemedelsförändringar. Justera aldrig din behandling enbart baserat på appråd. Kontakta alltid din vårdgivare om du är osäker."
+    }
+  },
+  "bloodSugar": {
+    "title": "Blodsocker",
+    "settingsButton": "Blodsockerlogg",
+    "settingsDescription": "Logga dina mätningar och se trender över tid",
+    "add": "Lägg till läsning",
+    "save": "Spara",
+    "history": "Historik",
+    "empty": "Inga avläsningar ännu. Tryck på knappen ovan för att logga din första mätning.",
+    "disclaimer": "Dessa nummer är endast för din egen referens. Diskutera alltid mönster med din läkare eller diabetesteam.",
+    "valueLabel": "Blodsocker (mmol/L)",
+    "contextLabel": "Kontext",
+    "noteLabel": "Obs (valfritt)",
+    "notePlaceholder": "T.ex. efter frukost",
+    "errInvalidTitle": "Ogiltigt värde",
+    "errInvalidBody": "Ange ett blodsockervärde mellan 1,0 och 40,0 mmol/L.",
+    "errSaveTitle": "Kunde inte spara",
+    "deleteTitle": "Ta bort läsning",
+    "deleteBody": "Är du säker? Tryck länge för att radera.",
+    "ctx": {
+      "fasting": "Fasta",
+      "preMeal": "Före måltid",
+      "postMeal": "Efter måltid",
+      "bedtime": "Sängtid",
+      "preExercise": "Före träning",
+      "postExercise": "Efter träning",
+      "random": "Slumpmässigt"
+    },
+    "range": {
+      "1d": "1 dag",
+      "7d": "7 dagar",
+      "30d": "30 dagar",
+      "90d": "90 dagar"
+    },
+    "stat": {
+      "avg": "Genomsnitt",
+      "min": "Min",
+      "max": "Max",
+      "tir": "Tid inom intervallet",
+      "target": "Mål",
+      "measurements": "avläsningar"
+    }
+  },
+  "healthScore": {
+    "title": "Hälsopoäng",
+    "todayLabel": "Dagens resultat",
+    "A": "Mycket hälsosamt",
+    "B": "Frisk",
+    "C": "Måttlig",
+    "D": "Mindre hälsosamt",
+    "E": "Ohälsosamt"
+  },
+  "units": {
+    "g": "g",
+    "kg": "kg",
+    "ml": "ml",
+    "dl": "dl",
+    "l": "l",
+    "tsk": "tsk",
+    "spsk": "msk",
+    "stk": "st",
+    "skive": "skiva",
+    "portion": "del"
+  },
+  "logMeal": {
+    "amount": "Belopp",
+    "unit": "Enhet",
+    "approxGrams": "≈ {{grams}}g"
+  },
+  "home": {
+    "greeting": {
+      "morning": "God morgon",
+      "day": "Hej!",
+      "evening": "God kväll",
+      "night": "God natt"
+    },
+    "coach": {
+      "restDay": "Idag är det en vilodag — njut av din återhämtning!",
+      "todayWorkout": "Dagens plan inkluderar {{workout}}.",
+      "nextWorkout": "Nästa träning: {{workout}}.",
+      "ready": "Redo att komma igång? Fråga mig om planering, kost eller motivation.",
+      "askForHelp": "Fråga mig vad som helst om du behöver hjälp."
+    },
+    "chat": {
+      "placeholder": "Fråga din AI-coach...",
+      "todayPlanPrompt": "Vad är min plan för idag?"
+    },
+    "todayPlan": "Dagens plan",
+    "startTraining": "Starta träningspasset",
+    "nextTraining": "Nästa träningspass",
+    "today": "Idag",
+    "training": "Träningspass",
+    "todayOverview": "Dagens översikt",
+    "week": "Vecka",
+    "milestone": "Milstolpe",
+    "toGoal": "till {{distance}} km-mål"
+  },
+  "progress": {
+    "weeks": "Veckor",
+    "months": "Månader",
+    "weekLabel": "Vecka {{week}}, {{year}}",
+    "weekShort": "W{{week}}",
+    "activities": "Aktiviteter",
+    "empty": "Inga aktiviteter än — gå ut och spring!",
+    "noRoute": "Ingen rutt registrerad",
+    "standardTraining": "Standardträning",
+    "steps": "Steg",
+    "duration": "Varaktighet",
+    "caloriesShort": "kal",
+    "activityTypes": {
+      "walk": "Gå",
+      "cycling": "Cykling",
+      "run": "Kör"
+    }
+  },
+  "workoutLabels": {
+    "rest": "Vila",
+    "injuryRest": "Vila på grund av skada"
+  },
+  "calendar": {
+    "monthSummary_one": "{{count}} löpning · {{km}} km",
+    "monthSummary_other": "{{count}} springer · {{km}} km",
+    "completed": "Klar",
+    "planned": "Planerad",
+    "missed": "Missade",
+    "plannedKm": "{{km}} km planerad",
+    "emptyDay": "Ingen löpning eller träning planerad för denna dag"
+  },
+  "motionPicker": {
+    "title": "Cardio",
+    "what": "Vad skulle du vilja göra?",
+    "where": "Var?",
+    "run": "Kör",
+    "walk": "Gå",
+    "cycling": "Cykling",
+    "runLocation": "Utomhus eller löpband",
+    "bikeLocation": "Utomhus eller inomhus",
+    "outdoor": "Utomhus",
+    "outdoorDescription": "GPS-spårning · rutter · tempo",
+    "indoor": "Inomhus",
+    "indoorDescription": "Löpband · stegräknare · manuellt avstånd"
+  },
+  "activityPicker": {
+    "title": "Välj träning",
+    "intro": "Vad vill du logga?",
+    "options": {
+      "mobility": {
+        "label": "Rörlighet / Yoga",
+        "description": "Stretching, yoga, foam rolling"
+      },
+      "bike": {
+        "label": "Cykling",
+        "description": "Inomhus eller utomhus"
+      },
+      "other": {
+        "label": "Annan aktivitet",
+        "description": "Padel, fotboll, simning..."
+      }
+    }
+  },
+  "logActivity": {
+    "types": {
+      "strength": "Styrketräning",
+      "mobility": "Rörlighet / Yoga",
+      "bike": "Cykling",
+      "other": "Annan aktivitet"
+    },
+    "invalidDuration": "Ange en giltig varaktighet i minuter",
+    "savedTitle": "Sparad!",
+    "savedMessage": "{{activity}} loggas ({{duration}} min, {{calories}} kcal)",
+    "saveError": "Kunde inte spara: {{error}}",
+    "logActivity": "Logga din {{activity}}",
+    "duration": "Längd (minuter) *",
+    "calories": "Kalorier (valfritt – annars beräknas automatiskt)",
+    "calorieEstimate": "≈ {{calories}} kcal beräknat från {{weight}} kg, RPE {{rpe}}",
+    "effort": "Ansträngning (RPE 1–10)",
+    "notes": "Anteckningar (valfritt)",
+    "notesPlaceholder": "Till exempel övningar, vikt, set...",
+    "save": "Spara träningspasset"
+  },
+  "treadmill": {
+    "invalidValueTitle": "Ogiltigt värde",
+    "invalidValueMessage": "Ange ett nummer, till exempel 5.2",
+    "noDistanceTitle": "Inget avstånd",
+    "noDistanceMessage": "Lägg till avståndet manuellt eller fortsätt tills stegen kan mätas.",
+    "finishTitle": "Avsluta och spara?",
+    "finishMessage": "Distans: {{distance}} km · Tid: {{time}} · {{calories}} kcal",
+    "walkNote": "Inomhuspromenad (löpband)",
+    "runNote": "Löpning inomhus (löpband)",
+    "savedTitle": "Sparad! 🏃",
+    "savedMessage": "{{distance}} km i {{time}} · {{calories}} kcal förbränd.",
+    "saveError": "Kunde inte spara",
+    "discardTitle": "Släng träningspasset?",
+    "discardMessage": "All data från detta träningspass kommer att gå förlorad.",
+    "keep": "Behåll",
+    "discard": "Kasta",
+    "walkTitle": "Löpband · Gå",
+    "runTitle": "Löpband · Löpning",
+    "pedometerActive": "Stegräknare aktiv",
+    "pedometerUnavailable": "Stegräknare inte tillgänglig",
+    "steps": "STEG",
+    "speed": "Hastighet",
+    "adjustDistance": "Justera avståndet",
+    "adjustHint": "Lägg till avstånd manuellt från löpbandets display",
+    "enterExactDistance": "Ange exakt avstånd från löpbandet",
+    "instructionsTitle": "Hur man använder trackern",
+    "instructions": "1. Tryck på START när du börjar på löpbandet\n2. Lägg till avstånd med +0,1 / +0,5 / +1,0 knapparna\n3. Eller ange det exakta avståndet när du är klar \n4. Steg räknas automatiskt när du bär din telefon",
+    "saving": "Sparar...",
+    "exactDistanceTitle": "Ange exakt avstånd",
+    "exactDistanceHint": "Läs löpbandets display och ange avståndet i km",
+    "apply": "Ansök"
+  },
+  "statsPage": {
+    "hoursShort": "h",
+    "minutesShort": "m",
+    "now": "Nu",
+    "weeksAgoShort": "{{count}}w",
+    "emptyTitle": "Ingen statistik ännu",
+    "emptyMessage": "Starta din första löptur för att se dina data här.",
+    "period4Weeks": "4 veckor",
+    "period3Months": "3 månader",
+    "bestPace": "Bästa tempot",
+    "dayStreak": "Dagsserie",
+    "weeklyGoal": "Veckomål",
+    "ofGoal": "av {{goal}} km-mål",
+    "goalReached": "Målet uppnått!",
+    "kmRemaining": "{{km}} km kvar",
+    "milestone": "Milstolpe",
+    "toMilestone": "{{remaining}} km till {{milestone}} km",
+    "kmPerWeek": "KM PER VECKA",
+    "kmPerMonth": "KM PER MÅNAD",
+    "avgDistance": "Genomsnittligt avstånd",
+    "kmPerRun": "km per löpning",
+    "totalTime": "Total tid",
+    "moving": "rör sig",
+    "longestRun": "Längsta körningen",
+    "runsPerWeekday": "Körs per vardag",
+    "activityRings": "Aktivitetssignaler",
+    "kmGoal": "KM-MÅL",
+    "distance": "Avstånd",
+    "activity": "Aktivitet",
+    "days": "DAGAR",
+    "streak": "Streak",
+    "activityTypes": "Aktivitetstyper",
+    "types": {
+      "run": "Kör",
+      "walk": "Gå",
+      "bike": "Cykling"
+    }
+  },
+  "privacyPage": {
+    "title": "Sekretesspolicy",
+    "updated": "Senast uppdaterad: april 2026",
+    "intro": "På RunWithAI tar vi din integritet på allvar. Denna policy förklarar hur vi samlar in, använder och skyddar din personliga information.",
+    "sections": [
+      {
+        "title": "Datakontrollant",
+        "paragraphs": [
+          "RunWithAI är ansvarig för behandlingen av dina personuppgifter. Kontakta oss på privacy@runwithai.app om du har frågor."
+        ]
+      },
+      {
+        "title": "Data vi samlar in",
+        "paragraphs": [
+          "Vi samlar in följande typer av data:"
+        ],
+        "bullets": [
+          "Kontoinformation: e-post, namn, ålder och kön",
+          "Fysiska data: vikt och längd (valfritt)",
+          "Träningsdata: aktiviteter, distans, tempo, puls och GPS-rutter",
+          "Appanvändning: preferenser, mål och nivå",
+          "Betalningsinformation: hanteras säkert av App Store eller Google Play"
+        ]
+      },
+      {
+        "title": "Hur vi använder dina uppgifter",
+        "paragraphs": [
+          "Vi använder dina uppgifter för att:"
+        ],
+        "bullets": [
+          "Tillhandahåll personliga AI-utbildningsplaner",
+          "Analysera dina träningspass och framsteg",
+          "Förbättra våra tjänster",
+          "Skicka relevanta meddelanden och uppdateringar",
+          "Hantera betalningar och prenumerationer"
+        ]
+      },
+      {
+        "title": "Tredjepartsintegrationer",
+        "paragraphs": [
+          "RunWithAI kan integreras med Garmin Connect för att importera löpdata. När vi är anslutna hämtar vi endast träningsdata – aldrig dina inloggningsuppgifter."
+        ]
+      },
+      {
+        "title": "Datadelning",
+        "paragraphs": [
+          "Vi säljer aldrig din data. Vi delar endast data med:"
+        ],
+        "bullets": [
+          "Apple/Google: säker betalningshantering",
+          "OpenAI: anonymiserad AI-coachning",
+          "Värdleverantörer: Vercel och Railway för datalagring"
+        ]
+      },
+      {
+        "title": "Datasäkerhet",
+        "paragraphs": [
+          "Vi använder industristandardskydd, inklusive:"
+        ],
+        "bullets": [
+          "HTTPS-kryptering för alla anslutningar",
+          "Säker lösenordshasning med bcrypt",
+          "JWT-tokens för autentisering",
+          "Regelbundna säkerhetsuppdateringar"
+        ]
+      },
+      {
+        "title": "Dina rättigheter",
+        "paragraphs": [
+          "Du har rätt att:"
+        ],
+        "bullets": [
+          "Få tillgång till dina uppgifter",
+          "Korrigera felaktig information",
+          "Radera ditt konto och all data",
+          "Exportera dina data som CSV",
+          "Återkalla samtycke"
+        ]
+      },
+      {
+        "title": "Datalagring",
+        "paragraphs": [
+          "Vi behåller dina uppgifter medan ditt konto är aktivt. Om du tar bort ditt konto tas all data bort inom 30 dagar."
+        ]
+      },
+      {
+        "title": "Cookies och spårning",
+        "paragraphs": [
+          "Vi använder minimalt med cookies för att hålla dig inloggad. Vi använder inte spårnings- eller reklamcookies från tredje part."
+        ]
+      },
+      {
+        "title": "Barns integritet",
+        "paragraphs": [
+          "RunWithAI är inte avsedd för barn under 13 år, och vi samlar inte medvetet in data från barn under denna ålder."
+        ]
+      },
+      {
+        "title": "Policyändringar",
+        "paragraphs": [
+          "Vi kan komma att uppdatera denna policy då och då. Vi kommer att meddela dig i appen eller via e-post om väsentliga förändringar."
+        ]
+      },
+      {
+        "title": "Kontakt"
+      }
+    ],
+    "contactQuestion": "Har du frågor om denna policy eller dina uppgifter?",
+    "footer": "© 2026 RunWithAI. Alla rättigheter reserverade."
+  },
+  "more": {
+    "title": "Mer",
+    "subtitle": "Alla dina verktyg på ett ställe",
+    "sections": {
+      "account": "Konto",
+      "statistics": "Statistik",
+      "setup": "Inställning",
+      "app": "App"
+    },
+    "newBadge": "Nytt",
+    "menu": {
+      "profile": "Profil",
+      "profileSubtitle": "Personlig information, mål, puls och skador",
+      "statistics": "Statistik",
+      "statisticsSubtitle": "Total distans, bästa tempo och milstolpar",
+      "goals": "Mål",
+      "goalsSubtitle": "Veckomål och träningstyper",
+      "settings": "Inställningar",
+      "settingsSubtitle": "Nivå, språk, profil och aviseringar",
+      "privacy": "Sekretess",
+      "privacySubtitle": "Dina data och rättigheter",
+      "upgrade": "Uppgradera till PRO",
+      "upgradeSubtitle": "Lås upp alla funktioner"
     }
   }
 }
