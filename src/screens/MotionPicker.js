@@ -6,6 +6,7 @@
 // ============================================
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   View,
   Text,
@@ -16,6 +17,7 @@ import {
 } from 'react-native';
 
 export default function MotionPicker({ onBack, onPick }) {
+  const { t } = useTranslation();
   const [step, setStep] = useState(1);
   const [selectedType, setSelectedType] = useState(null);
 
@@ -45,10 +47,10 @@ export default function MotionPicker({ onBack, onPick }) {
         </TouchableOpacity>
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Text style={styles.headerTitle}>
-            {step === 1 ? 'Motion' : selectedType === 'walk' ? 'Gå' : selectedType === 'bike' ? 'Cykling' : 'Løb'}
+            {step === 1 ? t('motionPicker.title') : selectedType === 'walk' ? t('motionPicker.walk') : selectedType === 'bike' ? t('motionPicker.cycling') : t('motionPicker.run')}
           </Text>
           <Text style={styles.headerSub}>
-            {step === 1 ? 'Hvad vil du lave?' : 'Hvor?'}
+            {step === 1 ? t('motionPicker.what') : t('motionPicker.where')}
           </Text>
         </View>
         <View style={styles.headerBtn} />
@@ -62,8 +64,8 @@ export default function MotionPicker({ onBack, onPick }) {
               onPress={function () { pickType('run'); }}
             >
               <Text style={styles.cardEmoji}>🏃</Text>
-              <Text style={styles.cardTitle}>Løb</Text>
-              <Text style={styles.cardSub}>Udendørs eller løbebånd</Text>
+              <Text style={styles.cardTitle}>{t('motionPicker.run')}</Text>
+              <Text style={styles.cardSub}>{t('motionPicker.runLocation')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -71,8 +73,8 @@ export default function MotionPicker({ onBack, onPick }) {
               onPress={function () { pickType('walk'); }}
             >
               <Text style={styles.cardEmoji}>🚶</Text>
-              <Text style={styles.cardTitle}>Gå</Text>
-              <Text style={styles.cardSub}>Udendørs eller løbebånd</Text>
+              <Text style={styles.cardTitle}>{t('motionPicker.walk')}</Text>
+              <Text style={styles.cardSub}>{t('motionPicker.runLocation')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -80,8 +82,8 @@ export default function MotionPicker({ onBack, onPick }) {
               onPress={function () { pickType('bike'); }}
             >
               <Text style={styles.cardEmoji}>🚴</Text>
-              <Text style={styles.cardTitle}>Cykling</Text>
-              <Text style={styles.cardSub}>Udendørs eller indendørs</Text>
+              <Text style={styles.cardTitle}>{t('motionPicker.cycling')}</Text>
+              <Text style={styles.cardSub}>{t('motionPicker.bikeLocation')}</Text>
             </TouchableOpacity>
           </View>
         ) : (
@@ -91,8 +93,8 @@ export default function MotionPicker({ onBack, onPick }) {
               onPress={function () { pickLocation('outdoor'); }}
             >
               <Text style={styles.cardEmoji}>📍</Text>
-              <Text style={styles.cardTitle}>Udendørs</Text>
-              <Text style={styles.cardSub}>GPS-tracking · ruter · tempo</Text>
+              <Text style={styles.cardTitle}>{t('motionPicker.outdoor')}</Text>
+              <Text style={styles.cardSub}>{t('motionPicker.outdoorDescription')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -100,8 +102,8 @@ export default function MotionPicker({ onBack, onPick }) {
               onPress={function () { pickLocation('treadmill'); }}
             >
               <Text style={styles.cardEmoji}>🏠</Text>
-              <Text style={styles.cardTitle}>Indendørs</Text>
-              <Text style={styles.cardSub}>Løbebånd · skridt-tæller · manuel km</Text>
+              <Text style={styles.cardTitle}>{t('motionPicker.indoor')}</Text>
+              <Text style={styles.cardSub}>{t('motionPicker.indoorDescription')}</Text>
             </TouchableOpacity>
           </View>
         )}

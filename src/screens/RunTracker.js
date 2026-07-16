@@ -785,7 +785,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
         showsBackgroundLocationIndicator: true,
         foregroundService: {
           notificationTitle: 'RunWithAI',
-          notificationBody: activityType === 'run' ? 'Tracking dit løb...' : 'Tracking din gåtur...',
+          notificationBody: activityType === 'run' ? t('tracker.notification.run') : activityType === 'bike' ? t('tracker.notification.bike') : t('tracker.notification.walk'),
           notificationColor: '#c8ff00',
         },
         pausesUpdatesAutomatically: false,
@@ -1229,11 +1229,11 @@ const bikePayload = {
           const errData = await res.json().catch(() => ({}));
           if (errData.error === 'limit_exceeded') {
             Alert.alert(
-              'Aktivitetsgraense naaet',
-              'Du har naaet graensen paa ' + (errData.limit || 3) + ' aktiviteter/uge paa Free. Opgrader til Basic eller Pro for ubegraenset adgang.',
+              t('tracker.limit.title'),
+              t('tracker.limit.message', { limit: errData.limit || 3 }),
               [
-                { text: 'Senere', style: 'cancel' },
-                { text: 'Opgrader', onPress: () => { if (onShowPricing) onShowPricing(); } },
+                { text: t('tracker.limit.later'), style: 'cancel' },
+                { text: t('pro.upgrade'), onPress: () => { if (onShowPricing) onShowPricing(); } },
               ]
             );
             return;
@@ -1312,7 +1312,7 @@ const formatPace = () => {
         <Text style={s.backText}>← {t('common.back')}</Text>
       </TouchableOpacity>
       <View style={s.header}>
-        <Text style={s.title}>{activityType === 'bike' ? '🚴 Cykling' : activityType === 'run' ? ('🏃 ' + t('run.title')) : ('🚶 ' + t('run.walk'))}</Text>
+        <Text style={s.title}>{activityType === 'bike' ? `🚴 ${t('tracker.cycling')}` : activityType === 'run' ? ('🏃 ' + t('run.title')) : ('🚶 ' + t('run.walk'))}</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <TouchableOpacity
             style={[s.voiceToggle, allowMusicMixing && s.voiceToggleActive]}
@@ -1324,7 +1324,7 @@ const formatPace = () => {
           >
             <Text style={{ fontSize: 16 }}>{allowMusicMixing ? '🎵' : '📍'}</Text>
             <Text style={[s.voiceToggleText, allowMusicMixing && s.voiceToggleTextActive]}>
-              {allowMusicMixing ? 'Musik' : 'Kun stemme'}
+              {allowMusicMixing ? t('tracker.music') : t('tracker.voiceOnly')}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -1358,7 +1358,7 @@ const formatPace = () => {
           gpsStatus === 'waiting' ? s.gpsWaiting : s.gpsIdle
         ]}>
           {gpsStatus === 'error' ? `⚠️ ${gpsError}` :
-                        gpsStatus === 'active' ? `📍 ${gpsPoints} punkter (${filteredPoints} filtreret | d:${(global._fr||{}).dist||0} j:${(global._fr||{}).jump||0} s:${(global._fr||{}).speed||0} a:${(global._fr||{}).acc||0})` :
+                        gpsStatus === 'active' ? `📍 ${t('tracker.gps.points', { count: gpsPoints, filtered: filteredPoints })}` :
            gpsStatus === 'waiting' ? `⏳ ${t('tracker.gps.waiting')}` : ''}
         </Text>
       )}

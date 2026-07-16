@@ -8,6 +8,7 @@
 // ============================================
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   View,
   Text,
@@ -60,6 +61,7 @@ function formatPace(minPerKm) {
 }
 
 export default function TreadmillTracker({ token, profile, mode, onClose, onSaved }) {
+  const { t } = useTranslation();
   // mode: 'run' or 'walk'
   const activityMode = mode === 'walk' ? 'walk' : 'run';
   const insets = useSafeAreaInsets();
@@ -171,7 +173,7 @@ export default function TreadmillTracker({ token, profile, mode, onClose, onSave
   function applyCalibration() {
     const val = parseFloat(calibrationInput.replace(',', '.'));
     if (isNaN(val) || val < 0) {
-      Alert.alert('Ugyldig værdi', 'Indtast et tal, fx 5.2');
+      Alert.alert(t('treadmill.invalidValueTitle'), t('treadmill.invalidValueMessage'));
       return;
     }
     setManualKm(Math.round(val * 100) / 100);
@@ -181,19 +183,19 @@ export default function TreadmillTracker({ token, profile, mode, onClose, onSave
   async function handleStop() {
     if (distanceKm <= 0) {
       Alert.alert(
-        'Ingen distance',
-        'Tilføj distance manuelt eller løb længere så skridt kan måles.',
+        t('treadmill.noDistanceTitle'),
+        t('treadmill.noDistanceMessage'),
         [{ text: 'OK' }]
       );
       return;
     }
 
     Alert.alert(
-      'Afslut og gem?',
-      'Distance: ' + distanceKm.toFixed(2) + ' km · Tid: ' + formatTime(seconds) + ' · ' + calories + ' kcal',
+      t('treadmill.finishTitle'),
+      t('treadmill.finishMessage', { distance: distanceKm.toFixed(2), time: formatTime(seconds), calories }),
       [
-        { text: 'Annuller', style: 'cancel' },
-        { text: 'Gem', onPress: saveRun },
+        { text: t('common.cancel'), style: 'cancel' },
+        { text: t('common.save'), onPress: saveRun },
       ]
     );
   }
@@ -208,7 +210,7 @@ export default function TreadmillTracker({ token, profile, mode, onClose, onSave
         pace: paceMinPerKm > 0 ? Math.round(paceMinPerKm * 100) / 100 : null,
         calories: calories,
         type: 'treadmill',
-        notes: activityMode === 'walk' ? 'Indendoers gang (loebebaand)' : 'Indendoers loeb (loebebaand)',
+        notes: activityMode === 'walk' ? t('treadmill.walkNote') : t('treadmill.runNote'),
         total_steps: steps || null,
       };
 
@@ -224,12 +226,12 @@ export default function TreadmillTracker({ token, profile, mode, onClose, onSave
       if (!res.ok) throw new Error(data.error || 'Save failed');
 
       Alert.alert(
-        'Gemt! 🏃',
-        distanceKm.toFixed(2) + ' km på ' + formatTime(seconds) + ' · ' + calories + ' kcal forbrændt.',
+        t('treadmill.savedTitle'),
+        t('treadmill.savedMessage', { distance: distanceKm.toFixed(2), time: formatTime(seconds), calories }),
         [{ text: 'OK', onPress: function () { if (onSaved) onSaved(data); if (onClose) onClose(); } }]
       );
     } catch (e) {
-      Alert.alert('Fejl', e.message || 'Kunne ikke gemme');
+      Alert.alert(t('common.error'), e.message || t('treadmill.saveError'));
     } finally {
       setSaving(false);
     }
@@ -238,11 +240,11 @@ export default function TreadmillTracker({ token, profile, mode, onClose, onSave
   function handleCancel() {
     if (running && (seconds > 10 || distanceKm > 0)) {
       Alert.alert(
-        'Forkast løb?',
-        'Du mister al data fra denne tur.',
+        t('treadmill.discardTitle'),
+        t('treadmill.discardMessage'),
         [
-          { text: 'Behold', style: 'cancel' },
-          { text: 'Forkast', style: 'destructive', onPress: function () { if (onClose) onClose(); } },
+          { text: t('treadmill.keep'), style: 'cancel' },
+          { text: t('treadmill.discard'), style: 'destructive', onPress: function () { if (onClose) onClose(); } },
         ]
       );
     } else {
@@ -260,12 +262,12 @@ export default function TreadmillTracker({ token, profile, mode, onClose, onSave
         </TouchableOpacity>
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Text style={styles.headerTitle}>
-            {activityMode === 'walk' ? '🚶 Løbebånd · Gang' : '🏃 Løbebånd · Løb'}
+            {activityMode === 'walk' ? `🚶 ${t('treadmill.walkTitle')}` : `🏃 ${t('treadmill.runTitle')}`}
           </Text>
           {pedometerAvailable ? (
-            <Text style={styles.headerSub}>Skridt-tæller aktiv</Text>
+            <Text style={styles.headerSub}>{t('treadmill.pedometerActive')}</Text>
           ) : (
-            <Text style={[styles.headerSub, { color: '#fa3c00' }]}>Skridt-tæller utilgængelig</Text>
+            <Text style={[styles.headerSub, { color: '#fa3c00' }]}>{t('treadmill.pedometerUnavailable')}</Text>
           )}
         </View>
         <View style={styles.headerBtn} />
@@ -274,7 +276,7 @@ export default function TreadmillTracker({ token, profile, mode, onClose, onSave
       <ScrollView contentContainerStyle={styles.content}>
         {/* Big timer */}
         <View style={styles.timerBox}>
-          <Text style={styles.timerLabel}>TID</Text>
+          <Text style={styles.timerLabel}>{t('run.time')}</Text>
           <Text style={styles.timer}>{formatTime(seconds)}</Text>
         </View>
 
@@ -297,22 +299,22 @@ export default function TreadmillTracker({ token, profile, mode, onClose, onSave
           </View>
           <View style={styles.statCard}>
             <Text style={styles.statValue}>{steps}</Text>
-            <Text style={styles.statLabel}>SKRIDT</Text>
+            <Text style={styles.statLabel}>{t('treadmill.steps')}</Text>
           </View>
         </View>
 
         {/* Speed indicator */}
         {distanceKm > 0 && minutes > 0 ? (
           <View style={styles.speedBox}>
-            <Text style={styles.speedLabel}>Hastighed</Text>
+            <Text style={styles.speedLabel}>{t('treadmill.speed')}</Text>
             <Text style={styles.speedValue}>{speedKmh.toFixed(1)} km/t</Text>
           </View>
         ) : null}
 
         {/* Distance buttons */}
-        <Text style={styles.sectionTitle}>JUSTÉR DISTANCE</Text>
+        <Text style={styles.sectionTitle}>{t('treadmill.adjustDistance').toUpperCase()}</Text>
         <Text style={styles.sectionHint}>
-          Tilføj km manuelt fra løbebåndets display
+          {t('treadmill.adjustHint')}
         </Text>
         <View style={styles.distanceButtons}>
           <TouchableOpacity
@@ -351,19 +353,16 @@ export default function TreadmillTracker({ token, profile, mode, onClose, onSave
           disabled={!running}
         >
           <Text style={styles.calibrateBtnText}>
-            🎯 Indtast præcis distance fra løbebånd
+            🎯 {t('treadmill.enterExactDistance')}
           </Text>
         </TouchableOpacity>
 
         {/* Tip */}
         {!running ? (
           <View style={styles.tipBox}>
-            <Text style={styles.tipTitle}>💡 Sådan bruger du tracker</Text>
+            <Text style={styles.tipTitle}>💡 {t('treadmill.instructionsTitle')}</Text>
             <Text style={styles.tipText}>
-              1. Tryk START når du begynder på løbebåndet{"\n"}
-              2. Tilføj distance manuelt med +0.1 / +0.5 / +1.0 knapperne{"\n"}
-              3. Eller indtast den præcise distance når du er færdig{"\n"}
-              4. Skridt tælles automatisk hvis telefonen er på dig
+              {t('treadmill.instructions')}
             </Text>
           </View>
         ) : null}
@@ -385,14 +384,14 @@ export default function TreadmillTracker({ token, profile, mode, onClose, onSave
                 style={[styles.bigBtn, styles.startBtn, { flex: 1 }]}
                 onPress={handleStart}
               >
-                <Text style={styles.bigBtnText}>FORTSÆT</Text>
+                <Text style={styles.bigBtnText}>{t('run.resume').toUpperCase()}</Text>
               </TouchableOpacity>
             ) : (
               <TouchableOpacity
                 style={[styles.bigBtn, styles.pauseBtn, { flex: 1 }]}
                 onPress={handlePause}
               >
-                <Text style={styles.bigBtnText}>PAUSE</Text>
+                <Text style={styles.bigBtnText}>{t('run.pause').toUpperCase()}</Text>
               </TouchableOpacity>
             )}
             <TouchableOpacity
@@ -400,7 +399,7 @@ export default function TreadmillTracker({ token, profile, mode, onClose, onSave
               onPress={handleStop}
               disabled={saving}
             >
-              <Text style={styles.bigBtnText}>{saving ? 'GEMMER...' : 'STOP'}</Text>
+              <Text style={styles.bigBtnText}>{saving ? t('treadmill.saving').toUpperCase() : t('run.stop').toUpperCase()}</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -415,9 +414,9 @@ export default function TreadmillTracker({ token, profile, mode, onClose, onSave
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>Indtast præcis distance</Text>
+            <Text style={styles.modalTitle}>{t('treadmill.exactDistanceTitle')}</Text>
             <Text style={styles.modalHint}>
-              Aflæs løbebåndets display og indtast km
+              {t('treadmill.exactDistanceHint')}
             </Text>
             <TextInput
               style={styles.modalInput}
@@ -433,13 +432,13 @@ export default function TreadmillTracker({ token, profile, mode, onClose, onSave
                 style={[styles.modalBtn, styles.modalBtnCancel]}
                 onPress={function () { setCalibrationVisible(false); }}
               >
-                <Text style={styles.modalBtnText}>Annuller</Text>
+                <Text style={styles.modalBtnText}>{t('common.cancel')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.modalBtn, styles.modalBtnPrimary]}
                 onPress={applyCalibration}
               >
-                <Text style={[styles.modalBtnText, { color: '#fff' }]}>Anvend</Text>
+                <Text style={[styles.modalBtnText, { color: '#fff' }]}>{t('treadmill.apply')}</Text>
               </TouchableOpacity>
             </View>
           </View>

@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Alert, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { logActivity } from '../services/NutritionAPI';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TYPE_META = {
-  strength: { label: 'Styrketræning', emoji: '\uD83D\uDCAA', color: '#f59e0b' },
-  mobility: { label: 'Mobility / Yoga', emoji: '\uD83E\uDDD8', color: '#8b5cf6' },
-  bike:     { label: 'Cykel',           emoji: '\uD83D\uDEB4', color: '#3b82f6' },
-  other:    { label: 'Anden aktivitet', emoji: '\u26A1',       color: '#6b7280' },
+  strength: { emoji: '\uD83D\uDCAA', color: '#f59e0b' },
+  mobility: { emoji: '\uD83E\uDDD8', color: '#8b5cf6' },
+  bike:     { emoji: '\uD83D\uDEB4', color: '#3b82f6' },
+  other:    { emoji: '\u26A1',       color: '#6b7280' },
 };
 
 // MET-værdier ved RPE 5 (moderat). Skaleres lineært med RPE.
@@ -31,7 +32,9 @@ function calcKcal(type, durationMin, rpe, weightKg) {
 }
 
 export default function LogActivity({ activityType, onBack, onDone }) {
+  const { t } = useTranslation();
   const meta = TYPE_META[activityType] || TYPE_META.other;
+  const activityLabel = t(`logActivity.types.${activityType || 'other'}`);
   const [duration, setDuration] = useState('');
   const [calories, setCalories] = useState('');
   const [rpe, setRpe] = useState(5);
@@ -61,7 +64,7 @@ export default function LogActivity({ activityType, onBack, onDone }) {
   const save = async () => {
     const dur = parseInt(duration, 10);
     if (!dur || dur <= 0) {
-      Alert.alert('Fejl', 'Indtast en gyldig varighed i minutter');
+      Alert.alert(t('common.error'), t('logActivity.invalidDuration'));
       return;
     }
     setSaving(true);
@@ -78,11 +81,11 @@ export default function LogActivity({ activityType, onBack, onDone }) {
         source: 'manual',
       };
       await logActivity(payload);
-      Alert.alert('Gemt!', meta.label + ' logget (' + dur + ' min, ' + finalKcal + ' kcal)', [
+      Alert.alert(t('logActivity.savedTitle'), t('logActivity.savedMessage', { activity: activityLabel, duration: dur, calories: finalKcal }), [
         { text: 'OK', onPress: () => { if (onDone) onDone(); } }
       ]);
     } catch (e) {
-      Alert.alert('Fejl', 'Kunne ikke gemme: ' + e.message);
+      Alert.alert(t('common.error'), t('logActivity.saveError', { error: e.message }));
     } finally {
       setSaving(false);
     }
@@ -91,17 +94,17 @@ export default function LogActivity({ activityType, onBack, onDone }) {
   return (
     <SafeAreaView style={s.safe}>
       <View style={s.header}>
-        <TouchableOpacity onPress={onBack}><Text style={s.back}>Tilbage</Text></TouchableOpacity>
-        <Text style={s.title}>{meta.emoji} {meta.label}</Text>
+        <TouchableOpacity onPress={onBack}><Text style={s.back}>{t('common.back')}</Text></TouchableOpacity>
+        <Text style={s.title}>{meta.emoji} {activityLabel}</Text>
         <View style={{ width: 60 }} />
       </View>
       <ScrollView contentContainerStyle={s.scroll}>
         <View style={[s.banner, { backgroundColor: meta.color }]}>
           <Text style={s.bannerEmoji}>{meta.emoji}</Text>
-          <Text style={s.bannerText}>Log din {meta.label.toLowerCase()}</Text>
+          <Text style={s.bannerText}>{t('logActivity.logActivity', { activity: activityLabel.toLowerCase() })}</Text>
         </View>
 
-        <Text style={s.label}>Varighed (minutter) *</Text>
+        <Text style={s.label}>{t('logActivity.duration')}</Text>
         <TextInput
           style={s.input}
           value={duration}
@@ -111,7 +114,7 @@ export default function LogActivity({ activityType, onBack, onDone }) {
           placeholderTextColor="#9ca3af"
         />
 
-        <Text style={s.label}>Kalorier (valgfri – ellers beregnes automatisk)</Text>
+        <Text style={s.label}>{t('logActivity.calories')}</Text>
         <TextInput
           style={s.input}
           value={calories}
@@ -121,10 +124,10 @@ export default function LogActivity({ activityType, onBack, onDone }) {
           placeholderTextColor="#9ca3af"
         />
         {autoKcal > 0 && !calories ? (
-          <Text style={s.hint}>≈ {autoKcal} kcal beregnet ud fra {weightKg} kg, RPE {rpe}</Text>
+          <Text style={s.hint}>{t('logActivity.calorieEstimate', { calories: autoKcal, weight: weightKg, rpe })}</Text>
         ) : null}
 
-        <Text style={s.label}>Anstrengelse (RPE 1-10)</Text>
+        <Text style={s.label}>{t('logActivity.effort')}</Text>
         <View style={s.rpeRow}>
           {[1,2,3,4,5,6,7,8,9,10].map(n => (
             <TouchableOpacity
@@ -136,12 +139,12 @@ export default function LogActivity({ activityType, onBack, onDone }) {
           ))}
         </View>
 
-        <Text style={s.label}>Noter (valgfri)</Text>
+        <Text style={s.label}>{t('logActivity.notes')}</Text>
         <TextInput
           style={[s.input, s.notesInput]}
           value={notes}
           onChangeText={setNotes}
-          placeholder="F.eks. øvelser, vægt, sets..."
+          placeholder={t('logActivity.notesPlaceholder')}
           placeholderTextColor="#9ca3af"
           multiline
         />
@@ -150,7 +153,7 @@ export default function LogActivity({ activityType, onBack, onDone }) {
           style={[s.saveBtn, { backgroundColor: meta.color }]}
           onPress={save}
           disabled={saving}>
-          {saving ? <ActivityIndicator color="#fff" /> : <Text style={s.saveText}>Gem træning</Text>}
+          {saving ? <ActivityIndicator color="#fff" /> : <Text style={s.saveText}>{t('logActivity.save')}</Text>}
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
