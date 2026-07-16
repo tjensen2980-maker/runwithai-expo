@@ -1,5 +1,6 @@
 ﻿{
   "tabs": {
+    "home": "Početna",
     "plan": "Plan",
     "run": "Trčanje",
     "coach": "Trener",
@@ -7,7 +8,8 @@
     "settings": "Postavke",
     "calendar": "Kalendar",
     "progress": "Napredak",
-    "start": "Start"
+    "start": "Start",
+    "more": "Više"
   },
   "run": {
     "title": "Trčanje",

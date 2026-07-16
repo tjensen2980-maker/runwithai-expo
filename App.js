@@ -243,11 +243,11 @@ function RoutesTabWrapper({ profile, runs }) {
 function TabBar({ tab, setTab, isPro }) {
   const { t } = useTranslation();
   const TABS = [
-    { id: 'home',      label: 'Hjem',             Icon: IconPlan      },
+    { id: 'home',      label: t('tabs.home'),     Icon: IconPlan      },
     { id: 'activity',  label: t('tabs.progress'), Icon: IconProgress  },
     { id: 'run',       label: '',                 Icon: null          },
-  { id: 'calendar',  label: 'Kalender',         Icon: IconCalendar  },
-    { id: 'more',      label: 'Mere',             Icon: IconStats     },
+    { id: 'calendar',  label: t('tabs.calendar'), Icon: IconCalendar  },
+    { id: 'more',      label: t('tabs.more'),     Icon: IconStats     },
   ];
   return (
     <View style={s.tabBar}>

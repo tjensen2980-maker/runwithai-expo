@@ -1,5 +1,6 @@
 ﻿{
   "tabs": {
+    "home": "Home",
     "plan": "Plan",
     "run": "Hardlopen",
     "coach": "Coach",
@@ -7,7 +8,8 @@
     "settings": "Instellingen",
     "calendar": "Kalender",
     "progress": "Voortgang",
-    "start": "Start"
+    "start": "Start",
+    "more": "Meer"
   },
   "run": {
     "title": "Hardlopen",

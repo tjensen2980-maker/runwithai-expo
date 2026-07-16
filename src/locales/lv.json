@@ -1,5 +1,6 @@
 ﻿{
   "tabs": {
+    "home": "Sākums",
     "plan": "Plāns",
     "run": "Skriešana",
     "coach": "Treneris",
@@ -7,7 +8,8 @@
     "settings": "Iestatījumi",
     "calendar": "Kalendārs",
     "progress": "Progress",
-    "start": "Sākt"
+    "start": "Sākt",
+    "more": "Vairāk"
   },
   "run": {
     "title": "Skriešana",

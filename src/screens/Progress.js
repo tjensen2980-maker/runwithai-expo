@@ -2,6 +2,7 @@
 // Kortet vises FOERST i detaljevisningen, naar man trykker paa en aktivitet.
 import React, { useMemo, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Modal, Platform, Dimensions, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { colors } from '../data';
 
 // Kort kun paa native - webben klarer sig uden
@@ -10,14 +11,11 @@ if (Platform.OS !== 'web') {
   try { const M = require('react-native-maps'); MapView = M.default; Polyline = M.Polyline; } catch (e) {}
 }
 
-const MDR = ['januar', 'februar', 'marts', 'april', 'maj', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'december'];
-const MDR_KORT = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
-
-function typeInfo(run) {
-  const t = String(run.type || '').toLowerCase();
-  if (t.includes('walk') || t.includes('gå') || t.includes('gaa')) return { emoji: '🚶', label: 'Gåtur' };
-  if (t.includes('cyc') || t.includes('bike') || t.includes('cykl')) return { emoji: '🚴', label: 'Cykling' };
-  return { emoji: '🏃', label: 'Løbetur' };
+function typeInfo(run, t) {
+  const type = String(run.type || '').toLowerCase();
+  if (type.includes('walk') || type.includes('gå') || type.includes('gaa')) return { emoji: '🚶', label: t('progress.activityTypes.walk') };
+  if (type.includes('cyc') || type.includes('bike') || type.includes('cykl')) return { emoji: '🚴', label: t('progress.activityTypes.cycling') };
+  return { emoji: '🏃', label: t('progress.activityTypes.run') };
 }
 
 function fmtDur(sek) {
@@ -51,10 +49,11 @@ function periodeNoegle(d, mode) {
   return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
 }
 
-function periodeLabel(noegle, mode) {
-  if (mode === 'weeks') { const [aar, u] = noegle.split('-U'); return 'Uge ' + Number(u) + ', ' + aar; }
+function periodeLabel(noegle, mode, t, locale) {
+  if (mode === 'weeks') { const [aar, u] = noegle.split('-U'); return t('progress.weekLabel', { week: Number(u), year: aar }); }
   const [aar, m] = noegle.split('-');
-  return MDR[Number(m) - 1] + ' ' + aar;
+  const month = new Intl.DateTimeFormat(locale, { month: 'long' }).format(new Date(2020, Number(m) - 1, 1));
+  return month + ' ' + aar;
 }
 
 function ruteKoordinater(run) {
@@ -66,6 +65,8 @@ function ruteKoordinater(run) {
 }
 
 export default function Progress({ runs }) {
+  const { t, i18n } = useTranslation();
+  const locale = i18n.resolvedLanguage || i18n.language || 'en';
   const [mode, setMode] = useState('months');
   const [valgt, setValgt] = useState(null);
   const alle = Array.isArray(runs) ? runs.filter(r => r && r.date) : [];
@@ -82,10 +83,10 @@ export default function Progress({ runs }) {
     });
     return Object.keys(g).sort().reverse().map(k => ({
       noegle: k,
-      label: periodeLabel(k, mode),
+      label: periodeLabel(k, mode, t, locale),
       runs: g[k].sort((a, b) => new Date(b.date) - new Date(a.date)),
     }));
-  }, [alle, mode]);
+  }, [alle, mode, locale, t]);
 
   // Graf: de seneste 8 perioder, inkl. tomme
   const graf = useMemo(() => {
@@ -96,10 +97,13 @@ export default function Progress({ runs }) {
       if (mode === 'weeks') d.setDate(nu.getDate() - i * 7); else d.setMonth(nu.getMonth() - i, 1);
       const k = periodeNoegle(d, mode);
       const antal = (grupper.find(x => x.noegle === k) || { runs: [] }).runs.length;
-      ud.push({ label: mode === 'weeks' ? 'u' + isoUge(d) : MDR_KORT[d.getMonth()], antal });
+      const label = mode === 'weeks'
+        ? t('progress.weekShort', { week: isoUge(d) })
+        : new Intl.DateTimeFormat(locale, { month: 'short' }).format(d);
+      ud.push({ label, antal });
     }
     return ud;
-  }, [grupper, mode]);
+  }, [grupper, mode, locale, t]);
   const maxAntal = Math.max(1, ...graf.map(x => x.antal));
 
   const koordinater = valgt ? ruteKoordinater(valgt) : null;
@@ -120,7 +124,7 @@ export default function Progress({ runs }) {
       {/* Uger / Maaneder-toggle */}
       <View style={s.toggleRow}>
         <View style={s.toggle}>
-          {[['weeks', 'Uger'], ['months', 'Måneder']].map(([id, label]) => (
+          {[['weeks', t('progress.weeks')], ['months', t('progress.months')]].map(([id, label]) => (
             <TouchableOpacity key={id} style={[s.toggleBtn, mode === id && s.toggleBtnAktiv]} onPress={() => setMode(id)}>
               <Text style={[s.toggleTekst, mode === id && s.toggleTekstAktiv]}>{label}</Text>
             </TouchableOpacity>
@@ -140,12 +144,12 @@ export default function Progress({ runs }) {
               </View>
             ))}
           </View>
-          <Text style={s.grafTitel}>Aktiviteter</Text>
+          <Text style={s.grafTitel}>{t('progress.activities')}</Text>
         </View>
 
         {/* Grupperet liste */}
         {grupper.length === 0 && (
-          <Text style={s.tom}>Ingen aktiviteter endnu - kom ud og løb! 🌱</Text>
+          <Text style={s.tom}>{t('progress.empty')} 🌱</Text>
         )}
         {grupper.map(g => {
           const tid = g.runs.reduce((a, r) => a + (Number(r.duration) || 0), 0);
@@ -155,21 +159,21 @@ export default function Progress({ runs }) {
             <View key={g.noegle}>
               <View style={s.gruppeHeader}>
                 <Text style={s.gruppeTitel}>{g.label}</Text>
-                <Text style={s.gruppeStats}>{'⏱ ' + fmtDur(tid) + '   📍 ' + fmtKm(km) + ' km   🔥 ' + Math.round(kal) + ' kal'}</Text>
+                <Text style={s.gruppeStats}>{'⏱ ' + fmtDur(tid) + '   📍 ' + fmtKm(km) + ' km   🔥 ' + Math.round(kal) + ' ' + t('progress.caloriesShort')}</Text>
               </View>
               <View style={s.gruppeKort}>
                 {g.runs.map((r, i) => {
-                  const t = typeInfo(r);
+                  const info = typeInfo(r, t);
                   return (
                     <TouchableOpacity key={r.id || i} style={[s.raekke, i > 0 && s.raekkeStreg]} onPress={() => setValgt(r)}>
-                      <View style={s.ikonCirkel}><Text style={s.ikonTekst}>{t.emoji}</Text></View>
+                      <View style={s.ikonCirkel}><Text style={s.ikonTekst}>{info.emoji}</Text></View>
                       <View style={{ flex: 1 }}>
                         <Text style={s.raekkeTitel}>{fmtKm(r.km)} km</Text>
-                        <Text style={s.raekkeType}>{t.label}</Text>
-                        <Text style={s.raekkeStats}>{fmtDur(r.duration) + '   ' + fmtKm(r.km) + ' km   ' + Math.round(Number(r.calories) || 0) + ' kal'}</Text>
+                        <Text style={s.raekkeType}>{info.label}</Text>
+                        <Text style={s.raekkeStats}>{fmtDur(r.duration) + '   ' + fmtKm(r.km) + ' km   ' + Math.round(Number(r.calories) || 0) + ' ' + t('progress.caloriesShort')}</Text>
                       </View>
                       <View style={{ alignItems: 'flex-end' }}>
-                        <Text style={s.raekkeDato}>{new Date(r.date).toLocaleDateString('da-DK')}</Text>
+                        <Text style={s.raekkeDato}>{new Date(r.date).toLocaleDateString(locale)}</Text>
                         <Text style={s.chevron}>{'›'}</Text>
                       </View>
                     </TouchableOpacity>
@@ -184,14 +188,14 @@ export default function Progress({ runs }) {
       {/* Detalje: kortet aabner FOERST her */}
       <Modal visible={!!valgt} animationType="slide" onRequestClose={() => setValgt(null)}>
         {valgt && (() => {
-          const t = typeInfo(valgt);
+          const info = typeInfo(valgt, t);
           return (
             <View style={s.detSafe}>
               <View style={s.detHeader}>
                 <TouchableOpacity style={s.detTilbage} onPress={() => setValgt(null)}>
                   <Text style={s.detTilbageTekst}>{'‹'}</Text>
                 </TouchableOpacity>
-                <Text style={s.detDato}>{new Date(valgt.date).toLocaleDateString('da-DK')}</Text>
+                <Text style={s.detDato}>{new Date(valgt.date).toLocaleDateString(locale)}</Text>
                 <View style={{ width: 44 }} />
               </View>
               {MapView && koordinater ? (
@@ -199,17 +203,17 @@ export default function Progress({ runs }) {
                   {Polyline && <Polyline coordinates={koordinater} strokeColor={colors.accent2} strokeWidth={4} />}
                 </MapView>
               ) : (
-                <View style={[s.detKort, s.detKortTom]}><Text style={s.detKortTomTekst}>Ingen rute registreret</Text></View>
+                <View style={[s.detKort, s.detKortTom]}><Text style={s.detKortTomTekst}>{t('progress.noRoute')}</Text></View>
               )}
-              <Text style={s.detTitel}>{t.label + ' ' + fmtKm(valgt.km) + ' km'}</Text>
-              <Text style={s.detUnder}>{valgt.notes || 'Standardtræning'}</Text>
+              <Text style={s.detTitel}>{info.label + ' ' + fmtKm(valgt.km) + ' km'}</Text>
+              <Text style={s.detUnder}>{valgt.notes || t('progress.standardTraining')}</Text>
               <View style={s.detGrid}>
                 {[
-                  ['👣', valgt.total_steps ? String(valgt.total_steps) : '-', 'Skridt'],
-                  ['⏱', fmtDur(valgt.duration), 'Varighed'],
+                  ['👣', valgt.total_steps ? String(valgt.total_steps) : '-', t('progress.steps')],
+                  ['⏱', fmtDur(valgt.duration), t('progress.duration')],
                   ['❤️', valgt.heart_rate ? String(Math.round(valgt.heart_rate)) : '-', 'bpm'],
                   ['📍', fmtKm(valgt.km), 'km'],
-                  ['🔥', String(Math.round(Number(valgt.calories) || 0)), 'kal'],
+                  ['🔥', String(Math.round(Number(valgt.calories) || 0)), t('progress.caloriesShort')],
                   ['⏲', fmtPace(valgt.pace), 'min/km'],
                 ].map(([emoji, vaerdi, label], i) => (
                   <View key={i} style={s.detCelle}>

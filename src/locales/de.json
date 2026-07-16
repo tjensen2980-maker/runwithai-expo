@@ -1,5 +1,6 @@
 ﻿{
   "tabs": {
+    "home": "Startseite",
     "plan": "Plan",
     "run": "Laufen",
     "coach": "Coach",
@@ -7,7 +8,8 @@
     "settings": "Einstellungen",
     "calendar": "Kalender",
     "progress": "Fortschritt",
-    "start": "Start"
+    "start": "Start",
+    "more": "Mehr"
   },
   "run": {
     "title": "Laufen",

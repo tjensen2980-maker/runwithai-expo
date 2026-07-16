@@ -1,5 +1,6 @@
 ﻿{
   "tabs": {
+    "home": "Baile",
     "plan": "Plean",
     "run": "Rith",
     "coach": "Traenálaí",
@@ -7,7 +8,8 @@
     "settings": "Socruithe",
     "calendar": "Féilire",
     "progress": "Dul chun cinn",
-    "start": "Tosaigh"
+    "start": "Tosaigh",
+    "more": "Tuilleadh"
   },
   "run": {
     "title": "Rith",

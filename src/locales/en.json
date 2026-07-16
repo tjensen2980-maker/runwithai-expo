@@ -26,6 +26,7 @@
     "fallbackYou": "there"
   },
   "tabs": {
+    "home": "Home",
     "plan": "Plan",
     "run": "Run",
     "coach": "Coach",
@@ -33,7 +34,8 @@
     "settings": "Settings",
     "calendar": "Calendar",
     "progress": "Progress",
-    "start": "Start"
+    "start": "Start",
+    "more": "More"
   },
   "run": {
     "title": "Run",
@@ -1012,9 +1014,75 @@
     "unit": "Unit",
     "approxGrams": "≈ {{grams}}g"
   },
+  "home": {
+    "greeting": {
+      "morning": "Good morning",
+      "day": "Hello",
+      "evening": "Good evening",
+      "night": "Good night"
+    },
+    "coach": {
+      "restDay": "Today is a rest day — enjoy your recovery!",
+      "todayWorkout": "Today's plan includes {{workout}}.",
+      "nextWorkout": "Next workout: {{workout}}.",
+      "ready": "Ready to get started? Ask me about planning, nutrition, or motivation.",
+      "askForHelp": "Ask me anything if you need help."
+    },
+    "chat": {
+      "placeholder": "Ask your AI coach...",
+      "todayPlanPrompt": "What is my plan for today?"
+    },
+    "todayPlan": "Today's plan",
+    "startTraining": "Start workout",
+    "nextTraining": "Next workout",
+    "today": "Today",
+    "training": "Workout",
+    "todayOverview": "Today's overview",
+    "week": "Week",
+    "milestone": "Milestone",
+    "toGoal": "to {{distance}} km goal"
+  },
+  "progress": {
+    "weeks": "Weeks",
+    "months": "Months",
+    "weekLabel": "Week {{week}}, {{year}}",
+    "weekShort": "W{{week}}",
+    "activities": "Activities",
+    "empty": "No activities yet — get out there and run!",
+    "noRoute": "No route recorded",
+    "standardTraining": "Standard workout",
+    "steps": "Steps",
+    "duration": "Duration",
+    "caloriesShort": "cal",
+    "activityTypes": {
+      "walk": "Walk",
+      "cycling": "Cycling",
+      "run": "Run"
+    }
+  },
   "more": {
+    "title": "More",
+    "subtitle": "All your tools in one place",
+    "sections": {
+      "account": "Account",
+      "statistics": "Statistics",
+      "setup": "Setup",
+      "app": "App"
+    },
+    "newBadge": "New",
     "menu": {
-      "goals": "Goals"
+      "profile": "Profile",
+      "profileSubtitle": "Personal information, goals, heart rate, and injuries",
+      "statistics": "Statistics",
+      "statisticsSubtitle": "Total distance, best pace, and milestones",
+      "goals": "Goals",
+      "goalsSubtitle": "Weekly goals and workout types",
+      "settings": "Settings",
+      "settingsSubtitle": "Level, language, profile, and notifications",
+      "privacy": "Privacy",
+      "privacySubtitle": "Your data and rights",
+      "upgrade": "Upgrade to PRO",
+      "upgradeSubtitle": "Unlock all features"
     }
   }
 }

@@ -1,5 +1,6 @@
 ﻿{
   "tabs": {
+    "home": "Avaleht",
     "plan": "Plaan",
     "run": "Jooks",
     "coach": "Treener",
@@ -7,7 +8,8 @@
     "settings": "Seaded",
     "calendar": "Kalender",
     "progress": "Progress",
-    "start": "Alusta"
+    "start": "Alusta",
+    "more": "Rohkem"
   },
   "run": {
     "title": "Jooks",

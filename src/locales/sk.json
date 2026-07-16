@@ -1,5 +1,6 @@
 ﻿{
   "tabs": {
+    "home": "Domov",
     "plan": "Plán",
     "run": "Beh",
     "coach": "Tréner",
@@ -7,7 +8,8 @@
     "settings": "Nastavenia",
     "calendar": "Kalendár",
     "progress": "Pokrok",
-    "start": "Štart"
+    "start": "Štart",
+    "more": "Viac"
   },
   "run": {
     "title": "Beh",
