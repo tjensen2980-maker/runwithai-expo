@@ -601,7 +601,30 @@
     "defaultRunner": "runner",
     "voiceOn": "Voice on",
     "voiceOff": "Voice off",
+    "cycling": "Cycling",
+    "music": "Music",
+    "voiceOnly": "Voice only",
     "mapNotAvailable": "Map not available",
+    "notification": {
+      "run": "Tracking your run...",
+      "walk": "Tracking your walk...",
+      "bike": "Tracking your ride..."
+    },
+    "limit": {
+      "title": "Weekly activity limit reached",
+      "message": "You have reached the Free plan limit of {{limit}} activities per week. Upgrade to Basic or Pro for unlimited access.",
+      "later": "Later"
+    },
+    "stats": {
+      "runs": "runs",
+      "walks": "walks",
+      "yourProgress": "Your progress",
+      "thisWeek": "This week",
+      "lastWeek": "Last week",
+      "bestPace": "Best pace",
+      "longestRun": "Longest run",
+      "totalKm": "Total km"
+    },
     "status": {
       "ready": "Press start to begin",
       "paused": "Paused",
@@ -614,7 +637,8 @@
       "unavailable": "GPS unavailable",
       "timeout": "GPS timeout",
       "notAvailable": "GPS not available",
-      "error": "GPS error"
+      "error": "GPS error",
+      "points": "{{count}} points ({{filtered}} filtered)"
     }
   },
   "chat": {
@@ -1059,6 +1083,144 @@
       "cycling": "Cycling",
       "run": "Run"
     }
+  },
+  "workoutLabels": {
+    "rest": "Rest",
+    "injuryRest": "Rest due to injury"
+  },
+  "calendar": {
+    "monthSummary_one": "{{count}} run · {{km}} km",
+    "monthSummary_other": "{{count}} runs · {{km}} km",
+    "completed": "Completed",
+    "planned": "Planned",
+    "missed": "Missed",
+    "plannedKm": "{{km}} km planned",
+    "emptyDay": "No run or workout planned for this day"
+  },
+  "motionPicker": {
+    "title": "Cardio",
+    "what": "What would you like to do?",
+    "where": "Where?",
+    "run": "Run",
+    "walk": "Walk",
+    "cycling": "Cycling",
+    "runLocation": "Outdoor or treadmill",
+    "bikeLocation": "Outdoor or indoor",
+    "outdoor": "Outdoor",
+    "outdoorDescription": "GPS tracking · routes · pace",
+    "indoor": "Indoor",
+    "indoorDescription": "Treadmill · step counter · manual distance"
+  },
+  "activityPicker": {
+    "title": "Choose workout",
+    "intro": "What would you like to log?",
+    "options": {
+      "mobility": { "label": "Mobility / Yoga", "description": "Stretching, yoga, foam rolling" },
+      "bike": { "label": "Cycling", "description": "Indoor or outdoor" },
+      "other": { "label": "Other activity", "description": "Padel, football, swimming..." }
+    }
+  },
+  "logActivity": {
+    "types": { "strength": "Strength training", "mobility": "Mobility / Yoga", "bike": "Cycling", "other": "Other activity" },
+    "invalidDuration": "Enter a valid duration in minutes",
+    "savedTitle": "Saved!",
+    "savedMessage": "{{activity}} logged ({{duration}} min, {{calories}} kcal)",
+    "saveError": "Could not save: {{error}}",
+    "logActivity": "Log your {{activity}}",
+    "duration": "Duration (minutes) *",
+    "calories": "Calories (optional — otherwise calculated automatically)",
+    "calorieEstimate": "≈ {{calories}} kcal calculated from {{weight}} kg, RPE {{rpe}}",
+    "effort": "Effort (RPE 1–10)",
+    "notes": "Notes (optional)",
+    "notesPlaceholder": "For example exercises, weight, sets...",
+    "save": "Save workout"
+  },
+  "treadmill": {
+    "invalidValueTitle": "Invalid value",
+    "invalidValueMessage": "Enter a number, for example 5.2",
+    "noDistanceTitle": "No distance",
+    "noDistanceMessage": "Add the distance manually or continue until steps can be measured.",
+    "finishTitle": "Finish and save?",
+    "finishMessage": "Distance: {{distance}} km · Time: {{time}} · {{calories}} kcal",
+    "walkNote": "Indoor walk (treadmill)",
+    "runNote": "Indoor run (treadmill)",
+    "savedTitle": "Saved! 🏃",
+    "savedMessage": "{{distance}} km in {{time}} · {{calories}} kcal burned.",
+    "saveError": "Could not save",
+    "discardTitle": "Discard workout?",
+    "discardMessage": "All data from this workout will be lost.",
+    "keep": "Keep",
+    "discard": "Discard",
+    "walkTitle": "Treadmill · Walk",
+    "runTitle": "Treadmill · Run",
+    "pedometerActive": "Step counter active",
+    "pedometerUnavailable": "Step counter unavailable",
+    "steps": "STEPS",
+    "speed": "Speed",
+    "adjustDistance": "Adjust distance",
+    "adjustHint": "Add distance manually from the treadmill display",
+    "enterExactDistance": "Enter exact distance from treadmill",
+    "instructionsTitle": "How to use the tracker",
+    "instructions": "1. Press START when you begin on the treadmill\n2. Add distance with the +0.1 / +0.5 / +1.0 buttons\n3. Or enter the exact distance when finished\n4. Steps are counted automatically when you carry your phone",
+    "saving": "Saving...",
+    "exactDistanceTitle": "Enter exact distance",
+    "exactDistanceHint": "Read the treadmill display and enter the distance in km",
+    "apply": "Apply"
+  },
+  "statsPage": {
+    "hoursShort": "h",
+    "minutesShort": "m",
+    "now": "Now",
+    "weeksAgoShort": "{{count}}w",
+    "emptyTitle": "No statistics yet",
+    "emptyMessage": "Start your first run to see your data here.",
+    "period4Weeks": "4 weeks",
+    "period3Months": "3 months",
+    "bestPace": "Best pace",
+    "dayStreak": "Day streak",
+    "weeklyGoal": "Weekly goal",
+    "ofGoal": "of {{goal}} km goal",
+    "goalReached": "Goal reached!",
+    "kmRemaining": "{{km}} km remaining",
+    "milestone": "Milestone",
+    "toMilestone": "{{remaining}} km to {{milestone}} km",
+    "kmPerWeek": "KM PER WEEK",
+    "kmPerMonth": "KM PER MONTH",
+    "avgDistance": "Average distance",
+    "kmPerRun": "km per run",
+    "totalTime": "Total time",
+    "moving": "moving",
+    "longestRun": "Longest run",
+    "runsPerWeekday": "Runs per weekday",
+    "activityRings": "Activity rings",
+    "kmGoal": "KM GOAL",
+    "distance": "Distance",
+    "activity": "Activity",
+    "days": "DAYS",
+    "streak": "Streak",
+    "activityTypes": "Activity types",
+    "types": { "run": "Run", "walk": "Walk", "bike": "Cycling" }
+  },
+  "privacyPage": {
+    "title": "Privacy Policy",
+    "updated": "Last updated: April 2026",
+    "intro": "At RunWithAI, we take your privacy seriously. This policy explains how we collect, use, and protect your personal information.",
+    "sections": [
+      { "title": "Data controller", "paragraphs": ["RunWithAI is responsible for processing your personal data. Contact us at privacy@runwithai.app if you have questions."] },
+      { "title": "Data we collect", "paragraphs": ["We collect the following types of data:"], "bullets": ["Account information: email, name, age, and gender", "Physical data: weight and height (optional)", "Workout data: activities, distance, pace, heart rate, and GPS routes", "App usage: preferences, goals, and level", "Payment information: handled securely by the App Store or Google Play"] },
+      { "title": "How we use your data", "paragraphs": ["We use your data to:"], "bullets": ["Provide personalized AI training plans", "Analyze your workouts and progress", "Improve our services", "Send relevant notifications and updates", "Manage payments and subscriptions"] },
+      { "title": "Third-party integrations", "paragraphs": ["RunWithAI may integrate with Garmin Connect to import running data. When connected, we retrieve workout data only — never your login credentials."] },
+      { "title": "Data sharing", "paragraphs": ["We never sell your data. We only share data with:"], "bullets": ["Apple/Google: secure payment processing", "OpenAI: anonymized AI coaching", "Hosting providers: Vercel and Railway for data storage"] },
+      { "title": "Data security", "paragraphs": ["We use industry-standard safeguards, including:"], "bullets": ["HTTPS encryption for all connections", "Secure password hashing with bcrypt", "JWT tokens for authentication", "Regular security updates"] },
+      { "title": "Your rights", "paragraphs": ["You have the right to:"], "bullets": ["Access your data", "Correct inaccurate information", "Delete your account and all data", "Export your data as CSV", "Withdraw consent"] },
+      { "title": "Data retention", "paragraphs": ["We keep your data while your account is active. If you delete your account, all data is removed within 30 days."] },
+      { "title": "Cookies and tracking", "paragraphs": ["We use minimal cookies to keep you signed in. We do not use third-party tracking or advertising cookies."] },
+      { "title": "Children's privacy", "paragraphs": ["RunWithAI is not intended for children under 13, and we do not knowingly collect data from children under this age."] },
+      { "title": "Policy changes", "paragraphs": ["We may update this policy from time to time. We will notify you in the app or by email about material changes."] },
+      { "title": "Contact", "paragraphs": [] }
+    ],
+    "contactQuestion": "Do you have questions about this policy or your data?",
+    "footer": "© 2026 RunWithAI. All rights reserved."
   },
   "more": {
     "title": "More",

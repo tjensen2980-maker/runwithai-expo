@@ -1,23 +1,25 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const OPTIONS = [
-  { type: 'mobility', emoji: '\uD83E\uDDD8', label: 'Mobility / Yoga', desc: 'Stretching, yoga, foam rolling', color: '#8b5cf6' },
-  { type: 'bike',     emoji: '\uD83D\uDEB4', label: 'Cykel',           desc: 'Indendørs eller udendørs', color: '#3b82f6' },
-  { type: 'other',    emoji: '\u26A1',       label: 'Anden aktivitet', desc: 'Padel, fodbold, svømning...', color: '#6b7280' },
+  { type: 'mobility', emoji: '\uD83E\uDDD8', color: '#8b5cf6' },
+  { type: 'bike',     emoji: '\uD83D\uDEB4', color: '#3b82f6' },
+  { type: 'other',    emoji: '\u26A1',       color: '#6b7280' },
 ];
 
 export default function ActivityTypePicker({ onBack, onPick }) {
+  const { t } = useTranslation();
   return (
     <SafeAreaView style={s.safe}>
       <View style={s.header}>
-        <TouchableOpacity onPress={onBack}><Text style={s.back}>Tilbage</Text></TouchableOpacity>
-        <Text style={s.title}>Vælg træning</Text>
+        <TouchableOpacity onPress={onBack}><Text style={s.back}>{t('common.back')}</Text></TouchableOpacity>
+        <Text style={s.title}>{t('activityPicker.title')}</Text>
         <View style={{ width: 60 }} />
       </View>
       <ScrollView contentContainerStyle={s.scroll}>
-        <Text style={s.intro}>Hvad vil du logge?</Text>
+        <Text style={s.intro}>{t('activityPicker.intro')}</Text>
         {OPTIONS.map(opt => (
           <TouchableOpacity
             key={opt.type}
@@ -26,8 +28,8 @@ export default function ActivityTypePicker({ onBack, onPick }) {
             activeOpacity={0.8}>
             <Text style={s.cardEmoji}>{opt.emoji}</Text>
             <View style={s.cardText}>
-              <Text style={s.cardLabel}>{opt.label}</Text>
-              <Text style={s.cardDesc}>{opt.desc}</Text>
+              <Text style={s.cardLabel}>{t(`activityPicker.options.${opt.type}.label`)}</Text>
+              <Text style={s.cardDesc}>{t(`activityPicker.options.${opt.type}.description`)}</Text>
             </View>
             <Text style={s.cardArrow}>{'\u203A'}</Text>
           </TouchableOpacity>

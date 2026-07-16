@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Dimensions, Platform } from 'react-native';
 import { colors } from '../data';
 import Svg, { Circle } from 'react-native-svg';
@@ -7,7 +8,7 @@ const W = Dimensions.get('window').width;
 
 // ─── HJÆLPE-FUNKTIONER ──────────────────────────────────────────────────────
 const fmtPace = (s) => s ? `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}` : '–';
-const fmtDur  = (s) => s ? `${Math.floor(s / 3600) > 0 ? Math.floor(s / 3600) + 't ' : ''}${Math.floor((s % 3600) / 60)}m` : '–';
+const fmtDur  = (s, t) => s ? `${Math.floor(s / 3600) > 0 ? Math.floor(s / 3600) + t('statsPage.hoursShort') + ' ' : ''}${Math.floor((s % 3600) / 60)}${t('statsPage.minutesShort')}` : '–';
 
 // ─── RING KOMPONENT (RETTET TIL REACT NATIVE) ───────────────────────────────
 function Ring({ pct, size = 110, color = colors.accent, label, value, sub }) {
@@ -88,6 +89,8 @@ function BigStat({ value, label, color }) {
 
 // ─── HOVED KOMPONENT ────────────────────────────────────────────────────────
 export default function Stats({ runs = [], profile, level }) {
+  const { t, i18n } = useTranslation();
+  const locale = i18n.resolvedLanguage || i18n.language || 'en';
   const [period, setPeriod] = useState('all');
   const now = new Date();
   
@@ -120,11 +123,11 @@ export default function Stats({ runs = [], profile, level }) {
       const weekEnd = new Date(weekStart.getTime() + 7 * 86400000);
       const weekRuns = runs.filter(r => r.date && new Date(r.date) >= weekStart && new Date(r.date) < weekEnd);
       const km = weekRuns.reduce((a, r) => a + (r.km || 0), 0);
-      const label = i === 0 ? 'Nu' : `${i}u`;
+      const label = i === 0 ? t('statsPage.now') : t('statsPage.weeksAgoShort', { count: i });
       weeks.push({ label, value: Math.round(km * 10) / 10 });
     }
     return weeks;
-  }, [runs]);
+  }, [runs, t]);
 
   // Månedlig fordeling
   const monthlyData = useMemo(() => {
@@ -137,10 +140,10 @@ export default function Stats({ runs = [], profile, level }) {
         return rd.getFullYear() === d.getFullYear() && rd.getMonth() === d.getMonth();
       });
       const km = monthRuns.reduce((a, r) => a + (r.km || 0), 0);
-      months.push({ label: d.toLocaleString('da-DK', { month: 'short' }), value: Math.round(km * 10) / 10 });
+      months.push({ label: d.toLocaleString(locale, { month: 'short' }), value: Math.round(km * 10) / 10 });
     }
     return months;
-  }, [runs]);
+  }, [runs, locale]);
 
   // Streak
   const streak = useMemo(() => {
@@ -167,15 +170,16 @@ export default function Stats({ runs = [], profile, level }) {
   const runTypes = useMemo(() => {
     const map = {};
     validRuns.forEach(r => {
-      const type = r.type || 'Løb';
+      const rawType = String(r.type || 'run').toLowerCase();
+      const type = rawType.includes('walk') || rawType.includes('gå') ? t('statsPage.types.walk') : rawType.includes('bike') || rawType.includes('cyk') ? t('statsPage.types.bike') : t('statsPage.types.run');
       map[type] = (map[type] || 0) + 1;
     });
     return Object.entries(map).sort((a, b) => b[1] - a[1]).slice(0, 4);
-  }, [validRuns]);
+  }, [validRuns, t]);
 
   // Ugedag fordeling
   const dayDist = useMemo(() => {
-    const days = ['Man','Tir','Ons','Tor','Fre','Lør','Søn'];
+    const days = Array.from({ length: 7 }, (_, index) => new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(new Date(2024, 0, index + 1)));
     const counts = Array(7).fill(0);
     validRuns.forEach(r => {
       if (!r.date) return;
@@ -183,7 +187,7 @@ export default function Stats({ runs = [], profile, level }) {
       counts[(d.getDay() + 6) % 7]++;
     });
     return days.map((label, i) => ({ label, value: counts[i] }));
-  }, [validRuns]);
+  }, [validRuns, locale]);
 
   const goalKmWeek = profile?.weeklyGoal || 20;
   const thisWeekKm = weeklyData[weeklyData.length - 1]?.value || 0;
@@ -191,8 +195,8 @@ export default function Stats({ runs = [], profile, level }) {
   if (runs.length === 0) return (
     <ScrollView style={st.container} contentContainerStyle={{ padding: 20, alignItems: 'center', paddingTop: 60 }}>
       <Text style={{ fontSize: 48 }}>📊</Text>
-      <Text style={{ fontSize: 20, fontWeight: '900', color: colors.text, marginTop: 16 }}>Ingen statistik endnu</Text>
-      <Text style={{ fontSize: 14, color: colors.muted, marginTop: 8, textAlign: 'center', lineHeight: 20 }}>Start dit første løb for at se dine data her.</Text>
+      <Text style={{ fontSize: 20, fontWeight: '900', color: colors.text, marginTop: 16 }}>{t('statsPage.emptyTitle')}</Text>
+      <Text style={{ fontSize: 14, color: colors.muted, marginTop: 8, textAlign: 'center', lineHeight: 20 }}>{t('statsPage.emptyMessage')}</Text>
     </ScrollView>
   );
 
@@ -200,7 +204,7 @@ export default function Stats({ runs = [], profile, level }) {
     <ScrollView style={st.container} contentContainerStyle={{ padding: 16, paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
       {/* Periode-vælger */}
       <View style={st.periodRow}>
-        {[['4w','4 uger'],['3m','3 mdr'],['all','Alt tid']].map(([id, label]) => (
+        {[['4w', t('statsPage.period4Weeks')], ['3m', t('statsPage.period3Months')], ['all', t('stats.allTime')]].map(([id, label]) => (
           <TouchableOpacity key={id} style={[st.periodBtn, period === id && st.periodBtnActive]} onPress={() => setPeriod(id)}>
             <Text style={[st.periodBtnText, period === id && st.periodBtnTextActive]}>{label}</Text>
           </TouchableOpacity>
@@ -209,17 +213,17 @@ export default function Stats({ runs = [], profile, level }) {
 
       {/* Top stats */}
       <View style={st.topRow}>
-        <BigStat value={`${Math.round(totalKm * 10) / 10}`} label="KM I ALT" color={colors.accent} />
+        <BigStat value={`${Math.round(totalKm * 10) / 10}`} label={t('stats.totalKm')} color={colors.accent} />
         <View style={st.topDivider} />
-        <BigStat value={`${validRuns.length}`} label="LØB" />
+        <BigStat value={`${validRuns.length}`} label={t('stats.runs')} />
         <View style={st.topDivider} />
-        <BigStat value={fmtPace(bestPace)} label="BEDSTE PACE" color={colors.green} />
+        <BigStat value={fmtPace(bestPace)} label={t('statsPage.bestPace')} color={colors.green} />
         <View style={st.topDivider} />
-        <BigStat value={`${streak}`} label="DAGES STREAK" color={colors.purple} />
+        <BigStat value={`${streak}`} label={t('statsPage.dayStreak')} color={colors.purple} />
       </View>
 
       {/* Ugentlig mål-ring */}
-      <StatCard title="UGENS MÅL" accent>
+      <StatCard title={t('statsPage.weeklyGoal')} accent>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 20 }}>
           <Ring
             pct={thisWeekKm / goalKmWeek}
@@ -230,19 +234,19 @@ export default function Stats({ runs = [], profile, level }) {
           />
           <View style={{ flex: 1 }}>
             <Text style={{ fontSize: 28, fontWeight: '900', color: colors.text, letterSpacing: -1 }}>{Math.round(thisWeekKm * 10) / 10} km</Text>
-            <Text style={{ fontSize: 13, color: colors.muted, marginTop: 2 }}>af {goalKmWeek} km mål</Text>
+            <Text style={{ fontSize: 13, color: colors.muted, marginTop: 2 }}>{t('statsPage.ofGoal', { goal: goalKmWeek })}</Text>
             <View style={{ height: 6, backgroundColor: colors.surface, borderRadius: 3, marginTop: 10 }}>
               <View style={{ height: 6, width: `${Math.min(100, (thisWeekKm / goalKmWeek) * 100)}%`, backgroundColor: thisWeekKm >= goalKmWeek ? colors.green : colors.accent, borderRadius: 3 }} />
             </View>
             <Text style={{ fontSize: 11, color: colors.muted, marginTop: 6 }}>
-              {thisWeekKm >= goalKmWeek ? '🎉 Mål nået!' : `${Math.round((goalKmWeek - thisWeekKm) * 10) / 10} km tilbage`}
+              {thisWeekKm >= goalKmWeek ? `🎉 ${t('statsPage.goalReached')}` : t('statsPage.kmRemaining', { km: Math.round((goalKmWeek - thisWeekKm) * 10) / 10 })}
             </Text>
           </View>
         </View>
       </StatCard>
 
       {/* Milepæl */}
-      <StatCard title="MILEPÆL">
+      <StatCard title={t('statsPage.milestone')}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
           <View style={{ flex: 1 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 }}>
@@ -253,7 +257,7 @@ export default function Stats({ runs = [], profile, level }) {
               <View style={{ height: 8, width: `${Math.min(100, milestonePct * 100)}%`, backgroundColor: colors.accent, borderRadius: 4 }} />
             </View>
             <Text style={{ fontSize: 11, color: colors.muted, marginTop: 6 }}>
-              {Math.round((nextMilestone - totalAllTime) * 10) / 10} km til {nextMilestone} km
+              {t('statsPage.toMilestone', { remaining: Math.round((nextMilestone - totalAllTime) * 10) / 10, milestone: nextMilestone })}
             </Text>
           </View>
           <Text style={{ fontSize: 36 }}>🏅</Text>
@@ -261,27 +265,27 @@ export default function Stats({ runs = [], profile, level }) {
       </StatCard>
 
       {/* Km pr uge — søjlediagram */}
-      <StatCard title="KM PR UGE">
+      <StatCard title={t('statsPage.kmPerWeek')}>
         <BarChart data={weeklyData} color={colors.accent} unit="" />
       </StatCard>
 
       {/* Km pr måned */}
-      <StatCard title="KM PR MÅNED">
+      <StatCard title={t('statsPage.kmPerMonth')}>
         <BarChart data={monthlyData} color={colors.blue} unit="" />
       </StatCard>
 
       {/* Pace + distance */}
       <View style={{ flexDirection: 'row', gap: 12 }}>
         <View style={{ flex: 1 }}>
-          <StatCard title="GNSN PACE">
+          <StatCard title={t('stats.avgPace')}>
             <Text style={{ fontSize: 28, fontWeight: '900', color: colors.text, letterSpacing: -1 }}>{fmtPace(avgPace)}</Text>
             <Text style={{ fontSize: 11, color: colors.muted, marginTop: 2 }}>min/km</Text>
           </StatCard>
         </View>
         <View style={{ flex: 1 }}>
-          <StatCard title="GNSN DISTANCE">
+          <StatCard title={t('statsPage.avgDistance')}>
             <Text style={{ fontSize: 28, fontWeight: '900', color: colors.text, letterSpacing: -1 }}>{avgKm > 0 ? `${Math.round(avgKm * 10) / 10}` : '–'}</Text>
-            <Text style={{ fontSize: 11, color: colors.muted, marginTop: 2 }}>km pr løb</Text>
+            <Text style={{ fontSize: 11, color: colors.muted, marginTop: 2 }}>{t('statsPage.kmPerRun')}</Text>
           </StatCard>
         </View>
       </View>
@@ -289,36 +293,36 @@ export default function Stats({ runs = [], profile, level }) {
       {/* Tid + længste løb */}
       <View style={{ flexDirection: 'row', gap: 12 }}>
         <View style={{ flex: 1 }}>
-          <StatCard title="TOTAL TID">
-            <Text style={{ fontSize: 24, fontWeight: '900', color: colors.text, letterSpacing: -1 }}>{fmtDur(totalTime)}</Text>
-            <Text style={{ fontSize: 11, color: colors.muted, marginTop: 2 }}>i bevægelse</Text>
+          <StatCard title={t('statsPage.totalTime')}>
+            <Text style={{ fontSize: 24, fontWeight: '900', color: colors.text, letterSpacing: -1 }}>{fmtDur(totalTime, t)}</Text>
+            <Text style={{ fontSize: 11, color: colors.muted, marginTop: 2 }}>{t('statsPage.moving')}</Text>
           </StatCard>
         </View>
         <View style={{ flex: 1 }}>
-          <StatCard title="LÆNGSTE LØB">
+          <StatCard title={t('statsPage.longestRun')}>
             <Text style={{ fontSize: 24, fontWeight: '900', color: colors.text, letterSpacing: -1 }}>{longestRun ? `${longestRun.km} km` : '–'}</Text>
-            <Text style={{ fontSize: 11, color: colors.muted, marginTop: 2 }}>{longestRun?.date ? new Date(longestRun.date).toLocaleDateString('da-DK', { day: 'numeric', month: 'short' }) : ''}</Text>
+            <Text style={{ fontSize: 11, color: colors.muted, marginTop: 2 }}>{longestRun?.date ? new Date(longestRun.date).toLocaleDateString(locale, { day: 'numeric', month: 'short' }) : ''}</Text>
           </StatCard>
         </View>
       </View>
 
       {/* Favorit ugedag */}
-      <StatCard title="LØB PR UGEDAG">
+      <StatCard title={t('statsPage.runsPerWeekday')}>
         <BarChart data={dayDist} color={colors.purple} unit="" />
       </StatCard>
 
       {/* Tre ringe — goals-stil */}
-      <StatCard title="AKTIVITETSRINGE">
+      <StatCard title={t('statsPage.activityRings')}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 8 }}>
-          <Ring pct={thisWeekKm / goalKmWeek} value={`${Math.round((thisWeekKm/goalKmWeek)*100)}%`} sub="KM MÅL" label="Distance" color={colors.accent} size={90} />
-          <Ring pct={validRuns.length / 4} value={`${validRuns.length}`} sub="LØB" label="Aktivitet" color={colors.green} size={90} />
-          <Ring pct={streak / 7} value={`${streak}`} sub="DAGE" label="Streak" color={colors.purple} size={90} />
+          <Ring pct={thisWeekKm / goalKmWeek} value={`${Math.round((thisWeekKm/goalKmWeek)*100)}%`} sub={t('statsPage.kmGoal')} label={t('statsPage.distance')} color={colors.accent} size={90} />
+          <Ring pct={validRuns.length / 4} value={`${validRuns.length}`} sub={t('stats.runs')} label={t('statsPage.activity')} color={colors.green} size={90} />
+          <Ring pct={streak / 7} value={`${streak}`} sub={t('statsPage.days')} label={t('statsPage.streak')} color={colors.purple} size={90} />
         </View>
       </StatCard>
 
       {/* Løbetype */}
       {runTypes.length > 0 && (
-        <StatCard title="AKTIVITETSTYPER">
+        <StatCard title={t('statsPage.activityTypes')}>
           {runTypes.map(([type, count]) => (
             <View key={type} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
               <Text style={{ fontSize: 13, color: colors.text, fontWeight: '600', flex: 1 }}>{type}</Text>

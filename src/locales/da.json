@@ -601,7 +601,30 @@
     "defaultRunner": "løber",
     "voiceOn": "Stemme til",
     "voiceOff": "Stemme fra",
+    "cycling": "Cykling",
+    "music": "Musik",
+    "voiceOnly": "Kun stemme",
     "mapNotAvailable": "Kort ikke tilgængeligt",
+    "notification": {
+      "run": "Sporer dit løb...",
+      "walk": "Sporer din gåtur...",
+      "bike": "Sporer din cykeltur..."
+    },
+    "limit": {
+      "title": "Ugentlig aktivitetsgrænse nået",
+      "message": "Du har nået gratisabonnementets grænse på {{limit}} aktiviteter om ugen. Opgrader til Basic eller Pro for ubegrænset adgang.",
+      "later": "Senere"
+    },
+    "stats": {
+      "runs": "løb",
+      "walks": "gåture",
+      "yourProgress": "Din fremgang",
+      "thisWeek": "Denne uge",
+      "lastWeek": "Sidste uge",
+      "bestPace": "Bedste tempo",
+      "longestRun": "Længste løb",
+      "totalKm": "Samlet km"
+    },
     "status": {
       "ready": "Tryk start for at begynde",
       "paused": "På pause",
@@ -614,7 +637,8 @@
       "unavailable": "GPS utilgængelig",
       "timeout": "GPS timeout",
       "notAvailable": "GPS ikke tilgængelig",
-      "error": "GPS fejl"
+      "error": "GPS-fejl",
+      "points": "{{count}} punkter ({{filtered}} filtreret)"
     }
   },
   "chat": {
@@ -1059,6 +1083,144 @@
       "cycling": "Cykling",
       "run": "Løbetur"
     }
+  },
+  "workoutLabels": {
+    "rest": "Hvile",
+    "injuryRest": "Hvile pga. skade"
+  },
+  "calendar": {
+    "monthSummary_one": "{{count}} løb · {{km}} km",
+    "monthSummary_other": "{{count}} løb · {{km}} km",
+    "completed": "Gennemført",
+    "planned": "Planlagt",
+    "missed": "Misset",
+    "plannedKm": "{{km}} km planlagt",
+    "emptyDay": "Ingen løb eller planlagt træning denne dag"
+  },
+  "motionPicker": {
+    "title": "Motion",
+    "what": "Hvad vil du lave?",
+    "where": "Hvor?",
+    "run": "Løb",
+    "walk": "Gå",
+    "cycling": "Cykling",
+    "runLocation": "Udendørs eller løbebånd",
+    "bikeLocation": "Udendørs eller indendørs",
+    "outdoor": "Udendørs",
+    "outdoorDescription": "GPS-sporing · ruter · tempo",
+    "indoor": "Indendørs",
+    "indoorDescription": "Løbebånd · skridttæller · manuel distance"
+  },
+  "activityPicker": {
+    "title": "Vælg træning",
+    "intro": "Hvad vil du logge?",
+    "options": {
+      "mobility": { "label": "Mobilitet / yoga", "description": "Udstrækning, yoga og foam rolling" },
+      "bike": { "label": "Cykling", "description": "Indendørs eller udendørs" },
+      "other": { "label": "Anden aktivitet", "description": "Padel, fodbold, svømning..." }
+    }
+  },
+  "logActivity": {
+    "types": { "strength": "Styrketræning", "mobility": "Mobilitet / yoga", "bike": "Cykling", "other": "Anden aktivitet" },
+    "invalidDuration": "Indtast en gyldig varighed i minutter",
+    "savedTitle": "Gemt!",
+    "savedMessage": "{{activity}} logget ({{duration}} min., {{calories}} kcal)",
+    "saveError": "Kunne ikke gemme: {{error}}",
+    "logActivity": "Log din {{activity}}",
+    "duration": "Varighed (minutter) *",
+    "calories": "Kalorier (valgfrit — ellers beregnes de automatisk)",
+    "calorieEstimate": "≈ {{calories}} kcal beregnet ud fra {{weight}} kg, RPE {{rpe}}",
+    "effort": "Anstrengelse (RPE 1–10)",
+    "notes": "Noter (valgfrit)",
+    "notesPlaceholder": "F.eks. øvelser, vægt og sæt...",
+    "save": "Gem træning"
+  },
+  "treadmill": {
+    "invalidValueTitle": "Ugyldig værdi",
+    "invalidValueMessage": "Indtast et tal, f.eks. 5,2",
+    "noDistanceTitle": "Ingen distance",
+    "noDistanceMessage": "Tilføj distancen manuelt, eller fortsæt, indtil skridt kan måles.",
+    "finishTitle": "Afslut og gem?",
+    "finishMessage": "Distance: {{distance}} km · Tid: {{time}} · {{calories}} kcal",
+    "walkNote": "Indendørs gang (løbebånd)",
+    "runNote": "Indendørs løb (løbebånd)",
+    "savedTitle": "Gemt! 🏃",
+    "savedMessage": "{{distance}} km på {{time}} · {{calories}} kcal forbrændt.",
+    "saveError": "Kunne ikke gemme",
+    "discardTitle": "Kassér træning?",
+    "discardMessage": "Du mister alle data fra denne træning.",
+    "keep": "Behold",
+    "discard": "Kassér",
+    "walkTitle": "Løbebånd · Gang",
+    "runTitle": "Løbebånd · Løb",
+    "pedometerActive": "Skridttæller aktiv",
+    "pedometerUnavailable": "Skridttæller utilgængelig",
+    "steps": "SKRIDT",
+    "speed": "Hastighed",
+    "adjustDistance": "Justér distance",
+    "adjustHint": "Tilføj distance manuelt fra løbebåndets display",
+    "enterExactDistance": "Indtast præcis distance fra løbebåndet",
+    "instructionsTitle": "Sådan bruger du trackeren",
+    "instructions": "1. Tryk START, når du begynder på løbebåndet\n2. Tilføj distance med knapperne +0,1 / +0,5 / +1,0\n3. Eller indtast den præcise distance, når du er færdig\n4. Skridt tælles automatisk, når du har telefonen på dig",
+    "saving": "Gemmer...",
+    "exactDistanceTitle": "Indtast præcis distance",
+    "exactDistanceHint": "Aflæs løbebåndets display, og indtast distancen i km",
+    "apply": "Anvend"
+  },
+  "statsPage": {
+    "hoursShort": "t",
+    "minutesShort": "m",
+    "now": "Nu",
+    "weeksAgoShort": "{{count}}u",
+    "emptyTitle": "Ingen statistik endnu",
+    "emptyMessage": "Start dit første løb for at se dine data her.",
+    "period4Weeks": "4 uger",
+    "period3Months": "3 mdr.",
+    "bestPace": "Bedste tempo",
+    "dayStreak": "Dages streak",
+    "weeklyGoal": "Ugens mål",
+    "ofGoal": "af målet på {{goal}} km",
+    "goalReached": "Mål nået!",
+    "kmRemaining": "{{km}} km tilbage",
+    "milestone": "Milepæl",
+    "toMilestone": "{{remaining}} km til {{milestone}} km",
+    "kmPerWeek": "KM PR. UGE",
+    "kmPerMonth": "KM PR. MÅNED",
+    "avgDistance": "Gennemsnitlig distance",
+    "kmPerRun": "km pr. løb",
+    "totalTime": "Samlet tid",
+    "moving": "i bevægelse",
+    "longestRun": "Længste løb",
+    "runsPerWeekday": "Løb pr. ugedag",
+    "activityRings": "Aktivitetsringe",
+    "kmGoal": "KM-MÅL",
+    "distance": "Distance",
+    "activity": "Aktivitet",
+    "days": "DAGE",
+    "streak": "Streak",
+    "activityTypes": "Aktivitetstyper",
+    "types": { "run": "Løb", "walk": "Gang", "bike": "Cykling" }
+  },
+  "privacyPage": {
+    "title": "Privatlivspolitik",
+    "updated": "Sidst opdateret: April 2026",
+    "intro": "Hos RunWithAI tager vi dit privatliv alvorligt. Denne politik beskriver, hvordan vi indsamler, bruger og beskytter dine personlige oplysninger.",
+    "sections": [
+      { "title": "Dataansvarlig", "paragraphs": ["RunWithAI er ansvarlig for behandlingen af dine personoplysninger. Kontakt os på privacy@runwithai.app, hvis du har spørgsmål."] },
+      { "title": "Hvilke data indsamler vi?", "paragraphs": ["Vi indsamler følgende typer data:"], "bullets": ["Kontooplysninger: e-mail, navn, alder og køn", "Fysiske data: vægt og højde (valgfrit)", "Træningsdata: aktiviteter, distance, tempo, puls og GPS-ruter", "Appbrug: præferencer, mål og niveau", "Betalingsoplysninger: håndteres sikkert af App Store eller Google Play"] },
+      { "title": "Hvordan bruger vi dine data?", "paragraphs": ["Vi bruger dine data til at:"], "bullets": ["Levere personlige AI-træningsplaner", "Analysere din træning og fremgang", "Forbedre vores tjenester", "Sende relevante notifikationer og opdateringer", "Håndtere betalinger og abonnementer"] },
+      { "title": "Integration med tredjeparter", "paragraphs": ["RunWithAI kan integrere med Garmin Connect for at importere løbedata. Når du forbinder kontoen, henter vi kun træningsdata — aldrig dine loginoplysninger."] },
+      { "title": "Datadeling", "paragraphs": ["Vi sælger aldrig dine data. Vi deler kun data med:"], "bullets": ["Apple/Google: sikker betalingshåndtering", "OpenAI: anonymiseret AI-coaching", "Hostingudbydere: Vercel og Railway til dataopbevaring"] },
+      { "title": "Datasikkerhed", "paragraphs": ["Vi bruger industristandarder til at beskytte dine data, herunder:"], "bullets": ["HTTPS-kryptering på alle forbindelser", "Sikker hashing af adgangskoder med bcrypt", "JWT-tokens til autentificering", "Regelmæssige sikkerhedsopdateringer"] },
+      { "title": "Dine rettigheder", "paragraphs": ["Du har ret til at:"], "bullets": ["Få adgang til dine data", "Rette fejl i dine oplysninger", "Slette din konto og alle data", "Eksportere dine data som CSV", "Trække samtykke tilbage"] },
+      { "title": "Opbevaring af data", "paragraphs": ["Vi opbevarer dine data, så længe din konto er aktiv. Hvis du sletter kontoen, fjernes alle data inden for 30 dage."] },
+      { "title": "Cookies og sporing", "paragraphs": ["Vi bruger minimale cookies til at holde dig logget ind. Vi bruger ikke tredjepartssporing eller reklamecookies."] },
+      { "title": "Børns privatliv", "paragraphs": ["RunWithAI er ikke beregnet til børn under 13 år, og vi indsamler ikke bevidst data fra børn under denne alder."] },
+      { "title": "Ændringer i politikken", "paragraphs": ["Vi kan opdatere denne politik fra tid til anden. Ved væsentlige ændringer informerer vi dig i appen eller via e-mail."] },
+      { "title": "Kontakt", "paragraphs": [] }
+    ],
+    "contactQuestion": "Har du spørgsmål om denne politik eller dine data?",
+    "footer": "© 2026 RunWithAI. Alle rettigheder forbeholdes."
   },
   "more": {
     "title": "Mere",
