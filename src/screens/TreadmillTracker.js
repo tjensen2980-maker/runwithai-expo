@@ -23,6 +23,7 @@ import {
 import { Pedometer } from 'expo-sensors';
 import { useSafeAreaInsets, SafeAreaView as SafeAreaViewCtx } from 'react-native-safe-area-context';
 import { SERVER as API_URL } from '../config';
+import { recordCompletedWorkoutAndMaybeRequestReview } from '../utils/reviewPrompt';
 
 // Step length estimate from height (cm)
 // Running: roughly height_cm * 0.413 / 100 = step length in meters
@@ -228,7 +229,14 @@ export default function TreadmillTracker({ token, profile, mode, onClose, onSave
       Alert.alert(
         t('treadmill.savedTitle'),
         t('treadmill.savedMessage', { distance: distanceKm.toFixed(2), time: formatTime(seconds), calories }),
-        [{ text: 'OK', onPress: function () { if (onSaved) onSaved(data); if (onClose) onClose(); } }]
+        [{
+          text: 'OK',
+          onPress: function () {
+            if (onSaved) onSaved(data);
+            if (onClose) onClose();
+            recordCompletedWorkoutAndMaybeRequestReview();
+          },
+        }]
       );
     } catch (e) {
       Alert.alert(t('common.error'), e.message || t('treadmill.saveError'));
