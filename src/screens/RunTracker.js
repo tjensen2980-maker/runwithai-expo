@@ -16,6 +16,7 @@ import VoiceInput from './components/VoiceInput';
 import LiveActivity from '../modules/LiveActivity';
 // Native baggrunds-GPS (CLBackgroundActivitySession, iOS 17+)
 import BackgroundLocation from '../modules/BackgroundLocation';
+import { recordCompletedWorkoutAndMaybeRequestReview } from '../utils/reviewPrompt';
 // Conditionally import native modules
 let MapView, Marker, Polyline, PROVIDER_GOOGLE;
 let Location;
@@ -1272,6 +1273,7 @@ const bikePayload = {
     setShowStory(false);
     setSavedRunId(null);
     if (onBack) onBack();
+    recordCompletedWorkoutAndMaybeRequestReview();
   };
 
   const formatTime = (seconds) => {
