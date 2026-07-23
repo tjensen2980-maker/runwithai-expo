@@ -3,7 +3,7 @@
     "name": "RunWithAI",
     "slug": "runwithai",
     "newArchEnabled": false,
-    "version": "2.5.7",
+    "version": "2.5.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -18,7 +18,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "app.runwithai",
-      "buildNumber": "108",
+      "buildNumber": "109",
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
         "NSSupportsLiveActivities": true,
