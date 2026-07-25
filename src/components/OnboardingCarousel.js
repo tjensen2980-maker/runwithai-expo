@@ -6,7 +6,7 @@ import React, { useState, useEffect, useRef } from
 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet, ScrollView,
-  Dimensions, Platform, Alert, ActivityIndicator, Linking, Modal
+  Dimensions, Alert, ActivityIndicator, Linking, Modal
 } from 
 'react-native';
 import { SafeAreaView } from 
@@ -14,18 +14,10 @@ import { SafeAreaView } from
 import { useTranslation } from 'react-i18next';
 import { SERVER, getAuthToken } from 
 '../data';
+import { configureRevenueCat } from '../services/RevenueCat';
 
-// RevenueCat conditional import
-let Purchases = null;
-if (Platform.OS === 'ios' || Platform.OS === 'android') {
-  try { Purchases = require(
-'react-native-purchases'
-).default; } catch (e) {}
-}
-
-const REVENUECAT_IOS_KEY = 'appl_RSTGHBSwwJLczMzoqgBiNYDFDIb';
-const TERMS_URL = 'https://www.runwithai.app/terms';
-const PRIVACY_URL = 'https://www.runwithai.app/privacy';
+const TERMS_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
+const PRIVACY_URL = 'https://www.runwithai.app/privatliv.html';
 
 const { width: SCREEN_W } = Dimensions.get('window');
 
@@ -35,12 +27,15 @@ const OFFER = {
   id: 'pro',
   pkgId: '$rc_monthly', // RevenueCat-pakkens identifier i default-offeringen (verificeret i dashboardet)
 };
-const PRICE_TEXT = '49 kr';
 export default function OnboardingCarousel({ visible, onComplete, onClose, isOnboarding }) {
   const { t } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState(0); // start on Basic
   const [loading, setLoading] = useState(false);
   const [offerings, setOfferings] = useState(null);
+  const [monthlyPackage, setMonthlyPackage] = useState(null);
+  const [priceString, setPriceString] = useState('');
+  const [priceLoading, setPriceLoading] = useState(true);
+  const purchasesRef = useRef(null);
   const scrollRef = useRef(null);
   const benefits = [
     { emoji: '🧠', text: t('onboarding.paywall.benefits.adaptive') },
@@ -52,13 +47,24 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
   useEffect(() => {
     if (!visible) return;
     const init = async () => {
-      if (!Purchases) return;
+      setPriceLoading(true);
       try {
-        await Purchases.configure({ apiKey: REVENUECAT_IOS_KEY });
-        const off = await Purchases.getOfferings();
+        const purchases = await configureRevenueCat(getAuthToken());
+        if (!purchases) return;
+
+        purchasesRef.current = purchases;
+        const off = await purchases.getOfferings();
         setOfferings(off.current);
+        const pkg = off.current?.availablePackages?.find(
+          candidate => candidate.identifier === OFFER.pkgId
+            || candidate.product?.identifier === 'app.runwithai.pro.monthly'
+        );
+        setMonthlyPackage(pkg || null);
+        setPriceString(pkg?.product?.priceString || '');
       } catch (e) {
         console.log('RC init err:', e);
+      } finally {
+        setPriceLoading(false);
       }
     };
     init();
@@ -71,15 +77,13 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
       return;
     }
 
-    if (!Purchases || !offerings) {
+    const purchases = purchasesRef.current;
+    if (!purchases || !offerings) {
       Alert.alert(t('common.error'), t('onboarding.paywall.errors.prices'));
       return;
     }
 
-    const pkg = offerings.availablePackages.find(p =>
-      p.identifier === tier.pkgId || p.product?.identifier?.includes(tier.id)
-    ) || offerings.availablePackages[0];
-
+    const pkg = monthlyPackage;
     if (!pkg) {
       Alert.alert(t('common.error'), t('onboarding.paywall.errors.packageUnavailable'));
       return;
@@ -87,31 +91,38 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
 
     setLoading(true);
     try {
-      const { customerInfo } = await Purchases.purchasePackage(pkg);
+      const { customerInfo } = await purchases.purchasePackage(pkg);
       const isActive = customerInfo.entitlements.active[tier.id] ||
                        customerInfo.entitlements.active['pro'] ||
                        customerInfo.entitlements.active['basic'];
 
-      if (isActive) {
-        const token = getAuthToken();
-        try {
-          await fetch(SERVER + '/subscription/activate', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: 'Bearer ' + token,
-            },
-            body: JSON.stringify({
-              revenueCatId: customerInfo.originalAppUserId,
-              tier: tier.id,
-            }),
-          });
-        } catch (syncErr) {
-          console.log('Server sync warn:', syncErr);
-        }
-        Alert.alert(t('onboarding.paywall.welcomeTitle'), t('onboarding.paywall.welcomeMessage'));
-        onComplete && onComplete(tier.id);
+      if (!isActive) {
+        throw new Error('RevenueCat did not return an active entitlement.');
       }
+
+      const token = getAuthToken();
+      if (!token) {
+        throw new Error('Authentication is required to activate the subscription.');
+      }
+
+      const response = await fetch(SERVER + '/subscription/activate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token,
+        },
+        body: JSON.stringify({
+          revenueCatId: customerInfo.originalAppUserId,
+          tier: tier.id,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Subscription sync failed (${response.status}).`);
+      }
+
+      Alert.alert(t('onboarding.paywall.welcomeTitle'), t('onboarding.paywall.welcomeMessage'));
+      onComplete && onComplete(tier.id);
     } catch (err) {
       if (!err.userCancelled) {
           Alert.alert(t('onboarding.paywall.errors.purchaseTitle'), err.message || t('common.retry'));
@@ -123,19 +134,49 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
 
 
   const handleRestore = async () => {
-    if (!Purchases) return;
+    const purchases = purchasesRef.current;
+    if (!purchases || loading) {
+      Alert.alert(t('common.error'), t('onboarding.paywall.errors.prices'));
+      return;
+    }
+
+    setLoading(true);
     try {
-      const info = await Purchases.restorePurchases();
+      const info = await purchases.restorePurchases();
       const tier = info.entitlements.active['pro'] ? 'pro' :
                    info.entitlements.active['basic'] ? 'basic' : null;
       if (tier) {
+        const token = getAuthToken();
+        if (!token) {
+          throw new Error('Authentication is required to restore the subscription.');
+        }
+
+        const response = await fetch(SERVER + '/subscription/activate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token,
+          },
+          body: JSON.stringify({
+            revenueCatId: info.originalAppUserId,
+            tier,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Subscription sync failed (${response.status}).`);
+        }
+
         Alert.alert(t('onboarding.paywall.restoreSuccessTitle'), t('onboarding.paywall.restoreSuccessMessage'));
         onComplete && onComplete(tier);
       } else {
         Alert.alert(t('onboarding.paywall.noPurchasesTitle'), t('onboarding.paywall.noPurchasesMessage'));
       }
     } catch (e) {
+      console.log('Restore purchase error:', e);
       Alert.alert(t('common.error'), t('onboarding.paywall.errors.restore'));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -160,20 +201,48 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
 
           <View style={s.giftBox}>
             <Text style={s.giftBig}>{t('onboarding.paywall.trial')}</Text>
-            <Text style={s.giftSmall}>{t('onboarding.paywall.afterTrial', { price: PRICE_TEXT })}</Text>
+            {priceLoading ? (
+              <ActivityIndicator color="#ff7a50" style={{ marginTop: 8 }} />
+            ) : (
+              <Text style={s.giftSmall}>
+                {priceString
+                  ? t('onboarding.paywall.afterTrial', { price: priceString })
+                  : t('onboarding.paywall.errors.prices')}
+              </Text>
+            )}
           </View>
 
-          <TouchableOpacity style={s.cta} onPress={() => handleSelect(OFFER)} activeOpacity={0.85}>
-            <Text style={s.ctaText}>{t('onboarding.paywall.startTraining')}</Text>
+          <TouchableOpacity
+            style={[s.cta, loading && s.disabled]}
+            onPress={() => handleSelect(OFFER)}
+            activeOpacity={0.85}
+            disabled={loading || priceLoading || !monthlyPackage}
+          >
+            {loading ? (
+              <ActivityIndicator color="#ffffff" />
+            ) : (
+              <Text style={s.ctaText}>{t('onboarding.paywall.startTraining')}</Text>
+            )}
           </TouchableOpacity>
 
-          <TouchableOpacity style={s.freeLink} onPress={() => handleSelect({ id: 'free' })}>
+          <TouchableOpacity style={s.freeLink} onPress={() => handleSelect({ id: 'free' })} disabled={loading}>
             <Text style={s.freeLinkText}>{t('proUpsell.continueWithFree')}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={s.restore} onPress={handleRestore}>
+          <TouchableOpacity style={s.restore} onPress={handleRestore} disabled={loading || priceLoading}>
             <Text style={s.restoreText}>{t('onboarding.paywall.restore')}</Text>
           </TouchableOpacity>
+
+          <Text style={s.renewalText}>{t('pricing.terms')}</Text>
+          <View style={s.legalLinks}>
+            <TouchableOpacity onPress={() => Linking.openURL(TERMS_URL)}>
+              <Text style={s.legalLink}>{t('settings.termsOfService')}</Text>
+            </TouchableOpacity>
+            <Text style={s.legalSeparator}>•</Text>
+            <TouchableOpacity onPress={() => Linking.openURL(PRIVACY_URL)}>
+              <Text style={s.legalLink}>{t('settings.privacyPolicy')}</Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       </SafeAreaView>
     </Modal>
@@ -195,9 +264,14 @@ const s = StyleSheet.create({
   giftBig: { color: '#ff7a50', fontSize: 24, fontWeight: '900' },
   giftSmall: { color: 'rgba(255,255,255,0.75)', fontSize: 13.5, marginTop: 6, textAlign: 'center' },
   cta: { backgroundColor: '#ff5722', borderRadius: 16, paddingVertical: 17, alignItems: 'center', marginTop: 22 },
+  disabled: { opacity: 0.55 },
   ctaText: { color: '#fff', fontSize: 17, fontWeight: '900' },
   freeLink: { alignItems: 'center', marginTop: 18 },
   freeLinkText: { color: 'rgba(255,255,255,0.55)', fontSize: 14.5, textDecorationLine: 'underline' },
   restore: { alignItems: 'center', marginTop: 14 },
   restoreText: { color: 'rgba(255,255,255,0.35)', fontSize: 13 },
+  renewalText: { color: 'rgba(255,255,255,0.42)', fontSize: 11.5, lineHeight: 17, textAlign: 'center', marginTop: 22 },
+  legalLinks: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10 },
+  legalLink: { color: 'rgba(255,255,255,0.65)', fontSize: 12, textDecorationLine: 'underline' },
+  legalSeparator: { color: 'rgba(255,255,255,0.35)', marginHorizontal: 9 },
 });

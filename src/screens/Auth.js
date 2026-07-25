@@ -26,22 +26,14 @@ import { useTranslation } from 'react-i18next';
 import { colors } from '../data';
 
 import { SERVER as API_URL } from '../config';
+import { configureRevenueCat } from '../services/RevenueCat';
 
 // ─── REVENUECAT SETUP ─────────────────────────────────────────────────────────
 let Purchases = null;
-if (Platform.OS === 'ios' || Platform.OS === 'android') {
-  try {
-    Purchases = require('react-native-purchases').default;
-  } catch (e) {
-    console.log('RevenueCat not available');
-  }
-}
-const REVENUECAT_IOS_KEY = 'appl_RSTGHBSwwJLczMzoqgBiNYDFDIb';
-const REVENUECAT_ANDROID_KEY = 'goog_YOUR_REVENUECAT_ANDROID_KEY';
 
 // Legal URLs - Required by Apple
-const TERMS_OF_USE_URL = 'https://www.runwithai.app/terms';
-const PRIVACY_POLICY_URL = 'https://www.runwithai.app/privacy';
+const TERMS_OF_USE_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
+const PRIVACY_POLICY_URL = 'https://www.runwithai.app/privatliv.html';
 
 // ─── APP LOGO COMPONENT ───────────────────────────────────────────────────────
 const AppLogo = ({ size = 140 }) => (
@@ -348,44 +340,50 @@ export default function Auth({ onAuth }) {
   const handleStartTrial = async () => {
     setLoading(true);
     try {
-      if (Platform.OS === 'web' || !Purchases) {
+      if (Platform.OS === 'web') {
         onAuth(pendingToken, { ...pendingUser, profile: pendingProfile });
         return;
       }
 
-      const apiKey = Platform.OS === 'ios' ? REVENUECAT_IOS_KEY : REVENUECAT_ANDROID_KEY;
-      if (!apiKey.includes('YOUR_REVENUECAT')) {
-        try {
-          await Purchases.configure({ apiKey });
+      Purchases = await configureRevenueCat(pendingToken);
+      if (!Purchases) {
+        onAuth(pendingToken, { ...pendingUser, profile: pendingProfile });
+        return;
+      }
+
+      try {
+        const offerings = await Purchases.getOfferings();
+        if (offerings.current && offerings.current.availablePackages.length > 0) {
+          const pkg = offerings.current.availablePackages.find(
+            candidate => candidate.identifier === '$rc_monthly'
+              || candidate.product?.identifier === 'app.runwithai.pro.monthly'
+          );
+          if (!pkg) {
+            throw new Error('Monthly subscription package is unavailable.');
+          }
+          const { customerInfo } = await Purchases.purchasePackage(pkg);
           
-          const offerings = await Purchases.getOfferings();
-          if (offerings.current && offerings.current.availablePackages.length > 0) {
-            const pkg = offerings.current.availablePackages[0];
-            const { customerInfo } = await Purchases.purchasePackage(pkg);
-            
-            if (customerInfo.entitlements.active['pro']) {
-              try {
-                await fetch(`${API_URL}/subscription/activate`, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${pendingToken}`,
-                  },
-                  body: JSON.stringify({
-                    revenueCatId: customerInfo.originalAppUserId,
-                  }),
-                });
-              } catch (syncErr) {
-                console.log('Server sync warning:', syncErr);
-              }
-              
-              Alert.alert('🎉 Velkommen til Pro!', 'Du har nu adgang til alle funktioner.');
+          if (customerInfo.entitlements.active['pro']) {
+            const response = await fetch(`${API_URL}/subscription/activate`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${pendingToken}`,
+              },
+              body: JSON.stringify({
+                revenueCatId: customerInfo.originalAppUserId,
+              }),
+            });
+            if (!response.ok) {
+              throw new Error(`Subscription sync failed (${response.status}).`);
             }
+
+            Alert.alert('🎉 Velkommen til Pro!', 'Du har nu adgang til alle funktioner.');
           }
-        } catch (purchaseErr) {
-          if (!purchaseErr.userCancelled) {
-            console.log('Purchase error:', purchaseErr);
-          }
+        }
+      } catch (purchaseErr) {
+        if (!purchaseErr.userCancelled) {
+          console.log('Purchase error:', purchaseErr);
         }
       }
       
@@ -401,34 +399,33 @@ export default function Auth({ onAuth }) {
 
   // ─── RESTORE PURCHASES ──────────────────────────────────────────────────────
   const handleRestorePurchases = async () => {
-    if (Platform.OS === 'web' || !Purchases) {
+    if (Platform.OS === 'web') {
       Alert.alert('Gendan køb', 'Gendan køb er kun tilgængeligt i iOS og Android appen.');
       return;
     }
 
     setLoading(true);
     try {
-      const apiKey = Platform.OS === 'ios' ? REVENUECAT_IOS_KEY : REVENUECAT_ANDROID_KEY;
-      if (!apiKey.includes('YOUR_REVENUECAT')) {
-        await Purchases.configure({ apiKey });
+      Purchases = await configureRevenueCat(pendingToken);
+      if (!Purchases) {
+        throw new Error('RevenueCat is unavailable.');
       }
 
       const customerInfo = await Purchases.restorePurchases();
 
       if (customerInfo.entitlements.active['pro']) {
-        try {
-          await fetch(`${API_URL}/subscription/activate`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${pendingToken}`,
-            },
-            body: JSON.stringify({
-              revenueCatId: customerInfo.originalAppUserId,
-            }),
-          });
-        } catch (syncErr) {
-          console.log('Server sync warning:', syncErr);
+        const response = await fetch(`${API_URL}/subscription/activate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${pendingToken}`,
+          },
+          body: JSON.stringify({
+            revenueCatId: customerInfo.originalAppUserId,
+          }),
+        });
+        if (!response.ok) {
+          throw new Error(`Subscription sync failed (${response.status}).`);
         }
 
         Alert.alert('✅ Køb gendannet!', 'Din Pro subscription er aktiveret.', [

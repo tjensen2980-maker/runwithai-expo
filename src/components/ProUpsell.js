@@ -6,24 +6,13 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Platform, Alert, ActivityIndicator, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, SERVER, getAuthToken } from '../data';
+import { configureRevenueCat } from '../services/RevenueCat';
 
-// RevenueCat - conditional import for web compatibility
 let Purchases = null;
-if (Platform.OS === 'ios' || Platform.OS === 'android') {
-  try {
-    Purchases = require('react-native-purchases').default;
-  } catch (e) {
-    console.log('RevenueCat not available');
-  }
-}
-
-// RevenueCat API Keys
-const REVENUECAT_IOS_KEY = 'appl_RSTGHBSwwJLczMzoqgBiNYDFDIb';
-const REVENUECAT_ANDROID_KEY = 'goog_YOUR_REVENUECAT_ANDROID_KEY';
 
 // Legal URLs - Required by Apple
-const TERMS_OF_USE_URL = 'https://www.runwithai.app/terms';
-const PRIVACY_POLICY_URL = 'https://www.runwithai.app/privacy';
+const TERMS_OF_USE_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
+const PRIVACY_POLICY_URL = 'https://www.runwithai.app/privatliv.html';
 
 const proFeatures = [
   { emoji: '🤖', title: 'AI Coach', desc: 'Personlig træningsplan der tilpasser sig dig' },
@@ -34,28 +23,10 @@ const proFeatures = [
   { emoji: '📈', title: 'Fremskridtsrapporter', desc: 'Ugentlige og månedlige opsummeringer' },
 ];
 
-let isRevenueCatConfigured = false;
-
 async function initRevenueCat() {
-  if (isRevenueCatConfigured) return true;
-  if (!Purchases) return false;
-
   try {
-    if (Platform.OS === 'web') {
-      console.log('RevenueCat: Web platform - skipping');
-      return false;
-    }
-
-    const apiKey = Platform.OS === 'ios' ? REVENUECAT_IOS_KEY : REVENUECAT_ANDROID_KEY;
-
-    if (apiKey.includes('YOUR_REVENUECAT')) {
-      console.log('RevenueCat: Not configured for this platform');
-      return false;
-    }
-
-    await Purchases.configure({ apiKey });
-    isRevenueCatConfigured = true;
-    return true;
+    Purchases = await configureRevenueCat(getAuthToken());
+    return !!Purchases;
   } catch (err) {
     console.error('RevenueCat init error:', err);
     return false;
@@ -65,7 +36,7 @@ async function initRevenueCat() {
 export default function ProUpsell({ onSkip, onUpgrade }) {
   const [loading, setLoading] = useState(false);
   const [offerings, setOfferings] = useState(null);
-  const [priceString, setPriceString] = useState('49 kr');
+  const [priceString, setPriceString] = useState('—');
   const [isConfigured, setIsConfigured] = useState(false);
 
   useEffect(() => {
@@ -78,7 +49,10 @@ export default function ProUpsell({ onSkip, onUpgrade }) {
           const offerings = await Purchases.getOfferings();
           if (offerings.current) {
             setOfferings(offerings.current);
-            const pkg = offerings.current.availablePackages?.[0];
+            const pkg = offerings.current.availablePackages?.find(
+              candidate => candidate.identifier === '$rc_monthly'
+                || candidate.product?.identifier === 'app.runwithai.pro.monthly'
+            );
             if (pkg?.product?.priceString) {
               setPriceString(pkg.product.priceString);
             }
@@ -118,14 +92,20 @@ export default function ProUpsell({ onSkip, onUpgrade }) {
     setLoading(true);
 
     try {
-      const pkg = offerings.availablePackages[0];
+      const pkg = offerings.availablePackages.find(
+        candidate => candidate.identifier === '$rc_monthly'
+          || candidate.product?.identifier === 'app.runwithai.pro.monthly'
+      );
+      if (!pkg) {
+        throw new Error('Monthly subscription package is unavailable.');
+      }
       const { customerInfo } = await Purchases.purchasePackage(pkg);
 
       if (customerInfo.entitlements.active['pro']) {
         const token = getAuthToken();
         if (token) {
           try {
-            await fetch(`${SERVER}/subscription/activate`, {
+            const response = await fetch(`${SERVER}/subscription/activate`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -135,8 +115,12 @@ export default function ProUpsell({ onSkip, onUpgrade }) {
                 revenueCatId: customerInfo.originalAppUserId,
               }),
             });
+            if (!response.ok) {
+              throw new Error(`Subscription sync failed (${response.status}).`);
+            }
           } catch (e) {
             console.log('Server sync warning:', e);
+            throw e;
           }
         }
 
@@ -171,7 +155,7 @@ export default function ProUpsell({ onSkip, onUpgrade }) {
         const token = getAuthToken();
         if (token) {
           try {
-            await fetch(`${SERVER}/subscription/activate`, {
+            const response = await fetch(`${SERVER}/subscription/activate`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -181,8 +165,12 @@ export default function ProUpsell({ onSkip, onUpgrade }) {
                 revenueCatId: customerInfo.originalAppUserId,
               }),
             });
+            if (!response.ok) {
+              throw new Error(`Subscription sync failed (${response.status}).`);
+            }
           } catch (e) {
             console.log('Server sync warning:', e);
+            throw e;
           }
         }
 
@@ -232,7 +220,7 @@ export default function ProUpsell({ onSkip, onUpgrade }) {
           <Text style={s.priceUnit}>/måned</Text>
         </View>
 
-        <Text style={s.guarantee}>✓ Annuller når som helst • ✓ 7 dages gratis prøveperiode</Text>
+        <Text style={s.guarantee}>✓ Annuller når som helst • ✓ 14 dages gratis prøveperiode</Text>
 
         <TouchableOpacity
           style={[s.upgradeBtn, loading && s.upgradeBtnDisabled]}

@@ -3,7 +3,7 @@
     "name": "RunWithAI",
     "slug": "runwithai",
     "newArchEnabled": false,
-    "version": "2.5.8",
+    "version": "2.5.9",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -18,7 +18,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "app.runwithai",
-      "buildNumber": "109",
+      "buildNumber": "110",
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
         "NSSupportsLiveActivities": true,
@@ -75,7 +75,7 @@
         "backgroundColor": "#0B1712"
       },
       "package": "app.runwithai",
-      "versionCode": 120,
+      "versionCode": 121,
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
