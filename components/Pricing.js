@@ -19,54 +19,20 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { SERVER } from '../src/config';
+import { configureRevenueCat } from '../src/services/RevenueCat';
 const API_URL = SERVER;
 
 // Legal URLs
-const PRIVACY_POLICY_URL = 'https://www.runwithai.app/privacy';
-const TERMS_OF_USE_URL = 'https://www.runwithai.app/terms';
-
-// RevenueCat API Keys
-const REVENUECAT_IOS_KEY = 'appl_RSTGHBSwwJLczMzoqgBiNYDFDIb';
-const REVENUECAT_ANDROID_KEY = 'goog_YOUR_REVENUECAT_ANDROID_KEY';
-
-// ─── SAFE REVENUECAT IMPORT ─────────────────────────────────────────────────
-let Purchases = null;
-if (Platform.OS === 'ios' || Platform.OS === 'android') {
-  try {
-    Purchases = require('react-native-purchases').default;
-  } catch (e) {
-    console.log('RevenueCat not available:', e.message);
-  }
-}
+const PRIVACY_POLICY_URL = 'https://www.runwithai.app/privatliv.html';
+const TERMS_OF_USE_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
 
 // ─── INITIALIZE REVENUECAT ──────────────────────────────────────────────────
-let isRevenueCatConfigured = false;
+let Purchases = null;
 
-async function initRevenueCat(userId) {
-  if (Platform.OS === 'web' || isRevenueCatConfigured || !Purchases) {
-    return false;
-  }
-  
+async function initRevenueCat(token) {
   try {
-    const apiKey = Platform.OS === 'ios' ? REVENUECAT_IOS_KEY : REVENUECAT_ANDROID_KEY;
-    
-    if (apiKey.includes('YOUR_REVENUECAT')) {
-      console.log('RevenueCat not configured - using placeholder keys');
-      return false;
-    }
-    
-    await Purchases.configure({ apiKey });
-    
-    if (userId) {
-      try {
-        await Purchases.logIn(String(userId));
-      } catch (loginErr) {
-        console.log('RevenueCat login warning:', loginErr.message);
-      }
-    }
-    
-    isRevenueCatConfigured = true;
-    return true;
+    Purchases = await configureRevenueCat(token);
+    return !!Purchases;
   } catch (err) {
     console.error('RevenueCat init error:', err);
     return false;
@@ -180,15 +146,6 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
           return;
         }
 
-        if (REVENUECAT_IOS_KEY.includes('YOUR_REVENUECAT') && Platform.OS === 'ios') {
-          setIsConfigured(false);
-          return;
-        }
-        if (REVENUECAT_ANDROID_KEY.includes('YOUR_REVENUECAT') && Platform.OS === 'android') {
-          setIsConfigured(false);
-          return;
-        }
-
         const configured = await initRevenueCat(token);
         
         if (!configured) {
@@ -245,12 +202,18 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
     setLoading(true);
 
     try {
-      const pkg = offerings.availablePackages[0];
+      const pkg = offerings.availablePackages.find(
+        candidate => candidate.identifier === '$rc_monthly'
+          || candidate.product?.identifier === 'app.runwithai.pro.monthly'
+      );
+      if (!pkg) {
+        throw new Error('Monthly subscription package is unavailable.');
+      }
       const { customerInfo } = await Purchases.purchasePackage(pkg);
       
       if (customerInfo.entitlements.active['pro']) {
         try {
-          await fetch(`${API_URL}/subscription/activate`, {
+          const response = await fetch(`${API_URL}/subscription/activate`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -260,8 +223,12 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
               revenueCatId: customerInfo.originalAppUserId,
             }),
           });
+          if (!response.ok) {
+            throw new Error(`Subscription sync failed (${response.status}).`);
+          }
         } catch (syncErr) {
           console.log('Server sync warning:', syncErr);
+          throw syncErr;
         }
         
         Alert.alert('🎉 ' + (t('pricing.success') || 'Du er nu Pro!'), 'Du har nu adgang til alle funktioner.');
@@ -296,7 +263,7 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
       
       if (customerInfo.entitlements.active['pro']) {
         try {
-          await fetch(`${API_URL}/subscription/activate`, {
+          const response = await fetch(`${API_URL}/subscription/activate`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -306,8 +273,12 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
               revenueCatId: customerInfo.originalAppUserId,
             }),
           });
+          if (!response.ok) {
+            throw new Error(`Subscription sync failed (${response.status}).`);
+          }
         } catch (syncErr) {
           console.log('Server sync warning:', syncErr);
+          throw syncErr;
         }
         
         Alert.alert('✅ Køb gendannet!', 'Din Pro subscription er aktiveret.');
@@ -324,7 +295,10 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
   };
 
   // Get price from offerings or use fallback
-  const productPrice = offerings?.availablePackages?.[0]?.product?.priceString || '99 kr';
+  const productPrice = offerings?.availablePackages?.find(
+    candidate => candidate.identifier === '$rc_monthly'
+      || candidate.product?.identifier === 'app.runwithai.pro.monthly'
+  )?.product?.priceString || '—';
 
   // Build features array from the nested object structure in da.json
   const featuresObj = t('pricing.features', { returnObjects: true });
@@ -357,7 +331,7 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
       <View style={styles.priceCard}>
         <Text style={styles.price}>{productPrice}</Text>
         <Text style={styles.period}>{t('pricing.perMonth') || '/måned'}</Text>
-        <Text style={styles.trial}>7 dages gratis prøveperiode</Text>
+        <Text style={styles.trial}>14 dages gratis prøveperiode</Text>
       </View>
 
       {/* Subscription Info - Required by Apple */}
@@ -366,7 +340,7 @@ export default function PricingPage({ token, onClose, currentTier = 'free' }) {
         <Text style={styles.subscriptionInfoText}>• RunWithAI Pro - Månedligt abonnement</Text>
         <Text style={styles.subscriptionInfoText}>• Varighed: 1 måned, fornyes automatisk</Text>
         <Text style={styles.subscriptionInfoText}>• Pris: {productPrice} pr. måned</Text>
-        <Text style={styles.subscriptionInfoText}>• 7 dages gratis prøveperiode</Text>
+        <Text style={styles.subscriptionInfoText}>• 14 dages gratis prøveperiode</Text>
       </View>
 
       {/* Features List */}

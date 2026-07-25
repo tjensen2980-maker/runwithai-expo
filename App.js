@@ -1,6 +1,6 @@
 import { syncLanguageWithDevice } from './src/i18n';
 import { useTranslation } from 'react-i18next';
-import PricingPage, { useSubscription, Paywall } from './components/Pricing';
+import { useSubscription } from './components/Pricing';
 import React, { useState, useEffect } from 'react';
 import { Icon } from './src/components/Icons';
 import { SERVER } from './src/config';
@@ -16,6 +16,7 @@ import { useWatch } from './src/hooks/useWatch'
 import useHealthKit from './src/hooks/useHealthKit'
 import { useHealthConnect } from './src/hooks/useHealthConnect'
 import { syncAuthToWatch } from './src/services/WatchSync';
+import { logOutRevenueCat } from './src/services/RevenueCat';
 import Auth from './src/screens/Auth';
 import Onboarding from './src/screens/Onboarding';
 import OnboardingCarousel from './src/components/OnboardingCarousel';
@@ -352,7 +353,6 @@ export default function App() {
   const [runs, setRuns]                     = useState([]);
   const [loading, setLoading]               = useState(true);
   const [activityType, setActivityType]     = useState('run');
-  const [showPricing, setShowPricing]       = useState(false);
   const [showTierCarousel, setShowTierCarousel] = useState(false);
   const [selectedRun, setSelectedRun]       = useState(null);
 // Watch sync - modtager run fra ur og marker dagens træning som completed
@@ -509,6 +509,7 @@ useEffect(() => {
   useEffect(() => { if (user) loadData(); }, [user]);
 
   const handleLogout = () => {
+    logOutRevenueCat().catch(() => {});
     setAuthToken(null); setUser(null); setShowOnboarding(true); setTab('home');
   };
 
@@ -801,13 +802,6 @@ if (tab === 'cycleTracker') {
         <SafeAreaView edges={['bottom']} style={{ backgroundColor: colors.card }}>
           <TabBar tab={tab} setTab={setTab} isPro={isPro} />
         </SafeAreaView>
-        <Modal visible={showPricing} animationType="slide" presentationStyle="pageSheet">
-          <PricingPage
-            token={token}
-            onClose={() => { setShowPricing(false); refreshSubscription(); }}
-            currentTier={subscription?.tier || 'free'}
-          />
-        </Modal>
         <OnboardingCarousel
           visible={showTierCarousel}
           isOnboarding={false}
