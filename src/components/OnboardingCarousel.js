@@ -27,7 +27,27 @@ const OFFER = {
   id: 'pro',
   pkgId: '$rc_monthly', // RevenueCat-pakkens identifier i default-offeringen (verificeret i dashboardet)
 };
-export default function OnboardingCarousel({ visible, onComplete, onClose, isOnboarding }) {
+
+function recordPaywallEvent(purchases, event, details = {}) {
+  if (!purchases?.setAttributes) return;
+
+  const timestamp = new Date().toISOString();
+  const attributes = {
+    paywall_last_event: event,
+    paywall_last_event_at: timestamp,
+    [`paywall_${event}_at`]: timestamp,
+  };
+
+  if (details.price) attributes.paywall_price = String(details.price).slice(0, 50);
+  if (details.goal) attributes.paywall_goal = String(details.goal).slice(0, 100);
+  if (details.errorCode) attributes.paywall_error_code = String(details.errorCode).slice(0, 80);
+
+  purchases.setAttributes(attributes).catch(error => {
+    console.log('Paywall analytics warning:', error?.message || error);
+  });
+}
+
+export default function OnboardingCarousel({ visible, onComplete, onClose, isOnboarding, goalLabel = '' }) {
   const { t } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState(0); // start on Basic
   const [loading, setLoading] = useState(false);
@@ -61,6 +81,10 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
         );
         setMonthlyPackage(pkg || null);
         setPriceString(pkg?.product?.priceString || '');
+        recordPaywallEvent(purchases, 'viewed', {
+          price: pkg?.product?.priceString || '',
+          goal: goalLabel,
+        });
       } catch (e) {
         console.log('RC init err:', e);
       } finally {
@@ -73,6 +97,7 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
 
   const handleSelect = async (tier) => {
     if (tier.id === 'free') {
+      recordPaywallEvent(purchasesRef.current, 'free_selected');
       onComplete && onComplete('free');
       return;
     }
@@ -90,6 +115,7 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
     }
 
     setLoading(true);
+    recordPaywallEvent(purchases, 'trial_tapped', { price: priceString, goal: goalLabel });
     try {
       const { customerInfo } = await purchases.purchasePackage(pkg);
       const isActive = customerInfo.entitlements.active[tier.id] ||
@@ -121,11 +147,17 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
         throw new Error(`Subscription sync failed (${response.status}).`);
       }
 
+      recordPaywallEvent(purchases, 'trial_started', { price: priceString, goal: goalLabel });
       Alert.alert(t('onboarding.paywall.welcomeTitle'), t('onboarding.paywall.welcomeMessage'));
       onComplete && onComplete(tier.id);
     } catch (err) {
-      if (!err.userCancelled) {
-          Alert.alert(t('onboarding.paywall.errors.purchaseTitle'), err.message || t('common.retry'));
+      if (err.userCancelled) {
+        recordPaywallEvent(purchases, 'purchase_cancelled');
+      } else {
+        recordPaywallEvent(purchases, 'purchase_failed', {
+          errorCode: err?.code || 'unknown',
+        });
+        Alert.alert(t('onboarding.paywall.errors.purchaseTitle'), err.message || t('common.retry'));
       }
     } finally {
       setLoading(false);
@@ -190,6 +222,12 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
           <Text style={s.headline}>{t('onboarding.paywall.headline')}</Text>
           <Text style={s.sub}>{t('onboarding.paywall.subtitle')}</Text>
 
+          {!!goalLabel && (
+            <View style={s.goalBox}>
+              <Text style={s.goalText}>{t('onboarding.plan.goal', { goal: goalLabel })}</Text>
+            </View>
+          )}
+
           <View style={s.benefits}>
             {benefits.map((b, i) => (
               <View key={i} style={s.benefitRow}>
@@ -221,7 +259,12 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
             {loading ? (
               <ActivityIndicator color="#ffffff" />
             ) : (
-              <Text style={s.ctaText}>{t('onboarding.paywall.startTraining')}</Text>
+              <>
+                <Text style={s.ctaText}>{t('onboarding.paywall.startTraining')}</Text>
+                <Text style={s.ctaSubText}>
+                  {priceString ? t('onboarding.paywall.afterTrial', { price: priceString }) : ''}
+                </Text>
+              </>
             )}
           </TouchableOpacity>
 
@@ -256,6 +299,8 @@ const s = StyleSheet.create({
   badgeText: { color: '#ff7a50', fontWeight: '800', fontSize: 12, letterSpacing: 2 },
   headline: { color: '#fff', fontSize: 30, fontWeight: '900', marginTop: 14 },
   sub: { color: 'rgba(255,255,255,0.65)', fontSize: 16, lineHeight: 23, marginTop: 8 },
+  goalBox: { backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10, marginTop: 18 },
+  goalText: { color: '#fff', fontSize: 14, fontWeight: '700', textAlign: 'center' },
   benefits: { marginTop: 26 },
   benefitRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 14 },
   benefitEmoji: { fontSize: 20, width: 32 },
@@ -266,6 +311,7 @@ const s = StyleSheet.create({
   cta: { backgroundColor: '#ff5722', borderRadius: 16, paddingVertical: 17, alignItems: 'center', marginTop: 22 },
   disabled: { opacity: 0.55 },
   ctaText: { color: '#fff', fontSize: 17, fontWeight: '900' },
+  ctaSubText: { color: 'rgba(255,255,255,0.82)', fontSize: 11.5, marginTop: 4, textAlign: 'center' },
   freeLink: { alignItems: 'center', marginTop: 18 },
   freeLinkText: { color: 'rgba(255,255,255,0.55)', fontSize: 14.5, textDecorationLine: 'underline' },
   restore: { alignItems: 'center', marginTop: 14 },
