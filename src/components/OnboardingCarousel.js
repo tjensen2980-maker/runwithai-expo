@@ -218,10 +218,11 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
     <Modal visible={!!visible} animationType="slide" transparent={false}>
       <View style={s.wrap}>
         <ScrollView
+          style={{ marginTop: Math.max(insets.top, 48) }}
           contentContainerStyle={[
             s.scroll,
             {
-              paddingTop: Math.max(insets.top, 48) + 12,
+              paddingTop: 12,
               paddingBottom: Math.max(insets.bottom, 16) + 32,
             },
           ]}
