@@ -393,6 +393,7 @@ export default function Onboarding({ onDone }) {
     <OnboardingCarousel 
       visible={true}
       isOnboarding={true}
+      goalLabel={goals.find(goal => goal.id === goalInfo.goal)?.label || ''}
       onComplete={() => onDone(chosen, goalInfo)}
       onClose={() => onDone(chosen, goalInfo)}
     />
