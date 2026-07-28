@@ -9,8 +9,7 @@ import {
   Dimensions, Alert, ActivityIndicator, Linking, Modal
 } from 
 'react-native';
-import { SafeAreaView } from 
-'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { SERVER, getAuthToken } from 
 '../data';
@@ -49,6 +48,7 @@ function recordPaywallEvent(purchases, event, details = {}) {
 
 export default function OnboardingCarousel({ visible, onComplete, onClose, isOnboarding, goalLabel = '' }) {
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const [currentIndex, setCurrentIndex] = useState(0); // start on Basic
   const [loading, setLoading] = useState(false);
   const [offerings, setOfferings] = useState(null);
@@ -216,33 +216,55 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
 
   return (
     <Modal visible={!!visible} animationType="slide" transparent={false}>
-      <SafeAreaView style={s.wrap}>
-        <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-          <View style={s.badge}><Text style={s.badgeText}>{t('proUpsell.features.aiCoach.title')}</Text></View>
-          <Text style={s.headline}>{t('onboarding.paywall.headline')}</Text>
-          <Text style={s.sub}>{t('onboarding.paywall.subtitle')}</Text>
+      <View style={s.wrap}>
+        <ScrollView
+          contentContainerStyle={[
+            s.scroll,
+            {
+              paddingTop: Math.max(insets.top, 48) + 12,
+              paddingBottom: Math.max(insets.bottom, 16) + 32,
+            },
+          ]}
+          contentInsetAdjustmentBehavior="never"
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={s.badge}>
+            <Text style={s.badgeText} maxFontSizeMultiplier={1.1}>
+              {t('proUpsell.features.aiCoach.title')}
+            </Text>
+          </View>
+          <Text style={s.headline} maxFontSizeMultiplier={1.15}>
+            {t('onboarding.paywall.headline')}
+          </Text>
+          <Text style={s.sub} maxFontSizeMultiplier={1.2}>
+            {t('onboarding.paywall.subtitle')}
+          </Text>
 
           {!!goalLabel && (
             <View style={s.goalBox}>
-              <Text style={s.goalText}>{t('onboarding.plan.goal', { goal: goalLabel })}</Text>
+              <Text style={s.goalText} maxFontSizeMultiplier={1.15}>
+                {t('onboarding.plan.goal', { goal: goalLabel })}
+              </Text>
             </View>
           )}
 
           <View style={s.benefits}>
             {benefits.map((b, i) => (
               <View key={i} style={s.benefitRow}>
-                <Text style={s.benefitEmoji}>{b.emoji}</Text>
-                <Text style={s.benefitText}>{b.text}</Text>
+                <Text style={s.benefitEmoji} maxFontSizeMultiplier={1.1}>{b.emoji}</Text>
+                <Text style={s.benefitText} maxFontSizeMultiplier={1.2}>{b.text}</Text>
               </View>
             ))}
           </View>
 
           <View style={s.giftBox}>
-            <Text style={s.giftBig}>{t('onboarding.paywall.trial')}</Text>
+            <Text style={s.giftBig} maxFontSizeMultiplier={1.15}>
+              {t('onboarding.paywall.trial')}
+            </Text>
             {priceLoading ? (
               <ActivityIndicator color="#ff7a50" style={{ marginTop: 8 }} />
             ) : (
-              <Text style={s.giftSmall}>
+              <Text style={s.giftSmall} maxFontSizeMultiplier={1.15}>
                 {priceString
                   ? t('onboarding.paywall.afterTrial', { price: priceString })
                   : t('onboarding.paywall.errors.prices')}
@@ -259,24 +281,31 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
             {loading ? (
               <ActivityIndicator color="#ffffff" />
             ) : (
-              <>
-                <Text style={s.ctaText}>{t('onboarding.paywall.startTraining')}</Text>
-                <Text style={s.ctaSubText}>
-                  {priceString ? t('onboarding.paywall.afterTrial', { price: priceString }) : ''}
-                </Text>
-              </>
+              <Text
+                style={s.ctaText}
+                maxFontSizeMultiplier={1.1}
+                numberOfLines={2}
+                adjustsFontSizeToFit
+                minimumFontScale={0.82}
+              >
+                {t('onboarding.paywall.startTraining')}
+              </Text>
             )}
           </TouchableOpacity>
 
           <TouchableOpacity style={s.freeLink} onPress={() => handleSelect({ id: 'free' })} disabled={loading}>
-            <Text style={s.freeLinkText}>{t('proUpsell.continueWithFree')}</Text>
+            <Text style={s.freeLinkText} maxFontSizeMultiplier={1.15}>
+              {t('proUpsell.continueWithFree')}
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={s.restore} onPress={handleRestore} disabled={loading || priceLoading}>
-            <Text style={s.restoreText}>{t('onboarding.paywall.restore')}</Text>
+            <Text style={s.restoreText} maxFontSizeMultiplier={1.15}>
+              {t('onboarding.paywall.restore')}
+            </Text>
           </TouchableOpacity>
 
-          <Text style={s.renewalText}>{t('pricing.terms')}</Text>
+          <Text style={s.renewalText} maxFontSizeMultiplier={1.15}>{t('pricing.terms')}</Text>
           <View style={s.legalLinks}>
             <TouchableOpacity onPress={() => Linking.openURL(TERMS_URL)}>
               <Text style={s.legalLink}>{t('settings.termsOfService')}</Text>
@@ -287,15 +316,15 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
             </TouchableOpacity>
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </View>
     </Modal>
   );
 }
 
 const s = StyleSheet.create({
   wrap: { flex: 1, backgroundColor: '#101114' },
-  scroll: { padding: 24, paddingBottom: 48, alignItems: 'stretch' },
-  badge: { alignSelf: 'flex-start', backgroundColor: 'rgba(255,87,34,0.18)', paddingHorizontal: 12, paddingVertical: 5, borderRadius: 14, marginTop: 8 },
+  scroll: { paddingHorizontal: 24, alignItems: 'stretch' },
+  badge: { alignSelf: 'flex-start', backgroundColor: 'rgba(255,87,34,0.18)', paddingHorizontal: 12, paddingVertical: 5, borderRadius: 14 },
   badgeText: { color: '#ff7a50', fontWeight: '800', fontSize: 12, letterSpacing: 2 },
   headline: { color: '#fff', fontSize: 30, fontWeight: '900', marginTop: 14 },
   sub: { color: 'rgba(255,255,255,0.65)', fontSize: 16, lineHeight: 23, marginTop: 8 },
@@ -308,10 +337,9 @@ const s = StyleSheet.create({
   giftBox: { backgroundColor: 'rgba(255,87,34,0.12)', borderColor: 'rgba(255,87,34,0.45)', borderWidth: 1, borderRadius: 16, padding: 18, marginTop: 22, alignItems: 'center' },
   giftBig: { color: '#ff7a50', fontSize: 24, fontWeight: '900' },
   giftSmall: { color: 'rgba(255,255,255,0.75)', fontSize: 13.5, marginTop: 6, textAlign: 'center' },
-  cta: { backgroundColor: '#ff5722', borderRadius: 16, paddingVertical: 17, alignItems: 'center', marginTop: 22 },
+  cta: { backgroundColor: '#ff5722', borderRadius: 16, minHeight: 60, paddingHorizontal: 24, paddingVertical: 14, alignItems: 'center', justifyContent: 'center', marginTop: 22 },
   disabled: { opacity: 0.55 },
-  ctaText: { color: '#fff', fontSize: 17, fontWeight: '900' },
-  ctaSubText: { color: 'rgba(255,255,255,0.82)', fontSize: 11.5, marginTop: 4, textAlign: 'center' },
+  ctaText: { color: '#fff', fontSize: 16, lineHeight: 21, fontWeight: '900', textAlign: 'center', width: '100%' },
   freeLink: { alignItems: 'center', marginTop: 18 },
   freeLinkText: { color: 'rgba(255,255,255,0.55)', fontSize: 14.5, textDecorationLine: 'underline' },
   restore: { alignItems: 'center', marginTop: 14 },
