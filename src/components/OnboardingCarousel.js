@@ -288,7 +288,7 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
                 adjustsFontSizeToFit
                 minimumFontScale={0.82}
               >
-                {t('onboarding.paywall.startTraining')}
+                {t('proUpsell.startTrial')}
               </Text>
             )}
           </TouchableOpacity>
