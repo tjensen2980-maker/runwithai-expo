@@ -404,7 +404,7 @@ const ps = StyleSheet.create({
 });
 
 // ─── RUNTRACKER COMPONENT ───────────────────────────────────────────────────
-export default function RunTracker({ activityType = 'run', onBack, profile, level, weekPlan, nextWorkout, runs, onShowPricing }) {
+export default function RunTracker({ activityType = 'run', onBack, profile, level, weekPlan, nextWorkout, runs, isPro = false, onShowPricing }) {
   const { t } = useTranslation();
   const [isTracking, setIsTracking] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(false); // TEST: AI-coach starter slaaet fra for at teste baggrunds-GPS
@@ -895,7 +895,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
     const bestKm = (runs || []).filter(r => r.km > 0).reduce((best, r) => (!best || r.km > best) ? r.km : best, null);
     const targetKm = nextWorkout?.km || null;
     voiceCoachRef.current = new VoiceCoach({
-      enabled: voiceEnabled,
+      enabled: isPro && voiceEnabled,
       name: profile?.name || t('tracker.defaultRunner'),
       activityType,
       bestPace,
@@ -1316,30 +1316,36 @@ const formatPace = () => {
       <View style={s.header}>
         <Text style={s.title}>{activityType === 'bike' ? `🚴 ${t('tracker.cycling')}` : activityType === 'run' ? ('🏃 ' + t('run.title')) : ('🚶 ' + t('run.walk'))}</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          {isPro && (
+            <TouchableOpacity
+              style={[s.voiceToggle, allowMusicMixing && s.voiceToggleActive]}
+              onPress={() => {
+                const next = !allowMusicMixing;
+                setAllowMusicMixing(next);
+                setVoiceCoachMixing(next);
+              }}
+            >
+              <Text style={{ fontSize: 16 }}>{allowMusicMixing ? '🎵' : '📍'}</Text>
+              <Text style={[s.voiceToggleText, allowMusicMixing && s.voiceToggleTextActive]}>
+                {allowMusicMixing ? t('tracker.music') : t('tracker.voiceOnly')}
+              </Text>
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
-            style={[s.voiceToggle, allowMusicMixing && s.voiceToggleActive]}
+            style={[s.voiceToggle, isPro && voiceEnabled && s.voiceToggleActive]}
             onPress={() => {
-              const next = !allowMusicMixing;
-              setAllowMusicMixing(next);
-              setVoiceCoachMixing(next);
-            }}
-          >
-            <Text style={{ fontSize: 16 }}>{allowMusicMixing ? '🎵' : '📍'}</Text>
-            <Text style={[s.voiceToggleText, allowMusicMixing && s.voiceToggleTextActive]}>
-              {allowMusicMixing ? t('tracker.music') : t('tracker.voiceOnly')}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[s.voiceToggle, voiceEnabled && s.voiceToggleActive]}
-            onPress={() => {
+              if (!isPro) {
+                if (onShowPricing) onShowPricing();
+                return;
+              }
               const next = !voiceEnabled;
               setVoiceEnabled(next);
               if (voiceCoachRef.current) voiceCoachRef.current.setEnabled(next);
             }}
           >
-            <Text style={{ fontSize: 16 }}>{voiceEnabled ? '🔊' : '🔇'}</Text>
-            <Text style={[s.voiceToggleText, voiceEnabled && s.voiceToggleTextActive]}>
-              {voiceEnabled ? t('tracker.voiceOn') : t('tracker.voiceOff')}
+            <Text style={{ fontSize: 16 }}>{!isPro ? '🔒' : voiceEnabled ? '🔊' : '🔇'}</Text>
+            <Text style={[s.voiceToggleText, isPro && voiceEnabled && s.voiceToggleTextActive]}>
+              {!isPro ? t('pro.badge') : voiceEnabled ? t('tracker.voiceOn') : t('tracker.voiceOff')}
             </Text>
           </TouchableOpacity>
         </View>
