@@ -109,7 +109,7 @@ function ProFeatureLock({ feature, description, onUpgrade }) {
         <TouchableOpacity style={proLockStyles.button} onPress={onUpgrade}>
           <Text style={proLockStyles.buttonText}>{t('pro.upgradeToPro')} →</Text>
         </TouchableOpacity>
-        <Text style={proLockStyles.price}>{t('pro.fromOnly')}</Text>
+        <Text style={proLockStyles.price}>{t('onboarding.paywall.trial')}</Text>
       </View>
     </View>
   );
@@ -137,7 +137,7 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, isFree, on
             style={{ flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center', backgroundColor: activeTab === id ? colors.black : colors.surface, borderWidth: 2, borderColor: activeTab === id ? colors.black : colors.border2 }}
             onPress={() => setActiveTab(id)}>
             <Text style={{ fontSize: 14, fontWeight: '800', color: activeTab === id ? colors.card : colors.muted }}>
-              {label}{id === 'routes' && isFree && ' 🔒'}
+              {label}{id === 'routes' && !isPro && ' 🔒'}
             </Text>
           </TouchableOpacity>
         ))}
@@ -168,7 +168,7 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, isFree, on
           )}
         </ScrollView>
       ) : (
-        !isFree ? <RoutesTabWrapper profile={profile} runs={runs} /> : <ProFeatureLock feature={t('pro.aiRoutes.title')} description={t('pro.aiRoutes.description')} onUpgrade={onShowPricing} />
+        isPro ? <RoutesTabWrapper profile={profile} runs={runs} /> : <ProFeatureLock feature={t('pro.aiRoutes.title')} description={t('pro.aiRoutes.description')} onUpgrade={onShowPricing} />
       )}
     </View>
   );
@@ -214,7 +214,7 @@ function PlanTab({ level, nextWorkout, weekPlan, planChanges, profile, runs, onN
             style={{ flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center', backgroundColor: activeTab === id ? colors.black : colors.surface, borderWidth: 2, borderColor: activeTab === id ? colors.black : colors.border2 }}
             onPress={() => setActiveTab(id)}>
             <Text style={{ fontSize: 14, fontWeight: '800', color: activeTab === id ? colors.card : colors.muted }}>
-              {label}{id === 'coach' && isFree && ' 🔒'}
+              {label}{id === 'coach' && !isPro && ' 🔒'}
             </Text>
           </TouchableOpacity>
         ))}
@@ -223,11 +223,11 @@ function PlanTab({ level, nextWorkout, weekPlan, planChanges, profile, runs, onN
         {activeTab === 'plan' ? (
           <Dashboard level={level} nextWorkout={nextWorkout} weekPlan={weekPlan} planChanges={planChanges} profile={profile} runs={runs} onNavigate={onNavigate} onStartActivity={onStartActivity} />
         ) : activeTab === 'kalender' ? (
-          !isFree
+          isPro
             ? <CalendarTab runs={runs} weekPlan={weekPlan} trainingPlan={trainingPlan} isPro={isPro} onShowPricing={onShowPricing} />
             : <ProFeatureLock feature={t('pro.calendar.title')} description={t('pro.calendar.description')} onUpgrade={onShowPricing} />
         ) : (
-          !isFree
+          isPro
             ? <Chat level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} onPlanUpdate={onPlanUpdate} runs={runs} />
             : <ProFeatureLock feature={t('pro.coach.title')} description={t('pro.coach.description')} onUpgrade={onShowPricing} />
         )
@@ -666,7 +666,14 @@ if (type === 'pick') {
     return (
       <SafeAreaProvider>
         <RunTracker profile={profile} level={level} weekPlan={weekPlan} nextWorkout={nextWorkout}
-          runs={runs} activityType={activityType} onBack={() => setTab('run')} onShowPricing={() => setShowTierCarousel(true)} />
+          runs={runs} activityType={activityType} isPro={isPro}
+          onBack={() => setTab('run')} onShowPricing={() => setShowTierCarousel(true)} />
+        <OnboardingCarousel
+          visible={showTierCarousel}
+          isOnboarding={false}
+          onClose={() => setShowTierCarousel(false)}
+          onComplete={() => { setShowTierCarousel(false); refreshSubscription && refreshSubscription(); }}
+        />
       </SafeAreaProvider>
     );
   }
@@ -735,7 +742,7 @@ if (tab === 'cycleTracker') {
       case 'calendar':
         return <CalendarTab runs={runs} weekPlan={weekPlan} trainingPlan={trainingPlan} isPro={isPro} onShowPricing={() => setShowTierCarousel(true)} />;
       case 'chat':
-        return !isFree ? <Chat level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} onPlanUpdate={handlePlanUpdate} runs={runs} initialMessage={chatDraft} onInitialMessageConsumed={() => setChatDraft('')} /> : <ProFeatureLock feature={t('pro.coach.title')} description={t('pro.coach.description')} onUpgrade={() => setShowTierCarousel(true)} />;
+        return isPro ? <Chat level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} onPlanUpdate={handlePlanUpdate} runs={runs} initialMessage={chatDraft} onInitialMessageConsumed={() => setChatDraft('')} /> : <ProFeatureLock feature={t('pro.coach.title')} description={t('pro.coach.description')} onUpgrade={() => setShowTierCarousel(true)} />;
       case 'more':
       return <More onNavigate={setTab} profile={profile} isPro={isPro} isFree={isFree} onShowPricing={() => setShowTierCarousel(true)} />;
     case 'settings':

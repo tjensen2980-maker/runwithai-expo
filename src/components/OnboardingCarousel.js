@@ -249,6 +249,16 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
             </View>
           )}
 
+          <View style={s.freeBox}>
+            <Text style={s.freeBoxTitle} maxFontSizeMultiplier={1.15}>
+              {t('settings.subscription.tiers.free')}
+            </Text>
+            <Text style={s.freeBoxText} maxFontSizeMultiplier={1.15}>
+              {`✓ ${t('tabs.plan')}  •  ${t('tabs.start')}  •  ${t('tabs.progress')}`}
+            </Text>
+          </View>
+
+          <Text style={s.proIncludes} maxFontSizeMultiplier={1.1}>RUNWITHAI PRO</Text>
           <View style={s.benefits}>
             {benefits.map((b, i) => (
               <View key={i} style={s.benefitRow}>
@@ -331,7 +341,11 @@ const s = StyleSheet.create({
   sub: { color: 'rgba(255,255,255,0.65)', fontSize: 16, lineHeight: 23, marginTop: 8 },
   goalBox: { backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10, marginTop: 18 },
   goalText: { color: '#fff', fontSize: 14, fontWeight: '700', textAlign: 'center' },
-  benefits: { marginTop: 26 },
+  freeBox: { backgroundColor: 'rgba(255,255,255,0.06)', borderColor: 'rgba(255,255,255,0.12)', borderWidth: 1, borderRadius: 14, padding: 14, marginTop: 20 },
+  freeBoxTitle: { color: 'rgba(255,255,255,0.55)', fontSize: 12, fontWeight: '800', letterSpacing: 1.5, textTransform: 'uppercase' },
+  freeBoxText: { color: 'rgba(255,255,255,0.78)', fontSize: 13.5, lineHeight: 20, marginTop: 6 },
+  proIncludes: { color: '#ff7a50', fontSize: 12, fontWeight: '900', letterSpacing: 1.5, marginTop: 22 },
+  benefits: { marginTop: 12 },
   benefitRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 14 },
   benefitEmoji: { fontSize: 20, width: 32 },
   benefitText: { color: '#fff', fontSize: 15.5, flex: 1, lineHeight: 21 },

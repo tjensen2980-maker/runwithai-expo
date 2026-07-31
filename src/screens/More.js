@@ -57,7 +57,7 @@ export default function More({
   };
 
   const goPro = (tab) => () => {
-    if (isFree && onShowPricing) {
+    if (!isPro && onShowPricing) {
       onShowPricing();
       return;
     }
@@ -84,7 +84,7 @@ export default function More({
           title={t('more.menu.statistics')}
           subtitle={t('more.menu.statisticsSubtitle')}
           onPress={goPro('stats')}
-          proLocked={isFree}
+          proLocked={!isPro}
         />
       </Section>
 
@@ -110,7 +110,7 @@ export default function More({
           subtitle={t('more.menu.privacySubtitle')}
           onPress={go('privacy')}
         />
-        {isFree && (
+        {!isPro && (
           <MenuRow
             icon="⭐"
             title={t('more.menu.upgrade')}
