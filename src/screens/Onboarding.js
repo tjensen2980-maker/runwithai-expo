@@ -9,6 +9,12 @@ import i18n, { getDeviceLanguage } from '../i18n';
 import CoachIntro from './CoachIntro'; // onboarding som samtale
 import { localizeWorkoutLabel } from '../utils/localizeWorkout';
 
+// The generated plan cards use light backgrounds, so they need their own
+// accessible text palette instead of the app's light-on-dark theme colors.
+const PLAN_CARD_TITLE = '#173C32';
+const PLAN_CARD_ACCENT = '#0B6B4F';
+const PLAN_CARD_BODY = '#3F6257';
+
 const LANGUAGES = [
   { code: 'da', flag: '🇩🇰', name: 'Dansk' },
   { code: 'en', flag: '🇬🇧', name: 'English' },
@@ -434,10 +440,10 @@ const s = StyleSheet.create({
   goalCard:      { width: '47%', backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 14, padding: 12 },
   planCard:      { backgroundColor: '#FDEFE7', borderRadius: 16, padding: 16, marginBottom: 12 },
   planCardRest:  { backgroundColor: '#F2F2F4' },
-  planWeekDay:   { color: colors.accent, fontWeight: '700', fontSize: 14, marginBottom: 4 },
-  planTitle:     { color: colors.black, fontWeight: '800', fontSize: 20, marginBottom: 4 },
-  planDesc:      { color: colors.muted, fontSize: 16, lineHeight: 22 },
-  planKm:        { color: colors.muted, fontSize: 15, marginTop: 4 },
+  planWeekDay:   { color: PLAN_CARD_ACCENT, fontWeight: '700', fontSize: 14, marginBottom: 4 },
+  planTitle:     { color: PLAN_CARD_TITLE, fontWeight: '800', fontSize: 20, marginBottom: 4 },
+  planDesc:      { color: PLAN_CARD_BODY, fontSize: 16, lineHeight: 22 },
+  planKm:        { color: PLAN_CARD_BODY, fontSize: 15, marginTop: 4 },
   goalLabel:     { color: colors.text, fontWeight: '700', fontSize: 13, marginBottom: 3 },
   goalSub:       { color: colors.dim, fontSize: 11 },
   // Language selector styles
