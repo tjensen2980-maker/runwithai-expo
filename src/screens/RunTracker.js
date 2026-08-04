@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator, TextInput, Platform, AppState, Alert, BackHandler } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors, SERVER, getAuthToken } from '../data';
 import VoiceCoach, { stopSpeaking, setVoiceAuthToken, setAllowMusicMixing as setVoiceCoachMixing } from '../components/VoiceCoach';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +9,7 @@ import MusicButton from './components/MusicButton';
 import MusicMatcher from './components/MusicMatcher';
 import useCadence from '../hooks/useCadence';
 // ─── PHOTO STORY IMPORTS ────────────────────────────────────────────────────
-import RunCamera, { uploadPendingPhotos, clearPendingPhotos } from './components/RunCamera';
+import RunCamera, { uploadPendingPhotos, clearPendingPhotos, getPendingPhotos } from './components/RunCamera';
 import PhotoStory from './components/PhotoStory';
 // ─── VOICE INPUT (talk to AI coach) ─────────────────────────────────────────
 import VoiceInput from './components/VoiceInput';
@@ -24,8 +25,38 @@ let TaskManager;
 const isWeb = Platform.OS === 'web';
 
 const BACKGROUND_LOCATION_TASK = 'background-location-task';
+const ANDROID_TRACKING_STATE_KEY = 'runwithai_active_android_tracking';
 let _bgSound = null;
 let _savingActivity = false; // guard mod dobbelt-gemning af samme tur
+
+async function readAndroidTrackingState() {
+  if (Platform.OS !== 'android') return null;
+  try {
+    const raw = await AsyncStorage.getItem(ANDROID_TRACKING_STATE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    console.log('Android tracking state read failed:', e);
+    return null;
+  }
+}
+
+async function writeAndroidTrackingState(state) {
+  if (Platform.OS !== 'android') return;
+  try {
+    await AsyncStorage.setItem(ANDROID_TRACKING_STATE_KEY, JSON.stringify(state));
+  } catch (e) {
+    console.log('Android tracking state write failed:', e);
+  }
+}
+
+async function clearAndroidTrackingState() {
+  if (Platform.OS !== 'android') return;
+  try {
+    await AsyncStorage.removeItem(ANDROID_TRACKING_STATE_KEY);
+  } catch (e) {
+    console.log('Android tracking state clear failed:', e);
+  }
+}
 
 // Only import native modules when not on web
 if (!isWeb) {
@@ -79,6 +110,19 @@ if (!isWeb && TaskManager) {
       console.error('Background location error:', error);
       return;
     }
+    const persistedState = Platform.OS === 'android' ? await readAndroidTrackingState() : null;
+    if (Platform.OS === 'android') {
+      // En headless Android-task kan starte i en ny JS-kontekst. Genskab derfor
+      // status fra disk i stedet for at stole paa globale variabler fra skaermen.
+      if (!persistedState?.active) return;
+      global._isBackgroundTracking = true;
+      global._trackingStartedAt = persistedState.startedAt;
+      global._trackingElapsedSeconds = persistedState.elapsedSeconds || 0;
+      global._trackingActivityType = persistedState.activityType || 'run';
+      global._liveDistanceMeters = Math.max(global._liveDistanceMeters || 0, persistedState.distanceMeters || 0);
+      global._bgDistance = Math.max(global._bgDistance || 0, persistedState.distanceMeters || 0);
+      global._bgLastPoint = global._bgLastPoint || persistedState.lastPoint || null;
+    }
     if (data) {
       const { locations } = data;
       if (locations && locations.length > 0) {
@@ -114,7 +158,7 @@ if (!isWeb && TaskManager) {
         // Androids foreground-location-task fortsaetter, selv naar React Native
         // er suspenderet. Opdater den samme lydloese statusnotifikation herfra,
         // saa tid/distance ikke fryser paa laaseskaermen.
-        if (Platform.OS === 'android' && global._isBackgroundTracking && global._trackingStartedAt) {
+        if (Platform.OS === 'android' && persistedState?.active && global._trackingStartedAt) {
           const durationSeconds = Math.max(
             global._trackingElapsedSeconds || 0,
             Math.floor((Date.now() - global._trackingStartedAt) / 1000)
@@ -122,6 +166,13 @@ if (!isWeb && TaskManager) {
           const distanceMeters = Math.max(global._liveDistanceMeters || 0, global._bgDistance || 0);
           const km = distanceMeters / 1000;
           const paceMinPerKm = km > 0 ? (durationSeconds / 60) / km : 0;
+          await writeAndroidTrackingState({
+            ...persistedState,
+            active: true,
+            distanceMeters,
+            elapsedSeconds: durationSeconds,
+            lastPoint: global._bgLastPoint,
+          });
           LiveActivity.update({
             activityType: global._trackingActivityType || 'run',
             distanceMeters,
@@ -906,6 +957,14 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
     global._trackingElapsedSeconds = duration;
     global._trackingActivityType = activityType;
     global._liveDistanceMeters = distanceRef.current;
+    await writeAndroidTrackingState({
+      active: true,
+      activityType,
+      startedAt: startTimeRef.current,
+      elapsedSeconds: duration,
+      distanceMeters: distanceRef.current,
+      lastPoint: null,
+    });
     
     // Start Live Activity (iOS) - vises paa laaseskaerm og Dynamic Island
     LiveActivity.start({
@@ -958,6 +1017,14 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
           paceMinPerKm: paceMinPerKm,
           isPaused: false,
         }).catch(() => {});
+        writeAndroidTrackingState({
+          active: true,
+          activityType,
+          startedAt: startTimeRef.current,
+          elapsedSeconds: elapsed,
+          distanceMeters: distanceRef.current,
+          lastPoint: lastValidPositionRef.current,
+        });
       }
     }, 1000);
 
@@ -1052,6 +1119,15 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
     setIsPaused(true);
     global._trackingElapsedSeconds = duration;
     global._trackingStartedAt = null;
+    await writeAndroidTrackingState({
+      active: false,
+      paused: true,
+      activityType,
+      startedAt: null,
+      elapsedSeconds: duration,
+      distanceMeters: distanceRef.current,
+      lastPoint: lastValidPositionRef.current,
+    });
     if (intervalRef.current) clearInterval(intervalRef.current);
     stopGpsWatch();
     await stopBackgroundLocationTracking();
@@ -1074,6 +1150,14 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
     startTimeRef.current = Date.now() - (duration * 1000);
     global._trackingStartedAt = startTimeRef.current;
     global._trackingElapsedSeconds = duration;
+    await writeAndroidTrackingState({
+      active: true,
+      activityType,
+      startedAt: startTimeRef.current,
+      elapsedSeconds: duration,
+      distanceMeters: distanceRef.current,
+      lastPoint: lastValidPositionRef.current,
+    });
 
     const token = getAuthToken();
     setVoiceAuthToken(token);
@@ -1089,7 +1173,7 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
       // Opdater Live Activity hver sekund med friske stats
       // Opdater Live Activity max hvert 3. sekund (undgaa iOS race condition)
       const now = Date.now();
-      if (!lastLiveActivityUpdateRef.current || now - lastLiveActivityUpdateRef.current >= 1000) {
+      if (!lastLiveActivityUpdateRef.current || now - lastLiveActivityUpdateRef.current >= 3000) {
         lastLiveActivityUpdateRef.current = now;
         const km = distanceRef.current / 1000;
         const paceMinPerKm = km > 0 ? (elapsed / 60) / km : 0;
@@ -1100,6 +1184,14 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
           paceMinPerKm: paceMinPerKm,
           isPaused: false,
         }).catch(() => {});
+        writeAndroidTrackingState({
+          active: true,
+          activityType,
+          startedAt: startTimeRef.current,
+          elapsedSeconds: elapsed,
+          distanceMeters: distanceRef.current,
+          lastPoint: lastValidPositionRef.current,
+        });
       }
     }, 1000);
 
@@ -1155,6 +1247,7 @@ console.log('iOS resume foreground GPS started');
     console.log('=== STOP AND SAVE ===');
     if (intervalRef.current) clearInterval(intervalRef.current);
     stopGpsWatch();
+    await clearAndroidTrackingState();
     await stopBackgroundLocationTracking();
     processBackgroundLocations();
 
@@ -1287,13 +1380,22 @@ const bikePayload = {
         console.log('Server response:', JSON.stringify(result));
 
         if (result.id) {
+          const hadPhotos = getPendingPhotos().length > 0;
           try {
             await uploadPendingPhotos(result.id);
           } catch (uploadErr) {
             console.warn('Photo upload error:', uploadErr);
           }
-          setSavedRunId(result.id);
-          setShowStory(true);
+          // Story er kun relevant, hvis brugeren aktivt har taget billeder.
+          // Et normalt loeb afsluttes direkte, saa Story-dialogen ikke skjuler
+          // den tydelige afslutning af turen.
+          if (hadPhotos) {
+            setSavedRunId(result.id);
+            setShowStory(true);
+          } else {
+            if (onBack) onBack();
+            recordCompletedWorkoutAndMaybeRequestReview();
+          }
           return;
         }
       }

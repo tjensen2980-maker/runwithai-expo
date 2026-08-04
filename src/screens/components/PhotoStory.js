@@ -14,6 +14,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   View,
   Text,
@@ -150,6 +151,7 @@ function StoryMap({ photos, route }) {
 // ─── MAIN COMPONENT ──────────────────────────────────────────────────────────
 
 export default function PhotoStory({ runId, visible, onClose, route }) {
+  const { t } = useTranslation();
   const [story, setStory] = useState(null);
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -323,7 +325,7 @@ export default function PhotoStory({ runId, visible, onClose, route }) {
 
           {/* Close button */}
           <TouchableOpacity style={s.closeBtn} onPress={onClose}>
-            <Text style={s.closeBtnText}>Luk</Text>
+            <Text style={s.closeBtnText}>{t('common.done')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -491,10 +493,16 @@ const s = StyleSheet.create({
   // Close
   closeBtn: {
     alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 52,
     paddingVertical: 14,
+    marginTop: 12,
+    borderRadius: 14,
+    backgroundColor: colors.accent,
   },
   closeBtnText: {
-    fontSize: 15,
-    color: colors.muted,
+    fontSize: 16,
+    fontWeight: '800',
+    color: '#000',
   },
 });
