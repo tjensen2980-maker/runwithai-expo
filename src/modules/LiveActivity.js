@@ -30,11 +30,18 @@ if (isAndroid) {
   }
 }
 
-const ANDROID_CHANNEL_ID = 'run-live-activity';
+// Ny kanal-id er bevidst: Android-kanalers lyd/importance kan ikke aendres,
+// efter de foerst er oprettet paa en telefon. v2 sikrer en lydloes kanal ogsaa
+// for testere, der allerede har haft den gamle kanal installeret.
+const ANDROID_CHANNEL_ID = 'run-live-activity-v2';
 const ANDROID_NOTIFICATION_ID = 'run-live-activity-notification';
+const ANDROID_MIN_UPDATE_INTERVAL_MS = 5000;
 
 let isActive = false;
 let androidChannelReady = false;
+let androidUpdateInFlight = false;
+let lastAndroidUpdateAt = 0;
+let lastAndroidContent = '';
 
 // --- Hjaelpere til formatering -------------------------------------------
 
@@ -110,9 +117,20 @@ async function ensureAndroidPermission() {
   }
 }
 
-async function presentAndroidNotification(params) {
+async function presentAndroidNotification(params, force = false) {
   if (!Notifications) return false;
   const { title, body } = buildAndroidContent(params);
+  const contentKey = `${title}\n${body}`;
+  const now = Date.now();
+
+  // Kun én native opdatering ad gangen. Uden denne guard kan kald, der blev
+  // forsinket i baggrunden, blive afviklet samlet ved foreground og ligne en
+  // notifikationsstorm.
+  if (androidUpdateInFlight) return true;
+  if (!force && contentKey === lastAndroidContent) return true;
+  if (!force && now - lastAndroidUpdateAt < ANDROID_MIN_UPDATE_INTERVAL_MS) return true;
+
+  androidUpdateInFlight = true;
   try {
     await Notifications.scheduleNotificationAsync({
       identifier: ANDROID_NOTIFICATION_ID,
@@ -124,12 +142,18 @@ async function presentAndroidNotification(params) {
         priority: Notifications.AndroidNotificationPriority?.LOW,
         color: '#ff4500',
       },
-      trigger: null,          // vis med det samme
+      // Angiv kanalen eksplicit. trigger:null brugte Androids standardkanal,
+      // saa den lydloese kanal ovenfor blev tidligere slet ikke anvendt.
+      trigger: { type: 'channel', channelId: ANDROID_CHANNEL_ID },
     });
+    lastAndroidUpdateAt = Date.now();
+    lastAndroidContent = contentKey;
     return true;
   } catch (e) {
     console.log('LiveActivity(Android): present fejl:', e?.message || e);
     return false;
+  } finally {
+    androidUpdateInFlight = false;
   }
 }
 
@@ -199,7 +223,9 @@ export async function start(params) {
         return null;
       }
       await ensureAndroidChannel();
-      const ok = await presentAndroidNotification(p);
+      lastAndroidUpdateAt = 0;
+      lastAndroidContent = '';
+      const ok = await presentAndroidNotification(p, true);
       isActive = ok;
       console.log('LiveActivity started (Android):', ok);
       return ok ? ANDROID_NOTIFICATION_ID : null;
@@ -238,7 +264,12 @@ export async function update(params) {
 
   // Android: gen-postning med samme identifier opdaterer den eksisterende notifikation
   if (isAndroid && Notifications) {
-    if (!isActive) return false;
+    // En Android background task kan vaekkes i en ny JS-kontekst, hvor den
+    // lokale isActive-variabel er nulstillet. Den aktive tracking-flag er da
+    // den autoritative kilde.
+    if (!isActive && !(typeof global !== 'undefined' && global._isBackgroundTracking)) return false;
+    await ensureAndroidChannel();
+    isActive = true;
     return await presentAndroidNotification(p);
   }
 
@@ -271,6 +302,8 @@ export async function end() {
       console.log('LiveActivity.end dismiss fejl (Android):', e?.message || e);
     }
     isActive = false;
+    lastAndroidUpdateAt = 0;
+    lastAndroidContent = '';
     console.log('LiveActivity ended (Android)');
     return true;
   }

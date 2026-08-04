@@ -719,6 +719,12 @@
     }
   },
   "tracker": {
+    "leaveActive": {
+      "title": "En tur er i gang",
+      "message": "Vil du fortsætte turen eller afslutte og gemme den?",
+      "continue": "Fortsæt tur",
+      "save": "Afslut og gem"
+    },
     "defaultRunner": "løber",
     "voiceOn": "Stemme til",
     "voiceOff": "Stemme fra",

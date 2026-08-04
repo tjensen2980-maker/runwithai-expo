@@ -727,6 +727,7 @@
     }
   },
   "tracker": {
+    "leaveActive": { "title": "Harjoitus on käynnissä", "message": "Haluatko jatkaa vai lopettaa ja tallentaa harjoituksen?", "continue": "Jatka harjoitusta", "save": "Lopeta ja tallenna" },
     "defaultRunner": "Juoksija",
     "voiceOn": "Ääni päällä",
     "voiceOff": "Ääni pois",

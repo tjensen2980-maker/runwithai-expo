@@ -727,6 +727,7 @@
     }
   },
   "tracker": {
+    "leaveActive": { "title": "Gníomhaíocht ar siúl", "message": "Ar mhaith leat leanúint ar aghaidh nó an ghníomhaíocht a chríochnú agus a shábháil?", "continue": "Lean ar aghaidh", "save": "Críochnaigh agus sábháil" },
     "defaultRunner": "Ritheoir",
     "voiceOn": "Guth ar siúl",
     "voiceOff": "Guth as",

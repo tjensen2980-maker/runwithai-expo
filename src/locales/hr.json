@@ -727,6 +727,7 @@
     }
   },
   "tracker": {
+    "leaveActive": { "title": "Aktivnost je u tijeku", "message": "Želite li nastaviti ili završiti i spremiti aktivnost?", "continue": "Nastavi aktivnost", "save": "Završi i spremi" },
     "defaultRunner": "Trkač",
     "voiceOn": "Glas uključen",
     "voiceOff": "Glas isključen",

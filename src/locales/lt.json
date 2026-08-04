@@ -727,6 +727,7 @@
     }
   },
   "tracker": {
+    "leaveActive": { "title": "Vyksta veikla", "message": "Ar norite tęsti, ar baigti ir išsaugoti veiklą?", "continue": "Tęsti veiklą", "save": "Baigti ir išsaugoti" },
     "defaultRunner": "Bėgikas",
     "voiceOn": "Balsas įjungtas",
     "voiceOff": "Balsas išjungtas",

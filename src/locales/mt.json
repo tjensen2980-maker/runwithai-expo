@@ -727,6 +727,7 @@
     }
   },
   "tracker": {
+    "leaveActive": { "title": "Attività għaddejja", "message": "Trid tkompli jew ittemm u tissejvja l-attività?", "continue": "Kompli l-attività", "save": "Temm u ssejvja" },
     "defaultRunner": "Ġerrej",
     "voiceOn": "Vuċi mixgħula",
     "voiceOff": "Vuċi mitfija",

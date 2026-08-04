@@ -719,6 +719,12 @@
     }
   },
   "tracker": {
+    "leaveActive": {
+      "title": "Activity in progress",
+      "message": "Do you want to continue or finish and save the activity?",
+      "continue": "Continue activity",
+      "save": "Finish and save"
+    },
     "defaultRunner": "runner",
     "voiceOn": "Voice on",
     "voiceOff": "Voice off",

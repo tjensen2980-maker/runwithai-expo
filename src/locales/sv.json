@@ -727,6 +727,7 @@
     }
   },
   "tracker": {
+    "leaveActive": { "title": "Aktivitet pågår", "message": "Vill du fortsätta eller avsluta och spara aktiviteten?", "continue": "Fortsätt aktiviteten", "save": "Avsluta och spara" },
     "defaultRunner": "Löpare",
     "voiceOn": "Röst på",
     "voiceOff": "Röst av",

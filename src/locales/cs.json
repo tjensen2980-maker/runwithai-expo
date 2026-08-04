@@ -727,6 +727,7 @@
     }
   },
   "tracker": {
+    "leaveActive": { "title": "Probíhá aktivita", "message": "Chcete pokračovat, nebo aktivitu ukončit a uložit?", "continue": "Pokračovat v aktivitě", "save": "Ukončit a uložit" },
     "defaultRunner": "Běžec",
     "voiceOn": "Hlas zapnut",
     "voiceOff": "Hlas vypnut",

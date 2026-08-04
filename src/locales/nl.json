@@ -727,6 +727,7 @@
     }
   },
   "tracker": {
+    "leaveActive": { "title": "Activiteit bezig", "message": "Wil je doorgaan of de activiteit beëindigen en opslaan?", "continue": "Activiteit voortzetten", "save": "Beëindigen en opslaan" },
     "defaultRunner": "hardloper",
     "voiceOn": "Stem aan",
     "voiceOff": "Stem uit",
