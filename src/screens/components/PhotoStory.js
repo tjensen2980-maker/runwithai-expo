@@ -30,6 +30,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { colors, SERVER, getAuthToken } from '../../data';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const isWeb = Platform.OS === 'web';
@@ -152,6 +153,7 @@ function StoryMap({ photos, route }) {
 
 export default function PhotoStory({ runId, visible, onClose, route }) {
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const [story, setStory] = useState(null);
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -222,7 +224,7 @@ export default function PhotoStory({ runId, visible, onClose, route }) {
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
       <View style={s.overlay}>
-        <View style={s.sheet}>
+        <View style={[s.sheet, { paddingBottom: Math.max(insets.bottom, 20) + 12 }]}>
           <View style={s.handle} />
 
           <ScrollView showsVerticalScrollIndicator={false}>
@@ -348,7 +350,6 @@ const s = StyleSheet.create({
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 20,
-    paddingBottom: Platform.OS === 'ios' ? 40 : 20,
     maxHeight: '92%',
   },
   handle: {
