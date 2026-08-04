@@ -8,7 +8,7 @@
 
 import { NativeModules, Platform } from 'react-native';
 
-const { LiveActivityModule } = NativeModules;
+const { LiveActivityModule, RunTrackingNotificationModule } = NativeModules;
 
 // ---------------------------------------------------------------------------
 // iOS: ActivityKit via native modul
@@ -19,6 +19,7 @@ const isIOSAvailable = Platform.OS === 'ios' && !!LiveActivityModule;
 // Android: vedvarende notifikation via expo-notifications
 // ---------------------------------------------------------------------------
 const isAndroid = Platform.OS === 'android';
+const isAndroidNativeAvailable = isAndroid && !!RunTrackingNotificationModule;
 
 let Notifications = null;
 if (isAndroid) {
@@ -215,6 +216,25 @@ export async function start(params) {
   }
 
   // Android
+  if (isAndroidNativeAvailable) {
+    try {
+      const granted = await ensureAndroidPermission();
+      if (!granted) return null;
+      const ok = await RunTrackingNotificationModule.start(
+        p.activityType,
+        p.distanceMeters,
+        p.durationSeconds,
+        p.paceMinPerKm,
+        p.isPaused
+      );
+      isActive = !!ok;
+      return ok ? ANDROID_NOTIFICATION_ID : null;
+    } catch (e) {
+      console.log('LiveActivity.start error (Android native):', e?.message || e);
+      return null;
+    }
+  }
+
   if (isAndroid && Notifications) {
     try {
       const granted = await ensureAndroidPermission();
@@ -263,6 +283,23 @@ export async function update(params) {
   }
 
   // Android: gen-postning med samme identifier opdaterer den eksisterende notifikation
+  if (isAndroidNativeAvailable) {
+    try {
+      const result = await RunTrackingNotificationModule.update(
+        p.activityType,
+        p.distanceMeters,
+        p.durationSeconds,
+        p.paceMinPerKm,
+        p.isPaused
+      );
+      isActive = true;
+      return result;
+    } catch (e) {
+      console.log('LiveActivity.update error (Android native):', e?.message || e);
+      return false;
+    }
+  }
+
   if (isAndroid && Notifications) {
     // En Android background task kan vaekkes i en ny JS-kontekst, hvor den
     // lokale isActive-variabel er nulstillet. Den aktive tracking-flag er da
@@ -295,6 +332,18 @@ export async function end() {
   }
 
   // Android
+  if (isAndroidNativeAvailable) {
+    try {
+      const result = await RunTrackingNotificationModule.end();
+      isActive = false;
+      return result;
+    } catch (e) {
+      console.log('LiveActivity.end error (Android native):', e?.message || e);
+      isActive = false;
+      return false;
+    }
+  }
+
   if (isAndroid && Notifications) {
     try {
       await Notifications.dismissNotificationAsync(ANDROID_NOTIFICATION_ID);
