@@ -727,6 +727,7 @@
     }
   },
   "tracker": {
+    "leaveActive": { "title": "Activitate în desfășurare", "message": "Doriți să continuați sau să încheiați și să salvați activitatea?", "continue": "Continuă activitatea", "save": "Încheie și salvează" },
     "defaultRunner": "Alergător",
     "voiceOn": "Voce activată",
     "voiceOff": "Voce dezactivată",

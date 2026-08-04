@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator, TextInput, Platform, AppState } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator, TextInput, Platform, AppState, Alert, BackHandler } from 'react-native';
 import { colors, SERVER, getAuthToken } from '../data';
 import VoiceCoach, { stopSpeaking, setVoiceAuthToken, setAllowMusicMixing as setVoiceCoachMixing } from '../components/VoiceCoach';
 import { useTranslation } from 'react-i18next';
@@ -57,7 +57,7 @@ if (!isWeb && typeof global !== 'undefined') {
   global._backgroundLocations = global._backgroundLocations || [];
   global._isBackgroundTracking = false;
   global._bgDistance = global._bgDistance || 0;
-global._bgLastPoint = global._bgLastPoint || null;
+  global._bgLastPoint = global._bgLastPoint || null;
   global._bgRoute = global._bgRoute || [];
 
 function _bgHaversine(lat1, lon1, lat2, lon2) {
@@ -110,6 +110,25 @@ if (!isWeb && TaskManager) {
           // Tilfoej punktet til baggrunds-ruten saa stregen foelger faktisk vej (ingen lige linjer)
           global._bgRoute.push({ latitude: p.latitude, longitude: p.longitude, timestamp: p.timestamp });
           global._bgLastPoint = p;
+        }
+        // Androids foreground-location-task fortsaetter, selv naar React Native
+        // er suspenderet. Opdater den samme lydloese statusnotifikation herfra,
+        // saa tid/distance ikke fryser paa laaseskaermen.
+        if (Platform.OS === 'android' && global._isBackgroundTracking && global._trackingStartedAt) {
+          const durationSeconds = Math.max(
+            global._trackingElapsedSeconds || 0,
+            Math.floor((Date.now() - global._trackingStartedAt) / 1000)
+          );
+          const distanceMeters = Math.max(global._liveDistanceMeters || 0, global._bgDistance || 0);
+          const km = distanceMeters / 1000;
+          const paceMinPerKm = km > 0 ? (durationSeconds / 60) / km : 0;
+          LiveActivity.update({
+            activityType: global._trackingActivityType || 'run',
+            distanceMeters,
+            durationSeconds,
+            paceMinPerKm,
+            isPaused: false,
+          }).catch(() => {});
         }
         // ────────────────────────────────────────────────────────────────
         console.log('BG location:', newLocations.length, 'pts, acc:', newLocations[0]?.accuracy?.toFixed(0) + 'm');
@@ -505,7 +524,9 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
           // Naar appen kommer i forgrunden: genstart location-tasken hvis den blev suspenderet i baggrunden
           if (global._isBackgroundTracking && global._locationTaskOptions) {
             Location.hasStartedLocationUpdatesAsync(BACKGROUND_LOCATION_TASK).then(function (running) {
-              // [NATIVE-ONLY DEAKTIVERET] if (!running) { Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions); }
+              if (Platform.OS === 'android' && !running) {
+                Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions).catch(function () {});
+              }
             }).catch(function () {});
           }
         console.log('App foregrounded, processing background locations...');
@@ -554,6 +575,7 @@ export default function RunTracker({ activityType = 'run', onBack, profile, leve
         }
         if (bgDist > distanceRef.current) {
           distanceRef.current = bgDist;
+          global._liveDistanceMeters = bgDist;
           setDistance(bgDist);
         }
       } catch (e) {
@@ -643,6 +665,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
       if (isValidPoint) {
         const newDistance = distanceRef.current + dist;
         distanceRef.current = newDistance;
+        global._liveDistanceMeters = newDistance;
         setDistance(newDistance);
         
                 // LET UDJAEVNING (kun visning/rute - distance regnes paa raa punkter, uaendret)
@@ -709,6 +732,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
           if (interpolatedDist > MIN_DISTANCE) {
             const newDistance = distanceRef.current + interpolatedDist;
             distanceRef.current = newDistance;
+            global._liveDistanceMeters = newDistance;
             setDistance(newDistance);
             const posWithData = {
               ...newPos,
@@ -765,7 +789,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
         return false;
       }
 
-      const isTaskRunning = await TaskManager.isTaskRegisteredAsync(BACKGROUND_LOCATION_TASK);
+      const isTaskRunning = await Location.hasStartedLocationUpdatesAsync(BACKGROUND_LOCATION_TASK);
       if (isTaskRunning) {
         await Location.stopLocationUpdatesAsync(BACKGROUND_LOCATION_TASK);
       }
@@ -794,7 +818,12 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
                 // naar skaermen er laast). Deferred updates er slaaet fra ovenfor.
                 activityType: Location.ActivityType.Fitness,
       };
-      // [NATIVE-ONLY DEAKTIVERET] await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions);
+      // Android skal bruge Expos rigtige foreground location service. Det er den,
+      // der holder GPS og TaskManager i live, naar skaermen er laast.
+      // iOS bruger fortsat det eksisterende native BackgroundLocation-modul.
+      if (Platform.OS === 'android') {
+        await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, global._locationTaskOptions);
+      }
 
       // Start ogsaa det native modul (aegte baggrundssession, fryser ikke med JS-traaden).
       try {
@@ -843,7 +872,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
 
     try {
       global._isBackgroundTracking = false;
-      const isTaskRunning = await TaskManager.isTaskRegisteredAsync(BACKGROUND_LOCATION_TASK);
+      const isTaskRunning = await Location.hasStartedLocationUpdatesAsync(BACKGROUND_LOCATION_TASK);
       if (isTaskRunning) {
         await Location.stopLocationUpdatesAsync(BACKGROUND_LOCATION_TASK);
         console.log('Background tracking stopped');
@@ -873,6 +902,10 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
     global._bgLastPoint = null;
     global._bgRoute = []; // reset GPS filter debug counters per run
     startTimeRef.current = Date.now() - (duration * 1000);
+    global._trackingStartedAt = startTimeRef.current;
+    global._trackingElapsedSeconds = duration;
+    global._trackingActivityType = activityType;
+    global._liveDistanceMeters = distanceRef.current;
     
     // Start Live Activity (iOS) - vises paa laaseskaerm og Dynamic Island
     LiveActivity.start({
@@ -919,6 +952,7 @@ const MIN_DISTANCE = Math.max(1, Math.min(4, accuracy * 0.3));
         const km = distanceRef.current / 1000;
         const paceMinPerKm = km > 0 ? (elapsed / 60) / km : 0;
         LiveActivity.update({
+          activityType,
           distanceMeters: distanceRef.current,
           durationSeconds: elapsed,
           paceMinPerKm: paceMinPerKm,
@@ -1016,6 +1050,8 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
 
   const pauseTracking = async () => {
     setIsPaused(true);
+    global._trackingElapsedSeconds = duration;
+    global._trackingStartedAt = null;
     if (intervalRef.current) clearInterval(intervalRef.current);
     stopGpsWatch();
     await stopBackgroundLocationTracking();
@@ -1023,6 +1059,7 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
     const km = distanceRef.current / 1000;
     const paceMinPerKm = km > 0 ? (duration / 60) / km : 0;
     LiveActivity.update({
+      activityType,
       distanceMeters: distanceRef.current,
       durationSeconds: duration,
       paceMinPerKm,
@@ -1035,6 +1072,8 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
     setIsPaused(false);
     setGpsStatus('waiting');
     startTimeRef.current = Date.now() - (duration * 1000);
+    global._trackingStartedAt = startTimeRef.current;
+    global._trackingElapsedSeconds = duration;
 
     const token = getAuthToken();
     setVoiceAuthToken(token);
@@ -1055,6 +1094,7 @@ console.log('iOS foreground GPS started (1000ms/1m) - bg task continues when loc
         const km = distanceRef.current / 1000;
         const paceMinPerKm = km > 0 ? (elapsed / 60) / km : 0;
         LiveActivity.update({
+          activityType,
           distanceMeters: distanceRef.current,
           durationSeconds: elapsed,
           paceMinPerKm: paceMinPerKm,
@@ -1129,6 +1169,9 @@ console.log('iOS resume foreground GPS started');
     
     // Afslut Live Activity
     LiveActivity.end().catch(() => {});
+    global._trackingStartedAt = null;
+    global._trackingElapsedSeconds = 0;
+    global._liveDistanceMeters = 0;
     
     setIsTracking(false);
 
@@ -1269,6 +1312,35 @@ const bikePayload = {
     if (onBack) onBack();
   };
 
+  // Androids system-tilbageknap maa aldrig lukke en aktiv tur. Vis samme
+  // sikkerhedsvalg for baade telefonens tilbageknap og appens egen tilbageknap.
+  const requestBack = () => {
+    if (isTracking || isPaused) {
+      Alert.alert(
+        t('tracker.leaveActive.title'),
+        t('tracker.leaveActive.message'),
+        [
+          { text: t('tracker.leaveActive.continue'), style: 'cancel' },
+          { text: t('tracker.leaveActive.save'), onPress: () => stopAndSave() },
+        ]
+      );
+      return true;
+    }
+    handleBack();
+    return true;
+  };
+
+  const requestBackRef = useRef(requestBack);
+  requestBackRef.current = requestBack;
+
+  useEffect(() => {
+    if (Platform.OS !== 'android') return undefined;
+    const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+      return requestBackRef.current ? requestBackRef.current() : true;
+    });
+    return () => subscription.remove();
+  }, []);
+
   const handleStoryClose = () => {
     setShowStory(false);
     setSavedRunId(null);
@@ -1310,7 +1382,7 @@ const formatPace = () => {
 
   return (
     <View style={s.container}>
-      <TouchableOpacity style={s.backBtn} onPress={handleBack} activeOpacity={0.7}>
+      <TouchableOpacity style={s.backBtn} onPress={requestBack} activeOpacity={0.7}>
         <Text style={s.backText}>← {t('common.back')}</Text>
       </TouchableOpacity>
       <View style={s.header}>

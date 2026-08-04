@@ -727,6 +727,7 @@
     }
   },
   "tracker": {
+    "leaveActive": { "title": "Dejavnost poteka", "message": "Želite nadaljevati ali končati in shraniti dejavnost?", "continue": "Nadaljuj dejavnost", "save": "Končaj in shrani" },
     "defaultRunner": "Tekač",
     "voiceOn": "Glas vklopljen",
     "voiceOff": "Glas izklopljen",

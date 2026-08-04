@@ -727,6 +727,7 @@
     }
   },
   "tracker": {
+    "leaveActive": { "title": "Aktivitāte turpinās", "message": "Vai vēlaties turpināt vai pabeigt un saglabāt aktivitāti?", "continue": "Turpināt aktivitāti", "save": "Pabeigt un saglabāt" },
     "defaultRunner": "Skrējējs",
     "voiceOn": "Balss ieslēgta",
     "voiceOff": "Balss izslēgta",

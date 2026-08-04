@@ -727,6 +727,7 @@
     }
   },
   "tracker": {
+    "leaveActive": { "title": "Aktivität läuft", "message": "Möchtest du fortfahren oder die Aktivität beenden und speichern?", "continue": "Aktivität fortsetzen", "save": "Beenden und speichern" },
     "defaultRunner": "Läufer",
     "voiceOn": "Stimme an",
     "voiceOff": "Stimme aus",

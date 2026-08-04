@@ -727,6 +727,7 @@
     }
   },
   "tracker": {
+    "leaveActive": { "title": "Tevékenység folyamatban", "message": "Folytatod, vagy befejezed és mented a tevékenységet?", "continue": "Tevékenység folytatása", "save": "Befejezés és mentés" },
     "defaultRunner": "Futó",
     "voiceOn": "Hang be",
     "voiceOff": "Hang ki",

@@ -727,6 +727,7 @@
     }
   },
   "tracker": {
+    "leaveActive": { "title": "Actividad en curso", "message": "¿Quieres continuar o finalizar y guardar la actividad?", "continue": "Continuar actividad", "save": "Finalizar y guardar" },
     "defaultRunner": "corredor",
     "voiceOn": "Voz activada",
     "voiceOff": "Voz desactivada",

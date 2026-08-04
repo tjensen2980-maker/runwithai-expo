@@ -727,6 +727,7 @@
     }
   },
   "tracker": {
+    "leaveActive": { "title": "Tegevus on pooleli", "message": "Kas soovid jätkata või tegevuse lõpetada ja salvestada?", "continue": "Jätka tegevust", "save": "Lõpeta ja salvesta" },
     "defaultRunner": "Jooksja",
     "voiceOn": "Hääl sees",
     "voiceOff": "Hääl väljas",
