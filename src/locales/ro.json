@@ -1400,7 +1400,7 @@
       {
         "title": "Integrari terță parte",
         "paragraphs": [
-          "RunWithAI se poate integra cu Garmin Connect pentru a importa date de rulare. Când ne conectăm, recuperăm numai datele de antrenament - niciodată datele de conectare."
+          "RunWithAI poate salva antrenamente în Apple Health sau Health Connect și poate trimite date de alergare către Strava atunci când le conectezi. Datele de autentificare nu sunt stocate niciodată în aplicație."
         ]
       },
       {
@@ -1469,6 +1469,25 @@
     ],
     "contactQuestion": "Aveți întrebări despre această politică sau despre datele dvs.?",
     "footer": "© 2026 RunWithAI. Toate drepturile rezervate."
+  },
+  "integrations": {
+  "title": "CONEXIUNI",
+  "connected": "Conectat",
+  "connectedAs": "Conectat ca {{name}}",
+  "notConnected": "Neconectat",
+  "healthDescription": "Salvează automat activitățile finalizate în {{service}}.",
+  "allowHealth": "Permite accesul la sănătate",
+  "stravaDescription": "Trimite automat alergările și plimbările noi către Strava. Poți sincroniza și activitățile anterioare.",
+  "connectStrava": "Conectează Strava",
+  "disconnect": "Deconectează",
+  "disconnectTitle": "Deconectează Strava",
+  "disconnectConfirm": "Vrei să deconectezi Strava?",
+  "syncExisting": "Sincronizează activitățile anterioare",
+  "syncedTitle": "Sincronizare finalizată",
+  "syncedCount": "Au fost sincronizate {{count}} activități",
+  "syncFailed": "Sincronizarea cu Strava nu a reușit.",
+  "connectFailed": "Conectarea la Strava nu a reușit.",
+  "notConfigured": "Strava nu este încă activat pe server."
   },
   "more": {
     "title": "Mai multe",

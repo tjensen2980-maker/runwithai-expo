@@ -1400,7 +1400,7 @@
       {
         "title": "Integrazzjonijiet ta' partijiet terzi",
         "paragraphs": [
-          "RunWithAI jista' jintegra ma' Garmin Connect biex jimporta data tat-tħaddim. Meta konnessi, aħna nġibu d-dejta tal-workout biss — qatt il-kredenzjali tal-login tiegħek."
+          "RunWithAI jista’ jissejvja workouts f’Apple Health jew Health Connect u jibgħat data tal-ġiri lil Strava meta tqabbadhom. Il-kredenzjali tal-login tiegħek qatt ma jinħażnu fl-app."
         ]
       },
       {
@@ -1469,6 +1469,25 @@
     ],
     "contactQuestion": "Għandek mistoqsijiet dwar din il-politika jew dwar id-dejta tiegħek?",
     "footer": "© 2026 RunWithAI. Id-drittijiet kollha riżervati."
+  },
+  "integrations": {
+  "title": "KONNESSJONIJIET",
+  "connected": "Konness",
+  "connectedAs": "Konness bħala {{name}}",
+  "notConnected": "Mhux konness",
+  "healthDescription": "Issejvja awtomatikament l-attivitajiet kompluti f’{{service}}.",
+  "allowHealth": "Ippermetti aċċess għas-saħħa",
+  "stravaDescription": "Ibgħat ġirjiet u mixjiet ġodda awtomatikament lil Strava. Tista’ wkoll tissinkronizza attivitajiet preċedenti.",
+  "connectStrava": "Qabbad Strava",
+  "disconnect": "Skonnettja",
+  "disconnectTitle": "Skonnettja Strava",
+  "disconnectConfirm": "Trid tiskonnettja Strava?",
+  "syncExisting": "Issinkronizza attivitajiet preċedenti",
+  "syncedTitle": "Sinkronizzazzjoni lesta",
+  "syncedCount": "Ġew sinkronizzati {{count}} attivitajiet",
+  "syncFailed": "Ma setax isir sinkronizzazzjoni ma’ Strava.",
+  "connectFailed": "Ma setax isir konnessjoni ma’ Strava.",
+  "notConfigured": "Strava għadu mhux attivat fuq is-server."
   },
   "more": {
     "title": "Aktar",

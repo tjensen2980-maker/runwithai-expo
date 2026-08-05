@@ -1400,7 +1400,7 @@
       {
         "title": "Integracije trećih strana",
         "paragraphs": [
-          "RunWithAI se može integrirati s Garmin Connectom za uvoz podataka o trčanju. Kada smo povezani, dohvaćamo samo podatke o vježbanju - nikada vaše vjerodajnice za prijavu."
+          "RunWithAI može spremati treninge u Apple Health ili Health Connect i slati podatke o trčanju na Stravu kada ih povežeš. Podaci za prijavu nikada se ne spremaju u aplikaciji."
         ]
       },
       {
@@ -1469,6 +1469,25 @@
     ],
     "contactQuestion": "Imate li pitanja o ovoj politici ili svojim podacima?",
     "footer": "© 2026 RunWithAI. Sva prava pridržana."
+  },
+  "integrations": {
+  "title": "POVEZIVANJA",
+  "connected": "Povezano",
+  "connectedAs": "Povezano kao {{name}}",
+  "notConnected": "Nije povezano",
+  "healthDescription": "Automatski spremaj dovršene aktivnosti u {{service}}.",
+  "allowHealth": "Dopusti pristup zdravlju",
+  "stravaDescription": "Automatski šalji nova trčanja i šetnje na Stravu. Možeš sinkronizirati i ranije aktivnosti.",
+  "connectStrava": "Poveži Stravu",
+  "disconnect": "Prekini vezu",
+  "disconnectTitle": "Odspoji Stravu",
+  "disconnectConfirm": "Želiš li odspojiti Stravu?",
+  "syncExisting": "Sinkroniziraj ranije aktivnosti",
+  "syncedTitle": "Sinkronizacija završena",
+  "syncedCount": "Sinkronizirano aktivnosti: {{count}}",
+  "syncFailed": "Sinkronizacija sa Stravom nije uspjela.",
+  "connectFailed": "Povezivanje sa Stravom nije uspjelo.",
+  "notConfigured": "Strava još nije aktivirana na poslužitelju."
   },
   "more": {
     "title": "Više",

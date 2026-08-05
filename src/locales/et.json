@@ -1400,7 +1400,7 @@
       {
         "title": "Kolmandate osapoolte integratsioonid",
         "paragraphs": [
-          "RunWithAI võib jooksvate andmete importimiseks integreeruda Garmin Connectiga. Kui see on ühendatud, hangime ainult treeninguandmeid – mitte kunagi teie sisselogimismandaate."
+          "RunWithAI saab salvestada treeningud Apple Healthi või Health Connecti ja saata jooksuandmed Stravasse, kui need ühendad. Sisselogimisandmeid ei salvestata kunagi rakendusse."
         ]
       },
       {
@@ -1469,6 +1469,25 @@
     ],
     "contactQuestion": "Kas teil on selle poliitika või oma andmete kohta küsimusi?",
     "footer": "© 2026 RunWithAI. Kõik õigused kaitstud."
+  },
+  "integrations": {
+  "title": "ÜHENDUSED",
+  "connected": "Ühendatud",
+  "connectedAs": "Ühendatud kasutajana {{name}}",
+  "notConnected": "Pole ühendatud",
+  "healthDescription": "Salvesta lõpetatud tegevused automaatselt teenusesse {{service}}.",
+  "allowHealth": "Luba terviseandmete juurdepääs",
+  "stravaDescription": "Saada uued jooksud ja kõnnid automaatselt Stravasse. Samuti saab sünkroonida varasemaid tegevusi.",
+  "connectStrava": "Ühenda Strava",
+  "disconnect": "Katkesta ühendus",
+  "disconnectTitle": "Katkesta Strava ühendus",
+  "disconnectConfirm": "Kas soovid Strava ühenduse katkestada?",
+  "syncExisting": "Sünkrooni varasemad tegevused",
+  "syncedTitle": "Sünkroonimine valmis",
+  "syncedCount": "Sünkrooniti {{count}} tegevust",
+  "syncFailed": "Stravaga sünkroonimine ebaõnnestus.",
+  "connectFailed": "Stravaga ühendamine ebaõnnestus.",
+  "notConfigured": "Strava pole serveris veel aktiveeritud."
   },
   "more": {
     "title": "Veel",

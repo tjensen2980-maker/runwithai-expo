@@ -1400,7 +1400,7 @@
       {
         "title": "Harmadik féltől származó integrációk",
         "paragraphs": [
-          "A RunWithAI integrálható a Garmin Connect szolgáltatással a futó adatok importálásához. Csatlakozáskor csak az edzésadatokat kérjük le – a bejelentkezési adatait nem."
+          "A RunWithAI edzéseket menthet az Apple Health vagy Health Connect szolgáltatásba, és futási adatokat küldhet a Stravára, ha összekapcsolod őket. A bejelentkezési adatokat az alkalmazás soha nem tárolja."
         ]
       },
       {
@@ -1469,6 +1469,25 @@
     ],
     "contactQuestion": "Kérdései vannak ezzel a szabályzattal vagy adataival kapcsolatban?",
     "footer": "© 2026 RunWithAI. Minden jog fenntartva."
+  },
+  "integrations": {
+  "title": "KAPCSOLATOK",
+  "connected": "Csatlakoztatva",
+  "connectedAs": "Csatlakoztatva mint {{name}}",
+  "notConnected": "Nincs csatlakoztatva",
+  "healthDescription": "A befejezett tevékenységek automatikus mentése ide: {{service}}.",
+  "allowHealth": "Egészségügyi hozzáférés engedélyezése",
+  "stravaDescription": "Az új futások és séták automatikus küldése a Stravára. A korábbi tevékenységek is szinkronizálhatók.",
+  "connectStrava": "Strava csatlakoztatása",
+  "disconnect": "Leválasztás",
+  "disconnectTitle": "Strava leválasztása",
+  "disconnectConfirm": "Le szeretnéd választani a Stravát?",
+  "syncExisting": "Korábbi tevékenységek szinkronizálása",
+  "syncedTitle": "Szinkronizálás kész",
+  "syncedCount": "{{count}} tevékenység szinkronizálva",
+  "syncFailed": "Nem sikerült szinkronizálni a Stravával.",
+  "connectFailed": "Nem sikerült csatlakozni a Stravához.",
+  "notConfigured": "A Strava még nincs aktiválva a szerveren."
   },
   "more": {
     "title": "Továbbiak",

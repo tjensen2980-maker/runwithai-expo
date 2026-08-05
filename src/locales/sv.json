@@ -1400,7 +1400,7 @@
       {
         "title": "Tredjepartsintegrationer",
         "paragraphs": [
-          "RunWithAI kan integreras med Garmin Connect för att importera löpdata. När vi är anslutna hämtar vi endast träningsdata – aldrig dina inloggningsuppgifter."
+          "RunWithAI kan spara träningspass i Apple Health eller Health Connect och skicka löpdata till Strava när du ansluter dem. Dina inloggningsuppgifter sparas aldrig i appen."
         ]
       },
       {
@@ -1469,6 +1469,25 @@
     ],
     "contactQuestion": "Har du frågor om denna policy eller dina uppgifter?",
     "footer": "© 2026 RunWithAI. Alla rättigheter reserverade."
+  },
+  "integrations": {
+  "title": "ANSLUTNINGAR",
+  "connected": "Ansluten",
+  "connectedAs": "Ansluten som {{name}}",
+  "notConnected": "Inte ansluten",
+  "healthDescription": "Spara slutförda aktiviteter automatiskt i {{service}}.",
+  "allowHealth": "Tillåt hälsoåtkomst",
+  "stravaDescription": "Skicka nya löp- och gångpass automatiskt till Strava. Du kan också synkronisera tidigare aktiviteter.",
+  "connectStrava": "Anslut Strava",
+  "disconnect": "Koppla från",
+  "disconnectTitle": "Koppla från Strava",
+  "disconnectConfirm": "Vill du koppla från Strava?",
+  "syncExisting": "Synkronisera tidigare aktiviteter",
+  "syncedTitle": "Synkronisering klar",
+  "syncedCount": "{{count}} aktiviteter synkroniserades",
+  "syncFailed": "Kunde inte synkronisera med Strava.",
+  "connectFailed": "Kunde inte ansluta till Strava.",
+  "notConfigured": "Strava är ännu inte aktiverat på servern."
   },
   "more": {
     "title": "Mer",

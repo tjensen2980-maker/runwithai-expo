@@ -1400,7 +1400,7 @@
       {
         "title": "Kolmannen osapuolen integraatiot",
         "paragraphs": [
-          "RunWithAI voi integroitua Garmin Connectiin juoksutietojen tuomista varten. Kun yhteys on muodostettu, haemme vain harjoitustiedot – emme koskaan kirjautumistietojasi."
+          "RunWithAI voi tallentaa harjoituksia Apple Healthiin tai Health Connectiin ja lähettää juoksutietoja Stravaan, kun yhdistät palvelut. Kirjautumistietojasi ei koskaan tallenneta sovellukseen."
         ]
       },
       {
@@ -1469,6 +1469,25 @@
     ],
     "contactQuestion": "Onko sinulla kysyttävää tästä käytännöstä tai tiedoistasi?",
     "footer": "© 2026 RunWithAI. Kaikki oikeudet pidätetään."
+  },
+  "integrations": {
+  "title": "YHTEYDET",
+  "connected": "Yhdistetty",
+  "connectedAs": "Yhdistetty käyttäjänä {{name}}",
+  "notConnected": "Ei yhdistetty",
+  "healthDescription": "Tallenna suoritetut harjoitukset automaattisesti palveluun {{service}}.",
+  "allowHealth": "Salli terveystietojen käyttö",
+  "stravaDescription": "Lähetä uudet juoksut ja kävelyt automaattisesti Stravaan. Voit myös synkronoida aiemmat harjoitukset.",
+  "connectStrava": "Yhdistä Strava",
+  "disconnect": "Katkaise yhteys",
+  "disconnectTitle": "Katkaise Strava-yhteys",
+  "disconnectConfirm": "Haluatko katkaista Strava-yhteyden?",
+  "syncExisting": "Synkronoi aiemmat harjoitukset",
+  "syncedTitle": "Synkronointi valmis",
+  "syncedCount": "{{count}} harjoitusta synkronoitiin",
+  "syncFailed": "Synkronointi Stravan kanssa epäonnistui.",
+  "connectFailed": "Yhteys Stravaan epäonnistui.",
+  "notConfigured": "Stravaa ei ole vielä otettu käyttöön palvelimella."
   },
   "more": {
     "title": "Lisää",

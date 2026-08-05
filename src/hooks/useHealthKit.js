@@ -287,15 +287,42 @@ export function useHealthKit({ enabled = true, heartRateInterval = 5000 } = {}) 
         isTrackingRef.current = false;
     }, []);
 
+    const requestAuthorization = useCallback(async () => {
+        if (Platform.OS !== 'ios' || !HK) return false;
+        try {
+            await safeRequestAuth();
+            setIsAuthorized(true);
+            setError(null);
+            return true;
+        } catch (e) {
+            setError((e && e.message) ? e.message : String(e));
+            return false;
+        }
+    }, []);
+
     const saveWorkout = useCallback(async (workoutData) => {
         if (!isAuthorized || Platform.OS !== 'ios' || !HK) return { success: false, error: 'HealthKit not available' };
         try {
             const saveFn = pick('saveWorkoutSample', 'saveWorkout');
             if (!saveFn) return { success: false, error: 'saveWorkout not supported' };
-            const result = await saveFn('HKWorkoutActivityTypeRunning', [], workoutData.startTime, workoutData.endTime, {
-                totalEnergyBurned: { quantity: workoutData.calories || 0, unit: 'kcal' },
-                totalDistance: { quantity: workoutData.distance || 0, unit: 'm' },
-            });
+            const activityTypes = { run: 37, walk: 52, bike: 13 };
+            const startTime = new Date(workoutData.startTime);
+            const endTime = new Date(workoutData.endTime);
+            const result = await saveFn(
+                activityTypes[workoutData.activityType] || activityTypes.run,
+                [],
+                startTime,
+                endTime,
+                {
+                    distance: Math.max(0, Number(workoutData.distance || 0)),
+                    energyBurned: Math.max(0, Number(workoutData.calories || 0)),
+                },
+                {
+                    HKSyncIdentifier: `runwithai-${workoutData.id || startTime.getTime()}`,
+                    HKSyncVersion: 1,
+                    HKWasUserEntered: false,
+                }
+            );
             return { success: true, result };
         } catch (e) {
             return { success: false, error: e };
@@ -339,7 +366,7 @@ export function useHealthKit({ enabled = true, heartRateInterval = 5000 } = {}) 
         heartRate, stepCount, distance, calories,
         startTracking, stopTracking, saveWorkout,
         fetchHeartRate, fetchStepCount, fetchDistance, fetchCalories,
-        fetchDailyCalories, fetchWorkouts,
+        fetchDailyCalories, fetchWorkouts, requestAuthorization,
     };
 }
 

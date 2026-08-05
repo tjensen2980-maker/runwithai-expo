@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
 import * as Notif from '../utils/notifications';
+import Integrations from './components/Integrations';
 let DTP = null; try { DTP = require('@react-native-community/datetimepicker').default; } catch(e) {}
 
 function Field({ label, value, onChange, keyboard, placeholder }) {
@@ -228,7 +229,7 @@ function LanguageSelector() {
 
 
 
-export default function Settings({ profile, level, onProfileChange, onLevelChange, onLogout, onBack, onNavigate, subscription: subscriptionProp, onShowPricing }) {
+export default function Settings({ profile, level, onProfileChange, onLevelChange, onLogout, onBack, onNavigate, subscription: subscriptionProp, onShowPricing, healthSync }) {
   const { t } = useTranslation();
   const translatedReminderDays = t('settings.reminders.days', { returnObjects: true });
   const reminderDays = Array.isArray(translatedReminderDays)
@@ -652,6 +653,8 @@ const save = async () => {
         </View>
 
 {/* ── PRIVATLIV ── */}
+        <Integrations healthSync={healthSync} />
+
         <Text style={s.sectionTitle}>{t('settings.sections.privacy')}</Text>
         <View style={s.card}>
           {[

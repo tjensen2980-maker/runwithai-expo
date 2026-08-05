@@ -1400,7 +1400,7 @@
       {
         "title": "Comhtháthú tríú páirtí",
         "paragraphs": [
-          "Féadfaidh RunWithAI comhtháthú le Garmin Connect chun sonraí reatha a allmhairiú. Nuair a bhíonn baint againn, ní aisghabhaimid ach sonraí cleachtaidh - gan do dhintiúir logáil isteach riamh."
+          "Is féidir le RunWithAI cleachtaí a shábháil in Apple Health nó Health Connect agus sonraí reatha a sheoladh chuig Strava nuair a nascann tú iad. Ní stóráiltear do dhintiúir logála isteach san aip riamh."
         ]
       },
       {
@@ -1469,6 +1469,25 @@
     ],
     "contactQuestion": "An bhfuil ceisteanna agat faoin bpolasaí seo nó faoi na sonraí atá agat?",
     "footer": "© 2026 RunWithAI. Gach ceart ar cosaint."
+  },
+  "integrations": {
+  "title": "NAISC",
+  "connected": "Ceangailte",
+  "connectedAs": "Ceangailte mar {{name}}",
+  "notConnected": "Gan nasc",
+  "healthDescription": "Sábháil gníomhaíochtaí críochnaithe go huathoibríoch in {{service}}.",
+  "allowHealth": "Ceadaigh rochtain sláinte",
+  "stravaDescription": "Seol ritheanna agus siúlóidí nua go Strava go huathoibríoch. Is féidir gníomhaíochtaí níos sine a shioncronú freisin.",
+  "connectStrava": "Ceangail Strava",
+  "disconnect": "Dícheangail",
+  "disconnectTitle": "Dícheangail Strava",
+  "disconnectConfirm": "Ar mhaith leat Strava a dhícheangal?",
+  "syncExisting": "Sioncronaigh gníomhaíochtaí níos sine",
+  "syncedTitle": "Sioncronú críochnaithe",
+  "syncedCount": "Sioncronaíodh {{count}} gníomhaíocht",
+  "syncFailed": "Níorbh fhéidir sioncronú le Strava.",
+  "connectFailed": "Níorbh fhéidir ceangal le Strava.",
+  "notConfigured": "Níl Strava cumasaithe ar an bhfreastalaí fós."
   },
   "more": {
     "title": "Tuilleadh",
