@@ -1400,7 +1400,7 @@
       {
         "title": "Integraties van derden",
         "paragraphs": [
-          "RunWithAI kan worden geïntegreerd met Garmin Connect om hardloopgegevens te importeren. Wanneer we verbonden zijn, halen we alleen trainingsgegevens op, nooit uw inloggegevens."
+          "RunWithAI kan trainingen opslaan in Apple Health of Health Connect en hardloopgegevens naar Strava sturen wanneer je deze koppelt. Je inloggegevens worden nooit in de app opgeslagen."
         ]
       },
       {
@@ -1469,6 +1469,25 @@
     ],
     "contactQuestion": "Heeft u vragen over dit beleid of uw gegevens?",
     "footer": "© 2026 RunWithAI. Alle rechten voorbehouden."
+  },
+  "integrations": {
+  "title": "VERBINDINGEN",
+  "connected": "Verbonden",
+  "connectedAs": "Verbonden als {{name}}",
+  "notConnected": "Niet verbonden",
+  "healthDescription": "Voltooide activiteiten automatisch opslaan in {{service}}.",
+  "allowHealth": "Gezondheidstoegang toestaan",
+  "stravaDescription": "Nieuwe hardloop- en wandelactiviteiten automatisch naar Strava sturen. Je kunt ook eerdere activiteiten synchroniseren.",
+  "connectStrava": "Strava verbinden",
+  "disconnect": "Verbinding verbreken",
+  "disconnectTitle": "Strava loskoppelen",
+  "disconnectConfirm": "Wil je Strava loskoppelen?",
+  "syncExisting": "Eerdere activiteiten synchroniseren",
+  "syncedTitle": "Synchronisatie voltooid",
+  "syncedCount": "{{count}} activiteiten gesynchroniseerd",
+  "syncFailed": "Synchroniseren met Strava is mislukt.",
+  "connectFailed": "Verbinden met Strava is mislukt.",
+  "notConfigured": "Strava is nog niet geactiveerd op de server."
   },
   "more": {
     "title": "Meer",

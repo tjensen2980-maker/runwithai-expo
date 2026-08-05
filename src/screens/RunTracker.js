@@ -474,7 +474,7 @@ const ps = StyleSheet.create({
 });
 
 // ─── RUNTRACKER COMPONENT ───────────────────────────────────────────────────
-export default function RunTracker({ activityType = 'run', onBack, profile, level, weekPlan, nextWorkout, runs, isPro = false, onShowPricing }) {
+export default function RunTracker({ activityType = 'run', onBack, profile, level, weekPlan, nextWorkout, runs, isPro = false, onShowPricing, saveHealthWorkout }) {
   const { t } = useTranslation();
   const [isTracking, setIsTracking] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(false); // TEST: AI-coach starter slaaet fra for at teste baggrunds-GPS
@@ -1380,6 +1380,24 @@ const bikePayload = {
         console.log('Server response:', JSON.stringify(result));
 
         if (result.id) {
+          if (saveHealthWorkout) {
+            try {
+              const healthResult = await saveHealthWorkout({
+                id: result.id,
+                activityType,
+                startTime: new Date(Date.now() - duration * 1000),
+                endTime: new Date(),
+                distance: Math.round(km * 1000),
+                calories,
+                route,
+              });
+              if (healthResult && healthResult.success === false) {
+                console.warn('[Health] workout was not saved:', healthResult.error);
+              }
+            } catch (healthError) {
+              console.warn('[Health] workout save failed:', healthError);
+            }
+          }
           const hadPhotos = getPendingPhotos().length > 0;
           try {
             await uploadPendingPhotos(result.id);

@@ -2,6 +2,7 @@
   "expo": {
     "name": "RunWithAI",
     "slug": "runwithai",
+    "scheme": "app.runwithai",
     "newArchEnabled": false,
     "version": "2.5.12",
     "orientation": "portrait",
@@ -86,7 +87,13 @@
         "android.permission.ACCESS_BACKGROUND_LOCATION",
         "android.permission.FOREGROUND_SERVICE",
         "android.permission.FOREGROUND_SERVICE_LOCATION",
-        "android.permission.POST_NOTIFICATIONS"
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.health.READ_ACTIVE_CALORIES_BURNED",
+        "android.permission.health.READ_TOTAL_CALORIES_BURNED",
+        "android.permission.health.WRITE_EXERCISE",
+        "android.permission.health.WRITE_EXERCISE_ROUTE",
+        "android.permission.health.WRITE_DISTANCE",
+        "android.permission.health.WRITE_TOTAL_CALORIES_BURNED"
       ],
       "config": {
         "googleMaps": {

@@ -1400,7 +1400,7 @@
       {
         "title": "Integrácie tretích strán",
         "paragraphs": [
-          "RunWithAI sa môže integrovať s Garmin Connect na import údajov o behu. Po pripojení získavame iba údaje o cvičení – nikdy nie vaše prihlasovacie údaje."
+          "RunWithAI môže ukladať tréningy do Apple Health alebo Health Connect a odosielať bežecké údaje do Stravy, keď ich pripojíte. Prihlasovacie údaje sa v aplikácii nikdy neukladajú."
         ]
       },
       {
@@ -1469,6 +1469,25 @@
     ],
     "contactQuestion": "Máte otázky týkajúce sa týchto pravidiel alebo vašich údajov?",
     "footer": "© 2026 RunWithAI. Všetky práva vyhradené."
+  },
+  "integrations": {
+  "title": "PRIPOJENIA",
+  "connected": "Pripojené",
+  "connectedAs": "Pripojené ako {{name}}",
+  "notConnected": "Nepripojené",
+  "healthDescription": "Automaticky ukladať dokončené aktivity do {{service}}.",
+  "allowHealth": "Povoliť prístup k zdraviu",
+  "stravaDescription": "Automaticky odosielať nové behy a prechádzky do Stravy. Môžete synchronizovať aj staršie aktivity.",
+  "connectStrava": "Pripojiť Stravu",
+  "disconnect": "Odpojiť",
+  "disconnectTitle": "Odpojiť Stravu",
+  "disconnectConfirm": "Chcete odpojiť Stravu?",
+  "syncExisting": "Synchronizovať staršie aktivity",
+  "syncedTitle": "Synchronizácia dokončená",
+  "syncedCount": "Synchronizovaných aktivít: {{count}}",
+  "syncFailed": "Synchronizácia so Stravou zlyhala.",
+  "connectFailed": "Pripojenie k Strave zlyhalo.",
+  "notConfigured": "Strava zatiaľ nie je na serveri aktivovaná."
   },
   "more": {
     "title": "Viac",

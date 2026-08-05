@@ -1400,7 +1400,7 @@
       {
         "title": "Trešo pušu integrācijas",
         "paragraphs": [
-          "RunWithAI var integrēties ar Garmin Connect, lai importētu darbības datus. Kad ir izveidots savienojums, mēs izgūstam tikai treniņu datus — nekad jūsu pieteikšanās akreditācijas datus."
+          "RunWithAI var saglabāt treniņus Apple Health vai Health Connect un nosūtīt skriešanas datus uz Strava, kad tos savienojat. Pieteikšanās dati lietotnē nekad netiek glabāti."
         ]
       },
       {
@@ -1469,6 +1469,25 @@
     ],
     "contactQuestion": "Vai jums ir jautājumi par šo politiku vai jūsu datiem?",
     "footer": "© 2026 RunWithAI. Visas tiesības paturētas."
+  },
+  "integrations": {
+  "title": "SAVIENOJUMI",
+  "connected": "Savienots",
+  "connectedAs": "Savienots kā {{name}}",
+  "notConnected": "Nav savienots",
+  "healthDescription": "Automātiski saglabāt pabeigtās aktivitātes pakalpojumā {{service}}.",
+  "allowHealth": "Atļaut piekļuvi veselības datiem",
+  "stravaDescription": "Automātiski nosūtīt jaunus skrējienus un pastaigas uz Strava. Var sinhronizēt arī iepriekšējās aktivitātes.",
+  "connectStrava": "Savienot Strava",
+  "disconnect": "Atvienot",
+  "disconnectTitle": "Atvienot Strava",
+  "disconnectConfirm": "Vai vēlaties atvienot Strava?",
+  "syncExisting": "Sinhronizēt iepriekšējās aktivitātes",
+  "syncedTitle": "Sinhronizācija pabeigta",
+  "syncedCount": "Sinhronizētas aktivitātes: {{count}}",
+  "syncFailed": "Neizdevās sinhronizēt ar Strava.",
+  "connectFailed": "Neizdevās savienoties ar Strava.",
+  "notConfigured": "Strava serverī vēl nav aktivizēta."
   },
   "more": {
     "title": "Vairāk",

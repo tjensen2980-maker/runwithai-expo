@@ -1400,7 +1400,7 @@
       {
         "title": "Integraciones de terceros",
         "paragraphs": [
-          "RunWithAI puede integrarse con Garmin Connect para importar datos de carrera. Cuando estamos conectados, solo recuperamos datos de entrenamiento, nunca sus credenciales de inicio de sesión."
+          "RunWithAI puede guardar entrenamientos en Apple Health o Health Connect y enviar datos de carrera a Strava cuando los conectas. Tus credenciales de inicio de sesión nunca se almacenan en la app."
         ]
       },
       {
@@ -1469,6 +1469,25 @@
     ],
     "contactQuestion": "¿Tiene preguntas sobre esta política o sus datos?",
     "footer": "© 2026 CorreConAI. Reservados todos los derechos."
+  },
+  "integrations": {
+  "title": "CONEXIONES",
+  "connected": "Conectado",
+  "connectedAs": "Conectado como {{name}}",
+  "notConnected": "No conectado",
+  "healthDescription": "Guardar automáticamente las actividades completadas en {{service}}.",
+  "allowHealth": "Permitir acceso a Salud",
+  "stravaDescription": "Enviar automáticamente las nuevas carreras y caminatas a Strava. También puedes sincronizar actividades anteriores.",
+  "connectStrava": "Conectar Strava",
+  "disconnect": "Desconectar",
+  "disconnectTitle": "Desconectar Strava",
+  "disconnectConfirm": "¿Quieres desconectar Strava?",
+  "syncExisting": "Sincronizar actividades anteriores",
+  "syncedTitle": "Sincronización completada",
+  "syncedCount": "Se sincronizaron {{count}} actividades",
+  "syncFailed": "No se pudo sincronizar con Strava.",
+  "connectFailed": "No se pudo conectar con Strava.",
+  "notConfigured": "Strava aún no está activado en el servidor."
   },
   "more": {
     "title": "Más",

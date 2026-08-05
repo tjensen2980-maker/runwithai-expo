@@ -389,9 +389,9 @@ export default function App() {
 
   const token = getAuthToken();
   const { subscription, tier, isPro, isBasic, isFree, canUseAICoach, canUseAllActivities, weeklyActivityLimit, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
-  const { calories: hkCalories, fetchDailyCalories, isSupported: hkSupported, isAvailable: hkAvail, isAuthorized: hkAuth, isInitializing: hkInit, error: hkError } = useHealthKit();
+  const { calories: hkCalories, fetchDailyCalories, isSupported: hkSupported, isAvailable: hkAvail, isAuthorized: hkAuth, isInitializing: hkInit, error: hkError, saveWorkout: hkSaveWorkout, requestAuthorization: hkRequestAuthorization } = useHealthKit();
   // Android: Health Connect parallel til iOS HealthKit. På modsat platform returnerer hooken bare 0.
-  const { calories: hcCalories, fetchDailyCalories: hcFetchDailyCalories, isAuthorized: hcAuth } = useHealthConnect();
+  const { calories: hcCalories, fetchDailyCalories: hcFetchDailyCalories, isAuthorized: hcAuth, canWriteWorkouts: hcWorkoutAuth, isSupported: hcSupported, saveWorkout: hcSaveWorkout, requestAuthorization: hcRequestAuthorization } = useHealthConnect();
   // Kombineret kalorie-værdi: kun én af dem er > 0 på en given platform.
   const combinedHealthCalories = (hkCalories || 0) + (hcCalories || 0);
   const combinedFetchDailyCalories = async () => {
@@ -399,6 +399,9 @@ export default function App() {
     if (hcFetchDailyCalories) await hcFetchDailyCalories();
   };
   const combinedAuth = hkAuth || hcAuth;
+  const healthSync = Platform.OS === 'ios'
+    ? { isAuthorized: hkAuth, isSupported: hkSupported, requestAuthorization: hkRequestAuthorization, saveWorkout: hkSaveWorkout }
+    : { isAuthorized: hcWorkoutAuth, isSupported: hcSupported, requestAuthorization: hcRequestAuthorization, saveWorkout: hcSaveWorkout };
 
   useEffect(() => { trainingPlanRef.current = trainingPlan; }, [trainingPlan]);
 
@@ -667,6 +670,7 @@ if (type === 'pick') {
       <SafeAreaProvider>
         <RunTracker profile={profile} level={level} weekPlan={weekPlan} nextWorkout={nextWorkout}
           runs={runs} activityType={activityType} isPro={isPro}
+          saveHealthWorkout={healthSync.saveWorkout}
           onBack={() => setTab('run')} onShowPricing={() => setShowTierCarousel(true)} />
         <OnboardingCarousel
           visible={showTierCarousel}
@@ -683,7 +687,7 @@ if (tab === 'cycleTracker') {
     return (
       <SafeAreaProvider>
         <CycleTracker profile={profile} level={level} weekPlan={weekPlan} nextWorkout={nextWorkout}
-          runs={runs} onBack={() => { setActivityType(null); setTab('run'); loadData(); }} onShowPricing={() => setShowTierCarousel(true)} />
+          runs={runs} saveHealthWorkout={healthSync.saveWorkout} onBack={() => { setActivityType(null); setTab('run'); loadData(); }} onShowPricing={() => setShowTierCarousel(true)} />
       </SafeAreaProvider>
     );
   }
@@ -746,7 +750,7 @@ if (tab === 'cycleTracker') {
       case 'more':
       return <More onNavigate={setTab} profile={profile} isPro={isPro} isFree={isFree} onShowPricing={() => setShowTierCarousel(true)} />;
     case 'settings':
-        return <Settings onNavigate={setTab} level={level || 'intermediate'} onLevelChange={(lv) => { setLevel(lv); setProfile(p => ({ ...p, level: lv })); }} profile={profile} onProfileChange={setProfile} onLogout={handleLogout} onBack={() => setTab('more')} subscription={subscription} onShowPricing={() => setShowTierCarousel(true)} />;
+        return <Settings onNavigate={setTab} level={level || 'intermediate'} onLevelChange={(lv) => { setLevel(lv); setProfile(p => ({ ...p, level: lv })); }} profile={profile} onProfileChange={setProfile} onLogout={handleLogout} onBack={() => setTab('more')} subscription={subscription} onShowPricing={() => setShowTierCarousel(true)} healthSync={healthSync} />;
       case 'profile':
         return <Profile profile={profile} onProfileChange={(form) => setProfile(form)} onBack={() => setTab('more')} />;
       case 'goalsScreen':

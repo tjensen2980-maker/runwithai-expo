@@ -15,6 +15,10 @@
     <!-- Health Connect permissions -->
     <uses-permission android:name="android.permission.health.READ_ACTIVE_CALORIES_BURNED"/>
     <uses-permission android:name="android.permission.health.READ_TOTAL_CALORIES_BURNED"/>
+    <uses-permission android:name="android.permission.health.WRITE_EXERCISE"/>
+    <uses-permission android:name="android.permission.health.WRITE_EXERCISE_ROUTE"/>
+    <uses-permission android:name="android.permission.health.WRITE_DISTANCE"/>
+    <uses-permission android:name="android.permission.health.WRITE_TOTAL_CALORIES_BURNED"/>
     <queries>
           <intent>
                   <action android:name="android.intent.action.VIEW"/>
@@ -39,6 +43,12 @@
                             <category android:name="android.intent.category.DEFAULT"/>
                             <category android:name="android.intent.category.BROWSABLE"/>
                             <data android:scheme="exp+runwithai"/>
+                  </intent-filter>
+                  <intent-filter>
+                            <action android:name="android.intent.action.VIEW"/>
+                            <category android:name="android.intent.category.DEFAULT"/>
+                            <category android:name="android.intent.category.BROWSABLE"/>
+                            <data android:scheme="app.runwithai" android:host="strava-callback"/>
                   </intent-filter>
               <!-- Health Connect permission usage rationale (Android 14+) -->
             <intent-filter>

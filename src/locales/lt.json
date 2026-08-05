@@ -1400,7 +1400,7 @@
       {
         "title": "Trečiųjų šalių integravimas",
         "paragraphs": [
-          "„RunWithAI“ gali būti integruotas su „Garmin Connect“, kad importuotų bėgimo duomenis. Prisijungę gauname tik treniruočių duomenis – niekada jūsų prisijungimo duomenų."
+          "„RunWithAI“ gali išsaugoti treniruotes „Apple Health“ arba „Health Connect“ ir siųsti bėgimo duomenis į „Strava“, kai juos prijungiate. Prisijungimo duomenys programėlėje niekada nesaugomi."
         ]
       },
       {
@@ -1469,6 +1469,25 @@
     ],
     "contactQuestion": "Ar turite klausimų apie šią politiką arba savo duomenis?",
     "footer": "© 2026 RunWithAI. Visos teisės saugomos."
+  },
+  "integrations": {
+  "title": "RYŠIAI",
+  "connected": "Prisijungta",
+  "connectedAs": "Prisijungta kaip {{name}}",
+  "notConnected": "Neprisijungta",
+  "healthDescription": "Automatiškai išsaugoti užbaigtas veiklas į {{service}}.",
+  "allowHealth": "Leisti sveikatos prieigą",
+  "stravaDescription": "Automatiškai siųsti naujus bėgimus ir pasivaikščiojimus į Strava. Taip pat galima sinchronizuoti ankstesnes veiklas.",
+  "connectStrava": "Prijungti Strava",
+  "disconnect": "Atsijungti",
+  "disconnectTitle": "Atjungti Strava",
+  "disconnectConfirm": "Ar norite atjungti Strava?",
+  "syncExisting": "Sinchronizuoti ankstesnes veiklas",
+  "syncedTitle": "Sinchronizavimas baigtas",
+  "syncedCount": "Sinchronizuota veiklų: {{count}}",
+  "syncFailed": "Nepavyko sinchronizuoti su Strava.",
+  "connectFailed": "Nepavyko prisijungti prie Strava.",
+  "notConfigured": "Strava serveryje dar neįjungta."
   },
   "more": {
     "title": "Daugiau",

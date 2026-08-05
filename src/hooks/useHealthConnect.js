@@ -34,6 +34,13 @@ const READ_PERMISSIONS = [
   { accessType: 'read', recordType: 'ActiveCaloriesBurned' },
   { accessType: 'read', recordType: 'TotalCaloriesBurned' },
 ];
+const WRITE_PERMISSIONS = [
+  { accessType: 'write', recordType: 'ExerciseSession' },
+  { accessType: 'write', recordType: 'ExerciseRoute' },
+  { accessType: 'write', recordType: 'Distance' },
+  { accessType: 'write', recordType: 'TotalCaloriesBurned' },
+];
+const ALL_PERMISSIONS = [...READ_PERMISSIONS, ...WRITE_PERMISSIONS];
 
 // Helper: get exported function from module, default export, or both
 function pick(...names) {
@@ -60,7 +67,7 @@ async function safeRequestPermission() {
   const fn = pick('requestPermission');
   if (!fn) return [];
   try {
-    return await fn(READ_PERMISSIONS);
+    return await fn(ALL_PERMISSIONS);
   } catch (e) {
     console.warn('[HealthConnect] requestPermission err:', e && e.message);
     return [];
@@ -109,6 +116,7 @@ async function readCalories(startDate, endDate) {
 export function useHealthConnect({ enabled = true } = {}) {
   const [isAvailable, setIsAvailable] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [canWriteWorkouts, setCanWriteWorkouts] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
   const [error, setError] = useState(loadError);
 
@@ -151,18 +159,26 @@ export function useHealthConnect({ enabled = true } = {}) {
           && p.accessType === 'read'
         );
 
-        if (!hasCalories) {
+        const hasWorkoutWrite = Array.isArray(granted) && granted.some(p =>
+          p.recordType === 'ExerciseSession' && p.accessType === 'write'
+        );
+
+        if (!hasCalories || !hasWorkoutWrite) {
           // Ask the user
           const result = await safeRequestPermission();
           if (cancelled) return;
           granted = Array.isArray(result) ? result : await safeGetGrantedPermissions();
         }
 
-        const hasNow = Array.isArray(granted) && granted.some(p =>
+        const hasReadNow = Array.isArray(granted) && granted.some(p =>
           (p.recordType === 'ActiveCaloriesBurned' || p.recordType === 'TotalCaloriesBurned')
           && p.accessType === 'read'
         );
-        setIsAuthorized(hasNow);
+        const hasWriteNow = Array.isArray(granted) && granted.some(p =>
+          p.recordType === 'ExerciseSession' && p.accessType === 'write'
+        );
+        setCanWriteWorkouts(hasWriteNow);
+        setIsAuthorized(hasReadNow || hasWriteNow);
         setError(null);
       } catch (e) {
         if (cancelled) return;
@@ -220,9 +236,63 @@ export function useHealthConnect({ enabled = true } = {}) {
     isTrackingRef.current = false;
   }, []);
 
-  const saveWorkout = useCallback(async () => {
-    return { success: false, error: 'not implemented yet' };
+  const requestAuthorization = useCallback(async () => {
+    if (Platform.OS !== 'android' || !HC) return [];
+    const granted = await safeRequestPermission();
+    const hasWrite = Array.isArray(granted) && granted.some(p =>
+      p.recordType === 'ExerciseSession' && p.accessType === 'write'
+    );
+    setCanWriteWorkouts(hasWrite);
+    if (hasWrite) setIsAuthorized(true);
+    return granted;
   }, []);
+
+  const saveWorkout = useCallback(async (workoutData) => {
+    if (!canWriteWorkouts || Platform.OS !== 'android' || !HC) {
+      return { success: false, error: 'Health Connect not available' };
+    }
+    try {
+      const insertFn = pick('insertRecords');
+      if (!insertFn) return { success: false, error: 'insertRecords not supported' };
+      const startTime = new Date(workoutData.startTime);
+      const endTime = new Date(workoutData.endTime);
+      const startMs = startTime.getTime();
+      const durationMs = Math.max(1000, endTime.getTime() - startMs);
+      const route = Array.isArray(workoutData.route) ? workoutData.route : [];
+      const routePoints = route.map((point, index) => ({
+        time: new Date(startMs + Math.round(durationMs * index / Math.max(1, route.length - 1))).toISOString(),
+        latitude: Number(point.lat != null ? point.lat : point.latitude),
+        longitude: Number(point.lng != null ? point.lng : point.longitude),
+      })).filter(point => Number.isFinite(point.latitude) && Number.isFinite(point.longitude));
+      const common = {
+        startTime: startTime.toISOString(),
+        endTime: endTime.toISOString(),
+        metadata: {
+          clientRecordId: `runwithai-${workoutData.id || startMs}`,
+          clientRecordVersion: 1,
+          recordingMethod: 1,
+          device: { manufacturer: 'RunWithAI', model: 'Phone', type: 2 },
+        },
+      };
+      const records = [{
+        ...common,
+        recordType: 'ExerciseSession',
+        exerciseType: workoutData.activityType === 'walk' ? 79 : workoutData.activityType === 'bike' ? 8 : 56,
+        title: workoutData.activityType === 'walk' ? 'RunWithAI Walk' : workoutData.activityType === 'bike' ? 'RunWithAI Ride' : 'RunWithAI Run',
+        notes: 'Recorded with RunWithAI',
+        ...(routePoints.length > 1 ? { exerciseRoute: { route: routePoints } } : {}),
+      }];
+      const distance = Math.max(0, Number(workoutData.distance || 0));
+      if (distance > 0) records.push({ ...common, recordType: 'Distance', distance: { value: distance, unit: 'meters' } });
+      const calories = Math.max(0, Number(workoutData.calories || 0));
+      if (calories > 0) records.push({ ...common, recordType: 'TotalCaloriesBurned', energy: { value: calories, unit: 'kilocalories' } });
+      const result = await insertFn(records);
+      return { success: true, result };
+    } catch (e) {
+      console.warn('[HealthConnect] saveWorkout err:', e);
+      return { success: false, error: e };
+    }
+  }, [canWriteWorkouts]);
 
   const fetchWorkouts = useCallback(async () => {
     return [];
@@ -233,6 +303,7 @@ export function useHealthConnect({ enabled = true } = {}) {
   return {
     isAvailable,
     isAuthorized,
+    canWriteWorkouts,
     isInitializing,
     error,
     isSupported: Platform.OS === 'android' && !!HC,
@@ -240,7 +311,7 @@ export function useHealthConnect({ enabled = true } = {}) {
     heartRate, stepCount, distance, calories,
     startTracking, stopTracking, saveWorkout,
     fetchHeartRate, fetchStepCount, fetchDistance, fetchCalories,
-    fetchDailyCalories, fetchWorkouts,
+    fetchDailyCalories, fetchWorkouts, requestAuthorization,
   };
 }
 
