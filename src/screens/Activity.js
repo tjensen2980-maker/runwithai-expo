@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Icon } from '../components/Icons';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator, TextInput, Modal, Platform } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator, TextInput, Modal, Platform, Alert } from 'react-native';
 import { colors, LEVELS, loadRuns, generateTrainingPlan, SERVER, getAuthToken, loadBadges, checkAndAwardBadges, loadStreak, calculateStreak, BADGES } from '../data';
 // ─── NYE KOMPONENTER ──────────────────────────────────────────────────────────
 import Badges, { NewBadgeCelebration } from './components/Badges';
@@ -71,8 +72,11 @@ function getActivityStyles() {
   runType:            { color: colors.muted, fontSize: 9, fontWeight: '700', letterSpacing: 1.5, textTransform: 'uppercase' },
   runDate:            { color: colors.muted, fontSize: 11, marginTop: 3 },
   runKm:              { color: colors.black, fontSize: 24, fontWeight: '900', letterSpacing: -1 },
-  shareIcon:          { backgroundColor: colors.surface, borderRadius: 8, padding: 7 },
-  shareIconText:      { fontSize: 13 },
+  activityActions:    { flexDirection: 'row', gap: 8, marginTop: -4, marginBottom: 10 },
+  activityAction:     { flex: 1, minHeight: 44, borderRadius: 10, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 7, borderWidth: 1, borderColor: colors.border },
+  activityActionText: { color: colors.muted, fontSize: 12, fontWeight: '700' },
+  deleteAction:       { backgroundColor: colors.red + '10', borderColor: colors.red + '60' },
+  deleteActionText:   { color: colors.red },
   metrics:            { flexDirection: 'row', gap: 20 },
   metric:             { alignItems: 'center' },
   metricVal:          { color: colors.black, fontSize: 15, fontWeight: '800', letterSpacing: -0.3 },
@@ -687,8 +691,8 @@ function RunWalkBreakdown({ runningKm, walkingKm, totalKm }) {
 
 // ─── RUN CARD ─────────────────────────────────────────────────────────────────
 function RunCard({ run, level, allRuns, onDelete, onSelectRun }) {
+  const { t } = useTranslation();
   const [showShare, setShowShare] = useState(false);
-  const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showMap, setShowMap] = useState(false);
   const km = run.km ? parseFloat(run.km).toFixed(2) : '–';
@@ -711,14 +715,28 @@ function RunCard({ run, level, allRuns, onDelete, onSelectRun }) {
     setDeleting(true);
     try {
       const token = getAuthToken();
-            await fetch(`${SERVER}${(run.isActivity || run.type === 'bike') ? '/activities/' : '/runs/'}${run.id}`, {
+      const response = await fetch(`${SERVER}${(run.isActivity || run.type === 'bike') ? '/activities/' : '/runs/'}${run.id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
+      if (!response.ok) throw new Error(`Delete failed with HTTP ${response.status}`);
       onDelete?.(run.id);
-    } catch {}
-    setDeleting(false);
-    setConfirmDelete(false);
+    } catch {
+      Alert.alert(t('common.error'), t('common.retry'));
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const confirmRunDelete = () => {
+    Alert.alert(
+      t('common.delete'),
+      t('alerts.deleteRun'),
+      [
+        { text: t('common.cancel'), style: 'cancel' },
+        { text: t('common.delete'), style: 'destructive', onPress: handleDelete },
+      ],
+    );
   };
   return (
     <>
@@ -740,12 +758,6 @@ function RunCard({ run, level, allRuns, onDelete, onSelectRun }) {
               </View>
             )}
             <Text style={getActivityStyles().runKm}>{km} km</Text>
-            <TouchableOpacity onPress={() => setShowShare(true)} style={getActivityStyles().shareIcon}>
-              <Icon name="arrow_up" size={16} color={colors.muted}/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setConfirmDelete(true)} style={{ padding: 6 }}>
-              <Icon name='x' size={16} color={colors.muted}/>
-            </TouchableOpacity>
           </View>
         </View>
         <View style={getActivityStyles().metrics}>
@@ -787,20 +799,29 @@ function RunCard({ run, level, allRuns, onDelete, onSelectRun }) {
           </View>
         )}
       </TouchableOpacity>
-      {confirmDelete && (
-        <View style={{ backgroundColor: colors.card, borderRadius: 14, padding: 16, marginTop: -8, marginBottom: 8, borderWidth: 1, borderColor: colors.red + '40' }}>
-          <Text style={{ color: colors.text, fontSize: 14, fontWeight: '700', marginBottom: 4 }}>Slet dette løb?</Text>
-          <Text style={{ color: colors.muted, fontSize: 12, marginBottom: 12 }}>Det forsvinder fra statistik og historik.</Text>
-          <View style={{ flexDirection: 'row', gap: 8 }}>
-            <TouchableOpacity onPress={() => setConfirmDelete(false)} style={{ flex: 1, backgroundColor: colors.surface, borderRadius: 10, paddingVertical: 10, alignItems: 'center' }}>
-              <Text style={{ color: colors.dim, fontWeight: '600' }}>Annuller</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleDelete} disabled={deleting} style={{ flex: 1, backgroundColor: colors.red + '20', borderRadius: 10, paddingVertical: 10, alignItems: 'center', borderWidth: 1, borderColor: colors.red }}>
-              <Text style={{ color: colors.red, fontWeight: '700' }}>{deleting ? '...' : 'Slet løb'}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
+      <View style={getActivityStyles().activityActions}>
+        <TouchableOpacity
+          accessibilityRole="button"
+          accessibilityLabel={t('settings.privacy.shareActivity')}
+          onPress={() => setShowShare(true)}
+          style={getActivityStyles().activityAction}
+        >
+          <Icon name="arrow_up" size={16} color={colors.muted}/>
+          <Text style={getActivityStyles().activityActionText}>{t('settings.privacy.shareActivity')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          accessibilityRole="button"
+          accessibilityLabel={t('common.delete')}
+          onPress={confirmRunDelete}
+          disabled={deleting}
+          style={[getActivityStyles().activityAction, getActivityStyles().deleteAction]}
+        >
+          <Icon name="x" size={16} color={colors.red}/>
+          <Text style={[getActivityStyles().activityActionText, getActivityStyles().deleteActionText]}>
+            {deleting ? '...' : t('common.delete')}
+          </Text>
+        </TouchableOpacity>
+      </View>
       <ShareModal run={run} visible={showShare} onClose={() => setShowShare(false)} />
       <FullRouteMapModal route={route} run={run} visible={showMap} onClose={() => setShowMap(false)} />
     </>
