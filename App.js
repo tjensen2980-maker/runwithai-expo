@@ -319,7 +319,7 @@ export default function App() {
   }, []);
 
   const [user, setUser] = useState(null);
-  const [showOnboarding, setShowOnboarding] = useState(true);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [level, setLevel]                   = useState(null);
   const [tab, setTab]                       = useState('home');
   const [profile, setProfileState]          = useState(DEFAULT_PROFILE);
@@ -445,19 +445,25 @@ export default function App() {
     }
   }, []);
 
-  const loadData = async () => {
+  const loadData = async (isNewUser = false) => {
     setLoading(true);
+    let hasCompletedOnboarding = false;
+    let savedLevel = null;
     try {
       const onboardingCompleted = await AsyncStorage.getItem('onboardingCompleted');
-      const savedLevel = await AsyncStorage.getItem('userLevel');
+      savedLevel = await AsyncStorage.getItem('userLevel');
       if (onboardingCompleted === 'true' && savedLevel) {
+        hasCompletedOnboarding = true;
         setLevel(savedLevel);
         setShowOnboarding(false);
       }
     } catch (e) {
       console.log('AsyncStorage read error:', e);
     }
-    setLoading(false); // vis UI straks fra lokal cache; server-data hentes i baggrunden
+
+    // Keep the loading screen visible until the server profile has had a
+    // chance to restore onboarding state. Otherwise an app update can show
+    // onboarding before the returning user's profile has loaded.
     const [savedProfile, savedPlan, savedTrainingPlan, savedRuns] = await Promise.all([
       loadProfile(), loadWeekPlan(), loadTrainingPlan(), loadRuns(),
     ]);
@@ -480,8 +486,23 @@ export default function App() {
       if (savedProfile.level) {
         setLevel(savedProfile.level);
         setShowOnboarding(false);
+        hasCompletedOnboarding = true;
+        try {
+          await AsyncStorage.multiSet([
+            ['onboardingCompleted', 'true'],
+            ['userLevel', String(savedProfile.level)],
+          ]);
+        } catch (e) {}
       }
     }
+
+    // Only a newly registered account should enter onboarding. A restored
+    // session or normal login is always treated as an existing account, even
+    // if local flags are missing or the profile request is temporarily offline.
+    if (!hasCompletedOnboarding) {
+      setShowOnboarding(Boolean(isNewUser));
+    }
+    setLoading(false);
   };
 
   // Init token from AsyncStorage before loading data
@@ -490,9 +511,8 @@ useEffect(() => {
     const savedToken = getAuthToken();
     if (savedToken) {
       setAuthToken(savedToken);
-      setUser({ token: savedToken });
+      setUser({ token: savedToken, isNewUser: false });
       syncAuthToWatch(savedToken, 'user');
-      setLoading(false);
       fetch(`${SERVER}/profile`, {
         headers: { Authorization: `Bearer ${savedToken}`, 'Content-Type': 'application/json' }
       }).then(r => {
@@ -509,7 +529,9 @@ useEffect(() => {
   });
 }, []);
 
-  useEffect(() => { if (user) loadData(); }, [user]);
+  useEffect(() => {
+    if (user) loadData(user.isNewUser === true);
+  }, [user]);
 
   const handleLogout = () => {
     logOutRevenueCat().catch(() => {});
@@ -662,7 +684,9 @@ if (type === 'pick') {
         // Persist the session before leaving the login screen. This prevents an
         // iOS app update or quick app close from racing the Keychain write.
         await setAuthToken(token);
-        setUser(userData); syncAuthToWatch(token, (userData && (userData.email || userData.id || userData._id)) || 'user'); setLoading(true); loadData();
+        setUser({ ...(userData || {}), isNewUser: Boolean(isNewUser) });
+        syncAuthToWatch(token, (userData && (userData.email || userData.id || userData._id)) || 'user');
+        setLoading(true);
       }} />
     </SafeAreaProvider>
   );
