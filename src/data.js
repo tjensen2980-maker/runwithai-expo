@@ -43,33 +43,81 @@ export const SERVER = 'https://runwithai-server-production.up.railway.app';
 
 // ─── AUTH TOKEN ────────────────────────────────────────────────────────────────────────────
 import AsyncStorageLib from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 const TOKEN_KEY = 'runwithai_token';
+const LEGACY_TOKEN_KEYS = ['token', 'authToken', 'accessToken'];
+const IOS_SECURE_STORE_OPTIONS = {
+  keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY,
+};
 let _token = null;
 
-// Init: load token from AsyncStorage (native) or localStorage (web)
+async function readLegacyNativeToken() {
+  const keys = [TOKEN_KEY, ...LEGACY_TOKEN_KEYS];
+  const entries = await AsyncStorageLib.multiGet(keys);
+  return entries.find(([, value]) => Boolean(value))?.[1] || null;
+}
+
+// iOS keeps the session in Keychain so App Store updates cannot discard it.
+// Existing AsyncStorage sessions are migrated automatically on first launch.
 export async function initAuthToken() {
   try {
-    if (typeof localStorage !== 'undefined') {
+    if (Platform.OS === 'web') {
       _token = localStorage.getItem(TOKEN_KEY) || null;
+    } else if (Platform.OS === 'ios') {
+      _token = await SecureStore.getItemAsync(TOKEN_KEY, IOS_SECURE_STORE_OPTIONS);
+      if (!_token) {
+        _token = await readLegacyNativeToken();
+        if (_token) {
+          await SecureStore.setItemAsync(TOKEN_KEY, _token, IOS_SECURE_STORE_OPTIONS);
+        }
+      }
     } else {
-      _token = await AsyncStorageLib.getItem(TOKEN_KEY);
+      _token = await readLegacyNativeToken();
     }
   } catch (e) {
-    _token = null;
+    // Keep compatibility with installations where Keychain is unavailable.
+    try {
+      _token = Platform.OS === 'web'
+        ? localStorage.getItem(TOKEN_KEY) || null
+        : await readLegacyNativeToken();
+    } catch {
+      _token = null;
+    }
   }
+
+  return _token;
 }
 
 export async function setAuthToken(token) {
   _token = token;
   try {
-    if (typeof localStorage !== 'undefined') {
+    if (Platform.OS === 'web') {
       if (token) localStorage.setItem(TOKEN_KEY, token);
       else localStorage.removeItem(TOKEN_KEY);
+    } else if (Platform.OS === 'ios') {
+      if (token) {
+        await SecureStore.setItemAsync(TOKEN_KEY, token, IOS_SECURE_STORE_OPTIONS);
+      } else {
+        await SecureStore.deleteItemAsync(TOKEN_KEY, IOS_SECURE_STORE_OPTIONS);
+      }
+
+      // Remove unencrypted and obsolete copies after migration/logout.
+      await AsyncStorageLib.multiRemove([TOKEN_KEY, ...LEGACY_TOKEN_KEYS]);
     } else {
       if (token) await AsyncStorageLib.setItem(TOKEN_KEY, token);
-      else await AsyncStorageLib.removeItem(TOKEN_KEY);
+      else await AsyncStorageLib.multiRemove([TOKEN_KEY, ...LEGACY_TOKEN_KEYS]);
     }
-  } catch (e) {}
+  } catch (e) {
+    // If Keychain is temporarily unavailable, preserve the session in the
+    // existing native store rather than forcing the user through sign-up.
+    if (Platform.OS !== 'web') {
+      try {
+        if (token) await AsyncStorageLib.setItem(TOKEN_KEY, token);
+        else await AsyncStorageLib.multiRemove([TOKEN_KEY, ...LEGACY_TOKEN_KEYS]);
+      } catch {}
+    }
+  }
 }
 export function getAuthToken() { return _token; }
 function authHeaders() {

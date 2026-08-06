@@ -652,14 +652,17 @@ if (type === 'pick') {
 
   if (!user) return (
     <SafeAreaProvider>
-      <Auth onAuth={(token, userData, isNewUser) => {
+      <Auth onAuth={async (token, userData, isNewUser) => {
         // Ny bruger: ryd enhedens gamle onboarding-flag (enheds-globalt spoegelse!)
         // og aabn den rigtige Onboarding-skaerm.
         if (isNewUser) {
-          try { AsyncStorage.removeItem('onboardingCompleted'); } catch (e) {}
+          try { await AsyncStorage.removeItem('onboardingCompleted'); } catch (e) {}
           setShowOnboarding(true);
         }
-        setAuthToken(token); setUser(userData); syncAuthToWatch(token, (userData && (userData.email || userData.id || userData._id)) || 'user'); setLoading(true); loadData();
+        // Persist the session before leaving the login screen. This prevents an
+        // iOS app update or quick app close from racing the Keychain write.
+        await setAuthToken(token);
+        setUser(userData); syncAuthToWatch(token, (userData && (userData.email || userData.id || userData._id)) || 'user'); setLoading(true); loadData();
       }} />
     </SafeAreaProvider>
   );
