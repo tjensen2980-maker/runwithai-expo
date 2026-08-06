@@ -67,5 +67,32 @@ target 'RunWithAI' do
         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
       end
     end
+
+    # Xcode 26.4 enforces stricter consteval rules that fmt 11.0.2 (bundled
+    # with React Native 0.81) does not support. Patch both the source Pod and
+    # the prebuilt ReactNativeDependencies headers so Xcode Cloud works in
+    # either dependency mode. Remove this when React Native ships newer fmt.
+    fmt_base_headers = [
+      File.join(installer.sandbox.pod_dir('fmt'), 'include', 'fmt', 'base.h'),
+      File.join(installer.sandbox.pod_dir('ReactNativeDependencies'), 'Headers', 'fmt', 'base.h'),
+    ]
+    fmt_base_headers.concat(
+      Dir.glob(File.join(installer.sandbox.pod_dir('ReactNativeDependencies'), '**', 'fmt', 'base.h'))
+    )
+
+    fmt_base_headers.uniq.each do |fmt_base|
+      next unless File.exist?(fmt_base)
+
+      content = File.read(fmt_base)
+      patched = content.gsub(
+        /^(#\s*define\s+FMT_USE_CONSTEVAL)\s+1$/,
+        '\\1 0'
+      )
+      next if patched == content
+
+      File.chmod(0644, fmt_base)
+      File.write(fmt_base, patched)
+      Pod::UI.puts "Patched fmt consteval compatibility: #{fmt_base}"
+    end
   end
 end
