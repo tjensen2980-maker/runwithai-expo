@@ -131,7 +131,7 @@ export default function Auth({ onAuth }) {
       const data = await res.json();
 
       if (res.ok && data.token) {
-        onAuth(data.token, data.user);
+        await onAuth(data.token, data.user);
       } else {
         setError(data.error || t('auth.errors.loginFailed'));
       }
