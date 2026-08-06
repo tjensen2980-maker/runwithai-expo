@@ -227,6 +227,7 @@ export const DEFAULT_PROFILE = {
 export async function loadProfile() {
   try {
     const res = await fetch(`${SERVER}/profile`, { headers: authHeaders() });
+    if (!res.ok) return null;
     let data = await res.json();
     // Serveren returnerer profil som JSON-string — parse den ekstra gang
     if (typeof data === 'string') {
