@@ -19,7 +19,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "app.runwithai",
-      "buildNumber": "115",
+      "buildNumber": "116",
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
         "NSSupportsLiveActivities": true,
@@ -76,7 +76,7 @@
         "backgroundColor": "#0B1712"
       },
       "package": "app.runwithai",
-      "versionCode": 127,
+      "versionCode": 128,
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
