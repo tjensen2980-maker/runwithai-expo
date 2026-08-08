@@ -6,7 +6,7 @@ import React, { useState, useEffect, useRef } from
 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet, ScrollView,
-  Alert, ActivityIndicator, Linking, Modal
+  Alert, ActivityIndicator, Linking, Modal, Platform
 } from 
 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -38,6 +38,10 @@ function findPackage(offering, offer) {
     candidate => candidate.identifier === offer.pkgId
       || candidate.product?.identifier === offer.productId
   ) || null;
+}
+
+function hasEligibleAndroidTrial(pkg) {
+  return Platform.OS === 'android' && Boolean(pkg?.product?.defaultOption?.freePhase);
 }
 
 function recordPaywallEvent(purchases, event, details = {}) {
@@ -91,7 +95,11 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
         const monthly = findPackage(off.current, OFFERS.monthly);
         const annual = findPackage(off.current, OFFERS.annual);
         setPackages({ monthly, annual });
-        setSelectedPlan(annual ? 'annual' : 'monthly');
+
+        let nextTrialEligibility = {
+          monthly: hasEligibleAndroidTrial(monthly),
+          annual: hasEligibleAndroidTrial(annual),
+        };
 
         const productIds = [monthly, annual]
           .map(pkg => pkg?.product?.identifier)
@@ -99,21 +107,32 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
         if (productIds.length && purchases.checkTrialOrIntroductoryPriceEligibility) {
           try {
             const eligibility = await purchases.checkTrialOrIntroductoryPriceEligibility(productIds);
-            setTrialEligibility({
-              monthly: eligibility[monthly?.product?.identifier]?.status === 2,
-              annual: eligibility[annual?.product?.identifier]?.status === 2,
-            });
+            nextTrialEligibility = {
+              monthly: nextTrialEligibility.monthly
+                || eligibility[monthly?.product?.identifier]?.status === 2,
+              annual: nextTrialEligibility.annual
+                || eligibility[annual?.product?.identifier]?.status === 2,
+            };
           } catch (eligibilityError) {
             console.log('Trial eligibility warning:', eligibilityError?.message || eligibilityError);
-            setTrialEligibility({ monthly: false, annual: false });
           }
         }
+
+        setTrialEligibility(nextTrialEligibility);
+        const initialPlan = nextTrialEligibility.annual && annual
+          ? 'annual'
+          : nextTrialEligibility.monthly && monthly
+            ? 'monthly'
+            : annual
+              ? 'annual'
+              : 'monthly';
+        setSelectedPlan(initialPlan);
 
         recordPaywallEvent(purchases, 'viewed', {
           price: [monthly?.product?.priceString, annual?.product?.priceString]
             .filter(Boolean)
             .join(' | '),
-          plan: annual ? 'annual' : 'monthly',
+          plan: initialPlan,
           goal: goalLabel,
         });
       } catch (e) {
@@ -257,6 +276,7 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
   const selectedPackage = packages[selectedPlan];
   const selectedPriceString = selectedPackage?.product?.priceString || '';
   const selectedTrialEligible = trialEligibility[selectedPlan];
+  const selectedPeriod = t(selectedPlan === 'annual' ? 'pricing.perYear' : 'pricing.perMonth');
   const monthlyPrice = Number(packages.monthly?.product?.price);
   const annualPrice = Number(packages.annual?.product?.price);
   const annualSavings = monthlyPrice > 0 && annualPrice > 0
@@ -354,37 +374,27 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
                     )}
                   </View>
                   {pkg ? (
-                    <View style={s.planPriceRow}>
-                      <Text style={[s.planPrice, isSelected && s.planPriceSelected]}>
-                        {pkg.product?.priceString}
-                      </Text>
-                      <Text style={s.planPeriod}>
-                        {t(isAnnual ? 'pricing.perYear' : 'pricing.perMonth')}
-                      </Text>
-                    </View>
+                    <>
+                      <View style={s.planPriceRow}>
+                        <Text style={[s.planPrice, isSelected && s.planPriceSelected]}>
+                          {pkg.product?.priceString}
+                        </Text>
+                        <Text style={s.planPeriod}>
+                          {t(isAnnual ? 'pricing.perYear' : 'pricing.perMonth')}
+                        </Text>
+                      </View>
+                      {isAnnual && pkg.product?.pricePerMonthString && (
+                        <Text style={s.planEquivalent}>
+                          {`≈ ${pkg.product.pricePerMonthString}${t('pricing.perMonth')}`}
+                        </Text>
+                      )}
+                    </>
                   ) : (
                     <ActivityIndicator color="#ff7a50" style={{ marginTop: 8 }} />
                   )}
                 </TouchableOpacity>
               );
             })}
-          </View>
-
-          <View style={s.giftBox}>
-            <Text style={s.giftBig} maxFontSizeMultiplier={1.15}>
-              {selectedTrialEligible
-                ? t('onboarding.paywall.trial')
-                : `${t('pricing.title')} · ${t(selectedPlan === 'annual' ? 'pricing.yearly' : 'pricing.monthly')}`}
-            </Text>
-            {priceLoading ? (
-              <ActivityIndicator color="#ff7a50" style={{ marginTop: 8 }} />
-            ) : (
-              <Text style={s.giftSmall} maxFontSizeMultiplier={1.15}>
-                {selectedPriceString
-                  ? `${selectedPriceString}${t(selectedPlan === 'annual' ? 'pricing.perYear' : 'pricing.perMonth')}. ${t('pricing.terms')}`
-                  : t('onboarding.paywall.errors.prices')}
-              </Text>
-            )}
           </View>
 
           <TouchableOpacity
@@ -408,6 +418,16 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
             )}
           </TouchableOpacity>
 
+          {priceLoading ? (
+            <ActivityIndicator color="#ff7a50" style={s.purchaseDetailsLoader} />
+          ) : (
+            <Text style={s.purchaseDetails} maxFontSizeMultiplier={1.15}>
+              {selectedPriceString
+                ? `${selectedTrialEligible ? `${t('onboarding.paywall.trial')} · ` : ''}${selectedPriceString}${selectedPeriod}. ${t('pricing.terms')}`
+                : t('onboarding.paywall.errors.prices')}
+            </Text>
+          )}
+
           <TouchableOpacity style={s.freeLink} onPress={() => handleSelect({ id: 'free' })} disabled={loading}>
             <Text style={s.freeLinkText} maxFontSizeMultiplier={1.15}>
               {t('proUpsell.continueWithFree')}
@@ -420,7 +440,6 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
             </Text>
           </TouchableOpacity>
 
-          <Text style={s.renewalText} maxFontSizeMultiplier={1.15}>{t('pricing.terms')}</Text>
           <View style={s.legalLinks}>
             <TouchableOpacity onPress={() => Linking.openURL(TERMS_URL)}>
               <Text style={s.legalLink}>{t('settings.termsOfService')}</Text>
@@ -464,18 +483,17 @@ const s = StyleSheet.create({
   planPrice: { color: 'rgba(255,255,255,0.82)', fontSize: 18, fontWeight: '900' },
   planPriceSelected: { color: '#ff7a50' },
   planPeriod: { color: 'rgba(255,255,255,0.55)', fontSize: 11.5, marginLeft: 3 },
-  giftBox: { backgroundColor: 'rgba(255,87,34,0.12)', borderColor: 'rgba(255,87,34,0.45)', borderWidth: 1, borderRadius: 16, padding: 18, marginTop: 22, alignItems: 'center' },
-  giftBig: { color: '#ff7a50', fontSize: 24, fontWeight: '900' },
-  giftSmall: { color: 'rgba(255,255,255,0.75)', fontSize: 13.5, marginTop: 6, textAlign: 'center' },
-  cta: { backgroundColor: '#ff5722', borderRadius: 16, minHeight: 60, paddingHorizontal: 24, paddingVertical: 14, alignItems: 'center', justifyContent: 'center', marginTop: 22 },
+  planEquivalent: { color: 'rgba(255,255,255,0.5)', fontSize: 11.5, marginTop: 5 },
+  cta: { backgroundColor: '#ff5722', borderRadius: 16, minHeight: 60, paddingHorizontal: 24, paddingVertical: 14, alignItems: 'center', justifyContent: 'center', marginTop: 18 },
   disabled: { opacity: 0.55 },
   ctaText: { color: '#fff', fontSize: 16, lineHeight: 21, fontWeight: '900', textAlign: 'center', width: '100%' },
+  purchaseDetails: { color: 'rgba(255,255,255,0.58)', fontSize: 12.5, lineHeight: 18, textAlign: 'center', marginTop: 10, paddingHorizontal: 8 },
+  purchaseDetailsLoader: { marginTop: 10 },
   freeLink: { alignItems: 'center', marginTop: 18 },
   freeLinkText: { color: 'rgba(255,255,255,0.55)', fontSize: 14.5, textDecorationLine: 'underline' },
   restore: { alignItems: 'center', marginTop: 14 },
   restoreText: { color: 'rgba(255,255,255,0.35)', fontSize: 13 },
-  renewalText: { color: 'rgba(255,255,255,0.42)', fontSize: 11.5, lineHeight: 17, textAlign: 'center', marginTop: 22 },
-  legalLinks: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10 },
+  legalLinks: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 22 },
   legalLink: { color: 'rgba(255,255,255,0.65)', fontSize: 12, textDecorationLine: 'underline' },
   legalSeparator: { color: 'rgba(255,255,255,0.35)', marginHorizontal: 9 },
 });
