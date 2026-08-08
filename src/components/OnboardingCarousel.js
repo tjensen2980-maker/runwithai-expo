@@ -287,12 +287,12 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
     <Modal visible={!!visible} animationType="slide" transparent={false}>
       <View style={s.wrap}>
         <ScrollView
-          style={{ marginTop: Math.max(insets.top, 48) }}
+          style={[s.scrollView, { marginTop: Math.max(insets.top, 20) }]}
           contentContainerStyle={[
             s.scroll,
             {
-              paddingTop: 12,
-              paddingBottom: Math.max(insets.bottom, 16) + 32,
+              paddingTop: 8,
+              paddingBottom: 24,
             },
           ]}
           contentInsetAdjustmentBehavior="never"
@@ -300,7 +300,7 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
         >
           <View style={s.badge}>
             <Text style={s.badgeText} maxFontSizeMultiplier={1.1}>
-              {t('proUpsell.features.aiCoach.title')}
+              RUNWITHAI PRO
             </Text>
           </View>
           <Text style={s.headline} maxFontSizeMultiplier={1.15}>
@@ -317,25 +317,6 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
               </Text>
             </View>
           )}
-
-          <View style={s.freeBox}>
-            <Text style={s.freeBoxTitle} maxFontSizeMultiplier={1.15}>
-              {t('settings.subscription.tiers.free')}
-            </Text>
-            <Text style={s.freeBoxText} maxFontSizeMultiplier={1.15}>
-              {`✓ ${t('tabs.plan')}  •  ${t('tabs.start')}  •  ${t('tabs.progress')}`}
-            </Text>
-          </View>
-
-          <Text style={s.proIncludes} maxFontSizeMultiplier={1.1}>RUNWITHAI PRO</Text>
-          <View style={s.benefits}>
-            {benefits.map((b, i) => (
-              <View key={i} style={s.benefitRow}>
-                <Text style={s.benefitEmoji} maxFontSizeMultiplier={1.1}>{b.emoji}</Text>
-                <Text style={s.benefitText} maxFontSizeMultiplier={1.2}>{b.text}</Text>
-              </View>
-            ))}
-          </View>
 
           <View style={s.planOptions}>
             {['annual', 'monthly'].map(plan => {
@@ -363,18 +344,28 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
                   accessibilityRole="radio"
                   accessibilityState={{ checked: isSelected, disabled: !pkg }}
                 >
-                  <View style={s.planTitleRow}>
-                    <Text style={[s.planTitle, isSelected && s.planTitleSelected]}>
-                      {t(isAnnual ? 'pricing.yearly' : 'pricing.monthly')}
-                    </Text>
-                    {isAnnual && annualSavings > 0 && (
-                      <Text style={s.savingsBadge}>
-                        {t('pricing.save')} {annualSavings}%
-                      </Text>
-                    )}
+                  <View style={s.planSelectRow}>
+                    <View style={[s.radioOuter, isSelected && s.radioOuterSelected]}>
+                      {isSelected && <View style={s.radioInner} />}
+                    </View>
+                    <View style={s.planInfo}>
+                      <View style={s.planTitleRow}>
+                        <Text style={[s.planTitle, isSelected && s.planTitleSelected]}>
+                          {t(isAnnual ? 'pricing.yearly' : 'pricing.monthly')}
+                        </Text>
+                        {isAnnual && annualSavings > 0 && (
+                          <Text style={s.savingsBadge}>
+                            {t('pricing.save')} {annualSavings}%
+                          </Text>
+                        )}
+                      </View>
+                      {!!trialEligibility[plan] && (
+                        <Text style={s.trialBadge}>{t('onboarding.paywall.trial')}</Text>
+                      )}
+                    </View>
                   </View>
                   {pkg ? (
-                    <>
+                    <View style={s.priceBlock}>
                       <View style={s.planPriceRow}>
                         <Text style={[s.planPrice, isSelected && s.planPriceSelected]}>
                           {pkg.product?.priceString}
@@ -388,7 +379,7 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
                           {`≈ ${pkg.product.pricePerMonthString}${t('pricing.perMonth')}`}
                         </Text>
                       )}
-                    </>
+                    </View>
                   ) : (
                     <ActivityIndicator color="#ff7a50" style={{ marginTop: 8 }} />
                   )}
@@ -397,6 +388,36 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
             })}
           </View>
 
+          <View style={s.valueCard}>
+            <Text style={s.valueTitle} maxFontSizeMultiplier={1.1}>{t('pricing.subtitle')}</Text>
+            <View style={s.benefits}>
+              {benefits.slice(0, 3).map((b, i) => (
+                <View key={i} style={s.benefitRow}>
+                  <Text style={s.benefitEmoji} maxFontSizeMultiplier={1.1}>{b.emoji}</Text>
+                  <Text style={s.benefitText} maxFontSizeMultiplier={1.2}>{b.text}</Text>
+                </View>
+              ))}
+            </View>
+          </View>
+
+          <TouchableOpacity style={s.restore} onPress={handleRestore} disabled={loading || priceLoading}>
+            <Text style={s.restoreText} maxFontSizeMultiplier={1.15}>
+              {t('onboarding.paywall.restore')}
+            </Text>
+          </TouchableOpacity>
+
+          <View style={s.legalLinks}>
+            <TouchableOpacity onPress={() => Linking.openURL(TERMS_URL)}>
+              <Text style={s.legalLink}>{t('settings.termsOfService')}</Text>
+            </TouchableOpacity>
+            <Text style={s.legalSeparator}>•</Text>
+            <TouchableOpacity onPress={() => Linking.openURL(PRIVACY_URL)}>
+              <Text style={s.legalLink}>{t('settings.privacyPolicy')}</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+
+        <View style={[s.purchaseFooter, { paddingBottom: Math.max(insets.bottom, 12) }]}>
           <TouchableOpacity
             style={[s.cta, loading && s.disabled]}
             onPress={() => handleSelect(PRO_TIER)}
@@ -433,23 +454,7 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
               {t('proUpsell.continueWithFree')}
             </Text>
           </TouchableOpacity>
-
-          <TouchableOpacity style={s.restore} onPress={handleRestore} disabled={loading || priceLoading}>
-            <Text style={s.restoreText} maxFontSizeMultiplier={1.15}>
-              {t('onboarding.paywall.restore')}
-            </Text>
-          </TouchableOpacity>
-
-          <View style={s.legalLinks}>
-            <TouchableOpacity onPress={() => Linking.openURL(TERMS_URL)}>
-              <Text style={s.legalLink}>{t('settings.termsOfService')}</Text>
-            </TouchableOpacity>
-            <Text style={s.legalSeparator}>•</Text>
-            <TouchableOpacity onPress={() => Linking.openURL(PRIVACY_URL)}>
-              <Text style={s.legalLink}>{t('settings.privacyPolicy')}</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
+        </View>
       </View>
     </Modal>
   );
@@ -457,43 +462,50 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
 
 const s = StyleSheet.create({
   wrap: { flex: 1, backgroundColor: '#101114' },
+  scrollView: { flex: 1 },
   scroll: { paddingHorizontal: 24, alignItems: 'stretch' },
-  badge: { alignSelf: 'flex-start', backgroundColor: 'rgba(255,87,34,0.18)', paddingHorizontal: 12, paddingVertical: 5, borderRadius: 14 },
-  badgeText: { color: '#ff7a50', fontWeight: '800', fontSize: 12, letterSpacing: 2 },
-  headline: { color: '#fff', fontSize: 30, fontWeight: '900', marginTop: 14 },
-  sub: { color: 'rgba(255,255,255,0.65)', fontSize: 16, lineHeight: 23, marginTop: 8 },
-  goalBox: { backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10, marginTop: 18 },
+  badge: { alignSelf: 'flex-start', backgroundColor: 'rgba(255,87,34,0.18)', borderColor: 'rgba(255,122,80,0.35)', borderWidth: 1, paddingHorizontal: 12, paddingVertical: 5, borderRadius: 14 },
+  badgeText: { color: '#ff7a50', fontWeight: '900', fontSize: 11.5, letterSpacing: 1.8 },
+  headline: { color: '#fff', fontSize: 28, lineHeight: 33, fontWeight: '900', marginTop: 12 },
+  sub: { color: 'rgba(255,255,255,0.66)', fontSize: 15, lineHeight: 21, marginTop: 7 },
+  goalBox: { backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 12, paddingHorizontal: 14, paddingVertical: 9, marginTop: 14 },
   goalText: { color: '#fff', fontSize: 14, fontWeight: '700', textAlign: 'center' },
-  freeBox: { backgroundColor: 'rgba(255,255,255,0.06)', borderColor: 'rgba(255,255,255,0.12)', borderWidth: 1, borderRadius: 14, padding: 14, marginTop: 20 },
-  freeBoxTitle: { color: 'rgba(255,255,255,0.55)', fontSize: 12, fontWeight: '800', letterSpacing: 1.5, textTransform: 'uppercase' },
-  freeBoxText: { color: 'rgba(255,255,255,0.78)', fontSize: 13.5, lineHeight: 20, marginTop: 6 },
-  proIncludes: { color: '#ff7a50', fontSize: 12, fontWeight: '900', letterSpacing: 1.5, marginTop: 22 },
-  benefits: { marginTop: 12 },
-  benefitRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 14 },
-  benefitEmoji: { fontSize: 20, width: 32 },
-  benefitText: { color: '#fff', fontSize: 15.5, flex: 1, lineHeight: 21 },
-  planOptions: { flexDirection: 'row', gap: 10, marginTop: 10 },
-  planOption: { flex: 1, minHeight: 92, backgroundColor: 'rgba(255,255,255,0.06)', borderColor: 'rgba(255,255,255,0.14)', borderWidth: 1, borderRadius: 14, padding: 12, justifyContent: 'center' },
-  planOptionSelected: { backgroundColor: 'rgba(255,87,34,0.14)', borderColor: '#ff5722', borderWidth: 2 },
-  planTitleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 6 },
-  planTitle: { color: 'rgba(255,255,255,0.68)', fontSize: 13, fontWeight: '800' },
+  planOptions: { gap: 10, marginTop: 18 },
+  planOption: { minHeight: 84, backgroundColor: 'rgba(255,255,255,0.055)', borderColor: 'rgba(255,255,255,0.14)', borderWidth: 1, borderRadius: 16, paddingHorizontal: 14, paddingVertical: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  planOptionSelected: { backgroundColor: 'rgba(255,87,34,0.15)', borderColor: '#ff6435', borderWidth: 2 },
+  planSelectRow: { flexDirection: 'row', alignItems: 'center', flex: 1, paddingRight: 10 },
+  radioOuter: { width: 22, height: 22, borderRadius: 11, borderWidth: 2, borderColor: 'rgba(255,255,255,0.35)', alignItems: 'center', justifyContent: 'center', marginRight: 11 },
+  radioOuterSelected: { borderColor: '#ff7a50' },
+  radioInner: { width: 10, height: 10, borderRadius: 5, backgroundColor: '#ff7a50' },
+  planInfo: { flex: 1 },
+  planTitleRow: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 7 },
+  planTitle: { color: 'rgba(255,255,255,0.72)', fontSize: 15, fontWeight: '800' },
   planTitleSelected: { color: '#fff' },
-  savingsBadge: { color: '#101114', backgroundColor: '#ff7a50', borderRadius: 8, paddingHorizontal: 6, paddingVertical: 2, fontSize: 9.5, fontWeight: '900', overflow: 'hidden' },
-  planPriceRow: { flexDirection: 'row', alignItems: 'baseline', flexWrap: 'wrap', marginTop: 8 },
-  planPrice: { color: 'rgba(255,255,255,0.82)', fontSize: 18, fontWeight: '900' },
+  savingsBadge: { color: '#101114', backgroundColor: '#ff7a50', borderRadius: 8, paddingHorizontal: 7, paddingVertical: 3, fontSize: 9.5, fontWeight: '900', overflow: 'hidden' },
+  trialBadge: { color: '#ff9a78', fontSize: 11.5, fontWeight: '800', marginTop: 4 },
+  priceBlock: { alignItems: 'flex-end', flexShrink: 0 },
+  planPriceRow: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'flex-end', flexWrap: 'wrap' },
+  planPrice: { color: 'rgba(255,255,255,0.84)', fontSize: 20, fontWeight: '900' },
   planPriceSelected: { color: '#ff7a50' },
   planPeriod: { color: 'rgba(255,255,255,0.55)', fontSize: 11.5, marginLeft: 3 },
-  planEquivalent: { color: 'rgba(255,255,255,0.5)', fontSize: 11.5, marginTop: 5 },
-  cta: { backgroundColor: '#ff5722', borderRadius: 16, minHeight: 60, paddingHorizontal: 24, paddingVertical: 14, alignItems: 'center', justifyContent: 'center', marginTop: 18 },
+  planEquivalent: { color: 'rgba(255,255,255,0.52)', fontSize: 11.5, marginTop: 4 },
+  valueCard: { backgroundColor: 'rgba(255,255,255,0.045)', borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, borderRadius: 16, paddingHorizontal: 16, paddingTop: 15, paddingBottom: 4, marginTop: 18 },
+  valueTitle: { color: '#ff7a50', fontSize: 12, fontWeight: '900', letterSpacing: 1.1, textTransform: 'uppercase' },
+  benefits: { marginTop: 13 },
+  benefitRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
+  benefitEmoji: { fontSize: 18, width: 31 },
+  benefitText: { color: 'rgba(255,255,255,0.9)', fontSize: 14.5, flex: 1, lineHeight: 20 },
+  purchaseFooter: { backgroundColor: '#15161a', borderTopColor: 'rgba(255,255,255,0.1)', borderTopWidth: 1, paddingHorizontal: 20, paddingTop: 14, shadowColor: '#000', shadowOffset: { width: 0, height: -4 }, shadowOpacity: 0.32, shadowRadius: 10, elevation: 12 },
+  cta: { backgroundColor: '#ff5722', borderRadius: 16, minHeight: 58, paddingHorizontal: 24, paddingVertical: 13, alignItems: 'center', justifyContent: 'center' },
   disabled: { opacity: 0.55 },
-  ctaText: { color: '#fff', fontSize: 16, lineHeight: 21, fontWeight: '900', textAlign: 'center', width: '100%' },
-  purchaseDetails: { color: 'rgba(255,255,255,0.58)', fontSize: 12.5, lineHeight: 18, textAlign: 'center', marginTop: 10, paddingHorizontal: 8 },
-  purchaseDetailsLoader: { marginTop: 10 },
-  freeLink: { alignItems: 'center', marginTop: 18 },
-  freeLinkText: { color: 'rgba(255,255,255,0.55)', fontSize: 14.5, textDecorationLine: 'underline' },
-  restore: { alignItems: 'center', marginTop: 14 },
-  restoreText: { color: 'rgba(255,255,255,0.35)', fontSize: 13 },
-  legalLinks: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 22 },
+  ctaText: { color: '#fff', fontSize: 17, lineHeight: 22, fontWeight: '900', textAlign: 'center', width: '100%' },
+  purchaseDetails: { color: 'rgba(255,255,255,0.6)', fontSize: 11.5, lineHeight: 16, textAlign: 'center', marginTop: 8, paddingHorizontal: 4 },
+  purchaseDetailsLoader: { marginTop: 8 },
+  freeLink: { alignItems: 'center', marginTop: 10 },
+  freeLinkText: { color: 'rgba(255,255,255,0.58)', fontSize: 13.5, textDecorationLine: 'underline' },
+  restore: { alignItems: 'center', marginTop: 18 },
+  restoreText: { color: 'rgba(255,255,255,0.42)', fontSize: 12.5 },
+  legalLinks: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 12 },
   legalLink: { color: 'rgba(255,255,255,0.65)', fontSize: 12, textDecorationLine: 'underline' },
   legalSeparator: { color: 'rgba(255,255,255,0.35)', marginHorizontal: 9 },
 });
