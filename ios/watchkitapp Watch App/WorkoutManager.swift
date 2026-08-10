@@ -35,6 +35,7 @@ class WorkoutManager: NSObject, ObservableObject {
     private let healthStore = HKHealthStore()
     private var session: HKWorkoutSession?
     private var builder: HKLiveWorkoutBuilder?
+    private var routeBuilder: HKWorkoutRouteBuilder?
 
     func requestHealthAuth(completion: @escaping (Bool) -> Void = { _ in }) {
         guard HKHealthStore.isHealthDataAvailable() else { completion(false); return }
@@ -43,9 +44,14 @@ class WorkoutManager: NSObject, ObservableObject {
             HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!,
             HKQuantityType.quantityType(forIdentifier: .distanceWalkingRunning)!,
             HKQuantityType.quantityType(forIdentifier: .stepCount)!,
-            HKQuantityType.quantityType(forIdentifier: .flightsClimbed)!
+            HKQuantityType.quantityType(forIdentifier: .flightsClimbed)!,
+            HKObjectType.workoutType(),
+            HKSeriesType.workoutRoute()
         ]
-        let typesToWrite: Set<HKSampleType> = [HKObjectType.workoutType()]
+        let typesToWrite: Set<HKSampleType> = [
+            HKObjectType.workoutType(),
+            HKSeriesType.workoutRoute()
+        ]
         healthStore.requestAuthorization(toShare: typesToWrite, read: typesToRead) { success, error in
             if let error = error { print("[HK] Auth fejl: \(error)") }
             print("[HK] Auth success: \(success)")
@@ -65,6 +71,11 @@ class WorkoutManager: NSObject, ObservableObject {
             b.delegate = self
             self.session = s
             self.builder = b
+            if isIndoor {
+                self.routeBuilder = nil
+            } else {
+                self.routeBuilder = b.seriesBuilder(for: HKSeriesType.workoutRoute()) as? HKWorkoutRouteBuilder
+            }
             let startDate = Date()
             s.startActivity(with: startDate)
             b.beginCollection(withStart: startDate) { success, error in
@@ -77,12 +88,42 @@ class WorkoutManager: NSObject, ObservableObject {
 
     private func endHealthKitWorkout() {
         guard let s = session, let b = builder else { return }
+        let recordedRoute = locationManager.route
+        let workoutRouteBuilder = routeBuilder
         s.end()
         b.endCollection(withEnd: Date()) { _, _ in
-            b.finishWorkout { _, _ in }
+            b.finishWorkout { workout, workoutError in
+                guard let workout = workout else {
+                    if let workoutError = workoutError {
+                        print("[HK] finishWorkout fejl: \(workoutError)")
+                    }
+                    return
+                }
+
+                // A HealthKit workout does not automatically inherit the GPS
+                // points collected by our CLLocationManager. Attach them as an
+                // HKWorkoutRoute so Apple Fitness can draw the route map.
+                guard let workoutRouteBuilder = workoutRouteBuilder,
+                      recordedRoute.count >= 2 else { return }
+
+                workoutRouteBuilder.insertRouteData(recordedRoute) { success, routeError in
+                    guard success else {
+                        if let routeError = routeError {
+                            print("[HK] insertRouteData fejl: \(routeError)")
+                        }
+                        return
+                    }
+                    workoutRouteBuilder.finishRoute(with: workout, metadata: nil) { _, finishError in
+                        if let finishError = finishError {
+                            print("[HK] finishRoute fejl: \(finishError)")
+                        }
+                    }
+                }
+            }
         }
         self.session = nil
         self.builder = nil
+        self.routeBuilder = nil
     }
 
     func start(type: String = "Regulaer", targetKm: Double = 0, targetMinutes: Int = 0, isIndoor: Bool = false) {
