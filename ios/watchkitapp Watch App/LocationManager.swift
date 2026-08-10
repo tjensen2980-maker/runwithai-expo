@@ -15,6 +15,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     private var lastLocation: CLLocation?
     private(set) var route: [CLLocation] = []
+    var onAcceptedRouteLocations: (([CLLocation]) -> Void)?
     private var startTime: Date?
     private var pendingStart: Bool = false
 
@@ -111,6 +112,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard isTracking else { return }
         guard let workoutStart = startTime else { return }
+        var acceptedLocations: [CLLocation] = []
 
         for newLocation in locations {
             // 1. Smid dÃ¥rlig accuracy
@@ -157,6 +159,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
             lastLocation = newLocation
             route.append(newLocation)
+            acceptedLocations.append(newLocation)
             debugMessage = "GPS: \(Int(newLocation.horizontalAccuracy))m, \(route.count) pkt"
 
             if distance > 0 {
@@ -166,6 +169,10 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
                     currentPace = (elapsedSecs / 60.0) / km
                 }
             }
+        }
+
+        if !acceptedLocations.isEmpty {
+            onAcceptedRouteLocations?(acceptedLocations)
         }
     }
 

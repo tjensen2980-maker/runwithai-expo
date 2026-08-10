@@ -36,6 +36,8 @@ class WorkoutManager: NSObject, ObservableObject {
     private var session: HKWorkoutSession?
     private var builder: HKLiveWorkoutBuilder?
     private var routeBuilder: HKWorkoutRouteBuilder?
+    private var routeInsertions = DispatchGroup()
+    private var didInsertRouteData = false
 
     func requestHealthAuth(completion: @escaping (Bool) -> Void = { _ in }) {
         guard HKHealthStore.isHealthDataAvailable() else { completion(false); return }
@@ -71,56 +73,86 @@ class WorkoutManager: NSObject, ObservableObject {
             b.delegate = self
             self.session = s
             self.builder = b
+            self.routeInsertions = DispatchGroup()
+            self.didInsertRouteData = false
             if isIndoor {
                 self.routeBuilder = nil
+                self.locationManager.onAcceptedRouteLocations = nil
             } else {
                 self.routeBuilder = b.seriesBuilder(for: HKSeriesType.workoutRoute()) as? HKWorkoutRouteBuilder
+                if self.routeBuilder == nil {
+                    print("[HK] Kunne ikke oprette workout route builder")
+                }
+                self.locationManager.onAcceptedRouteLocations = { [weak self] locations in
+                    guard let self = self, let routeBuilder = self.routeBuilder else { return }
+                    let insertions = self.routeInsertions
+                    insertions.enter()
+                    routeBuilder.insertRouteData(locations) { success, routeError in
+                        DispatchQueue.main.async {
+                            if success {
+                                self.didInsertRouteData = true
+                            } else if let routeError = routeError {
+                                print("[HK] insertRouteData fejl: \(routeError)")
+                            }
+                            insertions.leave()
+                        }
+                    }
+                }
             }
             let startDate = Date()
             s.startActivity(with: startDate)
             b.beginCollection(withStart: startDate) { success, error in
-                print("[HK] beginCollection: SUCC")
+                print("[HK] beginCollection: \(success), fejl: \(String(describing: error))")
             }
         } catch {
-            print("[HK] start fejl")
+            print("[HK] start fejl: \(error)")
         }
     }
 
     private func endHealthKitWorkout() {
+        locationManager.onAcceptedRouteLocations = nil
         guard let s = session, let b = builder else { return }
-        let recordedRoute = locationManager.route
         let workoutRouteBuilder = routeBuilder
-        s.end()
-        b.endCollection(withEnd: Date()) { _, _ in
-            b.finishWorkout { workout, workoutError in
-                guard let workout = workout else {
-                    if let workoutError = workoutError {
-                        print("[HK] finishWorkout fejl: \(workoutError)")
+        let endDate = Date()
+        let insertions = routeInsertions
+        let routePointCount = locationManager.route.count
+
+        // Wait for every GPS batch before ending the workout. Apple Fitness can
+        // then associate the finished HKWorkoutRoute with the saved workout.
+        insertions.notify(queue: .main) { [weak self] in
+            guard let self = self else { return }
+            s.end()
+            b.endCollection(withEnd: endDate) { collectionEnded, collectionError in
+                guard collectionEnded else {
+                    if let collectionError = collectionError {
+                        print("[HK] endCollection fejl: \(collectionError)")
                     }
                     return
                 }
 
-                // A HealthKit workout does not automatically inherit the GPS
-                // points collected by our CLLocationManager. Attach them as an
-                // HKWorkoutRoute so Apple Fitness can draw the route map.
-                guard let workoutRouteBuilder = workoutRouteBuilder,
-                      recordedRoute.count >= 2 else { return }
-
-                workoutRouteBuilder.insertRouteData(recordedRoute) { success, routeError in
-                    guard success else {
-                        if let routeError = routeError {
-                            print("[HK] insertRouteData fejl: \(routeError)")
+                b.finishWorkout { workout, workoutError in
+                    guard let workout = workout else {
+                        if let workoutError = workoutError {
+                            print("[HK] finishWorkout fejl: \(workoutError)")
                         }
                         return
                     }
-                    workoutRouteBuilder.finishRoute(with: workout, metadata: nil) { _, finishError in
+
+                    guard self.didInsertRouteData,
+                          routePointCount >= 2,
+                          let workoutRouteBuilder = workoutRouteBuilder else { return }
+
+                    workoutRouteBuilder.finishRoute(with: workout, metadata: nil) { route, finishError in
                         if let finishError = finishError {
                             print("[HK] finishRoute fejl: \(finishError)")
+                        } else {
+                            print("[HK] Route gemt med \(routePointCount) GPS-punkter: \(route != nil)")
                         }
                     }
                 }
             }
         }
+
         self.session = nil
         self.builder = nil
         self.routeBuilder = nil
@@ -146,8 +178,16 @@ class WorkoutManager: NSObject, ObservableObject {
         timerStartDate = Date()
         isRunning = true
         isPaused = false
-    if !isIndoor { locationManager.startTracking() }
-        requestHealthAuth { [weak self] _ in self?.startHealthKitWorkout() }
+        requestHealthAuth { [weak self] _ in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                guard self.isRunning else { return }
+                self.startHealthKitWorkout()
+                if !self.isIndoor {
+                    self.locationManager.startTracking()
+                }
+            }
+        }
         startTimer()
     }
 
