@@ -86,19 +86,17 @@ class SyncManager: ObservableObject {
         let paceSecsPerKm = km > 0 ? Double(durationSecs) / km : 0
         let isoFmt = ISO8601DateFormatter()
 
-        let routeArray: [[String: Any]] = workout.route.map { point in
+        let routeArray: [[String: Any]] = workout.route.compactMap { point in
+            guard point.lat.isFinite, point.lon.isFinite,
+                  (-90.0...90.0).contains(point.lat),
+                  (-180.0...180.0).contains(point.lon) else { return nil }
             return [
                 "lat": point.lat,
                 "lng": point.lon,
                 "lon": point.lon,
                 "t": isoFmt.string(from: point.timestamp),
-                "alt": point.altitude
+                "alt": point.altitude.isFinite ? point.altitude : 0
             ]
-        }
-        var routeString = "[]"
-        if let routeData = try? JSONSerialization.data(withJSONObject: routeArray),
-           let str = String(data: routeData, encoding: .utf8) {
-            routeString = str
         }
 
         let hrArray: [[String: Any]] = workout.hrSamples.map { sample in
@@ -159,7 +157,10 @@ class SyncManager: ObservableObject {
             "calories": workout.activeKcal,
             "hr_samples": hrSamplesString,
             "splits": splitsString,
-            "route": routeString,
+            // Send a real JSON array. Sending a JSON string made the backend
+            // encode the route a second time, so Progress could receive text
+            // instead of usable coordinates.
+            "route": routeArray,
             "type": workout.type,
             "date": dateFormatter.string(from: workout.startTime),
             "source": "apple_watch",

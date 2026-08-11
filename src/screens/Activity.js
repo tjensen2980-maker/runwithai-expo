@@ -146,20 +146,20 @@ function getRunHR(run) {
 function getRunRoute(run) {
   if (!run.route) return [];
   let route = run.route;
-  if (typeof route === 'string') {
-    try { route = JSON.parse(route); } catch { return []; }
-  }
-  if (typeof route === 'string') {
+  // Older Watch builds and the backend could each JSON-encode the route.
+  // Unwrap all legacy string layers before validating the coordinates.
+  for (let i = 0; i < 4 && typeof route === 'string'; i += 1) {
     try { route = JSON.parse(route); } catch { return []; }
   }
   if (!Array.isArray(route)) return [];
-  // Filtrer punkter uden gyldige koordinater fra (undgaa NaN -> native kort-crash)
-  return route.filter(p => {
-    if (!p) return false;
-    const lat = p.lat != null ? p.lat : p.latitude;
-    const lng = p.lng != null ? p.lng : p.longitude;
-    return Number.isFinite(lat) && Number.isFinite(lng);
-  });
+  // Normalize both Watch and phone coordinate names and always return numbers.
+  return route.map(p => {
+    if (!p) return null;
+    const lat = Number(p.lat != null ? p.lat : p.latitude);
+    const lng = Number(p.lng != null ? p.lng : (p.lon != null ? p.lon : p.longitude));
+    if (!Number.isFinite(lat) || !Number.isFinite(lng) || Math.abs(lat) > 90 || Math.abs(lng) > 180) return null;
+    return { ...p, lat, lng, latitude: lat, longitude: lng };
+  }).filter(Boolean);
 }
 // ─── HELPER FUNCTIONS ─────────────────────────────────────────────────────────
 function fmtTime(secs) {
