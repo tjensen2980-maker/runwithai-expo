@@ -28,6 +28,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let minimumDistanceBetweenPoints: Double = 3.0  // Min 3m mellem punkter
     private let maximumJumpDistance: Double = 100.0    // Smid teleporter > 100m/sek
     private let warmupSeconds: TimeInterval = 5.0      // Smid fÃ¸rste 5 sek af GPS
+    private var maximumSpeedMetersPerSecond: Double = 8.0
 
     override init() {
         super.init()
@@ -44,7 +45,10 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         manager.requestWhenInUseAuthorization()
     }
 
-    func startTracking() {
+    func startTracking(isCycling: Bool = false) {
+        // Cykling kan legitimt være væsentligt hurtigere end løb. Bevar stadig
+        // et loft, så store GPS-hop ikke bliver regnet med i distancen.
+        maximumSpeedMetersPerSecond = isCycling ? 25.0 : 8.0
         distance = 0.0
         currentPace = 0.0
         currentAccuracy = 0.0
@@ -148,7 +152,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
                 // 5. Smid teleporter (urealistiske spring)
                 if timeDelta > 0 {
                     let speedMps = delta / timeDelta
-                    if speedMps > 8.0 {  // > 54 km/t = sandsynligvis fejl
+                    if speedMps > maximumSpeedMetersPerSecond {
                         debugMessage = "Skip jump: \(Int(speedMps))m/s"
                         continue
                     }
@@ -189,6 +193,11 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         let mins = Int(currentPace)
         let secs = Int((currentPace - Double(mins)) * 60)
         return String(format: "%d:%02d /km", mins, secs)
+    }
+
+    var formattedSpeed: String {
+        guard currentPace > 0, currentPace.isFinite else { return "--.-" }
+        return String(format: "%.1f", 60.0 / currentPace)
     }
 
     // MARK: - Workout Session (holder app aktiv i baggrunden)

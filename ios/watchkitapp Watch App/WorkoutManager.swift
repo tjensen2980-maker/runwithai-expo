@@ -39,12 +39,18 @@ class WorkoutManager: NSObject, ObservableObject {
     private var routeInsertions = DispatchGroup()
     private var didInsertRouteData = false
 
+    var isCycling: Bool {
+        let type = workoutType.lowercased()
+        return type.contains("cykl") || type.contains("bike") || type.contains("cycling")
+    }
+
     func requestHealthAuth(completion: @escaping (Bool) -> Void = { _ in }) {
         guard HKHealthStore.isHealthDataAvailable() else { completion(false); return }
         let typesToRead: Set<HKObjectType> = [
             HKQuantityType.quantityType(forIdentifier: .heartRate)!,
             HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!,
             HKQuantityType.quantityType(forIdentifier: .distanceWalkingRunning)!,
+            HKQuantityType.quantityType(forIdentifier: .distanceCycling)!,
             HKQuantityType.quantityType(forIdentifier: .stepCount)!,
             HKQuantityType.quantityType(forIdentifier: .flightsClimbed)!,
             HKObjectType.workoutType(),
@@ -63,7 +69,7 @@ class WorkoutManager: NSObject, ObservableObject {
 
     private func startHealthKitWorkout() {
         let config = HKWorkoutConfiguration()
-        config.activityType = .running
+        config.activityType = isCycling ? .cycling : .running
         config.locationType = isIndoor ? .indoor : .outdoor
         do {
             let s = try HKWorkoutSession(healthStore: healthStore, configuration: config)
@@ -184,7 +190,7 @@ class WorkoutManager: NSObject, ObservableObject {
                 guard self.isRunning else { return }
                 self.startHealthKitWorkout()
                 if !self.isIndoor {
-                    self.locationManager.startTracking()
+                    self.locationManager.startTracking(isCycling: self.isCycling)
                 }
             }
         }
@@ -227,6 +233,8 @@ class WorkoutManager: NSObject, ObservableObject {
             let activityType: String
 if self.isIndoor {
     activityType = "treadmill"
+} else if self.isCycling {
+    activityType = "bike"
 } else if self.workoutType == "Regulaer" {
     activityType = pace > 8.0 ? "walk" : "run"
 } else {

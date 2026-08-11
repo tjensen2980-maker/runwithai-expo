@@ -36,6 +36,18 @@ function fmtPace(p) {
   return m + ':' + String(s).padStart(2, '0');
 }
 
+function isCycling(run) {
+  const type = String(run?.type || '').toLowerCase();
+  return type.includes('cyc') || type.includes('bike') || type.includes('cykl');
+}
+
+function fmtSpeed(run) {
+  const km = Number(run?.km) || 0;
+  const seconds = Number(run?.duration) || 0;
+  if (km <= 0 || seconds <= 0) return '-';
+  return ((km * 3600) / seconds).toFixed(1).replace('.', ',');
+}
+
 function isoUge(d) {
   const dt = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
   const dag = dt.getUTCDay() || 7;
@@ -241,7 +253,7 @@ export default function Progress({ runs, onRunDeleted }) {
                   ['❤️', valgt.heart_rate ? String(Math.round(valgt.heart_rate)) : '-', 'bpm'],
                   ['📍', fmtKm(valgt.km), 'km'],
                   ['🔥', String(Math.round(Number(valgt.calories) || 0)), t('progress.caloriesShort')],
-                  ['⏲', fmtPace(valgt.pace), 'min/km'],
+                  ['⏲', isCycling(valgt) ? fmtSpeed(valgt) : fmtPace(valgt.pace), isCycling(valgt) ? 'km/t' : 'min/km'],
                 ].map(([emoji, vaerdi, label], i) => (
                   <View key={i} style={s.detCelle}>
                     <Text style={s.detVaerdi}>{vaerdi}</Text>

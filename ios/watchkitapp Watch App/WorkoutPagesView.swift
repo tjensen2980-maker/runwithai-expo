@@ -49,12 +49,21 @@ private var page1: some View {
             Text("km")
                 .font(.caption2)
                 .foregroundColor(.gray)
-            Text(workout.locationManager.formattedPace)
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(.cyan)
-            Text("min/km")
-                .font(.caption2)
-                .foregroundColor(.gray)
+            if workout.isCycling {
+                Text(workout.locationManager.formattedSpeed)
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.cyan)
+                Text("km/t")
+                    .font(.caption2)
+                    .foregroundColor(.gray)
+            } else {
+                Text(workout.locationManager.formattedPace)
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.cyan)
+                Text("min/km")
+                    .font(.caption2)
+                    .foregroundColor(.gray)
+            }
         }
             HStack(spacing: 6) {
                 if workout.isPaused {
@@ -104,7 +113,11 @@ private var page1: some View {
     private var page3: some View {
         VStack(spacing: 10) {
             HStack {
-                metricBox(label: "SPM", value: "\(workout.currentSpm)", color: .blue)
+                metricBox(
+                    label: workout.isCycling ? "km/t" : "SPM",
+                    value: workout.isCycling ? workout.locationManager.formattedSpeed : "\(workout.currentSpm)",
+                    color: .blue
+                )
                 metricBox(label: "kcal", value: "\(Int(workout.activeKcal))", color: .orange)
             }
             VStack(spacing: 2) {
