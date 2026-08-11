@@ -10,6 +10,7 @@ struct StandardWorkout: Identifiable, Hashable {
 
 let standardWorkouts: [StandardWorkout] = [
     StandardWorkout(name: "Løb", icon: "figure.run", description: "Frit løb", color: "green"),
+    StandardWorkout(name: "Cykling", icon: "bicycle", description: "Udendørs cykling", color: "orange"),
     StandardWorkout(name: "Interval", icon: "bolt.fill", description: "Høj intensitet", color: "red"),
     StandardWorkout(name: "Langt løb", icon: "map", description: "Lav intensitet", color: "blue"),
     StandardWorkout(name: "Restitution", icon: "leaf.fill", description: "Let løb", color: "mint"),
@@ -60,7 +61,7 @@ struct ContentView: View {
                     Text("RunWithAI")
                         .font(.headline)
 
-                    Text("Klar til løb")
+                    Text("Klar til træning")
                         .font(.caption)
                         .foregroundColor(.gray)
 
@@ -217,7 +218,7 @@ struct WorkoutGoalView: View {
                 VStack(spacing: 2) {
                     Text("Distance: \(String(format: "%.1f", targetKm)) km")
                         .font(.system(size: 11))
-                    Stepper("", value: $targetKm, in: 0...50, step: 0.5)
+                    Stepper("", value: $targetKm, in: 0.0...(selected.name == "Cykling" ? 200.0 : 50.0), step: 0.5)
                         .labelsHidden()
                 }
                 VStack(spacing: 2) {

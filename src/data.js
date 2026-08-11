@@ -522,7 +522,16 @@ export async function loadRuns() {
     const baseRuns = Array.isArray(runs) ? runs : [];
     let activities = [];
     try { activities = await loadActivities(); } catch (e) { activities = []; }
-    const merged = [...baseRuns, ...activities];
+    const seen = new Set();
+    const merged = [...baseRuns, ...activities].filter((run) => {
+      const id = String(run?.id ?? '');
+      const isActivity = Boolean(run?.isActivity) || id.startsWith('act-');
+      const rawId = id.replace(/^act-/, '');
+      const key = `${isActivity ? 'activity' : 'run'}:${rawId}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
     merged.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
     return merged;
   } catch { return []; }
@@ -577,10 +586,15 @@ export async function saveRun(run) {
   } catch (e) { console.error('saveRun fejl:', e); return null; }
 }
 
-export async function deleteRun(runId) {
+export async function deleteRun(runOrId) {
   try {
-    await fetch(`${SERVER}/runs/${runId}`, { method: 'DELETE', headers: authHeaders() });
-    return true;
+    const run = runOrId && typeof runOrId === 'object' ? runOrId : null;
+    const id = String(run ? run.id : runOrId);
+    const isActivity = Boolean(run?.isActivity) || id.startsWith('act-');
+    const rawId = id.replace(/^act-/, '');
+    const endpoint = isActivity ? 'activities' : 'runs';
+    const res = await fetch(`${SERVER}/${endpoint}/${rawId}`, { method: 'DELETE', headers: authHeaders() });
+    return res.ok;
   } catch { return false; }
 }
 

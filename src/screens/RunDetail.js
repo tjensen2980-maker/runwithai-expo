@@ -54,16 +54,31 @@ function fmtDate(dateStr) {
   } catch { return dateStr; }
 }
 
-function getRoute(run) {
+function getRoutePoints(run) {
   if (!run || !run.route) return [];
-  try {
-    const parsed = typeof run.route === 'string' ? JSON.parse(run.route) : run.route;
-    if (!Array.isArray(parsed)) return [];
-    return parsed.map(p => ({
-      latitude: parseFloat(p.lat || p.latitude),
-      longitude: parseFloat(p.lng || p.lon || p.longitude),
-    })).filter(c => !isNaN(c.latitude) && !isNaN(c.longitude));
-  } catch { return []; }
+  let route = run.route;
+  for (let i = 0; i < 4 && typeof route === 'string'; i += 1) {
+    try { route = JSON.parse(route); } catch { return []; }
+  }
+  if (!Array.isArray(route)) return [];
+
+  return route.map((point) => {
+    if (!point || typeof point !== 'object') return null;
+    const lat = Number(point.lat != null ? point.lat : point.latitude);
+    const lng = Number(point.lng != null
+      ? point.lng
+      : (point.lon != null ? point.lon : point.longitude));
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)
+      || Math.abs(lat) > 90 || Math.abs(lng) > 180) return null;
+    return { ...point, lat, lng, latitude: lat, longitude: lng };
+  }).filter(Boolean);
+}
+
+function getRoute(run) {
+  return getRoutePoints(run).map(point => ({
+    latitude: point.latitude,
+    longitude: point.longitude,
+  }));
 }
 
 function MetricBox({ value, unit, label }) {
@@ -495,24 +510,13 @@ function TempoGraph({ run }) {
   const chartHeight = 220;
   const padding = { top: 20, right: 20, bottom: 30, left: 50 };
 
-  // Parse route
-  let route = [];
-  try {
-    if (typeof run.route === 'string' && run.route.length > 2) {
-      const parsed = JSON.parse(run.route);
-      if (Array.isArray(parsed)) route = parsed;
-    } else if (Array.isArray(run.route)) {
-      route = run.route;
-    }
-  } catch (e) {}
-
-  if (!Array.isArray(route)) route = [];
+  const route = getRoutePoints(run);
 
   // Filtrer kun punkter med timestamp
   const pts = route
     .map(p => ({
-      lat: parseFloat(p.lat || p.latitude),
-      lng: parseFloat(p.lng || p.lon || p.longitude),
+      lat: p.lat,
+      lng: p.lng,
       t: p.t || p.timestamp || p.time
     }))
     .filter(p => !isNaN(p.lat) && !isNaN(p.lng) && p.t);
@@ -714,23 +718,14 @@ function AltitudeGraph({ run }) {
   const chartHeight = 200;
   const padding = { top: 20, right: 20, bottom: 30, left: 50 };
 
-  let route = [];
-  try {
-    if (typeof run.route === 'string' && run.route.length > 2) {
-      const parsed = JSON.parse(run.route);
-      if (Array.isArray(parsed)) route = parsed;
-    } else if (Array.isArray(run.route)) {
-      route = run.route;
-    }
-  } catch (e) {}
-  if (!Array.isArray(route)) route = [];
+  const route = getRoutePoints(run);
 
   // Filtrer punkter med altitude
   const pts = route
     .map(p => ({
-      lat: parseFloat(p.lat || p.latitude),
-      lng: parseFloat(p.lng || p.lon || p.longitude),
-      alt: parseFloat(p.alt || p.altitude)
+      lat: p.lat,
+      lng: p.lng,
+      alt: Number(p.alt != null ? p.alt : p.altitude)
     }))
     .filter(p => !isNaN(p.lat) && !isNaN(p.lng) && !isNaN(p.alt));
 
@@ -884,16 +879,7 @@ function AltitudeGraph({ run }) {
 
 
 function OmgangeTab({ run }) {
-  let route = [];
-  try {
-    if (typeof run.route === 'string' && run.route.length > 2) {
-      const parsed = JSON.parse(run.route);
-      if (Array.isArray(parsed)) route = parsed;
-    } else if (Array.isArray(run.route)) {
-      route = run.route;
-    }
-  } catch (e) {}
-  if (!Array.isArray(route)) route = [];
+  const route = getRoutePoints(run);
 
   let hrSamples = [];
   try {
@@ -906,9 +892,9 @@ function OmgangeTab({ run }) {
   } catch (e) {}
 
   const pts = route.map(p => ({
-    lat: parseFloat(p.lat || p.latitude),
-    lng: parseFloat(p.lng || p.lon || p.longitude),
-    alt: parseFloat(p.alt || p.altitude),
+    lat: p.lat,
+    lng: p.lng,
+    alt: Number(p.alt != null ? p.alt : p.altitude),
     t: p.t || p.timestamp || p.time
   })).filter(p => !isNaN(p.lat) && !isNaN(p.lng) && p.t);
 
