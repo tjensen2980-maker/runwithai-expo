@@ -765,7 +765,15 @@ if (tab === 'cycleTracker') {
     case 'dashboard':
         return <PlanTab level={level} nextWorkout={nextWorkout} weekPlan={weekPlan} planChanges={planChanges} profile={profile} runs={runs} onNavigate={setTab} onStartActivity={handleStartActivity} trainingPlan={trainingPlan} onPlanUpdate={handlePlanUpdate} isPro={isPro} isFree={isFree} onShowPricing={() => setShowTierCarousel(true)} />;
       case 'activity':
-        return <Progress runs={runs} />;
+        return <Progress runs={runs} onRunDeleted={(deletedRun) => {
+          const deletedId = String(deletedRun?.id ?? '').replace(/^act-/, '');
+          const deletedIsActivity = Boolean(deletedRun?.isActivity) || String(deletedRun?.id ?? '').startsWith('act-');
+          setRuns(previous => previous.filter((candidate) => {
+            const candidateId = String(candidate?.id ?? '').replace(/^act-/, '');
+            const candidateIsActivity = Boolean(candidate?.isActivity) || String(candidate?.id ?? '').startsWith('act-');
+            return candidateId !== deletedId || candidateIsActivity !== deletedIsActivity;
+          }));
+        }} />;
       case 'run':
         return <RunTab nextWorkout={nextWorkout} onStartActivity={handleStartActivity} runs={runs} profile={profile} isPro={isPro} isFree={isFree} onShowPricing={() => setShowTierCarousel(true)} />;
       case 'stats':

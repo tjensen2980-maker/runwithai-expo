@@ -1,9 +1,9 @@
 // Progress.js - Fremgang-fanen (rebrand): graf + grupperet aktivitetsliste.
 // Kortet vises FOERST i detaljevisningen, naar man trykker paa en aktivitet.
 import React, { useMemo, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Modal, Platform, Dimensions, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Modal, Platform, Dimensions, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { colors } from '../data';
+import { colors, deleteRun } from '../data';
 
 // Kort kun paa native - webben klarer sig uden
 let MapView = null, Polyline = null;
@@ -58,17 +58,20 @@ function periodeLabel(noegle, mode, t, locale) {
 
 function ruteKoordinater(run) {
   let r = run.route || run.polyline;
-  if (typeof r === 'string') { try { r = JSON.parse(r); } catch (e) { return null; } }
+  for (let i = 0; i < 4 && typeof r === 'string'; i += 1) {
+    try { r = JSON.parse(r); } catch (e) { return null; }
+  }
   if (!Array.isArray(r) || r.length < 2) return null;
   const pts = r.map(p => ({ latitude: Number(p.latitude != null ? p.latitude : p.lat), longitude: Number(p.longitude != null ? p.longitude : (p.lng != null ? p.lng : p.lon)) })).filter(p => isFinite(p.latitude) && isFinite(p.longitude));
   return pts.length >= 2 ? pts : null;
 }
 
-export default function Progress({ runs }) {
+export default function Progress({ runs, onRunDeleted }) {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage || i18n.language || 'en';
   const [mode, setMode] = useState('months');
   const [valgt, setValgt] = useState(null);
+  const [deleting, setDeleting] = useState(false);
   const alle = Array.isArray(runs) ? runs.filter(r => r && r.date) : [];
 
   // Grupper aktiviteter pr. periode (nyeste foerst)
@@ -107,6 +110,30 @@ export default function Progress({ runs }) {
   const maxAntal = Math.max(1, ...graf.map(x => x.antal));
 
   const koordinater = valgt ? ruteKoordinater(valgt) : null;
+  const removeSelectedRun = async () => {
+    if (!valgt || deleting) return;
+    setDeleting(true);
+    const deleted = await deleteRun(valgt);
+    setDeleting(false);
+    if (!deleted) {
+      Alert.alert(t('common.error'), t('common.retry'));
+      return;
+    }
+    const removed = valgt;
+    setValgt(null);
+    onRunDeleted?.(removed);
+  };
+  const confirmDelete = () => {
+    if (!valgt || deleting) return;
+    Alert.alert(
+      t('common.delete'),
+      t('alerts.deleteRun'),
+      [
+        { text: t('common.cancel'), style: 'cancel' },
+        { text: t('common.delete'), style: 'destructive', onPress: removeSelectedRun },
+      ],
+    );
+  };
   let region = null;
   if (koordinater) {
     const lats = koordinater.map(p => p.latitude), lngs = koordinater.map(p => p.longitude);
@@ -222,6 +249,17 @@ export default function Progress({ runs }) {
                   </View>
                 ))}
               </View>
+              <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityLabel={t('common.delete')}
+                disabled={deleting}
+                onPress={confirmDelete}
+                style={[s.deleteBtn, deleting && { opacity: 0.6 }]}
+              >
+                {deleting
+                  ? <ActivityIndicator color={colors.red} />
+                  : <Text style={s.deleteBtnText}>{t('common.delete')}</Text>}
+              </TouchableOpacity>
             </View>
           );
         })()}
@@ -273,4 +311,6 @@ const s = StyleSheet.create({
   detCelle:        { width: '33.33%', alignItems: 'center', paddingVertical: 14 },
   detVaerdi:       { color: colors.text, fontSize: 22, fontWeight: '800' },
   detLabel:        { color: colors.muted, fontSize: 13, marginTop: 4 },
+  deleteBtn:       { alignSelf: 'center', minWidth: 180, marginTop: 8, paddingVertical: 13, paddingHorizontal: 28, borderRadius: 14, borderWidth: 1, borderColor: colors.red },
+  deleteBtnText:   { color: colors.red, fontSize: 15, fontWeight: '800', textAlign: 'center' },
 });
