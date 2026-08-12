@@ -79,7 +79,7 @@ function ruteKoordinater(run) {
   return pts.length >= 2 ? pts : null;
 }
 
-export default function Progress({ runs, onRunDeleted, isPro }) {
+export default function Progress({ runs, onRunDeleted, isPro, subscriptionKnown }) {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage || i18n.language || 'en';
   const [mode, setMode] = useState('months');
@@ -187,7 +187,7 @@ export default function Progress({ runs, onRunDeleted, isPro }) {
           <Text style={s.grafTitel}>{t('progress.activities')}</Text>
         </View>
 
-        <FreeTierBanner isPro={isPro} placement="progress" />
+        <FreeTierBanner isPro={isPro} subscriptionKnown={subscriptionKnown} placement="progress" />
 
         {/* Grupperet liste */}
         {grupper.length === 0 && (

@@ -3,12 +3,15 @@ import { Platform, StyleSheet, View } from 'react-native';
 import { ADS_CONFIG, hasUsableBannerConfig } from '../config/ads';
 import { initializeMobileAds } from '../services/MobileAds';
 
-export default function FreeTierBanner({ isPro, placement }) {
+export default function FreeTierBanner({ isPro, subscriptionKnown, placement }) {
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
 
   const ad = useMemo(() => {
-    if (isPro || Platform.OS === 'web' || !hasUsableBannerConfig(Platform.OS)) return null;
+    // Fail closed: never request an ad until the server has confirmed the tier.
+    // This prevents a paid user from briefly seeing an ad during startup or an
+    // account lookup failure.
+    if (!subscriptionKnown || isPro || Platform.OS === 'web' || !hasUsableBannerConfig(Platform.OS)) return null;
     try {
       const module = require('react-native-google-mobile-ads');
       const unitId = ADS_CONFIG.testMode
@@ -24,7 +27,7 @@ export default function FreeTierBanner({ isPro, placement }) {
     } catch (error) {
       return null;
     }
-  }, [isPro]);
+  }, [isPro, subscriptionKnown]);
 
   useEffect(() => {
     let active = true;

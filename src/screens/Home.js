@@ -77,6 +77,7 @@ export default function Home({
   onStartActivity,
   onOpenChat,
   isPro,
+  subscriptionKnown,
   isFree,
   onShowPricing,
 }) {
@@ -247,7 +248,7 @@ export default function Home({
         </TouchableOpacity>
       </View>
 
-      <FreeTierBanner isPro={isPro} placement="home" />
+      <FreeTierBanner isPro={isPro} subscriptionKnown={subscriptionKnown} placement="home" />
 
       <View style={{ height: 24 }} />
     </ScrollView>

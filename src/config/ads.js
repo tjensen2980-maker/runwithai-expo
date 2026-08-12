@@ -1,10 +1,10 @@
-// Google test ads are enabled while this feature is being verified in a build.
-// Replace the production unit IDs and set testMode to false before release.
+// Production AdMob configuration. AdMob can take up to an hour to activate a
+// newly-created ad unit, and app review/app-ads.txt verification can take longer.
 export const ADS_CONFIG = {
   enabled: true,
-  testMode: true,
-  iosBannerUnitId: '',
-  androidBannerUnitId: '',
+  testMode: false,
+  iosBannerUnitId: 'ca-app-pub-5451352100325177/9954003879',
+  androidBannerUnitId: 'ca-app-pub-5451352100325177/2872118028',
 };
 
 export function hasUsableBannerConfig(platform) {
