@@ -163,7 +163,7 @@
     "guarantee": "✓ Atšauk bet kada • ✓ 7 dienos nemokamai",
     "perMonth": "/mėnesį",
     "startFreeTrial": "Pradėti nemokamą bandomąjį laikotarpį",
-    "continueWithFree": "Tęsti su nemokama versija",
+    "continueWithFree": "Tęsti nemokamai su reklamomis",
     "or": "arba",
     "errors": {
       "serverConnection": "Nepavyko prisijungti prie serverio",
@@ -237,6 +237,7 @@
     "saved": "Išsaugota!",
     "logout": "Atsijungti",
     "privacyPolicy": "Privatumo politika",
+    "adPrivacy": "Reklamų privatumo pasirinkimai",
     "termsOfService": "Naudojimo sąlygos",
     "dangerZone": "Pavojinga zona",
     "sections": {
@@ -577,8 +578,8 @@
     "languageTitle": "Pasirinkite kalbą",
     "languageSubtitle": "Jį vėliau galėsite pakeisti nustatymuose",
     "paywall": {
-      "headline": "Jūsų asmeninis AI treneris",
-      "subtitle": "Treniruočių planas, kuris prisitaiko prie jūsų – kiekvieną savaitę, kiekvieną bėgimą.",
+      "headline": "Planas, kuris prisitaiko po kiekvieno bėgimo",
+      "subtitle": "Tiksliai žinokite, ką šiandien treniruoti — ir kodėl.",
       "benefits": {
         "adaptive": "Jūsų planas pritaikomas po kiekvieno bėgimo",
         "audioCoach": "Treniruotės metu jūsų treneris jūsų ausyse",
@@ -798,7 +799,7 @@
     "priceUnit": "/mėn.",
     "guarantee": "✓ Atšaukimas bet kada • ✓ 7 dienų nemokamas bandymas",
     "startTrial": "Pradėti nemokamą bandymą",
-    "continueWithFree": "Tęsti su nemokama versija",
+    "continueWithFree": "Tęsti nemokamai su reklamomis",
     "features": {
       "aiCoach": {
         "title": "AI treneris",
@@ -1362,7 +1363,7 @@
   },
   "privacyPage": {
     "title": "Privatumo politika",
-    "updated": "Paskutinį kartą atnaujinta: 2026 m. balandžio mėn",
+    "updated": "Paskutinį kartą atnaujinta: 2026 m. rugpjūčio mėn",
     "intro": "„RunWithAI“ rimtai žiūri į jūsų privatumą. Šioje politikoje paaiškinama, kaip renkame, naudojame ir saugome jūsų asmeninę informaciją.",
     "sections": [
       {
@@ -1411,7 +1412,8 @@
         "bullets": [
           "Apple / Google: saugus mokėjimų apdorojimas",
           "OpenAI: anoniminis AI mokymas",
-          "Prieglobos teikėjai: „Vercel“ ir „Railway“ duomenų saugojimui"
+          "Prieglobos teikėjai: „Vercel“ ir „Railway“ duomenų saugojimui",
+          "Google AdMob: neasmeniniai skelbimai nemokamiems naudotojams"
         ]
       },
       {
@@ -1448,7 +1450,7 @@
       {
         "title": "Slapukai ir sekimas",
         "paragraphs": [
-          "Kad būtumėte prisijungę, naudojame minimalius slapukus. Nenaudojame trečiųjų šalių stebėjimo ar reklamos slapukų."
+          "Nemokami naudotojai gali matyti neasmeninius „Google AdMob“ skelbimus. Kai reikia, prieš įkeliant skelbimus parodoma sutikimo forma. Sveikatos ir treniruočių duomenys, širdies ritmas ir GPS maršrutai niekada nenaudojami skelbimams taikyti. Pro naudotojai skelbimų nemato."
         ]
       },
       {

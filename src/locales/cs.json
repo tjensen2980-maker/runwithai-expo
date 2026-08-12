@@ -163,7 +163,7 @@
     "guarantee": "✓ Zruš kdykoliv • ✓ 7 dní zdarma",
     "perMonth": "/měsíc",
     "startFreeTrial": "Zahájit bezplatnou zkušební verzi",
-    "continueWithFree": "Pokračovat s bezplatnou verzí",
+    "continueWithFree": "Pokračovat zdarma s reklamami",
     "or": "nebo",
     "errors": {
       "serverConnection": "Nelze se připojit k serveru",
@@ -237,6 +237,7 @@
     "saved": "Uloženo!",
     "logout": "Odhlásit se",
     "privacyPolicy": "Zásady ochrany osobních údajů",
+    "adPrivacy": "Nastavení soukromí reklam",
     "termsOfService": "Podmínky služby",
     "dangerZone": "Nebezpečná zóna",
     "sections": {
@@ -577,8 +578,8 @@
     "languageTitle": "Vyberte svůj jazyk",
     "languageSubtitle": "Můžete to později změnit v Nastavení",
     "paywall": {
-      "headline": "Váš osobní trenér AI",
-      "subtitle": "Tréninkový plán, který se vám přizpůsobí – každý týden, každý běh.",
+      "headline": "Plán, který se přizpůsobí po každém běhu",
+      "subtitle": "Vězte přesně, co dnes trénovat — a proč.",
       "benefits": {
         "adaptive": "Váš plán se po každém běhu přizpůsobí",
         "audioCoach": "Váš trenér ve vašich uších, když trénujete",
@@ -798,7 +799,7 @@
     "priceUnit": "/měsíc",
     "guarantee": "✓ Zruš kdykoliv • ✓ 7 dní zdarma na vyzkoušení",
     "startTrial": "Začít zkušební období",
-    "continueWithFree": "Pokračovat s bezplatnou verzí",
+    "continueWithFree": "Pokračovat zdarma s reklamami",
     "features": {
       "aiCoach": {
         "title": "AI trenér",
@@ -1362,7 +1363,7 @@
   },
   "privacyPage": {
     "title": "Zásady ochrany osobních údajů",
-    "updated": "Poslední aktualizace: duben 2026",
+    "updated": "Poslední aktualizace: srpen 2026",
     "intro": "Ve společnosti RunWithAI bereme vaše soukromí vážně. Tyto zásady vysvětlují, jak shromažďujeme, používáme a chráníme vaše osobní údaje.",
     "sections": [
       {
@@ -1411,7 +1412,8 @@
         "bullets": [
           "Apple/Google: bezpečné zpracování plateb",
           "OpenAI: anonymizované koučování AI",
-          "Poskytovatelé hostingu: Vercel a Railway pro ukládání dat"
+          "Poskytovatelé hostingu: Vercel a Railway pro ukládání dat",
+          "Google AdMob: nepersonalizované reklamy pro bezplatné uživatele"
         ]
       },
       {
@@ -1448,7 +1450,7 @@
       {
         "title": "Soubory cookie a sledování",
         "paragraphs": [
-          "Používáme minimum souborů cookie, abychom vás udrželi přihlášeni. Nepoužíváme sledovací nebo reklamní soubory cookie třetích stran."
+          "Bezplatným uživatelům se mohou zobrazovat nepersonalizované reklamy od Google AdMob. Pokud je to vyžadováno, před načtením reklam se zobrazí formulář souhlasu. Zdravotní a tréninková data, tepová frekvence ani GPS trasy se nikdy nepoužívají k cílení reklam. Uživatelé Pro reklamy nevidí."
         ]
       },
       {

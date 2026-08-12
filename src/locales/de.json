@@ -163,7 +163,7 @@
     "guarantee": "✓ Jederzeit kündbar • ✓ 7 Tage kostenlos testen",
     "perMonth": "/Monat",
     "startFreeTrial": "Kostenlose Testversion starten",
-    "continueWithFree": "Mit kostenloser Version fortfahren",
+    "continueWithFree": "Kostenlos mit Werbung fortfahren",
     "or": "oder",
     "errors": {
       "serverConnection": "Verbindung zum Server nicht möglich",
@@ -237,6 +237,7 @@
     "saved": "Gespeichert!",
     "logout": "Abmelden",
     "privacyPolicy": "Datenschutzrichtlinie",
+    "adPrivacy": "Datenschutzeinstellungen für Werbung",
     "termsOfService": "Nutzungsbedingungen",
     "dangerZone": "Gefahrenzone",
     "sections": {
@@ -577,8 +578,8 @@
     "languageTitle": "Wähle deine Sprache",
     "languageSubtitle": "Du kannst sie später in den Einstellungen ändern",
     "paywall": {
-      "headline": "Dein persönlicher KI-Coach",
-      "subtitle": "Ein Trainingsplan, der sich an dich anpasst – jede Woche, bei jedem Lauf.",
+      "headline": "Ein Plan, der sich nach jedem Lauf anpasst",
+      "subtitle": "Wisse genau, was du heute trainieren sollst — und warum.",
       "benefits": {
         "adaptive": "Dein Plan passt sich nach jedem Lauf an",
         "audioCoach": "Dein Coach begleitet dich beim Training",
@@ -798,7 +799,7 @@
     "priceUnit": "/Monat",
     "guarantee": "✓ Jederzeit kündbar • ✓ 7 Tage kostenlos testen",
     "startTrial": "Kostenlose Testversion starten",
-    "continueWithFree": "Mit kostenloser Version fortfahren",
+    "continueWithFree": "Kostenlos mit Werbung fortfahren",
     "features": {
       "aiCoach": {
         "title": "KI-Coach",
@@ -1362,7 +1363,7 @@
   },
   "privacyPage": {
     "title": "Datenschutzrichtlinie",
-    "updated": "Letzte Aktualisierung: April 2026",
+    "updated": "Letzte Aktualisierung: August 2026",
     "intro": "Bei RunWithAI nehmen wir Ihre Privatsphäre ernst. In dieser Richtlinie wird erläutert, wie wir Ihre personenbezogenen Daten erfassen, verwenden und schützen.",
     "sections": [
       {
@@ -1411,7 +1412,8 @@
         "bullets": [
           "Apple/Google: sichere Zahlungsabwicklung",
           "OpenAI: anonymisiertes KI-Coaching",
-          "Hosting-Anbieter: Vercel und Railway für die Datenspeicherung"
+          "Hosting-Anbieter: Vercel und Railway für die Datenspeicherung",
+          "Google AdMob: nicht personalisierte Werbung für kostenlose Nutzer"
         ]
       },
       {
@@ -1448,7 +1450,7 @@
       {
         "title": "Cookies und Tracking",
         "paragraphs": [
-          "Wir verwenden minimale Cookies, damit Sie angemeldet bleiben. Wir verwenden keine Tracking- oder Werbecookies von Drittanbietern."
+          "Kostenlose Nutzer können nicht personalisierte Werbung von Google AdMob sehen. Wo erforderlich, wird vor dem Laden von Werbung ein Einwilligungsformular angezeigt. Gesundheits- und Trainingsdaten, Herzfrequenz und GPS-Routen werden niemals für die Ausrichtung von Werbung verwendet. Pro-Nutzer sehen keine Werbung."
         ]
       },
       {

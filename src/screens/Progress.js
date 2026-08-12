@@ -4,6 +4,7 @@ import React, { useMemo, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Modal, Platform, Dimensions, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { colors, deleteRun } from '../data';
+import FreeTierBanner from '../components/FreeTierBanner';
 
 // Kort kun paa native - webben klarer sig uden
 let MapView = null, Polyline = null;
@@ -78,7 +79,7 @@ function ruteKoordinater(run) {
   return pts.length >= 2 ? pts : null;
 }
 
-export default function Progress({ runs, onRunDeleted }) {
+export default function Progress({ runs, onRunDeleted, isPro }) {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage || i18n.language || 'en';
   const [mode, setMode] = useState('months');
@@ -185,6 +186,8 @@ export default function Progress({ runs, onRunDeleted }) {
           </View>
           <Text style={s.grafTitel}>{t('progress.activities')}</Text>
         </View>
+
+        <FreeTierBanner isPro={isPro} placement="progress" />
 
         {/* Grupperet liste */}
         {grupper.length === 0 && (

@@ -163,7 +163,7 @@
     "guarantee": "✓ Ikkanċella meta trid • ✓ 7 ijiem b'xejn",
     "perMonth": "/xahar",
     "startFreeTrial": "Ibda prova b'xejn",
-    "continueWithFree": "Kompli bil-verżjoni b'xejn",
+    "continueWithFree": "Kompli b’xejn bir-reklami",
     "or": "jew",
     "errors": {
       "serverConnection": "Ma nistax nikkonnettja mas-server",
@@ -237,6 +237,7 @@
     "saved": "Salvat!",
     "logout": "Oħroġ",
     "privacyPolicy": "Politika tal-privatezza",
+    "adPrivacy": "Għażliet tal-privatezza tar-reklami",
     "termsOfService": "Termini tas-servizz",
     "dangerZone": "Żona perikoluża",
     "sections": {
@@ -577,8 +578,8 @@
     "languageTitle": "Agħżel il-lingwa tiegħek",
     "languageSubtitle": "Tista' tibdelha aktar tard fis-Settings",
     "paywall": {
-      "headline": "Il-kowċ personali tiegħek tal-AI",
-      "subtitle": "Pjan ta' taħriġ li jadatta għalik — kull ġimgħa, kull ġirja.",
+      "headline": "Pjan li jadatta wara kull ġirja",
+      "subtitle": "Kun af eżatt x’għandek titħarreġ illum — u għaliex.",
       "benefits": {
         "adaptive": "Il-pjan tiegħek jadatta wara kull ġirja",
         "audioCoach": "Il-kowċ tiegħek f'widnejk waqt li titħarreġ",
@@ -798,7 +799,7 @@
     "priceUnit": "/xahar",
     "guarantee": "✓ Ikkanċella meta trid • ✓ Prova ta' 7 ijiem b'xejn",
     "startTrial": "Ibda prova b'xejn",
-    "continueWithFree": "Kompli bil-verżjoni b'xejn",
+    "continueWithFree": "Kompli b’xejn bir-reklami",
     "features": {
       "aiCoach": {
         "title": "Kowċ AI",
@@ -1362,7 +1363,7 @@
   },
   "privacyPage": {
     "title": "Politika ta' Privatezza",
-    "updated": "Aġġornata l-aħħar: April 2026",
+    "updated": "Aġġornata l-aħħar: Awwissu 2026",
     "intro": "F'RunWithAI, nieħdu l-privatezza tiegħek bis-serjetà. Din il-politika tispjega kif aħna niġbru, nużaw, u nipproteġu l-informazzjoni personali tiegħek.",
     "sections": [
       {
@@ -1411,7 +1412,8 @@
         "bullets": [
           "Apple/Google: proċessar ta' ħlas sigur",
           "OpenAI: taħriġ tal-AI anonimizzat",
-          "Fornituri tal-hosting: Vercel u Railway għall-ħażna tad-dejta"
+          "Fornituri tal-hosting: Vercel u Railway għall-ħażna tad-dejta",
+          "Google AdMob: reklami mhux personalizzati għal utenti b’xejn"
         ]
       },
       {
@@ -1448,7 +1450,7 @@
       {
         "title": "Cookies u traċċar",
         "paragraphs": [
-          "Aħna nużaw cookies minimi biex inżommuk ffirmat. Aħna ma nużawx cookies ta' traċċar jew ta' reklamar ta' partijiet terzi."
+          "Utenti b’xejn jistgħu jaraw reklami mhux personalizzati minn Google AdMob. Fejn meħtieġ, tintwera formola ta’ kunsens qabel ma jitgħabbew ir-reklami. Dejta tas-saħħa u tat-taħriġ, ir-rata tal-qalb u r-rotot GPS qatt ma jintużaw biex jiġu mmirati r-reklami. Utenti Pro ma jarawx reklami."
         ]
       },
       {

@@ -163,7 +163,7 @@
     "guarantee": "✓ Tühista igal ajal • ✓ 7 päeva tasuta",
     "perMonth": "/kuus",
     "startFreeTrial": "Alusta tasuta prooviperioodi",
-    "continueWithFree": "Jätka tasuta versiooniga",
+    "continueWithFree": "Jätka tasuta reklaamidega",
     "or": "või",
     "errors": {
       "serverConnection": "Serveriga ei saa ühendust",
@@ -237,6 +237,7 @@
     "saved": "Salvestatud!",
     "logout": "Logi välja",
     "privacyPolicy": "Privaatsuspoliitika",
+    "adPrivacy": "Reklaamide privaatsusvalikud",
     "termsOfService": "Kasutustingimused",
     "dangerZone": "Ohtlik tsoon",
     "sections": {
@@ -577,8 +578,8 @@
     "languageTitle": "Valige oma keel",
     "languageSubtitle": "Saate seda hiljem seadetes muuta",
     "paywall": {
-      "headline": "Teie isiklik tehisintellekti treener",
-      "subtitle": "Treeningplaan, mis kohandub teiega – iga nädal, iga jooks.",
+      "headline": "Plaan, mis kohandub pärast iga jooksu",
+      "subtitle": "Tea täpselt, mida täna treenida — ja miks.",
       "benefits": {
         "adaptive": "Teie plaan kohandub pärast iga jooksu",
         "audioCoach": "Treener on treenimise ajal kõrvas",
@@ -798,7 +799,7 @@
     "priceUnit": "/kuus",
     "guarantee": "✓ Tühista igal ajal • ✓ 7-päevane tasuta prooviversioon",
     "startTrial": "Alusta tasuta prooviperioodi",
-    "continueWithFree": "Jätka tasuta versiooniga",
+    "continueWithFree": "Jätka tasuta reklaamidega",
     "features": {
       "aiCoach": {
         "title": "AI treener",
@@ -1362,7 +1363,7 @@
   },
   "privacyPage": {
     "title": "Privaatsuspoliitika",
-    "updated": "Viimati värskendatud: aprill 2026",
+    "updated": "Viimati värskendatud: august 2026",
     "intro": "RunWithAI-s võtame teie privaatsust tõsiselt. See poliitika selgitab, kuidas me teie isikuandmeid kogume, kasutame ja kaitseme.",
     "sections": [
       {
@@ -1411,7 +1412,8 @@
         "bullets": [
           "Apple/Google: turvaline maksete töötlemine",
           "OpenAI: anonüümne AI juhendamine",
-          "Hostingi pakkujad: Vercel ja Railway andmete salvestamiseks"
+          "Hostingi pakkujad: Vercel ja Railway andmete salvestamiseks",
+          "Google AdMob: isikustamata reklaamid tasuta kasutajatele"
         ]
       },
       {
@@ -1448,7 +1450,7 @@
       {
         "title": "Küpsised ja jälgimine",
         "paragraphs": [
-          "Kasutame teie sisselogituna hoidmiseks minimaalselt küpsiseid. Me ei kasuta kolmandate osapoolte jälgimis- ega reklaamiküpsiseid."
+          "Tasuta kasutajad võivad näha Google AdMobi isikustamata reklaame. Vajaduse korral kuvatakse enne reklaamide laadimist nõusolekuvorm. Tervise- ja treeninguandmeid, pulssi ega GPS-marsruute ei kasutata kunagi reklaamide sihtimiseks. Pro kasutajad reklaame ei näe."
         ]
       },
       {

@@ -12,3 +12,5 @@
 -keep class com.facebook.react.turbomodule.** { *; }
 
 # Add any project specific keep options here:
+# Keep Google UMP consent classes used by the ad consent flow.
+-keep class com.google.android.gms.internal.consent_sdk.** { *; }

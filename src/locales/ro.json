@@ -163,7 +163,7 @@
     "guarantee": "✓ Anulează oricând • ✓ 7 zile probă gratuită",
     "perMonth": "/lună",
     "startFreeTrial": "Începe perioada de probă gratuită",
-    "continueWithFree": "Continuă cu versiunea gratuită",
+    "continueWithFree": "Continuă gratuit cu reclame",
     "or": "sau",
     "errors": {
       "serverConnection": "Nu se poate conecta la server",
@@ -237,6 +237,7 @@
     "saved": "Salvat!",
     "logout": "Deconectare",
     "privacyPolicy": "Politica de confidențialitate",
+    "adPrivacy": "Opțiuni de confidențialitate pentru reclame",
     "termsOfService": "Termeni și condiții",
     "dangerZone": "Zonă periculoasă",
     "sections": {
@@ -577,8 +578,8 @@
     "languageTitle": "Alegeți limba",
     "languageSubtitle": "O puteți schimba mai târziu în Setări",
     "paywall": {
-      "headline": "Antrenorul tău personal AI",
-      "subtitle": "Un plan de antrenament care se adaptează la tine — în fiecare săptămână, la fiecare alergare.",
+      "headline": "Un plan care se adaptează după fiecare alergare",
+      "subtitle": "Știi exact ce să antrenezi astăzi — și de ce.",
       "benefits": {
         "adaptive": "Planul tău se adaptează după fiecare rulare",
         "audioCoach": "Antrenorul tău în urechi în timp ce te antrenezi",
@@ -798,7 +799,7 @@
     "priceUnit": "/lună",
     "guarantee": "✓ Anulează oricând • ✓ 7 zile probă gratuită",
     "startTrial": "Începe proba gratuită",
-    "continueWithFree": "Continuă cu versiunea gratuită",
+    "continueWithFree": "Continuă gratuit cu reclame",
     "features": {
       "aiCoach": {
         "title": "Antrenor AI",
@@ -1362,7 +1363,7 @@
   },
   "privacyPage": {
     "title": "Politica de confidențialitate",
-    "updated": "Ultima actualizare: aprilie 2026",
+    "updated": "Ultima actualizare: august 2026",
     "intro": "La RunWithAI, vă luăm în serios confidențialitatea. Această politică explică modul în care colectăm, utilizăm și vă protejăm informațiile personale.",
     "sections": [
       {
@@ -1411,7 +1412,8 @@
         "bullets": [
           "Apple/Google: procesare securizată a plăților",
           "OpenAI: coaching AI anonim",
-          "Furnizori de găzduire: Vercel și Railway pentru stocarea datelor"
+          "Furnizori de găzduire: Vercel și Railway pentru stocarea datelor",
+          "Google AdMob: reclame nepersonalizate pentru utilizatorii gratuiți"
         ]
       },
       {
@@ -1448,7 +1450,7 @@
       {
         "title": "Cookie-uri și urmărire",
         "paragraphs": [
-          "Folosim cookie-uri minime pentru a vă menține conectat. Nu folosim cookie-uri de urmărire sau de publicitate de la terți."
+          "Utilizatorii gratuiți pot vedea reclame nepersonalizate furnizate de Google AdMob. Acolo unde este necesar, se afișează un formular de consimțământ înainte de încărcarea reclamelor. Datele de sănătate și antrenament, pulsul și rutele GPS nu sunt niciodată folosite pentru direcționarea reclamelor. Utilizatorii Pro nu văd reclame."
         ]
       },
       {

@@ -70,6 +70,10 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>GMSApiKey</key>
 	<string>AIzaSyBWEWmIbDI57D9p2gsUnJrJmEzrnLdC808</string>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-3940256099942544~1458002511</string>
+	<key>GADDelayAppMeasurementInit</key>
+	<true/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSMinimumSystemVersion</key>

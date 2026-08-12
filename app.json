@@ -123,10 +123,24 @@
       "expo-font",
       "expo-localization",
       "expo-web-browser",
-      "expo-notifications"
+      "expo-notifications",
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-3940256099942544~3347511713",
+          "iosAppId": "ca-app-pub-3940256099942544~1458002511",
+          "delayAppMeasurementInit": true,
+          "optimizeInitialization": true,
+          "optimizeAdLoading": true
+        }
+      ]
     ],
     "owner": "tj2970",
     "extra": {
+      "ads": {
+        "mode": "test",
+        "personalized": false
+      },
       "eas": {
         "projectId": "e312f910-d828-4893-adf6-645ba1ba2252"
       }
