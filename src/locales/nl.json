@@ -163,7 +163,7 @@
     "guarantee": "✓ Op elk moment opzeggen • ✓ 7 dagen gratis proberen",
     "perMonth": "/maand",
     "startFreeTrial": "Start gratis proefperiode",
-    "continueWithFree": "Doorgaan met gratis versie",
+    "continueWithFree": "Gratis doorgaan met advertenties",
     "or": "of",
     "errors": {
       "serverConnection": "Kon geen verbinding maken met server",
@@ -237,6 +237,7 @@
     "saved": "Opgeslagen!",
     "logout": "Uitloggen",
     "privacyPolicy": "Privacybeleid",
+    "adPrivacy": "Privacykeuzes voor advertenties",
     "termsOfService": "Servicevoorwaarden",
     "dangerZone": "Gevarenzone",
     "sections": {
@@ -577,8 +578,8 @@
     "languageTitle": "Kies uw taal",
     "languageSubtitle": "U kunt dit later wijzigen in Instellingen",
     "paywall": {
-      "headline": "Uw persoonlijke AI-coach",
-      "subtitle": "Een trainingsplan dat zich aan jou aanpast — elke week, elke run.",
+      "headline": "Een plan dat zich na elke run aanpast",
+      "subtitle": "Weet precies wat je vandaag moet trainen — en waarom.",
       "benefits": {
         "adaptive": "Je plan wordt na elke run aangepast",
         "audioCoach": "Je coach in je oren terwijl je traint",
@@ -798,7 +799,7 @@
     "priceUnit": "/maand",
     "guarantee": "✓ Op elk moment opzeggen • ✓ 7 dagen gratis proberen",
     "startTrial": "Start gratis proefperiode",
-    "continueWithFree": "Ga verder met gratis versie",
+    "continueWithFree": "Gratis doorgaan met advertenties",
     "features": {
       "aiCoach": {
         "title": "AI Coach",
@@ -1362,7 +1363,7 @@
   },
   "privacyPage": {
     "title": "Privacybeleid",
-    "updated": "Laatst bijgewerkt: april 2026",
+    "updated": "Laatst bijgewerkt: augustus 2026",
     "intro": "Bij RunWithAI nemen we uw privacy serieus. In dit beleid wordt uitgelegd hoe wij uw persoonlijke gegevens verzamelen, gebruiken en beschermen.",
     "sections": [
       {
@@ -1411,7 +1412,8 @@
         "bullets": [
           "Apple/Google: beveiligde betalingsverwerking",
           "OpenAI: geanonimiseerde AI-coaching",
-          "Hostingproviders: Vercel en Railway voor gegevensopslag"
+          "Hostingproviders: Vercel en Railway voor gegevensopslag",
+          "Google AdMob: niet-gepersonaliseerde advertenties voor gratis gebruikers"
         ]
       },
       {
@@ -1448,7 +1450,7 @@
       {
         "title": "Cookies en tracking",
         "paragraphs": [
-          "We gebruiken minimale cookies om u aangemeld te houden. We gebruiken geen tracking- of advertentiecookies van derden."
+          "Gratis gebruikers kunnen niet-gepersonaliseerde advertenties van Google AdMob zien. Waar nodig wordt een toestemmingsformulier getoond voordat advertenties worden geladen. Gezondheids- en trainingsgegevens, hartslag en GPS-routes worden nooit gebruikt voor advertentietargeting. Pro-gebruikers zien geen advertenties."
         ]
       },
       {

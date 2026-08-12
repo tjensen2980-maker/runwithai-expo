@@ -163,7 +163,7 @@
     "guarantee": "✓ Bármikor lemondható • ✓ 7 nap ingyenes próba",
     "perMonth": "/hónap",
     "startFreeTrial": "Ingyenes próba indítása",
-    "continueWithFree": "Folytatás ingyenes verzióval",
+    "continueWithFree": "Folytatás ingyen, hirdetésekkel",
     "or": "vagy",
     "errors": {
       "serverConnection": "Nem sikerült csatlakozni a szerverhez",
@@ -237,6 +237,7 @@
     "saved": "Mentve!",
     "logout": "Kijelentkezés",
     "privacyPolicy": "Adatvédelmi irányelvek",
+    "adPrivacy": "Hirdetési adatvédelmi beállítások",
     "termsOfService": "Felhasználási feltételek",
     "dangerZone": "Veszélyzóna",
     "sections": {
@@ -577,8 +578,8 @@
     "languageTitle": "Válassza ki a nyelvet",
     "languageSubtitle": "Később módosíthatja a Beállításokban",
     "paywall": {
-      "headline": "Az Ön személyes AI edzője",
-      "subtitle": "Egy edzésterv, amely hozzád igazodik – minden héten, minden futáson.",
+      "headline": "Egy terv, amely minden futás után alkalmazkodik",
+      "subtitle": "Tudd pontosan, mit eddz ma — és miért.",
       "benefits": {
         "adaptive": "A terve minden futás után igazodik",
         "audioCoach": "Edződ a füledben edzés közben",
@@ -798,7 +799,7 @@
     "priceUnit": "/hó",
     "guarantee": "✓ Bármikor lemondható • ✓ 7 napos ingyenes próba",
     "startTrial": "Ingyenes próba indítása",
-    "continueWithFree": "Folytatás az ingyenes verzióval",
+    "continueWithFree": "Folytatás ingyen, hirdetésekkel",
     "features": {
       "aiCoach": {
         "title": "AI edző",
@@ -1362,7 +1363,7 @@
   },
   "privacyPage": {
     "title": "Adatvédelmi irányelvek",
-    "updated": "Utolsó frissítés: 2026. április",
+    "updated": "Utolsó frissítés: 2026. augusztus",
     "intro": "A RunWithAI-nál komolyan vesszük az Ön adatainak védelmét. Ez a szabályzat elmagyarázza, hogyan gyűjtjük, használjuk és védjük személyes adatait.",
     "sections": [
       {
@@ -1411,7 +1412,8 @@
         "bullets": [
           "Apple/Google: biztonságos fizetésfeldolgozás",
           "OpenAI: anonimizált AI coaching",
-          "Tárhelyszolgáltatók: Vercel és Railway az adattároláshoz"
+          "Tárhelyszolgáltatók: Vercel és Railway az adattároláshoz",
+          "Google AdMob: nem személyre szabott hirdetések ingyenes felhasználóknak"
         ]
       },
       {
@@ -1448,7 +1450,7 @@
       {
         "title": "Cookie-k és nyomon követés",
         "paragraphs": [
-          "Minimális cookie-kat használunk a bejelentkezéshez. Nem használunk harmadik féltől származó nyomkövető vagy hirdetési cookie-kat."
+          "Az ingyenes felhasználók nem személyre szabott hirdetéseket láthatnak a Google AdMobtól. Ahol szükséges, a hirdetések betöltése előtt hozzájárulási űrlap jelenik meg. Az egészségügyi és edzésadatokat, pulzust és GPS-útvonalakat soha nem használjuk hirdetések célzására. A Pro felhasználók nem látnak hirdetéseket."
         ]
       },
       {

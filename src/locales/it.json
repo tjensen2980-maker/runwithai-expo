@@ -163,7 +163,7 @@
     "guarantee": "✓ Annulla quando vuoi • ✓ 7 giorni di prova gratuita",
     "perMonth": "/mese",
     "startFreeTrial": "Inizia prova gratuita",
-    "continueWithFree": "Continua con versione gratuita",
+    "continueWithFree": "Continua gratis con pubblicità",
     "or": "o",
     "errors": {
       "serverConnection": "Impossibile connettersi al server",
@@ -237,6 +237,7 @@
     "saved": "Salvato!",
     "logout": "Esci",
     "privacyPolicy": "Informativa sulla privacy",
+    "adPrivacy": "Scelte sulla privacy degli annunci",
     "termsOfService": "Termini di servizio",
     "dangerZone": "Zona pericolosa",
     "sections": {
@@ -577,8 +578,8 @@
     "languageTitle": "Scegli la tua lingua",
     "languageSubtitle": "Puoi modificarlo in seguito in Impostazioni",
     "paywall": {
-      "headline": "Il tuo allenatore personale di intelligenza artificiale",
-      "subtitle": "Un piano di allenamento che si adatta a te: ogni settimana, ogni corsa.",
+      "headline": "Un piano che si adatta dopo ogni corsa",
+      "subtitle": "Sai esattamente cosa allenare oggi — e perché.",
       "benefits": {
         "adaptive": "Il tuo piano si adatta dopo ogni corsa",
         "audioCoach": "Il tuo allenatore nelle tue orecchie mentre ti alleni",
@@ -798,7 +799,7 @@
     "priceUnit": "/mese",
     "guarantee": "✓ Annulla quando vuoi • ✓ 7 giorni di prova gratuita",
     "startTrial": "Inizia prova gratuita",
-    "continueWithFree": "Continua con versione gratuita",
+    "continueWithFree": "Continua gratis con pubblicità",
     "features": {
       "aiCoach": {
         "title": "Coach AI",
@@ -1362,7 +1363,7 @@
   },
   "privacyPage": {
     "title": "Informativa sulla privacy",
-    "updated": "Ultimo aggiornamento: aprile 2026",
+    "updated": "Ultimo aggiornamento: agosto 2026",
     "intro": "Noi di RunWithAI prendiamo sul serio la tua privacy. Questa politica spiega come raccogliamo, utilizziamo e proteggiamo le tue informazioni personali.",
     "sections": [
       {
@@ -1411,7 +1412,8 @@
         "bullets": [
           "Apple/Google: elaborazione sicura dei pagamenti",
           "OpenAI: coaching AI anonimizzato",
-          "Provider di hosting: Vercel e Railway per l'archiviazione dei dati"
+          "Provider di hosting: Vercel e Railway per l'archiviazione dei dati",
+          "Google AdMob: annunci non personalizzati per gli utenti gratuiti"
         ]
       },
       {
@@ -1448,7 +1450,7 @@
       {
         "title": "Cookie e tracciamento",
         "paragraphs": [
-          "Utilizziamo un numero minimo di cookie per mantenere l'accesso. Non utilizziamo cookie di tracciamento o pubblicitari di terze parti."
+          "Gli utenti gratuiti possono vedere annunci non personalizzati forniti da Google AdMob. Ove richiesto, viene mostrato un modulo di consenso prima del caricamento degli annunci. I dati sulla salute e sull’allenamento, la frequenza cardiaca e i percorsi GPS non vengono mai utilizzati per indirizzare gli annunci. Gli utenti Pro non vedono annunci."
         ]
       },
       {

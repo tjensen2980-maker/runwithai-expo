@@ -9,6 +9,8 @@ import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
 import * as Notif from '../utils/notifications';
 import Integrations from './components/Integrations';
+import { showAdPrivacyOptions } from '../services/MobileAds';
+import { shouldShowAdPrivacyOptions } from '../config/ads';
 let DTP = null; try { DTP = require('@react-native-community/datetimepicker').default; } catch(e) {}
 
 function Field({ label, value, onChange, keyboard, placeholder }) {
@@ -783,6 +785,14 @@ const save = async () => {
         </TouchableOpacity>
 
         {/* ── PRIVATLIVSPOLITIK ── */}
+        {subscriptionTierKey !== 'pro' && Platform.OS !== 'web' && shouldShowAdPrivacyOptions() && (
+          <TouchableOpacity
+            style={s.privacyBtn}
+            onPress={() => showAdPrivacyOptions()}
+          >
+            <Text style={s.privacyText}>🛡️ {t('settings.adPrivacy')}</Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity 
           style={s.privacyBtn}
           onPress={() => onNavigate && onNavigate('privacy')}

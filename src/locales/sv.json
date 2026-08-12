@@ -163,7 +163,7 @@
     "guarantee": "✓ Avsluta när som helst • ✓ 7 dagars gratis provperiod",
     "perMonth": "/månad",
     "startFreeTrial": "Starta gratis provperiod",
-    "continueWithFree": "Fortsätt med gratisversionen",
+    "continueWithFree": "Fortsätt gratis med annonser",
     "or": "eller",
     "errors": {
       "serverConnection": "Kan inte ansluta till servern",
@@ -237,6 +237,7 @@
     "saved": "Sparat!",
     "logout": "Logga ut",
     "privacyPolicy": "Integritetspolicy",
+    "adPrivacy": "Integritetsval för annonser",
     "termsOfService": "Användarvillkor",
     "dangerZone": "Riskzon",
     "sections": {
@@ -577,8 +578,8 @@
     "languageTitle": "Välj ditt språk",
     "languageSubtitle": "Du kan ändra det senare i Inställningar",
     "paywall": {
-      "headline": "Din personliga AI-coach",
-      "subtitle": "En träningsplan som anpassar sig efter dig — varje vecka, varje löprunda.",
+      "headline": "En plan som anpassas efter varje löprunda",
+      "subtitle": "Vet exakt vad du ska träna i dag — och varför.",
       "benefits": {
         "adaptive": "Din plan anpassas efter varje löpning",
         "audioCoach": "Din tränare i dina öron medan du tränar",
@@ -798,7 +799,7 @@
     "priceUnit": "/månad",
     "guarantee": "✓ Avsluta när som helst • ✓ 7 dagars gratis provperiod",
     "startTrial": "Starta gratis provperiod",
-    "continueWithFree": "Fortsätt med gratisversionen",
+    "continueWithFree": "Fortsätt gratis med annonser",
     "features": {
       "aiCoach": {
         "title": "AI-tränare",
@@ -1362,7 +1363,7 @@
   },
   "privacyPage": {
     "title": "Sekretesspolicy",
-    "updated": "Senast uppdaterad: april 2026",
+    "updated": "Senast uppdaterad: augusti 2026",
     "intro": "På RunWithAI tar vi din integritet på allvar. Denna policy förklarar hur vi samlar in, använder och skyddar din personliga information.",
     "sections": [
       {
@@ -1411,7 +1412,8 @@
         "bullets": [
           "Apple/Google: säker betalningshantering",
           "OpenAI: anonymiserad AI-coachning",
-          "Värdleverantörer: Vercel och Railway för datalagring"
+          "Värdleverantörer: Vercel och Railway för datalagring",
+          "Google AdMob: icke-personanpassade annonser för gratisanvändare"
         ]
       },
       {
@@ -1448,7 +1450,7 @@
       {
         "title": "Cookies och spårning",
         "paragraphs": [
-          "Vi använder minimalt med cookies för att hålla dig inloggad. Vi använder inte spårnings- eller reklamcookies från tredje part."
+          "Gratisanvändare kan se icke-personanpassade annonser från Google AdMob. Där det krävs visas ett samtyckesformulär innan annonser laddas. Hälso- och träningsdata, puls och GPS-rutter används aldrig för annonsinriktning. Pro-användare ser inga annonser."
         ]
       },
       {

@@ -163,7 +163,7 @@
     "guarantee": "✓ Peruuta milloin vain • ✓ 7 päivän ilmainen kokeilu",
     "perMonth": "/kuukausi",
     "startFreeTrial": "Aloita ilmainen kokeilu",
-    "continueWithFree": "Jatka ilmaisversiolla",
+    "continueWithFree": "Jatka ilmaiseksi mainosten kanssa",
     "or": "tai",
     "errors": {
       "serverConnection": "Palvelimeen ei saada yhteyttä",
@@ -237,6 +237,7 @@
     "saved": "Tallennettu!",
     "logout": "Kirjaudu ulos",
     "privacyPolicy": "Tietosuojakäytäntö",
+    "adPrivacy": "Mainosten tietosuoja-asetukset",
     "termsOfService": "Käyttöehdot",
     "dangerZone": "Vaaravyöhyke",
     "sections": {
@@ -577,8 +578,8 @@
     "languageTitle": "Valitse kieli",
     "languageSubtitle": "Voit muuttaa sitä myöhemmin asetuksissa",
     "paywall": {
-      "headline": "Henkilökohtainen tekoälyvalmentajasi",
-      "subtitle": "Harjoittelusuunnitelma, joka mukautuu sinulle – joka viikko, joka lenkki.",
+      "headline": "Suunnitelma, joka mukautuu jokaisen lenkin jälkeen",
+      "subtitle": "Tiedä tarkalleen, mitä harjoitella tänään — ja miksi.",
       "benefits": {
         "adaptive": "Suunnitelmasi mukautuu jokaisen ajon jälkeen",
         "audioCoach": "Valmentajasi korvissasi harjoittelun aikana",
@@ -798,7 +799,7 @@
     "priceUnit": "/kk",
     "guarantee": "✓ Peru milloin vain • ✓ 7 päivän ilmainen kokeilu",
     "startTrial": "Aloita ilmainen kokeilu",
-    "continueWithFree": "Jatka ilmaisversiolla",
+    "continueWithFree": "Jatka ilmaiseksi mainosten kanssa",
     "features": {
       "aiCoach": {
         "title": "AI-valmentaja",
@@ -1362,7 +1363,7 @@
   },
   "privacyPage": {
     "title": "Tietosuojakäytäntö",
-    "updated": "Päivitetty viimeksi: huhtikuussa 2026",
+    "updated": "Päivitetty viimeksi: elokuussa 2026",
     "intro": "RunWithAI:ssa otamme yksityisyytesi vakavasti. Tämä käytäntö selittää, kuinka keräämme, käytämme ja suojaamme henkilötietojasi.",
     "sections": [
       {
@@ -1411,7 +1412,8 @@
         "bullets": [
           "Apple/Google: turvallinen maksujen käsittely",
           "OpenAI: anonymisoitu tekoälyvalmennus",
-          "Isännöintipalveluntarjoajat: Vercel ja Railway tietojen tallentamiseen"
+          "Isännöintipalveluntarjoajat: Vercel ja Railway tietojen tallentamiseen",
+          "Google AdMob: personoimattomat mainokset ilmaisille käyttäjille"
         ]
       },
       {
@@ -1448,7 +1450,7 @@
       {
         "title": "Evästeet ja seuranta",
         "paragraphs": [
-          "Käytämme vain vähän evästeitä pitääksemme sinut kirjautuneena sisään. Emme käytä kolmannen osapuolen seuranta- tai mainosevästeitä."
+          "Ilmaiset käyttäjät voivat nähdä Google AdMobin personoimattomia mainoksia. Tarvittaessa suostumuslomake näytetään ennen mainosten lataamista. Terveys- ja harjoitustietoja, sykettä tai GPS-reittejä ei koskaan käytetä mainonnan kohdentamiseen. Pro-käyttäjät eivät näe mainoksia."
         ]
       },
       {

@@ -163,7 +163,7 @@
     "guarantee": "✓ Atcel jebkurā laikā • ✓ 7 dienas bez maksas",
     "perMonth": "/mēnesī",
     "startFreeTrial": "Sākt bezmaksas izmēģinājuma periodu",
-    "continueWithFree": "Turpināt ar bezmaksas versiju",
+    "continueWithFree": "Turpināt bez maksas ar reklāmām",
     "or": "vai",
     "errors": {
       "serverConnection": "Nevar izveidot savienojumu ar serveri",
@@ -237,6 +237,7 @@
     "saved": "Saglabāts!",
     "logout": "Izrakstīties",
     "privacyPolicy": "Privātuma politika",
+    "adPrivacy": "Reklāmu privātuma izvēles",
     "termsOfService": "Lietošanas noteikumi",
     "dangerZone": "Bīstama zona",
     "sections": {
@@ -577,8 +578,8 @@
     "languageTitle": "Izvēlieties valodu",
     "languageSubtitle": "Varat to mainīt vēlāk sadaļā Iestatījumi",
     "paywall": {
-      "headline": "Jūsu personīgais AI treneris",
-      "subtitle": "Treniņu plāns, kas pielāgojas jums — katru nedēļu, katru skrējienu.",
+      "headline": "Plāns, kas pielāgojas pēc katra skrējiena",
+      "subtitle": "Precīzi zini, ko trenēt šodien — un kāpēc.",
       "benefits": {
         "adaptive": "Jūsu plāns tiek pielāgots pēc katra brauciena",
         "audioCoach": "Treniņa laikā treneris ir tavās ausīs",
@@ -798,7 +799,7 @@
     "priceUnit": "/mēnesī",
     "guarantee": "✓ Atcelšana jebkurā laikā • ✓ 7 dienu bezmaksas izmēģinājums",
     "startTrial": "Sākt bezmaksas izmēģinājumu",
-    "continueWithFree": "Turpināt ar bezmaksas versiju",
+    "continueWithFree": "Turpināt bez maksas ar reklāmām",
     "features": {
       "aiCoach": {
         "title": "AI treneris",
@@ -1362,7 +1363,7 @@
   },
   "privacyPage": {
     "title": "Privātuma politika",
-    "updated": "Pēdējo reizi atjaunināts: 2026. gada aprīlī",
+    "updated": "Pēdējo reizi atjaunināts: 2026. gada augustā",
     "intro": "RunWithAI mēs nopietni uztveram jūsu privātumu. Šajā politikā ir paskaidrots, kā mēs apkopojam, izmantojam un aizsargājam jūsu personisko informāciju.",
     "sections": [
       {
@@ -1411,7 +1412,8 @@
         "bullets": [
           "Apple/Google: droša maksājumu apstrāde",
           "OpenAI: anonimizēta AI apmācība",
-          "Hostinga pakalpojumu sniedzēji: Vercel un Railway datu glabāšanai"
+          "Hostinga pakalpojumu sniedzēji: Vercel un Railway datu glabāšanai",
+          "Google AdMob: nepersonalizētas reklāmas bezmaksas lietotājiem"
         ]
       },
       {
@@ -1448,7 +1450,7 @@
       {
         "title": "Sīkfaili un izsekošana",
         "paragraphs": [
-          "Mēs izmantojam minimālu sīkfailu skaitu, lai jūs varētu pierakstīties. Mēs neizmantojam trešo pušu izsekošanas vai reklāmas sīkfailus."
+          "Bezmaksas lietotāji var redzēt Google AdMob nepersonalizētas reklāmas. Ja nepieciešams, pirms reklāmu ielādes tiek parādīta piekrišanas veidlapa. Veselības un treniņu dati, pulss un GPS maršruti nekad netiek izmantoti reklāmu mērķēšanai. Pro lietotāji reklāmas neredz."
         ]
       },
       {

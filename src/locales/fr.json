@@ -163,7 +163,7 @@
     "guarantee": "✓ Annulation à tout moment • ✓ 7 jours d'essai gratuit",
     "perMonth": "/mois",
     "startFreeTrial": "Démarrer l'essai gratuit",
-    "continueWithFree": "Continuer avec la version gratuite",
+    "continueWithFree": "Continuer gratuitement avec des publicités",
     "or": "ou",
     "errors": {
       "serverConnection": "Impossible de se connecter au serveur",
@@ -237,6 +237,7 @@
     "saved": "Enregistré !",
     "logout": "Déconnexion",
     "privacyPolicy": "Politique de confidentialité",
+    "adPrivacy": "Choix de confidentialité des annonces",
     "termsOfService": "Conditions d'utilisation",
     "dangerZone": "Zone de danger",
     "sections": {
@@ -577,8 +578,8 @@
     "languageTitle": "Choisissez votre langue",
     "languageSubtitle": "Vous pourrez le modifier ultérieurement dans Paramètres",
     "paywall": {
-      "headline": "Votre coach personnel en IA",
-      "subtitle": "Un plan d'entraînement qui s'adapte à vous, chaque semaine, chaque course.",
+      "headline": "Un plan qui s’adapte après chaque course",
+      "subtitle": "Sachez exactement quoi travailler aujourd’hui — et pourquoi.",
       "benefits": {
         "adaptive": "Votre plan s'adapte après chaque exécution",
         "audioCoach": "Votre coach dans vos oreilles pendant que vous vous entraînez",
@@ -798,7 +799,7 @@
     "priceUnit": "/mois",
     "guarantee": "✓ Annulez à tout moment • ✓ Essai gratuit de 7 jours",
     "startTrial": "Commencer l'essai gratuit",
-    "continueWithFree": "Continuer avec la version gratuite",
+    "continueWithFree": "Continuer gratuitement avec des publicités",
     "features": {
       "aiCoach": {
         "title": "Coach IA",
@@ -1362,7 +1363,7 @@
   },
   "privacyPage": {
     "title": "Politique de confidentialité",
-    "updated": "Dernière mise à jour : avril 2026",
+    "updated": "Dernière mise à jour : août 2026",
     "intro": "Chez RunWithAI, nous prenons votre vie privée au sérieux. Cette politique explique comment nous collectons, utilisons et protégeons vos informations personnelles.",
     "sections": [
       {
@@ -1411,7 +1412,8 @@
         "bullets": [
           "Apple/Google : traitement sécurisé des paiements",
           "OpenAI : coaching IA anonymisé",
-          "Hébergeurs : Vercel et Chemin de fer pour le stockage des données"
+          "Hébergeurs : Vercel et Chemin de fer pour le stockage des données",
+          "Google AdMob : annonces non personnalisées pour les utilisateurs gratuits"
         ]
       },
       {
@@ -1448,7 +1450,7 @@
       {
         "title": "Cookies et suivi",
         "paragraphs": [
-          "Nous utilisons un minimum de cookies pour vous permettre de rester connecté. Nous n'utilisons pas de cookies de suivi ou publicitaires tiers."
+          "Les utilisateurs gratuits peuvent voir des annonces non personnalisées fournies par Google AdMob. Lorsque cela est requis, un formulaire de consentement est affiché avant le chargement des annonces. Les données de santé et d’entraînement, la fréquence cardiaque et les itinéraires GPS ne sont jamais utilisés pour cibler les annonces. Les utilisateurs Pro ne voient aucune annonce."
         ]
       },
       {

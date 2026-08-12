@@ -163,7 +163,7 @@
     "guarantee": "✓ Prekliči kadarkoli • ✓ 7 dni brezplačno",
     "perMonth": "/mesec",
     "startFreeTrial": "Začni brezplačno preizkusno obdobje",
-    "continueWithFree": "Nadaljuj z brezplačno različico",
+    "continueWithFree": "Nadaljuj brezplačno z oglasi",
     "or": "ali",
     "errors": {
       "serverConnection": "Ni mogoče vzpostaviti povezave s strežnikom",
@@ -237,6 +237,7 @@
     "saved": "Shranjeno!",
     "logout": "Odjava",
     "privacyPolicy": "Pravilnik o zasebnosti",
+    "adPrivacy": "Nastavitve zasebnosti oglasov",
     "termsOfService": "Pogoji uporabe",
     "dangerZone": "Nevarna cona",
     "sections": {
@@ -577,8 +578,8 @@
     "languageTitle": "Izberite svoj jezik",
     "languageSubtitle": "To lahko pozneje spremenite v nastavitvah",
     "paywall": {
-      "headline": "Vaš osebni trener AI",
-      "subtitle": "Načrt treninga, ki se prilagaja vam – vsak teden, vsak tek.",
+      "headline": "Načrt, ki se prilagodi po vsakem teku",
+      "subtitle": "Natančno vedite, kaj trenirati danes — in zakaj.",
       "benefits": {
         "adaptive": "Vaš načrt se prilagodi po vsakem teku",
         "audioCoach": "Vaš trener v ušesih med vadbo",
@@ -798,7 +799,7 @@
     "priceUnit": "/mesec",
     "guarantee": "✓ Preklic kadarkoli • ✓ 7-dnevno brezplačno preizkusno obdobje",
     "startTrial": "Začni brezplačno preizkusno obdobje",
-    "continueWithFree": "Nadaljuj z brezplačno verzijo",
+    "continueWithFree": "Nadaljuj brezplačno z oglasi",
     "features": {
       "aiCoach": {
         "title": "AI trener",
@@ -1362,7 +1363,7 @@
   },
   "privacyPage": {
     "title": "Politika zasebnosti",
-    "updated": "Zadnja posodobitev: april 2026",
+    "updated": "Zadnja posodobitev: avgust 2026",
     "intro": "Pri RunWithAI vašo zasebnost jemljemo resno. Ta pravilnik pojasnjuje, kako zbiramo, uporabljamo in varujemo vaše osebne podatke.",
     "sections": [
       {
@@ -1411,7 +1412,8 @@
         "bullets": [
           "Apple/Google: varna obdelava plačil",
           "OpenAI: anonimizirano AI coaching",
-          "Ponudnika gostovanja: Vercel in Railway za shranjevanje podatkov"
+          "Ponudnika gostovanja: Vercel in Railway za shranjevanje podatkov",
+          "Google AdMob: nepersonalizirani oglasi za brezplačne uporabnike"
         ]
       },
       {
@@ -1448,7 +1450,7 @@
       {
         "title": "Piškotki in sledenje",
         "paragraphs": [
-          "Uporabljamo minimalno količino piškotkov, da ostanete prijavljeni. Ne uporabljamo sledilnih ali oglaševalskih piškotkov tretjih oseb."
+          "Brezplačni uporabniki lahko vidijo nepersonalizirane oglase storitve Google AdMob. Kjer je potrebno, se pred nalaganjem oglasov prikaže obrazec za soglasje. Zdravstveni in vadbeni podatki, srčni utrip ter poti GPS se nikoli ne uporabljajo za ciljanje oglasov. Uporabniki Pro oglasov ne vidijo."
         ]
       },
       {

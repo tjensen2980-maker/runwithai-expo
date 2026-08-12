@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors, loadCoachGreeting } from '../data';
 import { localizeWorkoutLabel } from '../utils/localizeWorkout';
+import FreeTierBanner from '../components/FreeTierBanner';
 
 // ============================================================
 // Home.js - New AI-first home screen
@@ -76,6 +77,7 @@ export default function Home({
   onStartActivity,
   onOpenChat,
   isPro,
+  subscriptionKnown,
   isFree,
   onShowPricing,
 }) {
@@ -157,11 +159,11 @@ export default function Home({
       contentContainerStyle={styles.scrollContent}
       keyboardShouldPersistTaps="handled"
     >
-      {/* AI Coach hero */}
+      {/* Personalized plan hero */}
       <View style={styles.aiHero}>
         <View style={styles.aiBadgeRow}>
           <View style={styles.aiBadge}>
-            <Text style={styles.aiBadgeText}>AI COACH</Text>
+            <Text style={styles.aiBadgeText}>RUNWITHAI</Text>
           </View>
         </View>
         <Text style={styles.aiGreetingLine1}>
@@ -245,6 +247,8 @@ export default function Home({
           <Text style={styles.keySub}>{t('home.toGoal', { distance: 50 })}</Text>
         </TouchableOpacity>
       </View>
+
+      <FreeTierBanner isPro={isPro} subscriptionKnown={subscriptionKnown} placement="home" />
 
       <View style={{ height: 24 }} />
     </ScrollView>

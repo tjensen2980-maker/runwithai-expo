@@ -163,7 +163,7 @@
     "guarantee": "✓ Cealaigh am ar bith • ✓ 7 lá saor in aisce",
     "perMonth": "/mí",
     "startFreeTrial": "Tosaigh triail saor in aisce",
-    "continueWithFree": "Lean leis an leagan saor in aisce",
+    "continueWithFree": "Lean ar aghaidh saor in aisce le fógraí",
     "or": "nó",
     "errors": {
       "serverConnection": "Ní féidir ceangal leis an bhfreastalaí",
@@ -237,6 +237,7 @@
     "saved": "Sábháilte!",
     "logout": "Logáil amach",
     "privacyPolicy": "Polasaí príobháideachta",
+    "adPrivacy": "Roghanna príobháideachais fógraí",
     "termsOfService": "Téarmaí seirbhíse",
     "dangerZone": "Crios contúirteach",
     "sections": {
@@ -577,8 +578,8 @@
     "languageTitle": "Roghnaigh do theanga",
     "languageSubtitle": "Is féidir leat é a athrú níos déanaí sna Socruithe",
     "paywall": {
-      "headline": "Do chóiste AI pearsanta",
-      "subtitle": "Plean oiliúna a chuireann in oiriúint duit - gach seachtain, gach rith.",
+      "headline": "Plean a chuireann in oiriúint tar éis gach rith",
+      "subtitle": "Bíodh a fhios agat go díreach cad ba cheart duit a thraenáil inniu — agus cén fáth.",
       "benefits": {
         "adaptive": "Déanann do phlean oiriúnú tar éis gach rith",
         "audioCoach": "Do chóiste i do chluasa agus tú ag traenáil",
@@ -798,7 +799,7 @@
     "priceUnit": "/mí",
     "guarantee": "✓ Cealaigh am ar bith • ✓ Triail 7 lá saor in aisce",
     "startTrial": "Tosaigh triail saor in aisce",
-    "continueWithFree": "Lean ar aghaidh leis an leagan saor",
+    "continueWithFree": "Lean ar aghaidh saor in aisce le fógraí",
     "features": {
       "aiCoach": {
         "title": "Traenálaí AI",
@@ -1362,7 +1363,7 @@
   },
   "privacyPage": {
     "title": "Beartas Príobháideachta",
-    "updated": "Nuashonrú is déanaí: Aibreán 2026",
+    "updated": "Nuashonrú is déanaí: Lúnasa 2026",
     "intro": "Ag RunWithAI, glacaimid do phríobháideachas i ndáiríre. Míníonn an polasaí seo conas a bhailímid, a úsáidimid agus a chosnaíonn tú do chuid faisnéise pearsanta.",
     "sections": [
       {
@@ -1411,7 +1412,8 @@
         "bullets": [
           "Apple/Google: próiseáil slán íocaíochta",
           "OpenAI: oiliúint AI gan ainm",
-          "Soláthraithe óstála: Vercel and Railway le haghaidh stórála sonraí"
+          "Soláthraithe óstála: Vercel and Railway le haghaidh stórála sonraí",
+          "Google AdMob: fógraí neamhphearsantaithe d’úsáideoirí saor in aisce"
         ]
       },
       {
@@ -1448,7 +1450,7 @@
       {
         "title": "Fianáin agus rianú",
         "paragraphs": [
-          "Úsáidimid fianáin íosta chun tú a choinneáil sínithe isteach. Ní úsáidimid fianáin rianaithe nó fógraíochta tríú páirtí."
+          "Féadfaidh úsáideoirí saor in aisce fógraí neamhphearsantaithe ó Google AdMob a fheiceáil. Nuair is gá, taispeántar foirm toilithe sula lódáiltear fógraí. Ní úsáidtear sonraí sláinte ná oiliúna, ráta croí ná bealaí GPS riamh chun fógraí a spriocdhíriú. Ní fheiceann úsáideoirí Pro fógraí."
         ]
       },
       {

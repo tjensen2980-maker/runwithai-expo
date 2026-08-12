@@ -761,11 +761,11 @@ if (tab === 'cycleTracker') {
   const renderScreen = () => {
     switch (tab) {
       case 'home':
-      return <Home level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} runs={runs} onNavigate={setTab} onStartActivity={handleStartActivity} onOpenChat={(draft) => { setChatDraft(draft || ''); setTab('chat'); }} isPro={isPro} isFree={isFree} onShowPricing={() => setShowTierCarousel(true)} />;
+      return <Home level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} runs={runs} onNavigate={setTab} onStartActivity={handleStartActivity} onOpenChat={(draft) => { setChatDraft(draft || ''); setTab('chat'); }} isPro={isPro} subscriptionKnown={Boolean(subscription)} isFree={isFree} onShowPricing={() => setShowTierCarousel(true)} />;
     case 'dashboard':
         return <PlanTab level={level} nextWorkout={nextWorkout} weekPlan={weekPlan} planChanges={planChanges} profile={profile} runs={runs} onNavigate={setTab} onStartActivity={handleStartActivity} trainingPlan={trainingPlan} onPlanUpdate={handlePlanUpdate} isPro={isPro} isFree={isFree} onShowPricing={() => setShowTierCarousel(true)} />;
       case 'activity':
-        return <Progress runs={runs} onRunDeleted={(deletedRun) => {
+        return <Progress runs={runs} isPro={isPro} subscriptionKnown={Boolean(subscription)} onRunDeleted={(deletedRun) => {
           const deletedId = String(deletedRun?.id ?? '').replace(/^act-/, '');
           const deletedIsActivity = Boolean(deletedRun?.isActivity) || String(deletedRun?.id ?? '').startsWith('act-');
           setRuns(previous => previous.filter((candidate) => {

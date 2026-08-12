@@ -187,7 +187,7 @@
     "guarantee": "✓ Annuller når som helst • ✓ 7 dages gratis prøveperiode",
     "perMonth": "/måned",
     "startFreeTrial": "Start gratis prøveperiode",
-    "continueWithFree": "Fortsæt med gratis version",
+    "continueWithFree": "Fortsæt gratis med reklamer",
     "or": "eller",
     "resetPassword": "Nulstil adgangskode",
     "forgotPasswordDesc": "Indtast din e-mail, så sender vi dig en nulstillingskode.",
@@ -237,6 +237,7 @@
     "saved": "Gemt!",
     "logout": "Log ud",
     "privacyPolicy": "Privatlivspolitik",
+    "adPrivacy": "Valg for annonceprivatliv",
     "termsOfService": "Servicevilkår",
     "dangerZone": "Farezone",
     "sections": {
@@ -569,8 +570,8 @@
       }
     },
     "paywall": {
-      "headline": "Din personlige AI-coach",
-      "subtitle": "En træningsplan, der tilpasser sig dig — hver uge, hvert løb.",
+      "headline": "En plan, der tilpasser sig efter hvert løb",
+      "subtitle": "Vid præcis, hvad du skal træne i dag — og hvorfor.",
       "benefits": {
         "adaptive": "Din plan tilpasser sig efter hvert løb",
         "audioCoach": "Coachen i ørerne, mens du træner",
@@ -795,7 +796,7 @@
     "priceUnit": "/måned",
     "guarantee": "✓ Annuller når som helst • ✓ 7 dages gratis prøveperiode",
     "startTrial": "Start gratis prøveperiode",
-    "continueWithFree": "Fortsæt med gratis version",
+    "continueWithFree": "Fortsæt gratis med reklamer",
     "features": {
       "aiCoach": {
         "title": "AI Coach",
@@ -1341,18 +1342,18 @@
   },
   "privacyPage": {
     "title": "Privatlivspolitik",
-    "updated": "Sidst opdateret: April 2026",
+    "updated": "Sidst opdateret: August 2026",
     "intro": "Hos RunWithAI tager vi dit privatliv alvorligt. Denne politik beskriver, hvordan vi indsamler, bruger og beskytter dine personlige oplysninger.",
     "sections": [
       { "title": "Dataansvarlig", "paragraphs": ["RunWithAI er ansvarlig for behandlingen af dine personoplysninger. Kontakt os på privacy@runwithai.app, hvis du har spørgsmål."] },
       { "title": "Hvilke data indsamler vi?", "paragraphs": ["Vi indsamler følgende typer data:"], "bullets": ["Kontooplysninger: e-mail, navn, alder og køn", "Fysiske data: vægt og højde (valgfrit)", "Træningsdata: aktiviteter, distance, tempo, puls og GPS-ruter", "Appbrug: præferencer, mål og niveau", "Betalingsoplysninger: håndteres sikkert af App Store eller Google Play"] },
       { "title": "Hvordan bruger vi dine data?", "paragraphs": ["Vi bruger dine data til at:"], "bullets": ["Levere personlige AI-træningsplaner", "Analysere din træning og fremgang", "Forbedre vores tjenester", "Sende relevante notifikationer og opdateringer", "Håndtere betalinger og abonnementer"] },
       { "title": "Integration med tredjeparter", "paragraphs": ["RunWithAI kan gemme træningsdata i Apple Health eller Health Connect og sende løbedata til Strava, når du vælger at forbinde dem. Dine loginoplysninger gemmes aldrig i appen."] },
-      { "title": "Datadeling", "paragraphs": ["Vi sælger aldrig dine data. Vi deler kun data med:"], "bullets": ["Apple/Google: sikker betalingshåndtering", "OpenAI: anonymiseret AI-coaching", "Hostingudbydere: Vercel og Railway til dataopbevaring"] },
+      { "title": "Datadeling", "paragraphs": ["Vi sælger aldrig dine data. Vi deler kun data med:"], "bullets": ["Apple/Google: sikker betalingshåndtering", "OpenAI: anonymiseret AI-coaching", "Hostingudbydere: Vercel og Railway til dataopbevaring", "Google AdMob: ikke-personlige reklamer til gratisbrugere"] },
       { "title": "Datasikkerhed", "paragraphs": ["Vi bruger industristandarder til at beskytte dine data, herunder:"], "bullets": ["HTTPS-kryptering på alle forbindelser", "Sikker hashing af adgangskoder med bcrypt", "JWT-tokens til autentificering", "Regelmæssige sikkerhedsopdateringer"] },
       { "title": "Dine rettigheder", "paragraphs": ["Du har ret til at:"], "bullets": ["Få adgang til dine data", "Rette fejl i dine oplysninger", "Slette din konto og alle data", "Eksportere dine data som CSV", "Trække samtykke tilbage"] },
       { "title": "Opbevaring af data", "paragraphs": ["Vi opbevarer dine data, så længe din konto er aktiv. Hvis du sletter kontoen, fjernes alle data inden for 30 dage."] },
-      { "title": "Cookies og sporing", "paragraphs": ["Vi bruger minimale cookies til at holde dig logget ind. Vi bruger ikke tredjepartssporing eller reklamecookies."] },
+      { "title": "Reklamer og sporing", "paragraphs": ["Gratisbrugere kan se ikke-personlige reklamer leveret af Google AdMob. Hvor det er påkrævet, vises en samtykkeformular, før reklamer hentes. Sundhedsdata, træningsdata, puls og GPS-ruter bruges aldrig til målretning af reklamer. Pro-brugere ser ingen reklamer."] },
       { "title": "Børns privatliv", "paragraphs": ["RunWithAI er ikke beregnet til børn under 13 år, og vi indsamler ikke bevidst data fra børn under denne alder."] },
       { "title": "Ændringer i politikken", "paragraphs": ["Vi kan opdatere denne politik fra tid til anden. Ved væsentlige ændringer informerer vi dig i appen eller via e-mail."] },
       { "title": "Kontakt", "paragraphs": [] }
