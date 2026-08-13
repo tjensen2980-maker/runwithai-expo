@@ -4,12 +4,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '../data';
 
 const KM_FOR_NIVEAU = { beginner: 5, intermediate: 15, advanced: 30 };
 
 export default function CoachIntro({ onFaerdig }) {
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const [beskeder, setBeskeder] = useState([]);
   const [svar, setSvar] = useState({});
   const [trin, setTrin] = useState(-1);
@@ -93,12 +95,20 @@ export default function CoachIntro({ onFaerdig }) {
   }
 
   return (
-    <KeyboardAvoidingView style={s.safe} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardAvoidingView
+      style={[s.safe, { paddingTop: Math.max(58, insets.top + 12) }]}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
       <View style={s.top}>
         <View style={s.aiDot} />
         <Text style={s.topTitel}>{t('coachIntro.title')}</Text>
       </View>
-      <ScrollView ref={scroll} style={{ flex: 1 }} contentContainerStyle={{ padding: 16, paddingBottom: 24 }}>
+      <ScrollView
+        ref={scroll}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ padding: 16, paddingBottom: 24 }}
+        keyboardShouldPersistTaps="handled"
+      >
         {beskeder.map((b, i) => (
           <View key={i} style={[s.boble, b.fra === 'coach' ? s.bobleCoach : s.bobleBruger]}>
             <Text style={b.fra === 'coach' ? s.bobleCoachTekst : s.bobleBrugerTekst}>{b.tekst}</Text>
@@ -120,7 +130,7 @@ export default function CoachIntro({ onFaerdig }) {
         </View>
       )}
       {stil && !skriver && stil.type !== 'chips' && (
-        <View style={s.inputOmraade}>
+        <View style={[s.inputOmraade, { paddingBottom: Math.max(28, insets.bottom + 12) }]}>
           {stil.chip && (
             <TouchableOpacity style={[s.chip, { alignSelf: 'center', marginBottom: 10 }]} onPress={() => afgiv('', stil.chip)}>
               <Text style={s.chipTekst}>{stil.chip}</Text>
@@ -149,7 +159,7 @@ export default function CoachIntro({ onFaerdig }) {
 }
 
 const s = StyleSheet.create({
-  safe:            { flex: 1, backgroundColor: colors.bg, paddingTop: 58 },
+  safe:            { flex: 1, backgroundColor: colors.bg },
   top:             { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, paddingBottom: 14 },
   aiDot:           { width: 18, height: 18, borderRadius: 9, backgroundColor: '#EFFFF8', borderWidth: 4, borderColor: colors.accent2 },
   topTitel:        { color: colors.text, fontSize: 17, fontWeight: '800' },
