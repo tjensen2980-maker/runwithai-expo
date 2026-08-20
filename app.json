@@ -4,7 +4,7 @@
     "slug": "runwithai",
     "scheme": "app.runwithai",
     "newArchEnabled": false,
-    "version": "2.5.14",
+    "version": "2.5.16",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
