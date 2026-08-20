@@ -31,7 +31,7 @@ function decodeJwtPayload(token) {
   }
 }
 
-function getStableAppUserId(token) {
+export function getStableAppUserId(token) {
   const payload = decodeJwtPayload(token);
   const rawId = [payload?.userId, payload?.user_id, payload?.id, payload?.sub]
     .find(value => value != null && !String(value).includes('@'));
