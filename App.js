@@ -16,7 +16,8 @@ import { useWatch } from './src/hooks/useWatch'
 import useHealthKit from './src/hooks/useHealthKit'
 import { useHealthConnect } from './src/hooks/useHealthConnect'
 import { syncAuthToWatch } from './src/services/WatchSync';
-import { logOutRevenueCat } from './src/services/RevenueCat';
+import { getStableAppUserId, logOutRevenueCat } from './src/services/RevenueCat';
+import { trackFunnelEvent } from './src/services/FunnelAnalytics';
 import Auth from './src/screens/Auth';
 import Onboarding from './src/screens/Onboarding';
 import OnboardingCarousel from './src/components/OnboardingCarousel';
@@ -354,7 +355,14 @@ export default function App() {
   const [loading, setLoading]               = useState(true);
   const [activityType, setActivityType]     = useState('run');
   const [showTierCarousel, setShowTierCarousel] = useState(false);
+  const [paywallEntryPoint, setPaywallEntryPoint] = useState('manual');
   const [selectedRun, setSelectedRun]       = useState(null);
+  const firstRunPaywallCheckRef = React.useRef(false);
+
+  const openPaywall = React.useCallback((entryPoint = 'manual') => {
+    setPaywallEntryPoint(entryPoint);
+    setShowTierCarousel(true);
+  }, []);
 // Watch sync - modtager run fra ur og marker dagens træning som completed
   const trainingPlanRef = React.useRef(null);
   const { sendTodayTraining } = useWatch({
@@ -388,7 +396,39 @@ export default function App() {
   });
 
   const token = getAuthToken();
+  const paywallUserKey = getStableAppUserId(token) || user?.id || user?.email;
   const { subscription, tier, isPro, isBasic, isFree, canUseAICoach, canUseAllActivities, weeklyActivityLimit, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
+
+  useEffect(() => {
+    firstRunPaywallCheckRef.current = false;
+  }, [paywallUserKey]);
+
+  useEffect(() => {
+    if (!user || !paywallUserKey || !subscription || showOnboarding || showTierCarousel || isPro || !runs.length) return;
+    if (firstRunPaywallCheckRef.current) return;
+
+    firstRunPaywallCheckRef.current = true;
+    (async () => {
+      try {
+        const storageKey = `postFirstRunPaywall:${paywallUserKey}`;
+        const paywallState = await AsyncStorage.getItem(storageKey);
+        if (paywallState !== 'pending') {
+          firstRunPaywallCheckRef.current = false;
+          return;
+        }
+
+        await AsyncStorage.setItem(storageKey, 'shown');
+        trackFunnelEvent('first_activity_saved', {
+          activity_type: runs[0]?.type || 'unknown',
+          activity_count: runs.length,
+        }).catch(() => {});
+        openPaywall('post_first_activity');
+      } catch (error) {
+        firstRunPaywallCheckRef.current = false;
+        console.log('First activity paywall warning:', error?.message || error);
+      }
+    })();
+  }, [user, paywallUserKey, subscription, showOnboarding, showTierCarousel, isPro, runs.length, openPaywall]);
   const { calories: hkCalories, fetchDailyCalories, isSupported: hkSupported, isAvailable: hkAvail, isAuthorized: hkAuth, isInitializing: hkInit, error: hkError, saveWorkout: hkSaveWorkout, requestAuthorization: hkRequestAuthorization } = useHealthKit();
   // Android: Health Connect parallel til iOS HealthKit. På modsat platform returnerer hooken bare 0.
   const { calories: hcCalories, fetchDailyCalories: hcFetchDailyCalories, isAuthorized: hcAuth, canWriteWorkouts: hcWorkoutAuth, isSupported: hcSupported, saveWorkout: hcSaveWorkout, requestAuthorization: hcRequestAuthorization } = useHealthConnect();
@@ -640,7 +680,7 @@ useEffect(() => {
     if (!canTrackRun && isFree) {
       Alert.alert(t('pro.limit.title'), t('pro.limit.message'), [
         { text: t('pro.limit.cancel'), style: 'cancel' },
-        { text: t('pro.limit.seePlans'), onPress: () => setShowTierCarousel(true) }
+        { text: t('pro.limit.seePlans'), onPress: () => openPaywall('activity_limit') }
       ]);
       return;
     }
@@ -698,10 +738,11 @@ if (type === 'pick') {
         <RunTracker profile={profile} level={level} weekPlan={weekPlan} nextWorkout={nextWorkout}
           runs={runs} activityType={activityType} isPro={isPro}
           saveHealthWorkout={healthSync.saveWorkout}
-          onBack={() => setTab('run')} onShowPricing={() => setShowTierCarousel(true)} />
+          onBack={() => { setTab('run'); loadData(); }} onShowPricing={() => openPaywall('tracker')} />
         <OnboardingCarousel
           visible={showTierCarousel}
           isOnboarding={false}
+          entryPoint={paywallEntryPoint}
           onClose={() => setShowTierCarousel(false)}
           onComplete={() => { setShowTierCarousel(false); refreshSubscription && refreshSubscription(); }}
         />
@@ -714,7 +755,7 @@ if (tab === 'cycleTracker') {
     return (
       <SafeAreaProvider>
         <CycleTracker profile={profile} level={level} weekPlan={weekPlan} nextWorkout={nextWorkout}
-          runs={runs} saveHealthWorkout={healthSync.saveWorkout} onBack={() => { setActivityType(null); setTab('run'); loadData(); }} onShowPricing={() => setShowTierCarousel(true)} />
+          runs={runs} saveHealthWorkout={healthSync.saveWorkout} onBack={() => { setActivityType(null); setTab('run'); loadData(); }} onShowPricing={() => openPaywall('tracker')} />
       </SafeAreaProvider>
     );
   }
@@ -746,6 +787,13 @@ if (tab === 'cycleTracker') {
         } catch (e) { console.log('AsyncStorage write error:', e); }
         setProfileState(merged);
         await saveProfile(merged);
+        if (paywallUserKey) {
+          try { await AsyncStorage.setItem(`postFirstRunPaywall:${paywallUserKey}`, 'pending'); } catch (e) {}
+        }
+        trackFunnelEvent('onboarding_completed', {
+          level: chosenLevel || 'beginner',
+          goal: goalInfo?.goal || 'unset',
+        }).catch(() => {});
         // Genindlaes traeningsplanen fra serveren saa kalenderen viser praecis
         // den plan brugeren lige fik i onboarding (gemt i goToPlan). Uden dette
         // staar trainingPlan-staten tilbage fra app-boot (foer planen fandtes).
@@ -761,9 +809,9 @@ if (tab === 'cycleTracker') {
   const renderScreen = () => {
     switch (tab) {
       case 'home':
-      return <Home level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} runs={runs} onNavigate={setTab} onStartActivity={handleStartActivity} onOpenChat={(draft) => { setChatDraft(draft || ''); setTab('chat'); }} isPro={isPro} subscriptionKnown={Boolean(subscription)} isFree={isFree} onShowPricing={() => setShowTierCarousel(true)} />;
+      return <Home level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} runs={runs} onNavigate={setTab} onStartActivity={handleStartActivity} onOpenChat={(draft) => { setChatDraft(draft || ''); setTab('chat'); }} isPro={isPro} subscriptionKnown={Boolean(subscription)} isFree={isFree} onShowPricing={() => openPaywall('home')} />;
     case 'dashboard':
-        return <PlanTab level={level} nextWorkout={nextWorkout} weekPlan={weekPlan} planChanges={planChanges} profile={profile} runs={runs} onNavigate={setTab} onStartActivity={handleStartActivity} trainingPlan={trainingPlan} onPlanUpdate={handlePlanUpdate} isPro={isPro} isFree={isFree} onShowPricing={() => setShowTierCarousel(true)} />;
+        return <PlanTab level={level} nextWorkout={nextWorkout} weekPlan={weekPlan} planChanges={planChanges} profile={profile} runs={runs} onNavigate={setTab} onStartActivity={handleStartActivity} trainingPlan={trainingPlan} onPlanUpdate={handlePlanUpdate} isPro={isPro} isFree={isFree} onShowPricing={() => openPaywall('plan')} />;
       case 'activity':
         return <Progress runs={runs} isPro={isPro} subscriptionKnown={Boolean(subscription)} onRunDeleted={(deletedRun) => {
           const deletedId = String(deletedRun?.id ?? '').replace(/^act-/, '');
@@ -775,17 +823,17 @@ if (tab === 'cycleTracker') {
           }));
         }} />;
       case 'run':
-        return <RunTab nextWorkout={nextWorkout} onStartActivity={handleStartActivity} runs={runs} profile={profile} isPro={isPro} isFree={isFree} onShowPricing={() => setShowTierCarousel(true)} />;
+        return <RunTab nextWorkout={nextWorkout} onStartActivity={handleStartActivity} runs={runs} profile={profile} isPro={isPro} isFree={isFree} onShowPricing={() => openPaywall('run_tab')} />;
       case 'stats':
-        return <StatsTab runs={runs} profile={profile} level={level} isPro={isPro} onShowPricing={() => setShowTierCarousel(true)} />;
+        return <StatsTab runs={runs} profile={profile} level={level} isPro={isPro} onShowPricing={() => openPaywall('stats')} />;
       case 'calendar':
-        return <CalendarTab runs={runs} weekPlan={weekPlan} trainingPlan={trainingPlan} isPro={isPro} onShowPricing={() => setShowTierCarousel(true)} />;
+        return <CalendarTab runs={runs} weekPlan={weekPlan} trainingPlan={trainingPlan} isPro={isPro} onShowPricing={() => openPaywall('calendar')} />;
       case 'chat':
-        return isPro ? <Chat level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} onPlanUpdate={handlePlanUpdate} runs={runs} initialMessage={chatDraft} onInitialMessageConsumed={() => setChatDraft('')} /> : <ProFeatureLock feature={t('pro.coach.title')} description={t('pro.coach.description')} onUpgrade={() => setShowTierCarousel(true)} />;
+        return isPro ? <Chat level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} onPlanUpdate={handlePlanUpdate} runs={runs} initialMessage={chatDraft} onInitialMessageConsumed={() => setChatDraft('')} /> : <ProFeatureLock feature={t('pro.coach.title')} description={t('pro.coach.description')} onUpgrade={() => openPaywall('ai_coach')} />;
       case 'more':
-      return <More onNavigate={setTab} profile={profile} isPro={isPro} isFree={isFree} onShowPricing={() => setShowTierCarousel(true)} />;
+      return <More onNavigate={setTab} profile={profile} isPro={isPro} isFree={isFree} onShowPricing={() => openPaywall('more')} />;
     case 'settings':
-        return <Settings onNavigate={setTab} level={level || 'intermediate'} onLevelChange={(lv) => { setLevel(lv); setProfile(p => ({ ...p, level: lv })); }} profile={profile} onProfileChange={setProfile} onLogout={handleLogout} onBack={() => setTab('more')} subscription={subscription} onShowPricing={() => setShowTierCarousel(true)} healthSync={healthSync} />;
+        return <Settings onNavigate={setTab} level={level || 'intermediate'} onLevelChange={(lv) => { setLevel(lv); setProfile(p => ({ ...p, level: lv })); }} profile={profile} onProfileChange={setProfile} onLogout={handleLogout} onBack={() => setTab('more')} subscription={subscription} onShowPricing={() => openPaywall('settings')} healthSync={healthSync} />;
       case 'profile':
         return <Profile profile={profile} onProfileChange={(form) => setProfile(form)} onBack={() => setTab('more')} />;
       case 'goalsScreen':
@@ -835,7 +883,7 @@ if (tab === 'cycleTracker') {
           <AppLogo size={90} />
           <View style={s.topRight}>
             {!isPro && (
-              <TouchableOpacity style={s.upgradeButton} onPress={() => setShowTierCarousel(true)}>
+              <TouchableOpacity style={s.upgradeButton} onPress={() => openPaywall('header')}>
                 <Text style={s.upgradeButtonText}>{t('pro.upgrade')}</Text>
               </TouchableOpacity>
             )}
@@ -851,6 +899,7 @@ if (tab === 'cycleTracker') {
         <OnboardingCarousel
           visible={showTierCarousel}
           isOnboarding={false}
+          entryPoint={paywallEntryPoint}
           onClose={() => setShowTierCarousel(false)}
           onComplete={(tier) => { setShowTierCarousel(false); refreshSubscription && refreshSubscription(); }}
         />

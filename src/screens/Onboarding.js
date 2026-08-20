@@ -2,12 +2,12 @@
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, LEVELS, generateTrainingPlan, saveTrainingPlan } from '../data';
-import OnboardingCarousel from '../components/OnboardingCarousel';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n, { getDeviceLanguage } from '../i18n';
 import CoachIntro from './CoachIntro'; // onboarding som samtale
 import { localizeWorkoutLabel } from '../utils/localizeWorkout';
+import { trackFunnelEvent } from '../services/FunnelAnalytics';
 
 // The generated plan cards use light backgrounds, so they need their own
 // accessible text palette instead of the app's light-on-dark theme colors.
@@ -51,6 +51,10 @@ export default function Onboarding({ onDone }) {
   const [aiPlan, setAiPlan] = useState(null);
   const [planLoading, setPlanLoading] = useState(false);
   const [planError, setPlanError] = useState(false);
+
+  React.useEffect(() => {
+    trackFunnelEvent('onboarding_started').catch(() => {});
+  }, []);
 
   const localizePlanDay = (value, index) => {
     const normalized = String(value || '').trim().toLowerCase().replace(/[.]/g, '');
@@ -107,9 +111,18 @@ export default function Onboarding({ onDone }) {
         // Gem planen paa serveren saa den lander i kalenderen (fire-and-forget:
         // et netvaerksudfald maa aldrig vaelte selve onboarding-oplevelsen)
         try { await saveTrainingPlan(plan); } catch (e) {}
-      } else { setPlanError(true); }
+        trackFunnelEvent('onboarding_plan_created', {
+          language: selectedLang,
+          level: lvl,
+          goal: gi.goal || 'unset',
+        }).catch(() => {});
+      } else {
+        setPlanError(true);
+        trackFunnelEvent('onboarding_plan_failed', { reason: 'empty_plan' }).catch(() => {});
+      }
     } catch (e) {
       setPlanError(true);
+      trackFunnelEvent('onboarding_plan_failed', { reason: 'request_error' }).catch(() => {});
     } finally {
       setPlanLoading(false);
     }
@@ -138,11 +151,16 @@ export default function Onboarding({ onDone }) {
   ];
 
   // ── COACH-INTERVIEW: erstatter formular-trinnene 2-3 ──────────────────
-  // Sprogvalg (0) og splash (1) beholdes; plan (4) og paywall (5) genbruges.
+  // Sprogvalg (0), splash (1) og den personlige plan (4) genbruges.
   if (step === 2 || step === 3) {
     return (
       <CoachIntro
         onFaerdig={(svar) => {
+          trackFunnelEvent('onboarding_coach_completed', {
+            language: selectedLang,
+            level: svar.level || 'unset',
+            goal: svar.goal || 'unset',
+          }).catch(() => {});
           setGoalInfo(g => ({ ...g, ...svar }));
           setChosen(svar.level || null);
           goToPlan(svar);
@@ -185,7 +203,13 @@ export default function Onboarding({ onDone }) {
           ))}
         </View>
 
-        <TouchableOpacity style={[s.ctaBtn, { marginTop: 24 }]} onPress={() => setStep(1)}>
+        <TouchableOpacity
+          style={[s.ctaBtn, { marginTop: 24 }]}
+          onPress={() => {
+            trackFunnelEvent('onboarding_language_selected', { language: selectedLang }).catch(() => {});
+            setStep(1);
+          }}
+        >
           <Text style={s.ctaBtnText}>{t('auth.continue') || 'Continue'} →</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -353,7 +377,7 @@ export default function Onboarding({ onDone }) {
             <TouchableOpacity style={[s.ctaBtn, { marginTop: 24 }]} onPress={() => goToPlan()}>
               <Text style={s.ctaBtnText}>{t('common.retry')}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ alignItems: "center", marginTop: 12 }} onPress={() => setStep(5)}>
+            <TouchableOpacity style={{ alignItems: "center", marginTop: 12 }} onPress={() => onDone(chosen || 'beginner', goalInfo)}>
               <Text style={{ color: colors.muted, fontSize: 13 }}>{t('auth.continue')}</Text>
             </TouchableOpacity>
           </View>
@@ -378,7 +402,7 @@ export default function Onboarding({ onDone }) {
               ))}
             </View>
             {aiPlan.summary ? (<Text style={{ color: colors.muted, marginTop: 16, lineHeight: 20 }}>{aiPlan.summary}</Text>) : null}
-            <TouchableOpacity style={[s.ctaBtn, { marginTop: 28 }]} onPress={() => setStep(5)}>
+            <TouchableOpacity style={[s.ctaBtn, { marginTop: 28 }]} onPress={() => onDone(chosen || 'beginner', goalInfo)}>
               <Text style={s.ctaBtnText}>{t('auth.continue')} →</Text>
             </TouchableOpacity>
           </View>
@@ -392,17 +416,6 @@ export default function Onboarding({ onDone }) {
         )}
       </ScrollView>
     </SafeAreaView>
-  );
-
-  // ── STEP 5: PRO Upsell ──────────────────────────────────────────────────────
-  if (step === 5) return (
-    <OnboardingCarousel 
-      visible={true}
-      isOnboarding={true}
-      goalLabel={goals.find(goal => goal.id === goalInfo.goal)?.label || ''}
-      onComplete={() => onDone(chosen, goalInfo)}
-      onClose={() => onDone(chosen, goalInfo)}
-    />
   );
 
   return null;

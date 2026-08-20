@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { SERVER, getAuthToken } from 
 '../data';
 import { configureRevenueCat } from '../services/RevenueCat';
+import { trackFunnelEvent } from '../services/FunnelAnalytics';
 
 const TERMS_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
 const PRIVACY_URL = 'https://www.runwithai.app/privatliv.html';
@@ -45,6 +46,8 @@ function hasEligibleAndroidTrial(pkg) {
 }
 
 function recordPaywallEvent(purchases, event, details = {}) {
+  trackFunnelEvent(`paywall_${event}`, details).catch(() => {});
+
   if (!purchases?.setAttributes) return;
 
   const timestamp = new Date().toISOString();
@@ -64,7 +67,7 @@ function recordPaywallEvent(purchases, event, details = {}) {
   });
 }
 
-export default function OnboardingCarousel({ visible, onComplete, onClose, isOnboarding, goalLabel = '' }) {
+export default function OnboardingCarousel({ visible, onComplete, onClose, isOnboarding, goalLabel = '', entryPoint = 'manual' }) {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const [loading, setLoading] = useState(false);
@@ -134,6 +137,7 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
             .join(' | '),
           plan: initialPlan,
           goal: goalLabel,
+          entry_point: entryPoint,
         });
       } catch (e) {
         console.log('RC init err:', e);
@@ -143,11 +147,11 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
     };
     init();
     // setTimeout(() => scrollRef.current?.scrollTo({ x: SCREEN_W, animated: false }), 100);  // disabled - start on Free
-  }, [visible]);
+  }, [visible, entryPoint]);
 
   const handleSelect = async (tier) => {
     if (tier.id === 'free') {
-      recordPaywallEvent(purchasesRef.current, 'free_selected');
+      recordPaywallEvent(purchasesRef.current, 'free_selected', { entry_point: entryPoint });
       onComplete && onComplete('free');
       return;
     }
@@ -170,6 +174,7 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
       price: selectedPrice,
       plan: selectedPlan,
       goal: goalLabel,
+      entry_point: entryPoint,
     });
     try {
       const { customerInfo } = await purchases.purchasePackage(pkg);
@@ -206,15 +211,17 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
         price: selectedPrice,
         plan: selectedPlan,
         goal: goalLabel,
+        entry_point: entryPoint,
       });
       Alert.alert(t('onboarding.paywall.welcomeTitle'), t('onboarding.paywall.welcomeMessage'));
       onComplete && onComplete(tier.id);
     } catch (err) {
       if (err.userCancelled) {
-        recordPaywallEvent(purchases, 'purchase_cancelled');
+        recordPaywallEvent(purchases, 'purchase_cancelled', { entry_point: entryPoint });
       } else {
         recordPaywallEvent(purchases, 'purchase_failed', {
           errorCode: err?.code || 'unknown',
+          entry_point: entryPoint,
         });
         Alert.alert(t('onboarding.paywall.errors.purchaseTitle'), err.message || t('common.retry'));
       }
@@ -337,6 +344,7 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
                       price: pkg?.product?.priceString || '',
                       plan,
                       goal: goalLabel,
+                      entry_point: entryPoint,
                     });
                   }}
                   disabled={!pkg || loading}
