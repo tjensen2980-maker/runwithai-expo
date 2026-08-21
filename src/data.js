@@ -604,14 +604,9 @@ export async function loadTrainingPlan() {
     const res = await fetch(`${SERVER}/trainingplan`, { headers: authHeaders() });
     const plan = await res.json();
     if (!plan) return null;
-    // FIX: parse dobbelt-JSON-encoded data felt
-    if (plan.data && typeof plan.data === 'string') {
-      try { plan.data = JSON.parse(plan.data); } catch {}
-    }
-    if (plan.data && typeof plan.data === 'string') {
-      try { plan.data = JSON.parse(plan.data); } catch {}
-    }
-    return plan;
+    // Normalize current and legacy shapes before any screen reads the plan.
+    // This keeps onboarding, dashboard, Watch and calendar on one data model.
+    return { ...plan, data: expandPlanToWeeks(plan.data) };
   } catch { return null; }
 }
 
@@ -637,22 +632,91 @@ function toIsoDate(d) {
   return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
 }
 
-export function expandPlanToWeeks(plan) {
-  const days = Array.isArray(plan && plan.weekPlan) ? plan.weekPlan
-    : (Array.isArray(plan) ? plan : null);
-  if (!days || days.length === 0) return plan;
-  const now = new Date();
-  const monday = new Date(now);
-  monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
-  const weeks = [];
-  for (let i = 0; i < days.length; i++) {
-    const w = Math.floor(i / 7);
-    const dt = new Date(monday);
-    dt.setDate(monday.getDate() + i);
-    if (!weeks[w]) weeks[w] = { week: w + 1, days: [] };
-    weeks[w].days.push({ ...days[i], date: toIsoDate(dt), week: w + 1 });
+function unwrapPlanArray(input) {
+  let value = input;
+  for (let i = 0; i < 6; i += 1) {
+    if (typeof value === 'string') {
+      try { value = JSON.parse(value); } catch { return []; }
+      continue;
+    }
+    if (Array.isArray(value)) return value;
+    if (!value || typeof value !== 'object') return [];
+    const next = value.weekPlan ?? value.plan ?? value.weeks ?? value.data;
+    if (next == null || next === value) return [];
+    value = next;
   }
+  return Array.isArray(value) ? value : [];
+}
+
+export function expandPlanToWeeks(plan, referenceDate = new Date()) {
+  const source = unwrapPlanArray(plan);
+  if (!source.length) return [];
+
+  // Both the current API and older stored plans occur in production:
+  // either 28 flat days or week objects containing days/sessions.
+  const flatDays = [];
+  source.forEach((entry) => {
+    const nestedDays = Array.isArray(entry?.days) ? entry.days
+      : (Array.isArray(entry?.sessions) ? entry.sessions : null);
+    if (nestedDays) nestedDays.forEach(day => flatDays.push(day));
+    else if (entry && typeof entry === 'object') flatDays.push(entry);
+  });
+  if (!flatDays.length) return [];
+
+  const monday = new Date(referenceDate);
+  monday.setHours(12, 0, 0, 0);
+  monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
+  const weeks = [];
+  flatDays.forEach((rawDay, index) => {
+    const weekIndex = Math.floor(index / 7);
+    const generatedDate = new Date(monday);
+    generatedDate.setDate(monday.getDate() + index);
+    const existingDate = /^\d{4}-\d{2}-\d{2}$/.test(String(rawDay.date || '')) ? rawDay.date : null;
+    const km = Number(rawDay.km ?? rawDay.distance ?? 0) || 0;
+    const rest = Boolean(rawDay.rest || rawDay.type === 'rest' || (km === 0 && /rest|hvile/i.test(String(rawDay.title || rawDay.workout || ''))));
+    const normalizedDay = {
+      ...rawDay,
+      title: rawDay.title || rawDay.name || rawDay.workout || (rest ? 'Hvile' : 'Træning'),
+      workout: rawDay.workout || rawDay.description || rawDay.desc || rawDay.title || rawDay.name || '',
+      km,
+      rest,
+      date: existingDate || toIsoDate(generatedDate),
+      week: weekIndex + 1,
+    };
+    if (!weeks[weekIndex]) weeks[weekIndex] = { week: weekIndex + 1, days: [] };
+    weeks[weekIndex].days.push(normalizedDay);
+  });
   return weeks;
+}
+
+export function trainingPlanToWeekPlan(plan, referenceDate = new Date()) {
+  const weeks = expandPlanToWeeks(plan, referenceDate);
+  const byDate = {};
+  weeks.forEach(week => (week.days || []).forEach(day => {
+    if (day.date) byDate[day.date] = day;
+  }));
+
+  const monday = new Date(referenceDate);
+  monday.setHours(12, 0, 0, 0);
+  monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
+  const dayNames = ['Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør', 'Søn'];
+  const currentWeek = [];
+  for (let index = 0; index < 7; index += 1) {
+    const date = new Date(monday);
+    date.setDate(monday.getDate() + index);
+    const session = byDate[toIsoDate(date)];
+    if (!session) continue;
+    currentWeek.push({
+      ...session,
+      day: dayNames[index],
+      workout: session.title || session.name || session.workout || (session.rest ? 'Hvile' : 'Træning'),
+      description: session.workout || session.description || session.desc || '',
+      type: session.rest ? 'rest' : (session.type || 'run'),
+      color: session.color || '#c8ff00',
+      today: index === ((referenceDate.getDay() + 6) % 7),
+    });
+  }
+  return currentWeek;
 }
 
 // Gemmer den genererede plan paa serveren (training_plan-tabellen, UPSERT),
@@ -662,12 +726,14 @@ export function expandPlanToWeeks(plan) {
 // auth-frit, saa den oprindelige klon herfra manglede tokenet (tavs 401).
 export async function saveTrainingPlan(plan) {
   try {
+    const data = expandPlanToWeeks(plan);
+    if (!data.length) return false;
     const res = await fetch(`${SERVER}/trainingplan/save`, {
       method: 'POST',
       headers: authHeaders(),
-      body: JSON.stringify({ data: expandPlanToWeeks(plan) }),
+      body: JSON.stringify({ data }),
     });
-    return res.ok;
+    return res.ok ? { data } : false;
   } catch (e) {
     return false;
   }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { colors } from '../../data';
+import { colors, expandPlanToWeeks } from '../../data';
 import { localizeWorkoutLabel } from '../../utils/localizeWorkout';
 
 // ─── LØBE-KALENDER ────────────────────────────────────────────────────────────
@@ -26,8 +26,8 @@ export function RunCalendar({ runs, weekPlan, trainingPlan }) {
 
   // Byg trainingPlan map: 'YYYY-MM-DD' → { workout, km, description, color }
   const tpMap = {};
-  if (trainingPlan?.data) {
-    const weeks = Array.isArray(trainingPlan.data) ? trainingPlan.data : [];
+  if (trainingPlan) {
+    const weeks = expandPlanToWeeks(trainingPlan.data ?? trainingPlan);
     weeks.forEach(week => {
       (week.days || week.sessions || []).forEach(session => {
         if (session.date) {
@@ -36,6 +36,7 @@ export function RunCalendar({ runs, weekPlan, trainingPlan }) {
       });
     });
   }
+  const hasPersonalPlan = Object.keys(tpMap).length > 0;
 
   // Beregn dage i måneden
   const firstDay = new Date(year, month, 1);
@@ -69,7 +70,9 @@ export function RunCalendar({ runs, weekPlan, trainingPlan }) {
 
   const selectedCell = selected ? cells.find(c => c?.key === selected) : null;
   const selectedRuns = selectedCell?.runs || [];
-  const selectedPlanned = selectedCell ? (tpMap[selectedCell.key] || getWeekPlanned(selectedCell.dayNum)) : null;
+  const selectedPlanned = selectedCell
+    ? (tpMap[selectedCell.key] || (!hasPersonalPlan ? getWeekPlanned(selectedCell.dayNum) : null))
+    : null;
 
   const monthRuns = (runs || []).filter(r => {
     const d = new Date(r.date || r.created_at);
@@ -121,7 +124,9 @@ export function RunCalendar({ runs, weekPlan, trainingPlan }) {
         {cells.map((cell, i) => {
           if (!cell) return <View key={i} style={cal.emptyCell} />;
           const hasRun   = cell.runs.length > 0;
-          const planned  = tpMap[cell.key] || getWeekPlanned(cell.dayNum);
+          // The static week is only a legacy fallback when no personal plan
+          // exists at all. Never mix it into gaps or dates after an AI plan.
+          const planned  = tpMap[cell.key] || (!hasPersonalPlan ? getWeekPlanned(cell.dayNum) : null);
           const isSelected = selected === cell.key;
           const isFuture = new Date(year, month, cell.dayNum) > today;
           const totalKm  = cell.runs.reduce((s, r) => s + (r.km||0), 0);
