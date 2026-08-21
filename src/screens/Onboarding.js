@@ -150,7 +150,7 @@ export default function Onboarding({ onDone }) {
     t('onboarding.paywall.benefits.chat'),
   ];
 
-  const finishOnboarding = () => onDone(chosen || 'beginner', goalInfo);
+  const finishOnboarding = () => onDone(chosen || 'beginner', goalInfo, aiPlan);
 
   // ── COACH-INTERVIEW: erstatter formular-trinnene 2-3 ──────────────────
   // Sprogvalg (0), coach-interview (2-3) og den personlige plan (4) genbruges.

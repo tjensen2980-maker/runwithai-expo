@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Svg, { Path, Line, Rect, Polyline, Polygon } from 'react-native-svg';
 import {
   colors, DEFAULT_WEEK_PLAN, DEFAULT_NEXT_WORKOUT, DEFAULT_PROFILE,
-  loadProfile, saveProfile, loadWeekPlan, saveWeekPlan, setAuthToken, generateTrainingPlan, getAuthToken, loadTrainingPlan, loadRuns, initAuthToken,
+  loadProfile, saveProfile, loadWeekPlan, saveWeekPlan, setAuthToken, generateTrainingPlan, getAuthToken, loadTrainingPlan, saveTrainingPlan, loadRuns, initAuthToken,
 } from './src/data';
 import { useWatch } from './src/hooks/useWatch'
 import useHealthKit from './src/hooks/useHealthKit'
@@ -42,7 +42,7 @@ import TreadmillTracker from './src/screens/TreadmillTracker';
 import * as WebBrowser from 'expo-web-browser';
 import Home from './src/screens/Home';
 import More from './src/screens/More';
-import { expandPlanToWeeks } from './src/data'; // levende plan: udrulning med datoer
+import { expandPlanToWeeks, trainingPlanToWeekPlan } from './src/data'; // levende plan: udrulning med datoer
 WebBrowser.maybeCompleteAuthSession();
 import Progress from './src/screens/Progress'; // ny Fremgang-skaerm
 
@@ -374,15 +374,21 @@ export default function App() {
       if (!plan || !plan.data) return;
       const planData = Array.isArray(plan.data) ? plan.data : [];
       let changed = false;
-      const updated = planData.map(d => {
-        if (d.day === todayShort && !d.completed) {
-          changed = true;
-          return { ...d, completed: true, completedAt: new Date().toISOString() };
-        }
-        return d;
-      });
+      const p = value => String(value).padStart(2, '0');
+      const now = new Date();
+      const todayIso = `${now.getFullYear()}-${p(now.getMonth() + 1)}-${p(now.getDate())}`;
+      const updated = planData.map(week => ({
+        ...week,
+        days: (week.days || []).map(day => {
+          if ((day.date === todayIso || day.day === todayShort) && !day.completed) {
+            changed = true;
+            return { ...day, completed: true, completedAt: new Date().toISOString() };
+          }
+          return day;
+        }),
+      }));
       if (!changed) return;
-      setWeekPlan(updated);
+      setWeekPlan(trainingPlanToWeekPlan(updated));
       setTrainingPlan({ data: updated, generated_at: new Date().toISOString() });
       const tok = getAuthToken();
       if (tok) {
@@ -504,15 +510,10 @@ export default function App() {
     ]);
     if (savedRuns) setRuns(savedRuns);
     if (savedTrainingPlan) {
-      if (savedTrainingPlan.data && typeof savedTrainingPlan.data === 'string') {
-        try { savedTrainingPlan.data = JSON.parse(savedTrainingPlan.data); } catch {}
-      }
-      setTrainingPlan(savedTrainingPlan);
-      if (Array.isArray(savedTrainingPlan.data) && savedTrainingPlan.data.length > 0) {
-        const todayShort = ['Søn','Man','Tir','Ons','Tor','Fre','Lør'][new Date().getDay()];
-        const synced = savedTrainingPlan.data.map(d => ({ ...d, today: d.day === todayShort }));
-        setWeekPlanState(synced);
-      }
+      const normalizedPlan = { ...savedTrainingPlan, data: expandPlanToWeeks(savedTrainingPlan.data) };
+      setTrainingPlan(normalizedPlan);
+      const synced = trainingPlanToWeekPlan(normalizedPlan.data);
+      if (synced.length > 0) setWeekPlanState(synced);
     } else if (savedPlan) {
       setWeekPlanState(savedPlan);
     }
@@ -773,7 +774,7 @@ if (tab === 'cycleTracker') {
   if (showOnboarding) return (
     <SafeAreaProvider>
       <StatusBar barStyle="light-content" backgroundColor={colors.black} />
-      <Onboarding onDone={async (chosenLevel, goalInfo) => {
+      <Onboarding onDone={async (chosenLevel, goalInfo, generatedPlan) => {
         setLevel(chosenLevel);
         const merged = { ...profile, ...(goalInfo || {}), level: chosenLevel };
         try {
@@ -786,10 +787,26 @@ if (tab === 'cycleTracker') {
           level: chosenLevel || 'beginner',
           goal: goalInfo?.goal || 'unset',
         }).catch(() => {});
-        // Genindlaes traeningsplanen fra serveren saa kalenderen viser praecis
-        // den plan brugeren lige fik i onboarding (gemt i goToPlan). Uden dette
-        // staar trainingPlan-staten tilbage fra app-boot (foer planen fandtes).
-        try { const tp = await loadTrainingPlan(); if (tp) setTrainingPlan(tp); } catch (e) {}
+        // Put the exact plan shown in onboarding into calendar state first.
+        // Then persist/reload it, so a slow network cannot expose the default
+        // template between onboarding and the personal calendar.
+        if (generatedPlan) {
+          const data = expandPlanToWeeks(generatedPlan);
+          if (data.length) {
+            setTrainingPlan({ data, generated_at: new Date().toISOString() });
+            const currentWeek = trainingPlanToWeekPlan(data);
+            if (currentWeek.length) setWeekPlanState(currentWeek);
+          }
+          try { await saveTrainingPlan(generatedPlan); } catch (e) {}
+        }
+        try {
+          const tp = await loadTrainingPlan();
+          if (tp) {
+            setTrainingPlan(tp);
+            const currentWeek = trainingPlanToWeekPlan(tp.data);
+            if (currentWeek.length) setWeekPlanState(currentWeek);
+          }
+        } catch (e) {}
         // Hent den automatiske 14-dages Pro-adgang straks efter onboarding.
         try { refreshSubscription && refreshSubscription(); } catch (e) {}
         setShowOnboarding(false);
