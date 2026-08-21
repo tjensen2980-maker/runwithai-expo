@@ -357,7 +357,7 @@ export default function App() {
   const [showTierCarousel, setShowTierCarousel] = useState(false);
   const [paywallEntryPoint, setPaywallEntryPoint] = useState('manual');
   const [selectedRun, setSelectedRun]       = useState(null);
-  const firstRunPaywallCheckRef = React.useRef(false);
+  const expiredTrialPaywallCheckRef = React.useRef(false);
 
   const openPaywall = React.useCallback((entryPoint = 'manual') => {
     setPaywallEntryPoint(entryPoint);
@@ -397,38 +397,33 @@ export default function App() {
 
   const token = getAuthToken();
   const paywallUserKey = getStableAppUserId(token) || user?.id || user?.email;
-  const { subscription, tier, isPro, isBasic, isFree, canUseAICoach, canUseAllActivities, weeklyActivityLimit, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
+  const { subscription, tier, isPro, isBasic, isFree, trialExpired, canUseAICoach, canUseAllActivities, weeklyActivityLimit, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
 
   useEffect(() => {
-    firstRunPaywallCheckRef.current = false;
+    expiredTrialPaywallCheckRef.current = false;
   }, [paywallUserKey]);
 
   useEffect(() => {
-    if (!user || !paywallUserKey || !subscription || showOnboarding || showTierCarousel || isPro || !runs.length) return;
-    if (firstRunPaywallCheckRef.current) return;
+    if (!user || !paywallUserKey || !subscription || showOnboarding || showTierCarousel || isPro || !trialExpired) return;
+    if (expiredTrialPaywallCheckRef.current) return;
 
-    firstRunPaywallCheckRef.current = true;
+    expiredTrialPaywallCheckRef.current = true;
     (async () => {
       try {
-        const storageKey = `postFirstRunPaywall:${paywallUserKey}`;
+        const storageKey = `expiredTrialPaywallShown:${paywallUserKey}`;
         const paywallState = await AsyncStorage.getItem(storageKey);
-        if (paywallState !== 'pending') {
-          firstRunPaywallCheckRef.current = false;
+        if (paywallState === 'shown') {
           return;
         }
 
         await AsyncStorage.setItem(storageKey, 'shown');
-        trackFunnelEvent('first_activity_saved', {
-          activity_type: runs[0]?.type || 'unknown',
-          activity_count: runs.length,
-        }).catch(() => {});
-        openPaywall('post_first_activity');
+        openPaywall('automatic_trial_expired');
       } catch (error) {
-        firstRunPaywallCheckRef.current = false;
-        console.log('First activity paywall warning:', error?.message || error);
+        expiredTrialPaywallCheckRef.current = false;
+        console.log('Expired trial paywall warning:', error?.message || error);
       }
     })();
-  }, [user, paywallUserKey, subscription, showOnboarding, showTierCarousel, isPro, runs.length, openPaywall]);
+  }, [user, paywallUserKey, subscription, showOnboarding, showTierCarousel, isPro, trialExpired, openPaywall]);
   const { calories: hkCalories, fetchDailyCalories, isSupported: hkSupported, isAvailable: hkAvail, isAuthorized: hkAuth, isInitializing: hkInit, error: hkError, saveWorkout: hkSaveWorkout, requestAuthorization: hkRequestAuthorization } = useHealthKit();
   // Android: Health Connect parallel til iOS HealthKit. På modsat platform returnerer hooken bare 0.
   const { calories: hcCalories, fetchDailyCalories: hcFetchDailyCalories, isAuthorized: hcAuth, canWriteWorkouts: hcWorkoutAuth, isSupported: hcSupported, saveWorkout: hcSaveWorkout, requestAuthorization: hcRequestAuthorization } = useHealthConnect();
@@ -787,9 +782,6 @@ if (tab === 'cycleTracker') {
         } catch (e) { console.log('AsyncStorage write error:', e); }
         setProfileState(merged);
         await saveProfile(merged);
-        if (paywallUserKey) {
-          try { await AsyncStorage.setItem(`postFirstRunPaywall:${paywallUserKey}`, 'pending'); } catch (e) {}
-        }
         trackFunnelEvent('onboarding_completed', {
           level: chosenLevel || 'beginner',
           goal: goalInfo?.goal || 'unset',
@@ -798,8 +790,7 @@ if (tab === 'cycleTracker') {
         // den plan brugeren lige fik i onboarding (gemt i goToPlan). Uden dette
         // staar trainingPlan-staten tilbage fra app-boot (foer planen fandtes).
         try { const tp = await loadTrainingPlan(); if (tp) setTrainingPlan(tp); } catch (e) {}
-        // Opdater Pro-status straks - koebet kan vaere sket paa trial-skaermen i onboardingen
-        // (upgrade-modalen goer allerede det samme; uden dette kraevede det logout/login).
+        // Hent den automatiske 14-dages Pro-adgang straks efter onboarding.
         try { refreshSubscription && refreshSubscription(); } catch (e) {}
         setShowOnboarding(false);
       }} />

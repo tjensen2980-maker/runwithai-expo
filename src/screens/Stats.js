@@ -1,14 +1,64 @@
 import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Dimensions, Platform } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { colors } from '../data';
 import Svg, { Circle } from 'react-native-svg';
 
-const W = Dimensions.get('window').width;
-
 // ─── HJÆLPE-FUNKTIONER ──────────────────────────────────────────────────────
-const fmtPace = (s) => s ? `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}` : '–';
+const positive = (value) => {
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 ? number : 0;
+};
+const getKm = (run) => positive(run?.km || (positive(run?.distance_m) / 1000));
+const getDuration = (run) => positive(run?.duration_secs || run?.duration_sec || run?.duration);
+const getPace = (run) => {
+  const raw = positive(run?.pace_secs_per_km || run?.avg_pace_sec_per_km || run?.pace);
+  // Phone/treadmill runs historically stored decimal minutes per km, while
+  // Watch and activity imports store seconds per km.
+  if (raw) return raw < 60 ? raw * 60 : raw;
+  const km = getKm(run);
+  const duration = getDuration(run);
+  return km > 0 && duration > 0 ? duration / km : 0;
+};
+const getAverageSpeed = (run) => positive(run?.avg_speed_kmh) || (() => {
+  const km = getKm(run);
+  const duration = getDuration(run);
+  return km > 0 && duration > 0 ? (km * 3600) / duration : 0;
+})();
+const isCycling = (run) => /cyc|bike|cykl/.test(String(run?.type || '').toLowerCase());
+const isWalking = (run) => /walk|gå|gaa/.test(String(run?.type || '').toLowerCase());
+const getHeartRate = (run) => positive(run?.avg_hr || run?.heart_rate);
+const getMaxHeartRate = (run) => positive(run?.max_hr || run?.max_heart_rate || run?.heart_rate);
+const getCadence = (run) => positive(run?.cadence_avg || run?.cadence);
+const getAscent = (run) => positive(run?.total_ascent_m || run?.total_ascent || run?.elevation_gain);
+const getCalories = (run) => positive(run?.calories_kcal || run?.calories);
+const getSteps = (run) => positive(run?.total_steps || run?.steps);
+const average = (values) => values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : 0;
+const weightedPace = (runs) => {
+  const measured = runs.filter(run => getKm(run) > 0 && getPace(run) > 0 && !isCycling(run) && !isWalking(run));
+  const km = measured.reduce((sum, run) => sum + getKm(run), 0);
+  return km > 0 ? measured.reduce((sum, run) => sum + getPace(run) * getKm(run), 0) / km : 0;
+};
+const parseSplits = (run) => {
+  let splits = run?.splits;
+  for (let i = 0; i < 3 && typeof splits === 'string'; i += 1) {
+    try { splits = JSON.parse(splits); } catch { return []; }
+  }
+  return Array.isArray(splits) ? splits : [];
+};
+const getSplitPace = (split) => {
+  const raw = positive(split?.pace || split?.pace_secs_per_km || split?.avg_pace_sec_per_km);
+  return raw && raw < 60 ? raw * 60 : raw;
+};
+const fmtPace = (seconds) => {
+  if (!seconds || !Number.isFinite(seconds)) return '–';
+  const rounded = Math.round(seconds);
+  return `${Math.floor(rounded / 60)}:${String(rounded % 60).padStart(2, '0')}`;
+};
 const fmtDur  = (s, t) => s ? `${Math.floor(s / 3600) > 0 ? Math.floor(s / 3600) + t('statsPage.hoursShort') + ' ' : ''}${Math.floor((s % 3600) / 60)}${t('statsPage.minutesShort')}` : '–';
+const fmtDecimal = (value, locale, digits = 1) => value > 0
+  ? new Intl.NumberFormat(locale, { maximumFractionDigits: digits }).format(value)
+  : '–';
 
 // ─── RING KOMPONENT (RETTET TIL REACT NATIVE) ───────────────────────────────
 function Ring({ pct, size = 110, color = colors.accent, label, value, sub }) {
@@ -68,6 +118,28 @@ function BarChart({ data, color = colors.accent, labelKey = 'label', valueKey = 
   );
 }
 
+function PaceChart({ data }) {
+  const measured = data.filter(item => item.value > 0);
+  if (!measured.length) return null;
+  const slowest = Math.max(...measured.map(item => item.value));
+  const fastest = Math.min(...measured.map(item => item.value));
+  const spread = Math.max(30, slowest - fastest);
+  return (
+    <View style={st.paceChart}>
+      {data.map((item, index) => {
+        const height = item.value > 0 ? 24 + ((slowest - item.value) / spread) * 42 : 4;
+        return (
+          <View key={`${item.label}-${index}`} style={st.paceColumn}>
+            <Text style={st.paceValue}>{item.value > 0 ? fmtPace(item.value) : ''}</Text>
+            <View style={[st.paceBar, { height, opacity: item.value > 0 ? (index === data.length - 1 ? 1 : 0.58) : 0.15 }]} />
+            <Text style={st.paceLabel}>{item.label}</Text>
+          </View>
+        );
+      })}
+    </View>
+  );
+}
+
 // ─── STAT KORT ──────────────────────────────────────────────────────────────
 function StatCard({ title, children, accent }) {
   return (
@@ -106,13 +178,34 @@ export default function Stats({ runs = [], profile, level }) {
     return runs;
   }, [runs, period]);
 
-  const validRuns = filtered.filter(r => r.km > 0);
-  const totalKm   = validRuns.reduce((a, r) => a + (r.km || 0), 0);
-  const totalTime = validRuns.reduce((a, r) => a + (r.duration_secs || 0), 0);
+  const validRuns = filtered.filter(r => getKm(r) > 0);
+  const runningRuns = validRuns.filter(r => !isCycling(r) && !isWalking(r));
+  const totalKm   = validRuns.reduce((a, r) => a + getKm(r), 0);
+  const totalTime = validRuns.reduce((a, r) => a + getDuration(r), 0);
   const avgKm     = validRuns.length > 0 ? totalKm / validRuns.length : 0;
-  const bestPace  = validRuns.reduce((b, r) => r.pace_secs_per_km && (!b || r.pace_secs_per_km < b) ? r.pace_secs_per_km : b, null);
-  const avgPace   = validRuns.length > 0 ? validRuns.reduce((a, r) => a + (r.pace_secs_per_km || 0), 0) / validRuns.filter(r => r.pace_secs_per_km).length : null;
-  const longestRun = validRuns.reduce((b, r) => r.km > (b?.km || 0) ? r : b, null);
+  const recordCandidates = runningRuns.filter(run => getKm(run) >= 1);
+  const measuredPaces = (recordCandidates.length ? recordCandidates : runningRuns).map(getPace).filter(Boolean);
+  const bestPace = measuredPaces.length ? Math.min(...measuredPaces) : 0;
+  const avgPace = weightedPace(runningRuns);
+  const longestRun = validRuns.reduce((b, r) => getKm(r) > getKm(b) ? r : b, null);
+  const totalCalories = validRuns.reduce((sum, run) => sum + getCalories(run), 0);
+  const totalAscent = validRuns.reduce((sum, run) => sum + getAscent(run), 0);
+  const totalSteps = validRuns.reduce((sum, run) => sum + getSteps(run), 0);
+  const heartRates = validRuns.map(getHeartRate).filter(Boolean);
+  const maxHeartRates = validRuns.map(getMaxHeartRate).filter(Boolean);
+  const cadences = runningRuns.map(getCadence).filter(Boolean);
+  const averageHeartRate = average(heartRates);
+  const maxHeartRate = maxHeartRates.length ? Math.max(...maxHeartRates) : 0;
+  const averageCadence = average(cadences);
+  const speeds = validRuns.map(getAverageSpeed).filter(Boolean);
+  const averageSpeed = totalTime > 0 ? (totalKm * 3600) / totalTime : average(speeds);
+  const maxSpeed = validRuns.reduce((max, run) => Math.max(max, positive(run?.max_speed_kmh) || getAverageSpeed(run)), 0);
+  const fastestSplit = runningRuns
+    .flatMap(parseSplits)
+    .map(getSplitPace)
+    .filter(Boolean)
+    .reduce((fastest, pace) => !fastest || pace < fastest ? pace : fastest, 0);
+  const activeDays = new Set(validRuns.map(run => new Date(run.date)).filter(date => !Number.isNaN(date.getTime())).map(date => date.toISOString().slice(0, 10))).size;
 
   // Ugentlige km — seneste 8 uger
   const weeklyData = useMemo(() => {
@@ -122,9 +215,24 @@ export default function Stats({ runs = [], profile, level }) {
       weekStart.setHours(0,0,0,0);
       const weekEnd = new Date(weekStart.getTime() + 7 * 86400000);
       const weekRuns = runs.filter(r => r.date && new Date(r.date) >= weekStart && new Date(r.date) < weekEnd);
-      const km = weekRuns.reduce((a, r) => a + (r.km || 0), 0);
+      const km = weekRuns.reduce((a, r) => a + getKm(r), 0);
       const label = i === 0 ? t('statsPage.now') : t('statsPage.weeksAgoShort', { count: i });
       weeks.push({ label, value: Math.round(km * 10) / 10 });
+    }
+    return weeks;
+  }, [runs, t]);
+
+  const weeklyPaceData = useMemo(() => {
+    const weeks = [];
+    for (let i = 7; i >= 0; i--) {
+      const weekStart = new Date(now - i * 7 * 86400000);
+      weekStart.setHours(0, 0, 0, 0);
+      const weekEnd = new Date(weekStart.getTime() + 7 * 86400000);
+      const weekRuns = runs.filter(run => run.date && new Date(run.date) >= weekStart && new Date(run.date) < weekEnd && !isCycling(run) && !isWalking(run));
+      weeks.push({
+        label: i === 0 ? t('statsPage.now') : t('statsPage.weeksAgoShort', { count: i }),
+        value: weightedPace(weekRuns),
+      });
     }
     return weeks;
   }, [runs, t]);
@@ -139,7 +247,7 @@ export default function Stats({ runs = [], profile, level }) {
         const rd = new Date(r.date);
         return rd.getFullYear() === d.getFullYear() && rd.getMonth() === d.getMonth();
       });
-      const km = monthRuns.reduce((a, r) => a + (r.km || 0), 0);
+      const km = monthRuns.reduce((a, r) => a + getKm(r), 0);
       months.push({ label: d.toLocaleString(locale, { month: 'short' }), value: Math.round(km * 10) / 10 });
     }
     return months;
@@ -162,7 +270,7 @@ export default function Stats({ runs = [], profile, level }) {
 
   // Mål-fremskridt (50km milepæl)
   const milestones = [50, 100, 200, 500, 1000];
-  const totalAllTime = runs.reduce((a, r) => a + (r.km || 0), 0);
+  const totalAllTime = runs.reduce((a, r) => a + getKm(r), 0);
   const nextMilestone = milestones.find(m => m > totalAllTime) || milestones[milestones.length - 1];
   const milestonePct = totalAllTime / nextMilestone;
 
@@ -274,6 +382,14 @@ export default function Stats({ runs = [], profile, level }) {
         <BarChart data={monthlyData} color={colors.blue} unit="" />
       </StatCard>
 
+      {/* Tempo-udvikling: en højere søjle betyder hurtigere tempo */}
+      {weeklyPaceData.some(item => item.value > 0) && (
+        <StatCard title={t('statsPage.paceTrend')} accent>
+          <PaceChart data={weeklyPaceData} />
+          <Text style={st.chartHint}>{t('statsPage.paceTrendHint')}</Text>
+        </StatCard>
+      )}
+
       {/* Pace + distance */}
       <View style={{ flexDirection: 'row', gap: 12 }}>
         <View style={{ flex: 1 }}>
@@ -290,6 +406,69 @@ export default function Stats({ runs = [], profile, level }) {
         </View>
       </View>
 
+      {/* Personlige præstationer */}
+      <StatCard title={t('statsPage.performance')}>
+        <View style={st.metricGrid}>
+          <View style={st.metricCell}>
+            <Text style={st.metricValue}>{fmtPace(bestPace)}</Text>
+            <Text style={st.metricLabel}>{t('statsPage.bestAveragePace')}</Text>
+          </View>
+          <View style={st.metricCell}>
+            <Text style={st.metricValue}>{fmtPace(fastestSplit)}</Text>
+            <Text style={st.metricLabel}>{t('statsPage.fastestKilometer')}</Text>
+          </View>
+          <View style={st.metricCell}>
+            <Text style={st.metricValue}>{fmtDecimal(averageSpeed, locale)}</Text>
+            <Text style={st.metricLabel}>{t('statsPage.avgSpeed')} · km/t</Text>
+          </View>
+          <View style={st.metricCell}>
+            <Text style={st.metricValue}>{fmtDecimal(maxSpeed, locale)}</Text>
+            <Text style={st.metricLabel}>{t('statsPage.maxSpeed')} · km/t</Text>
+          </View>
+        </View>
+      </StatCard>
+
+      {/* Træningsbelastning */}
+      <StatCard title={t('statsPage.trainingLoad')}>
+        <View style={st.metricGrid}>
+          <View style={st.metricCell}>
+            <Text style={st.metricValue}>{Math.round(totalCalories) || '–'}</Text>
+            <Text style={st.metricLabel}>🔥 {t('statsPage.calories')}</Text>
+          </View>
+          <View style={st.metricCell}>
+            <Text style={st.metricValue}>{Math.round(totalAscent) || '–'}</Text>
+            <Text style={st.metricLabel}>⛰ {t('statsPage.elevationGain')} · m</Text>
+          </View>
+          <View style={st.metricCell}>
+            <Text style={st.metricValue}>{activeDays || '–'}</Text>
+            <Text style={st.metricLabel}>📅 {t('statsPage.activeDays')}</Text>
+          </View>
+          <View style={st.metricCell}>
+            <Text style={st.metricValue}>{totalSteps ? new Intl.NumberFormat(locale).format(Math.round(totalSteps)) : '–'}</Text>
+            <Text style={st.metricLabel}>👣 {t('progress.steps')}</Text>
+          </View>
+        </View>
+      </StatCard>
+
+      {(heartRates.length > 0 || cadences.length > 0) && (
+        <StatCard title={t('statsPage.runningDynamics')}>
+          <View style={st.metricGrid}>
+            <View style={st.metricCell}>
+              <Text style={st.metricValue}>{averageHeartRate ? Math.round(averageHeartRate) : '–'}</Text>
+              <Text style={st.metricLabel}>❤️ {t('statsPage.avgHeartRate')} · bpm</Text>
+            </View>
+            <View style={st.metricCell}>
+              <Text style={st.metricValue}>{maxHeartRate ? Math.round(maxHeartRate) : '–'}</Text>
+              <Text style={st.metricLabel}>❤️ {t('statsPage.maxHeartRate')} · bpm</Text>
+            </View>
+            <View style={st.metricCell}>
+              <Text style={st.metricValue}>{averageCadence ? Math.round(averageCadence) : '–'}</Text>
+              <Text style={st.metricLabel}>👟 {t('statsPage.avgCadence')} · spm</Text>
+            </View>
+          </View>
+        </StatCard>
+      )}
+
       {/* Tid + længste løb */}
       <View style={{ flexDirection: 'row', gap: 12 }}>
         <View style={{ flex: 1 }}>
@@ -300,7 +479,7 @@ export default function Stats({ runs = [], profile, level }) {
         </View>
         <View style={{ flex: 1 }}>
           <StatCard title={t('statsPage.longestRun')}>
-            <Text style={{ fontSize: 24, fontWeight: '900', color: colors.text, letterSpacing: -1 }}>{longestRun ? `${longestRun.km} km` : '–'}</Text>
+            <Text style={{ fontSize: 24, fontWeight: '900', color: colors.text, letterSpacing: -1 }}>{longestRun ? `${fmtDecimal(getKm(longestRun), locale)} km` : '–'}</Text>
             <Text style={{ fontSize: 11, color: colors.muted, marginTop: 2 }}>{longestRun?.date ? new Date(longestRun.date).toLocaleDateString(locale, { day: 'numeric', month: 'short' }) : ''}</Text>
           </StatCard>
         </View>
@@ -352,4 +531,14 @@ const st = StyleSheet.create({
   bigStatLabel:     { fontSize: 8, color: colors.muted, fontWeight: '700', letterSpacing: 0.8, marginTop: 2, textTransform: 'uppercase' },
   card:             { backgroundColor: colors.card, borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: colors.border },
   cardTitle:        { fontSize: 9, color: colors.muted, fontWeight: '700', letterSpacing: 2, marginBottom: 12, textTransform: 'uppercase' },
+  paceChart:        { flexDirection: 'row', alignItems: 'flex-end', height: 92, gap: 6 },
+  paceColumn:       { flex: 1, height: 92, alignItems: 'center', justifyContent: 'flex-end' },
+  paceValue:        { fontSize: 8, color: colors.muted, fontWeight: '700', marginBottom: 4 },
+  paceBar:          { width: '100%', backgroundColor: colors.green, borderRadius: 5 },
+  paceLabel:        { fontSize: 8, color: colors.muted, marginTop: 4 },
+  chartHint:        { color: colors.muted, fontSize: 10, textAlign: 'center', marginTop: 10 },
+  metricGrid:       { flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: -6, marginVertical: -5 },
+  metricCell:       { width: '50%', paddingHorizontal: 6, paddingVertical: 10 },
+  metricValue:      { color: colors.text, fontSize: 24, fontWeight: '900', letterSpacing: -0.6 },
+  metricLabel:      { color: colors.muted, fontSize: 11, marginTop: 3, lineHeight: 15 },
 });

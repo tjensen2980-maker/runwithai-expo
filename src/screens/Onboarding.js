@@ -128,13 +128,6 @@ export default function Onboarding({ onDone }) {
     }
   };
 
-  const features = [
-    { emoji: '🤖', title: t('onboarding.features.ai.title'), desc: t('onboarding.features.ai.desc') },
-    { emoji: '📈', title: t('onboarding.features.adapts.title'), desc: t('onboarding.features.adapts.desc') },
-    { emoji: '🛡️', title: t('onboarding.features.injury.title'), desc: t('onboarding.features.injury.desc') },
-    { emoji: '🎯', title: t('onboarding.features.goals.title'), desc: t('onboarding.features.goals.desc') },
-  ];
-
   const levels = [
     { id: 'beginner',     label: t('onboarding.levels.beginner.label'),     sub: t('onboarding.levels.beginner.sub'),     emoji: '🌱', color: '#2ecc71' },
     { id: 'intermediate', label: t('onboarding.levels.intermediate.label'), sub: t('onboarding.levels.intermediate.sub'), emoji: '🏃', color: '#ff6b35' },
@@ -150,8 +143,17 @@ export default function Onboarding({ onDone }) {
     { id: 'weight',  label: t('onboarding.goals.weight.label'),  sub: t('onboarding.goals.weight.sub') },
   ];
 
+  const trialBenefits = [
+    t('onboarding.paywall.benefits.adaptive'),
+    t('onboarding.paywall.benefits.audioCoach'),
+    t('onboarding.paywall.benefits.calendar'),
+    t('onboarding.paywall.benefits.chat'),
+  ];
+
+  const finishOnboarding = () => onDone(chosen || 'beginner', goalInfo);
+
   // ── COACH-INTERVIEW: erstatter formular-trinnene 2-3 ──────────────────
-  // Sprogvalg (0), splash (1) og den personlige plan (4) genbruges.
+  // Sprogvalg (0), coach-interview (2-3) og den personlige plan (4) genbruges.
   if (step === 2 || step === 3) {
     return (
       <CoachIntro
@@ -207,7 +209,7 @@ export default function Onboarding({ onDone }) {
           style={[s.ctaBtn, { marginTop: 24 }]}
           onPress={() => {
             trackFunnelEvent('onboarding_language_selected', { language: selectedLang }).catch(() => {});
-            setStep(1);
+            setStep(2);
           }}
         >
           <Text style={s.ctaBtnText}>{t('auth.continue') || 'Continue'} →</Text>
@@ -216,37 +218,30 @@ export default function Onboarding({ onDone }) {
     </SafeAreaView>
   );
 
-  // ── STEP 1: Splash ──────────────────────────────────────────────────────────
-  if (step === 1) return (
+  // ── STEP 5: Automatic trial confirmation (no purchase, no prices) ───────────
+  if (step === 5) return (
     <SafeAreaView style={s.safe}>
-      <ScrollView contentContainerStyle={s.splash} showsVerticalScrollIndicator={false}>
-        <TouchableOpacity onPress={() => setStep(0)} style={s.backBtn}>
-          <Text style={s.backBtnText}>← {t('common.back')}</Text>
-        </TouchableOpacity>
-        <View style={s.logoWrap}>
-          <Text style={s.logoRun}>RUN</Text>
-          <Text style={s.logoWith}>WITH</Text>
-          <Text style={s.logoAi}>AI</Text>
+      <ScrollView contentContainerStyle={s.trialReady} showsVerticalScrollIndicator={false}>
+        <View style={s.trialIconWrap}>
+          <Text style={s.trialIcon}>🎉</Text>
         </View>
-        <Text style={s.tagline}>{t('onboarding.tagline')}</Text>
-        <Text style={s.headline}>
-          {t('onboarding.headline.before')}
-          <Text style={{ color: colors.accent }}>{t('onboarding.headline.highlight')}</Text>
-          {t('onboarding.headline.after')}
-        </Text>
-        <View style={s.featureGrid}>
-          {features.map(f => (
-            <View key={f.title} style={s.featureCard}>
-              <Text style={s.featureEmoji}>{f.emoji}</Text>
-              <Text style={s.featureTitle}>{f.title}</Text>
-              <Text style={s.featureDesc}>{f.desc}</Text>
+        <Text style={s.trialBadge}>PRO</Text>
+        <Text style={s.trialTitle}>{t('onboarding.paywall.trial')}</Text>
+        <Text style={s.trialSubtitle}>{t('onboarding.paywall.welcomeMessage')}</Text>
+        <Text style={s.trialNote}>{t('onboarding.trialReadyNote')}</Text>
+
+        <View style={s.trialBenefits}>
+          {trialBenefits.map(benefit => (
+            <View key={benefit} style={s.trialBenefitRow}>
+              <Text style={s.trialCheck}>✓</Text>
+              <Text style={s.trialBenefitText}>{benefit}</Text>
             </View>
           ))}
         </View>
-        <TouchableOpacity style={s.ctaBtn} onPress={() => setStep(2)}>
-          <Text style={s.ctaBtnText}>{t('onboarding.tryFree')} →</Text>
+
+        <TouchableOpacity style={s.ctaBtn} onPress={finishOnboarding}>
+          <Text style={s.ctaBtnText}>{t('onboarding.getStarted')} →</Text>
         </TouchableOpacity>
-        <Text style={s.fine}>{t('onboarding.fine')}</Text>
       </ScrollView>
     </SafeAreaView>
   );
@@ -377,7 +372,7 @@ export default function Onboarding({ onDone }) {
             <TouchableOpacity style={[s.ctaBtn, { marginTop: 24 }]} onPress={() => goToPlan()}>
               <Text style={s.ctaBtnText}>{t('common.retry')}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ alignItems: "center", marginTop: 12 }} onPress={() => onDone(chosen || 'beginner', goalInfo)}>
+            <TouchableOpacity style={{ alignItems: "center", marginTop: 12 }} onPress={() => setStep(5)}>
               <Text style={{ color: colors.muted, fontSize: 13 }}>{t('auth.continue')}</Text>
             </TouchableOpacity>
           </View>
@@ -402,7 +397,7 @@ export default function Onboarding({ onDone }) {
               ))}
             </View>
             {aiPlan.summary ? (<Text style={{ color: colors.muted, marginTop: 16, lineHeight: 20 }}>{aiPlan.summary}</Text>) : null}
-            <TouchableOpacity style={[s.ctaBtn, { marginTop: 28 }]} onPress={() => onDone(chosen || 'beginner', goalInfo)}>
+            <TouchableOpacity style={[s.ctaBtn, { marginTop: 28 }]} onPress={() => setStep(5)}>
               <Text style={s.ctaBtnText}>{t('auth.continue')} →</Text>
             </TouchableOpacity>
           </View>
@@ -466,4 +461,15 @@ const s = StyleSheet.create({
   langCard:      { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, borderRadius: 12, padding: 14, borderWidth: 1, borderColor: colors.border, gap: 12 },
   langFlag:      { fontSize: 24 },
   langName:      { flex: 1, color: colors.text, fontSize: 15, fontWeight: '600' },
+  trialReady:    { flexGrow: 1, justifyContent: 'center', padding: 24, paddingBottom: 48 },
+  trialIconWrap: { width: 86, height: 86, borderRadius: 43, alignSelf: 'center', alignItems: 'center', justifyContent: 'center', backgroundColor: colors.accent + '20', marginBottom: 18 },
+  trialIcon:     { fontSize: 44 },
+  trialBadge:    { color: colors.accent, fontSize: 15, fontWeight: '900', letterSpacing: 3, textAlign: 'center', marginBottom: 8 },
+  trialTitle:    { color: colors.text, fontSize: 34, fontWeight: '900', textAlign: 'center', marginBottom: 10 },
+  trialSubtitle: { color: colors.dim, fontSize: 17, lineHeight: 24, textAlign: 'center', marginBottom: 28 },
+  trialNote:     { color: colors.muted, fontSize: 14, lineHeight: 21, textAlign: 'center', marginTop: -16, marginBottom: 26 },
+  trialBenefits:{ backgroundColor: colors.card, borderRadius: 20, borderWidth: 1, borderColor: colors.border, padding: 18, marginBottom: 28, gap: 14 },
+  trialBenefitRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
+  trialCheck:    { color: colors.accent, fontSize: 18, fontWeight: '900', lineHeight: 23 },
+  trialBenefitText: { flex: 1, color: colors.text, fontSize: 15, lineHeight: 22, fontWeight: '600' },
 });
