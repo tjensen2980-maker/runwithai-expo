@@ -12,6 +12,7 @@ import {
   Alert,
   ScrollView,
   Platform,
+  AppState,
   Modal,
   ActivityIndicator,
   Linking,
@@ -60,7 +61,7 @@ export function useSubscription(token) {
       });
       const tierData = await tierRes.json();
       setTierInfo(tierData);
-      setSubscription({ tier: tierData.tier, status: tierData.status, isPro: tierData.isPro, isBasic: tierData.isBasic, isFree: tierData.isFree });
+      setSubscription(tierData);
     } catch (err) {
       console.error('Error fetching tier:', err);
       setSubscription(null);
@@ -74,6 +75,22 @@ export function useSubscription(token) {
     refresh();
   }, [token]);
 
+  useEffect(() => {
+    if (!token) return undefined;
+    const listener = AppState.addEventListener('change', state => {
+      if (state === 'active') refresh();
+    });
+    return () => listener.remove();
+  }, [token]);
+
+  useEffect(() => {
+    if (!tierInfo?.trialActive || !tierInfo?.trialEndsAt) return undefined;
+    const remaining = new Date(tierInfo.trialEndsAt).getTime() - Date.now();
+    if (!Number.isFinite(remaining)) return undefined;
+    const timeout = setTimeout(refresh, Math.max(1000, Math.min(remaining + 1000, 2147483647)));
+    return () => clearTimeout(timeout);
+  }, [tierInfo?.trialActive, tierInfo?.trialEndsAt, token]);
+
   // Tier flags
   const tier = tierInfo?.tier || 'free';
   const isPro = tierInfo?.isPro || false;
@@ -86,6 +103,10 @@ export function useSubscription(token) {
   const canUseAICoach = tierInfo?.canUseAICoach || false;
   const canUseAllActivities = tierInfo?.canUseAllActivities || false;
   const weeklyActivityLimit = tierInfo?.weeklyActivityLimit || null;
+  const trialActive = tierInfo?.trialActive || false;
+  const trialExpired = tierInfo?.trialExpired || false;
+  const trialEndsAt = tierInfo?.trialEndsAt || null;
+  const trialDaysRemaining = tierInfo?.trialDaysRemaining || 0;
 
   // Backwards compat
   const canTrackRun = true;
@@ -102,6 +123,10 @@ export function useSubscription(token) {
     canUseAICoach,
     canUseAllActivities,
     weeklyActivityLimit,
+    trialActive,
+    trialExpired,
+    trialEndsAt,
+    trialDaysRemaining,
     loading,
     refresh,
   };

@@ -1,5 +1,4 @@
 // ═══════════════════════════════════════════════════════════════════════════
-import OnboardingCarousel from '../components/OnboardingCarousel';
 import { generateTrainingPlan, setAuthToken } from '../data';
 // AUTH.JS - RunWithAI Login & Registration (med PRO Upsell + Glemt Password + i18n)
 // OPDATERET: Bruger RevenueCat + Terms/Privacy links for App Store compliance
@@ -928,7 +927,7 @@ export default function Auth({ onAuth }) {
                 ))}
               </View>
               <Text style={{ fontSize: 13, color: '#999', marginTop: 16, textAlign: 'center' }}>Det her var din gratis startplan.</Text>
-              <TouchableOpacity onPress={() => setMode('register_upsell')} style={{ backgroundColor: '#FF5A1F', borderRadius: 16, paddingVertical: 18, marginTop: 12 }}>
+              <TouchableOpacity onPress={handleSkipTrial} style={{ backgroundColor: '#FF5A1F', borderRadius: 16, paddingVertical: 18, marginTop: 12 }}>
                 <Text style={{ color: '#fff', fontSize: 18, fontWeight: '700', textAlign: 'center' }}>Fortsæt →</Text>
               </TouchableOpacity>
             </View>
@@ -937,24 +936,13 @@ export default function Auth({ onAuth }) {
               <Text style={{ fontSize: 22, fontWeight: '800', textAlign: 'center' }}>Planen er næsten klar 🙌</Text>
               <Text style={{ fontSize: 15, color: '#666', marginTop: 12, textAlign: 'center' }}>Vi kunne ikke hente din fulde plan lige nu, men du kan altid få den i appen. Lad os komme i gang.</Text>
               <Text style={{ color: '#c00', fontSize: 12, textAlign: 'center', marginTop: 8 }}>{'DEBUG: ' + String((global._planErr!=null?global._planErr:'ingen fejl-info'))}</Text>
-              <TouchableOpacity onPress={() => setMode('register_upsell')} style={{ backgroundColor: '#FF5A1F', borderRadius: 16, paddingVertical: 18, marginTop: 28 }}>
+              <TouchableOpacity onPress={handleSkipTrial} style={{ backgroundColor: '#FF5A1F', borderRadius: 16, paddingVertical: 18, marginTop: 28 }}>
                 <Text style={{ color: '#fff', fontSize: 18, fontWeight: '700', textAlign: 'center' }}>Fortsæt →</Text>
               </TouchableOpacity>
             </View>
           )}
         </ScrollView>
       </SafeAreaView>
-    );
-  }
-
-  if (mode === 'register_upsell') {
-    return (
-      <OnboardingCarousel
-        visible={true}
-        isOnboarding={true}
-        onComplete={handleSkipTrial}
-        onClose={handleSkipTrial}
-      />
     );
   }
 
