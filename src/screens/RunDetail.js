@@ -100,6 +100,10 @@ function OversigtTab({ run }) {
   const pace = (run.km && run.km >= 0.1) ? fmtPace(run.pace_secs_per_km || run.pace || 0) : '--:--';
   const avgHr = run.avg_hr || run.heart_rate || 0;
   const calories = run.calories ? Math.round(run.calories) : 0;
+  const visibleNotes = typeof run?.notes === 'string'
+    && !/^\s*gps:\d+\/\d+\b/i.test(run.notes)
+    ? run.notes.trim()
+    : '';
 
   return (
     <ScrollView style={{ flex: 1 }}>
@@ -131,8 +135,8 @@ function OversigtTab({ run }) {
           <Text style={{ color: colors.muted, fontSize: 13 }}>{fmtDate(run.date)}</Text>
         </View>
         <Text style={s.title}>{run.type === 'walk' ? 'Gang' : run.type === 'run' ? 'Løb' : run.type === 'mixed' ? 'Blandet' : 'Løb'}</Text>
-        {run.notes ? (
-          <Text style={s.notes}>{run.notes}</Text>
+        {visibleNotes ? (
+          <Text style={s.notes}>{visibleNotes}</Text>
         ) : (
           <Text style={s.addNotes}>Tilføj noter</Text>
         )}

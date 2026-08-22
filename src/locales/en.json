@@ -490,7 +490,7 @@
     },
     "tryFree": "Try free for 14 days",
     "fine": "No commitment. Cancel anytime.",
-    "trialReadyNote": "No payment now. After 14 days, you decide whether to subscribe.",
+    "trialReadyNote": "After 14 days, your account switches to Free unless you subscribe. You keep limited basic tracking with ads, while the features below become locked.",
     "levelQuestion": "Where are you on your running journey?",
     "selectLevel": "Select your level to continue",
     "levels": {

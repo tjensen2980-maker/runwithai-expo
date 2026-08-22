@@ -495,7 +495,6 @@ function FullRouteMapModal({ route, run, visible, onClose }) {
             <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: '#ef4444' }} />
             <Text style={{ fontSize: 12, color: colors.muted, fontWeight: '600' }}>Slut</Text>
           </View>
-                      <Text style={{ fontSize: 12, color: colors.muted }}>{route.length} GPS-punkter{run?.notes ? ` · ${run.notes}` : ''}</Text>
         </View>
       </View>
     </Modal>

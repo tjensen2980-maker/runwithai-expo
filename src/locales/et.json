@@ -496,7 +496,7 @@
     },
     "tryFree": "Proovige 14 päeva tasuta",
     "fine": "Kohustus puudub. Tühistage igal ajal.",
-    "trialReadyNote": "Praegu ei pea maksma. 14 päeva pärast otsustad ise, kas soovid tellida.",
+    "trialReadyNote": "14 päeva pärast läheb sinu konto üle tasuta paketile, kui sa ei telli. Alles jääb piiratud põhiline jälgimine koos reklaamidega, allolevad funktsioonid lukustatakse.",
     "levelQuestion": "Kus olete oma jooksuteekonnal?",
     "selectLevel": "Jätkamiseks valige oma tase",
     "levels": {

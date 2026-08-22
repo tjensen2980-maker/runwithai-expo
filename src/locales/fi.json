@@ -496,7 +496,7 @@
     },
     "tryFree": "Kokeile ilmaiseksi 14 päivää",
     "fine": "Ei sitoumusta. Peru milloin tahansa.",
-    "trialReadyNote": "Ei maksua nyt. 14 päivän jälkeen päätät itse, haluatko tilata.",
+    "trialReadyNote": "14 päivän jälkeen tilisi vaihtuu ilmaiseen versioon, ellet tilaa. Käyttöösi jää rajoitettu perusseuranta mainoksilla, ja alla olevat ominaisuudet lukitaan.",
     "levelQuestion": "Missä olet juoksumatkallasi?",
     "selectLevel": "Valitse tasosi jatkaaksesi",
     "levels": {
