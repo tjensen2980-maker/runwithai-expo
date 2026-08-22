@@ -496,7 +496,7 @@
     },
     "tryFree": "Wypróbuj bezpłatnie przez 14 dni",
     "fine": "Brak zobowiązań. Anuluj w dowolnym momencie.",
-    "trialReadyNote": "Teraz nic nie płacisz. Po 14 dniach zdecydujesz, czy chcesz wykupić subskrypcję.",
+    "trialReadyNote": "Po 14 dniach konto przełączy się na plan bezpłatny, jeśli nie wykupisz subskrypcji. Zachowasz ograniczone podstawowe śledzenie z reklamami, a poniższe funkcje zostaną zablokowane.",
     "levelQuestion": "Gdzie jesteś w swojej podróży biegowej?",
     "selectLevel": "Wybierz swój poziom, aby kontynuować",
     "levels": {

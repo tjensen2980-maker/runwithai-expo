@@ -496,7 +496,7 @@
     },
     "tryFree": "Próbáld ki ingyenesen 14 napig",
     "fine": "Nincs kötelezettségvállalás. Bármikor lemondhatja.",
-    "trialReadyNote": "Most nem kell fizetned. 14 nap után te döntöd el, hogy előfizetsz-e.",
+    "trialReadyNote": "14 nap után a fiókod az ingyenes csomagra vált, ha nem fizetsz elő. A korlátozott alapkövetés hirdetésekkel megmarad, az alábbi funkciók pedig zárolva lesznek.",
     "levelQuestion": "Hol tart a futóútján?",
     "selectLevel": "A folytatáshoz válassza ki a szintet",
     "levels": {

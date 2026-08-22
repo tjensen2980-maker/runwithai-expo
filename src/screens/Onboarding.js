@@ -148,6 +148,8 @@ export default function Onboarding({ onDone }) {
     t('onboarding.paywall.benefits.audioCoach'),
     t('onboarding.paywall.benefits.calendar'),
     t('onboarding.paywall.benefits.chat'),
+    t('pro.stats.features'),
+    t('pro.aiRoutes.description'),
   ];
 
   const finishOnboarding = () => onDone(chosen || 'beginner', goalInfo, aiPlan);
