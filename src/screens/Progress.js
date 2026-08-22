@@ -42,6 +42,13 @@ function isCycling(run) {
   return type.includes('cyc') || type.includes('bike') || type.includes('cykl');
 }
 
+function visibleActivityNotes(run) {
+  if (typeof run?.notes !== 'string') return '';
+  const notes = run.notes.trim();
+  if (!notes || /^gps:\d+\/\d+\b/i.test(notes) || /\[object Object\]/i.test(notes)) return '';
+  return notes;
+}
+
 function fmtSpeed(run) {
   const km = Number(run?.km) || 0;
   const seconds = Number(run?.duration) || 0;
@@ -231,6 +238,7 @@ export default function Progress({ runs, onRunDeleted, isPro, subscriptionKnown 
       <Modal visible={!!valgt} animationType="slide" onRequestClose={() => setValgt(null)}>
         {valgt && (() => {
           const info = typeInfo(valgt, t);
+          const notes = visibleActivityNotes(valgt);
           return (
             <View style={s.detSafe}>
               <View style={s.detHeader}>
@@ -248,7 +256,7 @@ export default function Progress({ runs, onRunDeleted, isPro, subscriptionKnown 
                 <View style={[s.detKort, s.detKortTom]}><Text style={s.detKortTomTekst}>{t('progress.noRoute')}</Text></View>
               )}
               <Text style={s.detTitel}>{info.label + ' ' + fmtKm(valgt.km) + ' km'}</Text>
-              <Text style={s.detUnder}>{valgt.notes || t('progress.standardTraining')}</Text>
+              <Text style={s.detUnder}>{notes || t('progress.standardTraining')}</Text>
               <View style={s.detGrid}>
                 {[
                   ['👣', valgt.total_steps ? String(valgt.total_steps) : '-', t('progress.steps')],
