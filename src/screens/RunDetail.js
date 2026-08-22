@@ -102,6 +102,7 @@ function OversigtTab({ run }) {
   const calories = run.calories ? Math.round(run.calories) : 0;
   const visibleNotes = typeof run?.notes === 'string'
     && !/^\s*gps:\d+\/\d+\b/i.test(run.notes)
+    && !/\[object Object\]/i.test(run.notes)
     ? run.notes.trim()
     : '';
 
