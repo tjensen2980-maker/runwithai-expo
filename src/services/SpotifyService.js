@@ -11,12 +11,11 @@
  *   - Create app at https://developer.spotify.com/dashboard
  *   - Add redirect URIs:
  *       https://dist-lilac-zeta-14.vercel.app/spotify-callback (web)
- *       runwithai://spotify-callback (native)
+ *       app.runwithai://spotify-callback (native)
  *   - Set SPOTIFY_CLIENT_ID below
  */
 
 import * as AuthSession from 'expo-auth-session';
-import * as Linking from 'expo-linking';
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -36,6 +35,8 @@ const SPOTIFY_SCOPES = [
 const SPOTIFY_AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
 const SPOTIFY_TOKEN_ENDPOINT = 'https://accounts.spotify.com/api/token';
 const SPOTIFY_API_BASE = 'https://api.spotify.com/v1';
+const SPOTIFY_WEB_REDIRECT_URI = 'https://dist-lilac-zeta-14.vercel.app/spotify-callback';
+const SPOTIFY_NATIVE_REDIRECT_URI = 'app.runwithai://spotify-callback';
 
 const STORAGE_KEY_TOKEN = '@runwithai_spotify_token';
 const STORAGE_KEY_EXPIRY = '@runwithai_spotify_expiry';
@@ -46,13 +47,9 @@ const STORAGE_KEY_REFRESH = '@runwithai_spotify_refresh';
 // ---------------------------------------------------------------------------
 
 function getRedirectUri() {
-  if (Platform.OS === 'web') {
-    return 'https://dist-lilac-zeta-14.vercel.app/spotify-callback';
-  }
-  // Native iOS/Android: use expo-linking to create a proper deep link
-  // This generates "runwithai://spotify-callback" in standalone builds
-  // because we have "scheme": "runwithai" in app.json
-  return Linking.createURL('spotify-callback');
+  return Platform.OS === 'web'
+    ? SPOTIFY_WEB_REDIRECT_URI
+    : SPOTIFY_NATIVE_REDIRECT_URI;
 }
 
 // ---------------------------------------------------------------------------

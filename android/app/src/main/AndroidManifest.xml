@@ -54,6 +54,12 @@
                             <category android:name="android.intent.category.BROWSABLE"/>
                             <data android:scheme="app.runwithai" android:host="strava-callback"/>
                   </intent-filter>
+                  <intent-filter>
+                            <action android:name="android.intent.action.VIEW"/>
+                            <category android:name="android.intent.category.DEFAULT"/>
+                            <category android:name="android.intent.category.BROWSABLE"/>
+                            <data android:scheme="app.runwithai" android:host="spotify-callback"/>
+                  </intent-filter>
               <!-- Health Connect permission usage rationale (Android 14+) -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW_PERMISSION_USAGE"/>
