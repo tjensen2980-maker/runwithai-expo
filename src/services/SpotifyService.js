@@ -11,7 +11,7 @@
  *   - Create app at https://developer.spotify.com/dashboard
  *   - Add redirect URIs:
  *       https://dist-lilac-zeta-14.vercel.app/spotify-callback (web)
- *       app.runwithai://spotify-callback (native)
+ *       runwithai-spotify-login://callback (native)
  *   - Set SPOTIFY_CLIENT_ID below
  */
 
@@ -36,7 +36,7 @@ const SPOTIFY_AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
 const SPOTIFY_TOKEN_ENDPOINT = 'https://accounts.spotify.com/api/token';
 const SPOTIFY_API_BASE = 'https://api.spotify.com/v1';
 const SPOTIFY_WEB_REDIRECT_URI = 'https://dist-lilac-zeta-14.vercel.app/spotify-callback';
-const SPOTIFY_NATIVE_REDIRECT_URI = 'app.runwithai://spotify-callback';
+const SPOTIFY_NATIVE_REDIRECT_URI = 'runwithai-spotify-login://callback';
 
 const STORAGE_KEY_TOKEN = '@runwithai_spotify_token';
 const STORAGE_KEY_EXPIRY = '@runwithai_spotify_expiry';
