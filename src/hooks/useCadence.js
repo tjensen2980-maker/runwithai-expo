@@ -15,6 +15,14 @@ import { Pedometer } from 'expo-sensors';
 // Typical running cadence ~150-185 spm; walking ~90-120 spm.
 const DEFAULT_BPM = 160;
 
+function createBpmRange(target) {
+  return {
+    min: Math.max(0, target - 5),
+    max: target + 5,
+    target,
+  };
+}
+
 function estimateFromPace(currentPaceSecondsPerKm, activityType) {
   // Rough cadence estimate from pace when no sensor data is available.
   if (!currentPaceSecondsPerKm || currentPaceSecondsPerKm <= 0) {
@@ -35,7 +43,7 @@ function estimateFromPace(currentPaceSecondsPerKm, activityType) {
 
 export default function useCadence({ currentPaceSecondsPerKm, isRunning = false, activityType = 'run' }) {
   const [cadence, setCadence] = useState(DEFAULT_BPM);
-  const [bpmRange, setBpmRange] = useState([DEFAULT_BPM - 5, DEFAULT_BPM + 5]);
+  const [bpmRange, setBpmRange] = useState(() => createBpmRange(DEFAULT_BPM));
   const [source, setSource] = useState('none');
 
   const subscriptionRef = useRef(null);
@@ -61,7 +69,7 @@ export default function useCadence({ currentPaceSecondsPerKm, isRunning = false,
     const tick = () => {
       const bpm = estimateFromPace(currentPaceSecondsPerKm, activityType);
       setCadence(bpm);
-      setBpmRange([bpm - 5, bpm + 5]);
+      setBpmRange(createBpmRange(bpm));
     };
     tick();
     fallbackIntervalRef.current = setInterval(tick, 3000);
@@ -90,6 +98,9 @@ export default function useCadence({ currentPaceSecondsPerKm, isRunning = false,
         return;
       }
 
+      // Show a useful default match while the pedometer collects enough steps.
+      setSource('default');
+
       // Subscribe to live step updates from the native motion coprocessor.
       // watchStepCount reports cumulative steps since subscription start.
       lastSampleRef.current = { steps: 0, timestamp: Date.now() };
@@ -111,7 +122,7 @@ export default function useCadence({ currentPaceSecondsPerKm, isRunning = false,
             if (spm > 0) {
               setSource('pedometer');
               setCadence(spm);
-              setBpmRange([Math.max(0, spm - 5), spm + 5]);
+              setBpmRange(createBpmRange(spm));
             }
           }
         });
