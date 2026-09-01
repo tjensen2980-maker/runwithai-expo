@@ -6,12 +6,17 @@ import { colors, assessProfile, saveProfile, SERVER, getAuthToken, loadRuns } fr
 import { Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
+import Constants from 'expo-constants';
 import i18n from '../i18n';
 import * as Notif from '../utils/notifications';
 import Integrations from './components/Integrations';
 import { showAdPrivacyOptions } from '../services/MobileAds';
 import { shouldShowAdPrivacyOptions } from '../config/ads';
 let DTP = null; try { DTP = require('@react-native-community/datetimepicker').default; } catch(e) {}
+
+const APP_VERSION = Constants.nativeAppVersion || Constants.expoConfig?.version || '—';
+const APP_BUILD = Constants.nativeBuildVersion;
+const APP_VERSION_LABEL = `RunWithAI v${APP_VERSION}${APP_BUILD ? ` (${APP_BUILD})` : ''}`;
 
 function Field({ label, value, onChange, keyboard, placeholder }) {
   return (
@@ -819,7 +824,7 @@ const save = async () => {
 
         {/* ── APP VERSION ── */}
         <View style={s.versionContainer}>
-          <Text style={s.versionText}>RunWithAI v1.6.2</Text>
+          <Text style={s.versionText}>{APP_VERSION_LABEL}</Text>
         </View>
 
         <View style={{ height: 40 }} />
