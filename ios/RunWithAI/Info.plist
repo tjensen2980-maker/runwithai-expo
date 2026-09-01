@@ -65,6 +65,14 @@
 				<string>exp+runwithai</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>spotify-login</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>runwithai-spotify-login</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
