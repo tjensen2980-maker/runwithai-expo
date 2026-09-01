@@ -62,6 +62,7 @@ export default function MusicMatcher({
 
   const getSourceLabel = () => {
     switch (source) {
+      case 'pedometer': return 'Live skridtfrekvens';
       case 'accelerometer': return 'Live step detection';
       case 'pace': return 'Estimated from pace';
       case 'default': return isRunning ? 'Default BPM — bevæg dig for bedre match' : 'Klar til at matche';
@@ -71,6 +72,7 @@ export default function MusicMatcher({
 
   const getSourceColor = () => {
     switch (source) {
+      case 'pedometer': return SPOTIFY_GREEN;
       case 'accelerometer': return SPOTIFY_GREEN;
       case 'pace': return SPOTIFY_GREEN;
       case 'default': return '#F59E0B';
