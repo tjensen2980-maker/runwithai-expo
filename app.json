@@ -7,7 +7,7 @@
       "runwithai-spotify-login"
     ],
     "newArchEnabled": false,
-    "version": "2.5.19",
+    "version": "2.5.20",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -22,7 +22,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "app.runwithai",
-      "buildNumber": "119",
+      "buildNumber": "120",
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
         "NSSupportsLiveActivities": true,
