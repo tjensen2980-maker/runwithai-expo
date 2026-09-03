@@ -79,6 +79,8 @@ export default function Home({
   isPro,
   subscriptionKnown,
   isFree,
+  trialActive,
+  trialDaysRemaining,
   onShowPricing,
 }) {
   const { t, i18n } = useTranslation();
@@ -200,6 +202,20 @@ export default function Home({
         </TouchableOpacity>
       </ScrollView>
 
+      {trialActive && (
+        <TouchableOpacity
+          style={styles.trialBanner}
+          onPress={() => onStartActivity && onStartActivity('motion')}
+          activeOpacity={0.85}
+        >
+          <View style={styles.trialBannerCopy}>
+            <Text style={styles.trialBannerBadge}>PRO · {trialDaysRemaining}/14</Text>
+            <Text style={styles.trialBannerTitle}>{t('onboarding.paywall.trial')}</Text>
+          </View>
+          <Text style={styles.trialBannerCta}>{t('home.startTraining')} →</Text>
+        </TouchableOpacity>
+      )}
+
       {/* Next workout */}
       {todayWorkout && (
         <View style={styles.nextWorkoutCard}>
@@ -309,6 +325,24 @@ const styles = StyleSheet.create({
   chipPrimary: { backgroundColor: colors.accent, borderColor: colors.accent },
   chipText: { fontSize: 12, fontWeight: '600', color: colors.text },
   chipPrimaryText: { fontSize: 12, fontWeight: '700', color: '#fff' },
+
+  trialBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+    backgroundColor: '#173C32',
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 13,
+    marginTop: 12,
+    borderWidth: 1,
+    borderColor: colors.accent,
+  },
+  trialBannerCopy: { flex: 1 },
+  trialBannerBadge: { color: colors.accent, fontSize: 11, fontWeight: '900', letterSpacing: 1 },
+  trialBannerTitle: { color: '#fff', fontSize: 15, fontWeight: '800', marginTop: 2 },
+  trialBannerCta: { color: '#fff', fontSize: 12, fontWeight: '800', textAlign: 'right' },
 
   nextWorkoutCard: {
     backgroundColor: colors.card,

@@ -143,15 +143,6 @@ export default function Onboarding({ onDone }) {
     { id: 'weight',  label: t('onboarding.goals.weight.label'),  sub: t('onboarding.goals.weight.sub') },
   ];
 
-  const trialBenefits = [
-    t('onboarding.paywall.benefits.adaptive'),
-    t('onboarding.paywall.benefits.audioCoach'),
-    t('onboarding.paywall.benefits.calendar'),
-    t('onboarding.paywall.benefits.chat'),
-    t('pro.stats.features'),
-    t('pro.aiRoutes.description'),
-  ];
-
   const finishOnboarding = () => onDone(chosen || 'beginner', goalInfo, aiPlan);
 
   // ── COACH-INTERVIEW: erstatter formular-trinnene 2-3 ──────────────────
@@ -215,34 +206,6 @@ export default function Onboarding({ onDone }) {
           }}
         >
           <Text style={s.ctaBtnText}>{t('auth.continue') || 'Continue'} →</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </SafeAreaView>
-  );
-
-  // ── STEP 5: Automatic trial confirmation (no purchase, no prices) ───────────
-  if (step === 5) return (
-    <SafeAreaView style={s.safe}>
-      <ScrollView contentContainerStyle={s.trialReady} showsVerticalScrollIndicator={false}>
-        <View style={s.trialIconWrap}>
-          <Text style={s.trialIcon}>🎉</Text>
-        </View>
-        <Text style={s.trialBadge}>PRO</Text>
-        <Text style={s.trialTitle}>{t('onboarding.paywall.trial')}</Text>
-        <Text style={s.trialSubtitle}>{t('onboarding.paywall.welcomeMessage')}</Text>
-        <Text style={s.trialNote}>{t('onboarding.trialReadyNote')}</Text>
-
-        <View style={s.trialBenefits}>
-          {trialBenefits.map(benefit => (
-            <View key={benefit} style={s.trialBenefitRow}>
-              <Text style={s.trialCheck}>✓</Text>
-              <Text style={s.trialBenefitText}>{benefit}</Text>
-            </View>
-          ))}
-        </View>
-
-        <TouchableOpacity style={s.ctaBtn} onPress={finishOnboarding}>
-          <Text style={s.ctaBtnText}>{t('onboarding.getStarted')} →</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -374,7 +337,7 @@ export default function Onboarding({ onDone }) {
             <TouchableOpacity style={[s.ctaBtn, { marginTop: 24 }]} onPress={() => goToPlan()}>
               <Text style={s.ctaBtnText}>{t('common.retry')}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ alignItems: "center", marginTop: 12 }} onPress={() => setStep(5)}>
+            <TouchableOpacity style={{ alignItems: "center", marginTop: 12 }} onPress={finishOnboarding}>
               <Text style={{ color: colors.muted, fontSize: 13 }}>{t('auth.continue')}</Text>
             </TouchableOpacity>
           </View>
@@ -399,8 +362,8 @@ export default function Onboarding({ onDone }) {
               ))}
             </View>
             {aiPlan.summary ? (<Text style={{ color: colors.muted, marginTop: 16, lineHeight: 20 }}>{aiPlan.summary}</Text>) : null}
-            <TouchableOpacity style={[s.ctaBtn, { marginTop: 28 }]} onPress={() => setStep(5)}>
-              <Text style={s.ctaBtnText}>{t('auth.continue')} →</Text>
+            <TouchableOpacity style={[s.ctaBtn, { marginTop: 28 }]} onPress={finishOnboarding}>
+              <Text style={s.ctaBtnText}>{t('onboarding.getStarted')} · {t('onboarding.paywall.trial')} →</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -463,15 +426,4 @@ const s = StyleSheet.create({
   langCard:      { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, borderRadius: 12, padding: 14, borderWidth: 1, borderColor: colors.border, gap: 12 },
   langFlag:      { fontSize: 24 },
   langName:      { flex: 1, color: colors.text, fontSize: 15, fontWeight: '600' },
-  trialReady:    { flexGrow: 1, justifyContent: 'center', padding: 24, paddingBottom: 48 },
-  trialIconWrap: { width: 86, height: 86, borderRadius: 43, alignSelf: 'center', alignItems: 'center', justifyContent: 'center', backgroundColor: colors.accent + '20', marginBottom: 18 },
-  trialIcon:     { fontSize: 44 },
-  trialBadge:    { color: colors.accent, fontSize: 15, fontWeight: '900', letterSpacing: 3, textAlign: 'center', marginBottom: 8 },
-  trialTitle:    { color: colors.text, fontSize: 34, fontWeight: '900', textAlign: 'center', marginBottom: 10 },
-  trialSubtitle: { color: colors.dim, fontSize: 17, lineHeight: 24, textAlign: 'center', marginBottom: 28 },
-  trialNote:     { color: colors.muted, fontSize: 14, lineHeight: 21, textAlign: 'center', marginTop: -16, marginBottom: 26 },
-  trialBenefits:{ backgroundColor: colors.card, borderRadius: 20, borderWidth: 1, borderColor: colors.border, padding: 18, marginBottom: 28, gap: 14 },
-  trialBenefitRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
-  trialCheck:    { color: colors.accent, fontSize: 18, fontWeight: '900', lineHeight: 23 },
-  trialBenefitText: { flex: 1, color: colors.text, fontSize: 15, lineHeight: 22, fontWeight: '600' },
 });

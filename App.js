@@ -358,6 +358,7 @@ export default function App() {
   const [paywallEntryPoint, setPaywallEntryPoint] = useState('manual');
   const [selectedRun, setSelectedRun]       = useState(null);
   const expiredTrialPaywallCheckRef = React.useRef(false);
+  const appOpenTrackedRef = React.useRef(false);
 
   const openPaywall = React.useCallback((entryPoint = 'manual') => {
     setPaywallEntryPoint(entryPoint);
@@ -403,7 +404,20 @@ export default function App() {
 
   const token = getAuthToken();
   const paywallUserKey = getStableAppUserId(token) || user?.id || user?.email;
-  const { subscription, tier, isPro, isBasic, isFree, trialExpired, canUseAICoach, canUseAllActivities, weeklyActivityLimit, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
+  const { subscription, tier, isPro, isBasic, isFree, trialActive, trialExpired, trialDaysRemaining, canUseAICoach, canUseAllActivities, weeklyActivityLimit, canTrackRun, refresh: refreshSubscription } = useSubscription(token);
+
+  useEffect(() => {
+    if (!user) {
+      appOpenTrackedRef.current = false;
+      return;
+    }
+    if (loading || appOpenTrackedRef.current) return;
+    appOpenTrackedRef.current = true;
+    trackFunnelEvent('app_opened', {
+      is_new_user: Boolean(user.isNewUser),
+      onboarding_visible: Boolean(showOnboarding),
+    }).catch(() => {});
+  }, [user, loading, showOnboarding]);
 
   useEffect(() => {
     expiredTrialPaywallCheckRef.current = false;
@@ -688,6 +702,7 @@ if (type === 'pick') {
       setTab('motionPicker');
       return;
     }
+    trackFunnelEvent('activity_started', { activity_type: type || 'run' }).catch(() => {});
     setActivityType(type);
     if (type === 'bike') {
       setTab('cycleTracker');
@@ -817,7 +832,7 @@ if (tab === 'cycleTracker') {
   const renderScreen = () => {
     switch (tab) {
       case 'home':
-      return <Home level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} runs={runs} onNavigate={setTab} onStartActivity={handleStartActivity} onOpenChat={(draft) => { setChatDraft(draft || ''); setTab('chat'); }} isPro={isPro} subscriptionKnown={Boolean(subscription)} isFree={isFree} onShowPricing={() => openPaywall('home')} />;
+      return <Home level={level} profile={profile} weekPlan={weekPlan} nextWorkout={nextWorkout} runs={runs} onNavigate={setTab} onStartActivity={handleStartActivity} onOpenChat={(draft) => { setChatDraft(draft || ''); setTab('chat'); }} isPro={isPro} subscriptionKnown={Boolean(subscription)} isFree={isFree} trialActive={trialActive} trialDaysRemaining={trialDaysRemaining} onShowPricing={() => openPaywall('home')} />;
     case 'dashboard':
         return <PlanTab level={level} nextWorkout={nextWorkout} weekPlan={weekPlan} planChanges={planChanges} profile={profile} runs={runs} onNavigate={setTab} onStartActivity={handleStartActivity} trainingPlan={trainingPlan} onPlanUpdate={handlePlanUpdate} isPro={isPro} isFree={isFree} onShowPricing={() => openPaywall('plan')} />;
       case 'activity':
