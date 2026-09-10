@@ -824,6 +824,9 @@ if (tab === 'cycleTracker') {
         } catch (e) {}
         // Hent den automatiske 14-dages Pro-adgang straks efter onboarding.
         try { refreshSubscription && refreshSubscription(); } catch (e) {}
+        // Land den nye bruger ved aktivitetsvalget, saa naeste naturlige handling
+        // er den foerste traening i stedet for endnu en informationsskaerm.
+        setTab('run');
         setShowOnboarding(false);
       }} />
     </SafeAreaProvider>

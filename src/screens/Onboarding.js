@@ -362,8 +362,14 @@ export default function Onboarding({ onDone }) {
               ))}
             </View>
             {aiPlan.summary ? (<Text style={{ color: colors.muted, marginTop: 16, lineHeight: 20 }}>{aiPlan.summary}</Text>) : null}
+
+            <View style={s.planTrialCard}>
+              <Text style={s.planTrialBadge}>PRO · {t('onboarding.paywall.trial')}</Text>
+              <Text style={s.planTrialText}>{t('onboarding.paywall.welcomeMessage')}</Text>
+            </View>
+
             <TouchableOpacity style={[s.ctaBtn, { marginTop: 28 }]} onPress={finishOnboarding}>
-              <Text style={s.ctaBtnText}>{t('onboarding.getStarted')} · {t('onboarding.paywall.trial')} →</Text>
+              <Text style={s.ctaBtnText}>{t('home.startTraining')} →</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -417,6 +423,9 @@ const s = StyleSheet.create({
   planTitle:     { color: PLAN_CARD_TITLE, fontWeight: '800', fontSize: 20, marginBottom: 4 },
   planDesc:      { color: PLAN_CARD_BODY, fontSize: 16, lineHeight: 22 },
   planKm:        { color: PLAN_CARD_BODY, fontSize: 15, marginTop: 4 },
+  planTrialCard: { backgroundColor: colors.card, borderRadius: 14, borderWidth: 1, borderColor: colors.accent, padding: 14, marginTop: 20 },
+  planTrialBadge:{ color: colors.accent, fontSize: 14, fontWeight: '800', marginBottom: 4 },
+  planTrialText: { color: colors.dim, fontSize: 13, lineHeight: 19 },
   goalLabel:     { color: colors.text, fontWeight: '700', fontSize: 13, marginBottom: 3 },
   goalSub:       { color: colors.dim, fontSize: 11 },
   // Language selector styles
