@@ -61,6 +61,23 @@
     "trainingTitle": "Schulung",
     "trainingActivities": "Kraft, Beweglichkeit und mehr"
   },
+  "activation": {
+    "firstWorkoutEyebrow": "DEIN ERSTER SCHRITT",
+    "firstWorkoutTitle": "Starte mit nur 10 Minuten",
+    "firstWorkoutBody": "Dein persönlicher Plan ist bereit. Starte heute entspannt — du kannst jederzeit pausieren oder aufhören.",
+    "startFirstRun": "Meinen ersten Lauf starten",
+    "walkInstead": "Stattdessen gehen",
+    "paywallHeadline": "Starker Start — behalte deinen Coach",
+    "paywallSubtitle": "Aktiviere jetzt den Testzeitraum im App Store und behalte deinen persönlichen Plan danach.",
+    "reminders": {
+      "day1Title": "Dein Plan ist bereit 🏃",
+      "day1Body": "Mach heute dein erstes kurzes Training — 10 Minuten reichen.",
+      "day3Title": "Dein KI-Coach wartet",
+      "day3Body": "Setze deinen Plan heute fort. Eine kurze Einheit hält dich auf Kurs.",
+      "day7Title": "Eine Woche mit deinem Plan",
+      "day7Body": "Starte das heutige Training und sieh, wie deine erste Woche Form annimmt."
+    }
+  },
   "pro": {
     "badge": "PRO",
     "upgrade": "Upgraden",

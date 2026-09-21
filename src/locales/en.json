@@ -61,6 +61,23 @@
     "trainingTitle": "Training",
     "trainingActivities": "Strength, mobility and more"
   },
+  "activation": {
+    "firstWorkoutEyebrow": "YOUR FIRST STEP",
+    "firstWorkoutTitle": "Start with just 10 minutes",
+    "firstWorkoutBody": "Your personal plan is ready. Start easy today — you can pause or stop at any time.",
+    "startFirstRun": "Start my first run",
+    "walkInstead": "Walk instead",
+    "paywallHeadline": "Great start — keep your coach",
+    "paywallSubtitle": "Activate the store trial now and keep your personal plan after the free period.",
+    "reminders": {
+      "day1Title": "Your plan is ready 🏃",
+      "day1Body": "Take your first short workout today — 10 minutes is enough.",
+      "day3Title": "Your AI coach is waiting",
+      "day3Body": "Continue your plan today. A short session keeps your progress moving.",
+      "day7Title": "One week with your plan",
+      "day7Body": "Start today's workout and see your first week take shape."
+    }
+  },
   "pro": {
     "badge": "PRO",
     "upgrade": "Upgrade",

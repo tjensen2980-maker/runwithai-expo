@@ -77,6 +77,7 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
   const [trialEligibility, setTrialEligibility] = useState({ monthly: false, annual: false });
   const [priceLoading, setPriceLoading] = useState(true);
   const purchasesRef = useRef(null);
+  const isFirstActivityOffer = entryPoint === 'first_activity_completed';
   const benefits = [
     { emoji: '🧠', text: t('onboarding.paywall.benefits.adaptive') },
     { emoji: '🎧', text: t('onboarding.paywall.benefits.audioCoach') },
@@ -311,10 +312,10 @@ export default function OnboardingCarousel({ visible, onComplete, onClose, isOnb
             </Text>
           </View>
           <Text style={s.headline} maxFontSizeMultiplier={1.15}>
-            {t('onboarding.paywall.headline')}
+            {t(isFirstActivityOffer ? 'activation.paywallHeadline' : 'onboarding.paywall.headline')}
           </Text>
           <Text style={s.sub} maxFontSizeMultiplier={1.2}>
-            {t('onboarding.paywall.subtitle')}
+            {t(isFirstActivityOffer ? 'activation.paywallSubtitle' : 'onboarding.paywall.subtitle')}
           </Text>
 
           {!!goalLabel && (

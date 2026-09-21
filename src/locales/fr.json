@@ -61,6 +61,23 @@
     "trainingTitle": "Formation",
     "trainingActivities": "Force, mobilité et plus"
   },
+  "activation": {
+    "firstWorkoutEyebrow": "VOTRE PREMIER PAS",
+    "firstWorkoutTitle": "Commencez par seulement 10 minutes",
+    "firstWorkoutBody": "Votre programme personnalisé est prêt. Commencez tranquillement aujourd’hui — vous pouvez faire une pause à tout moment.",
+    "startFirstRun": "Commencer ma première course",
+    "walkInstead": "Marcher à la place",
+    "paywallHeadline": "Excellent départ — gardez votre coach",
+    "paywallSubtitle": "Activez maintenant l’essai dans l’App Store et conservez votre programme personnalisé après la période gratuite.",
+    "reminders": {
+      "day1Title": "Votre programme est prêt 🏃",
+      "day1Body": "Faites votre première séance aujourd’hui — 10 minutes suffisent.",
+      "day3Title": "Votre coach IA vous attend",
+      "day3Body": "Poursuivez votre programme aujourd’hui. Une courte séance entretient vos progrès.",
+      "day7Title": "Une semaine avec votre programme",
+      "day7Body": "Lancez la séance du jour et voyez votre première semaine prendre forme."
+    }
+  },
   "pro": {
     "badge": "PRO",
     "upgrade": "Améliorer",

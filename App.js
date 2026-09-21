@@ -34,7 +34,14 @@ import RunDetail from './src/screens/RunDetail';
 import { RoutesTab as RoutesTabComponent } from './src/screens/RoutesTab';
 import Privacy from './src/screens/Privacy';
 import GoalsSetup from './src/screens/GoalsSetup';
-import { initNotifications, loadSettings as loadNotifSettings, syncFromSettings } from './src/utils/notifications';
+import {
+  initNotifications,
+  loadSettings as loadNotifSettings,
+  syncFromSettings,
+  scheduleActivationReminders,
+  cancelActivationReminders,
+  addNotificationResponseListener,
+} from './src/utils/notifications';
 import LogActivity from './src/screens/LogActivity';
 import ActivityTypePicker from './src/screens/ActivityTypePicker';
 import MotionPicker from './src/screens/MotionPicker';
@@ -130,6 +137,20 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, isFree, on
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('start');
   const lastRun = runs && runs.length > 0 ? [...runs].sort((a,b) => new Date(b.date||0) - new Date(a.date||0))[0] : null;
+  const isFirstWorkout = !lastRun;
+  const firstPromptTrackedRef = React.useRef(false);
+
+  useEffect(() => {
+    if (!isFirstWorkout || firstPromptTrackedRef.current) return;
+    firstPromptTrackedRef.current = true;
+    trackFunnelEvent('first_workout_prompt_viewed').catch(() => {});
+  }, [isFirstWorkout]);
+
+  const startFirstWorkout = (type) => {
+    trackFunnelEvent('first_workout_prompt_started', { activity_type: type }).catch(() => {});
+    onStartActivity(type);
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: colors.bg }}>
       <View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingTop: 16, gap: 10 }}>
@@ -145,18 +166,46 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, isFree, on
       </View>
       {activeTab === 'start' ? (
         <ScrollView contentContainerStyle={{ padding: 16 }}>
-          <TouchableOpacity onPress={() => onStartActivity('motion')}
-            style={{ backgroundColor: colors.black, borderRadius: 20, padding: 28, marginBottom: 12, alignItems: 'center' }}>
-            <Text style={{ fontSize: 40, marginBottom: 8 }}>🏃</Text>
-            <Text style={{ fontSize: 22, fontWeight: '900', color: colors.card, letterSpacing: -0.5 }}>{t('run.motionTitle')}</Text>
-            <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>{t('run.motionActivities')}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => onStartActivity('pick')}
-            style={{ backgroundColor: colors.accent, borderRadius: 20, padding: 28, marginBottom: 20, alignItems: 'center' }}>
-            <Text style={{ fontSize: 40, marginBottom: 8 }}>💪</Text>
-            <Text style={{ fontSize: 22, fontWeight: '900', color: '#fff', letterSpacing: -0.5 }}>{t('run.trainingTitle')}</Text>
-            <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', marginTop: 4 }}>{t('run.trainingActivities')}</Text>
-          </TouchableOpacity>
+          {isFirstWorkout ? (
+            <View style={{ backgroundColor: colors.black, borderRadius: 24, padding: 24, marginBottom: 20 }}>
+              <Text style={{ color: colors.accent2, fontSize: 12, fontWeight: '900', letterSpacing: 1.5, marginBottom: 10 }}>
+                {t('activation.firstWorkoutEyebrow')}
+              </Text>
+              <Text style={{ color: '#fff', fontSize: 27, lineHeight: 32, fontWeight: '900', letterSpacing: -0.7 }}>
+                {t('activation.firstWorkoutTitle')}
+              </Text>
+              <Text style={{ color: 'rgba(255,255,255,0.68)', fontSize: 15, lineHeight: 22, marginTop: 10, marginBottom: 22 }}>
+                {t('activation.firstWorkoutBody')}
+              </Text>
+              <TouchableOpacity
+                onPress={() => startFirstWorkout('run')}
+                style={{ backgroundColor: colors.accent, borderRadius: 16, minHeight: 58, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 18 }}>
+                <Text style={{ color: '#fff', fontSize: 17, fontWeight: '900', textAlign: 'center' }}>
+                  {t('activation.startFirstRun')} →
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => startFirstWorkout('walk')} style={{ alignItems: 'center', paddingTop: 16, paddingBottom: 2 }}>
+                <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, fontWeight: '700', textDecorationLine: 'underline' }}>
+                  {t('activation.walkInstead')}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <>
+              <TouchableOpacity onPress={() => onStartActivity('motion')}
+                style={{ backgroundColor: colors.black, borderRadius: 20, padding: 28, marginBottom: 12, alignItems: 'center' }}>
+                <Text style={{ fontSize: 40, marginBottom: 8 }}>🏃</Text>
+                <Text style={{ fontSize: 22, fontWeight: '900', color: colors.card, letterSpacing: -0.5 }}>{t('run.motionTitle')}</Text>
+                <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>{t('run.motionActivities')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => onStartActivity('pick')}
+                style={{ backgroundColor: colors.accent, borderRadius: 20, padding: 28, marginBottom: 20, alignItems: 'center' }}>
+                <Text style={{ fontSize: 40, marginBottom: 8 }}>💪</Text>
+                <Text style={{ fontSize: 22, fontWeight: '900', color: '#fff', letterSpacing: -0.5 }}>{t('run.trainingTitle')}</Text>
+                <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', marginTop: 4 }}>{t('run.trainingActivities')}</Text>
+              </TouchableOpacity>
+            </>
+          )}
           {lastRun && (
             <View style={{ backgroundColor: colors.card, borderRadius: 16, padding: 18, borderWidth: 1, borderColor: colors.border }}>
               <Text style={{ fontSize: 10, color: colors.muted, letterSpacing: 2, fontWeight: '700', marginBottom: 8 }}>{t('run.lastActivity')}</Text>
@@ -363,6 +412,17 @@ export default function App() {
   const openPaywall = React.useCallback((entryPoint = 'manual') => {
     setPaywallEntryPoint(entryPoint);
     setShowTierCarousel(true);
+  }, []);
+
+  useEffect(() => {
+    const listener = addNotificationResponseListener(data => {
+      if (data?.category !== 'activation_reminder') return;
+      setTab('run');
+      trackFunnelEvent('activation_reminder_opened', {
+        activation_day: Number(data.activationDay) || 0,
+      }).catch(() => {});
+    });
+    return () => listener?.remove?.();
   }, []);
 // Watch sync - modtager run fra ur og marker dagens træning som completed
   const trainingPlanRef = React.useRef(null);
@@ -713,6 +773,23 @@ if (type === 'pick') {
     }
   };
 
+  const handleActivitySaved = React.useCallback(async (savedActivity) => {
+    cancelActivationReminders().catch(() => {});
+    if (!trialActive || !paywallUserKey || runs.length > 0) return;
+
+    try {
+      const storageKey = `firstActivityPaywallShown:${paywallUserKey}`;
+      if (await AsyncStorage.getItem(storageKey) === 'shown') return;
+      await AsyncStorage.setItem(storageKey, 'shown');
+      trackFunnelEvent('first_activity_paywall_eligible', {
+        activity_type: savedActivity?.type || activityType || 'run',
+      }).catch(() => {});
+      setTimeout(() => openPaywall('first_activity_completed'), 650);
+    } catch (error) {
+      console.log('First activity paywall warning:', error?.message || error);
+    }
+  }, [activityType, openPaywall, paywallUserKey, runs.length, trialActive]);
+
   if (loading) return (
     <SafeAreaProvider>
       <StatusBar barStyle="light-content" backgroundColor={colors.black} />
@@ -749,6 +826,7 @@ if (type === 'pick') {
         <RunTracker profile={profile} level={level} weekPlan={weekPlan} nextWorkout={nextWorkout}
           runs={runs} activityType={activityType} isPro={isPro}
           saveHealthWorkout={healthSync.saveWorkout}
+          onActivitySaved={handleActivitySaved}
           onBack={() => { setTab('run'); loadData(); }} onShowPricing={() => openPaywall('tracker')} />
         <OnboardingCarousel
           visible={showTierCarousel}
@@ -766,7 +844,7 @@ if (tab === 'cycleTracker') {
     return (
       <SafeAreaProvider>
         <CycleTracker profile={profile} level={level} weekPlan={weekPlan} nextWorkout={nextWorkout}
-          runs={runs} saveHealthWorkout={healthSync.saveWorkout} onBack={() => { setActivityType(null); setTab('run'); loadData(); }} onShowPricing={() => openPaywall('tracker')} />
+          runs={runs} saveHealthWorkout={healthSync.saveWorkout} onActivitySaved={handleActivitySaved} onBack={() => { setActivityType(null); setTab('run'); loadData(); }} onShowPricing={() => openPaywall('tracker')} />
       </SafeAreaProvider>
     );
   }
@@ -780,7 +858,7 @@ if (tab === 'cycleTracker') {
           profile={profile}
           mode={activityType}
           onClose={() => { setActivityType(null); setTab('run'); }}
-          onSaved={() => { loadData(); }}
+          onSaved={(savedActivity) => { handleActivitySaved(savedActivity); loadData(); }}
         />
       </SafeAreaProvider>
     );
@@ -824,6 +902,13 @@ if (tab === 'cycleTracker') {
         } catch (e) {}
         // Hent den automatiske 14-dages Pro-adgang straks efter onboarding.
         try { refreshSubscription && refreshSubscription(); } catch (e) {}
+        try {
+          const reminderResult = await scheduleActivationReminders();
+          trackFunnelEvent('activation_reminders_scheduled', {
+            scheduled_count: reminderResult.scheduled,
+            permission_granted: reminderResult.granted,
+          }).catch(() => {});
+        } catch (e) {}
         // Land den nye bruger ved aktivitetsvalget, saa naeste naturlige handling
         // er den foerste traening i stedet for endnu en informationsskaerm.
         setTab('run');
@@ -883,7 +968,7 @@ if (tab === 'cycleTracker') {
         }} />;
 
         case 'logActivity':
-        return <LogActivity activityType={activityType} onBack={() => setTab('run')} onDone={() => { setActivityType(null); setTab('run'); loadData(); }} />;
+        return <LogActivity activityType={activityType} onBack={() => setTab('run')} onDone={(savedActivity) => { handleActivitySaved(savedActivity); setActivityType(null); setTab('run'); loadData(); }} />;
       default:
         return null;
     }
