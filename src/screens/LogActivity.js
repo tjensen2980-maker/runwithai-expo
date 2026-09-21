@@ -80,9 +80,9 @@ export default function LogActivity({ activityType, onBack, onDone }) {
         notes: notes || null,
         source: 'manual',
       };
-      await logActivity(payload);
+      const savedActivity = await logActivity(payload);
       Alert.alert(t('logActivity.savedTitle'), t('logActivity.savedMessage', { activity: activityLabel, duration: dur, calories: finalKcal }), [
-        { text: 'OK', onPress: () => { if (onDone) onDone(); } }
+        { text: 'OK', onPress: () => { if (onDone) onDone(savedActivity || payload); } }
       ]);
     } catch (e) {
       Alert.alert(t('common.error'), t('logActivity.saveError', { error: e.message }));

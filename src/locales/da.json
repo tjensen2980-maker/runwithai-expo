@@ -61,6 +61,23 @@
     "trainingTitle": "Træning",
     "trainingActivities": "Styrke, mobilitet m.m."
   },
+  "activation": {
+    "firstWorkoutEyebrow": "DIT FØRSTE SKRIDT",
+    "firstWorkoutTitle": "Start med bare 10 minutter",
+    "firstWorkoutBody": "Din personlige plan er klar. Begynd roligt i dag — du kan altid holde pause eller stoppe.",
+    "startFirstRun": "Start mit første løb",
+    "walkInstead": "Gå i stedet",
+    "paywallHeadline": "Stærk start — behold din coach",
+    "paywallSubtitle": "Aktivér prøveperioden i App Store nu, og behold din personlige plan efter gratisperioden.",
+    "reminders": {
+      "day1Title": "Din plan er klar 🏃",
+      "day1Body": "Tag din første korte træning i dag — 10 minutter er nok.",
+      "day3Title": "Din AI-coach venter",
+      "day3Body": "Fortsæt planen i dag. En kort træning holder din fremgang i gang.",
+      "day7Title": "En uge med din plan",
+      "day7Body": "Start dagens træning, og se din første uge tage form."
+    }
+  },
   "pro": {
     "badge": "PRO",
     "upgrade": "Opgrader",

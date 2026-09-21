@@ -3,7 +3,7 @@
 // Stoetter fri valg af dage + tidspunkt for traenings- og maaltids-paamindelser.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Platform } from 'react-native';
+import i18n from '../i18n';
 
 // Lazy import - appen crasher ikke hvis modulet mangler
 let Notifications = null;
@@ -14,6 +14,9 @@ try {
 }
 
 const STORAGE_KEY = 'runwithai.notification.settings.v2';
+const ACTIVATION_CATEGORY = 'activation_reminder';
+const WORKOUT_CATEGORY = 'workout_reminder';
+const MEAL_CATEGORY = 'meal_reminder';
 
 // dayIndex: 0=Sun, 1=Mon, ..., 6=Sat (matcher JS Date.getDay)
 // I expo-notifications WeeklyTrigger er weekday: 1=Sunday, 2=Monday, ..., 7=Saturday
@@ -98,7 +101,7 @@ function parseTime(timeStr) {
 
 // Schedule one weekly repeating notification for (dayIndex, hour, minute)
 // dayIndex: 0=Sun, ..., 6=Sat
-async function scheduleWeekly(dayIndex, hour, minute, title, body) {
+async function scheduleWeekly(dayIndex, hour, minute, title, body, category) {
   if (!Notifications) return null;
   try {
     const weekday = ((dayIndex % 7) + 7) % 7 + 1; // 1=Sun .. 7=Sat
@@ -107,8 +110,10 @@ async function scheduleWeekly(dayIndex, hour, minute, title, body) {
         title: title,
         body: body,
         sound: 'default',
+        data: { category, destination: 'run' },
       },
       trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.WEEKLY,
         weekday: weekday,
         hour: Number(hour) || 7,
         minute: Number(minute) || 0,
@@ -121,23 +126,109 @@ async function scheduleWeekly(dayIndex, hour, minute, title, body) {
   }
 }
 
+async function cancelScheduledCategories(categories, includeLegacy = false) {
+  if (!Notifications?.getAllScheduledNotificationsAsync) return;
+  try {
+    const categorySet = new Set(categories);
+    const scheduled = await Notifications.getAllScheduledNotificationsAsync();
+    await Promise.all(scheduled.map(item => {
+      const category = item?.content?.data?.category;
+      if (categorySet.has(category) || (includeLegacy && !category)) {
+        return Notifications.cancelScheduledNotificationAsync(item.identifier);
+      }
+      return null;
+    }));
+  } catch (e) { /* ignore */ }
+}
+
+export async function cancelActivationReminders() {
+  await cancelScheduledCategories([ACTIVATION_CATEGORY]);
+}
+
+export async function scheduleActivationReminders() {
+  if (!Notifications) return { scheduled: 0, granted: false };
+  const permission = await requestPermission();
+  if (!permission.granted) return { scheduled: 0, granted: false };
+
+  await cancelActivationReminders();
+  const reminders = [
+    {
+      seconds: 24 * 60 * 60,
+      title: i18n.t('activation.reminders.day1Title'),
+      body: i18n.t('activation.reminders.day1Body'),
+      day: 1,
+    },
+    {
+      seconds: 3 * 24 * 60 * 60,
+      title: i18n.t('activation.reminders.day3Title'),
+      body: i18n.t('activation.reminders.day3Body'),
+      day: 3,
+    },
+    {
+      seconds: 7 * 24 * 60 * 60,
+      title: i18n.t('activation.reminders.day7Title'),
+      body: i18n.t('activation.reminders.day7Body'),
+      day: 7,
+    },
+  ];
+
+  let scheduled = 0;
+  for (const reminder of reminders) {
+    try {
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: reminder.title,
+          body: reminder.body,
+          sound: 'default',
+          data: {
+            category: ACTIVATION_CATEGORY,
+            destination: 'run',
+            activationDay: reminder.day,
+          },
+        },
+        trigger: {
+          type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+          seconds: reminder.seconds,
+          repeats: false,
+        },
+      });
+      scheduled += 1;
+    } catch (e) { /* ignore one failed reminder and continue */ }
+  }
+  return { scheduled, granted: true };
+}
+
+export function addNotificationResponseListener(callback) {
+  if (!Notifications?.addNotificationResponseReceivedListener) return null;
+  try {
+    return Notifications.addNotificationResponseReceivedListener(response => {
+      const data = response?.notification?.request?.content?.data || {};
+      callback && callback(data);
+    });
+  } catch (e) {
+    return null;
+  }
+}
+
 // Synkronisér alle planlagte notifikationer ud fra settings
 export async function syncFromSettings(settings) {
   if (!Notifications) return;
-  await cancelAll();
+  // Only replace recurring reminders. Activation reminders are intentionally
+  // kept until the user completes a first activity.
+  await cancelScheduledCategories([WORKOUT_CATEGORY, MEAL_CATEGORY], true);
   const s = settings || (await loadSettings());
 
   if (s.workoutEnabled && Array.isArray(s.workoutDays) && s.workoutDays.length > 0) {
     const { hour, minute } = parseTime(s.workoutTime);
     for (const d of s.workoutDays) {
-      await scheduleWeekly(d, hour, minute, 'Tid til traening', 'Det er tid til dit planlagte loeb. God traening!');
+      await scheduleWeekly(d, hour, minute, 'Tid til traening', 'Det er tid til dit planlagte loeb. God traening!', WORKOUT_CATEGORY);
     }
   }
 
   if (s.mealEnabled && Array.isArray(s.mealDays) && s.mealDays.length > 0) {
     const { hour, minute } = parseTime(s.mealTime);
     for (const d of s.mealDays) {
-      await scheduleWeekly(d, hour, minute, 'Husk dit maaltid', 'Glem ikke at logge dit maaltid i dag.');
+      await scheduleWeekly(d, hour, minute, 'Husk dit maaltid', 'Glem ikke at logge dit maaltid i dag.', MEAL_CATEGORY);
     }
   }
 }

@@ -474,7 +474,7 @@ const ps = StyleSheet.create({
 });
 
 // ─── RUNTRACKER COMPONENT ───────────────────────────────────────────────────
-export default function RunTracker({ activityType = 'run', onBack, profile, level, weekPlan, nextWorkout, runs, isPro = false, onShowPricing, saveHealthWorkout }) {
+export default function RunTracker({ activityType = 'run', onBack, onActivitySaved, profile, level, weekPlan, nextWorkout, runs, isPro = false, onShowPricing, saveHealthWorkout }) {
   const { t } = useTranslation();
   const [isTracking, setIsTracking] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(false); // TEST: AI-coach starter slaaet fra for at teste baggrunds-GPS
@@ -1403,6 +1403,7 @@ const bikePayload = {
             setShowStory(true);
           } else {
             if (onBack) onBack();
+            if (onActivitySaved) onActivitySaved({ ...result, type: activityType });
             recordCompletedWorkoutAndMaybeRequestReview();
           }
           return;
@@ -1453,9 +1454,11 @@ const bikePayload = {
   }, []);
 
   const handleStoryClose = () => {
+    const completedRunId = savedRunId;
     setShowStory(false);
     setSavedRunId(null);
     if (onBack) onBack();
+    if (onActivitySaved) onActivitySaved({ id: completedRunId, type: activityType });
     recordCompletedWorkoutAndMaybeRequestReview();
   };
 

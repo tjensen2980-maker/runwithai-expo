@@ -61,6 +61,23 @@
     "trainingTitle": "Entrenamiento",
     "trainingActivities": "Fuerza, movilidad y más"
   },
+  "activation": {
+    "firstWorkoutEyebrow": "TU PRIMER PASO",
+    "firstWorkoutTitle": "Empieza con solo 10 minutos",
+    "firstWorkoutBody": "Tu plan personal está listo. Empieza con calma hoy — puedes pausar o parar cuando quieras.",
+    "startFirstRun": "Empezar mi primera carrera",
+    "walkInstead": "Caminar en su lugar",
+    "paywallHeadline": "Gran comienzo — conserva tu coach",
+    "paywallSubtitle": "Activa ahora la prueba de la App Store y conserva tu plan personal después del período gratuito.",
+    "reminders": {
+      "day1Title": "Tu plan está listo 🏃",
+      "day1Body": "Haz hoy tu primer entrenamiento corto — 10 minutos son suficientes.",
+      "day3Title": "Tu coach de IA te espera",
+      "day3Body": "Continúa tu plan hoy. Una sesión corta mantiene tu progreso.",
+      "day7Title": "Una semana con tu plan",
+      "day7Body": "Empieza el entrenamiento de hoy y observa cómo toma forma tu primera semana."
+    }
+  },
   "pro": {
     "badge": "PRO",
     "upgrade": "Mejorar",
