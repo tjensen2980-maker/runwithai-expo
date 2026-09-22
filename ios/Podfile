@@ -60,6 +60,14 @@ target 'RunWithAI' do
   )
 
   post_install do |installer|
+    # Backport the upstream Swift compiler fix to our locked RevenueCat SDK.
+    # Run after every pod install, including Xcode Cloud and EAS builds.
+    revenuecat_color = File.join(installer.sandbox.pod_dir('RevenueCat'), 'Sources', 'Paywalls', 'PaywallColor.swift')
+    compatibility_script = File.expand_path('../scripts/patch-revenuecat-swift.cjs', __dir__)
+    unless system('node', compatibility_script, revenuecat_color)
+      raise 'RevenueCat Swift compatibility patch failed'
+    end
+
     react_native_post_install(
       installer,
       config[:reactNativePath],
