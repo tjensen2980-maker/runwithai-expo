@@ -167,25 +167,25 @@ function RunTab({ nextWorkout, onStartActivity, runs, profile, isPro, isFree, on
       {activeTab === 'start' ? (
         <ScrollView contentContainerStyle={{ padding: 16 }}>
           {isFirstWorkout ? (
-            <View style={{ backgroundColor: colors.black, borderRadius: 24, padding: 24, marginBottom: 20 }}>
+            <View style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border2, borderRadius: 24, padding: 24, marginBottom: 20 }}>
               <Text style={{ color: colors.accent2, fontSize: 12, fontWeight: '900', letterSpacing: 1.5, marginBottom: 10 }}>
                 {t('activation.firstWorkoutEyebrow')}
               </Text>
-              <Text style={{ color: '#fff', fontSize: 27, lineHeight: 32, fontWeight: '900', letterSpacing: -0.7 }}>
+              <Text style={{ color: colors.text, fontSize: 27, lineHeight: 32, fontWeight: '900', letterSpacing: -0.7 }}>
                 {t('activation.firstWorkoutTitle')}
               </Text>
-              <Text style={{ color: 'rgba(255,255,255,0.68)', fontSize: 15, lineHeight: 22, marginTop: 10, marginBottom: 22 }}>
+              <Text style={{ color: colors.dim, fontSize: 15, lineHeight: 22, marginTop: 10, marginBottom: 22 }}>
                 {t('activation.firstWorkoutBody')}
               </Text>
               <TouchableOpacity
                 onPress={() => startFirstWorkout('run')}
                 style={{ backgroundColor: colors.accent, borderRadius: 16, minHeight: 58, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 18 }}>
-                <Text style={{ color: '#fff', fontSize: 17, fontWeight: '900', textAlign: 'center' }}>
+                <Text style={{ color: colors.bg, fontSize: 17, fontWeight: '900', textAlign: 'center' }}>
                   {t('activation.startFirstRun')} →
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => startFirstWorkout('walk')} style={{ alignItems: 'center', paddingTop: 16, paddingBottom: 2 }}>
-                <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, fontWeight: '700', textDecorationLine: 'underline' }}>
+                <Text style={{ color: colors.text, fontSize: 14, fontWeight: '700', textDecorationLine: 'underline' }}>
                   {t('activation.walkInstead')}
                 </Text>
               </TouchableOpacity>
